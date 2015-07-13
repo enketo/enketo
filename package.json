@@ -1,0 +1,18 @@
+{
+  "name": "openrosa-xpath-evaluator",
+  "version": "0.1.0",
+  "description": "Wrapper for browsers' XPath evaluator with added support for OpenRosa extensions.",
+  "main": "src/openrosa-xpath.js",
+  "scripts": {
+    "test": "./node_modules/karma/bin/karma start karma.config.js --single-run"
+  },
+  "author": "Alex",
+  "license": "MIT",
+  "devDependencies": {
+    "karma": "^0.12.37",
+    "karma-chrome-launcher": "^0.2.0",
+    "karma-firefox-launcher": "^0.1.6",
+    "karma-mocha": "^0.2.0",
+    "mocha": "^2.2.5"
+  }
+}
