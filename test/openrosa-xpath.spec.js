@@ -1,8 +1,15 @@
-var openrosa_xpath = require('../src/openrosa-xpath.js'),
-    assert = require('chai').assert;
+define(['src/openrosa-xpath', 'chai'], function(openrosa_xpath, chai) {
+  var assert = chai.assert;
 
-describe('openrosa-xpath', function() {
-  it('should provide a function', function() {
-    assert.equal(typeof openrosa_xpath, 'function');
+  describe('test setup', function() {
+    it('should provide `assert`', function() {
+      assert.ok(assert);
+    });
+  });
+
+  describe('openrosa-xpath', function() {
+    it('should provide a function', function() {
+      assert.ok(openrosa_xpath);
+    });
   });
 });
