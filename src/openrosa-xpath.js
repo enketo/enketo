@@ -3,6 +3,7 @@ var
     boolean_from_string = /^boolean-from-string\((.*)\)$/,
     pow = /^pow\((.*),\s*(.*)\)$/,
     coalesce = /^coalesce\((.*),\s*(.*)\)$/,
+    substr = /^substr\(([^,]*),\s*([^,]*)(?:,\s*(.*))?\)$/,
     _uuid_part = function(c) {
         var r = Math.random()*16|0,
                 v=c=='x'?r:r&0x3|0x8;
@@ -80,6 +81,16 @@ var openrosa_xpath = function(e, contextNode, namespaceResolver, resultType, res
       res = openrosa_xpath.call(doc, match[2], contextNode, namespaceResolver,
             XPathResult.STRING_TYPE, result);
       return res;
+  }
+
+  match = substr.exec(e);
+  if(match) {
+      res = openrosa_xpath.call(doc, match[1], contextNode, namespaceResolver,
+          XPathResult.STRING_TYPE, result).stringValue;
+      var startIndex = parseInt(match[2], 10),
+          endIndex = match[3] ? parseInt(match[3], 10) : res.length;
+      val = res.slice(startIndex, endIndex);
+      return xpathResult.string(val);
   }
 
   if(overriden) return overriden.apply(doc, arguments);

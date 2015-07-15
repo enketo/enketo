@@ -25,8 +25,6 @@ define(['src/openrosa-xpath', 'chai', 'lodash'], function(openrosa_xpath, chai, 
     describe('#decimal-date-time()', function() { it('should have tests', function() { TODO(); }); });
 
     describe('#pow()', function() {
-      it('should have tests', function() { TODO(); });
-
       describe('should return power of text values', function() {
         it('3^0', function() {
           // given
@@ -118,7 +116,24 @@ define(['src/openrosa-xpath', 'chai', 'lodash'], function(openrosa_xpath, chai, 
       });
     });
 
-    describe('#substr()', function() { it('should have tests', function() { TODO(); }); });
+    describe('#substr()', function() {
+      it('should give the rest of a string if supplied with only startIndex', function() {
+        // given
+        simpleValueIs('0123456789');
+        
+        // expect
+        assert.equal(xEval('substr(/simple/xpath/to/node, 5)').stringValue,
+            '56789');
+      });
+      it('should give substring from start to finish if supplied with 2 indexes', function() {
+        // given
+        simpleValueIs('0123456789');
+        
+        // expect
+        assert.equal(xEval('substr(/simple/xpath/to/node, 2, 4)').stringValue,
+            '23');
+      });
+    });
     describe('#int()', function() { it('should have tests', function() { TODO(); }); });
 
     describe('#uuid()', function() {
