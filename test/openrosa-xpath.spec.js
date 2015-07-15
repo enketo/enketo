@@ -1,4 +1,4 @@
-define(['src/openrosa-xpath', 'chai'], function(openrosa_xpath, chai) {
+define(['src/openrosa-xpath', 'chai', 'lodash'], function(openrosa_xpath, chai, _) {
   var assert = chai.assert;
 
   describe('test setup', function() {
@@ -39,7 +39,32 @@ define(['src/openrosa-xpath', 'chai'], function(openrosa_xpath, chai) {
     describe('#today()', function() { it('should have tests', function() { assert.notOk('TODO'); }); });
     describe('#date()', function() { it('should have tests', function() { assert.notOk('TODO'); }); });
     describe('#if()', function() { it('should have tests', function() { assert.notOk('TODO'); }); });
-    describe('#boolean-from-string()', function() { it('should have tests', function() { assert.notOk('TODO'); }); });
+
+    describe('#boolean-from-string()', function() {
+      it('should have tests', function() {
+        assert.notOk('TODO');
+      });
+
+      _.forEach({
+        '1': true,
+        'true':true,
+        'True':false,
+        '0':false,
+        '':false,
+        'false':false,
+        'nonsense':false
+      }, function(nodeValue, expectedBoolean) {
+        it('should evaluate `' + nodeValue +
+            '` as ' + expectedBoolean.toUpperCase(), function() {
+          // given
+          simpleValueIs(nodeValue);
+
+          // then
+          assert.equal(openrosa_xpath('/simple/xpath/to/node'), expectedBoolean);
+        });
+      });
+    });
+
     describe('#checklist()', function() { it('should have tests', function() { assert.notOk('TODO'); }); });
     describe('#selected()', function() { it('should have tests', function() { assert.notOk('TODO'); }); });
     describe('#selected-at()', function() { it('should have tests', function() { assert.notOk('TODO'); }); });

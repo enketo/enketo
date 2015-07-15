@@ -23,6 +23,7 @@ require.config({
   callback: window.__karma__.start,
 
   paths: {
-    chai:'/base/node_modules/chai/chai'
+    chai:'/base/node_modules/chai/chai',
+    lodash:'/base/test/lib/lodash-3.10.0.min'
   }
 });
