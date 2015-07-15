@@ -7,3 +7,4 @@ For more info on extended XPath expressions/bindings supported by XForms/OpenRos
 
 * [ODK XForm Specification](https://opendatakit.github.io/odk-xform-spec/)
 * [OpenDataKit Binding documentation](https://opendatakit.org/help/form-design/binding/)
+* [JavaRosa XPath functions](https://bitbucket.org/javarosa/javarosa/wiki/xform)
