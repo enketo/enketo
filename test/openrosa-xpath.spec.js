@@ -4,12 +4,11 @@ define(['src/openrosa-xpath', 'chai', 'lodash'], function(openrosa_xpath, chai, 
       xEval,
       simpleValueIs = function(textValue) {
         var xml = '<simple><xpath><to><node>' + textValue +
-                '</node></to></xpath></simple>',
+                '</node></to></xpath><empty/></simple>',
             doc = new DOMParser().parseFromString(xml, 'application/xml');
         xEval = function(e) {
-          var res = openrosa_xpath.call(doc, e, doc, null,
+          return openrosa_xpath.call(doc, e, doc, null,
               XPathResult.STRING_TYPE, null);
-          return res.stringValue;
         }
       };
 
@@ -33,26 +32,70 @@ define(['src/openrosa-xpath', 'chai', 'lodash'], function(openrosa_xpath, chai, 
           // given
           simpleValueIs('3');
 
-          assert.equal(xEval('pow(/simple/xpath/to/node, 0)'), 1);
+          assert.equal(xEval('pow(/simple/xpath/to/node, 0)').numberValue, 1);
         });
         it('1^3', function() {
           // given
           simpleValueIs('1');
 
-          assert.equal(xEval('pow(/simple/xpath/to/node, 3)'), 1);
+          assert.equal(xEval('pow(/simple/xpath/to/node, 3)').numberValue, 1);
         });
         it('4^2', function() {
           // given
           simpleValueIs('4');
 
-          assert.equal(xEval('pow(/simple/xpath/to/node, 2)'), 16);
+          assert.equal(xEval('pow(/simple/xpath/to/node, 2)').numberValue, 16);
         });
       });
     });
 
     describe('#indexed-repeat()', function() { it('should have tests', function() { TODO(); }); });
     describe('#format-date()', function() { it('should have tests', function() { TODO(); }); });
-    describe('#coalesce()', function() { it('should have tests', function() { TODO(); }); });
+
+    describe('#coalesce()', function() {
+      it('should return first value if provided via xpath', function() {
+        // given
+        simpleValueIs('first');
+
+        // expect
+        assert.equal(xEval('coalesce(/simple/xpath/to/node, "whatever")').stringValue,
+            'first');
+      });
+      it('should return first value if provided via string', function() {
+        // expect
+        assert.equal(xEval('coalesce("FIRST", "whatever")').stringValue,
+            'FIRST');
+      });
+      it('should return second value from xpath if first value is empty string', function() {
+        // given
+        simpleValueIs('second');
+
+        // expect
+        assert.equal(xEval('coalesce("", /simple/xpath/to/node)').stringValue,
+            'second');
+      });
+      it('should return second value from string if first value is empty string', function() {
+        // expect
+        assert.equal(xEval('coalesce("", "SECOND")').stringValue, 'SECOND');
+      });
+      it('should return second value from xpath if first value is empty xpath', function() {
+        // given
+        simpleValueIs('second');
+
+        // expect
+        assert.equal(xEval('coalesce(/simple/empty, /simple/xpath/to/node)').stringValue,
+            'second');
+      });
+      it('should return second value from string if first value is empty xpath', function() {
+        // given
+        simpleValueIs('');
+
+        // expect
+        assert.equal(xEval('coalesce(/simple/xpath/to/node, "SECOND")').stringValue,
+            'SECOND');
+      });
+    });
+
     describe('#join()', function() { it('should have tests', function() { TODO(); }); });
     describe('#max()', function() { it('should have tests', function() { TODO(); }); });
     describe('#min()', function() { it('should have tests', function() { TODO(); }); });
@@ -111,7 +154,8 @@ define(['src/openrosa-xpath', 'chai', 'lodash'], function(openrosa_xpath, chai, 
           simpleValueIs(nodeValue);
 
           // then
-          assert.equal(xEval('boolean-from-string(/simple/xpath/to/node)'), expectedBoolean.toString());
+          assert.equal(xEval('boolean-from-string(/simple/xpath/to/node)').stringValue,
+              expectedBoolean.toString());
         });
       });
     });

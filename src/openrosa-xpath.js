@@ -1,6 +1,8 @@
 var
+    raw_string = /^"(.*)"$/
     boolean_from_string = /^boolean-from-string\((.*)\)$/,
     pow = /^pow\((.*),\s*(.*)\)$/,
+    coalesce = /^coalesce\((.*),\s*(.*)\)$/,
     _uuid_part = function(c) {
         var r = Math.random()*16|0,
                 v=c=='x'?r:r&0x3|0x8;
@@ -50,6 +52,11 @@ var openrosa_xpath = function(e, contextNode, namespaceResolver, resultType, res
     return xpathResult.number(Math.random());
   }
 
+  match = raw_string.exec(e);
+  if(match) {
+    return xpathResult.string(match[1]);
+  }
+
   match = boolean_from_string.exec(e);
   if(match) {
     res = openrosa_xpath.call(doc, match[1], contextNode, namespaceResolver,
@@ -63,6 +70,16 @@ var openrosa_xpath = function(e, contextNode, namespaceResolver, resultType, res
         XPathResult.STRING_TYPE, result).stringValue;
     val = Math.pow(parseInt(res, 10), parseInt(match[2], 10));
     return xpathResult.number(val);
+  }
+
+  match = coalesce.exec(e);
+  if(match) {
+      res = openrosa_xpath.call(doc, match[1], contextNode, namespaceResolver,
+          XPathResult.STRING_TYPE, result);
+      if(res.stringValue) return res;
+      res = openrosa_xpath.call(doc, match[2], contextNode, namespaceResolver,
+            XPathResult.STRING_TYPE, result);
+      return res;
   }
 
   if(overriden) return overriden.apply(doc, arguments);
