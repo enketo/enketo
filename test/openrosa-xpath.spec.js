@@ -1,7 +1,7 @@
 define(['src/openrosa-xpath', 'chai', 'lodash'], function(openrosa_xpath, chai, _) {
   var TODO = function() { false && assert.notOk('TODO'); },
       assert = chai.assert,
-      xEval = openrosa_xpath,
+      xEval,
       simpleValueIs = function(textValue) {
         var xml = '<simple><xpath><to><node>' + textValue +
                 '</node></to></xpath></simple>',
@@ -12,6 +12,11 @@ define(['src/openrosa-xpath', 'chai', 'lodash'], function(openrosa_xpath, chai, 
           return res.stringValue;
         }
       };
+
+  beforeEach(function() {
+    // reset xEval for simple tests which don't define a doc
+    xEval = openrosa_xpath;
+  });
 
   describe('openrosa-xpath', function() {
     it('should provide a function', function() {
@@ -61,7 +66,8 @@ define(['src/openrosa-xpath', 'chai', 'lodash'], function(openrosa_xpath, chai, 
         var provided = xEval('uuid()');
 
         // then
-        assert.match(provided, /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i);
+        assert.match(provided.stringValue,
+            /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i);
       });
     });
 

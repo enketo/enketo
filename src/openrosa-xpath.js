@@ -36,7 +36,11 @@ var openrosa_xpath = function(e, contextNode, namespaceResolver, resultType, res
       overriden = doc ? doc.evaluate : null;
 
   if(e === 'uuid()') {
-    return uuid();
+    val = uuid();
+    return {
+      resultType: XPathResult.STRING_TYPE,
+      stringValue: val
+    };
   }
 
   match = boolean_from_string.exec(e);
