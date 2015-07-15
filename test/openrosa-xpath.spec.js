@@ -1,50 +1,52 @@
 define(['src/openrosa-xpath', 'chai', 'lodash'], function(openrosa_xpath, chai, _) {
-  var assert = chai.assert;
-
-  describe('test setup', function() {
-    it('should provide `assert`', function() {
-      assert.ok(assert);
-    });
-  });
+  var TODO = function() { assert.notOk('TODO'); },
+      assert = chai.assert,
+      xEval = openrosa_xpath,
+      simpleValueIs = function(textValue) {
+        var xml = '<simple><xpath><to><node>' + textValue +
+                '</node></to></xpath></simple>',
+            doc = new DOMParser().parseFromString(xml, 'application/xml');
+        xEval = function(e) {
+          var res = openrosa_xpath.call(doc, e, doc, null,
+              XPathResult.STRING_TYPE, null);
+          return res.stringValue;
+        }
+      };
 
   describe('openrosa-xpath', function() {
     it('should provide a function', function() {
       assert.typeOf(openrosa_xpath, 'function');
     });
 
-    describe('#decimal-date-time()', function() { it('should have tests', function() { assert.notOk('TODO'); }); });
-    describe('#pow()', function() { it('should have tests', function() { assert.notOk('TODO'); }); });
-    describe('#indexed-repeat()', function() { it('should have tests', function() { assert.notOk('TODO'); }); });
-    describe('#format-date()', function() { it('should have tests', function() { assert.notOk('TODO'); }); });
-    describe('#coalesce()', function() { it('should have tests', function() { assert.notOk('TODO'); }); });
-    describe('#join()', function() { it('should have tests', function() { assert.notOk('TODO'); }); });
-    describe('#max()', function() { it('should have tests', function() { assert.notOk('TODO'); }); });
-    describe('#min()', function() { it('should have tests', function() { assert.notOk('TODO'); }); });
-    describe('#random()', function() { it('should have tests', function() { assert.notOk('TODO'); }); });
-    describe('#substr()', function() { it('should have tests', function() { assert.notOk('TODO'); }); });
-    describe('#int()', function() { it('should have tests', function() { assert.notOk('TODO'); }); });
+    describe('#decimal-date-time()', function() { it('should have tests', function() { TODO(); }); });
+    describe('#pow()', function() { it('should have tests', function() { TODO(); }); });
+    describe('#indexed-repeat()', function() { it('should have tests', function() { TODO(); }); });
+    describe('#format-date()', function() { it('should have tests', function() { TODO(); }); });
+    describe('#coalesce()', function() { it('should have tests', function() { TODO(); }); });
+    describe('#join()', function() { it('should have tests', function() { TODO(); }); });
+    describe('#max()', function() { it('should have tests', function() { TODO(); }); });
+    describe('#min()', function() { it('should have tests', function() { TODO(); }); });
+    describe('#random()', function() { it('should have tests', function() { TODO(); }); });
+    describe('#substr()', function() { it('should have tests', function() { TODO(); }); });
+    describe('#int()', function() { it('should have tests', function() { TODO(); }); });
 
     describe('#uuid()', function() {
       it('should provide an RFC 4122 version 4 compliant UUID string', function() {
         // when
-        var provided = openrosa_xpath('uuid()');
+        var provided = xEval('uuid()');
 
         // then
         assert.match(provided, /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i);
       });
     });
 
-    describe('#regex()', function() { it('should have tests', function() { assert.notOk('TODO'); }); });
-    describe('#now()', function() { it('should have tests', function() { assert.notOk('TODO'); }); });
-    describe('#today()', function() { it('should have tests', function() { assert.notOk('TODO'); }); });
-    describe('#date()', function() { it('should have tests', function() { assert.notOk('TODO'); }); });
-    describe('#if()', function() { it('should have tests', function() { assert.notOk('TODO'); }); });
+    describe('#regex()', function() { it('should have tests', function() { TODO(); }); });
+    describe('#now()', function() { it('should have tests', function() { TODO(); }); });
+    describe('#today()', function() { it('should have tests', function() { TODO(); }); });
+    describe('#date()', function() { it('should have tests', function() { TODO(); }); });
+    describe('#if()', function() { it('should have tests', function() { TODO(); }); });
 
     describe('#boolean-from-string()', function() {
-      it('should have tests', function() {
-        assert.notOk('TODO');
-      });
-
       _.forEach({
         '1': true,
         'true':true,
@@ -53,23 +55,23 @@ define(['src/openrosa-xpath', 'chai', 'lodash'], function(openrosa_xpath, chai, 
         '':false,
         'false':false,
         'nonsense':false
-      }, function(nodeValue, expectedBoolean) {
+      }, function(expectedBoolean, nodeValue) {
         it('should evaluate `' + nodeValue +
-            '` as ' + expectedBoolean.toUpperCase(), function() {
+            '` as ' + expectedBoolean.toString().toUpperCase(), function() {
           // given
           simpleValueIs(nodeValue);
 
           // then
-          assert.equal(openrosa_xpath('/simple/xpath/to/node'), expectedBoolean);
+          assert.equal(xEval('boolean-from-string(/simple/xpath/to/node)'), expectedBoolean.toString());
         });
       });
     });
 
-    describe('#checklist()', function() { it('should have tests', function() { assert.notOk('TODO'); }); });
-    describe('#selected()', function() { it('should have tests', function() { assert.notOk('TODO'); }); });
-    describe('#selected-at()', function() { it('should have tests', function() { assert.notOk('TODO'); }); });
-    describe('#round()', function() { it('should have tests', function() { assert.notOk('TODO'); }); });
-    describe('#area()', function() { it('should have tests', function() { assert.notOk('TODO'); }); });
-    describe('#position()', function() { it('should have tests', function() { assert.notOk('TODO'); }); });
+    describe('#checklist()', function() { it('should have tests', function() { TODO(); }); });
+    describe('#selected()', function() { it('should have tests', function() { TODO(); }); });
+    describe('#selected-at()', function() { it('should have tests', function() { TODO(); }); });
+    describe('#round()', function() { it('should have tests', function() { TODO(); }); });
+    describe('#area()', function() { it('should have tests', function() { TODO(); }); });
+    describe('#position()', function() { it('should have tests', function() { TODO(); }); });
   });
 });
