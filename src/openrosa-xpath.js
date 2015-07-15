@@ -1,5 +1,6 @@
 var
-    boolean_string = /^boolean-from-string\((.*)\)$/,
+    boolean_from_string = /^boolean-from-string\((.*)\)$/,
+    pow = /^pow\((.*),\s*(.*)\)$/,
     _uuid_part = function(c) {
         var r = Math.random()*16|0,
                 v=c=='x'?r:r&0x3|0x8;
@@ -30,27 +31,38 @@ var
  *   common and will create a new XPathResult
  */
 var openrosa_xpath = function(e, contextNode, namespaceResolver, resultType, result) {
-  var match,
-      overriden = this ? this.evaluate : null;
+  var doc = this,
+      match, res, val,
+      overriden = doc ? doc.evaluate : null;
 
   if(e === 'uuid()') {
     return uuid();
   }
 
-  match = boolean_string.exec(e);
+  match = boolean_from_string.exec(e);
   if(match) {
-    var wrapped = match[1],
-        res = openrosa_xpath.call(this, wrapped, contextNode, namespaceResolver,
-            XPathResult.STRING_TYPE, result).stringValue,
-        bool = res === '1' || res === 'true';
+    res = openrosa_xpath.call(doc, match[1], contextNode, namespaceResolver,
+        XPathResult.STRING_TYPE, result).stringValue;
+    val = res === '1' || res === 'true';
     return {
-      booleanValue: bool,
       resultType: XPathResult.BOOLEAN_TYPE,
-      stringValue: bool.toString()
+      booleanValue: val,
+      stringValue: val.toString()
     };
   }
 
-  if(overriden) return overriden.apply(this, arguments);
+  match = pow.exec(e);
+  if(match) {
+    res = openrosa_xpath.call(doc, match[1], contextNode, namespaceResolver,
+        XPathResult.STRING_TYPE, result).stringValue;
+    val = Math.pow(parseInt(res, 10), parseInt(match[2], 10));
+    return {
+      resultType: XPathResult.NUMBER_TYPE,
+      numberValue: val,
+      stringValue: val.toString() };
+  }
+
+  if(overriden) return overriden.apply(doc, arguments);
 
   throw new Error('Failed to parse expression: ' + e);
 };

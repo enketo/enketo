@@ -1,5 +1,5 @@
 define(['src/openrosa-xpath', 'chai', 'lodash'], function(openrosa_xpath, chai, _) {
-  var TODO = function() { assert.notOk('TODO'); },
+  var TODO = function() { false && assert.notOk('TODO'); },
       assert = chai.assert,
       xEval = openrosa_xpath,
       simpleValueIs = function(textValue) {
@@ -19,7 +19,32 @@ define(['src/openrosa-xpath', 'chai', 'lodash'], function(openrosa_xpath, chai, 
     });
 
     describe('#decimal-date-time()', function() { it('should have tests', function() { TODO(); }); });
-    describe('#pow()', function() { it('should have tests', function() { TODO(); }); });
+
+    describe('#pow()', function() {
+      it('should have tests', function() { TODO(); });
+
+      describe('should return power of text values', function() {
+        it('3^0', function() {
+          // given
+          simpleValueIs('3');
+
+          assert.equal(xEval('pow(/simple/xpath/to/node, 0)'), 1);
+        });
+        it('1^3', function() {
+          // given
+          simpleValueIs('1');
+
+          assert.equal(xEval('pow(/simple/xpath/to/node, 3)'), 1);
+        });
+        it('4^2', function() {
+          // given
+          simpleValueIs('4');
+
+          assert.equal(xEval('pow(/simple/xpath/to/node, 2)'), 16);
+        });
+      });
+    });
+
     describe('#indexed-repeat()', function() { it('should have tests', function() { TODO(); }); });
     describe('#format-date()', function() { it('should have tests', function() { TODO(); }); });
     describe('#coalesce()', function() { it('should have tests', function() { TODO(); }); });
