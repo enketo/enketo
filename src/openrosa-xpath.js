@@ -1,7 +1,9 @@
 var
     raw_string = /^"(.*)"$/
     boolean_from_string = /^boolean-from-string\((.*)\)$/,
+    int = /^int\((.*)\)$/,
     pow = /^pow\((.*),\s*(.*)\)$/,
+    regex = /^regex\((.*),\s*(.*)\)$/,
     coalesce = /^coalesce\((.*),\s*(.*)\)$/,
     substr = /^substr\(([^,]*),\s*([^,]*)(?:,\s*(.*))?\)$/,
     _uuid_part = function(c) {
@@ -42,8 +44,9 @@ var
  *   common and will create a new XPathResult
  */
 var openrosa_xpath = function(e, contextNode, namespaceResolver, resultType, result) {
+  'use strict';
   var doc = this,
-      match, res, val,
+      match, res, val, r,
       overriden = doc ? doc.evaluate : null;
 
   if(e === 'uuid()') {
@@ -56,6 +59,13 @@ var openrosa_xpath = function(e, contextNode, namespaceResolver, resultType, res
   match = raw_string.exec(e);
   if(match) {
     return xpathResult.string(match[1]);
+  }
+
+  match = int.exec(e);
+  if(match) {
+    res = openrosa_xpath.call(doc, match[1], contextNode, namespaceResolver,
+        XPathResult.STRING_TYPE, result).stringValue;
+    return xpathResult.number(parseInt(res, 10));
   }
 
   match = boolean_from_string.exec(e);
@@ -71,6 +81,15 @@ var openrosa_xpath = function(e, contextNode, namespaceResolver, resultType, res
         XPathResult.STRING_TYPE, result).stringValue;
     val = Math.pow(parseInt(res, 10), parseInt(match[2], 10));
     return xpathResult.number(val);
+  }
+
+  match = regex.exec(e);
+  if(match) {
+      val = openrosa_xpath.call(doc, match[1], contextNode, namespaceResolver,
+          XPathResult.STRING_TYPE, result);
+      r = openrosa_xpath.call(doc, match[2], contextNode, namespaceResolver,
+            XPathResult.STRING_TYPE, result);
+      return xpathResult.boolean(new RegExp(r).test(val));
   }
 
   match = coalesce.exec(e);

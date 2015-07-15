@@ -134,7 +134,24 @@ define(['src/openrosa-xpath', 'chai', 'lodash'], function(openrosa_xpath, chai, 
             '23');
       });
     });
-    describe('#int()', function() { it('should have tests', function() { TODO(); }); });
+
+    describe('#int()', function() {
+      it('should convert a string to an integer', function() {
+        // given
+        simpleValueIs('123');
+
+        // then
+        assert.equal(xEval('int(/simple/xpath/to/node)').numberValue, 123);
+      });
+      it('should convert a decimal to an integer', function() {
+        // given
+        simpleValueIs('123.456');
+
+        // then
+        assert.equal(xEval('int(/simple/xpath/to/node)').numberValue, 123);
+      });
+      // TODO it's not clear from the spec what else this should do
+    });
 
     describe('#uuid()', function() {
       it('should provide an RFC 4122 version 4 compliant UUID string', function() {
@@ -147,7 +164,25 @@ define(['src/openrosa-xpath', 'chai', 'lodash'], function(openrosa_xpath, chai, 
       });
     });
 
-    describe('#regex()', function() { it('should have tests', function() { TODO(); }); });
+    describe('#regex()', function() {
+      it('should return `true` if value matches supplied regex', function() {
+        // given
+        simpleValueIs('123');
+
+        // expect
+        assert.ok(xEval('regex(/simple/xpath/to/node, "[0-9]{3}")').booleanValue);
+      });
+      // This test assumes that regex matching is for the whole value, so start
+      // and end marks do not need to be included.  This seems logical, but is
+      // not explicitly stated in the spec.
+      it('should return `false` if value matches supplied regex', function() {
+        // given
+        simpleValueIs('1234');
+
+        // expect
+        assert.ok(xEval('regex(/simple/xpath/to/node, "[0-9]{3}")').booleanValue);
+      });
+    });
     describe('#now()', function() { it('should have tests', function() { TODO(); }); });
     describe('#today()', function() { it('should have tests', function() { TODO(); }); });
     describe('#date()', function() { it('should have tests', function() { TODO(); }); });
