@@ -22,7 +22,8 @@ var
           numberValue:val, stringValue:val.toString() } },
       string: function(val) { return { resultType:XPathResult.STRING_TYPE,
           stringValue:val } },
-    };
+    },
+    zeroPad = function(n) { return n >= 10 ? n : '0' + n; };
 
 /**
  * OpenRosa wrapper for [`document.evaluate()`]
@@ -54,6 +55,15 @@ var openrosa_xpath = function(e, contextNode, namespaceResolver, resultType, res
   }
   if(e === 'random()') {
     return xpathResult.number(Math.random());
+  }
+  if(e === 'now()') {
+    return xpathResult.number(Date.now());
+  }
+  if(e === 'today()') {
+    var today = new Date();
+    today = today.getFullYear() + '-' + zeroPad(today.getMonth()+1) + '-' +
+        zeroPad(today.getDate());
+    return xpathResult.string(today);
   }
 
   match = raw_string.exec(e);

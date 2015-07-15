@@ -183,8 +183,30 @@ define(['src/openrosa-xpath', 'chai', 'lodash'], function(openrosa_xpath, chai, 
         assert.ok(xEval('regex(/simple/xpath/to/node, "[0-9]{3}")').booleanValue);
       });
     });
-    describe('#now()', function() { it('should have tests', function() { TODO(); }); });
-    describe('#today()', function() { it('should have tests', function() { TODO(); }); });
+
+    describe('#now()', function() {
+      it('should return a timestamp for this instant', function() {
+        var before = Date.now(),
+            val = xEval('now()').numberValue,
+            after = Date.now();
+
+        assert.ok(before <= val && after >= val);
+      });
+    });
+
+    describe('#today()', function() {
+      it('should return today\'s date', function() {
+        // given
+        var today = new Date(),
+            zeroPad = function(n) { return n >= 10 ? n : '0' + n; };
+        today = today.getFullYear() + '-' + zeroPad(today.getMonth()+1) + '-' +
+            zeroPad(today.getDate());
+
+        // expect
+        assert.equal(xEval('today()').stringValue, today);
+      });
+    });
+
     describe('#date()', function() { it('should have tests', function() { TODO(); }); });
     describe('#if()', function() { it('should have tests', function() { TODO(); }); });
 
