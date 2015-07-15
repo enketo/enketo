@@ -9,6 +9,14 @@ var
     uuid = function() {
         return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'
                 .replace(/[xy]/g, _uuid_part);
+    },
+    xpathResult = {
+      boolean: function(val) { return { resultType:XPathResult.BOOLEAN_TYPE,
+          booleanValue:val, stringValue:val.toString() } },
+      number: function(val) { return { resultType:XPathResult.NUMBER_TYPE,
+          numberValue:val, stringValue:val.toString() } },
+      string: function(val) { return { resultType:XPathResult.STRING_TYPE,
+          stringValue:val } },
     };
 
 /**
@@ -36,31 +44,17 @@ var openrosa_xpath = function(e, contextNode, namespaceResolver, resultType, res
       overriden = doc ? doc.evaluate : null;
 
   if(e === 'uuid()') {
-    val = uuid();
-    return {
-      resultType: XPathResult.STRING_TYPE,
-      stringValue: val
-    };
+    return xpathResult.string(uuid());
   }
   if(e === 'random()') {
-    val = Math.random();
-    return {
-      resultType: XPathResult.NUMBER_TYPE,
-      numberValue: val,
-      stringValue: val.toString()
-    };
+    return xpathResult.number(Math.random());
   }
 
   match = boolean_from_string.exec(e);
   if(match) {
     res = openrosa_xpath.call(doc, match[1], contextNode, namespaceResolver,
         XPathResult.STRING_TYPE, result).stringValue;
-    val = res === '1' || res === 'true';
-    return {
-      resultType: XPathResult.BOOLEAN_TYPE,
-      booleanValue: val,
-      stringValue: val.toString()
-    };
+    return xpathResult.boolean(res === '1' || res === 'true');
   }
 
   match = pow.exec(e);
@@ -68,10 +62,7 @@ var openrosa_xpath = function(e, contextNode, namespaceResolver, resultType, res
     res = openrosa_xpath.call(doc, match[1], contextNode, namespaceResolver,
         XPathResult.STRING_TYPE, result).stringValue;
     val = Math.pow(parseInt(res, 10), parseInt(match[2], 10));
-    return {
-      resultType: XPathResult.NUMBER_TYPE,
-      numberValue: val,
-      stringValue: val.toString() };
+    return xpathResult.number(val);
   }
 
   if(overriden) return overriden.apply(doc, arguments);
