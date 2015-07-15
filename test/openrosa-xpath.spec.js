@@ -56,7 +56,23 @@ define(['src/openrosa-xpath', 'chai', 'lodash'], function(openrosa_xpath, chai, 
     describe('#join()', function() { it('should have tests', function() { TODO(); }); });
     describe('#max()', function() { it('should have tests', function() { TODO(); }); });
     describe('#min()', function() { it('should have tests', function() { TODO(); }); });
-    describe('#random()', function() { it('should have tests', function() { TODO(); }); });
+    describe('#random()', function() {
+      it('should return a number', function() {
+        var vals = [];
+        _.times(10, function() {
+          // when
+          var val = xEval('random()').numberValue;
+
+          // then
+          assert.typeOf(val, 'number');
+
+          vals.push(val);
+        });
+
+        // check the numbers are a bit random
+        assert.equal(_.uniq(vals).length, vals.length);
+      });
+    });
     describe('#substr()', function() { it('should have tests', function() { TODO(); }); });
     describe('#int()', function() { it('should have tests', function() { TODO(); }); });
 

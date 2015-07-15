@@ -42,6 +42,14 @@ var openrosa_xpath = function(e, contextNode, namespaceResolver, resultType, res
       stringValue: val
     };
   }
+  if(e === 'random()') {
+    val = Math.random();
+    return {
+      resultType: XPathResult.NUMBER_TYPE,
+      numberValue: val,
+      stringValue: val.toString()
+    };
+  }
 
   match = boolean_from_string.exec(e);
   if(match) {
