@@ -28,7 +28,20 @@ var
       string: function(val) { return { resultType:XPathResult.STRING_TYPE,
           stringValue:val } },
     },
-    zeroPad = function(n) { return n >= 10 ? n : '0' + n; };
+    zeroPad = function(n) { return n >= 10 ? n : '0' + n; },
+    textVal = function(xpathResult) {
+      switch(xpathResult.resultType) {
+        case XPathResult.UNORDERED_NODE_ITERATOR_TYPE:
+        case XPathResult.ORDERED_NODE_ITERATOR_TYPE:
+        case XPathResult.UNORDERED_NODE_SNAPSHOT_TYPE:
+        case XPathResult.ORDERED_NODE_SNAPSHOT_TYPE:
+        case XPathResult.ANY_UNORDERED_NODE_TYPE:
+        case XPathResult.FIRST_ORDERED_NODE_TYPE:
+          console.log('We got a node of type: ' + xpathResult.resultType);
+          return xpathResult.iterateNext().textContent;
+      }
+      return xpathResult.stringValue;
+    };
 
 /**
  * OpenRosa wrapper for [`document.evaluate()`]
@@ -65,7 +78,6 @@ var openrosa_xpath = function(e, contextNode, namespaceResolver, resultType, res
   if(e === 'uuid()') {
     return xpathResult.string(uuid());
   }
-
   if(e === 'random()') {
     return xpathResult.number(Math.random());
   }
@@ -93,7 +105,7 @@ var openrosa_xpath = function(e, contextNode, namespaceResolver, resultType, res
             rhs.resultType === XPathResult.NUMBER_TYPE) {
           res = lhs.numberValue < rhs.numberValue;
         } else {
-          res = lhs.stringValue < rhs.stringValue;
+          res = textVal(lhs) < textVal(rhs);
         }
         break;
       case '<=':
@@ -102,7 +114,7 @@ var openrosa_xpath = function(e, contextNode, namespaceResolver, resultType, res
             rhs.resultType === XPathResult.NUMBER_TYPE) {
           res = lhs.numberValue <= rhs.numberValue;
         } else {
-          res = lhs.stringValue <= rhs.stringValue;
+          res = textVal(lhs) <= textVal(rhs);
         }
         break;
       case '>':
@@ -111,7 +123,7 @@ var openrosa_xpath = function(e, contextNode, namespaceResolver, resultType, res
             rhs.resultType === XPathResult.NUMBER_TYPE) {
           res = lhs.numberValue > rhs.numberValue;
         } else {
-          res = lhs.stringValue > rhs.stringValue;
+          res = textVal(lhs) > textVal(rhs);
         }
         break;
       case '>=':
@@ -120,7 +132,7 @@ var openrosa_xpath = function(e, contextNode, namespaceResolver, resultType, res
             rhs.resultType === XPathResult.NUMBER_TYPE) {
           res = lhs.numberValue >= rhs.numberValue;
         } else {
-          res = lhs.stringValue >= rhs.stringValue;
+          res = textVal(lhs) >= textVal(rhs);
         }
         break;
     }
