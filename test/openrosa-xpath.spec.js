@@ -22,6 +22,46 @@ define(['src/openrosa-xpath', 'chai', 'lodash'], function(openrosa_xpath, chai, 
       assert.typeOf(openrosa_xpath, 'function');
     });
 
+    it('should process simple xpaths', function() {
+      // given
+      simpleValueIs('val');
+
+      // expect
+      assert.equal(xEval('/simple/xpath/to/node').stringValue, 'val');
+    });
+
+    describe('#concat', function() {
+      it('should concatenate two xpath values', function() {
+        // given
+        simpleValueIs('jaja');
+
+        // expect
+        assert.equal(xEval('concat(/simple/xpath/to/node, /simple/xpath/to/node)').stringValue,
+            'jajajaja');
+      });
+      it('should concatenate two string values', function() {
+        // expect
+        assert.equal(xEval('concat("port", "manteau")').stringValue,
+            'portmanteau');
+      });
+      it('should concatenate a string and an xpath value', function() {
+        // given
+        simpleValueIs('port');
+
+        // expect
+        assert.equal(xEval('concat(/simple/xpath/to/node, "manteau")').stringValue,
+            'portmanteau');
+      });
+      it('should concatenate an xpath and a string value', function() {
+        // given
+        simpleValueIs('port');
+
+        // expect
+        assert.equal(xEval('concat(/simple/xpath/to/node, "manteau")').stringValue,
+            'portmanteau');
+      });
+    });
+
     describe('#decimal-date-time()', function() { it('should have tests', function() { TODO(); }); });
 
     describe('#pow()', function() {
@@ -259,5 +299,16 @@ define(['src/openrosa-xpath', 'chai', 'lodash'], function(openrosa_xpath, chai, 
     describe('#round()', function() { it('should have tests', function() { TODO(); }); });
     describe('#area()', function() { it('should have tests', function() { TODO(); }); });
     describe('#position()', function() { it('should have tests', function() { TODO(); }); });
+  });
+
+  describe('some complex examples', function() {
+    _.forEach({
+      'concat("uuid:", uuid())':/uuid:[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/
+    }, function(matcher, expression) {
+      it('should convert "' + expression + '" to match "' + matcher + '"', function() {
+        var evaluated = xEval(expression);
+        assert.match(evaluated.stringValue, matcher);
+      });
+    });
   });
 });
