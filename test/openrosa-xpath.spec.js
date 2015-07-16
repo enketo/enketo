@@ -233,7 +233,28 @@ define(['src/openrosa-xpath', 'chai', 'lodash'], function(openrosa_xpath, chai, 
     });
 
     describe('#checklist()', function() { it('should have tests', function() { TODO(); }); });
-    describe('#selected()', function() { it('should have tests', function() { TODO(); }); });
+
+    describe('#selected()', function() {
+      it('should return true if requested item is in list', function() {
+        // given
+        simpleValueIs('one two three');
+
+        // expect
+        assert.ok(xEval('selected(/simple/xpath/to/node, "one")').booleanValue);
+        assert.ok(xEval('selected(/simple/xpath/to/node, "two")').booleanValue);
+        assert.ok(xEval('selected(/simple/xpath/to/node, "three")').booleanValue);
+      });
+      it('should return false if requested item not in list', function() {
+        // given
+        simpleValueIs('one two three');
+
+        // expect
+        assert.notOk(xEval('selected(/simple/xpath/to/node, "on")').booleanValue);
+        assert.notOk(xEval('selected(/simple/xpath/to/node, "ne")').booleanValue);
+        assert.notOk(xEval('selected(/simple/xpath/to/node, "four")').booleanValue);
+      });
+    });
+
     describe('#selected-at()', function() { it('should have tests', function() { TODO(); }); });
     describe('#round()', function() { it('should have tests', function() { TODO(); }); });
     describe('#area()', function() { it('should have tests', function() { TODO(); }); });

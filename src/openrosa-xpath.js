@@ -3,6 +3,7 @@ var
     boolean_from_string = /^boolean-from-string\((.*)\)$/,
     int = /^int\((.*)\)$/,
     pow = /^pow\((.*),\s*(.*)\)$/,
+    selected = /^selected\((.*),\s*(.*)\)$/,
     regex = /^regex\((.*),\s*(.*)\)$/,
     coalesce = /^coalesce\((.*),\s*(.*)\)$/,
     substr = /^substr\(([^,]*),\s*([^,]*)(?:,\s*(.*))?\)$/,
@@ -83,6 +84,15 @@ var openrosa_xpath = function(e, contextNode, namespaceResolver, resultType, res
     res = openrosa_xpath.call(doc, match[1], contextNode, namespaceResolver,
         XPathResult.STRING_TYPE, result).stringValue;
     return xpathResult.boolean(res === '1' || res === 'true');
+  }
+
+  match = selected.exec(e);
+  if(match) {
+    var haystack = openrosa_xpath.call(doc, match[1], contextNode, namespaceResolver,
+        XPathResult.STRING_TYPE, result).stringValue.split(' '),
+    needle = openrosa_xpath.call(doc, match[2], contextNode, namespaceResolver,
+        XPathResult.STRING_TYPE, result).stringValue;
+    return xpathResult.boolean(haystack.indexOf(needle) !== -1);
   }
 
   match = pow.exec(e);
