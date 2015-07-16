@@ -301,9 +301,81 @@ define(['src/openrosa-xpath', 'chai', 'lodash'], function(openrosa_xpath, chai, 
     describe('#position()', function() { it('should have tests', function() { TODO(); }); });
   });
 
+  describe('infix operators', function() {
+    describe('with numbers', function() {
+      _.forEach({
+        '1 < 2' : true,
+        '1 > 2' : false,
+        '2 < 1' : false,
+        '2 > 1' : true,
+        '1 <= 2' : true,
+        '1 >= 2' : false,
+        '2 <= 1' : false,
+        '2 >= 1' : true,
+        '1 <= 1' : true,
+        '1 >= 1' : true,
+        '1 &lt; 2' : true,
+        '1 &gt; 2' : false,
+        '2 &lt; 1' : false,
+        '2 &gt; 1' : true,
+        '1 &lt;= 2' : true,
+        '1 &gt;= 2' : false,
+        '2 &lt;= 1' : false,
+        '2 &gt;= 1' : true,
+        '1 &lt;= 1' : true,
+        '1 &gt;= 1' : true,
+      }, function(expectedBoolean, expr) {
+        it('should evaluate "' + expr + '" as ' + expectedBoolean.toString().toUpperCase(), function() {
+          assert.equal(xEval(expr).booleanValue, expectedBoolean);
+        });
+      });
+    });
+    describe('with strings', function() {
+      _.forEach({
+        '"1" < "2"' : true,
+        '"1" > "2"' : false,
+        '"2" < "1"' : false,
+        '"2" > "1"' : true,
+        '"1" <= "2"' : true,
+        '"1" >= "2"' : false,
+        '"2" <= "1"' : false,
+        '"2" >= "1"' : true,
+        '"1" <= "1"' : true,
+        '"1" >= "1"' : true,
+        '"1" &lt; "2"' : true,
+        '"1" &gt; "2"' : false,
+        '"2" &lt; "1"' : false,
+        '"2" &gt; "1"' : true,
+        '"1" &lt;= "2"' : true,
+        '"1" &gt;= "2"' : false,
+        '"2" &lt;= "1"' : false,
+        '"2" &gt;= "1"' : true,
+        '"1" &lt;= "1"' : true,
+        '"1" &gt;= "1"' : true,
+        '"aardvark" < "aligator"' : true,
+        '"aardvark" <= "aligator"' : true,
+        '"aligator" < "aardvark"' : false,
+        '"aligator" <= "aardvark"' : false,
+        '"possum" > "aligator"' : true,
+        '"possum" >= "aligator"' : true,
+        '"aligator" > "possum"' : false,
+        '"aligator" >= "possum"' : false,
+      }, function(expectedBoolean, expr) {
+        it('should evaluate "' + expr + '" as ' + expectedBoolean.toString().toUpperCase(), function() {
+          assert.equal(xEval(expr).booleanValue, expectedBoolean);
+        });
+      });
+    });
+  });
+
   describe('some complex examples', function() {
     _.forEach({
-      'concat("uuid:", uuid())':/uuid:[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/
+      'concat("uuid:", uuid())':/uuid:[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/,
+      '"2015-07-15" &lt; today()': /true/,
+      '"2015-07-15" < today()' : /true/,
+      "'2015-07-15' &lt; today()" : /true/,
+      "'2015-07-15' < today()" : /true/,
+      "'raw-string'" : /raw-string/,
     }, function(matcher, expression) {
       it('should convert "' + expression + '" to match "' + matcher + '"', function() {
         var evaluated = xEval(expression);

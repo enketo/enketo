@@ -1,11 +1,14 @@
 var
-    raw_string = /^"(.*)"$/
+    raw_string_singles = /^\s*'([^']*)'\s*$/,
+    raw_string_doubles = /^\s*"([^"]*)"\s*$/,
+    raw_number = /^\s*([0-9]+)\s*$/,
     boolean_from_string = /^boolean-from-string\((.*)\)$/,
     int = /^int\((.*)\)$/,
     pow = /^pow\((.*),\s*(.*)\)$/,
     concat = /^concat\((.*),\s*(.*)\)$/,
     selected = /^selected\((.*),\s*(.*)\)$/,
     regex = /^regex\((.*),\s*(.*)\)$/,
+    infix = /^(.*)\s*((?:<|&lt;|>|&gt;)=?)\s*(.*)$/,
     coalesce = /^coalesce\((.*),\s*(.*)\)$/,
     substr = /^substr\(([^,]*),\s*([^,]*)(?:,\s*(.*))?\)$/,
     _uuid_part = function(c) {
@@ -50,7 +53,14 @@ var openrosa_xpath = function(e, contextNode, namespaceResolver, resultType, res
   'use strict';
   var doc = this,
       match, res, val, r,
-      overriden = doc ? doc.evaluate : null;
+      overriden = doc ? doc.evaluate : null,
+      recurse = function(expr, _resultType) {
+        if(!_resultType) _resultType = XPathResult.ANY_TYPE;
+        return openrosa_xpath.call(doc, expr, contextNode, namespaceResolver,
+            _resultType, result);
+      }
+
+  // Handle no-arg function calls
 
   if(e === 'uuid()') {
     return xpathResult.string(uuid());
@@ -69,7 +79,68 @@ var openrosa_xpath = function(e, contextNode, namespaceResolver, resultType, res
     return xpathResult.string(today);
   }
 
-  match = raw_string.exec(e);
+  // Handle infix operators
+
+  match = infix.exec(e);
+  if(match) {
+    var lhs = recurse(match[1]),
+        operator = match[2],
+        rhs = recurse(match[3]);
+    switch(operator) {
+      case '<':
+      case '&lt;':
+        if(lhs.resultType === XPathResult.NUMBER_TYPE &&
+            rhs.resultType === XPathResult.NUMBER_TYPE) {
+          res = lhs.numberValue < rhs.numberValue;
+        } else {
+          res = lhs.stringValue < rhs.stringValue;
+        }
+        break;
+      case '<=':
+      case '&lt;=':
+        if(lhs.resultType === XPathResult.NUMBER_TYPE &&
+            rhs.resultType === XPathResult.NUMBER_TYPE) {
+          res = lhs.numberValue <= rhs.numberValue;
+        } else {
+          res = lhs.stringValue <= rhs.stringValue;
+        }
+        break;
+      case '>':
+      case '&gt;':
+        if(lhs.resultType === XPathResult.NUMBER_TYPE &&
+            rhs.resultType === XPathResult.NUMBER_TYPE) {
+          res = lhs.numberValue > rhs.numberValue;
+        } else {
+          res = lhs.stringValue > rhs.stringValue;
+        }
+        break;
+      case '>=':
+      case '&gt;=':
+        if(lhs.resultType === XPathResult.NUMBER_TYPE &&
+            rhs.resultType === XPathResult.NUMBER_TYPE) {
+          res = lhs.numberValue >= rhs.numberValue;
+        } else {
+          res = lhs.stringValue >= rhs.stringValue;
+        }
+        break;
+    }
+    if(typeof res === 'undefined') return xpathResult.string('Not yet implemented');
+    return xpathResult.boolean(res);
+  }
+
+  // Handle function-style operators
+
+  match = raw_number.exec(e);
+  if(match) {
+    return xpathResult.number(match[1]);
+  }
+
+  match = raw_string_singles.exec(e);
+  if(match) {
+    return xpathResult.string(match[1]);
+  }
+
+  match = raw_string_doubles.exec(e);
   if(match) {
     return xpathResult.string(match[1]);
   }
@@ -145,7 +216,7 @@ var openrosa_xpath = function(e, contextNode, namespaceResolver, resultType, res
 
   if(overriden) return overriden.apply(doc, arguments);
 
-  throw new Error('Failed to parse expression: ' + e);
+  throw new Error('Failed to parse expression: [' + e + ']');
 };
 
 if(typeof define === 'function') {
