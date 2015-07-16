@@ -159,71 +159,59 @@ var openrosa_xpath = function(e, contextNode, namespaceResolver, resultType, res
 
   match = int.exec(e);
   if(match) {
-    res = openrosa_xpath.call(doc, match[1], contextNode, namespaceResolver,
-        XPathResult.STRING_TYPE, result).stringValue;
+    res = recurse(match[1], XPathResult.STRING_TYPE).stringValue;
     return xpathResult.number(parseInt(res, 10));
   }
 
   match = boolean_from_string.exec(e);
   if(match) {
-    res = openrosa_xpath.call(doc, match[1], contextNode, namespaceResolver,
-        XPathResult.STRING_TYPE, result).stringValue;
+    res = recurse(match[1], XPathResult.STRING_TYPE).stringValue;
     return xpathResult.boolean(res === '1' || res === 'true');
   }
 
   match = selected.exec(e);
   if(match) {
-    var haystack = openrosa_xpath.call(doc, match[1], contextNode, namespaceResolver,
-        XPathResult.STRING_TYPE, result).stringValue.split(' '),
-    needle = openrosa_xpath.call(doc, match[2], contextNode, namespaceResolver,
-        XPathResult.STRING_TYPE, result).stringValue;
+    var haystack = recurse(match[1], XPathResult.STRING_TYPE).stringValue.split(' '),
+        needle = recurse(match[2], XPathResult.STRING_TYPE).stringValue;
     return xpathResult.boolean(haystack.indexOf(needle) !== -1);
   }
 
   match = concat.exec(e);
   if(match) {
-    val = openrosa_xpath.call(doc, match[1], contextNode, namespaceResolver,
-            XPathResult.STRING_TYPE, result).stringValue +
-        openrosa_xpath.call(doc, match[2], contextNode, namespaceResolver,
-            XPathResult.STRING_TYPE, result).stringValue
+    val = recurse(match[1], XPathResult.STRING_TYPE).stringValue +
+        recurse(match[2], XPathResult.STRING_TYPE).stringValue;
     return xpathResult.string(val);
   }
 
   match = pow.exec(e);
   if(match) {
-    res = openrosa_xpath.call(doc, match[1], contextNode, namespaceResolver,
-        XPathResult.STRING_TYPE, result).stringValue;
+    res = recurse(match[1], XPathResult.STRING_TYPE).stringValue;
     val = Math.pow(parseInt(res, 10), parseInt(match[2], 10));
     return xpathResult.number(val);
   }
 
   match = regex.exec(e);
   if(match) {
-      val = openrosa_xpath.call(doc, match[1], contextNode, namespaceResolver,
-          XPathResult.STRING_TYPE, result);
-      r = openrosa_xpath.call(doc, match[2], contextNode, namespaceResolver,
-            XPathResult.STRING_TYPE, result);
-      return xpathResult.boolean(new RegExp(r).test(val));
+    val = recurse(match[1], XPathResult.STRING_TYPE).stringValue;
+    r = recurse(match[2], XPathResult.STRING_TYPE).stringValue;
+    return xpathResult.boolean(new RegExp(r).test(val));
   }
 
   match = coalesce.exec(e);
   if(match) {
-      res = openrosa_xpath.call(doc, match[1], contextNode, namespaceResolver,
-          XPathResult.STRING_TYPE, result);
-      if(res.stringValue) return res;
-      res = openrosa_xpath.call(doc, match[2], contextNode, namespaceResolver,
-            XPathResult.STRING_TYPE, result);
-      return res;
+    res = recurse(match[1], XPathResult.STRING_TYPE);
+    if(res.stringValue) return res;
+    res = recurse(match[2], XPathResult.STRING_TYPE);
+    return res;
   }
 
   match = substr.exec(e);
   if(match) {
-      res = openrosa_xpath.call(doc, match[1], contextNode, namespaceResolver,
-          XPathResult.STRING_TYPE, result).stringValue;
-      var startIndex = parseInt(match[2], 10),
-          endIndex = match[3] ? parseInt(match[3], 10) : res.length;
-      val = res.slice(startIndex, endIndex);
-      return xpathResult.string(val);
+    res = recurse(match[1], XPathResult.STRING_TYPE).stringValue;
+    var startIndex = parseInt(match[2], 10),
+        endIndex = match[3] ? parseInt(match[3], 10) : res.length;
+    val = res.slice(startIndex, endIndex);
+    return xpathResult.string(val);
   }
 
   if(overriden) return overriden.apply(doc, arguments);
