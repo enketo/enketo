@@ -1,6 +1,8 @@
 Openrosa XForms Evaluator
 =========================
 
+<a href="https://api.travis-ci.org/alxndrsn/openrosa-xpath-evaluator"><img src="https://api.travis-ci.org/alxndrsn/openrosa-xpath-evaluator.svg"/></a>
+
 Wrapper for browsers' XPath evaluator with added support for OpenRosa extensions.
 
 For more info on extended XPath expressions/bindings supported by XForms/OpenRosa/OpenDataKit (ODK) see:
