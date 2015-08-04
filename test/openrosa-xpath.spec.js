@@ -62,7 +62,82 @@ define(['src/openrosa-xpath', 'chai', 'lodash'], function(openrosa_xpath, chai, 
       });
     });
 
-    describe('#decimal-date-time()', function() { it('should have tests', function() { TODO(); }); });
+    describe('#date()', function() {
+      describe('valid date', function() {
+        it('should be left alone', function() {
+          assert.equal(xEval("date('1970-01-01')", '1970-01-01'));
+        });
+      });
+
+      describe('invalid date', function() {
+        it('should not parse', function() {
+          assert.equal(xEval("date('nonsense')", 'Invalid Date'));
+        });
+      });
+
+      describe('comparisons', function() {
+        _.forEach({
+            'date("2001-12-26") > date("2001-12-25")': true,
+            'date("2001-12-26") < date("2001-12-25")': false,
+            'date("1969-07-20") < date("1969-07-21")': true,
+            'date("1969-07-20") > date("1969-07-21")': false,
+            'date("2004-05-01") = date("2004-05-01")': true,
+            'date("2004-05-01") != date("2004-05-01")': false,
+            'true() != date("1999-09-09")': false,
+            'true() = date("1999-09-09")': true,
+            'date(0) = date("1970-01-01")': true,
+            'date(0) != date("1970-01-01")': false,
+            'date(1) = date("1970-01-02")': true,
+            'date(1) != date("1970-01-02")': false,
+            'date(-1) = date("1969-12-31")': true,
+            'date(-1) != date("1969-12-31")': false,
+            'date(14127) = date("2008-09-05")': true,
+            'date(14127) != date("2008-09-05")': false,
+            'date(-10252) = date("1941-12-07")': true,
+            'date(-10252) != date("1941-12-07")': false,
+            'date(date("1989-11-09")) = date("1989-11-09")': true,
+            'date(date("1989-11-09")) != date("1989-11-09")': false,
+            'date("2012-01-01") < today()': true,
+            'date("2012-01-01") > today()': false,
+            'date("2100-01-02") > today()': true,
+            'date("2100-01-02") < today()': false,
+            'date("2012-01-01") < now()': true,
+            'date("2012-01-01") > now()': false,
+            'date("2100-01-02") > now()': true,
+            'date("2100-01-02") < now()': false,
+            'now() > today()': true,
+        }, function(expected, expr) {
+          it('should evaluate \'' + expr + '\' to: ' + expected, function() {
+            assert.equal(xEval(expr), expected);
+          });
+        });
+      });
+    });
+
+    describe('#number()', function() {
+      describe('called on a date string', function() {
+        _.forEach({
+            'number("1970-01-01")': '0',
+            'number("1970-01-02")': '1',
+            'number("1969-12-31")': '-1',
+            'number("2008-09-05")': '14127',
+            'number("1941-12-07")': '-10252',
+            'number("2008-09-05")': '14127',
+        }, function(expectedResult, expr) {
+          it(expr + ' should be ' + expectedResult + ' days since the epoch', function() {
+          });
+        });
+      });
+    });
+
+      // some test cases for number, from enketo-xpathjs
+
+    describe('#decimal-date-time()', function() {
+      it('should convert a date string into days since epoch', function() {
+        TODO('Implement these!');
+      });
+      it('should have tests', function() { TODO(); });
+    });
 
     describe('#pow()', function() {
       describe('should return power of text values', function() {
@@ -160,7 +235,7 @@ define(['src/openrosa-xpath', 'chai', 'lodash'], function(openrosa_xpath, chai, 
       it('should give the rest of a string if supplied with only startIndex', function() {
         // given
         simpleValueIs('0123456789');
-        
+
         // expect
         assert.equal(xEval('substr(/simple/xpath/to/node, 5)').stringValue,
             '56789');
@@ -168,7 +243,7 @@ define(['src/openrosa-xpath', 'chai', 'lodash'], function(openrosa_xpath, chai, 
       it('should give substring from start to finish if supplied with 2 indexes', function() {
         // given
         simpleValueIs('0123456789');
-        
+
         // expect
         assert.equal(xEval('substr(/simple/xpath/to/node, 2, 4)').stringValue,
             '23');
