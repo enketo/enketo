@@ -376,6 +376,8 @@ define(['src/openrosa-xpath', 'chai', 'lodash'], function(openrosa_xpath, chai, 
       "'2015-07-15' &lt; today()" : /true/,
       "'2015-07-15' < today()" : /true/,
       "'raw-string'" : /raw-string/,
+      "if(selected( /model/instance[1]/pregnancy/group_lmp/lmp_method ,'date'), /model/instance[1]/pregnancy/group_lmp/lmp_date ,date-time(decimal-date-time(today()- /model/instance[1]/pregnancy/group_lmp/lmp_approx )))": '???',
+      'format-date-time(date-time(decimal-date-time( /model/instance[1]/pregnancy/lmp )+280),"%b %e, %Y")': '???',
     }, function(matcher, expression) {
       it('should convert "' + expression + '" to match "' + matcher + '"', function() {
         var evaluated = xEval(expression);
