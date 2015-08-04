@@ -383,6 +383,10 @@ define(['src/openrosa-xpath', 'chai', 'lodash'], function(openrosa_xpath, chai, 
   describe('infix operators', function() {
     describe('with numbers', function() {
       _.forEach({
+        '1 = 1' : true,
+        '1 != 1' : false,
+        '1 = 2' : false,
+        '1 != 2' : true,
         '1 < 2' : true,
         '1 > 2' : false,
         '2 < 1' : false,
@@ -411,6 +415,10 @@ define(['src/openrosa-xpath', 'chai', 'lodash'], function(openrosa_xpath, chai, 
     });
     describe('with strings', function() {
       _.forEach({
+        '"1" = "1"' : true,
+        '"1" = "2"' : false,
+        '"1" != "1"' : false,
+        '"1" != "2"' : true,
         '"1" < "2"' : true,
         '"1" > "2"' : false,
         '"2" < "1"' : false,

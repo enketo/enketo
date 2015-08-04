@@ -10,7 +10,7 @@ var
     concat = /^concat\((.*),\s*(.*)\)$/,
     selected = /^selected\((.*),\s*(.*)\)$/,
     regex = /^regex\((.*),\s*(.*)\)$/,
-    infix = /^(.*)\s*((?:<|&lt;|>|&gt;|!)=?)\s*(.*)$/,
+    infix = /^(.*)\s+((?:=|<|&lt;|>|&gt;|!)=?)\s+(.*)$/,
     coalesce = /^coalesce\((.*),\s*(.*)\)$/,
     substr = /^substr\(([^,]*),\s*([^,]*)(?:,\s*(.*))?\)$/,
     _uuid_part = function(c) {
