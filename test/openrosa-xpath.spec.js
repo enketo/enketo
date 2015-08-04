@@ -63,9 +63,20 @@ define(['src/openrosa-xpath', 'chai', 'lodash'], function(openrosa_xpath, chai, 
     });
 
     describe('#date()', function() {
-      describe('valid date', function() {
+      describe('valid date string', function() {
         it('should be left alone', function() {
           assert.equal(xEval("date('1970-01-01')").stringValue, '1970-01-01');
+        });
+      });
+
+      describe('positive number', function() {
+        _.forEach({
+          'date(0)': '1970-01-01',
+          'date(1)': '1970-01-02',
+        }, function(expected, expr) {
+          it(expr + ' should be converted to ' + expected, function() {
+            assert.equal(xEval(expr).stringValue, expected);
+          });
         });
       });
 
@@ -83,8 +94,8 @@ define(['src/openrosa-xpath', 'chai', 'lodash'], function(openrosa_xpath, chai, 
             'date("1969-07-20") > date("1969-07-21")': false,
             'date("2004-05-01") = date("2004-05-01")': true,
             'date("2004-05-01") != date("2004-05-01")': false,
-            'true() != date("1999-09-09")': false,
-            'true() = date("1999-09-09")': true,
+            '"string" != date("1999-09-09")': true,
+            '"string" = date("1999-09-09")': false,
             'date(0) = date("1970-01-01")': true,
             'date(0) != date("1970-01-01")': false,
             'date(1) = date("1970-01-02")': true,
@@ -95,17 +106,10 @@ define(['src/openrosa-xpath', 'chai', 'lodash'], function(openrosa_xpath, chai, 
             'date(14127) != date("2008-09-05")': false,
             'date(-10252) = date("1941-12-07")': true,
             'date(-10252) != date("1941-12-07")': false,
-            'date(date("1989-11-09")) = date("1989-11-09")': true,
-            'date(date("1989-11-09")) != date("1989-11-09")': false,
             'date("2012-01-01") < today()': true,
             'date("2012-01-01") > today()': false,
             'date("2100-01-02") > today()': true,
             'date("2100-01-02") < today()': false,
-            'date("2012-01-01") < now()': true,
-            'date("2012-01-01") > now()': false,
-            'date("2100-01-02") > now()': true,
-            'date("2100-01-02") < now()': false,
-            'now() > today()': true,
         }, function(expected, expr) {
           it('should evaluate \'' + expr + '\' to: ' + expected, function() {
             assert.equal(xEval(expr).booleanValue, expected);

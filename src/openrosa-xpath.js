@@ -1,14 +1,16 @@
 var
-    raw_string_singles = /^\s*'([^']*)'\s*$/,
-    raw_string_doubles = /^\s*"([^"]*)"\s*$/,
-    raw_number = /^\s*([0-9]+)\s*$/,
+    raw_string_singles = /^'([^']*)'$/,
+    raw_string_doubles = /^"([^"]*)"$/,
+    raw_number = /^(-?[0-9]+)$/,
     boolean_from_string = /^boolean-from-string\((.*)\)$/,
     int = /^int\((.*)\)$/,
+    date = /^date\(([^)]*)\)$/,
+    date_string = /^\d\d\d\d-\d\d-\d\d$/,
     pow = /^pow\((.*),\s*(.*)\)$/,
     concat = /^concat\((.*),\s*(.*)\)$/,
     selected = /^selected\((.*),\s*(.*)\)$/,
     regex = /^regex\((.*),\s*(.*)\)$/,
-    infix = /^(.*)\s*((?:<|&lt;|>|&gt;)=?)\s*(.*)$/,
+    infix = /^(.*)\s*((?:<|&lt;|>|&gt;|!)=?)\s*(.*)$/,
     coalesce = /^coalesce\((.*),\s*(.*)\)$/,
     substr = /^substr\(([^,]*),\s*([^,]*)(?:,\s*(.*))?\)$/,
     _uuid_part = function(c) {
@@ -27,6 +29,11 @@ var
           numberValue:val, stringValue:val.toString() } },
       string: function(val) { return { resultType:XPathResult.STRING_TYPE,
           stringValue:val } },
+      dateString: function(val) {
+        val = val.getFullYear() + '-' + zeroPad(val.getMonth()+1) + '-' +
+            zeroPad(val.getDate());
+        return xpathResult.string(val);
+      }
     },
     zeroPad = function(n) { return n >= 10 ? n : '0' + n; },
     textVal = function(xpathResult) {
@@ -73,6 +80,8 @@ var openrosa_xpath = function(e, contextNode, namespaceResolver, resultType, res
             _resultType, result);
       }
 
+  e = e.trim();
+
   // Handle no-arg function calls
 
   if(e === 'uuid()') {
@@ -85,10 +94,7 @@ var openrosa_xpath = function(e, contextNode, namespaceResolver, resultType, res
     return xpathResult.number(Date.now());
   }
   if(e === 'today()') {
-    var today = new Date();
-    today = today.getFullYear() + '-' + zeroPad(today.getMonth()+1) + '-' +
-        zeroPad(today.getDate());
-    return xpathResult.string(today);
+    return xpathResult.dateString(new Date());
   }
 
   // Handle infix operators
@@ -123,6 +129,7 @@ var openrosa_xpath = function(e, contextNode, namespaceResolver, resultType, res
             rhs.resultType === XPathResult.NUMBER_TYPE) {
           res = lhs.numberValue > rhs.numberValue;
         } else {
+          console.log('### [compare] ' + textVal(lhs) + ' > ' + textVal(rhs));
           res = textVal(lhs) > textVal(rhs);
         }
         break;
@@ -133,6 +140,23 @@ var openrosa_xpath = function(e, contextNode, namespaceResolver, resultType, res
           res = lhs.numberValue >= rhs.numberValue;
         } else {
           res = textVal(lhs) >= textVal(rhs);
+        }
+        break;
+      case '=':
+      case '==':
+        if(lhs.resultType === XPathResult.NUMBER_TYPE &&
+            rhs.resultType === XPathResult.NUMBER_TYPE) {
+          res = lhs.numberValue == rhs.numberValue;
+        } else {
+          res = textVal(lhs) == textVal(rhs);
+        }
+        break;
+      case '!=':
+        if(lhs.resultType === XPathResult.NUMBER_TYPE &&
+            rhs.resultType === XPathResult.NUMBER_TYPE) {
+          res = lhs.numberValue != rhs.numberValue;
+        } else {
+          res = textVal(lhs) != textVal(rhs);
         }
         break;
     }
@@ -161,6 +185,23 @@ var openrosa_xpath = function(e, contextNode, namespaceResolver, resultType, res
   if(match) {
     res = recurse(match[1], XPathResult.STRING_TYPE).stringValue;
     return xpathResult.number(parseInt(res, 10));
+  }
+
+  match = date.exec(e);
+  if(match) {
+    console.log('### ' + e + ' -> ' + match[1]);
+    if(raw_string_singles.test(match[1]) || raw_string_doubles.test(match[1])) {
+      match = recurse(match[1], XPathResult.STRING_TYPE).stringValue;
+      if(date_string.test(match)) {
+        return xpathResult.string(match);
+      } else {
+        return xpathResult.string('Invalid Date');
+      }
+    } else if(raw_number.test(match[1])) {
+      var tempDate = new Date(0);
+      tempDate.setDate(1 + parseInt(match[1], 10));
+      return xpathResult.dateString(tempDate);
+    }
   }
 
   match = boolean_from_string.exec(e);
