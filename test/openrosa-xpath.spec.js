@@ -65,13 +65,13 @@ define(['src/openrosa-xpath', 'chai', 'lodash'], function(openrosa_xpath, chai, 
     describe('#date()', function() {
       describe('valid date', function() {
         it('should be left alone', function() {
-          assert.equal(xEval("date('1970-01-01')", '1970-01-01'));
+          assert.equal(xEval("date('1970-01-01')").stringValue, '1970-01-01');
         });
       });
 
       describe('invalid date', function() {
         it('should not parse', function() {
-          assert.equal(xEval("date('nonsense')", 'Invalid Date'));
+          assert.equal(xEval("date('nonsense')").stringValue, 'Invalid Date');
         });
       });
 
@@ -108,7 +108,7 @@ define(['src/openrosa-xpath', 'chai', 'lodash'], function(openrosa_xpath, chai, 
             'now() > today()': true,
         }, function(expected, expr) {
           it('should evaluate \'' + expr + '\' to: ' + expected, function() {
-            assert.equal(xEval(expr), expected);
+            assert.equal(xEval(expr).booleanValue, expected);
           });
         });
       });
