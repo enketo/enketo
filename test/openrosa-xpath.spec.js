@@ -10,11 +10,11 @@ define(['src/openrosa-xpath', 'chai', 'lodash'], function(openrosa_xpath, chai, 
           return openrosa_xpath.call(doc, e, doc, null,
               XPathResult.STRING_TYPE, null);
         }
-      };
+      },
+      initBasicXmlDoc = function() { simpleValueIs(''); };
 
   beforeEach(function() {
-    // reset xEval for simple tests which don't define a doc
-    xEval = openrosa_xpath;
+    initBasicXmlDoc();
   });
 
   describe('openrosa-xpath', function() {
@@ -445,75 +445,102 @@ define(['src/openrosa-xpath', 'chai', 'lodash'], function(openrosa_xpath, chai, 
   });
 
   describe('infix operators', function() {
-    describe('with numbers', function() {
-      _.forEach({
-        '1 = 1' : true,
-        '1 != 1' : false,
-        '1 = 2' : false,
-        '1 != 2' : true,
-        '1 < 2' : true,
-        '1 > 2' : false,
-        '2 < 1' : false,
-        '2 > 1' : true,
-        '1 <= 2' : true,
-        '1 >= 2' : false,
-        '2 <= 1' : false,
-        '2 >= 1' : true,
-        '1 <= 1' : true,
-        '1 >= 1' : true,
-        '1 &lt; 2' : true,
-        '1 &gt; 2' : false,
-        '2 &lt; 1' : false,
-        '2 &gt; 1' : true,
-        '1 &lt;= 2' : true,
-        '1 &gt;= 2' : false,
-        '2 &lt;= 1' : false,
-        '2 &gt;= 1' : true,
-        '1 &lt;= 1' : true,
-        '1 &gt;= 1' : true,
-      }, function(expectedBoolean, expr) {
-        it('should evaluate "' + expr + '" as ' + expectedBoolean.toString().toUpperCase(), function() {
-          assert.equal(xEval(expr).booleanValue, expectedBoolean);
+    describe('math operators', function() {
+      describe('with numbers', function() {
+        _.forEach({
+          '1 + 1' : 2,
+          '1 - 1' : 0,
+          '1 * 1' : 1,
+          '1 / 1' : 1,
+          '1 % 1' : 0,
+          '2 + 1' : 3,
+          '2 - 1' : 1,
+          '2 * 1' : 2,
+          '2 / 1' : 2,
+          '2 % 1' : 0,
+          '1 + 2' : 3,
+          '1 - 2' : -1,
+          '1 * 2' : 2,
+          '1 / 2' : 0,
+          '1 % 2' : 1,
+        }, function(expected, expr) {
+          it('should evaluate "' + expr + '" as ' + expected, function() {
+            assert.equal(xEval(expr).stringValue, expected);
+          });
         });
       });
     });
-    describe('with strings', function() {
-      _.forEach({
-        '"1" = "1"' : true,
-        '"1" = "2"' : false,
-        '"1" != "1"' : false,
-        '"1" != "2"' : true,
-        '"1" < "2"' : true,
-        '"1" > "2"' : false,
-        '"2" < "1"' : false,
-        '"2" > "1"' : true,
-        '"1" <= "2"' : true,
-        '"1" >= "2"' : false,
-        '"2" <= "1"' : false,
-        '"2" >= "1"' : true,
-        '"1" <= "1"' : true,
-        '"1" >= "1"' : true,
-        '"1" &lt; "2"' : true,
-        '"1" &gt; "2"' : false,
-        '"2" &lt; "1"' : false,
-        '"2" &gt; "1"' : true,
-        '"1" &lt;= "2"' : true,
-        '"1" &gt;= "2"' : false,
-        '"2" &lt;= "1"' : false,
-        '"2" &gt;= "1"' : true,
-        '"1" &lt;= "1"' : true,
-        '"1" &gt;= "1"' : true,
-        '"aardvark" < "aligator"' : true,
-        '"aardvark" <= "aligator"' : true,
-        '"aligator" < "aardvark"' : false,
-        '"aligator" <= "aardvark"' : false,
-        '"possum" > "aligator"' : true,
-        '"possum" >= "aligator"' : true,
-        '"aligator" > "possum"' : false,
-        '"aligator" >= "possum"' : false,
-      }, function(expectedBoolean, expr) {
-        it('should evaluate "' + expr + '" as ' + expectedBoolean.toString().toUpperCase(), function() {
-          assert.equal(xEval(expr).booleanValue, expectedBoolean);
+    describe('boolean operators', function() {
+      describe('with numbers', function() {
+        _.forEach({
+          '1 = 1' : true,
+          '1 != 1' : false,
+          '1 = 2' : false,
+          '1 != 2' : true,
+          '1 < 2' : true,
+          '1 > 2' : false,
+          '2 < 1' : false,
+          '2 > 1' : true,
+          '1 <= 2' : true,
+          '1 >= 2' : false,
+          '2 <= 1' : false,
+          '2 >= 1' : true,
+          '1 <= 1' : true,
+          '1 >= 1' : true,
+          '1 &lt; 2' : true,
+          '1 &gt; 2' : false,
+          '2 &lt; 1' : false,
+          '2 &gt; 1' : true,
+          '1 &lt;= 2' : true,
+          '1 &gt;= 2' : false,
+          '2 &lt;= 1' : false,
+          '2 &gt;= 1' : true,
+          '1 &lt;= 1' : true,
+          '1 &gt;= 1' : true,
+        }, function(expectedBoolean, expr) {
+          it('should evaluate "' + expr + '" as ' + expectedBoolean.toString().toUpperCase(), function() {
+            assert.equal(xEval(expr).booleanValue, expectedBoolean);
+          });
+        });
+      });
+      describe('with strings', function() {
+        _.forEach({
+          '"1" = "1"' : true,
+          '"1" = "2"' : false,
+          '"1" != "1"' : false,
+          '"1" != "2"' : true,
+          '"1" < "2"' : true,
+          '"1" > "2"' : false,
+          '"2" < "1"' : false,
+          '"2" > "1"' : true,
+          '"1" <= "2"' : true,
+          '"1" >= "2"' : false,
+          '"2" <= "1"' : false,
+          '"2" >= "1"' : true,
+          '"1" <= "1"' : true,
+          '"1" >= "1"' : true,
+          '"1" &lt; "2"' : true,
+          '"1" &gt; "2"' : false,
+          '"2" &lt; "1"' : false,
+          '"2" &gt; "1"' : true,
+          '"1" &lt;= "2"' : true,
+          '"1" &gt;= "2"' : false,
+          '"2" &lt;= "1"' : false,
+          '"2" &gt;= "1"' : true,
+          '"1" &lt;= "1"' : true,
+          '"1" &gt;= "1"' : true,
+          '"aardvark" < "aligator"' : true,
+          '"aardvark" <= "aligator"' : true,
+          '"aligator" < "aardvark"' : false,
+          '"aligator" <= "aardvark"' : false,
+          '"possum" > "aligator"' : true,
+          '"possum" >= "aligator"' : true,
+          '"aligator" > "possum"' : false,
+          '"aligator" >= "possum"' : false,
+        }, function(expectedBoolean, expr) {
+          it('should evaluate "' + expr + '" as ' + expectedBoolean.toString().toUpperCase(), function() {
+            assert.equal(xEval(expr).booleanValue, expectedBoolean);
+          });
         });
       });
     });
