@@ -62,6 +62,37 @@ define(['src/openrosa-xpath', 'chai', 'lodash'], function(openrosa_xpath, chai, 
       });
     });
 
+    describe('#date-time()', function() {
+      describe('valid date string', function() {
+        it('should be left alone', function() {
+          assert.equal(xEval("date-time('1970-01-01')").stringValue, '1970-01-01');
+        });
+      });
+
+      describe('valid date-time string', function() {
+        it('should be converted to date string', function() {
+          assert.equal(xEval("date-time('1970-01-01T21:50:49Z')").stringValue, '1970-01-01');
+        });
+      });
+
+      describe('positive number', function() {
+        _.forEach({
+          'date-time(0)': '1970-01-01',
+          'date-time(1)': '1970-01-02',
+        }, function(expected, expr) {
+          it(expr + ' should be converted to ' + expected, function() {
+            assert.equal(xEval(expr).stringValue, expected);
+          });
+        });
+      });
+
+      describe('invalid date-time', function() {
+        it('should not parse', function() {
+          assert.equal(xEval("date-time('nonsense')").stringValue, 'Invalid Date');
+        });
+      });
+    });
+
     describe('#date()', function() {
       describe('valid date string', function() {
         it('should be left alone', function() {
@@ -134,13 +165,28 @@ define(['src/openrosa-xpath', 'chai', 'lodash'], function(openrosa_xpath, chai, 
       });
     });
 
-      // some test cases for number, from enketo-xpathjs
+    describe('#decimal-date()', function() {
+      _.forEach({
+        'decimal-date("1970-01-01")' : 0,
+        'decimal-date("1970-01-02")' : 1,
+        'decimal-date("1969-12-31")' : -1,
+      }, function(expectedDaysSinceEpoch, expr) {
+        it('should convert ' + expr + ' into ' + expectedDaysSinceEpoch, function() {
+          assert.equal(xEval(expr).numberValue, expectedDaysSinceEpoch);
+        });
+      });
+    });
 
     describe('#decimal-date-time()', function() {
-      it('should convert a date string into days since epoch', function() {
-        TODO('Implement these!');
+      _.forEach({
+        'decimal-date-time("1970-01-01T00:00:00Z")' : 0,
+        'decimal-date-time("1970-01-02T00:00:00Z")' : 1,
+        'decimal-date-time("1969-12-31T00:00:00Z")' : -1,
+      }, function(expectedDaysSinceEpoch, expr) {
+        it('should convert ' + expr + ' into ' + expectedDaysSinceEpoch, function() {
+          assert.equal(xEval(expr).numberValue, expectedDaysSinceEpoch);
+        });
       });
-      it('should have tests', function() { TODO(); });
     });
 
     describe('#pow()', function() {
@@ -326,7 +372,6 @@ define(['src/openrosa-xpath', 'chai', 'lodash'], function(openrosa_xpath, chai, 
       });
     });
 
-    describe('#date()', function() { it('should have tests', function() { TODO(); }); });
     describe('#if()', function() { it('should have tests', function() { TODO(); }); });
 
     describe('#boolean-from-string()', function() {

@@ -1,11 +1,13 @@
 var
+    MILLIS_PER_DAY = 1000 * 60 * 60 * 24,
     raw_string_singles = /^'([^']*)'$/,
     raw_string_doubles = /^"([^"]*)"$/,
     raw_number = /^(-?[0-9]+)$/,
     boolean_from_string = /^boolean-from-string\((.*)\)$/,
     int = /^int\((.*)\)$/,
-    date = /^date\(([^)]*)\)$/,
-    date_string = /^\d\d\d\d-\d\d-\d\d$/,
+    date = /^date(?:-time)?\(([^)]*)\)$/,
+    date_string = /^\d\d\d\d-\d\d-\d\d(?:T\d\d:\d\d:\d\d(?:Z|[+-]\d\d:\d\d))?$/,
+    decimal_date = /^decimal-date(?:-time)?\(([^)]*)\)$/,
     pow = /^pow\((.*),\s*(.*)\)$/,
     concat = /^concat\((.*),\s*(.*)\)$/,
     selected = /^selected\((.*),\s*(.*)\)$/,
@@ -44,7 +46,6 @@ var
         case XPathResult.ORDERED_NODE_SNAPSHOT_TYPE:
         case XPathResult.ANY_UNORDERED_NODE_TYPE:
         case XPathResult.FIRST_ORDERED_NODE_TYPE:
-          console.log('We got a node of type: ' + xpathResult.resultType);
           return xpathResult.iterateNext().textContent;
       }
       return xpathResult.stringValue;
@@ -129,7 +130,6 @@ var openrosa_xpath = function(e, contextNode, namespaceResolver, resultType, res
             rhs.resultType === XPathResult.NUMBER_TYPE) {
           res = lhs.numberValue > rhs.numberValue;
         } else {
-          console.log('### [compare] ' + textVal(lhs) + ' > ' + textVal(rhs));
           res = textVal(lhs) > textVal(rhs);
         }
         break;
@@ -189,11 +189,10 @@ var openrosa_xpath = function(e, contextNode, namespaceResolver, resultType, res
 
   match = date.exec(e);
   if(match) {
-    console.log('### ' + e + ' -> ' + match[1]);
     if(raw_string_singles.test(match[1]) || raw_string_doubles.test(match[1])) {
       match = recurse(match[1], XPathResult.STRING_TYPE).stringValue;
       if(date_string.test(match)) {
-        return xpathResult.string(match);
+        return xpathResult.string(match.substring(0, 10));
       } else {
         return xpathResult.string('Invalid Date');
       }
@@ -202,6 +201,13 @@ var openrosa_xpath = function(e, contextNode, namespaceResolver, resultType, res
       tempDate.setDate(1 + parseInt(match[1], 10));
       return xpathResult.dateString(tempDate);
     }
+  }
+
+  match = decimal_date.exec(e);
+  if(match) {
+    match = recurse(match[1], XPathResult.STRING_TYPE).stringValue;
+    console.log('### parsing date: ' + match);
+    return xpathResult.number(Date.parse(match) / MILLIS_PER_DAY);
   }
 
   match = boolean_from_string.exec(e);
