@@ -213,7 +213,26 @@ define(['src/openrosa-xpath', 'chai', 'lodash'], function(openrosa_xpath, chai, 
     });
 
     describe('#indexed-repeat()', function() { it('should have tests', function() { TODO(); }); });
-    describe('#format-date()', function() { it('should have tests', function() { TODO(); }); });
+
+    describe('#format-date()', function() {
+      _.forEach({
+        'format-date("2001-12-31", "%b %e, %Y")': 'Dec 31, 2001',
+      }, function(expected, expr) {
+        it(expr + ' should evaluate to ' + expected, function() {
+          assert.equal(xEval(expr).stringValue, expected);
+        });
+      });
+    });
+
+    describe('#format-date-time()', function() {
+      _.forEach({
+        'format-date-time("2001-12-31", "%b %e, %Y")': 'Dec 31, 2001',
+      }, function(expected, expr) {
+        it(expr + ' should evaluate to ' + expected, function() {
+          assert.equal(xEval(expr).stringValue, expected);
+        });
+      });
+    });
 
     describe('#coalesce()', function() {
       it('should return first value if provided via xpath', function() {

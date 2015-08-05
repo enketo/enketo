@@ -1,13 +1,16 @@
 var
     MILLIS_PER_DAY = 1000 * 60 * 60 * 24,
+    MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
+    DAYS = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"],
     raw_string_singles = /^'([^']*)'$/,
     raw_string_doubles = /^"([^"]*)"$/,
     raw_number = /^(-?[0-9]+)$/,
     boolean_from_string = /^boolean-from-string\((.*)\)$/,
     int = /^int\((.*)\)$/,
-    date = /^date(?:-time)?\(([^)]*)\)$/,
+    format_date = /^format-date(?:-time)?\((.*), ['"](.*)['"]\)$/,
+    date = /^date(?:-time)?\((.*)\)$/,
     date_string = /^\d\d\d\d-\d\d-\d\d(?:T\d\d:\d\d:\d\d(?:Z|[+-]\d\d:\d\d))?$/,
-    decimal_date = /^decimal-date(?:-time)?\(([^)]*)\)$/,
+    decimal_date = /^decimal-date(?:-time)?\((.*)\)$/,
     pow = /^pow\((.*),\s*(.*)\)$/,
     concat = /^concat\((.*),\s*(.*)\)$/,
     selected = /^selected\((.*),\s*(.*)\)$/,
@@ -37,7 +40,12 @@ var
         return xpathResult.string(val);
       }
     },
-    zeroPad = function(n) { return n >= 10 ? n : '0' + n; },
+    zeroPad = function(n, len) {
+      len = len || 2;
+      n = n.toString();
+      while(n.length < len) n = '0' + n;
+      return n;
+    },
     textVal = function(xpathResult) {
       switch(xpathResult.resultType) {
         case XPathResult.UNORDERED_NODE_ITERATOR_TYPE:
@@ -49,6 +57,69 @@ var
           return xpathResult.iterateNext().textContent;
       }
       return xpathResult.stringValue;
+    },
+    /** Date format spec from openrosa https://bitbucket.org/m.sundt/javarosa/src/62409ae3b803/core/src/org/javarosa/core/model/utils/DateUtils.java#cl-247 */
+    _format_date = function(date, format) {
+      date = new Date(Date.parse(date));
+      var c, i, sb = '', f = {
+        year: 1900 + date.getYear(),
+        month: 1 + date.getMonth(),
+        day: date.getDate(),
+        hour: date.getHours(),
+        minute: date.getMinutes(),
+        second: date.getSeconds(),
+        secTicks: date.getTime(),
+        dow: date.getDay(),
+      };
+
+      for(i=0; i<format.length; ++i) {
+        c = format.charAt(i);
+
+        if (c === '%') {
+          if(++i >= format.length) {
+            throw new Error("date format string ends with %");
+          }
+          c = format.charAt(i);
+
+          if (c === '%') { // literal '%'
+            sb += '%';
+          } else if (c === 'Y') {  //4-digit year
+            sb += zeroPad(f.year, 4);
+          } else if (c === 'y') {  //2-digit year
+            sb += zeroPad(f.year, 4).substring(2);
+          } else if (c === 'm') {  //0-padded month
+            sb += zeroPad(f.month, 2);
+          } else if (c === 'n') {  //numeric month
+            sb += f.month;
+          } else if (c === 'b') {  //short text month
+            sb += MONTHS[f.month - 1];
+          } else if (c === 'd') {  //0-padded day of month
+            sb += zeroPad(f.day, 2);
+          } else if (c === 'e') {  //day of month
+            sb += f.day;
+          } else if (c === 'H') {  //0-padded hour (24-hr time)
+            sb += zeroPad(f.hour, 2);
+          } else if (c === 'h') {  //hour (24-hr time)
+            sb += f.hour;
+          } else if (c === 'M') {  //0-padded minute
+            sb += zeroPad(f.minute, 2);
+          } else if (c === 'S') {  //0-padded second
+            sb += zeroPad(f.second, 2);
+          } else if (c === '3') {  //0-padded millisecond ticks (000-999)
+            sb += zeroPad(f.secTicks, 3);
+          } else if (c === 'a') {  //Three letter short text day
+            sb += DAYS[f.dow - 1];
+          } else if (c === 'Z' || c === 'A' || c === 'B') {
+            throw new Error('unsupported escape in date format string [%' + c + ']');
+          } else {
+            throw new Error('unrecognized escape in date format string [%' + c + ']');
+          }
+        } else {
+          sb += c;
+        }
+      }
+
+      return sb;
     };
 
 /**
@@ -79,7 +150,8 @@ var openrosa_xpath = function(e, contextNode, namespaceResolver, resultType, res
         if(!_resultType) _resultType = XPathResult.ANY_TYPE;
         return openrosa_xpath.call(doc, expr, contextNode, namespaceResolver,
             _resultType, result);
-      }
+      },
+      temp = {};
 
   e = e.trim();
 
@@ -100,6 +172,9 @@ var openrosa_xpath = function(e, contextNode, namespaceResolver, resultType, res
 
   // Handle infix operators
 
+  // TODO these operators should almost certainly be handled by the underlying
+  // xpath implementation.  We should evaluate each side, and then defer to the
+  // underlying implementation.
   match = infix.exec(e);
   if(match) {
     var lhs = recurse(match[1]),
@@ -208,6 +283,13 @@ var openrosa_xpath = function(e, contextNode, namespaceResolver, resultType, res
     match = recurse(match[1], XPathResult.STRING_TYPE).stringValue;
     console.log('### parsing date: ' + match);
     return xpathResult.number(Date.parse(match) / MILLIS_PER_DAY);
+  }
+
+  match = format_date.exec(e);
+  if(match) {
+    temp.date = recurse(match[1], XPathResult.STRING_TYPE).stringValue,
+    temp.pattern = match[2];
+    return xpathResult.string(_format_date(temp.date, temp.pattern));
   }
 
   match = boolean_from_string.exec(e);
