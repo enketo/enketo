@@ -95,10 +95,13 @@ var openrosa_xpath_extensions = (function() {
 
   exported = {
     coalesce: function(a, b) { return xpathResult.string(a || b); },
+    'decimal-date': function(date) {
+        return xpathResult.number(Date.parse(date) / MILLIS_PER_DAY); },
     'format-date': function(date, format) {
         return xpathResult.string(format_date(date, format)); },
     int: function(v) { return xpathResult.number(parseInt(v, 10)); },
     now: function() { return xpathResult.number(Date.now()); },
+    pow: function(x, y) { return xpathResult.number(Math.pow(x, y)); },
     random: function() { return xpathResult.number(Math.random()); },
     regex: function(haystack, pattern) {
         return xpathResult.boolean(new RegExp(pattern).test(haystack)); },
@@ -109,6 +112,7 @@ var openrosa_xpath_extensions = (function() {
   };
 
   // function aliases
+  exported['decimal-date-time'] = exported['decimal-date'];
   exported['format-date-time'] = exported['format-date'];
 
   return exported;

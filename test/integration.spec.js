@@ -161,7 +161,7 @@ define(['src/openrosa-xpath-extensions', 'src/extended-xpath', 'chai', 'lodash']
           });
         });
       });
-    });
+    });*/
 
     describe('#number()', function() {
       describe('called on a date string', function() {
@@ -224,7 +224,7 @@ define(['src/openrosa-xpath-extensions', 'src/extended-xpath', 'chai', 'lodash']
           assert.equal(xEval('pow(/simple/xpath/to/node, 2)').numberValue, 16);
         });
       });
-    });*/
+    });
 
     describe('#indexed-repeat()', function() { it('should have tests', function() { TODO(); }); });
 
