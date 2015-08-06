@@ -7,7 +7,7 @@ var
     raw_number = /^(-?[0-9]+)$/,
     boolean_from_string = /^boolean-from-string\((.*)\)$/,
     int = /^int\((.*)\)$/,
-    format_date = /^format-date(?:-time)?\((.*), ['"](.*)['"]\)$/,
+    format_date = /^format-date(?:-time)?\((.*), ['"]([^'"]*)['"]\)$/,
     date = /^date(?:-time)?\((.*)\)$/,
     date_string = /^\d\d\d\d-\d\d-\d\d(?:T\d\d:\d\d:\d\d(?:Z|[+-]\d\d:\d\d))?$/,
     decimal_date = /^decimal-date(?:-time)?\((.*)\)$/,
@@ -15,7 +15,7 @@ var
     concat = /^concat\((.*),\s*(.*)\)$/,
     selected = /^selected\((.*),\s*(.*)\)$/,
     regex = /^regex\((.*),\s*(.*)\)$/,
-    infix = /^(.*)\s+((?:=|<|&lt;|>|&gt;|!)=?)\s+(.*)$/,
+    infix = /^(.*)\s+((?:=|<|&lt;|>|&gt;|!)=?|[-+*]|mod|div)\s+(.*)$/,
     coalesce = /^coalesce\((.*),\s*(.*)\)$/,
     substr = /^substr\(([^,]*),\s*([^,]*)(?:,\s*(.*))?\)$/,
     _uuid_part = function(c) {
@@ -179,71 +179,80 @@ var openrosa_xpath = function(e, contextNode, namespaceResolver, resultType, res
   if(match) {
     var lhs = recurse(match[1]),
         operator = match[2],
-        rhs = recurse(match[3]);
+        rhs = recurse(match[3]),
+        bool = xpathResult.boolean,
+        num = xpathResult.number,
+        str = xpathResult.string;
     switch(operator) {
       case '<':
       case '&lt;':
         if(lhs.resultType === XPathResult.NUMBER_TYPE &&
             rhs.resultType === XPathResult.NUMBER_TYPE) {
-          res = lhs.numberValue < rhs.numberValue;
+          return bool(lhs.numberValue < rhs.numberValue);
         } else {
-          res = textVal(lhs) < textVal(rhs);
+          return bool(textVal(lhs) < textVal(rhs));
         }
         break;
       case '<=':
       case '&lt;=':
         if(lhs.resultType === XPathResult.NUMBER_TYPE &&
             rhs.resultType === XPathResult.NUMBER_TYPE) {
-          res = lhs.numberValue <= rhs.numberValue;
+          return bool(lhs.numberValue <= rhs.numberValue);
         } else {
-          res = textVal(lhs) <= textVal(rhs);
+          return bool(textVal(lhs) <= textVal(rhs));
         }
         break;
       case '>':
       case '&gt;':
         if(lhs.resultType === XPathResult.NUMBER_TYPE &&
             rhs.resultType === XPathResult.NUMBER_TYPE) {
-          res = lhs.numberValue > rhs.numberValue;
+          return bool(lhs.numberValue > rhs.numberValue);
         } else {
-          res = textVal(lhs) > textVal(rhs);
+          return bool(textVal(lhs) > textVal(rhs));
         }
         break;
       case '>=':
       case '&gt;=':
         if(lhs.resultType === XPathResult.NUMBER_TYPE &&
             rhs.resultType === XPathResult.NUMBER_TYPE) {
-          res = lhs.numberValue >= rhs.numberValue;
+          return bool(lhs.numberValue >= rhs.numberValue);
         } else {
-          res = textVal(lhs) >= textVal(rhs);
+          return bool(textVal(lhs) >= textVal(rhs));
         }
         break;
       case '=':
       case '==':
         if(lhs.resultType === XPathResult.NUMBER_TYPE &&
             rhs.resultType === XPathResult.NUMBER_TYPE) {
-          res = lhs.numberValue == rhs.numberValue;
+          return bool(lhs.numberValue == rhs.numberValue);
         } else {
-          res = textVal(lhs) == textVal(rhs);
+          return bool(textVal(lhs) == textVal(rhs));
         }
         break;
       case '!=':
         if(lhs.resultType === XPathResult.NUMBER_TYPE &&
             rhs.resultType === XPathResult.NUMBER_TYPE) {
-          res = lhs.numberValue != rhs.numberValue;
+          return bool(lhs.numberValue != rhs.numberValue);
         } else {
-          res = textVal(lhs) != textVal(rhs);
+          return bool(textVal(lhs) != textVal(rhs));
         }
         break;
+      case '+':
+      case '-':
+      case '*':
+      case 'mod':
+      case 'div':
+        return overriden.call(doc, textVal(lhs) + ' ' + operator + ' ' + textVal(rhs),
+            contextNode, namespaceResolver, resultType, result);
     }
-    if(typeof res === 'undefined') return xpathResult.string('Not yet implemented');
-    return xpathResult.boolean(res);
+    return xpathResult.string('Not yet implemented');
   }
 
   // Handle function-style operators
 
   match = raw_number.exec(e);
   if(match) {
-    return xpathResult.number(match[1]);
+    return xpathResult.number(parseFloat(match[1]));
   }
 
   match = raw_string_singles.exec(e);
@@ -264,24 +273,21 @@ var openrosa_xpath = function(e, contextNode, namespaceResolver, resultType, res
 
   match = date.exec(e);
   if(match) {
-    if(raw_string_singles.test(match[1]) || raw_string_doubles.test(match[1])) {
-      match = recurse(match[1], XPathResult.STRING_TYPE).stringValue;
-      if(date_string.test(match)) {
-        return xpathResult.string(match.substring(0, 10));
-      } else {
-        return xpathResult.string('Invalid Date');
-      }
-    } else if(raw_number.test(match[1])) {
+    match = recurse(match[1], XPathResult.STRING_TYPE).stringValue;
+    if(raw_number.test(match)) {
       var tempDate = new Date(0);
-      tempDate.setDate(1 + parseInt(match[1], 10));
+      tempDate.setDate(1 + parseInt(match, 10));
       return xpathResult.dateString(tempDate);
+    } else if(date_string.test(match)) {
+      return xpathResult.string(match.substring(0, 10));
+    } else {
+      return xpathResult.string('Invalid Date');
     }
   }
 
   match = decimal_date.exec(e);
   if(match) {
     match = recurse(match[1], XPathResult.STRING_TYPE).stringValue;
-    console.log('### parsing date: ' + match);
     return xpathResult.number(Date.parse(match) / MILLIS_PER_DAY);
   }
 
