@@ -100,7 +100,6 @@ define(['src/extended-xpath', 'chai', 'lodash'], function(ExtendedXpathEvaluator
       },
       extendedXpathEvaluator = new ExtendedXpathEvaluator(
         function wrappedXpathEvaluator(xpath) {
-          // TODO actually evaluate
           var v = xpath.v.trim();
           var regChec = /^-?[0-9]+(\.[0-9]+)?$/.test(v);
           if(regChec) {
