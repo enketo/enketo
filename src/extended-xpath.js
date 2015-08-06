@@ -80,7 +80,7 @@ var ExtendedXpathEvaluator = function(wrapped, extendedFuncs) {
         }
       },
       handleXpathExpr = function() {
-        var evaluated = v = cur.v.trim();
+        var evaluated, v = cur.v.trim();
         if(/^-?[0-9]+(\.[0-9]+)?$/.test(v)) {
           evaluated = { t:'num', v:parseFloat(v) };
         } else {
