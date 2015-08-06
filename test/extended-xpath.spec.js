@@ -103,9 +103,9 @@ define(['src/extended-xpath', 'chai', 'lodash'], function(ExtendedXpathEvaluator
           var v = xpath.v.trim();
           var regChec = /^-?[0-9]+(\.[0-9]+)?$/.test(v);
           if(regChec) {
-            return { t:'num', v:parseFloat(v) };
+            return { resultType:XPathResult.NUMBER_TYPE, numberValue:parseFloat(v), stringValue:v };
           }
-          return { t:'str', v:'<xpath:' + xpath.v + '>' };
+          return { resultType:XPathResult.STRING_TYPE, stringValue:'<xpath:' + xpath.v + '>' };
         },
         {
           upcase: function(it) { return xp.str(it.toUpperCase()); },

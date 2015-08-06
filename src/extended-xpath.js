@@ -1,11 +1,14 @@
 var ExtendedXpathEvaluator = function(wrapped, extendedFuncs) {
   var
-    TYPE = XPathResult ? {
-      num: XPathResult.NUMBER_TYPE,
-      str: XPathResult.STRING_TYPE,
-    } : {
-      num: 1,
-      str: 2,
+    toInternalResult = function(r) {
+      if(r.resultType === XPathResult.NUMBER_TYPE) return { t:'num', v:r.numberValue };
+      if(r.resultType === XPathResult.BOOLEAN_TYPE) return {  t:'bool', v:r.booleanValue };
+      return { t:'str', v:r.stringValue };
+    },
+    toExternalResult = function(r) {
+      if(r.t === 'num') return { resultType:XPathResult.NUMBER_TYPE, numberValue:r.v, stringValue:r.v.toString() };
+      if(r.t === 'bool') return { resultType:XPathResult.BOOLEAN_TYPE, booleanValue:r.v, stringValue:r.v.toString() };
+      return { resultType:XPathResult.STRING_TYPE, stringValue:r.v.toString() };
     },
     callFn = function(name, args) {
       if(extendedFuncs.hasOwnProperty(name)) {
@@ -16,7 +19,8 @@ var ExtendedXpathEvaluator = function(wrapped, extendedFuncs) {
     callExtended = function(name, args) {
       var argVals = [], argString, res, i;
       for(i=0; i<args.length; ++i) argVals.push(args[i].v);
-      return extendedFuncs[name].apply(null, argVals);
+      res = extendedFuncs[name].apply(null, argVals);
+      return res;
     },
     callNative = function(name, args) {
       var argString = '', arg, quote, i;
@@ -30,7 +34,7 @@ var ExtendedXpathEvaluator = function(wrapped, extendedFuncs) {
         if(arg.t !== 'num') argString += quote;
         if(i < args.length - 1) argString += ', ';
       }
-      return wrapped({ t:'str', v:name + '(' + argString + ')' });
+      return toInternalResult(wrapped({ t:'str', v:name + '(' + argString + ')' }));
     },
     typefor = function(val) {
       switch(typeof val) {
@@ -76,7 +80,7 @@ var ExtendedXpathEvaluator = function(wrapped, extendedFuncs) {
         }
       },
       handleXpathExpr = function() {
-        peek().tokens.push(wrapped(cur));
+        peek().tokens.push(toInternalResult(wrapped(cur)));
         newCurrent();
         backtrack();
       },
@@ -199,17 +203,8 @@ var ExtendedXpathEvaluator = function(wrapped, extendedFuncs) {
     if(stack[0].t !== 'root') err('Weird stuff on stack.');
     if(stack[0].tokens.length === 0) err('No tokens.');
     if(stack[0].tokens.length > 1) err('Too many tokens.');
-    cur = stack[0].tokens[0];
-    // TODO these will disappear when we start using XPathResult internally
-    if(cur.t === 'num') {
-      return { numberValue: cur.v, stringValue: cur.v.toString(), };
-    }
-    if(cur.t === 'bool') {
-      return { booleanValue: cur.v, stringValue: cur.v.toString(), };
-    }
-    return {
-      stringValue: cur.v.toString(),
-    };
+
+    return toExternalResult(stack[0].tokens[0]);
   };
 };
 
