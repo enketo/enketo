@@ -5,15 +5,11 @@ define(['src/openrosa-xpath-extensions', 'src/extended-xpath', 'chai', 'lodash']
       extendedXpathEvaluator = new ExtendedXpathEvaluator(
           function wrappedXpathEvaluator(xpath) {
             var v = xpath.v.trim();
-            console.log('wrappedXpathEvaluator() :: xpath         =' + JSON.stringify(xpath));
             if(/^-?[0-9]+(\.[0-9]+)?$/.test(v)) {
               return { t:'num', v:parseFloat(v) };
             }
-            console.log('wrappedXpathEvaluator() ::              v=' + JSON.stringify(v));
             var evaluated = doc.evaluate.call(doc, v, doc, null,
                 XPathResult.STRING_TYPE, null);
-            console.log('wrappedXpathEvaluator() ::      evaluated=' + evaluated);
-            console.log('wrappedXpathEvaluator() ::      evaluated.resultType=' + evaluated.resultType);
             switch(evaluated.resultType) {
               case XPathResult.TYPE_NUMBER: return { t:'num', v:evaluated.numberValue };
               default: return { t:'str', v:evaluated.stringValue };
@@ -518,7 +514,7 @@ define(['src/openrosa-xpath-extensions', 'src/extended-xpath', 'chai', 'lodash']
             assert.equal(xEval(expr).booleanValue, expectedBoolean);
           });
         });
-      });/*
+      });
       describe('with strings', function() {
         _.forEach({
           '"1" = "1"' : true,
@@ -558,10 +554,10 @@ define(['src/openrosa-xpath-extensions', 'src/extended-xpath', 'chai', 'lodash']
             assert.equal(xEval(expr).booleanValue, expectedBoolean);
           });
         });
-      });*/
+      });
     });
   });
-/*
+
   describe('some complex examples', function() {
     _.forEach({
       'concat("uuid:", uuid())':/uuid:[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/,
@@ -577,5 +573,5 @@ define(['src/openrosa-xpath-extensions', 'src/extended-xpath', 'chai', 'lodash']
         assert.match(evaluated.stringValue, matcher);
       });
     });
-  });*/
+  });
 });
