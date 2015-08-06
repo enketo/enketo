@@ -224,7 +224,7 @@ define(['src/openrosa-xpath-extensions', 'src/extended-xpath', 'chai', 'lodash']
           assert.equal(xEval('pow(/simple/xpath/to/node, 2)').numberValue, 16);
         });
       });
-    });
+    });*/
 
     describe('#indexed-repeat()', function() { it('should have tests', function() { TODO(); }); });
 
@@ -290,7 +290,7 @@ define(['src/openrosa-xpath-extensions', 'src/extended-xpath', 'chai', 'lodash']
         assert.equal(xEval('coalesce(/simple/xpath/to/node, "SECOND")').stringValue,
             'SECOND');
       });
-    });*/
+    });
 
     describe('#join()', function() { it('should have tests', function() { TODO(); }); });
     describe('#max()', function() { it('should have tests', function() { TODO(); }); });

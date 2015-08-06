@@ -1,5 +1,8 @@
 var openrosa_xpath_extensions = (function() {
   var ___start_vars___,
+      MILLIS_PER_DAY = 1000 * 60 * 60 * 24,
+      MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
+      DAYS = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"],
       xpathResult = {
         boolean: function(val) { return { t:'bool', v:val }; },
         number: function(val) { return { t:'num', v:val }; },
@@ -25,8 +28,75 @@ var openrosa_xpath_extensions = (function() {
           return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'
                   .replace(/[xy]/g, _uuid_part);
       },
+      format_date = function(date, format) {
+        date = new Date(Date.parse(date));
+        var c, i, sb = '', f = {
+          year: 1900 + date.getYear(),
+          month: 1 + date.getMonth(),
+          day: date.getDate(),
+          hour: date.getHours(),
+          minute: date.getMinutes(),
+          second: date.getSeconds(),
+          secTicks: date.getTime(),
+          dow: date.getDay(),
+        };
+
+        for(i=0; i<format.length; ++i) {
+          c = format.charAt(i);
+
+          if (c === '%') {
+            if(++i >= format.length) {
+              throw new Error("date format string ends with %");
+            }
+            c = format.charAt(i);
+
+            if (c === '%') { // literal '%'
+              sb += '%';
+            } else if (c === 'Y') {  //4-digit year
+              sb += zeroPad(f.year, 4);
+            } else if (c === 'y') {  //2-digit year
+              sb += zeroPad(f.year, 4).substring(2);
+            } else if (c === 'm') {  //0-padded month
+              sb += zeroPad(f.month, 2);
+            } else if (c === 'n') {  //numeric month
+              sb += f.month;
+            } else if (c === 'b') {  //short text month
+              sb += MONTHS[f.month - 1];
+            } else if (c === 'd') {  //0-padded day of month
+              sb += zeroPad(f.day, 2);
+            } else if (c === 'e') {  //day of month
+              sb += f.day;
+            } else if (c === 'H') {  //0-padded hour (24-hr time)
+              sb += zeroPad(f.hour, 2);
+            } else if (c === 'h') {  //hour (24-hr time)
+              sb += f.hour;
+            } else if (c === 'M') {  //0-padded minute
+              sb += zeroPad(f.minute, 2);
+            } else if (c === 'S') {  //0-padded second
+              sb += zeroPad(f.second, 2);
+            } else if (c === '3') {  //0-padded millisecond ticks (000-999)
+              sb += zeroPad(f.secTicks, 3);
+            } else if (c === 'a') {  //Three letter short text day
+              sb += DAYS[f.dow - 1];
+            } else if (c === 'Z' || c === 'A' || c === 'B') {
+              throw new Error('unsupported escape in date format string [%' + c + ']');
+            } else {
+              throw new Error('unrecognized escape in date format string [%' + c + ']');
+            }
+          } else {
+            sb += c;
+          }
+        }
+
+        return sb;
+      },
+      exported,
       ___end_vars___;
-  return {
+
+  exported = {
+    coalesce: function(a, b) { return xpathResult.string(a || b); },
+    'format-date': function(date, format) {
+        return xpathResult.string(format_date(date, format)); },
     int: function(v) { return xpathResult.number(parseInt(v, 10)); },
     now: function() { return xpathResult.number(Date.now()); },
     random: function() { return xpathResult.number(Math.random()); },
@@ -37,6 +107,11 @@ var openrosa_xpath_extensions = (function() {
     today: function() { return xpathResult.dateString(new Date()); },
     uuid: function() { return xpathResult.string(uuid()); },
   };
+
+  // function aliases
+  exported['format-date-time'] = exported['format-date'];
+
+  return exported;
 }());
 
 if(typeof define === 'function') {
