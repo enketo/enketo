@@ -34,7 +34,7 @@ var ExtendedXpathEvaluator = function(wrapped, extendedFuncs) {
         if(arg.t !== 'num') argString += quote;
         if(i < args.length - 1) argString += ', ';
       }
-      return toInternalResult(wrapped({ t:'str', v:name + '(' + argString + ')' }));
+      return toInternalResult(wrapped(name + '(' + argString + ')'));
     },
     typefor = function(val) {
       switch(typeof val) {
@@ -80,7 +80,13 @@ var ExtendedXpathEvaluator = function(wrapped, extendedFuncs) {
         }
       },
       handleXpathExpr = function() {
-        peek().tokens.push(toInternalResult(wrapped(cur)));
+        var evaluated = v = cur.v.trim();
+        if(/^-?[0-9]+(\.[0-9]+)?$/.test(v)) {
+          evaluated = { t:'num', v:parseFloat(v) };
+        } else {
+          evaluated = toInternalResult(wrapped(cur.v));
+        }
+        peek().tokens.push(evaluated);
         newCurrent();
         backtrack();
       },

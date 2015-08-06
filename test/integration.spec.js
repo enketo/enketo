@@ -3,11 +3,7 @@ define(['src/openrosa-xpath-extensions', 'src/extended-xpath', 'chai', 'lodash']
       assert = chai.assert,
       doc, xEval,
       extendedXpathEvaluator = new ExtendedXpathEvaluator(
-          function wrappedXpathEvaluator(xpath) {
-            var v = xpath.v.trim();
-            if(/^-?[0-9]+(\.[0-9]+)?$/.test(v)) {
-              return { resultType:XPathResult.NUMBER_TYPE, numberValue:parseFloat(v), stringValue:v };
-            }
+          function wrappedXpathEvaluator(v) {
             return doc.evaluate.call(doc, v, doc, null,
                 XPathResult.STRING_TYPE, null);
           },

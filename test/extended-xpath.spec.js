@@ -100,12 +100,7 @@ define(['src/extended-xpath', 'chai', 'lodash'], function(ExtendedXpathEvaluator
       },
       extendedXpathEvaluator = new ExtendedXpathEvaluator(
         function wrappedXpathEvaluator(xpath) {
-          var v = xpath.v.trim();
-          var regChec = /^-?[0-9]+(\.[0-9]+)?$/.test(v);
-          if(regChec) {
-            return { resultType:XPathResult.NUMBER_TYPE, numberValue:parseFloat(v), stringValue:v };
-          }
-          return { resultType:XPathResult.STRING_TYPE, stringValue:'<xpath:' + xpath.v + '>' };
+          return { resultType:XPathResult.STRING_TYPE, stringValue:'<xpath:' + xpath + '>' };
         },
         {
           upcase: function(it) { return xp.str(it.toUpperCase()); },
