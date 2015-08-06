@@ -394,7 +394,34 @@ define(['src/openrosa-xpath-extensions', 'src/extended-xpath', 'chai', 'lodash']
     });
     
 
-    describe('#if()', function() { it('should have tests', function() { TODO(); }); });
+    describe('#if()', function() {
+      it('should return first option if true', function() {
+        // given
+        var val = xEval('if(true(), "a", "b")');
+
+        // expect
+        assert.equal(val.stringValue, 'a');
+      });
+      it('should return second option if false', function() {
+        // given
+        var val = xEval('if(false(), "a", "b")');
+
+        // expect
+        assert.equal(val.stringValue, 'b');
+      });
+    });
+
+    describe('#false()', function() {
+      it('should evaluate to false', function() {
+        assert.equal(xEval('false()').booleanValue, false);
+      });
+    });
+
+    describe('#true()', function() {
+      it('should evaluate to true', function() {
+        assert.equal(xEval('true()').booleanValue, true);
+      });
+    });
 
     describe('#boolean-from-string()', function() {
       _.forEach({

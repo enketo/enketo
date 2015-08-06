@@ -26,12 +26,13 @@ var ExtendedXpathEvaluator = function(wrapped, extendedFuncs) {
       var argString = '', arg, quote, i;
       for(i=0; i<args.length; ++i) {
         arg = args[i];
-        if(arg.t !== 'num') {
+        if(arg.t !== 'num' && arg.t !== 'bool') {
           quote = arg.v.indexOf('"') === -1 ? '"' : "'";
           argString += quote;
         }
         argString += arg.v;
-        if(arg.t !== 'num') argString += quote;
+        if(arg.t === 'bool') argString += '()';
+        if(arg.t !== 'num' && arg.t !== 'bool') argString += quote;
         if(i < args.length - 1) argString += ', ';
       }
       return toInternalResult(wrapped(name + '(' + argString + ')'));

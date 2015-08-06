@@ -113,8 +113,10 @@ var openrosa_xpath_extensions = (function() {
     },
     'decimal-date': function(date) {
         return xpathResult.number(Date.parse(date) / MILLIS_PER_DAY); },
+    'false': function() { return xpathResult.boolean(false); },
     'format-date': function(date, format) {
         return xpathResult.string(format_date(date, format)); },
+    'if': function(con, a, b) { return xpathResult.string(con? a: b); },
     int: function(v) { return xpathResult.number(parseInt(v, 10)); },
     now: function() { return xpathResult.number(Date.now()); },
     pow: function(x, y) { return xpathResult.number(Math.pow(x, y)); },
@@ -127,6 +129,7 @@ var openrosa_xpath_extensions = (function() {
     substr: function(string, startIndex, endIndex) {
         return xpathResult.string(string.slice(startIndex, endIndex)); },
     today: function() { return xpathResult.dateString(new Date()); },
+    'true': function() { return xpathResult.boolean(true); },
     uuid: function() { return xpathResult.string(uuid()); },
   };
 
