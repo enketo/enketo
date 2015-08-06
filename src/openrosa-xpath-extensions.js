@@ -3,6 +3,8 @@ var openrosa_xpath_extensions = (function() {
       MILLIS_PER_DAY = 1000 * 60 * 60 * 24,
       MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
       DAYS = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"],
+      raw_number = /^(-?[0-9]+)$/,
+      date_string = /^\d\d\d\d-\d\d-\d\d(?:T\d\d:\d\d:\d\d(?:Z|[+-]\d\d:\d\d))?$/,
       xpathResult = {
         boolean: function(val) { return { t:'bool', v:val }; },
         number: function(val) { return { t:'num', v:val }; },
@@ -94,7 +96,21 @@ var openrosa_xpath_extensions = (function() {
       ___end_vars___;
 
   exported = {
+    'boolean-from-string': function(string) {
+      return xpathResult.boolean(string === '1' || string === 'true');
+    },
     coalesce: function(a, b) { return xpathResult.string(a || b); },
+    date: function(it) {
+      if(raw_number.test(it)) {
+        var tempDate = new Date(0);
+        tempDate.setDate(1 + parseInt(it, 10));
+        return xpathResult.dateString(tempDate);
+      } else if(date_string.test(it)) {
+        return xpathResult.string(it.substring(0, 10));
+      } else {
+        return xpathResult.string('Invalid Date');
+      }
+    },
     'decimal-date': function(date) {
         return xpathResult.number(Date.parse(date) / MILLIS_PER_DAY); },
     'format-date': function(date, format) {
@@ -105,6 +121,9 @@ var openrosa_xpath_extensions = (function() {
     random: function() { return xpathResult.number(Math.random()); },
     regex: function(haystack, pattern) {
         return xpathResult.boolean(new RegExp(pattern).test(haystack)); },
+    selected: function(haystack, needle) {
+        return xpathResult.boolean(haystack.split(' ').indexOf(needle) !== -1);
+    },
     substr: function(string, startIndex, endIndex) {
         return xpathResult.string(string.slice(startIndex, endIndex)); },
     today: function() { return xpathResult.dateString(new Date()); },
@@ -112,6 +131,7 @@ var openrosa_xpath_extensions = (function() {
   };
 
   // function aliases
+  exported['date-time'] = exported['date'];
   exported['decimal-date-time'] = exported['decimal-date'];
   exported['format-date-time'] = exported['format-date'];
 

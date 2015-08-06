@@ -34,7 +34,7 @@ define(['src/openrosa-xpath-extensions', 'src/extended-xpath', 'chai', 'lodash']
     initBasicXmlDoc();
   });
 
-/*
+
   describe('openrosa-xpath', function() {
     it('should process simple xpaths', function() {
       // given
@@ -161,7 +161,7 @@ define(['src/openrosa-xpath-extensions', 'src/extended-xpath', 'chai', 'lodash']
           });
         });
       });
-    });*/
+    });
 
     describe('#number()', function() {
       describe('called on a date string', function() {
@@ -404,7 +404,7 @@ define(['src/openrosa-xpath-extensions', 'src/extended-xpath', 'chai', 'lodash']
         assert.equal(xEval('today()').stringValue, today);
       });
     });
-    /*
+    
 
     describe('#if()', function() { it('should have tests', function() { TODO(); }); });
 
@@ -458,7 +458,7 @@ define(['src/openrosa-xpath-extensions', 'src/extended-xpath', 'chai', 'lodash']
     describe('#area()', function() { it('should have tests', function() { TODO(); }); });
     describe('#position()', function() { it('should have tests', function() { TODO(); }); });
   });
-  */
+  
 
   describe('infix operators', function() {
     describe('math operators', function() {
@@ -486,7 +486,6 @@ define(['src/openrosa-xpath-extensions', 'src/extended-xpath', 'chai', 'lodash']
         });
       });
     });
-    /*
     describe('boolean operators', function() {
       describe('with numbers', function() {
         _.forEach({
@@ -519,7 +518,7 @@ define(['src/openrosa-xpath-extensions', 'src/extended-xpath', 'chai', 'lodash']
             assert.equal(xEval(expr).booleanValue, expectedBoolean);
           });
         });
-      });
+      });/*
       describe('with strings', function() {
         _.forEach({
           '"1" = "1"' : true,
@@ -559,10 +558,10 @@ define(['src/openrosa-xpath-extensions', 'src/extended-xpath', 'chai', 'lodash']
             assert.equal(xEval(expr).booleanValue, expectedBoolean);
           });
         });
-      });
+      });*/
     });
   });
-
+/*
   describe('some complex examples', function() {
     _.forEach({
       'concat("uuid:", uuid())':/uuid:[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/,
@@ -578,6 +577,5 @@ define(['src/openrosa-xpath-extensions', 'src/extended-xpath', 'chai', 'lodash']
         assert.match(evaluated.stringValue, matcher);
       });
     });
-    */
-  });
+  });*/
 });

@@ -66,6 +66,7 @@ var ExtendedXpathEvaluator = function(wrapped, extendedFuncs) {
           else if(op.t === '>') res = lhs.v > rhs.v;
           else if(op.t === '<=') res = lhs.v <= rhs.v;
           else if(op.t === '>=') res = lhs.v >= rhs.v;
+          else if(op.t === '!=') res = lhs.v != rhs.v;
 
           if(typeof res !== 'undefined') {
             tokens = tokens.slice(0, -3);
@@ -136,11 +137,20 @@ var ExtendedXpathEvaluator = function(wrapped, extendedFuncs) {
             break;
           } // else it's `-` operator
           /* falls through */
-        case '+':
-        case '*':
         case '=':
+          if(c === '=' && (cur.v === '<' || cur.v === '&lt;' ||
+              cur.v === '>' || cur.v === '&gt;' || cur.v === '!')) {
+            cur.v += c; break;
+          }
+          /* falls through */
         case '>':
         case '<':
+          if((c === '<' || c === '>') && nextChar() === '=') {
+            cur.v += c; break;
+          }
+          /* falls through */
+        case '+':
+        case '*':
           if(cur.t === '?') {
             if(cur.v !== '') handleXpathExpr();
             peek().tokens.push({ t:c });
@@ -155,11 +165,20 @@ var ExtendedXpathEvaluator = function(wrapped, extendedFuncs) {
               } else if(cur.v === 'div') {
                 peek().tokens.push({ t:'/' });
                 newCurrent();
+              } else if(cur.v === '&lt;') {
+                peek().tokens.push({ t:'<' });
+                newCurrent();
               } else if(cur.v === '&gt;') {
                 peek().tokens.push({ t:'>' });
                 newCurrent();
-              } else if(cur.v === '>=' || cur.v === '&gte;=') {
+              } else if(cur.v === '<=' || cur.v === '&lt;=') {
+                peek().tokens.push({ t:'<=' });
+                newCurrent();
+              } else if(cur.v === '>=' || cur.v === '&gt;=') {
                 peek().tokens.push({ t:'>=' });
+                newCurrent();
+              } else if(cur.v === '!=') {
+                peek().tokens.push({ t:'!=' });
                 newCurrent();
               } else {
                 handleXpathExpr();
