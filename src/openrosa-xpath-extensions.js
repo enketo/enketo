@@ -31,7 +31,9 @@ var openrosa_xpath_extensions = (function() {
                   .replace(/[xy]/g, _uuid_part);
       },
       format_date = function(date, format) {
-        date = new Date(Date.parse(date));
+        date = Date.parse(date);
+        if(isNaN(date)) return '';
+        date = new Date(date);
         var c, i, sb = '', f = {
           year: 1900 + date.getYear(),
           month: 1 + date.getMonth(),
