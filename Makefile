@@ -1,5 +1,7 @@
 CC_VERSION = compiler-20150729.tar.gz
 
+default: minify
+
 .PHONY: minify-dependencies
 minify-dependencies:
 	-mkdir -p build/lib
