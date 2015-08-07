@@ -1,6 +1,14 @@
 CC_VERSION = compiler-20150729.tar.gz
 
-default: minify
+default: test minify
+
+.PHONY: lint
+lint:
+	jshint src/*.js test/*.js
+
+.PHONY: test
+test: lint
+	npm test
 
 .PHONY: minify-dependencies
 minify-dependencies:
@@ -11,7 +19,7 @@ minify-dependencies:
 		tar -xf ${CC_VERSION} && \
 		cp compiler.jar ../../lib)
 .PHONY: minify
-minify: minify-dependencies
+minify: lint minify-dependencies
 	java -jar build/lib/compiler.jar \
 		--language_in ES5 \
 		--js_output_file=build/openrosa-xpath.js \

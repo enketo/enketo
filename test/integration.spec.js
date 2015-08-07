@@ -1,5 +1,5 @@
 define(['src/openrosa-xpath-extensions', 'src/extended-xpath', 'chai', 'lodash'], function(openRosaXpathExtensions, ExtendedXpathEvaluator, chai, _) {
-  var TODO = function() { false && assert.notOk('TODO'); },
+  var TODO = function() { if(false) assert.notOk('TODO'); },
       assert = chai.assert,
       doc, xEval,
       extendedXpathEvaluator = new ExtendedXpathEvaluator(
@@ -7,14 +7,14 @@ define(['src/openrosa-xpath-extensions', 'src/extended-xpath', 'chai', 'lodash']
             return doc.evaluate.call(doc, v, doc, null,
                 XPathResult.STRING_TYPE, null);
           },
-          openRosaXpathExtensions);
+          openRosaXpathExtensions),
       simpleValueIs = function(textValue) {
         var xml = '<simple><xpath><to><node>' + textValue +
                 '</node></to></xpath><empty/></simple>';
         doc = new DOMParser().parseFromString(xml, 'application/xml');
         xEval = function(e) {
           return extendedXpathEvaluator.evaluate(e);
-        }
+        };
       },
       initBasicXmlDoc = function() { simpleValueIs(''); };
 
@@ -159,7 +159,6 @@ define(['src/openrosa-xpath-extensions', 'src/extended-xpath', 'chai', 'lodash']
             'number("1969-12-31")': '-1',
             'number("2008-09-05")': '14127',
             'number("1941-12-07")': '-10252',
-            'number("2008-09-05")': '14127',
         }, function(expectedResult, expr) {
           it(expr + ' should be ' + expectedResult + ' days since the epoch', function() {
           });

@@ -136,7 +136,7 @@ var openrosa_xpath_extensions = (function() {
   };
 
   // function aliases
-  exported['date-time'] = exported['date'];
+  exported['date-time'] = exported.date;
   exported['decimal-date-time'] = exported['decimal-date'];
   exported['format-date-time'] = exported['format-date'];
 
