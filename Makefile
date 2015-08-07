@@ -4,7 +4,7 @@ default: test minify
 
 .PHONY: lint
 lint:
-	jshint src/*.js test/*.js
+	./node_modules/jshint/bin/jshint src/*.js test/*.js
 
 .PHONY: test
 test: lint
