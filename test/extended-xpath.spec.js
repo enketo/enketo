@@ -103,16 +103,18 @@ define(['src/extended-xpath', 'chai', 'lodash'], function(ExtendedXpathEvaluator
           return { resultType:XPathResult.STRING_TYPE, stringValue:'<xpath:' + xpath + '>' };
         },
         {
-          upcase: function(it) { return xp.str(it.toUpperCase()); },
-          downcase: function(it) { return xp.str(it.toLowerCase()); },
-          date: function() { return xp.str(new Date().toString()); },
-          concat: function() {
-            var i, acc = '';
-            for(i=0; i<arguments.length; ++i) acc += arguments[i];
-            return xp.str(acc);
+          func: {
+            upcase: function(it) { return xp.str(it.toUpperCase()); },
+            downcase: function(it) { return xp.str(it.toLowerCase()); },
+            date: function() { return xp.str(new Date().toString()); },
+            concat: function() {
+              var i, acc = '';
+              for(i=0; i<arguments.length; ++i) acc += arguments[i];
+              return xp.str(acc);
+            },
+            random: function() { return xp.num(Math.random()); },
+            reverse: function(it) { return xp.str(it.split('').reverse().join('')); },
           },
-          random: function() { return xp.num(Math.random()); },
-          reverse: function(it) { return xp.str(it.split('').reverse().join('')); },
         }
       );
 

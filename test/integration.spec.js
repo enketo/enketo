@@ -89,7 +89,7 @@ define(['src/openrosa-xpath-extensions', 'src/extended-xpath', 'chai', 'lodash']
       });
 
       describe('invalid date-time', function() {
-        it('should not parse', function() {
+        it('should not parse, but instead should return a String', function() {
           assert.equal(xEval("date-time('nonsense')").stringValue, 'Invalid Date');
         });
       });
@@ -114,7 +114,7 @@ define(['src/openrosa-xpath-extensions', 'src/extended-xpath', 'chai', 'lodash']
       });
 
       describe('invalid date', function() {
-        it('should not parse', function() {
+        it('should not parse, but instead should return a String', function() {
           assert.equal(xEval("date('nonsense')").stringValue, 'Invalid Date');
         });
       });

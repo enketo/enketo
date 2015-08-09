@@ -1,13 +1,15 @@
 define(['src/openrosa-xpath-extensions', 'chai', 'lodash'], function(or, chai, _) {
+  var f = or.func;
+
   describe('#date()', function() {
     describe('when called with integers', function() {
       it('should return a date type', function() {
         // expect
-        assert.equal(or.date(0).t, 'date');
+        assert.equal(f.date(0).t, 'date');
       });
       it('should return a value of type Date', function() {
         // expect
-        assert.ok(or.date(0).v instanceof Date);
+        assert.ok(f.date(0).v instanceof Date);
       });
 
       _.forEach({
@@ -18,7 +20,7 @@ define(['src/openrosa-xpath-extensions', 'chai', 'lodash'], function(or, chai, _
       }, function(arg, expected) {
         it('should convert ' + arg + ' to ' + expected, function() {
           // expect
-          assert.equal(or.date(arg).v.toISOString().slice(0, 10), expected);
+          assert.equal(f.date(arg).v.toISOString().slice(0, 10), expected);
         });
       });
     });
@@ -31,13 +33,13 @@ define(['src/openrosa-xpath-extensions', 'chai', 'lodash'], function(or, chai, _
         '1971-02-05',
       ], function(arg) {
         it('should return a date type', function() {
-          assert.equal(or.date(arg).t, 'date');
+          assert.equal(f.date(arg).t, 'date');
         });
         it('should return a value of type Date', function() {
-          assert.ok(or.date(arg).v instanceof Date);
+          assert.ok(f.date(arg).v instanceof Date);
         });
         it('should return the correct date', function() {
-          assert.equal(or.date(arg).v.toISOString().slice(0, 10), arg);
+          assert.equal(f.date(arg).v.toISOString().slice(0, 10), arg);
         });
       });
     });
@@ -48,10 +50,10 @@ define(['src/openrosa-xpath-extensions', 'chai', 'lodash'], function(or, chai, _
           '99-12-31',
       ], function(arg) {
         it('should return a string type', function() {
-          assert.equal(or.date(arg).t, 'str');
+          assert.equal(f.date(arg).t, 'str');
         });
         it('should convert "' + arg + '" to "Invalid Date"', function() {
-          assert.equal(or.date(arg).v, 'Invalid Date');
+          assert.equal(f.date(arg).v, 'Invalid Date');
         });
       });
     });
@@ -60,7 +62,7 @@ define(['src/openrosa-xpath-extensions', 'chai', 'lodash'], function(or, chai, _
   describe('#date-format()', function() {
     it("should return empty string if it can't parse a date", function() {
       // when
-      var formattedDate = or['format-date']('abc', '%Y');
+      var formattedDate = f['format-date']('abc', '%Y');
 
       // then
       assert.equal(formattedDate.v, '');
@@ -69,11 +71,11 @@ define(['src/openrosa-xpath-extensions', 'chai', 'lodash'], function(or, chai, _
 
   describe('#today()', function() {
     it('should return a result of type `date`', function() {
-      assert.equal(or.today().t, 'date');
+      assert.equal(f.today().t, 'date');
     });
 
     it('should return a value which is instance of Date', function() {
-      assert.ok(or.today().v instanceof Date);
+      assert.ok(f.today().v instanceof Date);
     });
   });
 });

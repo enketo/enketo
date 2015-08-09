@@ -1,26 +1,19 @@
-var ExtendedXpathEvaluator = function(wrapped, extendedFuncs) {
+var ExtendedXpathEvaluator = function(wrapped, extensions) {
   var
-    zeroPad = function(n) {
-      n = n.toString();
-      if(n.length < 2) n = '0' + n;
-      return n;
-    },
-    dateToString = function(d) {
-          return d.getFullYear() + '-' + zeroPad(d.getMonth()+1) + '-' +
-              zeroPad(d.getDate());
-    },
-    num = function(o) {
-      return o.t === 'num'? o.v: parseFloat(o.v);
-    },
+    extendedFuncs = extensions.func || {},
+    extendedProcessors = extensions.process || {},
     toInternalResult = function(r) {
       if(r.resultType === XPathResult.NUMBER_TYPE) return { t:'num', v:r.numberValue };
       if(r.resultType === XPathResult.BOOLEAN_TYPE) return {  t:'bool', v:r.booleanValue };
       return { t:'str', v:r.stringValue };
     },
     toExternalResult = function(r) {
+      if(extendedProcessors.toExternalResult) {
+        var res = extendedProcessors.toExternalResult(r);
+        if(res) return res;
+      }
       if(r.t === 'num') return { resultType:XPathResult.NUMBER_TYPE, numberValue:r.v, stringValue:r.v.toString() };
       if(r.t === 'bool') return { resultType:XPathResult.BOOLEAN_TYPE, booleanValue:r.v, stringValue:r.v.toString() };
-      if(r.t === 'date') return { resultType:XPathResult.STRING_TYPE, stringValue:dateToString(r.v) };
       return { resultType:XPathResult.STRING_TYPE, stringValue:r.v.toString() };
     },
     callFn = function(name, args) {
@@ -51,7 +44,10 @@ var ExtendedXpathEvaluator = function(wrapped, extendedFuncs) {
       return toInternalResult(wrapped(name + '(' + argString + ')'));
     },
     typefor = function(val) {
-      if(val instanceof Date) return 'date';
+      if(extendedProcessors.typefor) {
+        var res = extendedProcessors.typefor(val);
+        if(res) return res;
+      }
       if(typeof val === 'boolean') return 'bool';
       if(typeof val === 'number') return 'number';
       return 'str';
@@ -73,51 +69,14 @@ var ExtendedXpathEvaluator = function(wrapped, extendedFuncs) {
           op  = tokens[len - 2];
           rhs = tokens[len - 1];
 
-          // TODO this date stuff is openrosa-specific, so should be moved
-          // to the openrosa_xpath_extensions object
-          if(lhs.t === 'date' || rhs.t === 'date') {
-            (function() {
-              /*var d = lhs.t === 'date' ? lhs.v : rhs.v;
-              var i = lhs.t !== 'date' ? lhs.v : rhs.v;
-              if(       op.t === '+') {
-                res = new Date();
-                res.setUTCDate(d.getDate + i);
-              } else if(op.t === '-') {
-                res = new Date();
-                res.setUTCDate(d.getDate - i);
-              }*/
-
-              // For comparisons, we must make sure that both values are numbers
-              // Dates would be fine, except for quality!
-              if( op.t === '=' ||
-                  op.t === '<' ||
-                  op.t === '>' ||
-                  op.t === '<=' ||
-                  op.t === '>=' ||
-                  op.t === '!=') {
-                if(lhs.t === 'str') lhs = extendedFuncs.date(lhs.v);
-                if(rhs.t === 'str') rhs = extendedFuncs.date(rhs.v);
-                if(lhs.t !== 'date' || rhs.t !== 'date') {
-                  res = op.t === '!=';
-                } else {
-                  lhs = { t:'num', v:lhs.v.getTime() };
-                  rhs = { t:'num', v:rhs.v.getTime() };
-                }
-              } else if(op.t === '+' || op.t === '-') {
-                // for math operators, we need to do it ourselves
-                (function() {
-                  if(lhs.t === 'date' && rhs.t === 'date') err();
-                  var d = lhs.t === 'date'? lhs.v: rhs.v,
-                      n = lhs.t !== 'date'? num(lhs): num(rhs);
-                  if(op.t === '-') n = -n;
-                  res = new Date(d.getTime());
-                  res.setUTCDate(d.getDate() + n);
-                }());
-              }
-            }());
+          if(extendedProcessors.handleInfix) {
+            res = extendedProcessors.handleInfix(lhs, op, rhs);
+            if(res && res.t === 'continue') {
+              lhs = res.lhs; op = res.op; rhs = res.rhs; res = null;
+            }
           }
 
-          if(typeof res === 'undefined') {
+          if(typeof res === 'undefined' || res === null) {
             if(     op.t === '+') res = lhs.v + rhs.v;
             else if(op.t === '-') res = lhs.v - rhs.v;
             else if(op.t === '*') res = lhs.v * rhs.v;

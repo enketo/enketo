@@ -20,6 +20,13 @@ var openrosa_xpath_extensions = (function() {
         while(n.length < len) n = '0' + n;
         return n;
       },
+      num = function(o) {
+        return o.t === 'num'? o.v: parseFloat(o.v);
+      },
+      dateToString = function(d) {
+            return d.getFullYear() + '-' + zeroPad(d.getMonth()+1) + '-' +
+                zeroPad(d.getDate());
+      },
       _uuid_part = function(c) {
           var r = Math.random()*16|0,
                   v=c=='x'?r:r&0x3|0x8;
@@ -28,6 +35,17 @@ var openrosa_xpath_extensions = (function() {
       uuid = function() {
           return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'
                   .replace(/[xy]/g, _uuid_part);
+      },
+      date = function(it) {
+        if(raw_number.test(it)) {
+          var tempDate = new Date(0);
+          tempDate.setUTCDate(1 + parseInt(it, 10));
+          return xr.date(tempDate);
+        } else if(date_string.test(it)) {
+          return xr.date(new Date(it.substring(0, 10)));
+        } else {
+          return xr.string('Invalid Date');
+        }
       },
       format_date = function(date, format) {
         date = Date.parse(date);
@@ -93,25 +111,15 @@ var openrosa_xpath_extensions = (function() {
 
         return sb;
       },
-      exported,
+      func,
       ___end_vars___;
 
-  exported = {
+  func = {
     'boolean-from-string': function(string) {
       return xr.boolean(string === '1' || string === 'true');
     },
     coalesce: function(a, b) { return xr.string(a || b); },
-    date: function(it) {
-      if(raw_number.test(it)) {
-        var tempDate = new Date(0);
-        tempDate.setUTCDate(1 + parseInt(it, 10));
-        return xr.date(tempDate);
-      } else if(date_string.test(it)) {
-        return xr.date(new Date(it.substring(0, 10)));
-      } else {
-        return xr.string('Invalid Date');
-      }
-    },
+    date: date,
     'decimal-date': function(date) {
         return xr.number(Date.parse(date) / MILLIS_PER_DAY); },
     'false': function() { return xr.boolean(false); },
@@ -135,11 +143,52 @@ var openrosa_xpath_extensions = (function() {
   };
 
   // function aliases
-  exported['date-time'] = exported.date;
-  exported['decimal-date-time'] = exported['decimal-date'];
-  exported['format-date-time'] = exported['format-date'];
+  func['date-time'] = func.date;
+  func['decimal-date-time'] = func['decimal-date'];
+  func['format-date-time'] = func['format-date'];
 
-  return exported;
+  return {
+    func:func,
+    process: {
+      toExternalResult: function(r) {
+        if(r.t === 'date') return { resultType:XPathResult.STRING_TYPE, stringValue:dateToString(r.v) };
+      },
+      typefor: function(val) {
+        if(val instanceof Date) return 'date';
+      },
+      handleInfix: function(lhs, op, rhs) {
+        if(lhs.t === 'date' || rhs.t === 'date') {
+          // For comparisons, we must make sure that both values are numbers
+          // Dates would be fine, except for quality!
+          if( op.t === '=' ||
+              op.t === '<' ||
+              op.t === '>' ||
+              op.t === '<=' ||
+              op.t === '>=' ||
+              op.t === '!=') {
+            if(lhs.t === 'str') lhs = date(lhs.v);
+            if(rhs.t === 'str') rhs = date(rhs.v);
+            if(lhs.t !== 'date' || rhs.t !== 'date') {
+              return op.t === '!=';
+            } else {
+              lhs = { t:'num', v:lhs.v.getTime() };
+              rhs = { t:'num', v:rhs.v.getTime() };
+            }
+          } else if(op.t === '+' || op.t === '-') {
+            // for math operators, we need to do it ourselves
+            if(lhs.t === 'date' && rhs.t === 'date') err();
+            var d = lhs.t === 'date'? lhs.v: rhs.v,
+                n = lhs.t !== 'date'? num(lhs): num(rhs),
+                res = new Date(d.getTime());
+            if(op.t === '-') n = -n;
+            res.setUTCDate(d.getDate() + n);
+            return res;
+          }
+          return { t:'continue', lhs:lhs, op:op, rhs:rhs };
+        }
+      },
+    },
+  };
 }());
 
 if(typeof define === 'function') {
