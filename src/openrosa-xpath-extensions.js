@@ -3,9 +3,9 @@ var openrosa_xpath_extensions = (function() {
       MILLIS_PER_DAY = 1000 * 60 * 60 * 24,
       MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
       DAYS = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"],
-      raw_number = /^(-?[0-9]+)$/,
-      date_string = /^\d\d\d\d-\d\d-\d\d(?:T\d\d:\d\d:\d\d(?:Z|[+-]\d\d:\d\d))?$/,
-      xr = {
+      RAW_NUMBER = /^(-?[0-9]+)$/,
+      DATE_STRING = /^\d\d\d\d-\d\d-\d\d(?:T\d\d:\d\d:\d\d(?:Z|[+-]\d\d:\d\d))?$/,
+      XPR = {
         boolean: function(val) { return { t:'bool', v:val }; },
         number: function(val) { return { t:'num', v:val }; },
         string: function(val) { return { t:'str', v:val }; },
@@ -14,18 +14,18 @@ var openrosa_xpath_extensions = (function() {
           return { t:'date', v:val };
         }
       },
-      zeroPad = function(n, len) {
+      _zeroPad = function(n, len) {
         len = len || 2;
         n = n.toString();
         while(n.length < len) n = '0' + n;
         return n;
       },
-      num = function(o) {
+      _num = function(o) {
         return o.t === 'num'? o.v: parseFloat(o.v);
       },
-      dateToString = function(d) {
-            return d.getFullYear() + '-' + zeroPad(d.getMonth()+1) + '-' +
-                zeroPad(d.getDate());
+      _dateToString = function(d) {
+            return d.getFullYear() + '-' + _zeroPad(d.getMonth()+1) + '-' +
+                _zeroPad(d.getDate());
       },
       _uuid_part = function(c) {
           var r = Math.random()*16|0,
@@ -37,14 +37,14 @@ var openrosa_xpath_extensions = (function() {
                   .replace(/[xy]/g, _uuid_part);
       },
       date = function(it) {
-        if(raw_number.test(it)) {
+        if(RAW_NUMBER.test(it)) {
           var tempDate = new Date(0);
           tempDate.setUTCDate(1 + parseInt(it, 10));
-          return xr.date(tempDate);
-        } else if(date_string.test(it)) {
-          return xr.date(new Date(it.substring(0, 10)));
+          return XPR.date(tempDate);
+        } else if(DATE_STRING.test(it)) {
+          return XPR.date(new Date(it.substring(0, 10)));
         } else {
-          return xr.string('Invalid Date');
+          return XPR.string('Invalid Date');
         }
       },
       format_date = function(date, format) {
@@ -74,29 +74,29 @@ var openrosa_xpath_extensions = (function() {
             if (c === '%') { // literal '%'
               sb += '%';
             } else if (c === 'Y') {  //4-digit year
-              sb += zeroPad(f.year, 4);
+              sb += _zeroPad(f.year, 4);
             } else if (c === 'y') {  //2-digit year
-              sb += zeroPad(f.year, 4).substring(2);
+              sb += _zeroPad(f.year, 4).substring(2);
             } else if (c === 'm') {  //0-padded month
-              sb += zeroPad(f.month, 2);
+              sb += _zeroPad(f.month, 2);
             } else if (c === 'n') {  //numeric month
               sb += f.month;
             } else if (c === 'b') {  //short text month
               sb += MONTHS[f.month - 1];
             } else if (c === 'd') {  //0-padded day of month
-              sb += zeroPad(f.day, 2);
+              sb += _zeroPad(f.day, 2);
             } else if (c === 'e') {  //day of month
               sb += f.day;
             } else if (c === 'H') {  //0-padded hour (24-hr time)
-              sb += zeroPad(f.hour, 2);
+              sb += _zeroPad(f.hour, 2);
             } else if (c === 'h') {  //hour (24-hr time)
               sb += f.hour;
             } else if (c === 'M') {  //0-padded minute
-              sb += zeroPad(f.minute, 2);
+              sb += _zeroPad(f.minute, 2);
             } else if (c === 'S') {  //0-padded second
-              sb += zeroPad(f.second, 2);
+              sb += _zeroPad(f.second, 2);
             } else if (c === '3') {  //0-padded millisecond ticks (000-999)
-              sb += zeroPad(f.secTicks, 3);
+              sb += _zeroPad(f.secTicks, 3);
             } else if (c === 'a') {  //Three letter short text day
               sb += DAYS[f.dow - 1];
             } else if (c === 'Z' || c === 'A' || c === 'B') {
@@ -116,30 +116,30 @@ var openrosa_xpath_extensions = (function() {
 
   func = {
     'boolean-from-string': function(string) {
-      return xr.boolean(string === '1' || string === 'true');
+      return XPR.boolean(string === '1' || string === 'true');
     },
-    coalesce: function(a, b) { return xr.string(a || b); },
+    coalesce: function(a, b) { return XPR.string(a || b); },
     date: date,
     'decimal-date': function(date) {
-        return xr.number(Date.parse(date) / MILLIS_PER_DAY); },
-    'false': function() { return xr.boolean(false); },
+        return XPR.number(Date.parse(date) / MILLIS_PER_DAY); },
+    'false': function() { return XPR.boolean(false); },
     'format-date': function(date, format) {
-        return xr.string(format_date(date, format)); },
-    'if': function(con, a, b) { return xr.string(con? a: b); },
-    int: function(v) { return xr.number(parseInt(v, 10)); },
-    now: function() { return xr.number(Date.now()); },
-    pow: function(x, y) { return xr.number(Math.pow(x, y)); },
-    random: function() { return xr.number(Math.random()); },
+        return XPR.string(format_date(date, format)); },
+    'if': function(con, a, b) { return XPR.string(con? a: b); },
+    int: function(v) { return XPR.number(parseInt(v, 10)); },
+    now: function() { return XPR.number(Date.now()); },
+    pow: function(x, y) { return XPR.number(Math.pow(x, y)); },
+    random: function() { return XPR.number(Math.random()); },
     regex: function(haystack, pattern) {
-        return xr.boolean(new RegExp(pattern).test(haystack)); },
+        return XPR.boolean(new RegExp(pattern).test(haystack)); },
     selected: function(haystack, needle) {
-        return xr.boolean(haystack.split(' ').indexOf(needle) !== -1);
+        return XPR.boolean(haystack.split(' ').indexOf(needle) !== -1);
     },
     substr: function(string, startIndex, endIndex) {
-        return xr.string(string.slice(startIndex, endIndex)); },
-    today: function() { return xr.date(new Date()); },
-    'true': function() { return xr.boolean(true); },
-    uuid: function() { return xr.string(uuid()); },
+        return XPR.string(string.slice(startIndex, endIndex)); },
+    today: function() { return XPR.date(new Date()); },
+    'true': function() { return XPR.boolean(true); },
+    uuid: function() { return XPR.string(uuid()); },
   };
 
   // function aliases
@@ -151,7 +151,8 @@ var openrosa_xpath_extensions = (function() {
     func:func,
     process: {
       toExternalResult: function(r) {
-        if(r.t === 'date') return { resultType:XPathResult.STRING_TYPE, stringValue:dateToString(r.v) };
+        if(r.t === 'date') return {
+          resultType:XPathResult.STRING_TYPE, stringValue:_dateToString(r.v) };
       },
       typefor: function(val) {
         if(val instanceof Date) return 'date';
@@ -178,7 +179,7 @@ var openrosa_xpath_extensions = (function() {
             // for math operators, we need to do it ourselves
             if(lhs.t === 'date' && rhs.t === 'date') err();
             var d = lhs.t === 'date'? lhs.v: rhs.v,
-                n = lhs.t !== 'date'? num(lhs): num(rhs),
+                n = lhs.t !== 'date'? _num(lhs): _num(rhs),
                 res = new Date(d.getTime());
             if(op.t === '-') n = -n;
             res.setUTCDate(d.getDate() + n);
