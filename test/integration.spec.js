@@ -149,6 +149,20 @@ define(['src/openrosa-xpath-extensions', 'src/extended-xpath', 'chai', 'lodash']
           });
         });
       });
+      describe('math', function() {
+        _.forEach({
+            'date("2001-12-26") + 5': '2001-12-31',
+            'date("2001-12-26") - 5': '2001-12-21',
+            '5 + date("2001-12-26")': '2001-12-31',
+            '-5 + date("2001-12-26")': '2001-12-21',
+            '3 + date("2001-12-26") + 5': '2002-01-03',
+            '3 + date("2001-12-26") - 5': '2001-12-24',
+        }, function(expected, expr) {
+          it('should evaluate \'' + expr + '\' to: ' + expected, function() {
+            assert.equal(xEval(expr).stringValue, expected);
+          });
+        });
+      });
     });
 
     describe('#number()', function() {
@@ -161,6 +175,7 @@ define(['src/openrosa-xpath-extensions', 'src/extended-xpath', 'chai', 'lodash']
             'number("1941-12-07")': '-10252',
         }, function(expectedResult, expr) {
           it(expr + ' should be ' + expectedResult + ' days since the epoch', function() {
+            TODO();
           });
         });
       });
@@ -391,7 +406,7 @@ define(['src/openrosa-xpath-extensions', 'src/extended-xpath', 'chai', 'lodash']
         assert.equal(xEval('today()').stringValue, today);
       });
     });
-    
+
 
     describe('#if()', function() {
       it('should return first option if true', function() {
@@ -472,7 +487,7 @@ define(['src/openrosa-xpath-extensions', 'src/extended-xpath', 'chai', 'lodash']
     describe('#area()', function() { it('should have tests', function() { TODO(); }); });
     describe('#position()', function() { it('should have tests', function() { TODO(); }); });
   });
-  
+
 
   describe('infix operators', function() {
     describe('math operators', function() {

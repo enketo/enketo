@@ -5,14 +5,13 @@ var openrosa_xpath_extensions = (function() {
       DAYS = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"],
       raw_number = /^(-?[0-9]+)$/,
       date_string = /^\d\d\d\d-\d\d-\d\d(?:T\d\d:\d\d:\d\d(?:Z|[+-]\d\d:\d\d))?$/,
-      xpathResult = {
+      xr = {
         boolean: function(val) { return { t:'bool', v:val }; },
         number: function(val) { return { t:'num', v:val }; },
         string: function(val) { return { t:'str', v:val }; },
-        dateString: function(val) {
-          val = val.getFullYear() + '-' + zeroPad(val.getMonth()+1) + '-' +
-              zeroPad(val.getDate());
-          return xpathResult.string(val);
+        date: function(val) {
+          if(!(val instanceof Date)) throw new Error('Cannot create date from ' + val + ' (' + (typeof val) + ')');
+          return { t:'date', v:val };
         }
       },
       zeroPad = function(n, len) {
@@ -99,40 +98,40 @@ var openrosa_xpath_extensions = (function() {
 
   exported = {
     'boolean-from-string': function(string) {
-      return xpathResult.boolean(string === '1' || string === 'true');
+      return xr.boolean(string === '1' || string === 'true');
     },
-    coalesce: function(a, b) { return xpathResult.string(a || b); },
+    coalesce: function(a, b) { return xr.string(a || b); },
     date: function(it) {
       if(raw_number.test(it)) {
         var tempDate = new Date(0);
-        tempDate.setDate(1 + parseInt(it, 10));
-        return xpathResult.dateString(tempDate);
+        tempDate.setUTCDate(1 + parseInt(it, 10));
+        return xr.date(tempDate);
       } else if(date_string.test(it)) {
-        return xpathResult.string(it.substring(0, 10));
+        return xr.date(new Date(it.substring(0, 10)));
       } else {
-        return xpathResult.string('Invalid Date');
+        return xr.string('Invalid Date');
       }
     },
     'decimal-date': function(date) {
-        return xpathResult.number(Date.parse(date) / MILLIS_PER_DAY); },
-    'false': function() { return xpathResult.boolean(false); },
+        return xr.number(Date.parse(date) / MILLIS_PER_DAY); },
+    'false': function() { return xr.boolean(false); },
     'format-date': function(date, format) {
-        return xpathResult.string(format_date(date, format)); },
-    'if': function(con, a, b) { return xpathResult.string(con? a: b); },
-    int: function(v) { return xpathResult.number(parseInt(v, 10)); },
-    now: function() { return xpathResult.number(Date.now()); },
-    pow: function(x, y) { return xpathResult.number(Math.pow(x, y)); },
-    random: function() { return xpathResult.number(Math.random()); },
+        return xr.string(format_date(date, format)); },
+    'if': function(con, a, b) { return xr.string(con? a: b); },
+    int: function(v) { return xr.number(parseInt(v, 10)); },
+    now: function() { return xr.number(Date.now()); },
+    pow: function(x, y) { return xr.number(Math.pow(x, y)); },
+    random: function() { return xr.number(Math.random()); },
     regex: function(haystack, pattern) {
-        return xpathResult.boolean(new RegExp(pattern).test(haystack)); },
+        return xr.boolean(new RegExp(pattern).test(haystack)); },
     selected: function(haystack, needle) {
-        return xpathResult.boolean(haystack.split(' ').indexOf(needle) !== -1);
+        return xr.boolean(haystack.split(' ').indexOf(needle) !== -1);
     },
     substr: function(string, startIndex, endIndex) {
-        return xpathResult.string(string.slice(startIndex, endIndex)); },
-    today: function() { return xpathResult.dateString(new Date()); },
-    'true': function() { return xpathResult.boolean(true); },
-    uuid: function() { return xpathResult.string(uuid()); },
+        return xr.string(string.slice(startIndex, endIndex)); },
+    today: function() { return xr.date(new Date()); },
+    'true': function() { return xr.boolean(true); },
+    uuid: function() { return xr.string(uuid()); },
   };
 
   // function aliases
