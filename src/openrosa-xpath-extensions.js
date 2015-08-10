@@ -3,7 +3,7 @@ var openrosa_xpath_extensions = (function() {
       MILLIS_PER_DAY = 1000 * 60 * 60 * 24,
       MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
       DAYS = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"],
-      RAW_NUMBER = /^(-?[0-9]+)$/,
+      RAW_NUMBER = /^(-?[0-9]+)(\.[0-9]+)?$/,
       DATE_STRING = /^\d\d\d\d-\d\d-\d\d(?:T\d\d:\d\d:\d\d(?:Z|[+-]\d\d:\d\d))?$/,
       XPR = {
         boolean: function(val) { return { t:'bool', v:val }; },
@@ -21,7 +21,7 @@ var openrosa_xpath_extensions = (function() {
         return n;
       },
       _num = function(o) {
-        return o.t === 'num'? o.v: parseFloat(o.v);
+        return Math.round(o.t === 'num'? o.v: parseFloat(o.v));
       },
       _dateToString = function(d) {
             return d.getFullYear() + '-' + _zeroPad(d.getMonth()+1) + '-' +

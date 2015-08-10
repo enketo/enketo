@@ -1,5 +1,6 @@
 define(['src/openrosa-xpath-extensions', 'src/extended-xpath', 'chai', 'lodash'], function(openRosaXpathExtensions, ExtendedXpathEvaluator, chai, _) {
   var TODO = function() { if(false) assert.notOk('TODO'); },
+      DATE_MATCH = /(Mon|Tue|Wed|Thu|Fri|Sat|Sun) (Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec) \d\d \d{4} \d\d:\d\d:\d\d GMT([+-]\d\d\d\d \(.+\))?/,
       assert = chai.assert,
       doc, xEval,
       extendedXpathEvaluator = new ExtendedXpathEvaluator(
@@ -102,10 +103,12 @@ define(['src/openrosa-xpath-extensions', 'src/extended-xpath', 'chai', 'lodash']
         });
       });
 
-      describe('positive number', function() {
+      describe('number', function() {
         _.forEach({
           'date(0)': '1970-01-01',
           'date(1)': '1970-01-02',
+          'date(1.5)': '1970-01-02',
+          'date(-1)': '1969-12-31',
         }, function(expected, expr) {
           it(expr + ' should be converted to ' + expected, function() {
             assert.equal(xEval(expr).stringValue, expected);
@@ -600,6 +603,23 @@ define(['src/openrosa-xpath-extensions', 'src/extended-xpath', 'chai', 'lodash']
       "'2015-07-15' < today()" : /true/,
       "'raw-string'" : /raw-string/,
       'format-date-time(date-time(decimal-date-time("2003-03-12") + 280), "%b %e, %Y")': /Dec 17, 2003/,
+      "decimal-date-time(today()- 60 )": /^-?[0-9]+(\.[0-9]+)?$/,
+      "date-time(decimal-date-time(today()- 60 ))": /2015-06-11/,
+      "if(selected( 'date' ,'date'), 'first' ,'second')": /^first$/,
+      "if(selected( 'approx' ,'date'), 'first' ,'second')": /^second$/,
+      "if(selected(/model/instance[1]/pregnancy/group_lmp/lmp_method, 'date'), /model/instance[1]/pregnancy/group_lmp/lmp_date, 'testing')": /testing/,
+      "if(selected(/model/instance[1]/pregnancy/group_lmp/lmp_method, 'date'), /model/instance[1]/pregnancy/group_lmp/lmp_date, concat('testing', '1', '2', '3', '...'))": /testing/,
+      "if(selected(/model/instance[1]/pregnancy/group_lmp/lmp_method, 'date'), /model/instance[1]/pregnancy/group_lmp/lmp_date, date-time(0))": DATE_MATCH,
+      "if(selected(/model/instance[1]/pregnancy/group_lmp/lmp_method, 'date'), /model/instance[1]/pregnancy/group_lmp/lmp_date, date-time(decimal-date-time(today() - 60)))": DATE_MATCH,
+      "if(selected( /model/instance[1]/pregnancy/group_lmp/lmp_method ,'date'), /model/instance[1]/pregnancy/group_lmp/lmp_date ,date-time(decimal-date-time(today()- 60 )))": DATE_MATCH,
+      'if(true(), today(), today())': DATE_MATCH,
+      'if(false(), today(), today())': DATE_MATCH,
+      'if(true(), "", today())': /^$/,
+      'if(false(), "", today())': DATE_MATCH,
+      'if(true(), today(), "")': DATE_MATCH,
+      'if(false(), today(), "")': /^$/,
+      'coalesce(today(), "")': DATE_MATCH,
+      'coalesce("", today())': DATE_MATCH,
     }, function(matcher, expression) {
       it('should convert "' + expression + '" to match "' + matcher + '"', function() {
         var evaluated = xEval(expression);

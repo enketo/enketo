@@ -25,6 +25,29 @@ define(['src/openrosa-xpath-extensions', 'chai', 'lodash'], function(or, chai, _
       });
     });
 
+    describe('when called with floats', function() {
+      it('should return a date type', function() {
+        // expect
+        assert.equal(f.date(1.11596).t, 'date');
+      });
+      it('should return a value of type Date', function() {
+        // expect
+        assert.ok(f.date(1.11596).v instanceof Date);
+      });
+
+      _.forEach({
+        '1969-12-31': -1.234567,
+        '1970-01-01': 0.0001,
+        '1970-01-02': 1.99999,
+        '1971-02-05': 400.5,
+      }, function(arg, expected) {
+        it('should convert ' + arg + ' to ' + expected, function() {
+          // expect
+          assert.equal(f.date(arg).v.toISOString().slice(0, 10), expected);
+        });
+      });
+    });
+
     describe('when called with valid strings', function() {
       _.forEach([
         '1969-12-31',
