@@ -604,7 +604,7 @@ define(['src/openrosa-xpath-extensions', 'src/extended-xpath', 'chai', 'lodash']
       "'raw-string'" : /raw-string/,
       'format-date-time(date-time(decimal-date-time("2003-03-12") + 280), "%b %e, %Y")': /Dec 17, 2003/,
       "decimal-date-time(today()- 60 )": /^-?[0-9]+(\.[0-9]+)?$/,
-      "date-time(decimal-date-time(today()- 60 ))": /2015-06-11/,
+      "date-time(decimal-date-time(today()- 60 ))": /\d{4}-\d{2}-\d{2}/,
       "if(selected( 'date' ,'date'), 'first' ,'second')": /^first$/,
       "if(selected( 'approx' ,'date'), 'first' ,'second')": /^second$/,
       "if(selected(/model/instance[1]/pregnancy/group_lmp/lmp_method, 'date'), /model/instance[1]/pregnancy/group_lmp/lmp_date, 'testing')": /testing/,
