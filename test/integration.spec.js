@@ -591,6 +591,22 @@ define(['src/openrosa-xpath-extensions', 'src/extended-xpath', 'chai', 'lodash']
           });
         });
       });
+      describe('with booleans', function() {
+        _.forEach({
+          'true() and true()': true,
+          'false() and true()': false,
+          'true() and false()': false,
+          'false() and false()': false,
+          'true() or true()': true,
+          'false() or true()': true,
+          'true() or false()': true,
+          'false() or false()': false,
+        }, function(expectedBoolean, expr) {
+          it('should evaluate "' + expr + '" as ' + expectedBoolean.toString().toUpperCase(), function() {
+            assert.equal(xEval(expr).booleanValue, expectedBoolean);
+          });
+        });
+      });
     });
   });
 
