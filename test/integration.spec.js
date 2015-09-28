@@ -486,7 +486,101 @@ define(['src/openrosa-xpath-extensions', 'src/extended-xpath', 'chai', 'lodash']
     });
 
     describe('#selected-at()', function() { it('should have tests', function() { TODO(); }); });
-    describe('#round()', function() { it('should have tests', function() { TODO(); }); });
+
+    describe('#round()', function() {
+      describe('with a single argument', function() {
+        _.forEach({
+          '1': '1',
+          '1.1': '1',
+          '1.5': '2',
+        }, function(expected, input) {
+          it('should round ' + input + ' to ' + expected, function() {
+            // when
+            var expr = 'round("{1}")'
+                .replace('{1}', input);
+
+            // expect
+            assert.equal(xEval(expr).stringValue, expected);
+          });
+        });
+      });
+
+      describe('with two arguments', function() {
+        describe('with num_digits = 0', function() {
+          _.forEach({
+            '1': '1',
+            '1.1': '1',
+            '1.5': '2',
+          }, function(expected, input) {
+            it('should round ' + input + ' to ' + expected, function() {
+              // when
+              var expr = 'round("{1}", "0")'
+                  .replace('{1}', input);
+
+              // expect
+              assert.equal(xEval(expr).stringValue, expected);
+            });
+          });
+        });
+
+        describe('with num_digits > 0', function() {
+          _.forEach([
+            [ '0', 1, '0.0' ],
+            [ '1', 1, '1.0' ],
+            [ '1', 2, '1.00' ],
+            [ '23.7825', 2, '23.78' ],
+            [ '23.7825', 1, '23.8' ],
+            [ '2.15', 1, '2.2' ],
+            [ '2.149', 1, '2.1' ],
+            [ '-1.475', 2, '-1.48' ],
+          ], function(data) {
+            it('should round ' + data[0] + ' by ' + data[1] + ' digits to ' + data[2], function() {
+              // given
+              var number = data[0];
+              var numDigits = data[1];
+              var expected = data[2];
+
+              // when
+              var expr = 'round("{1}", "{2}")'
+                  .replace('{1}', number)
+                  .replace('{2}', numDigits);
+
+              // expect
+              assert.equal(xEval(expr).stringValue, expected);
+            });
+          });
+        });
+
+        describe('with num_digits < 0', function() {
+          _.forEach([
+            [ '0', -1, '0' ],
+            [ '1', -1, '0' ],
+            [ '1', -2, '0' ],
+            [ '23.7825', -2, '0' ],
+            [ '23.7825', -1, '20' ],
+            [ '2.15', -1, '0' ],
+            [ '2.149', -1, '0' ],
+            [ '-1.475', -2, '0' ],
+          ], function(data) {
+            it('should round ' + data[0] + ' by ' + data[1] + ' digits to ' + data[2], function() {
+              // given
+              var number = data[0];
+              var numDigits = data[1];
+              var expected = data[2];
+
+              // when
+              var expr = 'round("{1}", "{2}")'
+                  .replace('{1}', number)
+                  .replace('{2}', numDigits);
+
+              // expect
+              assert.equal(xEval(expr).stringValue, expected);
+            });
+          });
+        });
+      });
+    });
+
     describe('#area()', function() { it('should have tests', function() { TODO(); }); });
     describe('#position()', function() { it('should have tests', function() { TODO(); }); });
   });
