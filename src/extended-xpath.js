@@ -56,7 +56,7 @@ var ExtendedXpathEvaluator = function(wrapped, extensions) {
 
   this.evaluate = function(input) {
     var cur, stack = [{ t:'root', tokens:[] }],
-      peek = function() { return stack.slice(-1)[0]; },
+      peek = function() { return stack[stack.length-1]; },
       err = function(message) { throw new Error((message||'') + ' [stack=' + JSON.stringify(stack) + '] [cur=' + JSON.stringify(cur) + ']'); },
       err_unexpectedC = function() { err('Character at unexpected location: "' + c + '"'); },
       newCurrent = function() { cur = { t:'?', v:'' }; },
