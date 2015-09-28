@@ -58,6 +58,7 @@ var ExtendedXpathEvaluator = function(wrapped, extensions) {
     var cur, stack = [{ t:'root', tokens:[] }],
       peek = function() { return stack.slice(-1)[0]; },
       err = function(message) { throw new Error((message||'') + ' [stack=' + JSON.stringify(stack) + '] [cur=' + JSON.stringify(cur) + ']'); },
+      err_unexpectedC = function() { err('Character at unexpected location: "' + c + '"'); },
       newCurrent = function() { cur = { t:'?', v:'' }; },
       backtrack = function() {
         // handle infix operators
@@ -141,7 +142,7 @@ var ExtendedXpathEvaluator = function(wrapped, extensions) {
             cur.tokens = [];
             stack.push(cur);
             newCurrent();
-          } else err();
+          } else err_unexpectedC();
           break;
         case ')':
           if(cur.t === '?') {
@@ -151,13 +152,13 @@ var ExtendedXpathEvaluator = function(wrapped, extensions) {
             peek().tokens.push(callFn(cur.v, cur.tokens));
             backtrack();
             newCurrent();
-          } else err();
+          } else err_unexpectedC();
           break;
         case ',':
           if(cur.t === '?') {
             if(cur.v !== '') handleXpathExpr();
             if(peek().t !== 'fn') err();
-          } else err();
+          } else err_unexpectedC();
           break;
         case '-':
           if(/[0-9]/.test(nextChar()) ||
@@ -184,7 +185,7 @@ var ExtendedXpathEvaluator = function(wrapped, extensions) {
           if(cur.t === '?') {
             if(cur.v !== '') handleXpathExpr();
             peek().tokens.push({ t:c });
-          } else err();
+          } else err_unexpectedC();
           break;
         case ' ':
           if(cur.t === '?') {
