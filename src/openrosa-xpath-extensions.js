@@ -27,6 +27,12 @@ var openrosa_xpath_extensions = (function() {
             return d.getFullYear() + '-' + _zeroPad(d.getMonth()+1) + '-' +
                 _zeroPad(d.getDate());
       },
+      _round = function(num) {
+        if(num < 0) {
+          return -Math.round(-num);
+        }
+        return Math.round(num);
+      },
       _uuid_part = function(c) {
           var r = Math.random()*16|0,
                   v=c=='x'?r:r&0x3|0x8;
@@ -132,6 +138,19 @@ var openrosa_xpath_extensions = (function() {
     random: function() { return XPR.number(Math.random()); },
     regex: function(haystack, pattern) {
         return XPR.boolean(new RegExp(pattern).test(haystack)); },
+    round: function(number, num_digits) {
+      number = parseFloat(number);
+      num_digits = num_digits ? parseInt(num_digits) : 0;
+      if(!num_digits) {
+        return XPR.number(_round(number));
+      }
+      var pow = Math.pow(10, Math.abs(num_digits));
+      if(num_digits > 0) {
+        return XPR.number(_round(number * pow) / pow);
+      } else {
+        return XPR.number(pow * _round(number / pow));
+      }
+    },
     selected: function(haystack, needle) {
         return XPR.boolean(haystack.split(' ').indexOf(needle) !== -1);
     },
