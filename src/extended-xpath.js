@@ -201,6 +201,7 @@ var ExtendedXpathEvaluator = function(wrapped, extensions) {
         case ' ':
           if(cur.t === '?') {
             switch(cur.v) {
+              case '': break;
               case 'mod': pushOp('%'); break;
               case 'div': pushOp('/'); break;
               case 'and': pushOp('&'); break;
@@ -214,7 +215,7 @@ var ExtendedXpathEvaluator = function(wrapped, extensions) {
               case '&gt;=':
                 pushOp('>='); break;
               case '!=': pushOp('!='); break;
-              default: if(cur.v) handleXpathExpr();
+              default: handleXpathExpr();
             }
             break;
           }
