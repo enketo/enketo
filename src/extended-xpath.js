@@ -60,6 +60,10 @@ var ExtendedXpathEvaluator = function(wrapped, extensions) {
       err = function(message) { throw new Error((message||'') + ' [stack=' + JSON.stringify(stack) + '] [cur=' + JSON.stringify(cur) + ']'); },
       err_unexpectedC = function() { err('Character at unexpected location: "' + c + '"'); },
       newCurrent = function() { cur = { t:'?', v:'' }; },
+      pushOp = function(t) {
+        peek().tokens.push({ t:t });
+        newCurrent();
+      },
       backtrack = function() {
         // handle infix operators
         var res, len, tokens, lhs, rhs, op;
@@ -196,37 +200,21 @@ var ExtendedXpathEvaluator = function(wrapped, extensions) {
           break;
         case ' ':
           if(cur.t === '?') {
-            if(cur.v !== '') {
-              if(cur.v === 'mod') {
-                peek().tokens.push({ t:'%' });
-                newCurrent();
-              } else if(cur.v === 'div') {
-                peek().tokens.push({ t:'/' });
-                newCurrent();
-              } else if(cur.v === 'and') {
-                peek().tokens.push({ t:'&' });
-                newCurrent();
-              } else if(cur.v === 'or') {
-                peek().tokens.push({ t:'|' });
-                newCurrent();
-              } else if(cur.v === '&lt;') {
-                peek().tokens.push({ t:'<' });
-                newCurrent();
-              } else if(cur.v === '&gt;') {
-                peek().tokens.push({ t:'>' });
-                newCurrent();
-              } else if(cur.v === '<=' || cur.v === '&lt;=') {
-                peek().tokens.push({ t:'<=' });
-                newCurrent();
-              } else if(cur.v === '>=' || cur.v === '&gt;=') {
-                peek().tokens.push({ t:'>=' });
-                newCurrent();
-              } else if(cur.v === '!=') {
-                peek().tokens.push({ t:'!=' });
-                newCurrent();
-              } else {
-                handleXpathExpr();
-              }
+            switch(cur.v) {
+              case 'mod': pushOp('%'); break;
+              case 'div': pushOp('/'); break;
+              case 'and': pushOp('&'); break;
+              case 'or':  pushOp('|'); break;
+              case '&lt;': pushOp('<'); break;
+              case '&gt;': pushOp('>'); break;
+              case '<=':
+              case '&lt;=':
+                pushOp('<='); break;
+              case '>=':
+              case '&gt;=':
+                pushOp('>='); break;
+              case '!=': pushOp('!='); break;
+              default: if(cur.v) handleXpathExpr();
             }
             break;
           }
