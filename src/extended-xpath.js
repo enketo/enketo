@@ -78,19 +78,21 @@ var ExtendedXpathEvaluator = function(wrapped, extensions) {
           }
 
           if(typeof res === 'undefined' || res === null) {
-            if(     op.t === '+') res = lhs.v + rhs.v;
-            else if(op.t === '-') res = lhs.v - rhs.v;
-            else if(op.t === '*') res = lhs.v * rhs.v;
-            else if(op.t === '/') res = lhs.v / rhs.v;
-            else if(op.t === '%') res = lhs.v % rhs.v;
-            else if(op.t === '=') res = lhs.v === rhs.v;
-            else if(op.t === '<') res = lhs.v < rhs.v;
-            else if(op.t === '>') res = lhs.v > rhs.v;
-            else if(op.t === '<=') res = lhs.v <= rhs.v;
-            else if(op.t === '>=') res = lhs.v >= rhs.v;
-            else if(op.t === '!=') res = lhs.v != rhs.v;
-            else if(op.t === '&') res = lhs.v && rhs.v;
-            else if(op.t === '|') res = lhs.v || rhs.v;
+            switch(op.t) {
+              case '+':  res = lhs.v + rhs.v;   break;
+              case '-':  res = lhs.v - rhs.v;   break;
+              case '*':  res = lhs.v * rhs.v;   break;
+              case '/':  res = lhs.v / rhs.v;   break;
+              case '%':  res = lhs.v % rhs.v;   break;
+              case '=':  res = lhs.v === rhs.v; break;
+              case '<':  res = lhs.v < rhs.v;   break;
+              case '>':  res = lhs.v > rhs.v;   break;
+              case '<=': res = lhs.v <= rhs.v;  break;
+              case '>=': res = lhs.v >= rhs.v;  break;
+              case '!=': res = lhs.v != rhs.v;  break;
+              case '&':  res = lhs.v && rhs.v;  break;
+              case '|':  res = lhs.v || rhs.v;  break;
+            }
           }
 
           if(typeof res !== 'undefined' && res !== null) {
