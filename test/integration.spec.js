@@ -748,6 +748,14 @@ define(['src/openrosa-xpath-extensions', 'src/extended-xpath', 'chai', 'lodash']
       'if(false(), today(), "")': /^$/,
       'coalesce(today(), "")': DATE_MATCH,
       'coalesce("", today())': DATE_MATCH,
+      'true() and (true() or true()': /true/,
+      'true() and (true() or false()': /true/,
+      'true() and (false() or true()': /true/,
+      'true() and (false() or false()': /false/,
+      'false() and (true() or true()': /false/,
+      'false() and (true() or false()': /false/,
+      'false() and (false() or true()': /false/,
+      'false() and (false() or false()': /false/,
     }, function(matcher, expression) {
       it('should convert "' + expression + '" to match "' + matcher + '"', function() {
         var evaluated = xEval(expression);
