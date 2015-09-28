@@ -146,9 +146,9 @@ var ExtendedXpathEvaluator = function(wrapped, extensions) {
         case ')':
           if(cur.t === '?') {
             if(cur.v !== '') handleXpathExpr();
-            var fn = stack.pop();
-            if(fn.t !== 'fn') err();
-            peek().tokens.push(callFn(fn.v, fn.tokens));
+            cur = stack.pop();
+            if(cur.t !== 'fn') err();
+            peek().tokens.push(callFn(cur.v, cur.tokens));
             backtrack();
             newCurrent();
           } else err();
