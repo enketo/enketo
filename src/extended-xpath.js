@@ -1,3 +1,4 @@
+// TODO remove all the checks for cur.t==='?' - what else woudl it be?
 var ExtendedXpathEvaluator = function(wrapped, extensions) {
   var
     extendedFuncs = extensions.func || {},
@@ -107,12 +108,8 @@ var ExtendedXpathEvaluator = function(wrapped, extensions) {
         }
       },
       handleXpathExpr = function() {
-        var evaluated, v = cur.v.trim();
-        if(/^-?[0-9]+(\.[0-9]+)?$/.test(v)) {
-          evaluated = { t:'num', v:parseFloat(v) };
-        } else {
-          evaluated = toInternalResult(wrapped(cur.v));
-        }
+        var v = cur.v.trim(),
+            evaluated = toInternalResult(wrapped(cur.v));
         peek().tokens.push(evaluated);
         newCurrent();
         backtrack();
@@ -122,6 +119,12 @@ var ExtendedXpathEvaluator = function(wrapped, extensions) {
       },
       nextChar = function() {
         if(i < input.length -1) return input.charAt(i+1);
+      },
+      finaliseNum = function() {
+        cur.v = parseFloat(cur.string);
+        peek().tokens.push(cur);
+        backtrack();
+        newCurrent();
       },
       ___end_vars___;
 
@@ -135,7 +138,34 @@ var ExtendedXpathEvaluator = function(wrapped, extensions) {
           backtrack();
           newCurrent();
         } else cur.v += c;
-      } else switch(c) {
+        continue;
+      }
+      if (cur.t === 'num') {
+        if(/[0-9]/.test(c)) {
+          cur.string += c;
+          continue;
+        } else if(c === '.' && !cur.decimal) {
+          cur.decimal = 1;
+          cur.string += c;
+        } else {
+          finaliseNum();
+        }
+      }
+      switch(c) {
+        case '0':
+        case '1':
+        case '2':
+        case '3':
+        case '4':
+        case '5':
+        case '6':
+        case '7':
+        case '8':
+        case '9':
+          if(cur.t === '?' && cur.v === '') {
+            cur = { t:'num', string:c };
+          } else cur.v += c;
+          break;
         case "'":
         case '"':
           if(cur.t === '?' && cur.v === '') {
@@ -171,18 +201,36 @@ var ExtendedXpathEvaluator = function(wrapped, extensions) {
             if(peek().t !== 'fn') err();
           } else err_unexpectedC();
           break;
+        case ';':
+          if(cur.t === '?' && nextChar() !== '=') {
+            switch(cur.v) {
+              case '&lt': pushOp('<'); continue;
+              case '&gt': pushOp('>'); continue;
+            }
+          }
+          /* falls through */
         case '-':
-          if(/[0-9]/.test(nextChar()) ||
-              (nextChar() !== ' ' && lastChar() !== ' ')) {
-            // -ve number or function name expr
-            cur.v += c;
-            break;
-          } // else it's `-` operator
+          if(cur.t === '?') {
+            if(cur.v !== '') {
+              // function name expr
+              cur.v += c;
+              break;
+            } else if(peek().tokens.length === 0) {
+              // -ve number
+              cur = { t:'num', string:'-' };
+              break;
+            } // else it's `-` operator
+          } else err('No idea how we got in this state.');
           /* falls through */
         case '=':
           if(c === '=' && (cur.v === '<' || cur.v === '&lt;' ||
               cur.v === '>' || cur.v === '&gt;' || cur.v === '!')) {
-            cur.v += c; break;
+            cur.v += c;
+            switch(cur.v) {
+              case '<=': case '&lt;=': pushOp('<='); break;
+              case '>=': case '&gt;=': pushOp('>='); break;
+            }
+            break;
           }
           /* falls through */
         case '>':
@@ -224,6 +272,8 @@ var ExtendedXpathEvaluator = function(wrapped, extensions) {
           cur.v += c;
       }
     }
+
+    if(cur.t === 'num') finaliseNum();
 
     if(cur.t === '?' && cur.v !== '') handleXpathExpr();
 
