@@ -236,7 +236,7 @@ var ExtendedXpathEvaluator = function(wrapped, extensions) {
           break;
         case ' ':
           switch(cur.v) {
-            case '': break;
+            case '': break; // trim leading whitespace
             case 'mod': pushOp('%'); break;
             case 'div': pushOp('/'); break;
             case 'and': pushOp('&'); break;
