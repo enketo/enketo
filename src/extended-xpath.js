@@ -59,7 +59,6 @@ var ExtendedXpathEvaluator = function(wrapped, extensions) {
     var cur, stack = [{ t:'root', tokens:[] }],
       peek = function() { return stack[stack.length-1]; },
       err = function(message) { throw new Error((message||'') + ' [stack=' + JSON.stringify(stack) + '] [cur=' + JSON.stringify(cur) + ']'); },
-      err_unexpectedC = function() { err('Character at unexpected location: "' + c + '"'); },
       newCurrent = function() { cur = { t:'?', v:'' }; },
       pushOp = function(t) {
         peek().tokens.push({ t:t });
@@ -147,9 +146,7 @@ var ExtendedXpathEvaluator = function(wrapped, extensions) {
         } else if(c === '.' && !cur.decimal) {
           cur.decimal = 1;
           cur.string += c;
-        } else {
-          finaliseNum();
-        }
+        } else finaliseNum();
       }
       switch(c) {
         case '0':
@@ -162,47 +159,41 @@ var ExtendedXpathEvaluator = function(wrapped, extensions) {
         case '7':
         case '8':
         case '9':
-          if(cur.t === '?' && cur.v === '') {
+          if(cur.v === '') {
             cur = { t:'num', string:c };
           } else cur.v += c;
           break;
         case "'":
         case '"':
-          if(cur.t === '?' && cur.v === '') {
+          if(cur.v === '') {
             cur = { t:'str', quote:c, v:'' };
           } else err('Not sure how to handle: ' + c);
           break;
         case '(':
-          if(cur.t === '?') {
-            cur.t = 'fn';
-            cur.tokens = [];
-            stack.push(cur);
-            newCurrent();
-          } else err_unexpectedC();
+          cur.t = 'fn';
+          cur.tokens = [];
+          stack.push(cur);
+          newCurrent();
           break;
         case ')':
-          if(cur.t === '?') {
-            if(cur.v !== '') handleXpathExpr();
-            cur = stack.pop();
-            if(cur.t !== 'fn') err();
-            if(cur.v) {
-              peek().tokens.push(callFn(cur.v, cur.tokens));
-            } else {
-              if(cur.tokens.length !== 1) err();
-              peek().tokens.push(cur.tokens[0]);
-            }
-            backtrack();
-            newCurrent();
-          } else err_unexpectedC();
+          if(cur.v !== '') handleXpathExpr();
+          cur = stack.pop();
+          if(cur.t !== 'fn') err();
+          if(cur.v) {
+            peek().tokens.push(callFn(cur.v, cur.tokens));
+          } else {
+            if(cur.tokens.length !== 1) err();
+            peek().tokens.push(cur.tokens[0]);
+          }
+          backtrack();
+          newCurrent();
           break;
         case ',':
-          if(cur.t === '?') {
-            if(cur.v !== '') handleXpathExpr();
-            if(peek().t !== 'fn') err();
-          } else err_unexpectedC();
+          if(cur.v !== '') handleXpathExpr();
+          if(peek().t !== 'fn') err();
           break;
         case ';':
-          if(cur.t === '?' && nextChar() !== '=') {
+          if(nextChar() !== '=') {
             switch(cur.v) {
               case '&lt': pushOp('<'); continue;
               case '&gt': pushOp('>'); continue;
@@ -210,17 +201,15 @@ var ExtendedXpathEvaluator = function(wrapped, extensions) {
           }
           /* falls through */
         case '-':
-          if(cur.t === '?') {
-            if(cur.v !== '') {
-              // function name expr
-              cur.v += c;
-              break;
-            } else if(peek().tokens.length === 0) {
-              // -ve number
-              cur = { t:'num', string:'-' };
-              break;
-            } // else it's `-` operator
-          } else err('No idea how we got in this state.');
+          if(cur.v !== '') {
+            // function name expr
+            cur.v += c;
+            break;
+          } else if(peek().tokens.length === 0) {
+            // -ve number
+            cur = { t:'num', string:'-' };
+            break;
+          } // else it's `-` operator
           /* falls through */
         case '=':
           if(c === '=' && (cur.v === '<' || cur.v === '&lt;' ||
@@ -241,33 +230,28 @@ var ExtendedXpathEvaluator = function(wrapped, extensions) {
           /* falls through */
         case '+':
         case '*':
-          if(cur.t === '?') {
-            if(cur.v !== '') handleXpathExpr();
-            peek().tokens.push({ t:c });
-          } else err_unexpectedC();
+          if(cur.v !== '') handleXpathExpr();
+          peek().tokens.push({ t:c });
           break;
         case ' ':
-          if(cur.t === '?') {
-            switch(cur.v) {
-              case '': break;
-              case 'mod': pushOp('%'); break;
-              case 'div': pushOp('/'); break;
-              case 'and': pushOp('&'); break;
-              case 'or':  pushOp('|'); break;
-              case '&lt;': pushOp('<'); break;
-              case '&gt;': pushOp('>'); break;
-              case '<=':
-              case '&lt;=':
-                pushOp('<='); break;
-              case '>=':
-              case '&gt;=':
-                pushOp('>='); break;
-              case '!=': pushOp('!='); break;
-              default: handleXpathExpr();
-            }
-            break;
+          switch(cur.v) {
+            case '': break;
+            case 'mod': pushOp('%'); break;
+            case 'div': pushOp('/'); break;
+            case 'and': pushOp('&'); break;
+            case 'or':  pushOp('|'); break;
+            case '&lt;': pushOp('<'); break;
+            case '&gt;': pushOp('>'); break;
+            case '<=':
+            case '&lt;=':
+              pushOp('<='); break;
+            case '>=':
+            case '&gt;=':
+              pushOp('>='); break;
+            case '!=': pushOp('!='); break;
+            default: handleXpathExpr();
           }
-          /* falls through */
+          break;
         default:
           cur.v += c;
       }
