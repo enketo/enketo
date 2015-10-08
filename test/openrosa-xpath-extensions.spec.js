@@ -92,6 +92,16 @@ define(['src/openrosa-xpath-extensions', 'chai', 'lodash'], function(or, chai, _
     });
   });
 
+  describe('#now()', function() {
+    it('should return a result of type `date`', function() {
+      assert.equal(f.now().t, 'date');
+    });
+
+    it('should return a value which is instance of Date', function() {
+      assert.ok(f.now().v instanceof Date);
+    });
+  });
+
   describe('#today()', function() {
     it('should return a result of type `date`', function() {
       assert.equal(f.today().t, 'date');
@@ -99,6 +109,14 @@ define(['src/openrosa-xpath-extensions', 'chai', 'lodash'], function(or, chai, _
 
     it('should return a value which is instance of Date', function() {
       assert.ok(f.today().v instanceof Date);
+    });
+
+    it('should have a time set to midnight', function() {
+      var today = f.today().v;
+
+      assert.equal(today.getHours(), 0);
+      assert.equal(today.getMinutes(), 0);
+      assert.equal(today.getSeconds(), 0);
     });
   });
 });

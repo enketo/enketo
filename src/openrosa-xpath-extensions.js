@@ -133,7 +133,7 @@ var openrosa_xpath_extensions = (function() {
         return XPR.string(format_date(date, format)); },
     'if': function(con, a, b) { return XPR.string(con? a: b); },
     int: function(v) { return XPR.number(parseInt(v, 10)); },
-    now: function() { return XPR.number(Date.now()); },
+    now: function() { return XPR.date(new Date()); },
     pow: function(x, y) { return XPR.number(Math.pow(x, y)); },
     random: function() { return XPR.number(Math.random()); },
     regex: function(haystack, pattern) {
@@ -156,7 +156,10 @@ var openrosa_xpath_extensions = (function() {
     },
     substr: function(string, startIndex, endIndex) {
         return XPR.string(string.slice(startIndex, endIndex)); },
-    today: function() { return XPR.date(new Date()); },
+    today: function() {
+      var now = new Date();
+      return XPR.date(new Date(now.getFullYear(), now.getMonth(), now.getDate()));
+    },
     'true': function() { return XPR.boolean(true); },
     uuid: function() { return XPR.string(uuid()); },
   };
@@ -171,7 +174,16 @@ var openrosa_xpath_extensions = (function() {
     process: {
       toExternalResult: function(r) {
         if(r.t === 'date') return {
-          resultType:XPathResult.STRING_TYPE, stringValue:_dateToString(r.v) };
+          resultType:XPathResult.STRING_TYPE,
+          // TODO a bit naughty, but we return both a string and number value
+          // for dates.  We should actually know from where the xpath evaluator
+          // was initially called whether we expect a STRING_TYPE or NUMBER_TYPE
+          // result, but we should get away with it because:
+          //   1. this setup makes testing easy
+          //   2. dates should never leak outside openrosa functionality anyway
+          numberValue:r.v.getTime(),
+          stringValue:_dateToString(r.v),
+        };
       },
       typefor: function(val) {
         if(val instanceof Date) return 'date';
