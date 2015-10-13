@@ -50,7 +50,7 @@ var ExtendedXpathEvaluator = function(wrapped, extensions) {
         if(res) return res;
       }
       if(typeof val === 'boolean') return 'bool';
-      if(typeof val === 'number') return 'number';
+      if(typeof val === 'number') return 'num';
       return 'str';
     },
   ___end_vars___;
