@@ -890,6 +890,14 @@ define(['src/openrosa-xpath-extensions', 'src/extended-xpath', 'chai', 'lodash']
       '-1': /^-1$/,
       '1-1': /^0$/,
       '1+1': /^2$/,
+      '0 > 0': /false/,
+      '(0 > 0)': /false/,
+      'false != "true"': /true/,
+      '(false != "true")': /true/,
+      '(0 = 0) and (false != "true")': /true/,
+      '0 = 0 and false != "true"': /true/,
+      '(0 > 0) and (false != "true")': /false/,
+      '0 > 0 and false != "true"': /false/,
     }, function(matcher, expression) {
       it('should convert "' + expression + '" to match "' + matcher + '"', function() {
         var evaluated = xEval(expression);
