@@ -1,3 +1,17 @@
+/*
+ * From http://www.w3.org/TR/xpath/#section-Expressions XPath infix
+ * operator precedence is left-associative, and as follows:
+ */
+var OP_PRECEDENCE = [
+  ['|'],
+  ['&'],
+  ['=', '!='],
+  ['<', '<=', '>=', '>'],
+  ['+', '-'],
+  ['*', '/', '%']
+];
+
+
 // TODO remove all the checks for cur.t==='?' - what else woudl it be?
 var ExtendedXpathEvaluator = function(wrapped, extensions) {
   var
@@ -90,9 +104,7 @@ var ExtendedXpathEvaluator = function(wrapped, extensions) {
           case '|':  return lhs.v || rhs.v;
         }
       },
-      evalOpAt = function(opIndex) {
-        var tokens = peek().tokens;
-
+      evalOpAt = function(tokens, opIndex) {
         res = evalOp(
             tokens[opIndex - 1],
             tokens[opIndex],
@@ -105,14 +117,17 @@ var ExtendedXpathEvaluator = function(wrapped, extensions) {
       },
       backtrack = function() {
         // handle infix operators
-        var i = 1, len, tokens;
+        var i, ops, tokens;
         tokens = peek().tokens;
-        len = tokens.length;
 
-        while(i < tokens.length - 1) {
-          if(tokens[i].t === 'op') {
-            evalOpAt(i);
-          } else ++i;
+        for(j=OP_PRECEDENCE.length-1; j>=0; --j) {
+          ops = OP_PRECEDENCE[j];
+          i = 1;
+          while(i < tokens.length-1) {
+            if(tokens[i].t === 'op' && ops.indexOf(tokens[i].v) !== -1) {
+              evalOpAt(tokens, i);
+            } else ++i;
+          }
         }
       },
       handleXpathExpr = function() {
