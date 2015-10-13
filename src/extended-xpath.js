@@ -64,40 +64,46 @@ var ExtendedXpathEvaluator = function(wrapped, extensions) {
         peek().tokens.push({ t:'op', v:t });
         newCurrent();
       },
+      evalOp = function(lhs, op, rhs) {
+        var res;
+
+        if(extendedProcessors.handleInfix) {
+          res = extendedProcessors.handleInfix(lhs, op, rhs);
+          if(res && res.t === 'continue') {
+            lhs = res.lhs; op = res.op; rhs = res.rhs; res = null;
+          }
+        }
+
+        if(typeof res === 'undefined' || res === null) {
+          switch(op.v) {
+            case '+':  res = lhs.v + rhs.v;   break;
+            case '-':  res = lhs.v - rhs.v;   break;
+            case '*':  res = lhs.v * rhs.v;   break;
+            case '/':  res = lhs.v / rhs.v;   break;
+            case '%':  res = lhs.v % rhs.v;   break;
+            case '=':  res = lhs.v === rhs.v; break;
+            case '<':  res = lhs.v < rhs.v;   break;
+            case '>':  res = lhs.v > rhs.v;   break;
+            case '<=': res = lhs.v <= rhs.v;  break;
+            case '>=': res = lhs.v >= rhs.v;  break;
+            case '!=': res = lhs.v != rhs.v;  break;
+            case '&':  res = lhs.v && rhs.v;  break;
+            case '|':  res = lhs.v || rhs.v;  break;
+          }
+        }
+
+        return res;
+      },
       backtrack = function() {
         // handle infix operators
-        var res, len, tokens, lhs, rhs, op;
+        var res, len, tokens;
         tokens = peek().tokens;
         len = tokens.length;
         if(len >= 3) {
-          lhs = tokens[len - 3];
-          op  = tokens[len - 2];
-          rhs = tokens[len - 1];
-
-          if(extendedProcessors.handleInfix) {
-            res = extendedProcessors.handleInfix(lhs, op, rhs);
-            if(res && res.t === 'continue') {
-              lhs = res.lhs; op = res.op; rhs = res.rhs; res = null;
-            }
-          }
-
-          if(typeof res === 'undefined' || res === null) {
-            switch(op.v) {
-              case '+':  res = lhs.v + rhs.v;   break;
-              case '-':  res = lhs.v - rhs.v;   break;
-              case '*':  res = lhs.v * rhs.v;   break;
-              case '/':  res = lhs.v / rhs.v;   break;
-              case '%':  res = lhs.v % rhs.v;   break;
-              case '=':  res = lhs.v === rhs.v; break;
-              case '<':  res = lhs.v < rhs.v;   break;
-              case '>':  res = lhs.v > rhs.v;   break;
-              case '<=': res = lhs.v <= rhs.v;  break;
-              case '>=': res = lhs.v >= rhs.v;  break;
-              case '!=': res = lhs.v != rhs.v;  break;
-              case '&':  res = lhs.v && rhs.v;  break;
-              case '|':  res = lhs.v || rhs.v;  break;
-            }
-          }
+          res = evalOp(
+              tokens[len - 3],
+              tokens[len - 2],
+              tokens[len - 1]);
 
           if(typeof res !== 'undefined' && res !== null) {
             tokens = tokens.slice(0, -3);
