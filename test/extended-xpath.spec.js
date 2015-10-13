@@ -1,6 +1,10 @@
 define(['src/extended-xpath', 'chai', 'lodash'], function(ExtendedXpathEvaluator, chai, _) {
   var DATE_MATCH = '(Mon|Tue|Wed|Thu|Fri|Sat|Sun) (Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec) \\d\\d 2015 \\d\\d:\\d\\d:\\d\\d GMT([+-]\\d\\d\\d\\d \(.+\))?',
       examples = {
+        'false':
+          /false/,
+        'true':
+          /true/,
         '"double-string"':
           /^double-string$/,
         "'single-string'":
