@@ -102,9 +102,8 @@ var ExtendedXpathEvaluator = function(wrapped, extensions) {
               tokens[len - 1]);
 
           if(typeof res !== 'undefined' && res !== null) {
-            tokens = tokens.slice(0, -3);
-            tokens.push({ t:typefor(res), v:res });
-            peek().tokens = tokens;
+            tokens.splice(len - 2, 2);
+            tokens[len - 3] = { t:typefor(res), v:res };
           }
         }
       },
