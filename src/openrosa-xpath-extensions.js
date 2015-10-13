@@ -191,7 +191,7 @@ var openrosa_xpath_extensions = (function() {
       handleInfix: function(lhs, op, rhs) {
         if(lhs.t === 'date' || rhs.t === 'date') {
           // For comparisons, we must make sure that both values are numbers
-          // Dates would be fine, except for quality!
+          // Dates would be fine, except for equality!
           if( op.t === '=' ||
               op.t === '<' ||
               op.t === '>' ||
