@@ -105,11 +105,14 @@ var ExtendedXpathEvaluator = function(wrapped, extensions) {
       },
       backtrack = function() {
         // handle infix operators
-        var len, tokens;
+        var i = 1, len, tokens;
         tokens = peek().tokens;
         len = tokens.length;
-        if(len >= 3) {
-          evalOpAt(len - 2);
+
+        while(i < tokens.length - 1) {
+          if(tokens[i].t === 'op') {
+            evalOpAt(i);
+          } else ++i;
         }
       },
       handleXpathExpr = function() {
@@ -117,7 +120,6 @@ var ExtendedXpathEvaluator = function(wrapped, extensions) {
             evaluated = toInternalResult(wrapped(cur.v));
         peek().tokens.push(evaluated);
         newCurrent();
-        backtrack();
       },
       lastChar = function() {
         if(i > 0) return input.charAt(i-1);
@@ -128,7 +130,6 @@ var ExtendedXpathEvaluator = function(wrapped, extensions) {
       finaliseNum = function() {
         cur.v = parseFloat(cur.string);
         peek().tokens.push(cur);
-        backtrack();
         newCurrent();
       },
       ___end_vars___;
@@ -140,7 +141,6 @@ var ExtendedXpathEvaluator = function(wrapped, extensions) {
       if(cur.t === 'str') {
         if(c === cur.quote) {
           peek().tokens.push(cur);
-          backtrack();
           newCurrent();
         } else cur.v += c;
         continue;
@@ -182,6 +182,7 @@ var ExtendedXpathEvaluator = function(wrapped, extensions) {
           newCurrent();
           break;
         case ')':
+          backtrack();
           if(cur.v !== '') handleXpathExpr();
           cur = stack.pop();
           if(cur.t !== 'fn') err();
@@ -191,7 +192,6 @@ var ExtendedXpathEvaluator = function(wrapped, extensions) {
             if(cur.tokens.length !== 1) err();
             peek().tokens.push(cur.tokens[0]);
           }
-          backtrack();
           newCurrent();
           break;
         case ',':
@@ -263,6 +263,7 @@ var ExtendedXpathEvaluator = function(wrapped, extensions) {
     if(stack.length > 1) err('Stuff left on stack.');
     if(stack[0].t !== 'root') err('Weird stuff on stack.');
     if(stack[0].tokens.length === 0) err('No tokens.');
+    if(stack[0].tokens.length >= 3) backtrack();
     if(stack[0].tokens.length > 1) err('Too many tokens.');
 
     return toExternalResult(stack[0].tokens[0]);
