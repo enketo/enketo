@@ -92,18 +92,20 @@ var ExtendedXpathEvaluator = function(wrapped, extensions) {
       },
       backtrack = function() {
         // handle infix operators
-        var res, len, tokens;
+        var res, len, tokens, opIndex;
         tokens = peek().tokens;
         len = tokens.length;
         if(len >= 3) {
+          opIndex = len - 2;
+
           res = evalOp(
-              tokens[len - 3],
-              tokens[len - 2],
-              tokens[len - 1]);
+              tokens[opIndex - 1],
+              tokens[opIndex],
+              tokens[opIndex + 1]);
 
           if(typeof res !== 'undefined' && res !== null) {
-            tokens.splice(len - 2, 2);
-            tokens[len - 3] = { t:typefor(res), v:res };
+            tokens.splice(opIndex, 2);
+            tokens[opIndex - 1] = { t:typefor(res), v:res };
           }
         }
       },
