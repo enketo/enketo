@@ -65,16 +65,14 @@ var ExtendedXpathEvaluator = function(wrapped, extensions) {
         newCurrent();
       },
       evalOp = function(lhs, op, rhs) {
-        var res;
-
         if(extendedProcessors.handleInfix) {
-          res = extendedProcessors.handleInfix(lhs, op, rhs);
+          var res = extendedProcessors.handleInfix(lhs, op, rhs);
           if(res && res.t === 'continue') {
             lhs = res.lhs; op = res.op; rhs = res.rhs; res = null;
           }
-        }
 
-        if(typeof res !== 'undefined' && res !== null) return res;
+          if(typeof res !== 'undefined' && res !== null) return res;
+        }
 
         switch(op.v) {
           case '+':  return lhs.v + rhs.v;
