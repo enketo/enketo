@@ -90,23 +90,26 @@ var ExtendedXpathEvaluator = function(wrapped, extensions) {
           case '|':  return lhs.v || rhs.v;
         }
       },
+      evalOpAt = function(opIndex) {
+        var tokens = peek().tokens;
+
+        res = evalOp(
+            tokens[opIndex - 1],
+            tokens[opIndex],
+            tokens[opIndex + 1]);
+
+        if(typeof res !== 'undefined' && res !== null) {
+          tokens.splice(opIndex, 2);
+          tokens[opIndex - 1] = { t:typefor(res), v:res };
+        }
+      },
       backtrack = function() {
         // handle infix operators
-        var res, len, tokens, opIndex;
+        var len, tokens;
         tokens = peek().tokens;
         len = tokens.length;
         if(len >= 3) {
-          opIndex = len - 2;
-
-          res = evalOp(
-              tokens[opIndex - 1],
-              tokens[opIndex],
-              tokens[opIndex + 1]);
-
-          if(typeof res !== 'undefined' && res !== null) {
-            tokens.splice(opIndex, 2);
-            tokens[opIndex - 1] = { t:typefor(res), v:res };
-          }
+          evalOpAt(len - 2);
         }
       },
       handleXpathExpr = function() {
