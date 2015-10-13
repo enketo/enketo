@@ -192,27 +192,27 @@ var openrosa_xpath_extensions = (function() {
         if(lhs.t === 'date' || rhs.t === 'date') {
           // For comparisons, we must make sure that both values are numbers
           // Dates would be fine, except for equality!
-          if( op.t === '=' ||
-              op.t === '<' ||
-              op.t === '>' ||
-              op.t === '<=' ||
-              op.t === '>=' ||
-              op.t === '!=') {
+          if( op.v === '=' ||
+              op.v === '<' ||
+              op.v === '>' ||
+              op.v === '<=' ||
+              op.v === '>=' ||
+              op.v === '!=') {
             if(lhs.t === 'str') lhs = date(lhs.v);
             if(rhs.t === 'str') rhs = date(rhs.v);
             if(lhs.t !== 'date' || rhs.t !== 'date') {
-              return op.t === '!=';
+              return op.v === '!=';
             } else {
               lhs = { t:'num', v:lhs.v.getTime() };
               rhs = { t:'num', v:rhs.v.getTime() };
             }
-          } else if(op.t === '+' || op.t === '-') {
+          } else if(op.v === '+' || op.v === '-') {
             // for math operators, we need to do it ourselves
             if(lhs.t === 'date' && rhs.t === 'date') err();
             var d = lhs.t === 'date'? lhs.v: rhs.v,
                 n = lhs.t !== 'date'? _num(lhs): _num(rhs),
                 res = new Date(d.getTime());
-            if(op.t === '-') n = -n;
+            if(op.v === '-') n = -n;
             res.setUTCDate(d.getDate() + n);
             return res;
           }

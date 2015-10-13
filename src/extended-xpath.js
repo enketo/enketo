@@ -61,7 +61,7 @@ var ExtendedXpathEvaluator = function(wrapped, extensions) {
       err = function(message) { throw new Error((message||'') + ' [stack=' + JSON.stringify(stack) + '] [cur=' + JSON.stringify(cur) + ']'); },
       newCurrent = function() { cur = { t:'?', v:'' }; },
       pushOp = function(t) {
-        peek().tokens.push({ t:t });
+        peek().tokens.push({ t:'op', v:t });
         newCurrent();
       },
       backtrack = function() {
@@ -82,7 +82,7 @@ var ExtendedXpathEvaluator = function(wrapped, extensions) {
           }
 
           if(typeof res === 'undefined' || res === null) {
-            switch(op.t) {
+            switch(op.v) {
               case '+':  res = lhs.v + rhs.v;   break;
               case '-':  res = lhs.v - rhs.v;   break;
               case '*':  res = lhs.v * rhs.v;   break;
@@ -232,7 +232,7 @@ var ExtendedXpathEvaluator = function(wrapped, extensions) {
         case '+':
         case '*':
           if(cur.v !== '') handleXpathExpr();
-          peek().tokens.push({ t:c });
+          peek().tokens.push({ t:'op', v:c });
           break;
         case ' ':
           switch(cur.v) {
