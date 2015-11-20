@@ -128,6 +128,18 @@ var openrosa_xpath_extensions = (function() {
     date: date,
     'decimal-date': function(date) {
         return XPR.number(Date.parse(date) / MILLIS_PER_DAY); },
+    'difference-in-months': function(d1, d2) {
+      // FIXME this is a medic mobile extension, and should be in a corresponding
+      // extensions file.
+      var months;
+      d1 = new Date(d1);
+      d2 = new Date(d2);
+      months =
+          ((d2.getFullYear() - d1.getFullYear()) * 12) +
+          (d2.getMonth() - d1.getMonth()) +
+          (d2.getDate() < d1.getDate() ? -1 : 0);
+      return XPR.number(months);
+    },
     'false': function() { return XPR.boolean(false); },
     'format-date': function(date, format) {
         return XPR.string(format_date(date, format)); },
@@ -228,4 +240,3 @@ if(typeof define === 'function') {
 } else if(typeof module === 'object' && typeof module.exports === 'object') {
   module.exports = openrosa_xpath_extensions;
 }
-
