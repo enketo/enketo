@@ -170,7 +170,7 @@ var openrosa_xpath_extensions = (function() {
         return XPR.string(string.slice(startIndex, endIndex)); },
     today: function() {
       var now = new Date();
-      return XPR.date(new Date(now.getFullYear(), now.getMonth(), now.getDate()));
+      return XPR.date(new Date(Date.UTC(now.getFullYear(), now.getMonth(), now.getDate())));
     },
     'true': function() { return XPR.boolean(true); },
     uuid: function() { return XPR.string(uuid()); },

@@ -784,6 +784,26 @@ define(['src/openrosa-xpath-extensions', 'src/extended-xpath', 'chai', 'lodash']
     });
   });
 
+  describe('date comparison', function() {
+    var d = new Date(),
+        zeroPad = function(n) { return n >= 10 ? n : '0' + n; },
+        todayString = d.getUTCFullYear() + '-' +
+            zeroPad(d.getUTCMonth()+1, 2) + '-' +
+            zeroPad(d.getUTCDate(), 2);
+    it('works for less-than', function() {
+      assert.notOk(xEval('today() < "' + todayString + '"').booleanValue);
+    });
+    it('works for greater-than', function() {
+      assert.notOk(xEval('today() > "' + todayString + '"').booleanValue);
+    });
+    it('works for less-than-or-equal', function() {
+      assert.ok(xEval('today() <= "' + todayString + '"').booleanValue);
+    });
+    it('works for greater-than-or-equal', function() {
+      assert.ok(xEval('today() >= "' + todayString + '"').booleanValue);
+    });
+  });
+
   describe('some complex examples', function() {
     _.forEach({
       'concat("uuid:", uuid())':/uuid:[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/,
@@ -898,6 +918,7 @@ define(['src/openrosa-xpath-extensions', 'src/extended-xpath', 'chai', 'lodash']
       '0 = 0 and false != "true"': /true/,
       '(0 > 0) and (false != "true")': /false/,
       '0 > 0 and false != "true"': /false/,
+      'difference-in-months("2005-12-12", "2012-01-15")': /73/,
     }, function(matcher, expression) {
       it('should convert "' + expression + '" to match "' + matcher + '"', function() {
         var evaluated = xEval(expression);

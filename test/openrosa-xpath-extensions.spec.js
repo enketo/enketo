@@ -114,9 +114,9 @@ define(['src/openrosa-xpath-extensions', 'chai', 'lodash'], function(or, chai, _
     it('should have a time set to midnight', function() {
       var today = f.today().v;
 
-      assert.equal(today.getHours(), 0);
-      assert.equal(today.getMinutes(), 0);
-      assert.equal(today.getSeconds(), 0);
+      assert.equal(today.getUTCHours(), 0);
+      assert.equal(today.getUTCMinutes(), 0);
+      assert.equal(today.getUTCSeconds(), 0);
     });
   });
 
@@ -146,4 +146,3 @@ define(['src/openrosa-xpath-extensions', 'chai', 'lodash'], function(or, chai, _
     });
   });
 });
-
