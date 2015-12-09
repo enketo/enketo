@@ -97,6 +97,8 @@ define(['src/extended-xpath', 'chai', 'lodash'], function(ExtendedXpathEvaluator
             /^<xpath:native-function\(1, 2, 3, "a", "b", "c"\)>$/,
         'native-function1(native-function2() + native-function3()) + native-function4(native-function5() + native-function6())':
             /^<xpath:native-function1\("<xpath:native-function2\(\)><xpath:native-function3\(\)>"\)><xpath:native-function4\("<xpath:native-function5\(\)><xpath:native-function6\(\)>"\)>$/,
+        'native-function-with-space-before-bracket ()':
+            /^<xpath:native-function-with-space-before-bracket\(\)>$/,
         '3 * 2 + 1':
           /^7$/,
         '1 + 2 * 3':

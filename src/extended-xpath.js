@@ -11,6 +11,8 @@ var OP_PRECEDENCE = [
   ['*', '/', '%']
 ];
 
+var DIGIT = /[0-9]/;
+var FUNCTION_NAME = /^[a-z]/;
 
 // TODO remove all the checks for cur.t==='?' - what else woudl it be?
 var ExtendedXpathEvaluator = function(wrapped, extensions) {
@@ -161,7 +163,7 @@ var ExtendedXpathEvaluator = function(wrapped, extensions) {
         continue;
       }
       if (cur.t === 'num') {
-        if(/[0-9]/.test(c)) {
+        if(DIGIT.test(c)) {
           cur.string += c;
           continue;
         } else if(c === '.' && !cur.decimal) {
@@ -262,7 +264,7 @@ var ExtendedXpathEvaluator = function(wrapped, extensions) {
             case 'div': pushOp('/'); break;
             case 'and': pushOp('&'); break;
             case 'or':  pushOp('|'); break;
-            default: handleXpathExpr();
+            default: if(!FUNCTION_NAME.test(cur.v)) handleXpathExpr();
           }
           break;
         default:
