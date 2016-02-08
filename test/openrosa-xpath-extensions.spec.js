@@ -1,6 +1,27 @@
 define(['src/openrosa-xpath-extensions', 'chai', 'lodash'], function(or, chai, _) {
   var f = or.func;
 
+  describe('#count-selected()', function() {
+    _.forEach({
+      '': 0,
+      '    ': 0,
+      'one': 1,
+      ' one   ': 1,
+      'one two': 2,
+      'one two three': 3,
+      'one  two  three': 3,
+      'one-1  two,2  three==3': 3,
+    }, function(expected, expr) {
+      it('should return ' + expected + ' when called with <<' + expr + '>>', function() {
+        // when
+        var result = f['count-selected'](expr);
+
+        // then
+        assert.equal(result.v, expected);
+      });
+    });
+  });
+
   describe('#date()', function() {
     describe('when called with integers', function() {
       it('should return a date type', function() {

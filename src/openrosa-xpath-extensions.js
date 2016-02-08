@@ -125,6 +125,13 @@ var openrosa_xpath_extensions = (function() {
       return XPR.boolean(string === '1' || string === 'true');
     },
     coalesce: function(a, b) { return XPR.string(a || b); },
+    'count-selected': function(s) {
+      var parts = s.split(' '),
+          i = parts.length,
+          count = 0;
+      while(--i >= 0) if(parts[i].length) ++count;
+      return XPR.number(count);
+    },
     date: date,
     'decimal-date': function(date) {
         return XPR.number(Date.parse(date) / MILLIS_PER_DAY); },
