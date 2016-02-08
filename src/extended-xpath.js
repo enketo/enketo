@@ -254,7 +254,26 @@ var ExtendedXpathEvaluator = function(wrapped, extensions) {
           /* falls through */
         case '+':
         case '*':
-          if(cur.v !== '') handleXpathExpr();
+          // > If there is a preceding token and the preceding token is not one
+          // > of @, ::, (, [, , or an Operator, then a * must be recognized as
+          // > a MultiplyOperator and an NCName must be recognized as an
+          // > OperatorName.
+          // > – https://www.w3.org/TR/xpath/#exprlex
+          if(cur.v !== '') {
+            switch(cur.v.charAt(cur.v.length-1)) {
+              case ':':
+                if(cur.v.length < 2 || cur.v.charAt(cur.v.length-2) != ':') {
+                  // * is a MultiplyOperator!
+                  break;
+                }
+                /* falls through */
+              case '/':
+                cur.v += c;
+                continue;
+            }
+            // * is a MultiplyOperator!
+            handleXpathExpr();
+          }
           peek().tokens.push({ t:'op', v:c });
           break;
         case ' ':
