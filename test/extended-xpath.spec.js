@@ -129,7 +129,7 @@ define(['src/extended-xpath', 'chai', 'lodash'], function(ExtendedXpathEvaluator
       );
 
   describe('ExtendedXpathEvaluator', function() {
-    _.collect(examples, function(expected, expr) {
+    _.map(examples, function(expected, expr) {
       it(expr + ' should be evaluated', function() {
         assert.match(
           extendedXpathEvaluator.evaluate(expr).stringValue,

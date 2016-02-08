@@ -24,6 +24,6 @@ require.config({
 
   paths: {
     chai:'/base/node_modules/chai/chai',
-    lodash:'/base/test/lib/lodash-3.10.0.min'
+    lodash:'/base/test/lib/lodash-4.3.0.min'
   }
 });
