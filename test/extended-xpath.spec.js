@@ -140,6 +140,7 @@ define(['src/extended-xpath', 'chai', 'lodash'], function(ExtendedXpathEvaluator
         'ancestor::book[1]',
         'ancestor::book[author][1]',
         'ancestor::author[parent::book][1]',
+        '../../some-path',
       ],
       trickyStandardXpath_unsupported = [
         '*/*',

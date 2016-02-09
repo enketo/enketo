@@ -199,8 +199,8 @@ var ExtendedXpathEvaluator = function(wrapped, extensions) {
           newCurrent();
           break;
         case ')':
-          backtrack();
           if(cur.v !== '') handleXpathExpr();
+          backtrack();
           cur = stack.pop();
           if(cur.t !== 'fn') err();
           if(cur.v) {
