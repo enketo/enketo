@@ -152,6 +152,15 @@ var openrosa_xpath_extensions = (function() {
         return XPR.string(format_date(date, format)); },
     'if': function(con, a, b) { return XPR.string(con? a: b); },
     int: function(v) { return XPR.number(parseInt(v, 10)); },
+    /*
+     * As per https://github.com/alxndrsn/openrosa-xpath-evaluator/issues/15,
+     * the pass-through to the wrapped implementation always requests
+     * XPathResult.STRING_TYPE.  This seems to cause an issue with the response
+     * from `not()` calls, which should ideally be handled by the built-in
+     * XPath implementation.  The following method is supplied as a workaround,
+     * and ideally would be unnecessary.
+     */
+    not: function(v) { return XPR.boolean(!v); },
     now: function() { return XPR.date(new Date()); },
     pow: function(x, y) { return XPR.number(Math.pow(x, y)); },
     random: function() { return XPR.number(Math.random()); },
