@@ -786,14 +786,16 @@ define(['src/openrosa-xpath-extensions', 'src/extended-xpath', 'chai', 'lodash']
   });
 
   describe('date comparison', function() {
-    function relativeDateAsString(offset) {
-      var d = new Date();
+    function relativeDateAsString(offset, noQuotes) {
+      var d = new Date(),
+          ret = noQuotes ? '' : '"';
       d.setDate(d.getDate() + offset);
-      return '"' +
+      ret +=
           d.getUTCFullYear() + '-' +
           zeroPad(d.getUTCMonth()+1, 2) + '-' +
-          zeroPad(d.getUTCDate(), 2) +
-          '"';
+          zeroPad(d.getUTCDate(), 2);
+
+      return ret + (noQuotes ? '' : '"');
     }
 
     var zeroPad = function(n) { return n >= 10 ? n : '0' + n; },
@@ -904,6 +906,48 @@ define(['src/openrosa-xpath-extensions', 'src/extended-xpath', 'chai', 'lodash']
 
       it('should be greater than or equal to today()', function() {
         assert.ok(xEval(tomorrowString + ' >= today()').booleanValue);
+      });
+    });
+
+    describe('comparisons with a field', function() {
+      describe('set to today', function() {
+        beforeEach(function() {
+          simpleValueIs(relativeDateAsString(0, true));
+        });
+
+        it('should be less than tomorrow', function() {
+          assert.ok(xEval('/simple/xpath/to/node < today() + 1').booleanValue);
+        });
+
+        it('should not be greater than tomorrow', function() {
+          assert.notOk(xEval('/simple/xpath/to/node > today() + 1').booleanValue);
+        });
+
+        it('should be greater than yesterday', function() {
+          assert.ok(xEval('/simple/xpath/to/node > today() - 1').booleanValue);
+        });
+
+        it('should not be less than yesterday', function() {
+          assert.notOk(xEval('/simple/xpath/to/node < today() - 1').booleanValue);
+        });
+
+        describe('with brackets', function() {
+          it('should be less than tomorrow', function() {
+            assert.ok(xEval('/simple/xpath/to/node < (today() + 1)').booleanValue);
+          });
+
+          it('should not be greater than tomorrow', function() {
+            assert.notOk(xEval('/simple/xpath/to/node > (today() + 1)').booleanValue);
+          });
+
+          it('should be greater than yesterday', function() {
+            assert.ok(xEval('/simple/xpath/to/node > (today() - 1)').booleanValue);
+          });
+
+          it('should not be less than yesterday', function() {
+            assert.notOk(xEval('/simple/xpath/to/node < (today() - 1)').booleanValue);
+          });
+        });
       });
     });
 
