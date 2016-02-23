@@ -131,13 +131,12 @@ define(['src/openrosa-xpath-extensions', 'chai', 'lodash'], function(or, chai, _
     it('should return a value which is instance of Date', function() {
       assert.ok(f.today().v instanceof Date);
     });
+  });
 
-    it('should have a time set to midnight', function() {
-      var today = f.today().v;
-
-      assert.equal(today.getUTCHours(), 0);
-      assert.equal(today.getUTCMinutes(), 0);
-      assert.equal(today.getUTCSeconds(), 0);
+  describe('#now() and #today()', function() {
+    it('should have the same implementation', function() {
+      assert.equal(f.today, f.now);
+      assert.equal(f.now, f.today);
     });
   });
 

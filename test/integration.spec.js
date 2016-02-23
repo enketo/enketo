@@ -786,23 +786,127 @@ define(['src/openrosa-xpath-extensions', 'src/extended-xpath', 'chai', 'lodash']
   });
 
   describe('date comparison', function() {
-    var d = new Date(),
-        zeroPad = function(n) { return n >= 10 ? n : '0' + n; },
-        todayString = d.getUTCFullYear() + '-' +
-            zeroPad(d.getUTCMonth()+1, 2) + '-' +
-            zeroPad(d.getUTCDate(), 2);
-    it('works for less-than', function() {
-      assert.notOk(xEval('today() < "' + todayString + '"').booleanValue);
+    function relativeDateAsString(offset) {
+      var d = new Date();
+      d.setDate(d.getDate() + offset);
+      return '"' +
+          d.getUTCFullYear() + '-' +
+          zeroPad(d.getUTCMonth()+1, 2) + '-' +
+          zeroPad(d.getUTCDate(), 2) +
+          '"';
+    }
+
+    var zeroPad = function(n) { return n >= 10 ? n : '0' + n; },
+        yesterdayString = relativeDateAsString(-1),
+        todayString = relativeDateAsString(0),
+        tomorrowString = relativeDateAsString(1);
+
+    describe('yesterday', function() {
+      it('should be less than today()', function() {
+        assert.ok(xEval(yesterdayString + ' < today()').booleanValue);
+      });
+
+      it('should be less than or equal to today()', function() {
+        assert.ok(xEval(yesterdayString + ' <= today()').booleanValue);
+      });
+
+      it('should not be greater than today()', function() {
+        assert.notOk(xEval(yesterdayString + ' > today()').booleanValue);
+      });
+
+      it('should not be greater than or equal to today()', function() {
+        assert.notOk(xEval(yesterdayString + ' >= today()').booleanValue);
+      });
     });
-    it('works for greater-than', function() {
-      assert.notOk(xEval('today() > "' + todayString + '"').booleanValue);
+
+    describe('today', function() {
+      it('should be less than today()', function() {
+        assert.ok(xEval(todayString + ' < today()').booleanValue);
+      });
+
+      it('should be less than or equal to today()', function() {
+        assert.ok(xEval(todayString + ' <= today()').booleanValue);
+      });
+
+      it('should not be greater than today()', function() {
+        assert.notOk(xEval(todayString + ' > today()').booleanValue);
+      });
+
+      it('should be greater than or equal to today()', function() {
+        assert.notOk(xEval(todayString + ' >= today()').booleanValue);
+      });
     });
-    it('works for less-than-or-equal', function() {
-      assert.ok(xEval('today() <= "' + todayString + '"').booleanValue);
+
+    describe('today()', function() {
+      it('should not be less than yesterday', function() {
+        assert.notOk(xEval('today() < ' + yesterdayString).booleanValue);
+      });
+
+      it('should not be less than or equal to yesterday', function() {
+        assert.notOk(xEval('today() <= ' + yesterdayString).booleanValue);
+      });
+
+      it('should be greater than yesterday', function() {
+        assert.ok(xEval('today() > ' + yesterdayString).booleanValue);
+      });
+
+      it('should be greater than or equal to yesterday', function() {
+        assert.ok(xEval('today() >= ' + yesterdayString).booleanValue);
+      });
+
+
+      it('should not be less than today', function() {
+        assert.notOk(xEval('today() < ' + todayString).booleanValue);
+      });
+
+      it('because it is a precise moment, should not be less than or equal to today', function() {
+        assert.notOk(xEval('today() <= ' + todayString).booleanValue);
+      });
+
+      it('because it is a precise moment, should be greater than today', function() {
+        assert.ok(xEval('today() > ' + todayString).booleanValue);
+      });
+
+      it('because it is a precise moment, should be greater than or equal to today', function() {
+        assert.ok(xEval('today() >= ' + todayString).booleanValue);
+      });
+
+
+      it('should be less than tomorrow', function() {
+        assert.ok(xEval('today() < ' + tomorrowString).booleanValue);
+      });
+
+      it('should be less than or equal to tomorrow', function() {
+        assert.ok(xEval('today() <= ' + tomorrowString).booleanValue);
+      });
+
+      it('should not be greater than tomorrow', function() {
+        assert.notOk(xEval('today() > ' + tomorrowString).booleanValue);
+      });
+
+      it('should not be greater than or equal to tomorrow', function() {
+        assert.notOk(xEval('today() >= ' + tomorrowString).booleanValue);
+      });
     });
-    it('works for greater-than-or-equal', function() {
-      assert.ok(xEval('today() >= "' + todayString + '"').booleanValue);
+
+    describe('tomorrow', function() {
+      it('should not be less than today()', function() {
+        assert.notOk(xEval(tomorrowString + ' < today()').booleanValue);
+      });
+
+      it('should not be less than or equal to today()', function() {
+        assert.notOk(xEval(tomorrowString + ' <= today()').booleanValue);
+      });
+
+      it('should be greater than today()', function() {
+        assert.ok(xEval(tomorrowString + ' > today()').booleanValue);
+      });
+
+      it('should be greater than or equal to today()', function() {
+        assert.ok(xEval(tomorrowString + ' >= today()').booleanValue);
+      });
     });
+
   });
 
   describe('some complex examples', function() {

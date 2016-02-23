@@ -118,6 +118,7 @@ var openrosa_xpath_extensions = (function() {
         return sb;
       },
       func,
+      now_and_today = function() { return XPR.date(new Date()); },
       ___end_vars___;
 
   func = {
@@ -161,7 +162,7 @@ var openrosa_xpath_extensions = (function() {
      * and ideally would be unnecessary.
      */
     not: function(v) { return XPR.boolean(!v); },
-    now: function() { return XPR.date(new Date()); },
+    now: now_and_today,
     pow: function(x, y) { return XPR.number(Math.pow(x, y)); },
     random: function() { return XPR.number(Math.random()); },
     regex: function(haystack, pattern) {
@@ -184,10 +185,7 @@ var openrosa_xpath_extensions = (function() {
     },
     substr: function(string, startIndex, endIndex) {
         return XPR.string(string.slice(startIndex, endIndex)); },
-    today: function() {
-      var now = new Date();
-      return XPR.date(new Date(Date.UTC(now.getFullYear(), now.getMonth(), now.getDate())));
-    },
+    today: now_and_today,
     'true': function() { return XPR.boolean(true); },
     uuid: function() { return XPR.string(uuid()); },
   };
