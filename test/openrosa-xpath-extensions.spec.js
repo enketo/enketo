@@ -1,6 +1,14 @@
 define(['src/openrosa-xpath-extensions', 'chai', 'lodash'], function(or, chai, _) {
   var f = or.func;
 
+  function zeroPad(n) {
+    return n >= 10 ? n : '0' + n;
+  }
+
+  function simpleDateString(d) {
+    return d.getFullYear() + '-' + zeroPad(d.getMonth()+1) + '-' + zeroPad(d.getDate());
+  }
+
   describe('#count-selected()', function() {
     _.forEach({
       '': 0,
@@ -41,7 +49,7 @@ define(['src/openrosa-xpath-extensions', 'chai', 'lodash'], function(or, chai, _
       }, function(arg, expected) {
         it('should convert ' + arg + ' to ' + expected, function() {
           // expect
-          assert.equal(f.date(arg).v.toISOString().slice(0, 10), expected);
+          assert.equal(simpleDateString(f.date(arg).v), expected);
         });
       });
     });
@@ -64,7 +72,7 @@ define(['src/openrosa-xpath-extensions', 'chai', 'lodash'], function(or, chai, _
       }, function(arg, expected) {
         it('should convert ' + arg + ' to ' + expected, function() {
           // expect
-          assert.equal(f.date(arg).v.toISOString().slice(0, 10), expected);
+          assert.equal(simpleDateString(f.date(arg).v), expected);
         });
       });
     });
@@ -82,8 +90,8 @@ define(['src/openrosa-xpath-extensions', 'chai', 'lodash'], function(or, chai, _
         it('should return a value of type Date', function() {
           assert.ok(f.date(arg).v instanceof Date);
         });
-        it('should return the correct date', function() {
-          assert.equal(f.date(arg).v.toISOString().slice(0, 10), arg);
+        it('should return the correct date, in the local format', function() {
+          assert.equal(simpleDateString(f.date(arg).v), arg);
         });
       });
     });

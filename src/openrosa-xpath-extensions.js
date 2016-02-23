@@ -38,25 +38,33 @@ var openrosa_xpath_extensions = (function() {
                   v=c=='x'?r:r&0x3|0x8;
           return v.toString(16);
       },
+      _parseDate = function(it) {
+        var temp;
+        if(it instanceof Date) {
+          return new Date(it);
+        } else if(RAW_NUMBER.test(it)) {
+          // Create a date at 00:00:00 1st Jan 1970 _in the current timezone_
+          temp = new Date(1970, 0, 1);
+          temp.setDate(1 + parseInt(it, 10));
+          return temp;
+        } else if(DATE_STRING.test(it)) {
+          temp = it.substring(0, 10).split('-');
+          temp = new Date(temp[0], temp[1]-1, temp[2]);
+          return temp;
+        }
+      },
       uuid = function() {
           return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'
                   .replace(/[xy]/g, _uuid_part);
       },
       date = function(it) {
-        if(RAW_NUMBER.test(it)) {
-          var tempDate = new Date(0);
-          tempDate.setUTCDate(1 + parseInt(it, 10));
-          return XPR.date(tempDate);
-        } else if(DATE_STRING.test(it)) {
-          return XPR.date(new Date(it.substring(0, 10)));
-        } else {
-          return XPR.string('Invalid Date');
-        }
+        it = _parseDate(it);
+        if(!it) return XPR.string('Invalid Date');
+        return XPR.date(it);
       },
       format_date = function(date, format) {
-        date = Date.parse(date);
-        if(isNaN(date)) return '';
-        date = new Date(date);
+        date = _parseDate(date);
+        if(!date) return '';
         var c, i, sb = '', f = {
           year: 1900 + date.getYear(),
           month: 1 + date.getMonth(),
@@ -140,8 +148,8 @@ var openrosa_xpath_extensions = (function() {
       // FIXME this is a medic mobile extension, and should be in a corresponding
       // extensions file.
       var months;
-      d1 = new Date(d1);
-      d2 = new Date(d2);
+      d1 = _parseDate(d1);
+      d2 = _parseDate(d2);
       months =
           ((d2.getFullYear() - d1.getFullYear()) * 12) +
           (d2.getMonth() - d1.getMonth()) +
@@ -239,7 +247,7 @@ var openrosa_xpath_extensions = (function() {
                 n = lhs.t !== 'date'? _num(lhs): _num(rhs),
                 res = new Date(d.getTime());
             if(op.v === '-') n = -n;
-            res.setUTCDate(d.getDate() + n);
+            res.setDate(d.getDate() + n);
             return res;
           }
           return { t:'continue', lhs:lhs, op:op, rhs:rhs };
