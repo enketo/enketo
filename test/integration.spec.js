@@ -791,9 +791,9 @@ define(['src/openrosa-xpath-extensions', 'src/extended-xpath', 'chai', 'lodash']
           ret = noQuotes ? '' : '"';
       d.setDate(d.getDate() + offset);
       ret +=
-          d.getUTCFullYear() + '-' +
-          zeroPad(d.getUTCMonth()+1, 2) + '-' +
-          zeroPad(d.getUTCDate(), 2);
+          d.getFullYear() + '-' +
+          zeroPad(d.getMonth()+1, 2) + '-' +
+          zeroPad(d.getDate(), 2);
 
       return ret + (noQuotes ? '' : '"');
     }
