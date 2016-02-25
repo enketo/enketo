@@ -171,6 +171,15 @@ define(['src/openrosa-xpath-extensions', 'chai', 'lodash'], function(or, chai, _
           assert.equal(f['difference-in-months'](d1, d2).v, expectedDifference);
         });
       });
+
+      it('should return an empty string when the difference cannot be calculated', function() {
+        // given
+        var d1 = 'nonsense',
+            d2 = '2015-09-22';
+
+        // expect
+        assert.equal(f['difference-in-months'](d1, d2).v, '');
+      });
     });
   });
 });

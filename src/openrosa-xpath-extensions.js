@@ -150,6 +150,9 @@ var openrosa_xpath_extensions = (function() {
       var months;
       d1 = _parseDate(d1);
       d2 = _parseDate(d2);
+
+      if(!d1 || !d2) return XPR.string('');
+
       months =
           ((d2.getFullYear() - d1.getFullYear()) * 12) +
           (d2.getMonth() - d1.getMonth()) +
