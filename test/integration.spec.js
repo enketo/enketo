@@ -7,7 +7,7 @@ define(['src/openrosa-xpath-extensions', 'src/extended-xpath', 'chai', 'lodash']
       extendedXpathEvaluator = new ExtendedXpathEvaluator(
           function wrappedXpathEvaluator(v) {
             return doc.evaluate.call(doc, v, doc, null,
-                XPathResult.STRING_TYPE, null);
+                XPathResult.ANY_TYPE, null);
           },
           openRosaXpathExtensions),
       simpleValueIs = function(textValue) {
@@ -165,6 +165,22 @@ define(['src/openrosa-xpath-extensions', 'src/extended-xpath', 'chai', 'lodash']
           it('should evaluate \'' + expr + '\' to: ' + expected, function() {
             assert.equal(xEval(expr).stringValue, expected);
           });
+        });
+      });
+    });
+
+    describe('#floor()', function() {
+      _.forEach({
+        '3': 3,
+        '12.5': 12,
+        '-3.75': -4,
+      }, function(expected, decimal) {
+        var expr = 'floor(' + decimal + ')';
+        it('should convert ' + expr + ' to ' + expected, function() {
+          // given
+
+          // expect
+          assert.equal(xEval(expr).numberValue, expected);
         });
       });
     });

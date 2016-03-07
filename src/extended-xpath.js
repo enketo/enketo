@@ -20,8 +20,13 @@ var ExtendedXpathEvaluator = function(wrapped, extensions) {
     extendedFuncs = extensions.func || {},
     extendedProcessors = extensions.process || {},
     toInternalResult = function(r) {
+      var n;
       if(r.resultType === XPathResult.NUMBER_TYPE) return { t:'num', v:r.numberValue };
       if(r.resultType === XPathResult.BOOLEAN_TYPE) return {  t:'bool', v:r.booleanValue };
+      if(r.resultType === XPathResult.UNORDERED_NODE_ITERATOR_TYPE) {
+        n = r.iterateNext();
+        return { t:'str', v:n? n.textContent: '' };
+      }
       return { t:'str', v:r.stringValue };
     },
     toExternalResult = function(r) {
