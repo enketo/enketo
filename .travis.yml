@@ -9,6 +9,9 @@ before_script:
 
 script: make test
 
+before_deploy:
+  - "sed -i -E -e \"s/0\\.0\\.0/$TRAVIS_TAG/\" package.json"
+
 deploy:
   provider: npm
   api_key: $NPM_API_KEY
