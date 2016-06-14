@@ -8,3 +8,10 @@ before_script:
   - sh -e /etc/init.d/xvfb start
 
 script: make test
+
+deploy:
+  provider: npm
+  api_key: $NPM_API_KEY
+  email: dev@medicmobile.org
+  on:
+    tags: true
