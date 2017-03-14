@@ -13,7 +13,9 @@ For more info on extended XPath expressions/bindings supported by XForms/OpenRos
 
 # Limitations
 
-The expression parser is currently very basic and will fail for some xpath expressions.  Some examples of expressions that are and are not supported follow.
+Any expression made requesting a node-type result will be delegated to the underlying xpath evaluator.
+
+Also, the expression parser is currently very basic and will fail for some xpath expressions.  Some examples of expressions that are and are not supported follow.
 
 ## Supported XPath expressions:
 

@@ -75,7 +75,12 @@ var ExtendedXpathEvaluator = function(wrapped, extensions) {
       return 'str';
     };
 
-  this.evaluate = function(input) {
+  /**
+   * @see https://developer.mozilla.org/en-US/docs/Web/API/Document/evaluate
+   */
+  this.evaluate = function(input, cN, nR, rT, r) {
+    if(rT > 3) return wrapped(input, cN, nR, rT, r); // we don't try to handle node expressions
+
     var i, cur, stack = [{ t:'root', tokens:[] }],
       peek = function() { return stack[stack.length-1]; },
       err = function(message) { throw new Error((message||'') + ' [stack=' + JSON.stringify(stack) + '] [cur=' + JSON.stringify(cur) + ']'); },

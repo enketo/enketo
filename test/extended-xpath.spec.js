@@ -221,6 +221,34 @@ define(['src/extended-xpath', 'chai', 'lodash'], function(ExtendedXpathEvaluator
       );
 
   describe('ExtendedXpathEvaluator', function() {
+
+    describe('should delegate to the wrpaped evaluator when', function() {
+      _.forIn({
+        UNORDERED_NODE_ITERATOR_TYPE: 4,
+        RDERED_NODE_ITERATOR_TYPE: 5,
+        UNORDERED_NODE_SNAPSHOT_TYPE: 6,
+        ORDERED_NODE_SNAPSHOT_TYPE: 7,
+        ANY_UNORDERED_NODE_TYPE: 8,
+        FIRST_ORDERED_NODE_TYPE: 9,
+      }, function(typeVal, typeName) {
+        it(typeName + ' is requested', function() {
+          // given
+          var wrappedCalls = [],
+              evaluator = new ExtendedXpathEvaluator(function() {
+                  wrappedCalls.push(Array.prototype.slice.call(arguments));
+                },
+                { func:{} }),
+              someExpr = '/a/b/c', someContextNode = {}, someNamespaceResolver = {}, someResult = {};
+
+          // when
+          evaluator.evaluate(someExpr, someContextNode, someNamespaceResolver, typeVal, someResult);
+
+          // given
+          assert.deepEqual(wrappedCalls, [[someExpr, someContextNode, someNamespaceResolver, typeVal, someResult]]);
+        });
+      });
+    });
+
     _.map(examples, function(expected, expr) {
       it(expr + ' should be evaluated', function() {
         if(typeof expected === 'string') {
