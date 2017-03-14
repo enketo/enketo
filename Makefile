@@ -1,13 +1,15 @@
 CC_VERSION = compiler-20150729.tar.gz
 
-default: test minify
+.PHONY: default travis
+default: lint test minify
+travis: lint test minify
 
 .PHONY: lint
 lint:
 	./node_modules/jshint/bin/jshint src/*.js test/*.js
 
 .PHONY: test
-test: lint
+test:
 	npm test
 
 .PHONY: minify-dependencies

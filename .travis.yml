@@ -7,7 +7,7 @@ before_script:
   - export DISPLAY=:99.0
   - sh -e /etc/init.d/xvfb start
 
-script: make test
+script: make travis
 
 before_deploy:
   - "sed -i -E -e \"s/0\\.0\\.0/$TRAVIS_TAG/\" package.json"
