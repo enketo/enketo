@@ -11,7 +11,7 @@
   "devDependencies": {
     "chai": "^3.0.0",
     "jshint": "^2.8.0",
-    "karma": "^0.12.37",
+    "karma": "^1.5.0",
     "karma-chai": "^0.1.0",
     "karma-chrome-launcher": "^0.2.0",
     "karma-firefox-launcher": "^0.1.6",
