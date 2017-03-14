@@ -1,5 +1,5 @@
 var openrosa_xpath_extensions = (function() {
-  var ___start_vars___,
+  var
       MILLIS_PER_DAY = 1000 * 60 * 60 * 24,
       MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
       DAYS = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"],
@@ -126,8 +126,7 @@ var openrosa_xpath_extensions = (function() {
         return sb;
       },
       func,
-      now_and_today = function() { return XPR.date(new Date()); },
-      ___end_vars___;
+      now_and_today = function() { return XPR.date(new Date()); };
 
   func = {
     'boolean-from-string': function(string) {
@@ -225,7 +224,7 @@ var openrosa_xpath_extensions = (function() {
       typefor: function(val) {
         if(val instanceof Date) return 'date';
       },
-      handleInfix: function(lhs, op, rhs) {
+      handleInfix: function(err, lhs, op, rhs) {
         if(lhs.t === 'date' || rhs.t === 'date') {
           // For comparisons, we must make sure that both values are numbers
           // Dates would be fine, except for equality!

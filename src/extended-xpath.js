@@ -45,7 +45,7 @@ var ExtendedXpathEvaluator = function(wrapped, extensions) {
       return callNative(name, args);
     },
     callExtended = function(name, args) {
-      var argVals = [], argString, res, i;
+      var argVals = [], res, i;
       for(i=0; i<args.length; ++i) argVals.push(args[i].v);
       res = extendedFuncs[name].apply(null, argVals);
       return res;
@@ -73,11 +73,10 @@ var ExtendedXpathEvaluator = function(wrapped, extensions) {
       if(typeof val === 'boolean') return 'bool';
       if(typeof val === 'number') return 'num';
       return 'str';
-    },
-  ___end_vars___;
+    };
 
   this.evaluate = function(input) {
-    var cur, stack = [{ t:'root', tokens:[] }],
+    var i, cur, stack = [{ t:'root', tokens:[] }],
       peek = function() { return stack[stack.length-1]; },
       err = function(message) { throw new Error((message||'') + ' [stack=' + JSON.stringify(stack) + '] [cur=' + JSON.stringify(cur) + ']'); },
       newCurrent = function() { cur = { t:'?', v:'' }; },
@@ -87,7 +86,7 @@ var ExtendedXpathEvaluator = function(wrapped, extensions) {
       },
       evalOp = function(lhs, op, rhs) {
         if(extendedProcessors.handleInfix) {
-          var res = extendedProcessors.handleInfix(lhs, op, rhs);
+          var res = extendedProcessors.handleInfix(err, lhs, op, rhs);
           if(res && res.t === 'continue') {
             lhs = res.lhs; op = res.op; rhs = res.rhs; res = null;
           }
@@ -112,7 +111,7 @@ var ExtendedXpathEvaluator = function(wrapped, extensions) {
         }
       },
       evalOpAt = function(tokens, opIndex) {
-        res = evalOp(
+        var res = evalOp(
             tokens[opIndex - 1],
             tokens[opIndex],
             tokens[opIndex + 1]);
@@ -124,7 +123,7 @@ var ExtendedXpathEvaluator = function(wrapped, extensions) {
       },
       backtrack = function() {
         // handle infix operators
-        var i, ops, tokens;
+        var i, j, ops, tokens;
         tokens = peek().tokens;
 
         for(j=OP_PRECEDENCE.length-1; j>=0; --j) {
@@ -138,13 +137,9 @@ var ExtendedXpathEvaluator = function(wrapped, extensions) {
         }
       },
       handleXpathExpr = function() {
-        var v = cur.v.trim(),
-            evaluated = toInternalResult(wrapped(cur.v));
+        var evaluated = toInternalResult(wrapped(cur.v));
         peek().tokens.push(evaluated);
         newCurrent();
-      },
-      lastChar = function() {
-        if(i > 0) return input.charAt(i-1);
       },
       nextChar = function() {
         if(i < input.length -1) return input.charAt(i+1);
@@ -153,13 +148,12 @@ var ExtendedXpathEvaluator = function(wrapped, extensions) {
         cur.v = parseFloat(cur.string);
         peek().tokens.push(cur);
         newCurrent();
-      },
-      ___end_vars___;
+      };
 
     newCurrent();
 
     for(i=0; i<input.length; ++i) {
-      c = input.charAt(i);
+      var c = input.charAt(i);
       if(cur.t === 'str') {
         if(c === cur.quote) {
           peek().tokens.push(cur);
@@ -300,7 +294,7 @@ var ExtendedXpathEvaluator = function(wrapped, extensions) {
 
     if(cur.t === '?' && cur.v !== '') handleXpathExpr();
 
-    if(cur.t !== '?' || cur.v !== '' || (cur.tokens && current.tokens.length)) err('Current item not evaluated!');
+    if(cur.t !== '?' || cur.v !== '' || (cur.tokens && cur.tokens.length)) err('Current item not evaluated!');
     if(stack.length > 1) err('Stuff left on stack.');
     if(stack[0].t !== 'root') err('Weird stuff on stack.');
     if(stack[0].tokens.length === 0) err('No tokens.');
