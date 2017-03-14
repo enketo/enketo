@@ -148,6 +148,13 @@ var ExtendedXpathEvaluator = function(wrapped, extensions) {
         cur.v = parseFloat(cur.string);
         peek().tokens.push(cur);
         newCurrent();
+      },
+      prevToken = function() {
+        var peeked = peek().tokens;
+        return peeked[peeked.length - 1];
+      },
+      isNum = function(c) {
+        return c >= '0' && c <= '9';
       };
 
     newCurrent();
@@ -170,21 +177,11 @@ var ExtendedXpathEvaluator = function(wrapped, extensions) {
           cur.string += c;
         } else finaliseNum();
       }
-      switch(c) {
-        case '0':
-        case '1':
-        case '2':
-        case '3':
-        case '4':
-        case '5':
-        case '6':
-        case '7':
-        case '8':
-        case '9':
+      if(isNum(c)) {
           if(cur.v === '') {
             cur = { t:'num', string:c };
           } else cur.v += c;
-          break;
+      } else switch(c) {
         case "'":
         case '"':
           if(cur.v === '') {
@@ -227,7 +224,7 @@ var ExtendedXpathEvaluator = function(wrapped, extensions) {
             // function name expr
             cur.v += c;
             break;
-          } else if(peek().tokens.length === 0) {
+          } else if(peek().tokens.length === 0 || prevToken().t === 'op') {
             // -ve number
             cur = { t:'num', string:'-' };
             break;

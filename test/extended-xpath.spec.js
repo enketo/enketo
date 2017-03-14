@@ -104,6 +104,26 @@ define(['src/extended-xpath', 'chai', 'lodash'], function(ExtendedXpathEvaluator
           /^7$/,
         '1 + 2 * 3':
           /^7$/,
+        '1 > 0':
+          /^true$/,
+        '1 > 1':
+          /^false$/,
+        '1 < 1':
+          /^false$/,
+        '1 > -1':
+          /^true$/,
+        '1 < -1':
+          /^false$/,
+        '-1 > 1':
+          /^false$/,
+        '-1 < 1':
+          /^true$/,
+        '-1 > -1':
+          /^false$/,
+        '-1 < -1':
+          /^false$/,
+        '-1 < -2':
+          /^false$/,
       },
       trickyStandardXpath_supported = [
         '/model/instance[1]//*',
