@@ -105,7 +105,7 @@ var ExtendedXpathEvaluator = function(wrapped, extensions) {
           case '*':  return lhs.v * rhs.v;
           case '/':  return lhs.v / rhs.v;
           case '%':  return lhs.v % rhs.v;
-          case '=':  return lhs.v === rhs.v;
+          case '=':  return lhs.v == rhs.v;
           case '<':  return lhs.v < rhs.v;
           case '>':  return lhs.v > rhs.v;
           case '<=': return lhs.v <= rhs.v;

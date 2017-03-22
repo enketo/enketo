@@ -25,6 +25,53 @@ define(['src/openrosa-xpath-extensions', 'src/extended-xpath', 'chai', 'lodash']
   });
 
 
+  describe('basic xpath', function() {
+    describe('comparing node values', function() {
+      describe('to integer values', function() {
+        it('should support equality operator', function() {
+          // given
+          simpleValueIs(1);
+
+          // expect
+          assert.isTrue(xEval('/simple/xpath/to/node = 1').booleanValue);
+        });
+        it('should support inequality operator', function() {
+          // given
+          simpleValueIs(1);
+
+          // expect
+          assert.isFalse(xEval('/simple/xpath/to/node != 1').booleanValue);
+        });
+        it('should support comparators', function() {
+          // given
+          simpleValueIs(1);
+
+          // expect
+          assert.isFalse(xEval('/simple/xpath/to/node < 1').booleanValue);
+          assert.isFalse(xEval('/simple/xpath/to/node > 1').booleanValue);
+          assert.isTrue(xEval('/simple/xpath/to/node <= 1').booleanValue);
+          assert.isTrue(xEval('/simple/xpath/to/node >= 1').booleanValue);
+        });
+      });
+      describe('to string values', function() {
+        it('should support equality operator', function() {
+          // given
+          simpleValueIs(1);
+
+          // expect
+          assert.isTrue(xEval('/simple/xpath/to/node = "1"').booleanValue);
+        });
+        it('should support inequality operator', function() {
+          // given
+          simpleValueIs(1);
+
+          // expect
+          assert.isFalse(xEval('/simple/xpath/to/node != "1"').booleanValue);
+        });
+      });
+    });
+  });
+
   describe('openrosa-xpath', function() {
     it('should process simple xpaths', function() {
       // given
