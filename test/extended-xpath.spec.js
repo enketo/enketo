@@ -161,12 +161,13 @@ define(['src/extended-xpath', 'chai', 'lodash'], function(ExtendedXpathEvaluator
         'ancestor::book[author][1]',
         'ancestor::author[parent::book][1]',
         '../../some-path',
-      ],
-      trickyStandardXpath_unsupported = [
         '*/*',
         '*[@specialty]',
-        '@my:*',
         '@*',
+        '@my:*',
+        'my:*',
+      ],
+      trickyStandardXpath_unsupported = [
         'author[degree and award]',
         'author[(degree or award) and publication]',
         'author[degree and not(publication)]',
@@ -186,7 +187,6 @@ define(['src/extended-xpath', 'chai', 'lodash'], function(ExtendedXpathEvaluator
         'book[/bookstore/@specialty=@style]',
         'degree[position() &lt; 3]',
         'degree[@from != "Harvard"]',
-        'my:*',
         'p/text()[2]',
         'price[@intl = "Canada"]',
         'x/y[position() = 1]',
@@ -303,7 +303,9 @@ define(['src/extended-xpath', 'chai', 'lodash'], function(ExtendedXpathEvaluator
               extendedXpathEvaluator.evaluate(expr).stringValue,
               '<xpath:' + expr + '>');
           } catch(e) {
-            assert.equal(e.message.indexOf('Too many tokens.'), 0);
+            if(e.message.indexOf('Too many tokens.') === 0) {
+              // expected
+            } else throw e;
           }
         });
       });

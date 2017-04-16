@@ -53,14 +53,15 @@ Also, the expression parser is currently very basic and will fail for some xpath
 * `ancestor::book[1]`
 * `ancestor::book[author][1]`
 * `ancestor::author[parent::book][1]`
+* `*/*`
+* `*[@specialty]`
+* `@*`
+* `@my:*`
+* `my:*`
 
 
 ## Unsupported XPath expressions:
 
-* `*/*`
-* `*[@specialty]`
-* `@my:*`
-* `@*`
 * `author[degree and award]`
 * `author[(degree or award) and publication]`
 * `author[degree and not(publication)]`
@@ -80,7 +81,6 @@ Also, the expression parser is currently very basic and will fail for some xpath
 * `book[/bookstore/@specialty=@style]`
 * `degree[position() &lt; 3]`
 * `degree[@from != "Harvard"]`
-* `my:*`
 * `p/text()[2]`
 * `price[@intl = "Canada"]`
 * `x/y[position() = 1]`
