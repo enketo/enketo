@@ -216,50 +216,52 @@ var ExtendedXpathEvaluator = function(wrapped, extensions) {
           if(cur.v !== '') handleXpathExpr();
           if(peek().t !== 'fn') err();
           break;
-        case ';':
-          if(nextChar() !== '=') {
-            switch(cur.v) {
-              case '&lt': pushOp('<'); continue;
-              case '&gt': pushOp('>'); continue;
-            }
+        case '*':
+          if(c === '*' && (cur.v !== '' || peek().tokens.length === 0)) {
+            cur.v += c;
+          } else {
+            pushOp(c);
           }
-          /* falls through */
+          break;
         case '-':
           if(cur.v !== '') {
             // function name expr
             cur.v += c;
-            break;
           } else if(peek().tokens.length === 0 || prevToken().t === 'op') {
             // -ve number
             cur = { t:'num', string:'-' };
-            break;
-          } // else it's `-` operator
-          /* falls through */
+          } else {
+            pushOp(c);
+          }
+          break;
         case '=':
-          if(c === '=' && (cur.v === '<' || cur.v === '&lt;' ||
-              cur.v === '>' || cur.v === '&gt;' || cur.v === '!')) {
+          if(cur.v === '<' || cur.v === '&lt;' ||
+              cur.v === '>' || cur.v === '&gt;' || cur.v === '!') {
             cur.v += c;
             switch(cur.v) {
               case '<=': case '&lt;=': pushOp('<='); break;
               case '>=': case '&gt;=': pushOp('>='); break;
               case '!=':               pushOp('!='); break;
             }
-            break;
+          } else {
+            pushOp(c);
           }
-          if(cur.v !== '') handleXpathExpr();
+          break;
+        case ';':
+          switch(cur.v) {
+            case '&lt': c = '<'; break;
+            case '&gt': c = '>'; break;
+            default: cur.v += c; continue;
+          }
           /* falls through */
         case '>':
         case '<':
-          if((c === '<' || c === '>') && nextChar() === '=') {
-            cur.v += c; break;
+          if(nextChar() === '=') {
+            cur.v = c; break;
           }
           /* falls through */
         case '+':
-        case '*':
-          if(c === '*' && (cur.v !== '' || peek().tokens.length === 0)) {
-            cur.v += c; break;
-          }
-          peek().tokens.push({ t:'op', v:c });
+          pushOp(c);
           break;
         case ' ':
           switch(cur.v) {
