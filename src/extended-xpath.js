@@ -147,7 +147,7 @@ var ExtendedXpathEvaluator = function(wrapped, extensions) {
         newCurrent();
       },
       nextChar = function() {
-        if(i < input.length -1) return input.charAt(i+1);
+        return input.charAt(i+1);
       },
       finaliseNum = function() {
         cur.v = parseFloat(cur.string);
