@@ -166,6 +166,12 @@ var ExtendedXpathEvaluator = function(wrapped, extensions) {
 
     for(i=0; i<input.length; ++i) {
       var c = input.charAt(i);
+      if(cur.sq) {
+        cur.v += c;
+        if(c === ']') --cur.sq;
+        else if(c === '[') ++cur.sq;
+        continue;
+      }
       if(cur.t === 'str') {
         if(c === cur.quote) {
           peek().tokens.push(cur);
@@ -200,6 +206,14 @@ var ExtendedXpathEvaluator = function(wrapped, extensions) {
           newCurrent();
           break;
         case ')':
+          if(nextChar() === '[') {
+            // collapse the stack, and let the native evaluator handle this...
+            var tail = stack.pop();
+            tail.v = tail.v + '(' + cur.v + c;
+            tail.t = '?';
+            cur = tail;
+            break;
+          }
           if(cur.v !== '') handleXpathExpr();
           backtrack();
           cur = stack.pop();
@@ -273,6 +287,8 @@ var ExtendedXpathEvaluator = function(wrapped, extensions) {
             default: if(!FUNCTION_NAME.test(cur.v)) handleXpathExpr();
           }
           break;
+        case '[':
+          cur.sq = (cur.sq || 0) + 1;
         default:
           cur.v += c;
       }

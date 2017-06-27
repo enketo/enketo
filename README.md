@@ -58,10 +58,6 @@ Also, the expression parser is currently very basic and will fail for some xpath
 * `@*`
 * `@my:*`
 * `my:*`
-
-
-## Unsupported XPath expressions:
-
 * `author[degree and award]`
 * `author[(degree or award) and publication]`
 * `author[degree and not(publication)]`
@@ -86,3 +82,8 @@ Also, the expression parser is currently very basic and will fail for some xpath
 * `x/y[position() = 1]`
 * `(book/author)[last()]`
 * `(x/y)[1]`
+
+
+## Unsupported XPath expressions:
+
+(Add any examples of known-unsupported expressions here and to `test/extended-xpath.spec.js`.)

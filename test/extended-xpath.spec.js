@@ -166,8 +166,6 @@ define(['src/extended-xpath', 'chai', 'lodash'], function(ExtendedXpathEvaluator
         '@*',
         '@my:*',
         'my:*',
-      ],
-      trickyStandardXpath_unsupported = [
         'author[degree and award]',
         'author[(degree or award) and publication]',
         'author[degree and not(publication)]',
@@ -192,6 +190,8 @@ define(['src/extended-xpath', 'chai', 'lodash'], function(ExtendedXpathEvaluator
         'x/y[position() = 1]',
         '(book/author)[last()]',
         '(x/y)[1]',
+      ],
+      trickyStandardXpath_unsupported = [
       ],
       xp = {
         str: function(v) { return { t:'str', v:v }; },
