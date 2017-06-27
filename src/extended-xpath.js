@@ -289,6 +289,7 @@ var ExtendedXpathEvaluator = function(wrapped, extensions) {
           break;
         case '[':
           cur.sq = (cur.sq || 0) + 1;
+          /* falls through */
         default:
           cur.v += c;
       }
