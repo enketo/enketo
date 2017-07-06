@@ -11,6 +11,10 @@ For more info on extended XPath expressions/bindings supported by XForms/OpenRos
 * [OpenDataKit Binding documentation](https://opendatakit.org/help/form-design/binding/)
 * [JavaRosa XPath functions](https://bitbucket.org/javarosa/javarosa/wiki/xform)
 
+# TODO
+
+Check that UUID generation is correct (random?  UUID vX?)
+
 # Limitations
 
 Any expression made requesting a node-type result will be delegated to the underlying xpath evaluator.
