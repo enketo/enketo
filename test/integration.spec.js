@@ -1174,6 +1174,24 @@ define(['src/openrosa-xpath-extensions', 'src/extended-xpath', 'chai', 'lodash']
       "today() + 1 < '1970-06-03'": false,
       "today() + 1 > '1970-06-03'": true,
       '.': '',
+
+      // These tests exposed a weird bug which would return "Too many tokens" if dot was followed by a comparator
+      ".>1": false,
+      ".> 1": false,
+      ". >1": false,
+      ". > 1": false,
+      ".>=1": false,
+      ".>= 1": false,
+      ". >=1": false,
+      ". >= 1": false,
+      ".<1": true,
+      ".< 1": true,
+      ". <1": true,
+      ". < 1": true,
+      ".<=1": true,
+      ".<= 1": true,
+      ". <=1": true,
+      ". <= 1": true,
     }, function(matcher, expression) {
       it('should convert "' + expression + '" to match "' + matcher + '"', function() {
         var evaluated = xEval(expression);

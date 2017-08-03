@@ -263,13 +263,14 @@ var ExtendedXpathEvaluator = function(wrapped, extensions) {
           break;
         case ';':
           switch(cur.v) {
-            case '&lt': c = '<'; break;
-            case '&gt': c = '>'; break;
+            case '&lt': cur.v = ''; c = '<'; break;
+            case '&gt': cur.v = ''; c = '>'; break;
             default: cur.v += c; continue;
           }
           /* falls through */
         case '>':
         case '<':
+          if(cur.v) handleXpathExpr();
           if(nextChar() === '=') {
             cur.v = c; break;
           }
