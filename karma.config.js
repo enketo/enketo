@@ -8,6 +8,9 @@ module.exports = function(config) {
     basePath: '',
 
 
+    plugins: ['karma-mocha', 'karma-requirejs', 'karma-chai', 'karma-firefox-launcher'],
+
+
     // frameworks to use
     // available frameworks: https://npmjs.org/browse/keyword/karma-adapter
     frameworks: ['mocha', 'requirejs', 'chai'],
@@ -18,7 +21,6 @@ module.exports = function(config) {
       'test-main.js',
       {pattern: 'src/**/*.js', included: false},
       {pattern: 'test/**/*.js', included: false},
-      {pattern: 'lib/**/*.js', included: false}
     ],
 
 
