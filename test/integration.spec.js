@@ -1173,6 +1173,7 @@ define(['src/openrosa-xpath-extensions', 'src/extended-xpath', 'chai', 'lodash']
       "today() > '1970-06-03'": true,
       "today() + 1 < '1970-06-03'": false,
       "today() + 1 > '1970-06-03'": true,
+      '.': '',
     }, function(matcher, expression) {
       it('should convert "' + expression + '" to match "' + matcher + '"', function() {
         var evaluated = xEval(expression);

@@ -36,7 +36,7 @@ var ExtendedXpathEvaluator = function(wrapped, extensions) {
       }
       if(r.t === 'num') return { resultType:XPathResult.NUMBER_TYPE, numberValue:r.v, stringValue:r.v.toString() };
       if(r.t === 'bool') return { resultType:XPathResult.BOOLEAN_TYPE, booleanValue:r.v, stringValue:r.v.toString() };
-      return { resultType:XPathResult.STRING_TYPE, stringValue:r.v.toString() };
+      return { resultType:XPathResult.STRING_TYPE, stringValue: r.v===null ? '' : r.v.toString() };
     },
     callFn = function(name, args) {
       if(extendedFuncs.hasOwnProperty(name)) {
