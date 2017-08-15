@@ -8,7 +8,7 @@ module.exports = function(config) {
     basePath: '',
 
 
-    plugins: ['karma-mocha', 'karma-requirejs', 'karma-chai', 'karma-firefox-launcher'],
+    plugins: ['karma-mocha', 'karma-requirejs', 'karma-chai', 'karma-chrome-launcher', 'karma-firefox-launcher'],
 
 
     // frameworks to use
@@ -65,7 +65,7 @@ module.exports = function(config) {
     customLaunchers: {
       Chrome_travis_ci: {
         base: 'Chrome',
-        flags: ['--no-sandbox']
+        flags: ['--no-sandbox', '--headless', '--disable-gpu']
       }
     },
 
