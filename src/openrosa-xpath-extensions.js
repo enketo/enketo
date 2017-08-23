@@ -1,8 +1,6 @@
-var openrosa_xpath_extensions = (function() {
+var openrosa_xpath_extensions = function(translate) {
   var
       MILLIS_PER_DAY = 1000 * 60 * 60 * 24,
-      MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
-      DAYS = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"],
       RAW_NUMBER = /^(-?[0-9]+)(\.[0-9]+)?$/,
       DATE_STRING = /^\d\d\d\d-\d\d-\d\d(?:T\d\d:\d\d:\d\d(?:Z|[+-]\d\d:\d\d))?$/,
       XPR = {
@@ -96,7 +94,7 @@ var openrosa_xpath_extensions = (function() {
             } else if (c === 'n') {  //numeric month
               sb += f.month;
             } else if (c === 'b') {  //short text month
-              sb += MONTHS[f.month - 1];
+              sb += translate('date.month.' + f.month);
             } else if (c === 'd') {  //0-padded day of month
               sb += _zeroPad(f.day, 2);
             } else if (c === 'e') {  //day of month
@@ -112,7 +110,7 @@ var openrosa_xpath_extensions = (function() {
             } else if (c === '3') {  //0-padded millisecond ticks (000-999)
               sb += _zeroPad(f.secTicks, 3);
             } else if (c === 'a') {  //Three letter short text day
-              sb += DAYS[f.dow - 1];
+              sb += translate('date.dayofweek.' + f.dow);
             } else if (c === 'Z' || c === 'A' || c === 'B') {
               throw new Error('unsupported escape in date format string [%' + c + ']');
             } else {
@@ -257,7 +255,7 @@ var openrosa_xpath_extensions = (function() {
       },
     },
   };
-}());
+};
 
 if(typeof define === 'function') {
   define(function() { return openrosa_xpath_extensions; });

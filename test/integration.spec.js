@@ -1,4 +1,5 @@
-define(['src/openrosa-xpath-extensions', 'src/extended-xpath', 'chai', 'lodash'], function(openRosaXpathExtensions, ExtendedXpathEvaluator, chai, _) {
+define(['src/openrosa-xpath-extensions', 'src/extended-xpath', 'src/translate', 'chai', 'lodash'],
+function(openRosaXpathExtensions, ExtendedXpathEvaluator, translate, chai, _) {
   var TODO = function() { if(false) assert.notOk('TODO'); },
       SIMPLE_DATE_MATCH = /^\d{4}-\d\d-\d\d$/,
       FULL_DATE_MATCH = /(Mon|Tue|Wed|Thu|Fri|Sat|Sun) (Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec) \d\d \d{4} \d\d:\d\d:\d\d GMT([+-]\d\d\d\d \(.+\))?/,
@@ -9,7 +10,7 @@ define(['src/openrosa-xpath-extensions', 'src/extended-xpath', 'chai', 'lodash']
             return doc.evaluate.call(doc, v, doc, null,
                 XPathResult.ANY_TYPE, null);
           },
-          openRosaXpathExtensions),
+          openRosaXpathExtensions(translate)),
       simpleValueIs = function(textValue) {
         var xml = '<simple><xpath><to><node>' + textValue +
                 '</node></to></xpath><empty/></simple>';

@@ -1,5 +1,6 @@
-define(['src/openrosa-xpath-extensions', 'chai', 'lodash'], function(or, chai, _) {
-  var f = or.func;
+define(['src/openrosa-xpath-extensions', 'src/translate', 'chai', 'lodash'],
+function(or, translate, chai, _) {
+  var f = or(translate).func;
 
   function zeroPad(n) {
     return n >= 10 ? n : '0' + n;
