@@ -1193,6 +1193,35 @@ function(openRosaXpathExtensions, ExtendedXpathEvaluator, translate, chai, _) {
       ".<= 1": true,
       ". <=1": true,
       ". <= 1": true,
+
+      '1=1': true,
+      '1=0': false,
+      '0=1': false,
+
+      '1 =1': true,
+      '1 =0': false,
+      '0 =1': false,
+
+      '1= 1': true,
+      '1= 0': false,
+      '0= 1': false,
+
+      '1 = 1': true,
+      '1 = 0': false,
+      '0 = 1': false,
+
+      "../some-path='some-value'": false,
+      '../some-path="some-value"': false,
+      "../some-path= 'some-value'": false,
+      "../some-path ='some-value'": false,
+      "../some-path = 'some-value'": false,
+
+      "'some-value'=../some-path": false,
+      '"some-value"=../some-path': false,
+      "'some-value'= ../some-path": false,
+      "'some-value' =../some-path": false,
+      "'some-value' = ../some-path": false,
+
     }, function(matcher, expression) {
       it('should convert "' + expression + '" to match "' + matcher + '"', function() {
         var evaluated = xEval(expression);

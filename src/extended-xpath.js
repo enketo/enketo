@@ -258,6 +258,7 @@ var ExtendedXpathEvaluator = function(wrapped, extensions) {
               case '!=':               pushOp('!='); break;
             }
           } else {
+            if(cur.v) handleXpathExpr();
             pushOp(c);
           }
           break;
