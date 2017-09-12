@@ -32,6 +32,7 @@ var openrosa_xpath_extensions = function(translate) {
         return Math.round(num);
       },
       _uuid_part = function(c) {
+          // TODO understand what these are used for - they're probably not very unique
           var r = Math.random()*16|0,
                   v=c=='x'?r:r&0x3|0x8;
           return v.toString(16);
