@@ -69,9 +69,9 @@ define(['src/extended-xpath', 'chai', 'lodash'], function(ExtendedXpathEvaluator
         '10 div 100':
             /^0.1$/,
         'random()':
-            /^0.\d+$/,
+            /^(0\.\d+)|(\d\.\d+e-\d)$/,
         'random() div 10':
-            /^0.0\d+$/,
+            /^(0\.0\d+)|(\d\.\d+e-\d)$/,
         '12 mod 5':
             /^2$/,
         'reverse("hello " + "friend")':
