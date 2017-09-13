@@ -74,7 +74,8 @@ module.exports = function(config) {
     singleRun: false
   }
 
-  if (process.env.TRAVIS) cfg.browsers = ['Chrome_travis_ci'];
+  // TODO Chrome currently fails to launch on Travis.  Ideally we'd run both.
+  if (process.env.TRAVIS) cfg.browsers = ['Firefox', /*'Chrome_travis_ci'*/];
 
   config.set(cfg);
 }
