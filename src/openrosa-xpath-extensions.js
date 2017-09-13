@@ -2,7 +2,7 @@ var openrosa_xpath_extensions = function(translate) {
   var
       MILLIS_PER_DAY = 1000 * 60 * 60 * 24,
       RAW_NUMBER = /^(-?[0-9]+)(\.[0-9]+)?$/,
-      DATE_STRING = /^\d\d\d\d-\d\d-\d\d(?:T\d\d:\d\d:\d\d(?:Z|[+-]\d\d:\d\d))?$/,
+      DATE_STRING = /^\d\d\d\d-\d{1,2}-\d{1,2}(?:T\d\d:\d\d:\d\d(?:Z|[+-]\d\d:\d\d))?$/,
       XPR = {
         boolean: function(val) { return { t:'bool', v:val }; },
         number: function(val) { return { t:'num', v:val }; },
@@ -38,7 +38,7 @@ var openrosa_xpath_extensions = function(translate) {
         return v.toString(16);
       },
       _parseDate = function(it) {
-        var temp;
+        var temp, t;
         if(it instanceof Date) {
           return new Date(it);
         } else if(RAW_NUMBER.test(it)) {
@@ -47,7 +47,9 @@ var openrosa_xpath_extensions = function(translate) {
           temp.setDate(1 + parseInt(it, 10));
           return temp;
         } else if(DATE_STRING.test(it)) {
-          temp = it.substring(0, 10).split('-');
+          t = it.indexOf('T');
+          if(t !== -1) it = it.substring(0, t);
+          temp = it.split('-');
           temp = new Date(temp[0], temp[1]-1, temp[2]);
           return temp;
         }

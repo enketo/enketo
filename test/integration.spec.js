@@ -152,6 +152,12 @@ function(openRosaXpathExtensions, ExtendedXpathEvaluator, translate, chai, _) {
         });
       });
 
+      describe('date string with single-digit day or month values', function() {
+        it('should insert zeroes', function() {
+          assert.equal(xEval("date('1970-1-2')").stringValue, '1970-01-02');
+        });
+      });
+
       describe('number', function() {
         _.forEach({
           'date(0)': '1970-01-01',
