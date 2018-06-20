@@ -246,6 +246,29 @@ function(openRosaXpathExtensions, ExtendedXpathEvaluator, translate, chai, _) {
     });
 
     describe('#number()', function() {
+      describe('called on a boolean', function() {
+        _.forEach({
+            'number(true())': '1',
+            'number(false())': '0',
+            'number(1 = 1)': '1',
+            'number(1 = 2)': '0',
+        }, function(expectedResult, expr) {
+          it(`${expr} should be ${expectedResult}`, function() {
+            assert.equal(xEval(expr).numberValue, expectedResult);
+          });
+        });
+      });
+      describe('called on a number', function() {
+        _.forEach({
+            'number("0")': '0',
+            'number("1")': '1',
+            'number("-1")': '-1',
+        }, function(expectedResult, expr) {
+          it(`${expr} should be ${expectedResult}`, function() {
+            assert.equal(xEval(expr).numberValue, expectedResult);
+          });
+        });
+      });
       describe('called on a date string', function() {
         _.forEach({
             'number("1970-01-01")': '0',
@@ -256,6 +279,7 @@ function(openRosaXpathExtensions, ExtendedXpathEvaluator, translate, chai, _) {
         }, function(expectedResult, expr) {
           it(expr + ' should be ' + expectedResult + ' days since the epoch', function() {
             TODO();
+            // assert.equal(xEval(expr).numberValue, expectedResult);
           });
         });
       });
