@@ -717,7 +717,22 @@ function(openRosaXpathExtensions, ExtendedXpathEvaluator, translate, chai, _) {
       });
     });
 
-    describe('#selected-at()', function() { it('should have tests', function() { TODO(); }); });
+    describe('#selected-at()', function() {
+      [
+        { from:'zero one two three', index:1, expected:'one' },
+        { from:'zero one two three', index:4, expected:'' },
+        { from:'zero one two three', index:-1, expected:'' },
+        { from:'', index:0, expected:'' },
+      ].forEach(({ from, index, expected }) => {
+        it(`should select ${expected} from "${from}" at index ${index}`, function() {
+          // when
+          const actual = xEval(`selected-at('${from}', '${index}')`).stringValue;
+
+          // expect
+          assert.equal(actual, expected);
+        });
+      });
+    });
 
     describe('#round()', function() {
       describe('with a single argument', function() {

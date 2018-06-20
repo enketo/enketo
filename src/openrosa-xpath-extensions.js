@@ -223,6 +223,10 @@ var openrosa_xpath_extensions = function(translate) {
     selected: function(haystack, needle) {
         return XPR.boolean(_str(haystack).split(' ').indexOf(_str(needle)) !== -1);
     },
+    'selected-at': function(list, index) {
+      if(!index) throw new Error(JSON.stringify(list));
+      return XPR.string(_str(list).split(' ')[_int(index)] || '');
+    },
     substr: function(string, startIndex, endIndex) {
       return XPR.string(_str(string).slice(
           _int(startIndex),
