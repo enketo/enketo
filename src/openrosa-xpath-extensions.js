@@ -18,8 +18,13 @@ var openrosa_xpath_extensions = function(translate) {
         while(n.length < len) n = '0' + n;
         return n;
       },
-      _num = function(o) {
-        return Math.round(o.t === 'num'? o.v: parseFloat(o.v));
+      _bool = function(r) { return r.t === 'bool' ? r.v : _str(r); },
+      _int = function(r) { return Math.round(_float(r)); },
+      _float = function(r) { return r.t === 'num'? r.v: parseFloat(_str(r)); },
+      _str = function(r) {
+        return r.t === 'arr' ?
+               r.v.length ? r.v[0].toString() : '' :
+            r.v.toString();
       },
       _dateToString = function(d) {
             return d.getFullYear() + '-' + _zeroPad(d.getMonth()+1) + '-' +
@@ -37,11 +42,16 @@ var openrosa_xpath_extensions = function(translate) {
             v = c == 'x' ? r : r&0x3|0x8;
         return v.toString(16);
       },
-      _parseDate = function(it) {
+      _date = function(it) {
         var temp, t;
-        if(it instanceof Date) {
-          return new Date(it);
-        } else if(RAW_NUMBER.test(it)) {
+
+        if(it.v instanceof Date) {
+          return new Date(it.v);
+        }
+
+        it = _str(it);
+
+        if(RAW_NUMBER.test(it)) {
           // Create a date at 00:00:00 1st Jan 1970 _in the current timezone_
           temp = new Date(1970, 0, 1);
           temp.setDate(1 + parseInt(it, 10));
@@ -59,12 +69,13 @@ var openrosa_xpath_extensions = function(translate) {
                   .replace(/[xy]/g, _uuid_part);
       },
       date = function(it) {
-        it = _parseDate(it);
+        it = _date(it);
         if(!it) return XPR.string('Invalid Date');
         return XPR.date(it);
       },
       format_date = function(date, format) {
-        date = _parseDate(date);
+        date = _date(date);
+        format = _str(format);
         if(!date) return '';
         var c, i, sb = '', f = {
           year: 1900 + date.getYear(),
@@ -126,16 +137,17 @@ var openrosa_xpath_extensions = function(translate) {
 
         return sb;
       },
-      func,
+      func, process, ret = {},
       now_and_today = function() { return XPR.date(new Date()); };
 
   func = {
     'boolean-from-string': function(string) {
+      string = _str(string);
       return XPR.boolean(string === '1' || string === 'true');
     },
-    coalesce: function(a, b) { return XPR.string(a || b); },
+    coalesce: function(a, b) { return XPR.string(_str(a) || _str(b)); },
     'count-selected': function(s) {
-      var parts = s.split(' '),
+      var parts = _str(s).split(' '),
           i = parts.length,
           count = 0;
       while(--i >= 0) if(parts[i].length) ++count;
@@ -143,13 +155,13 @@ var openrosa_xpath_extensions = function(translate) {
     },
     date: date,
     'decimal-date': function(date) {
-        return XPR.number(Date.parse(date) / MILLIS_PER_DAY); },
+        return XPR.number(Date.parse(_str(date)) / MILLIS_PER_DAY); },
     'difference-in-months': function(d1, d2) {
       // FIXME this is a medic mobile extension, and should be in a corresponding
       // extensions file.
       var months;
-      d1 = _parseDate(d1);
-      d2 = _parseDate(d2);
+      d1 = _date(d1);
+      d2 = _date(d2);
 
       if(!d1 || !d2) return XPR.string('');
 
@@ -162,8 +174,9 @@ var openrosa_xpath_extensions = function(translate) {
     'false': function() { return XPR.boolean(false); },
     'format-date': function(date, format) {
         return XPR.string(format_date(date, format)); },
-    'if': function(con, a, b) { return XPR.string(con? a: b); },
-    int: function(v) { return XPR.number(parseInt(v, 10)); },
+    'if': function(con, a, b) { return XPR.string(_bool(con)? a.v: b.v); },
+    int: function(v) { return XPR.number(parseInt(_str(v), 10)); },
+    join: function(delim, arr) { return XPR.string(arr.v.join(_str(delim))); },
     /*
      * As per https://github.com/alxndrsn/openrosa-xpath-evaluator/issues/15,
      * the pass-through to the wrapped implementation always requests
@@ -172,18 +185,18 @@ var openrosa_xpath_extensions = function(translate) {
      * XPath implementation.  The following method is supplied as a workaround,
      * and ideally would be unnecessary.
      */
-    not: function(v) { return XPR.boolean(!v); },
+    not: function(r) { return XPR.boolean(!r.v); },
     now: now_and_today,
-    pow: function(x, y) { return XPR.number(Math.pow(x, y)); },
+    pow: function(x, y) { return XPR.number(Math.pow(_float(x), _float(y))); },
     random: function() { return XPR.number(Math.random()); },
     regex: function(haystack, pattern) {
-        return XPR.boolean(new RegExp(pattern).test(haystack)); },
+        return XPR.boolean(new RegExp(_str(pattern)).test(_str(haystack))); },
     round: function(number, num_digits) {
-      number = parseFloat(number);
-      num_digits = num_digits ? parseInt(num_digits) : 0;
+      number = _float(number);
       if(!num_digits) {
         return XPR.number(_round(number));
       }
+      num_digits = _int(num_digits);
       var pow = Math.pow(10, Math.abs(num_digits));
       if(num_digits > 0) {
         return XPR.number(_round(number * pow) / pow);
@@ -192,10 +205,13 @@ var openrosa_xpath_extensions = function(translate) {
       }
     },
     selected: function(haystack, needle) {
-        return XPR.boolean(haystack.split(' ').indexOf(needle) !== -1);
+        return XPR.boolean(_str(haystack).split(' ').indexOf(_str(needle)) !== -1);
     },
     substr: function(string, startIndex, endIndex) {
-        return XPR.string(string.slice(startIndex, endIndex)); },
+      return XPR.string(_str(string).slice(
+          _int(startIndex),
+          endIndex && _int(endIndex)));
+    },
     today: now_and_today,
     'true': function() { return XPR.boolean(true); },
     uuid: function() { return XPR.string(uuid()); },
@@ -206,9 +222,7 @@ var openrosa_xpath_extensions = function(translate) {
   func['decimal-date-time'] = func['decimal-date'];
   func['format-date-time'] = func['format-date'];
 
-  return {
-    func:func,
-    process: {
+  process = {
       toExternalResult: function(r) {
         if(r.t === 'date') return {
           resultType:XPathResult.STRING_TYPE,
@@ -235,8 +249,8 @@ var openrosa_xpath_extensions = function(translate) {
               op.v === '<=' ||
               op.v === '>=' ||
               op.v === '!=') {
-            if(lhs.t === 'str') lhs = date(lhs.v);
-            if(rhs.t === 'str') rhs = date(rhs.v);
+            if(lhs.t === 'arr' || lhs.t === 'str') lhs = date(lhs);
+            if(rhs.t === 'arr' || rhs.t === 'str') rhs = date(rhs);
             if(lhs.t !== 'date' || rhs.t !== 'date') {
               return op.v === '!=';
             } else {
@@ -247,7 +261,7 @@ var openrosa_xpath_extensions = function(translate) {
             // for math operators, we need to do it ourselves
             if(lhs.t === 'date' && rhs.t === 'date') err();
             var d = lhs.t === 'date'? lhs.v: rhs.v,
-                n = lhs.t !== 'date'? _num(lhs): _num(rhs),
+                n = lhs.t !== 'date'? _int(lhs): _int(rhs),
                 res = new Date(d.getTime());
             if(op.v === '-') n = -n;
             res.setDate(d.getDate() + n);
@@ -256,8 +270,12 @@ var openrosa_xpath_extensions = function(translate) {
           return { t:'continue', lhs:lhs, op:op, rhs:rhs };
         }
       },
-    },
   };
+
+  ret.func = func;
+  ret.process = process;
+
+  return ret;
 };
 
 if(typeof define === 'function') {

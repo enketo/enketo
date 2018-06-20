@@ -20,10 +20,13 @@ function(or, translate, chai, _) {
       'one two three': 3,
       'one  two  three': 3,
       'one-1  two,2  three==3': 3,
-    }, function(expected, expr) {
-      it('should return ' + expected + ' when called with <<' + expr + '>>', function() {
+    }, function(expected, v) {
+      it(`should return ${expected} when called with <<${v}>>`, function() {
+        // given
+        const r = { t:'str', v };
+
         // when
-        var result = f['count-selected'](expr);
+        var result = f['count-selected'](r);
 
         // then
         assert.equal(result.v, expected);
@@ -34,12 +37,18 @@ function(or, translate, chai, _) {
   describe('#date()', function() {
     describe('when called with integers', function() {
       it('should return a date type', function() {
+        // given
+        const r = { t:'str', v:0 };
+
         // expect
-        assert.equal(f.date(0).t, 'date');
+        assert.equal(f.date(r).t, 'date');
       });
       it('should return a value of type Date', function() {
+        // given
+        const r = { t:'str', v:0 };
+
         // expect
-        assert.ok(f.date(0).v instanceof Date);
+        assert.ok(f.date(r).v instanceof Date);
       });
 
       _.forEach({
@@ -47,22 +56,31 @@ function(or, translate, chai, _) {
         '1970-01-01': 0,
         '1970-01-02': 1,
         '1971-02-05': 400,
-      }, function(arg, expected) {
-        it('should convert ' + arg + ' to ' + expected, function() {
+      }, function(v, expected) {
+        // given
+        const r = { t:'str', v };
+
+        it('should convert ' + r + ' to ' + expected, function() {
           // expect
-          assert.equal(simpleDateString(f.date(arg).v), expected);
+          assert.equal(simpleDateString(f.date(r).v), expected);
         });
       });
     });
 
     describe('when called with floats', function() {
       it('should return a date type', function() {
+        // given
+        const r = { t:'num', v:1.11596 };
+
         // expect
-        assert.equal(f.date(1.11596).t, 'date');
+        assert.equal(f.date(r).t, 'date');
       });
       it('should return a value of type Date', function() {
+        // given
+        const r = { t:'num', v:1.11596 };
+
         // expect
-        assert.ok(f.date(1.11596).v instanceof Date);
+        assert.ok(f.date(r).v instanceof Date);
       });
 
       _.forEach({
@@ -70,10 +88,13 @@ function(or, translate, chai, _) {
         '1970-01-01': 0.0001,
         '1970-01-02': 1.99999,
         '1971-02-05': 400.5,
-      }, function(arg, expected) {
-        it('should convert ' + arg + ' to ' + expected, function() {
+      }, function(v, expected) {
+        // given
+        const r = { t:'num', v };
+
+        it('should convert ' + r + ' to ' + expected, function() {
           // expect
-          assert.equal(simpleDateString(f.date(arg).v), expected);
+          assert.equal(simpleDateString(f.date(r).v), expected);
         });
       });
     });
@@ -84,15 +105,21 @@ function(or, translate, chai, _) {
         '1970-01-01',
         '1970-01-02',
         '1971-02-05',
-      ], function(arg) {
+      ], function(v) {
+        // given
+        const r = { t:'str', v };
+
         it('should return a date type', function() {
-          assert.equal(f.date(arg).t, 'date');
+          // expect
+          assert.equal(f.date(r).t, 'date');
         });
         it('should return a value of type Date', function() {
-          assert.ok(f.date(arg).v instanceof Date);
+          // expect
+          assert.ok(f.date(r).v instanceof Date);
         });
         it('should return the correct date, in the local format', function() {
-          assert.equal(simpleDateString(f.date(arg).v), arg);
+          // expect
+          assert.equal(simpleDateString(f.date(r).v), r.v);
         });
       });
     });
@@ -101,12 +128,17 @@ function(or, translate, chai, _) {
       _.forEach([
           'nonsense',
           '99-12-31',
-      ], function(arg) {
+      ], function(v) {
+        // given
+        const r = { t:'string', v };
+
         it('should return a string type', function() {
-          assert.equal(f.date(arg).t, 'str');
+          // expect
+          assert.equal(f.date(r).t, 'str');
         });
-        it('should convert "' + arg + '" to "Invalid Date"', function() {
-          assert.equal(f.date(arg).v, 'Invalid Date');
+        it(`should convert "${v}" to "Invalid Date"`, function() {
+          // expect
+          assert.equal(f.date(r).v, 'Invalid Date');
         });
       });
     });
@@ -114,8 +146,12 @@ function(or, translate, chai, _) {
 
   describe('#date-format()', function() {
     it("should return empty string if it can't parse a date", function() {
+      // given
+      const badDateString = { type:'str', v:'abc' };
+      const format = { type:'str', v:'%Y' };
+
       // when
-      var formattedDate = f['format-date']('abc', '%Y');
+      const formattedDate = f['format-date'](badDateString, format);
 
       // then
       assert.equal(formattedDate.v, '');
@@ -164,8 +200,8 @@ function(or, translate, chai, _) {
         [ "2014-10-02", "2015-10-01", 11, ],
         [ "2015-10-01", "2014-10-01", -12, ],
       ].forEach(function(example) {
-        var d1 = example[0],
-            d2 = example[1],
+        var d1 = { t:'str', v:example[0] },
+            d2 = { t:'str', v:example[1] },
             expectedDifference = example[2];
 
         it('should report difference between ' + d1 + ' and ' + d2 + ' as ' + expectedDifference, function() {
@@ -175,8 +211,8 @@ function(or, translate, chai, _) {
 
       it('should return an empty string when the difference cannot be calculated', function() {
         // given
-        var d1 = 'nonsense',
-            d2 = '2015-09-22';
+        const d1 = { t:'str', v:'nonsense' };
+        const d2 = { t:'str', v:'2015-09-22' };
 
         // expect
         assert.equal(f['difference-in-months'](d1, d2).v, '');

@@ -20,12 +20,13 @@ var ExtendedXpathEvaluator = function(wrapped, extensions) {
     extendedFuncs = extensions.func || {},
     extendedProcessors = extensions.process || {},
     toInternalResult = function(r) {
-      var n;
+      var n, v;
       if(r.resultType === XPathResult.NUMBER_TYPE) return { t:'num', v:r.numberValue };
       if(r.resultType === XPathResult.BOOLEAN_TYPE) return {  t:'bool', v:r.booleanValue };
       if(r.resultType === XPathResult.UNORDERED_NODE_ITERATOR_TYPE) {
-        n = r.iterateNext();
-        return { t:'str', v:n? n.textContent: '' };
+        v = [];
+        while((n = r.iterateNext())) v.push(n.textContent);
+        return { t:'arr', v:v };
       }
       return { t:'str', v:r.stringValue };
     },
@@ -46,7 +47,7 @@ var ExtendedXpathEvaluator = function(wrapped, extensions) {
     },
     callExtended = function(name, args) {
       var argVals = [], res, i;
-      for(i=0; i<args.length; ++i) argVals.push(args[i].v);
+      for(i=0; i<args.length; ++i) argVals.push(args[i]);
       res = extendedFuncs[name].apply(null, argVals);
       return res;
     },

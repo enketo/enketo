@@ -6,16 +6,17 @@ function(openRosaXpathExtensions, ExtendedXpathEvaluator, translate, chai, _) {
 
   function TODO() { if(false) assert.notOk('TODO'); }
 
-  const extendedXpathEvaluator = new ExtendedXpathEvaluator(
-      function wrappedXpathEvaluator(v) {
-        return doc.evaluate.call(doc, v, doc, null,
-            XPathResult.ANY_TYPE, null);
-      },
-      openRosaXpathExtensions(translate));
+  let doc, xEval, extendedXpathEvaluator;
 
-  let doc, xEval;
   function initDoc(xml) {
     doc = new DOMParser().parseFromString(xml, 'application/xml');
+    extendedXpathEvaluator = new ExtendedXpathEvaluator(
+        v => {
+          const result = doc.evaluate.call(doc, v, doc, null, XPathResult.ANY_TYPE, null);
+          //console.log(`${v} => ${result.resultType}`);
+          return result;
+        },
+        openRosaXpathExtensions(translate, doc));
     xEval = function(e) {
       return extendedXpathEvaluator.evaluate(e);
     };
@@ -398,7 +399,24 @@ function(openRosaXpathExtensions, ExtendedXpathEvaluator, translate, chai, _) {
       });
     });
 
-    describe('#join()', function() { it('should have tests', function() { TODO(); }); });
+    describe('#join()', function() {
+      it('should join a list of strings with supplied separator', function() {
+        // given
+        initDoc(`
+            <root>
+              <item>one</item>
+              <item>two</item>
+              <item>three</item>
+            </root>`);
+
+        // when
+        const joined = xEval(`join(' :: ', //item)`).stringValue;
+
+        // expect
+        assert.equal(joined, 'one :: two :: three');
+      });
+    });
+
     describe('#max()', function() { it('should have tests', function() { TODO(); }); });
     describe('#min()', function() { it('should have tests', function() { TODO(); }); });
 

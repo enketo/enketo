@@ -206,16 +206,16 @@ define(['src/extended-xpath', 'chai', 'lodash'], function(ExtendedXpathEvaluator
         },
         {
           func: {
-            upcase: function(it) { return xp.str(it.toUpperCase()); },
-            downcase: function(it) { return xp.str(it.toLowerCase()); },
+            upcase: function(it) { return xp.str(it.v.toUpperCase()); },
+            downcase: function(it) { return xp.str(it.v.toLowerCase()); },
             date: function() { return xp.str(new Date().toString()); },
             concat: function() {
               var i, acc = '';
-              for(i=0; i<arguments.length; ++i) acc += arguments[i];
+              for(i=0; i<arguments.length; ++i) acc += arguments[i].v;
               return xp.str(acc);
             },
             random: function() { return xp.num(Math.random()); },
-            reverse: function(it) { return xp.str(it.split('').reverse().join('')); },
+            reverse: function(it) { return xp.str(it.v.split('').reverse().join('')); },
           },
         }
       );
