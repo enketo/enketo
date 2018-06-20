@@ -1,25 +1,31 @@
 define(['src/openrosa-xpath-extensions', 'src/extended-xpath', 'src/translate', 'chai', 'lodash'],
 function(openRosaXpathExtensions, ExtendedXpathEvaluator, translate, chai, _) {
-  var TODO = function() { if(false) assert.notOk('TODO'); },
-      SIMPLE_DATE_MATCH = /^\d{4}-\d\d-\d\d$/,
-      FULL_DATE_MATCH = /(Mon|Tue|Wed|Thu|Fri|Sat|Sun) (Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec) \d\d \d{4} \d\d:\d\d:\d\d GMT([+-]\d\d\d\d \(.+\))?/,
-      assert = chai.assert,
-      doc, xEval,
-      extendedXpathEvaluator = new ExtendedXpathEvaluator(
-          function wrappedXpathEvaluator(v) {
-            return doc.evaluate.call(doc, v, doc, null,
-                XPathResult.ANY_TYPE, null);
-          },
-          openRosaXpathExtensions(translate)),
-      simpleValueIs = function(textValue) {
-        var xml = '<simple><xpath><to><node>' + textValue +
-                '</node></to></xpath><empty/></simple>';
-        doc = new DOMParser().parseFromString(xml, 'application/xml');
-        xEval = function(e) {
-          return extendedXpathEvaluator.evaluate(e);
-        };
+  const SIMPLE_DATE_MATCH = /^\d{4}-\d\d-\d\d$/;
+  const FULL_DATE_MATCH = /(Mon|Tue|Wed|Thu|Fri|Sat|Sun) (Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec) \d\d \d{4} \d\d:\d\d:\d\d GMT([+-]\d\d\d\d \(.+\))?/;
+  const assert = chai.assert;
+
+  function TODO() { if(false) assert.notOk('TODO'); }
+
+  const extendedXpathEvaluator = new ExtendedXpathEvaluator(
+      function wrappedXpathEvaluator(v) {
+        return doc.evaluate.call(doc, v, doc, null,
+            XPathResult.ANY_TYPE, null);
       },
-      initBasicXmlDoc = function() { simpleValueIs(''); };
+      openRosaXpathExtensions(translate));
+
+  let doc, xEval;
+  function initDoc(xml) {
+    doc = new DOMParser().parseFromString(xml, 'application/xml');
+    xEval = function(e) {
+      return extendedXpathEvaluator.evaluate(e);
+    };
+  }
+  function simpleValueIs(textValue) {
+    initDoc(`<simple><xpath><to>
+               <node>${textValue}</node>
+             </to></xpath><empty/></simple>`);
+  }
+  const initBasicXmlDoc = () => simpleValueIs('');
 
   beforeEach(function() {
     initBasicXmlDoc();
