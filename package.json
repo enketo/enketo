@@ -1,6 +1,6 @@
 {
   "name": "openrosa-xpath-evaluator",
-  "version": "1.4.2",
+  "version": "1.5.0",
   "description": "Wrapper for browsers' XPath evaluator with added support for OpenRosa extensions.",
   "main": "src/openrosa-xpath.js",
   "scripts": {
