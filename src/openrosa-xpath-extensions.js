@@ -177,6 +177,22 @@ var openrosa_xpath_extensions = function(translate) {
     'if': function(con, a, b) { return XPR.string(_bool(con)? a.v: b.v); },
     int: function(v) { return XPR.number(parseInt(_str(v), 10)); },
     join: function(delim, arr) { return XPR.string(arr.v.join(_str(delim))); },
+    max: function(r) {
+      var max, i;
+      r = r.v;
+      if(!(i=r.length)) return XPR.number(NaN);
+      max = parseFloat(r[0]);
+      while(--i) max = Math.max(max, parseFloat(r[i]));
+      return XPR.number(max);
+    },
+    min: function(r) {
+      var min, i;
+      r = r.v;
+      if(!(i=r.length)) return XPR.number(NaN);
+      min = parseFloat(r[0]);
+      while(--i) min = Math.min(min, parseFloat(r[i]));
+      return XPR.number(min);
+    },
     /*
      * As per https://github.com/alxndrsn/openrosa-xpath-evaluator/issues/15,
      * the pass-through to the wrapped implementation always requests

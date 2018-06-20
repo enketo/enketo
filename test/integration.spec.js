@@ -417,8 +417,121 @@ function(openRosaXpathExtensions, ExtendedXpathEvaluator, translate, chai, _) {
       });
     });
 
-    describe('#max()', function() { it('should have tests', function() { TODO(); }); });
-    describe('#min()', function() { it('should have tests', function() { TODO(); }); });
+    describe('#max()', function() {
+      it('should return NaN if no numerical nodes are matched', function() {
+        // given
+        simpleValueIs('');
+
+        // expect
+        assert.isNaN(xEval('max(/simple)').numberValue);
+      });
+
+      it('should return value of a single node if only one matches', function() {
+        // given
+        simpleValueIs('3');
+
+        // expect
+        assert.equal(xEval('max(/simple/xpath/to/node)').numberValue, 3);
+      });
+
+      it('should return NaN if any node evaluates to NaN', function() {
+        // given
+        initDoc(`
+            <root>
+              <item>3</item>
+              <item>17</item>
+              <item>-32</item>
+              <item>cheese</item>
+            </root>`);
+
+        // expect
+        assert.isNaN(xEval('max(/root/item)').numberValue);
+      });
+
+      it('should return the max value in a node set', function() {
+        // given
+        initDoc(`
+            <root>
+              <item>3</item>
+              <item>17</item>
+              <item>-32</item>
+            </root>`);
+
+        // expect
+        assert.equal(xEval('max(/root/item)').numberValue, 17);
+      });
+
+      it('should return the max value in a node set of negative numbers', function() {
+        // given
+        initDoc(`
+            <root>
+              <item>-3</item>
+              <item>-17</item>
+              <item>-32</item>
+            </root>`);
+
+        // expect
+        assert.equal(xEval('max(/root/item)').numberValue, -3);
+      });
+    });
+
+    describe('#min()', function() {
+      it('should return NaN if no numerical nodes are matched', function() {
+        // given
+        simpleValueIs('');
+
+        // expect
+        assert.isNaN(xEval('min(/simple)').numberValue);
+      });
+
+      it('should return value of a single node if only one matches', function() {
+        // given
+        simpleValueIs('3');
+
+        // expect
+        assert.equal(xEval('min(/simple/xpath/to/node)').numberValue, 3);
+      });
+
+      it('should return NaN if any node evaluates to NaN', function() {
+        // given
+        initDoc(`
+            <root>
+              <item>3</item>
+              <item>17</item>
+              <item>-32</item>
+              <item>cheese</item>
+            </root>`);
+
+        // expect
+        assert.isNaN(xEval('min(/root/item)').numberValue);
+      });
+
+      it('should return the min value in a node set', function() {
+        // given
+        initDoc(`
+            <root>
+              <item>3</item>
+              <item>-17</item>
+              <item>32</item>
+            </root>`);
+
+        // expect
+        assert.equal(xEval('min(/root/item)').numberValue, -17);
+      });
+
+      it('should return the min value in a node set of negative numbers', function() {
+        // given
+        initDoc(`
+            <root>
+              <item>-3</item>
+              <item>-17</item>
+              <item>-32</item>
+            </root>`);
+
+        // expect
+        assert.equal(xEval('min(/root/item)').numberValue, -32);
+      });
+    });
 
     describe('#random()', function() {
       it('should return a number', function() {
