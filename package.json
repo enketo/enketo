@@ -9,7 +9,7 @@
     "travis": "npm run jshint && npm test"
   },
   "author": "Alex",
-  "license": "MIT",
+  "license": "Apache-2.0",
   "devDependencies": {
     "chai": "^3.5.0",
     "jshint": "^2.9.5",
