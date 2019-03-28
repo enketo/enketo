@@ -138,7 +138,7 @@ var openrosa_xpath_extensions = function(translate) {
         return sb;
       },
       func, process, ret = {},
-      now_and_today = function() { return XPR.date(new Date()); };
+      now_and_today = function() { return XPR.date(ret._now()); };
 
   func = {
     'boolean-from-string': function(string) {
@@ -294,6 +294,9 @@ var openrosa_xpath_extensions = function(translate) {
 
   ret.func = func;
   ret.process = process;
+  ret._now = function() { 
+    return new Date();
+  };
 
   return ret;
 };

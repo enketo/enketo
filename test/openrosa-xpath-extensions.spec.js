@@ -124,6 +124,14 @@ function(or, translate, chai, _) {
       });
     });
 
+    it('supports overriding current time', () => {
+      const extensions = or(translate);
+      extensions._now = function() { return new Date('2000-01-01'); };
+      const actual = extensions.func.now();
+      assert.equal(actual.t, 'date');
+      assert.include(actual.v.toISOString(), '2000-01-01');
+    });
+
     describe('when called with invalid strings', function() {
       _.forEach([
           'nonsense',
