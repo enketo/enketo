@@ -137,16 +137,8 @@ var openrosa_xpath_extensions = function(translate) {
 
         return sb;
       },
-      _now,
-      overrideNow = function(now) {
-        if (typeof now === 'function') {
-          _now = now();
-        } else {
-          _now = now;
-        }
-      },
       func, process, ret = {},
-      now_and_today = function() { return XPR.date(_now || new Date()); };
+      now_and_today = function() { return XPR.date(ret._now()); };
 
   func = {
     'boolean-from-string': function(string) {
@@ -302,7 +294,9 @@ var openrosa_xpath_extensions = function(translate) {
 
   ret.func = func;
   ret.process = process;
-  ret.overrideNow = overrideNow;
+  ret._now = function() { 
+    return new Date();
+  };
 
   return ret;
 };

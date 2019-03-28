@@ -124,19 +124,12 @@ function(or, translate, chai, _) {
       });
     });
 
-    describe('supports overriding current time', () => {
-      _.forEach([
-        new Date('2000-01-01'),
-        () => new Date('2000-01-01'),
-      ], function(v) {
-        it('accepts date override', () => {
-          const extensions = or(translate);
-          extensions.overrideNow(v);
-          const actual = extensions.func.now();
-          assert.equal(actual.t, 'date');
-          assert.include(actual.v.toISOString(), '2000-01-01');
-        });
-      });
+    it('supports overriding current time', () => {
+      const extensions = or(translate);
+      extensions._now = function() { return new Date('2000-01-01'); };
+      const actual = extensions.func.now();
+      assert.equal(actual.t, 'date');
+      assert.include(actual.v.toISOString(), '2000-01-01');
     });
 
     describe('when called with invalid strings', function() {
