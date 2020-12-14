@@ -1,25 +1,44 @@
 {
   "name": "openrosa-xpath-evaluator",
-  "version": "1.5.1",
+  "version": "2.0.0-beta.9",
   "description": "Wrapper for browsers' XPath evaluator with added support for OpenRosa extensions.",
-  "main": "src/openrosa-xpath.js",
+  "main": "src/index.js",
   "scripts": {
-    "jshint": "jshint src/*.js test/*.js",
-    "test": "karma start karma.config.js --single-run",
-    "travis": "npm run jshint && npm test"
+    "lint": "eslint --ignore-path .gitignore src",
+    "lint:watch": "esw --ignore-path .gitignore . -w",
+    "prebuild": "rimraf dist",
+    "build": "webpack",
+    "test": "karma start --single-run",
+    "travis": "npm run lint && npm run test"
   },
   "author": "Alex",
   "license": "Apache-2.0",
+  "dependencies": {
+    "node-forge": "^0.9.0"
+  },
   "devDependencies": {
-    "chai": "^3.5.0",
-    "jshint": "^2.9.5",
-    "karma": "^1.7.0",
-    "karma-chai": "^0.1.0",
-    "karma-chrome-launcher": "^2.2.0",
-    "karma-firefox-launcher": "^1.0.1",
-    "karma-mocha": "^0.2.2",
-    "karma-requirejs": "^0.2.6",
-    "mocha": "^2.5.3",
-    "requirejs": "^2.3.4"
+    "@babel/cli": "^7.5.5",
+    "@babel/core": "^7.5.5",
+    "@babel/preset-env": "^7.5.5",
+    "@babel/register": "^7.5.5",
+    "babel-loader": "^8.0.6",
+    "chai": "^4.2.0",
+    "eslint": "^7.2.0",
+    "eslint-watch": "^6.0.0",
+    "karma": "^4.3.0",
+    "karma-babel-preprocessor": "^8.0.1",
+    "karma-chrome-launcher": "^3.1.0",
+    "karma-coverage": "^2.0.1",
+    "karma-firefox-launcher": "^1.2.0",
+    "karma-mocha": "^1.3.0",
+    "karma-mocha-reporter": "^2.2.5",
+    "karma-sourcemap-loader": "^0.3.7",
+    "karma-webpack": "^4.0.2",
+    "lodash": "^4.17.15",
+    "mocha": "^6.2.0",
+    "puppeteer": "^1.19.0",
+    "terser-webpack-plugin": "^1.4.1",
+    "webpack": "^4.39.3",
+    "webpack-cli": "^3.3.7"
   }
 }
