@@ -1,4 +1,4 @@
-const { initDoc, assertNumberValue } = require('../../helpers');
+const { initDoc, assertNumberValue } = require('../helpers');
 
 describe('#count-selected()', () => {
   it('count-selected()', () => {

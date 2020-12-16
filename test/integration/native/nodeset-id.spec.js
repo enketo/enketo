@@ -1,4 +1,4 @@
-const { initDoc, assertNodes } = require('../../helpers');
+const { initDoc, assertNodes } = require('../helpers');
 
 describe('nodeset id() function', () => {
   let doc;

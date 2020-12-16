@@ -1,5 +1,5 @@
 const { initDoc, filterAttributes, snapshotToArray,
-  assertNodes, assertUnorderedNodes } = require('../../helpers');
+  assertNodes, assertUnorderedNodes } = require('../helpers');
 
 describe('Union operator', () => {
   let doc;
@@ -29,7 +29,73 @@ describe('Union operator', () => {
       </div>`);
   });
 
-  it('combines elements', () => {
+  it('combines two elements', () => {
+    assertNodes(
+      "id('eee10') | id('eee20')",
+      doc, [
+        doc.getElementById('eee10'),
+        doc.getElementById('eee20'),
+      ]);
+  });
+
+  describe('without spaces around the operator', () => {
+    it('should work with a simple nodeset before the operator', () => {
+      assertNodes(
+        "/div/div/div/div/div|id('eee20')",
+        doc, [
+          // these are in document order, not the order they are listed in the expression // TODO check if this is to spec
+          doc.getElementById('eee20'),
+          doc.getElementById('eee25'),
+        ]);
+    });
+
+    it('should work with a predicated nodeset before the operator 0', () => {
+      assertNodes(
+        "/*[1]/*[1]|id('eee20')",
+        doc, [
+          doc.getElementById('eee10'),
+          doc.getElementById('eee20'),
+        ]);
+    });
+
+    it('should work with a predicated nodeset before the operator 1', () => {
+      assertNodes(
+        "/div/div[1]|id('eee20')",
+        doc, [
+          doc.getElementById('eee10'),
+          doc.getElementById('eee20'),
+        ]);
+    });
+
+    it('should work with a predicated nodeset before the operator 2', () => {
+      assertNodes(
+        "/div[1]/div[1]|id('eee20')",
+        doc, [
+          doc.getElementById('eee10'),
+          doc.getElementById('eee20'),
+        ]);
+    });
+
+    it('should work with a predicated nodeset before the operator 3', () => {
+      assertNodes(
+        "/div[1]/div[1]|id('eee20')",
+        doc, [
+          doc.getElementById('eee10'),
+          doc.getElementById('eee20'),
+        ]);
+    });
+
+    it('should work with a function call before the operator', () => {
+      assertNodes(
+        "id('eee10')|id('eee20')",
+        doc, [
+          doc.getElementById('eee10'),
+          doc.getElementById('eee20'),
+        ]);
+    });
+  });
+
+  it('combines many elements', () => {
     assertNodes(
       "id('eee40') | id('eee20') | id('eee25') | id('eee10') | id('eee30') | id('eee50')",
       doc, [
@@ -38,63 +104,91 @@ describe('Union operator', () => {
         doc.getElementById('eee25'),
         doc.getElementById('eee30'),
         doc.getElementById('eee40'),
-        doc.getElementById('eee50')
+        doc.getElementById('eee50'),
       ]);
+  });
+
+  describe('general tests', () => {
+    // TODO these were created while debugging UNION, but should be somewhere else
+    it('combines elements and attributes', () => {
+      assertNodes("id('eee40')/attribute::*[1] | id('eee30')", doc, [
+        doc.getElementById('eee30'),
+        filterAttributes(doc.getElementById('eee40').attributes)[0],
+      ]);
+    });
+
+    it('returns indexed attributes', () => {
+      assertNodes("id('eee40')/attribute::*[1]", doc, [
+        filterAttributes(doc.getElementById('eee40').attributes)[0],
+      ]);
+    });
+
+    it('returns all attributes', () => {
+      assertNodes("id('eee40')/attribute::*", doc, filterAttributes(doc.getElementById('eee40').attributes));
+    });
+
+    it('returns root node', () => {
+      assertNodes("/div", doc, [doc.getElementById('UnionOperatorTestCase')]);
+    });
+
+    it('returns doc node', () => {
+      assertNodes("/", doc, [doc]);
+    });
   });
 
   it('combines elements and attributes', () => {
     assertNodes("id('eee40')/attribute::*[1] | id('eee30')", doc, [
       doc.getElementById('eee30'),
-      filterAttributes(doc.getElementById('eee40').attributes)[0]
+      filterAttributes(doc.getElementById('eee40').attributes)[0],
     ]);
   });
 
   it('combines elements and attributes if they refer to the same element', () => {
     assertNodes("id('eee40')/attribute::*[1] | id('eee40')", doc, [
       doc.getElementById('eee40'),
-      filterAttributes(doc.getElementById('eee40').attributes)[0]
+      filterAttributes(doc.getElementById('eee40').attributes)[0],
     ]);
   });
 
   it('combines elements and attributs if they refer to different trees', () => {
     assertNodes("id('eee40')/attribute::*[1] | id('eee20')", doc, [
       doc.getElementById('eee20'),
-      filterAttributes(doc.getElementById('eee40').attributes)[0]
+      filterAttributes(doc.getElementById('eee40').attributes)[0],
     ]);
   });
 
   it('combines elements and attributes if the attribute is on a parent element in the same tree', () => {
     assertNodes("id('eee40') | id('eee30')/attribute::*[1]", doc, [
       filterAttributes(doc.getElementById('eee30').attributes)[0],
-      doc.getElementById('eee40')
+      doc.getElementById('eee40'),
     ]);
   });
 
   it('combines elements and attributes if both are (on) elements under the same parent', () => {
     assertNodes("id('eee40') | id('eee35')/attribute::*[1]", doc, [
       filterAttributes(doc.getElementById('eee35').attributes )[0],
-      doc.getElementById('eee40')
+      doc.getElementById('eee40'),
     ]);
   });
 
   it('combines attributes that live on different elements', () => {
     assertNodes("id('eee35')/attribute::*[1] | id('eee40')/attribute::*[1]", doc, [
       filterAttributes(doc.getElementById('eee35').attributes)[0],
-      filterAttributes(doc.getElementById('eee40').attributes)[0]
+      filterAttributes(doc.getElementById('eee40').attributes)[0],
     ]);
   });
 
   it('combines attributes that live on descendent elements', () => {
     assertNodes("id('eee30')/attribute::*[1] | id('eee40')/attribute::*[1]", doc, [
       filterAttributes(doc.getElementById('eee30').attributes)[0],
-      filterAttributes(doc.getElementById('eee40').attributes)[0]
+      filterAttributes(doc.getElementById('eee40').attributes)[0],
     ]);
   });
 
   it('combines attributes that live on descendent element (reversed)', () => {
     assertNodes("id('eee40')/attribute::*[1] | id('eee30')/attribute::*[1]", doc, [
       filterAttributes(doc.getElementById('eee30').attributes)[0],
-      filterAttributes(doc.getElementById('eee40').attributes)[0]
+      filterAttributes(doc.getElementById('eee40').attributes)[0],
     ]);
   });
 

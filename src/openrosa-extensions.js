@@ -1,35 +1,26 @@
 require('./date-extensions');
-var {area, distance, areaOrDistance} = require('./geo');
-var {digest} = require('./digest');
-var {randomToken} = require('./random-token');
-var xpr = require('./xpr');
-var {isValidDate} = require('./utils/date');
+const { asGeopoints, area, distance } = require('./geo');
+const digest = require('./digest');
+const { randomToken } = require('./random-token');
+const { DATE_STRING, dateToDays, dateStringToDays, isValidDate} = require('./utils/date');
+const shuffle = require('./utils/shuffle');
+const { asBoolean, asNumber, asString } = require('./utils/xpath-cast');
+const sortByDocumentOrder = require('./utils/sort-by-document-order');
+const XPR = require('./xpr');
 
-var openrosa_xpath_extensions = function(config) {
-  var
+const RAW_NUMBER = /^-?[0-9]+(\.[0-9]+)?$/;
+
+// Operator constants copied from extended-xpath.js
+const EQ    = 0b01000;
+const GTE   = 0b01111;
+const PLUS  = 0b10000;
+const MINUS = 0b10001;
+
+const openrosa_xpath_extensions = function() {
+  const
       TOO_MANY_ARGS = new Error('too many args'),
       TOO_FEW_ARGS = new Error('too few args'),
       MILLIS_PER_DAY = 1000 * 60 * 60 * 24,
-      RAW_NUMBER = /^(-?[0-9]+)(\.[0-9]+)?$/,
-      DATE_STRING = /^\d\d\d\d-\d{1,2}-\d{1,2}(?:T\d\d:\d\d:\d\d\.?\d?\d?(?:Z|[+-]\d\d:\d\d)|.*)?$/,
-      XPR = xpr,
-      _zeroPad = function(n, len) {
-        len = len || 2;
-        n = n.toString();
-        while(n.length < len) n = '0' + n;
-        return n;
-      },
-      _int = function(r) { return Math.round(_float(r)); },
-      _float = function(r) { return r.t === 'num'? r.v: parseFloat(_str(r)); },
-      _str = function(r) {
-        return r.t === 'arr' ?
-               r.v.length ? r.v[0].toString() : '' :
-            r.v.toString();
-      },
-      _dateToString = function(d) {
-            return d.getFullYear() + '-' + _zeroPad(d.getMonth()+1) + '-' +
-                _zeroPad(d.getDate());
-      },
       _round = function(num) {
         if(num < 0) {
           return -Math.round(-num);
@@ -37,70 +28,20 @@ var openrosa_xpath_extensions = function(config) {
         return Math.round(num);
       },
       _uuid_part = function(c) {
-        var r = Math.random()*16|0,
+        const r = Math.random()*16|0,
             v = c == 'x' ? r : r&0x3|0x8;
         return v.toString(16);
-      },
-      _date = function(it, keepTime) {
-        var temp, t;
-        if(it.v instanceof Date) {
-          return new Date(it.v);
-        }
-        it = _str(it);
-        if(RAW_NUMBER.test(it)) {
-          // Create a date at 00:00:00 1st Jan 1970 _in the current timezone_
-          temp = new Date(1970, 0, 1);
-          temp.setDate(1 + parseInt(it, 10));
-          return temp;
-        } else if(DATE_STRING.test(it)) {
-          if(keepTime && it.indexOf('T')>0) return new Date(it);
-          t = it.indexOf('T');
-          if(t !== -1) it = it.substring(0, t);
-          temp = it.split('-');
-          if(isValidDate(temp[0], temp[1], temp[2])) {
-            if(config.includeLocalTimeForDatesWithoutTime) {
-              var time = `${_zeroPad(temp[0])}-${_zeroPad(temp[1])}-${_zeroPad(temp[2])}`+
-                'T00:00:00.000' + (new Date(it)).getTimezoneOffsetAsTime();
-              return new Date(time);
-            }
-            return new Date(temp[0], temp[1]-1, temp[2]);
-          }
-        }
-        var d = new Date(it);
-        return d == 'Invalid Date' ? null : d;
-      },
-      _dateForReturnType = function(it, rt) {
-        if(rt === XPathResult.BOOLEAN_TYPE) {
-          if(!it) return XPR.boolean(false);
-          return XPR.boolean(!isNaN(new Date(it).getTime()));
-        }
-        if(rt === XPathResult.NUMBER_TYPE) {
-          if(!it) return XPR.number(0);
-          return XPR.number((new Date(it).getTime()) / (1000 * 60 * 60 * 24));
-        }
-        if(rt === XPathResult.STRING_TYPE) {
-          if(!it) {
-            return XPR.string(config.returnEmptyStringForInvalidDate ? '' : 'Invalid Date');
-          }
-          return XPR.string(new Date(it).toISOLocalString());
-        }
-        if(!it) return XPR.string('Invalid Date');
-        return XPR.date(it);
       },
       uuid = function() {
           return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'
                   .replace(/[xy]/g, _uuid_part);
       },
-      date = function(it, rt) {
-        it = _date(it);
-        return _dateForReturnType(it, rt);
-      },
       format_date = function(date, format) {
-        date = _date(date, true);
-        if(!format) return '';
-        format = _str(format);
-        if(!date) return 'Invalid Date';
-        var c, i, sb = '', f = {
+        date = asDate(date);
+        format = asString(format);
+        if(isNaN(date)) return 'Invalid Date';
+        let c, i, sb = '';
+        const f = {
           year: 1900 + date.getYear(),
           month: 1 + date.getMonth(),
           day: date.getDate(),
@@ -111,7 +52,7 @@ var openrosa_xpath_extensions = function(config) {
           secTicks: date.getTime(),
           dow: 1 + date.getDay(),
         };
-        var locale = window ? window.enketoFormLocale : undefined;
+        const locale = window ? window.enketoFormLocale : undefined;
 
         for(i=0; i<format.length; ++i) {
           c = format.charAt(i);
@@ -163,72 +104,48 @@ var openrosa_xpath_extensions = function(config) {
 
         return sb;
       },
-      func, process, ret = {},
-      now_and_today = function(rt, resetTime) {
-        return _dateForReturnType(ret._now(resetTime), rt);
-      };
+      ret = {};
 
-  func = {
-    abs: function(r) { return XPR.number(Math.abs(r.v)); },
-    acos: function(r) { return XPR.number(Math.acos(r.v)); },
-    asin: function(r) { return XPR.number(Math.asin(r.v)); },
-    atan: function(r) { return XPR.number(Math.atan(r.v)); },
+  const func = {
+    abs: function(r) { return XPR.number(Math.abs(asNumber(r))); },
+    acos: function(r) { return XPR.number(Math.acos(asNumber(r))); },
+    asin: function(r) { return XPR.number(Math.asin(asNumber(r))); },
+    atan: function(r) { return XPR.number(Math.atan(asNumber(r))); },
     atan2: function(r) {
-      if(arguments.length>1) {
-        var y = arguments[0].v;
-        var x = arguments[1].v;
+      if(arguments.length > 1) {
+        const y = asNumber(arguments[0]);
+        const x = asNumber(arguments[1]);
         return XPR.number(Math.atan2(y, x));
       }
-      return XPR.number(Math.atan2(r.v));
+      return XPR.number(Math.atan2(asNumber(r)));
     },
-    boolean: function(...args) {
+    boolean: function(r) {
       if(arguments.length === 0) throw new Error('too few args');
       if(arguments.length > 1) throw new Error('too few args');
-      if(args[0].t === 'arr') {
-        return XPR.boolean(!!args[0].v[0]);
-      }
-      return XPR.boolean(!!args[0].v);
+      return XPR.boolean(asBoolean(r));
     },
     'boolean-from-string': function(r) {
       if(r.t === 'num' && r.v > 0 && !r.decimal) {
         return XPR.boolean(true);
       }
-      r = _str(r);
+      r = asString(r);
       return XPR.boolean(r === '1' || r === 'true');
     },
     area: function(r) {
       if(arguments.length === 0) throw TOO_FEW_ARGS;
-      return areaOrDistance(XPR.number, area, r);
+      return XPR.number(area(asGeopoints(r)));
     },
-    checklist: function(min, max) {
-      var i, j, trues = 0;
-      min = min.v;
-      max = max.v;
-      for (i=2;i < arguments.length;i++) {
-        var arg = arguments[i];
-        if (arg.t === 'bool' && Boolean(arg.v)) {
-          trues++;
-        } else if (arg.t === 'arr') {
-          for(j=0;j<arg.v.length;j++) {
-            if(arg.v[j]) trues++;
-          }
-        }
-      }
+    checklist: function(min, max, ...list) {
+      min = asNumber(min);
+      max = asNumber(max);
+      const trues = mapFn(asBoolean, ...list).reduce((acc, v) => v ? acc + 1 : acc, 0);
       return XPR.boolean((min < 0 || trues >= min) && (max < 0 || trues <= max));
     },
-    coalesce: function(a, b) { return XPR.string(_str(a) || _str(b)); },
-    concat: function() {
-      var out = [];
-      for (var j = 0; j < arguments.length; j++){
-        if(arguments[j].t === 'arr') {
-          out.push(arguments[j].v.join(''));
-        } else {
-          out.push(arguments[j].v);
-        }
-      }
-      return XPR.string(out.join(''));
+    coalesce: function(a, b) { return XPR.string(asString(a) || asString(b)); },
+    concat: function(...args) {
+      return XPR.string(mapFn(asString, ...args).join(''));
     },
-    cos: function(r) { return XPR.number(Math.cos(r.v)); },
+    cos: function(r) { return XPR.number(Math.cos(asNumber(r))); },
     count: function(selecter) {
       // count() is part of XPath 1.0, but Chrome and Firefox disagree on how it should work.
       if(arguments.length === 0) throw new Error('too few args');
@@ -237,37 +154,34 @@ var openrosa_xpath_extensions = function(config) {
       return XPR.number(selecter.v.length);
     },
     'count-non-empty': function(r) {
-      if(arguments.length === 0 || r.t !== 'arr') throw TOO_FEW_ARGS;
-      var counter = 0;
-      for (var j = 0; j < r.v.length; j++){
-        counter += r.v[j] === '' ? 0 : 1;
-      }
-      return XPR.number(counter);
+      if(!arguments.length === 0) throw new Error('too few args');
+      if(arguments.length > 1) throw new Error('too many args');
+      if(r.t !== 'arr') throw new Error('wrong arg type:' + JSON.stringify(r));
+      return XPR.number(mapFn(asString, r).reduce((acc, v) => v ? acc + 1 : acc, 0));
     },
     'count-selected': function(s) {
-      var parts = _str(s).split(' '),
-          i = parts.length,
+      const parts = asString(s).split(' ');
+      let i = parts.length,
           count = 0;
       while(--i >= 0) if(parts[i].length) ++count;
       return XPR.number(count);
     },
-    date: function(it, rt) {
-      it = _date(it);
-      return _dateForReturnType(it, rt);
+    date: function(it) {
+      return XPR.date(asDate(it));
     },
     'decimal-date': function(date) {
       if(arguments.length > 1) throw TOO_MANY_ARGS;
-      var res = Date.parse(_str(date)) / MILLIS_PER_DAY;
+      const res = Date.parse(asString(date)) / MILLIS_PER_DAY;
       return XPR.number(res);
     },
     'decimal-time': function(r) {
       if(arguments.length > 1) throw TOO_MANY_ARGS;
       if(r.t === 'num') return XPR.number(NaN);
-      var time = r.v;
+      const time = r.v;
       // There is no Time type, and so far we don't need it so we do all validation
       // and conversion here, manually.
-      var  m = time.match(/^(\d\d):(\d\d):(\d\d)(\.\d\d?\d?)?(\+|-)(\d\d):(\d\d)$/);
-      var dec;
+      const m = time.match(/^(\d\d):(\d\d):(\d\d)(\.\d\d?\d?)?(\+|-)(\d\d):(\d\d)$/);
+      let dec;
       if (m &&
         m[1] < 24 && m[1] >= 0 &&
         m[2] < 60 && m[2] >= 0 &&
@@ -275,9 +189,8 @@ var openrosa_xpath_extensions = function(config) {
         m[6] < 24 && m[6] >= 0 && // this could be tighter
         m[7] < 60 && m[7] >= 0 // this is probably either 0 or 30
       ) {
-        var pad2 = function(x) { return (x < 10) ? '0' + x : x; };
-        var today = new Date(); // use today to cater to daylight savings time.
-        var d = new Date(today.getFullYear() + '-' + pad2(today.getMonth() + 1) + '-' + pad2(today.getDate()) + 'T' + time);
+        const today = new Date(); // use today to cater to daylight savings time.
+        const d = new Date(today.getFullYear() + '-' + _zeroPad(today.getMonth() + 1) + '-' + _zeroPad(today.getDate()) + 'T' + time);
         if(d.toString() === 'Invalid Date'){
           dec = NaN;
         } else {
@@ -293,24 +206,19 @@ var openrosa_xpath_extensions = function(config) {
     },
     distance: function(r) {
       if(arguments.length === 0) throw TOO_FEW_ARGS;
-      return areaOrDistance(XPR.number, distance, r);
+      return XPR.number(distance(asGeopoints(r)));
     },
     exp: function(r) { return XPR.number(Math.exp(r.v)); },
     exp10: function(r) { return XPR.number(Math.pow(10, r.v)); },
-    'false': function(rt) {
-      if(rt === XPathResult.NUMBER_TYPE) return XPR.number(0);
-      if(arguments.length>1) throw TOO_MANY_ARGS;
+    'false': function() {
+      if(arguments.length) throw TOO_MANY_ARGS;
       return XPR.boolean(false);
     },
     'format-date': function(date, format) {
+      if(arguments.length < 2) throw new Error('format-date() :: not enough args');
       return XPR.string(format_date(date, format)); },
-    'if': function(con, a, b) {
-      if(con.t === 'bool') return XPR.string(con.v ? a.v : b.v);
-      if(con.t === 'arr') {
-        var exists = con.v.length && con.v[0] !== null;
-        return XPR.string(exists ? a.v : b.v);
-      }
-      return XPR.string(b.v);
+    if: function(con, a, b) {
+      return XPR.string(asBoolean(con) ? asString(a) : asString(b));
     },
     'ends-with': function(a, b) {
       if(arguments.length > 2) throw TOO_MANY_ARGS;
@@ -318,54 +226,70 @@ var openrosa_xpath_extensions = function(config) {
       return XPR.boolean(a.v.endsWith(b.v));
     },
     int: function(v) {
-      if(v.t === 'str' && v.v.indexOf('e-')>0) return XPR.number(NaN);
-      v = _str(v);
-      if(v.indexOf('e-')>0) return XPR.number(0);
-      return XPR.number(parseInt(v, 10));
+      return XPR.number(asInteger(v));
     },
-    join: function() {
-      var delim = arguments[0];
-      if(arguments.length<2) return XPR.string('');
-      if(arguments.length>2) {
-        var out = [];
-        for (var i = 1; i < arguments.length; i++){
-          out.push(arguments[i].v);
-        }
-        return XPR.string(out.join(_str(delim)));
-      }
-      return XPR.string(arguments[1].v.join(_str(delim)));
+    join: function(delim, ...args) {
+      return XPR.string(mapFn(asString, ...args).join(asString(delim)));
+    },
+    last: function() {
+      if(arguments.length) throw new Error(`last() does not take arguments`);
+      return XPR.number(this.contextSize);
+    },
+    'local-name': function(r) {
+      // This is actually supported natively, but currently it's simpler to implement
+      // ourselves than convert the supplied nodeset into a single node and pass this
+      // somehow to the native implementation.
+      //
+      // See: https://www.w3.org/TR/1999/REC-xpath-19991116/#function-local-name
+      const name = getNodeName(this, r);
+      return XPR.string(name.match(/^(?:[^:]*:)?(.*)/)[1]);
+    },
+    name: function(r) {
+      // This is actually supported natively, but currently it's simpler to implement
+      // ourselves than convert the supplied nodeset into a single node and pass this
+      // somehow to the native implementation.
+      //
+      // See: https://www.w3.org/TR/1999/REC-xpath-19991116/#function-name
+      return XPR.string(getNodeName(this, r));
     },
     log: function(r) { return XPR.number(Math.log(r.v)); },
     log10: function(r) { return XPR.number(Math.log10(r.v)); },
-    max: function() {
-      if(arguments.length > 1) {
-        var out = [];
-        for (var j = 0; j < arguments.length; j++){
-          out.push(arguments[j].v);
-        }
-        return XPR.number(Math.max.apply(null, out));
-      }
-      var max, i;
-      var r = arguments[0].v;
-      if(!(i=r.length)) return XPR.number(NaN);
-      max = parseFloat(r[0]);
-      while(--i) max = Math.max(max, parseFloat(r[i]));
-      return XPR.number(max);
+    max: function(...args) {
+      const nums = mapFn(asNumber, ...args);
+      if(!nums.length || nums.some(v => isNaN(v))) return XPR.number(NaN);
+      return XPR.number(Math.max(...nums));
     },
-    min: function() {
-      if(arguments.length > 1) {
-        var out = [];
-        for (var j = 0; j < arguments.length; j++){
-          out.push(arguments[j].v);
-        }
-        return XPR.number(Math.min.apply(null, out));
-      }
-      var min, i;
-      var r = arguments[0].v;
-      if(!(i=r.length)) return XPR.number(NaN);
-      min = parseFloat(r[0]);
-      while(--i) min = Math.min(min, parseFloat(r[i]));
-      return XPR.number(min);
+    min: function(...args) {
+      const nums = mapFn(asNumber, ...args);
+      if(!nums.length || nums.some(v => isNaN(v))) return XPR.number(NaN);
+      return XPR.number(Math.min(...nums));
+    },
+    'namespace-uri': function(r) {
+      // This is actually supported natively, but currently it's simpler to implement
+      // ourselves than convert the supplied nodeset into a single node and pass this
+      // somehow to the native implementation.
+      //
+      // See: https://www.w3.org/TR/1999/REC-xpath-19991116/#function-namespace-uri
+      const node = getNode(this, r);
+      return XPR.string(node && node.namespaceURI || '');
+    },
+    'normalize-space': function(r) {
+      // TODO this seems to do a lot more than the spec at https://www.w3.org/TR/1999/REC-xpath-19991116/#function-normalize-space
+      // I think we should just be able to return: XPR.string(asString(r || this.cN).replace(/[\t\r\n ]+/g, ' ').trim());
+      // TODO check XPath 3.0 spec for normalize-space()?  https://www.w3.org/TR/xpath-functions-30/#func-normalize-space
+      if(arguments.length > 1) throw new Error('too many args');
+
+      let res = asString(r || this.cN);
+
+      res = res.replace(/\f/g, '\\f');
+      res = res.replace(/\r\v/g, '\v');
+      res = res.replace(/\v/g, '\\v');
+      res = res.replace(/\s+/g, ' ');
+      res = res.replace(/^\s+|\s+$/g, '');
+      res = res.replace(/\\v/g, '\v');
+      res = res.replace(/\\f/g, '\f');
+
+      return XPR.string(res);
     },
     /*
      * As per https://github.com/alxndrsn/openrosa-xpath-evaluator/issues/15,
@@ -380,15 +304,20 @@ var openrosa_xpath_extensions = function(config) {
       if(arguments.length > 1) throw TOO_MANY_ARGS;
       return XPR.boolean(!r.v);
     },
-    now: function(rt) {
-      return now_and_today(rt);
+    now: function() {
+      return XPR.date(new Date());
     },
-    today: function(rt) {
-      var r = now_and_today(rt, !config.returnCurrentTimeForToday);
-      if(rt === XPathResult.STRING_TYPE && !config.includeTimeForTodayString) {
-        r.v = r.v.split('T')[0];
+    number: function(r) {
+      if(arguments.length > 1) throw new Error(`number() passed wrong arg count (expected 0 or 1, but got ${arguments.length})`);
+      let arg = arguments.length ? r : this.cN;
+      const str = asString(arg);
+      if(DATE_STRING.test(str)) { // TODO cleanup regex and splitting
+        return XPR.number(dateStringToDays(str));
       }
-      return r;
+      return XPR.number(asNumber(arg));
+    },
+    today: function() {
+      return XPR.date(ret._now());
     },
     /**
      * The once function returns the value of the parameter if its own value
@@ -396,61 +325,54 @@ var openrosa_xpath_extensions = function(config) {
      * Also note that the parameter expr is always evaluated.
      * This function simply decides whether to return the new result or the old value.
      */
-    once: function(node, r) {
-      if(node.v.length && node.v[0].length) {
-        return XPR.string(node.v[0]);
-      }
-      if(r.v == Infinity) return XPR.string('');
-      if(r.t === 'num' && r.v === 0) return XPR.string('');
-      return XPR.string(r.v);
+    once: function(r) {
+      const current = asString(this.cN);
+      return XPR.string(current || asString(r));
     },
     pi: function() { return XPR.number(Math.PI); },
     position: function(r) {
-      var position = 1;
-      if(r) {
-        var node = r.iterateNext();
-        var nodeName = node.tagName;
-        while (node.previousElementSibling && node.previousElementSibling.tagName === nodeName) {
-          node = node.previousElementSibling;
-          position++;
-        }
+      // N.B.: I suspect there is a bug here - this will return position within the parent node, rather than the evaluation context.
+      // I suspect this is contrary to the spec, which reads:
+      // > The position function returns a number equal to the context position from the expression evaluation context.
+      //   - https://www.w3.org/TR/1999/REC-xpath-19991116/#function-position
+      // I'd have thought e.g. a union of all first-children in a doc would not all have position()=1 within that nodeset
+      if(arguments.length > 1) throw new Error('too many args');
+      if(r && r.t !== 'arr') throw new Error('wrong arg type for position() - expected nodeset, but got: ' + r.t);
+      if(r && !r.v.length) throw new Error('cannot call position() on an empty nodeset');
+
+      if(!r) return XPR.number(this.contextPosition);
+
+      let position = 1;
+      let node = r.v[0];
+      const nodeName = node.tagName;
+      while (node.previousElementSibling && node.previousElementSibling.tagName === nodeName) {
+        node = node.previousElementSibling;
+        position++;
       }
+
       return XPR.number(position);
     },
-    pow: function(x, y) { return XPR.number(Math.pow(_float(x), _float(y))); },
+    pow: function(x, y) { return XPR.number(Math.pow(asNumber(x), asNumber(y))); },
     random: function() { return XPR.number(parseFloat(Math.random().toFixed(15))); },
-    randomize: function(r) {
-      if(arguments.length === 1) throw TOO_FEW_ARGS;//only rT passed
-      if(arguments.length > 3) throw TOO_MANY_ARGS;
+    randomize: function(r, seed) {
+      if(!arguments.length) throw TOO_FEW_ARGS;//only rT passed
+      if(arguments.length > 2) throw TOO_MANY_ARGS;
 
-      var seed = arguments.length > 2 ? arguments[1] : arguments[2];
-      var rt = arguments[arguments.length - 1];
+      seed = seed && asNumber(seed);
 
-      if(rt === XPathResult.BOOLEAN_TYPE) {
-        return XPR.boolean(r.v.length > 0 ? true : false);
-      }
-      if(rt === XPathResult.STRING_TYPE) {
-        if (r.v.length < 1) return '';
-        return XPR.string(r.v[0]);
-      }
-
-      // nodes as seed
-      if(Array.isArray(seed) && seed.length && seed[0].nodeType === 1) {
-        return [r, parseInt(seed[0].textContent)];
-      }
-      return [r, seed && seed.v];
+      return { t:'arr', v:shuffle(r.v, seed) };
     },
     regex: function(haystack, pattern) {
-        return XPR.boolean(new RegExp(_str(pattern)).test(_str(haystack))); },
+        return XPR.boolean(new RegExp(asString(pattern)).test(asString(haystack))); },
     round: function(number, num_digits) {
       if(arguments.length === 0) throw TOO_FEW_ARGS;
       if(arguments.length > 2) throw TOO_MANY_ARGS;
-      number = _float(number);
+      number = asNumber(number);
       if(!num_digits) {
         return XPR.number(_round(number));
       }
-      num_digits = _int(num_digits);
-      var pow = Math.pow(10, Math.abs(num_digits));
+      num_digits = asInteger(num_digits);
+      const pow = Math.pow(10, Math.abs(num_digits));
       if(num_digits > 0) {
         return XPR.number(_round(number * pow) / pow);
       } else {
@@ -458,55 +380,58 @@ var openrosa_xpath_extensions = function(config) {
       }
     },
     selected: function(haystack, needle) {
-      return XPR.boolean(_str(haystack).split(' ').indexOf(_str(needle).trim()) !== -1);
+      return XPR.boolean(asString(haystack).split(' ').indexOf(asString(needle).trim()) !== -1);
     },
     'selected-at': function(list, index) {
       if(!index) throw new Error('No index provided for selected-at() [index=' + index + '; list=' + JSON.stringify(list));
-      return XPR.string(_str(list).split(' ')[_int(index)] || '');
+      return XPR.string(asString(list).split(' ')[asInteger(index)] || '');
     },
-    sin: function(r) { return XPR.number(Math.sin(r.v)); },
+    sin: function(r) { return XPR.number(Math.sin(asNumber(r))); },
     sqrt: function(r) { return XPR.number(Math.sqrt(r.v)); },
-    substr: function(string, startIndex, endIndex) {
-      return XPR.string(_str(string).slice(
-          _int(startIndex),
-          endIndex && _int(endIndex)));
+    string: function(r) {
+      if(arguments.length > 1) throw new Error(`string() passed wrong arg count (expected 0 or 1, but got ${arguments.length})`);
+      return XPR.string(asString(r || this.cN));
+    }, // TODO this is not an extension - should be a "native" function
+    'string-length': function(r) {
+      if(arguments.length > 1) throw new Error('too many args');
+      const str = asString(r || this.cN);
+      // implemented as per https://www.w3.org/TR/1999/REC-xpath-19991116/#function-string-length, rather than the restricted ODK implementation
+      return XPR.number(str.length);
+    },
+    substr: function(s, startIndex, endIndex) {
+      return XPR.string(asString(s).slice(asNumber(startIndex), endIndex && asNumber(endIndex)));
     },
     sum: function(r) {
-      if(arguments.length > 1) throw TOO_MANY_ARGS;
-      var out = 0;
-      for (var i = 0; i < r.v.length; i++) {
-        if(!RAW_NUMBER.test(r.v[i])) XPR.number(NaN);
-        out += parseInt(r.v[i], 10);
-      }
-      return XPR.number(out);
+      if(!r || r.t !== 'arr') throw new Error('sum() must be called on a nodeset');
+      let sum = 0, i = r.v.length;
+      while(i--) sum += asNumber(r.v[i]);
+      return XPR.number(sum);
     },
-    tan: function(r) { return XPR.number(Math.tan(r.v)); },
-    'true': function(rt) {
-      if(rt === XPathResult.NUMBER_TYPE) return XPR.number(1);
-      if(arguments.length>1) throw TOO_MANY_ARGS;
+    tan: function(r) { return XPR.number(Math.tan(asNumber(r))); },
+    'true': function() {
+      if(arguments.length) throw TOO_MANY_ARGS;
       return XPR.boolean(true);
     },
     uuid: function(r) {
       if(r && r.v) return XPR.string(randomToken(r.v));
       return XPR.string(uuid());
     },
-    'weighted-checklist': function(min, max) {
-      var i, values = [], weights = [], weightedTrues = 0;
-      min = min.v;
-      max = max.v;
-      for (i=2 ; i < arguments.length ; i=i+2) {
-        var v = arguments[i];
-        var w = arguments[i+1];
-        if (v && w) {
+    'weighted-checklist': function(min, max, ...list) {
+      min = asNumber(min);
+      max = asNumber(max);
+      let values = [], weights = [], weightedTrues = 0;
+      for(let i=0; i<list.length; i+=2) {
+        const v = list[i];
+        const w = list[i+1];
+        if(v && w) {
           // value or weight might be a nodeset
-          values = values.concat(v.t === 'arr' ?  v.v : [v.v]);
-          weights = weights.concat( w.t === 'arr' ? w.v : [w.v]);
+          values  = values. concat(mapFn(asBoolean, v));
+          weights = weights.concat(mapFn(asNumber,  w));
         }
       }
-      for(i=0; i < values.length; i++) {
+      for(let i=0; i < values.length; i++) {
         if(values[i]) {
-          var weight = weights[i];
-          weightedTrues += isNaN(weight) ? 0 : parseFloat(weight);
+          weightedTrues += weights[i] || 0;
         }
       }
       return XPR.boolean((min < 0 || weightedTrues >= min) && (max < 0 || weightedTrues <= max));
@@ -518,86 +443,188 @@ var openrosa_xpath_extensions = function(config) {
   func['decimal-date-time'] = func['decimal-date'];
   func['format-date-time'] = func['format-date'];
 
-  process = {
-      toExternalResult: function(r) {
-        if(r.t === 'date') return {
-          resultType:XPathResult.STRING_TYPE,
-          // TODO a bit naughty, but we return both a string and number value
-          // for dates.  We should actually know from where the xpath evaluator
-          // was initially called whether we expect a STRING_TYPE or NUMBER_TYPE
-          // result, but we should get away with it because:
-          //   1. this setup makes testing easy
-          //   2. dates should never leak outside openrosa functionality anyway
-          numberValue:r.v.getTime(),
-          stringValue:_dateToString(r.v),
-        };
+  const process = {
+      toExternalResult: function(r, resultType) {
+        if(r.t === 'arr' && resultType === XPathResult.NUMBER_TYPE) {
+          const str = asString(r);
+          if(DATE_STRING.test(str)) {
+            return { resultType, numberValue:dateStringToDays(str) };
+          }
+        }
+        if(r.t === 'date') {
+          switch(resultType) {
+            case XPathResult.BOOLEAN_TYPE: return { resultType, booleanValue:!isNaN(r.v) };
+            case XPathResult.NUMBER_TYPE:  return { resultType, numberValue:dateToDays(r.v) };
+            case XPathResult.ANY_TYPE:
+            case XPathResult.STRING_TYPE:
+              return { resultType, stringValue:r.v.toISOLocalString().replace(/T00:00:00.000.*/, '') };
+            default: throw new Error(`toExternalResult() doesn't know how to convert a date to ${resultType}`);
+          }
+        }
       },
       typefor: function(val) {
         if(val instanceof Date) return 'date';
       },
       handleInfix: function(err, lhs, op, rhs) {
         if(lhs.t === 'date' || rhs.t === 'date') {
+          if(lhs.t === 'bool' || rhs.t === 'bool') {
+            // date comparisons with booleans should be coerced to boolean
+            return;
+          }
+
           // For comparisons, we must make sure that both values are numbers
           // Dates would be fine, except for equality!
-          if( op.v === '=' ||
-              op.v === '<' ||
-              op.v === '>' ||
-              op.v === '<=' ||
-              op.v === '>=' ||
-              op.v === '!=') {
-            if(lhs.t === 'arr' || lhs.t === 'str') lhs = date(lhs);
-            if(rhs.t === 'arr' || rhs.t === 'str') rhs = date(rhs);
+          if(op >= EQ && op <= GTE) {
+            if(lhs.t === 'arr' || lhs.t === 'str') lhs = XPR.date(asDate(lhs));
+            if(rhs.t === 'arr' || rhs.t === 'str') rhs = XPR.date(asDate(rhs));
             if(lhs.t !== 'date' || rhs.t !== 'date') {
-              return op.v === '!=';
+              return op === '!=';
             } else {
               lhs = { t:'num', v:lhs.v.getTime() };
               rhs = { t:'num', v:rhs.v.getTime() };
             }
-          } else if(op.v === '+' || op.v === '-') {
+          } else if(op === PLUS || op === MINUS) {
             // for math operators, we need to do it ourselves
             if(lhs.t === 'date' && rhs.t === 'date') err('No handling for simple arithmetic with two dates.');
-            var d = lhs.t === 'date'? lhs.v: rhs.v,
-                n = lhs.t !== 'date'? _int(lhs): _int(rhs),
+            const d = lhs.t === 'date'? lhs.v: rhs.v,
                 res = new Date(d.getTime());
-            if(op.v === '-') n = -n;
+            let n = lhs.t !== 'date'? asInteger(lhs): asInteger(rhs);
+            if(op === MINUS) n = -n;
             res.setDate(d.getDate() + n);
             return res;
           }
           return { t:'continue', lhs:lhs, op:op, rhs:rhs };
         }
+
+        // try to coerce non-dates into dates :o
+        if(op === PLUS || op === MINUS) {
+          const lStr = asString(lhs);
+          if(DATE_STRING.test(lStr)) {
+            const lDays = dateStringToDays(lStr);
+            const rDays = asNumber(rhs);
+            const delta = op === PLUS ? lDays + rDays : lDays - rDays;
+            const date = new Date(1970, 0, 1);
+            date.setDate(date.getDate() + delta);
+            return date;
+          }
+
+          const rStr = asString(rhs);
+          if(DATE_STRING.test(rStr)) {
+            const rDays = dateStringToDays(rStr);
+            const lDays = asNumber(lhs);
+            const delta = op === PLUS ? lDays + rDays : lDays - rDays;
+            const date = new Date(1970, 0, 1);
+            date.setDate(date.getDate() + delta);
+            return date;
+          }
+        } else if(op >= EQ && op <= GTE) {
+          const lStr = asString(lhs);
+          if(DATE_STRING.test(lStr)) lhs = XPR.number(dateStringToDays(lStr));
+
+          const rStr = asString(rhs);
+          if(DATE_STRING.test(rStr)) rhs = XPR.number(dateStringToDays(rStr));
+
+          return { t:'continue', lhs, op, rhs };
+        }
+
       },
   };
 
   ret.func = func;
   ret.process = process;
   ret.XPR = XPR;
-  ret._now = function(resetTime) {
-    var t = new Date();
-    if(resetTime) {
-      return new Date(t.getFullYear(), t.getMonth(), t.getDate());
-    }
-    return t;
+  ret._now = function() { // This is exposed in ret to allow for unit testing, although this is not currently utilised.
+    const t = new Date();
+    return new Date(t.getFullYear(), t.getMonth(), t.getDate());
   };
-  ret.customXPathFunction = {
-    type: {
-      StringType: XPR.string,
-      NumberType: XPR.number,
-      BooleanType: XPR.boolean,
-      DateType: XPR.date
-    },
-    add: function(name, fnObj) {
-      func[name] = fnObj;
-    },
-    remove: function(name) {
-      delete func[name];
-    },
-    all: function() {
-      return func;
-    }
-  };
-
 
   return ret;
 };
 
 module.exports = openrosa_xpath_extensions;
+
+function mapFn(fn) {
+  const res = [];
+  for(let i=1; i<arguments.length; ++i) {
+    if(arguments[i].t === 'arr') {
+      for(let j=0; j<arguments[i].v.length; ++j) {
+        res.push(fn(arguments[i].v[j]));
+      }
+    } else res.push(fn(arguments[i]));
+  }
+  return res;
+}
+
+function asInteger(r) {
+  const num = asNumber(r);
+  return num > 0 ? Math.floor(num) : Math.ceil(num);
+}
+
+function asDate(r) {
+  let temp;
+  switch(r.t) {
+    case 'bool': return new Date(NaN);
+    case 'date': return r.v;
+    case 'num':  temp = new Date(1970, 0, 1); temp.setDate(temp.getDate() + r.v); return temp;
+    case 'arr':
+    case 'str':
+      r = asString(r);
+      if(RAW_NUMBER.test(r)) {
+        // Create a date at 00:00:00 1st Jan 1970 _in the current timezone_
+        temp = new Date(1970, 0, 1);
+        temp.setDate(1 + parseInt(r, 10));
+        return temp;
+      } else if(DATE_STRING.test(r)) {
+        temp = r.indexOf('T');
+        if(temp !== -1) r = r.substring(0, temp);
+        temp = r.split('-');
+        if(isValidDate(temp[0], temp[1], temp[2])) {
+          const time = `${_zeroPad(temp[0])}-${_zeroPad(temp[1])}-${_zeroPad(temp[2])}`+
+            'T00:00:00.000' + (new Date(r)).getTimezoneOffsetAsTime();
+          return new Date(time);
+        }
+      }
+      return new Date(r);
+    default: throw new Error(`asDate() can't handle ${r.t}s yet :-(`);
+  }
+}
+
+function _zeroPad(n, len) {
+  len = len || 2;
+  n = n.toString();
+  while(n.length < len) n = '0' + n;
+  return n;
+}
+
+function getNodeName(ctx, r) {
+  const node = getNode(ctx, r);
+  return node ? node.nodeName : '';
+}
+
+/**
+ * If r is supplied, returns the first Element or Attribute in r by document order.
+ * If r is not supplied, returns the ctx iff it is an Element or Attribute.
+ */
+function getNode(ctx, r) {
+  if(arguments.length > 2) throw new Error('too many args');
+  if(!r) return isNodeish(ctx.cN) ? ctx.cN : null;
+  if(r.t !== 'arr') throw new Error('wrong arg type');
+  if(!r.v.length) return;
+  sortByDocumentOrder({ t:'arr', v:r.v.filter(isNodeish) });
+  return r.v[0];
+}
+
+/**
+ * I can't decode what a QName is from the spec, but it seems like only the
+ * following nodeTypes are considered by XPath:
+ * @see https://developer.mozilla.org/en-US/docs/Web/API/Node/nodeType
+ */
+const NODEISH = {
+  [Node.ELEMENT_NODE               ]: true,
+  [Node.ATTRIBUTE_NODE             ]: true,
+  [Node.PROCESSING_INSTRUCTION_NODE]: true,
+  [Node.DOCUMENT_TYPE_NODE         ]: true,
+};
+function isNodeish({ nodeType }) {
+  return NODEISH[nodeType];
+}

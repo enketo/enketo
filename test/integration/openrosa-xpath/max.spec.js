@@ -1,4 +1,4 @@
-const { assertNumberValue, initDoc } = require('../../helpers');
+const { assertNumberValue, initDoc } = require('../helpers');
 
 describe('#max()', () => {
   it('should max simple values', () => {
@@ -7,6 +7,7 @@ describe('#max()', () => {
     assertNumberValue('max(-1, 0, -3)', 0);
     assertNumberValue('max(-4, -1, -3)', -1);
     assertNumberValue('max("")', NaN);
+    assertNumberValue('max(//nonexisting)', NaN);
   });
 
   it('should return NaN if no numerical nodes are matched', () => {
@@ -70,9 +71,6 @@ describe('#max()', () => {
 
     node = doc.getElementById('FunctionMaxCase');
     assertNumberValue(node, null, 'max(*)', 0);
-
-    node = doc.getElementById('FunctionMaxCase');
-    assertNumberValue(node, null, 'max(//*[@id="FunctionMaxCase"]/*[position()=1], //*[@id="FunctionMaxCase"]/*[position()=2], //*[@id="FunctionMaxCase"]/*[position()=3])', 0);
 
     node = doc.getElementById('FunctionMaxMinWithEmpty');
     assertNumberValue(node, null, 'max(*)', NaN);

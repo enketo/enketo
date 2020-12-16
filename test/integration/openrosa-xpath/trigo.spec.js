@@ -1,4 +1,4 @@
-const { assertNumberValue, assertNumberRounded, initDoc, nsResolver } = require('../../helpers');
+const { assertNumberValue, assertNumberRounded, initDoc, nsResolver } = require('../helpers');
 
 describe('math functions', () => {
 

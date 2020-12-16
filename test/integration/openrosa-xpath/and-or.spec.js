@@ -1,4 +1,4 @@
-const { initDoc, assert, assertBoolean, assertTrue, assertFalse} = require('../../helpers');
+const { initDoc, assert, assertBoolean, assertTrue, assertFalse} = require('../helpers');
 
 describe('and/or operators', () => {
 
@@ -47,9 +47,9 @@ describe('and/or operators', () => {
   });
 
   it('and laziness', () => {
-    assertFalse("false() and $some-made-up-var");
-    assertFalse("false() and $some-made-up-var and true()");
-    assertFalse("true() and false() and $some-made-up-var");
+    assertFalse("false() and substring()");
+    assertFalse("false() and substring() and true()");
+    assertFalse("true() and false() and substring()");
   });
 
   it('or works without spacing', () => {
@@ -102,23 +102,25 @@ describe('and/or operators', () => {
 
   it('or laziness', () => {
     [
-      [ "true() or $some-made-up-var", true ],
-      [ "true() or $some-made-up-var and true()", true ],
-      [ "false() or true() or $some-made-up-var", true ]
+      [ "true() or substring()", true ],
+      [ "true() or substring() and true()", true ],
+      [ "false() or true() or substring()", true ]
     ].forEach(([expr, value]) => {
       assertBoolean(expr, value);
     });
   });
 
-  it('or/and precendence rules are applied correctly', () => {
+  describe('or/and precendence rules are applied correctly', () => {
     [
       [ "true() or true() and false()", true ],
       [ "true() and false() or true()", true ],
       [ "false() and false() or false()", false ],
       [ "0 or 1 and 0", false ],
       [ "0 or 1 and 0+1", true ]
-    ].forEach(([expr, value]) => {
-      assertBoolean(expr, value);
+    ].forEach(([expr, expected]) => {
+      it(`should evaluate ${expr} as ${expected}`, () => {
+        assertBoolean(expr, expected);
+      });
     });
   });
 });

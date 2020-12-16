@@ -1,8 +1,9 @@
-const ExtendedXPathEvaluator = require('../src/extended-xpath');
-const assert = chai.assert;
+// TODO this can be moved to test/unit
+const ExtendedXPathEvaluator = require('../../src/extended-xpath');
+const assert = require('chai').assert;
+const _ = require('lodash');
 
-var docs = '',
-    DATE_MATCH = '(Mon|Tue|Wed|Thu|Fri|Sat|Sun) (Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec) \\d\\d 20\\d\\d \\d\\d:\\d\\d:\\d\\d GMT([+-]\\d\\d\\d\\d \(.+\))?',
+var DATE_MATCH = '(Mon|Tue|Wed|Thu|Fri|Sat|Sun) (Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec) \\d\\d 20\\d\\d \\d\\d:\\d\\d:\\d\\d GMT([+-]\\d\\d\\d\\d (.+))?',
     examples = {
       'false':
         /false/,
@@ -75,7 +76,7 @@ var docs = '',
       'native_function(\'string-with-escaped-"-arg\')':
           /^<xpath:native_function\('string-with-escaped-"-arg'\)>$/,
       'native_function(1, 2, 3, "a", \'b\', "c")':
-          /^<xpath:native_function\(1, 2, 3, "a", "b", "c"\)>$/,
+          /^<xpath:native_function\(1,2,3,"a",'b',"c"\)>$/,
       'native-function()':
           /^<xpath:native-function\(\)>$/,
       'native-function(3)':
@@ -83,8 +84,8 @@ var docs = '',
       'native-function("string-arg")':
           /^<xpath:native-function\("string-arg"\)>$/,
       'native-function(1, 2, 3, "a", \'b\', "c")':
-          /^<xpath:native-function\(1, 2, 3, "a", "b", "c"\)>$/,
-      /* 
+          /^<xpath:native-function\(1,2,3,"a",'b',"c"\)>$/,
+      /*
       // Not clear what to do here as correcting this requires knowledge of return types of native functions.
       'native-function1(native-function2() + native-function3()) + native-function4(native-function5() + native-function6())':
           /^<xpath:native-function1\("<xpath:native-function2\(\)><xpath:native-function3\(\)>"\)><xpath:native-function4\("<xpath:native-function5\(\)><xpath:native-function6\(\)>"\)>$/,
@@ -93,6 +94,10 @@ var docs = '',
           /^<xpath:native-function-with-space-before-bracket\(\)>$/,
       '3 * 2 + 1':
         /^7$/,
+      '2 + 3 * 4 + 5 * 6 + 7 * 8 + 9':
+        /^109$/,
+      '2+3*4+5*6+7*8+9':
+        /^109$/,
       '1 + 2 * 3':
         /^7$/,
       '1 > 0':
@@ -115,10 +120,72 @@ var docs = '',
         /^false$/,
       '-1 < -2':
         /^false$/,
+      '0.23':
+        /^0.23$/,
+      '.23':
+        /^0.23$/,
+      'concat(0+1,3-1,6 div 2,4*1)':
+        /^1234$/,
+      '0 or 1':
+        true,
+      '1 or throw-overkeen-error()':
+        /^true/,
+      '1 or 1 + throw-overkeen-error()':
+        /^true/,
+      '1 or throw-overkeen-error() + 1':
+        /^true/,
+      '0 and 1':
+        false,
+      '0 and throw-overkeen-error()':
+        false,
+      '0 and 1 + throw-overkeen-error()':
+        false,
+      '0 and throw-overkeen-error() + 1':
+        false,
+      '(1 or 1) or 1':
+        true,
+      '0 = 0 and false() != "true"':
+        true,
+      '1 or 1 and 0':
+        true,
+      '0 and 0 or 1':
+        true,
+      '0 and 1 or 1':
+        true,
+      '1 and 0 or 1':
+        /^true/,
+      '0 and throw-overkeen-error() or 1':
+        true,
+      '0 and (throw-overkeen-error())':
+        false,
+      '0 and concat(throw-overkeen-error())':
+        false,
+      '1 or /explode':
+        /^true/,
+      '1 or 1 + /explode':
+        /^true/,
+      '1 or /explode + 1':
+        /^true/,
+      '0 and /explode':
+        false,
+      '0 and 1 + /explode':
+        false,
+      '0 and /explode + 1':
+        false,
+      '0 and /explode or 1':
+        true,
+      '0 and (/explode)':
+        false,
+      '0 and concat(/explode)':
+        false,
+      '0 and /explode[/explode]':
+        false,
+      '1 div 0':
+        Infinity,
+      '-1 div 0':
+        -Infinity,
     },
     trickyStandardXpath_supported = [
-      '/model/instance[1]//*',
-      '/model/instance[1]/*/meta/*',
       './author',
       'author',
       'first.name',
@@ -129,71 +196,31 @@ var docs = '',
       'bookstore/*/title',
       'bookstore//book/excerpt//emph',
       './/title',
-      'author/*',
       'book/*/last-name',
       '@style',
       'price/@exchange',
       'price/@exchange/total',
-      'book[@style]',
       'book/@style',
       './first-name',
       'first-name',
-      'author[1]',
-      'author[first-name][3]',
       'my:book',
-      'x/y[1]',
-      'x[1]/y[2]',
-      'book[excerpt]',
-      'book[excerpt]/title',
-      'book[excerpt]/author[degree]',
-      'book[author/degree]',
-      'author[degree][award]',
-      'ancestor::book[1]',
-      'ancestor::book[author][1]',
-      'ancestor::author[parent::book][1]',
       '../../some-path',
       '*/*',
-      '*[@specialty]',
       '@*',
       '@my:*',
       'my:*',
-      'author[degree and award]',
-      'author[(degree or award) and publication]',
-      'author[degree and not(publication)]',
-      'author[not(degree or award) and publication]',
-      'author[. = "Matthew Bob"]',
-      'author[last-name = "Bob" and ../price &gt; 50]',
-      'author[not(last-name = "Bob")]',
-      'author[first-name = "Bob"]',
-      'author[last-name = "Bob" and first-name = "Joe"]',
-      'author[* = "Bob"]',
-      'author[last-name = "Bob"]',
-      'author[last-name[1] = "Bob"]',
-      'author[last-name [position()=1]= "Bob"]',
-      'book[last()]',
-      'book/author[last()]',
-      'book[position() &lt;= 3]',
-      'book[/bookstore/@specialty=@style]',
-      'degree[position() &lt; 3]',
-      'degree[@from != "Harvard"]',
-      'p/text()[2]',
-      'price[@intl = "Canada"]',
-      'x/y[position() = 1]',
-      '(book/author)[last()]',
-      '(x/y)[1]',
-    ],
-    trickyStandardXpath_unsupported = [
     ],
     xp = {
       str: function(v) { return { t:'str', v:v }; },
       num: function(v) { return { t:'num', v:v }; },
     },
-    _document = function(line) {
-      docs += line + '\n';
-    },
     extendedXPathEvaluator = new ExtendedXPathEvaluator(
-      function wrappedXpathEvaluator(xpath) {
-        return { resultType:XPathResult.STRING_TYPE, stringValue:'<xpath:' + xpath + '>' };
+      {
+        evaluate: xpath => {
+          if(xpath === 'throw-overkeen-error()') throw new Error('This path should not have been evaluated, because and/or should be lazy!');
+          if(xpath === '/explode') throw new Error('The forbidden path was accessed!');
+          return { resultType:XPathResult.STRING_TYPE, stringValue:'<xpath:' + xpath + '>' };
+        },
       },
       {
         func: {
@@ -212,72 +239,24 @@ var docs = '',
     );
 
 describe('ExtendedXpathEvaluator', function() {
-
   _.map(examples, function(expected, expr) {
     it(expr + ' should be evaluated', function() {
-      if(typeof expected === 'string') {
-        assert.equal(
-          extendedXPathEvaluator.evaluate(expr).stringValue,
-          expected);
-      } else {
-        assert.match(
-          extendedXPathEvaluator.evaluate(expr).stringValue,
-          expected);
+      switch(typeof expected) {
+        case 'boolean': return assert.equal(extendedXPathEvaluator.evaluate(expr).booleanValue, expected);
+        case 'number':  return assert.equal(extendedXPathEvaluator.evaluate(expr).numberValue,  expected);
+        case 'string':  return assert.equal(extendedXPathEvaluator.evaluate(expr).stringValue,  expected);
+        default:        return assert.match(extendedXPathEvaluator.evaluate(expr).stringValue,  expected);
       }
     });
   });
 
   describe('Supported XPath expressions', function() {
-    it('has a documentation header', function() {
-      _document('## Supported XPath expressions:');
-      _document('');
-    });
-
     _.each(trickyStandardXpath_supported, function(expr) {
       it(expr + ' should be delegated to the regular XPath evaluator', function() {
-        _document('* `' + expr + '`');
-
         assert.equal(
           extendedXPathEvaluator.evaluate(expr).stringValue,
           '<xpath:' + expr + '>');
       });
-    });
-
-    it('has a documentation footer', function() {
-      _document('');
-      _document('');
-    });
-  });
-
-  // Documents standard XPath expressions which are not currently supported
-  describe('Unsupported XPath expressions', function() {
-    it('has a documentation header', function() {
-      _document('## Unsupported XPath expressions:');
-      _document('');
-    });
-
-    _.each(trickyStandardXpath_unsupported, function(expr) {
-      it(expr + ' should not be parsed correctly', function() {
-        _document('* `' + expr + '`');
-
-        // expect
-        try {
-          extendedXPathEvaluator.evaluate(expr);
-          assert.notEqual(
-            extendedXPathEvaluator.evaluate(expr).stringValue,
-            '<xpath:' + expr + '>');
-        } catch(e) {
-          if(e.message.indexOf('Too many tokens.') === 0) {
-            // expected
-          } else throw e;
-        }
-      });
-    });
-  });
-
-  describe('DOCUMENTATION', function() {
-    it('supports the following:', function() {
-      console.log('\n' + docs);
     });
   });
 });

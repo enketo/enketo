@@ -1,5 +1,4 @@
-const { assertStringValue } = require('../../helpers');
-const config = require('../../../src/config');
+const { assertStringValue } = require('../helpers');
 
 describe('#date-time()', () => {
   describe('valid date string', () => {
@@ -23,7 +22,6 @@ describe('#date-time()', () => {
 
   describe('invalid date-time', () => {
     it('should not parse, but instead should return a String', () => {
-      config.returnEmptyStringForInvalidDate = false;
       assertStringValue("date-time('nonsense')", 'Invalid Date');
     });
   });

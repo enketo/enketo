@@ -1,4 +1,4 @@
-const { assert, assertNumberValue, initDoc } = require('../../helpers');
+const { assert, assertNumberValue, initDoc } = require('../helpers');
 
 describe('#min()', () => {
 
@@ -8,7 +8,6 @@ describe('#min()', () => {
     assertNumberValue('min(0, 2, 3)', 0);
     assertNumberValue('min(-1, 2, 3)', -1);
     assertNumberValue('min("")', NaN);
-    assertNumberValue('min(//nonexisting)', NaN);
     assertNumberValue('min(//nonexisting)', NaN);
   });
 
@@ -127,7 +126,5 @@ describe('#min()', () => {
 
     node = doc.getElementById('FunctionNumberCaseNotNumberMultiple');
     assertNumberValue(node, null, 'min(node())', NaN);
-
-    assertNumberValue('min(//*[@id="FunctionMinCase"]/*[position()=1], //*[@id="FunctionMinCase"]/*[position()=2], //*[@id="FunctionMinCase"]/*[position()=3])', 0);
   });
 });

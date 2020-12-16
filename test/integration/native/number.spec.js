@@ -1,4 +1,4 @@
-const { initDoc, assertThrow, assertNumber } = require('../../helpers');
+const { initDoc, assertThrow, assertNumber } = require('../helpers');
 
 describe('native number functions', () => {
   it('number() conversion of convertible numbers, strings, booleans', () => {
@@ -37,6 +37,17 @@ describe('native number functions', () => {
     assertNumber('number("1.1sd")', NaN);
     assertNumber('number(".1sd")', NaN);
     assertNumber('number(" . ")', NaN);
+  });
+
+  describe('Infinities', () => {
+    [
+      [ 'number( 1 div 0)',  Infinity ],
+      [ 'number(-1 div 0)', -Infinity ],
+    ].forEach(([ expr, expected ]) => {
+      it(`should evaluate "${expr}" as "${expected}"`, () => {
+        assertNumber(expr, expected);
+      });
+    });
   });
 
   describe('conversion of nodesets', () => {

@@ -1,4 +1,6 @@
-const {assertBoolean, assertString, assertNumberValue, initDoc} = require('../helpers');
+const _ = require('lodash');
+
+const {assertBoolean, assertString, assertNumberValue, initDoc} = require('./helpers');
 
 describe('infix operators', () => {
   describe('math operators', () => {
@@ -23,6 +25,11 @@ describe('infix operators', () => {
         it('should evaluate "' + expr + '" as ' + expected, () => {
           assertString(expr, expected);
         });
+
+        const spaceless = expr.replace(/\s/g, '');
+        it('should evaluate "' + spaceless + '" as ' + expected, () => {
+          assertString(spaceless, expected);
+        });
       });
     });
   });
@@ -43,16 +50,6 @@ describe('infix operators', () => {
         '2 >= 1' : true,
         '1 <= 1' : true,
         '1 >= 1' : true,
-        '1 &lt; 2' : true,
-        '1 &gt; 2' : false,
-        '2 &lt; 1' : false,
-        '2 &gt; 1' : true,
-        '1 &lt;= 2' : true,
-        '1 &gt;= 2' : false,
-        '2 &lt;= 1' : false,
-        '2 &gt;= 1' : true,
-        '1 &lt;= 1' : true,
-        '1 &gt;= 1' : true,
 
         /* weird spacing */
         '1=1' : true,
@@ -91,30 +88,6 @@ describe('infix operators', () => {
         '2>=1' : true,
         '2>= 1' : true,
         '2 >=1' : true,
-        '1&lt;1' : false,
-        '1&lt; 1' : false,
-        '1 &lt;1' : false,
-        '2&lt;1' : false,
-        '2&lt; 1' : false,
-        '2 &lt;1' : false,
-        '1&gt;1' : false,
-        '1&gt; 1' : false,
-        '1 &gt;1' : false,
-        '2&gt;1' : true,
-        '2&gt; 1' : true,
-        '2 &gt;1' : true,
-        '1&lt;=1' : true,
-        '1&lt;= 1' : true,
-        '1 &lt;=1' : true,
-        '2&lt;=1' : false,
-        '2&lt;= 1' : false,
-        '2 &lt;=1' : false,
-        '1&gt;=1' : true,
-        '1&gt;= 1' : true,
-        '1 &gt;=1' : true,
-        '2&gt;=1' : true,
-        '2&gt;= 1' : true,
-        '2 &gt;=1' : true,
       }, (expectedBoolean, expr) => {
         it('should evaluate "' + expr + '" as ' + expectedBoolean.toString().toUpperCase(), () => {
           assertBoolean(expr, expectedBoolean);
@@ -127,6 +100,10 @@ describe('infix operators', () => {
         '"1" = "2"' : false,
         '"1" != "1"' : false,
         '"1" != "2"' : true,
+        // > When neither object to be compared is a node-set and the operator
+        // > is <=, <, >= or >, then the objects are compared by converting both
+        // > objects to numbers and comparing the numbers according to IEEE 754.
+        //   - https://www.w3.org/TR/1999/REC-xpath-19991116/#booleans
         '"1" < "2"' : true,
         '"1" > "2"' : false,
         '"2" < "1"' : false,
@@ -137,18 +114,6 @@ describe('infix operators', () => {
         '"2" >= "1"' : true,
         '"1" <= "1"' : true,
         '"1" >= "1"' : true,
-        '"1" &lt; "2"' : true,
-        '"1" &gt; "2"' : false,
-        '"2" &lt; "1"' : false,
-        '"2" &gt; "1"' : true,
-        '"1" &lt;= "2"' : true,
-        '"1" &gt;= "2"' : false,
-        '"2" &lt;= "1"' : false,
-        '"2" &gt;= "1"' : true,
-        '"1" &lt;= "1"' : true,
-        '"1" &gt;= "1"' : true,
-        // We don't compare strings by default.
-        // We can configure this in config.js
         '"aardvark" < "aligator"' : false,
         '"aardvark" <= "aligator"' : false,
         '"aligator" < "aardvark"' : false,
@@ -197,21 +162,38 @@ describe('infix operators', () => {
       assertNumberValue('1 - 1', 0);
     });
 
-    it('calculation with node operand returned as string', () => {
-      var doc = initDoc(`
-      <data>
-        <number>4</number>
-      </data>`);
+    describe('node-based calculatations with strings', () => {
+      let doc;
 
-      // It doesn't matter whether a string or number is requested, an infix operator should ensure that both 
-      // left and right operands are converted to numbers during evaluation.
-      // If multiple nodes are returned, the value of the first node will be used.
-      assertString('/data/number + 1', '5'); // returns '41'
+      beforeEach(() => {
+        doc = initDoc(`<data><number id="num">4</number></data>`);
+      });
 
+      it('should support simple addition', () => {
+        // It doesn't matter whether a string or number is requested, an infix operator should ensure that both
+        // left and right operands are converted to numbers during evaluation.
+        // If multiple nodes are returned, the value of the first node will be used.
+        assertString('/data/number + 1', '5');
+      });
+
+      it('should support addition without spaces around the operator', () => {
+        // expect
+        assertString('/data/number+1', '5');
+      });
+
+      it('should support relative nodesets with strings', () => {
+        // expect
+        assertString(doc.getElementById('num'), null, '../number + 1', '5');
+      });
+
+      it('should support relative nodesets with strings without spaces around the operator', () => {
+        // expect
+        assertString(doc.getElementById('num'), null, '../number+1', '5');
+      });
     });
 
     it('calculation with multiple nodes operand returned as string', () => {
-      var doc = initDoc(`
+      initDoc(`
       <data>
         <number>4</number>
         <number>10</number>
@@ -220,8 +202,7 @@ describe('infix operators', () => {
       // It doesn't matter whether a string or number is requested, an infix operator should ensure that both 
       // left and right operands are converted to numbers during evaluation.
       // If multiple nodes are returned, the value of the first node will be used.
-      assertString('/data/number + 1', '5'); // returns '4,101'
-
+      assertString('/data/number + 1', '5');
     });
   });
 });

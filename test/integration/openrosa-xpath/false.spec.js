@@ -1,4 +1,4 @@
-const {assertThrow, assertFalse} = require('../../helpers');
+const {assertThrow, assertFalse} = require('../helpers');
 
 describe('#false()', () => {
   it('should evaluate to false', () => {

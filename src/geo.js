@@ -1,6 +1,8 @@
 var EARTH_EQUATORIAL_RADIUS_METERS = 6378100;
 var PRECISION = 100;
 
+var { asString } = require('./utils/xpath-cast');
+
 function _toLatLngs(geopoints) {
   return geopoints.map(function (geopoint) {
     return geopoint.trim().split(' ');
@@ -36,16 +38,6 @@ function _distanceBetween(p1,p2) {
   var φ1 = _toRadians(p1.lat);
   var φ2 = _toRadians(p2.lat);
   return Math.acos(Math.sin(φ1) * Math.sin(φ2) + Math.cos(φ1) * Math.cos(φ2) * Math.cos(Δλ)) * EARTH_EQUATORIAL_RADIUS_METERS;
-}
-
-function areaOrDistance(xpr, fn, r) {
-  var geopoints = [];
-  if(r.t === 'str') geopoints = r.v.split(';');
-  if(r.t === 'arr') {
-    if(r.v.length === 1) geopoints = r.v[0].split(';');
-    else geopoints = r.v;
-  }
-  return xpr(fn(geopoints));
 }
 
 /**
@@ -112,7 +104,14 @@ function distance(geopoints) {
 }
 
 module.exports = {
+  asGeopoints,
   area,
-  areaOrDistance,
   distance
 };
+
+function asGeopoints(r) {
+  if(r.t === 'arr' && r.v.length > 1) {
+    return r.v.map(asString);
+  }
+  return asString(r).split(';');
+}

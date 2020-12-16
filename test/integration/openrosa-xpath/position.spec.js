@@ -1,4 +1,4 @@
-const { assertNumberValue, initDoc } = require('../../helpers');
+const { assertNumberValue, initDoc } = require('../helpers');
 
 describe('#position()', () => {
 

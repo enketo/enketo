@@ -1,7 +1,11 @@
-const {initDoc, assert, simpleValueIs} = require('../helpers');
+const {initDoc, assert, simpleValueIs} = require('./helpers');
 
 describe('date comparison', () => {
-  const doc = initDoc('');
+  let doc;
+  beforeEach(() => {
+    doc = initDoc('');
+  });
+
   function relativeDateAsString(offset, noQuotes) {
     var d = new Date(),
         ret = noQuotes ? '' : '"';
@@ -38,7 +42,6 @@ describe('date comparison', () => {
   });
 
   describe('today', () => {
-    // We don't include time in today strings by default (config.js).
     it('should be less than today()', () => {
       assert.notOk(doc.xEval(todayString + ' < today()').booleanValue);
     });
@@ -51,7 +54,6 @@ describe('date comparison', () => {
       assert.notOk(doc.xEval(todayString + ' > today()').booleanValue);
     });
 
-    // We don't include time in today strings by default (config.js).
     it('should be greater than or equal to today()', () => {
       assert.ok(doc.xEval(todayString + ' >= today()').booleanValue);
     });
@@ -78,12 +80,10 @@ describe('date comparison', () => {
       assert.notOk(doc.xEval('today() < ' + todayString).booleanValue);
     });
 
-    // We don't include time in today strings by default (config.js).
     it('because it is a precise moment, should not be less than or equal to today', () => {
       assert.ok(doc.xEval('today() <= ' + todayString).booleanValue);
     });
 
-    // We don't include time in today strings by default (config.js).
     it('because it is a precise moment, should be greater than today', () => {
       assert.notOk(doc.xEval('today() > ' + todayString).booleanValue);
     });
@@ -130,8 +130,9 @@ describe('date comparison', () => {
 
   describe('comparisons with a field', () => {
     describe('set to today', () => {
+      let doc;
       beforeEach(() => {
-        simpleValueIs(relativeDateAsString(0, true));
+        doc = simpleValueIs(relativeDateAsString(0, true));
       });
 
       it('should be less than tomorrow', () => {

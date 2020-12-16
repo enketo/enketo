@@ -1,328 +1,249 @@
-var config = require('./config');
-var shuffle = require('./utils/shuffle');
-var {isNamespaceExpr, handleNamespaceExpr} = require('./utils/ns');
-var {handleOperation} = require('./utils/operation');
-var {isNativeFunction, preprocessNativeArgs} = require('./utils/native');
-var {DATE_STRING, dateToDays} = require('./utils/date');
-var {toNodes, toSnapshotResult} = require('./utils/result');
-var {inputArgs, preprocessInput} = require('./utils/input');
+const { handleOperation } = require('./utils/operation');
+const { preprocessNativeArgs } = require('./utils/native');
+const { toSnapshotResult } = require('./utils/result');
+const { asBoolean, asNumber, asString } = require('./utils/xpath-cast');
 /*
- * From http://www.w3.org/TR/xpath/#section-Expressions XPath infix
- * operator precedence is left-associative, and as follows:
+ * From http://www.w3.org/TR/xpath/#section-Expressions XPath infix operator
+ * precedence is left-associative.  In the constants that follow, all but the
+ * bottom two bits indicate precendence, and the entire value represents the
+ * unique ID of the operator.
+ *
+ * These values are defined here rather than imported in an object so that they
+ * can be inlined.  Copy/paste the definitions into other files where they are
+ * used.
  */
-var OP_PRECEDENCE = [
-  ['|'],
-  ['&'],
-  ['=', '!='],
-  ['<', '<=', '>=', '>'],
-  ['+', '-'],
-  ['*', '/', '%']
-];
+const OR    = 0b00000;
+// --- precedence group separator
+const AND   = 0b00100;
+// --- precedence group separator
+const EQ    = 0b01000;
+const NE    = 0b01001;
+// --- precedence group separator
+const LT    = 0b01100;
+const LTE   = 0b01101;
+const GT    = 0b01110;
+const GTE   = 0b01111;
+// --- precedence group separator
+const PLUS  = 0b10000;
+const MINUS = 0b10001;
+// --- precedence group separator
+const MULT  = 0b10100;
+const DIV   = 0b10101;
+const MOD   = 0b10110;
+// --- precedence group separator
+const UNION = 0b11000;
+// --- end operators
 
-var DIGIT = /[0-9]/;
-var FUNCTION_NAME = /^[a-z]/;
-var NUMERIC_COMPARATOR = /(>|<)/;
-var BOOLEAN_COMPARATOR = /(=)/;
-var BOOLEAN_FN_COMPARATOR = /(true\(\)|false\(\))/;
-var COMPARATOR = /(=|<|>)/;
+const FUNCTION_NAME = /^[a-z]/;
+const D = 0xDEAD; // dead-end marker for the unevaluated side of a lazy expression
 
-var INVALID_ARGS = new Error('invalid args');
-var TOO_FEW_ARGS = new Error('too few args');
-
-// TODO remove all the checks for cur.t==='?' - what else woudl it be?
-var ExtendedXPathEvaluator = function(wrapped, extensions) {
-  var
+module.exports = function(wrapped, extensions) {
+  const
     extendedFuncs = extensions.func || {},
     extendedProcessors = extensions.process || {},
     toInternalResult = function(r) {
-      var n, v;
-      if(r.resultType === XPathResult.NUMBER_TYPE) return { t:'num', v:r.numberValue };
-      if(r.resultType === XPathResult.BOOLEAN_TYPE) return {  t:'bool', v:r.booleanValue };
-      if(r.resultType === XPathResult.UNORDERED_NODE_ITERATOR_TYPE) {
-        v = [];
-        while((n = r.iterateNext())) v.push(n.textContent);
-        return { t:'arr', v:v };
+      let v, i, ordrd;
+      switch(r.resultType) {
+        case XPathResult.NUMBER_TYPE:  return { t:'num',  v:r.numberValue  };
+        case XPathResult.BOOLEAN_TYPE: return { t:'bool', v:r.booleanValue };
+        case XPathResult.STRING_TYPE:  return { t:'str',  v:r.stringValue  };
+        case XPathResult.ORDERED_NODE_ITERATOR_TYPE:
+          ordrd = true;
+          /* falls through */
+        case XPathResult.UNORDERED_NODE_ITERATOR_TYPE:
+          v = [];
+          while((i = r.iterateNext())) v.push(i);
+          return { t:'arr', v, ordrd };
+        case XPathResult.ORDERED_NODE_SNAPSHOT_TYPE:
+          ordrd = true;
+          /* falls through */
+        case XPathResult.UNORDERED_NODE_SNAPSHOT_TYPE:
+          v = [];
+          for(i=0; i<r.snapshotLength; ++i) {
+            v.push(r.snapshotItem(i));
+          }
+          return { t:'arr', v, ordrd };
+        case XPathResult.ANY_UNORDERED_NODE_TYPE:
+        case XPathResult.FIRST_ORDERED_NODE_TYPE:
+          return { t:'arr', v:[r.singleNodeValue] };
+        default:
+          throw new Error(`no handling for result type: ${r.resultType}`);
       }
-      return { t:'str', v:r.stringValue };
     },
     toExternalResult = function(r, rt) {
       if(extendedProcessors.toExternalResult) {
-        var res = extendedProcessors.toExternalResult(r);
+        const res = extendedProcessors.toExternalResult(r, rt);
         if(res) return res;
       }
 
-      if((r.t === 'arr' && rt === XPathResult.NUMBER_TYPE && DATE_STRING.test(r.v[0])) ||
-          (r.t === 'str' && rt === XPathResult.NUMBER_TYPE && DATE_STRING.test(r.v))) {
-        var val = r.t === 'arr' ? r.v[0] : r.v;
-        var days = dateToDays(val);
-        return {
-          resultType:XPathResult.NUMBER_TYPE,
-          numberValue:days,
-          stringValue:days
-        };
+      switch(rt) {
+        case null:
+        case undefined:
+        case XPathResult.ANY_TYPE:
+          // don't convert
+          switch(r.t) {
+            case 'num':  return { resultType:XPathResult.NUMBER_TYPE,  numberValue:r.v,  stringValue:r.v.toString() };
+            case 'str':  return { resultType:XPathResult.BOOLEAN_TYPE, stringValue:r.v };
+            case 'bool': return { resultType:XPathResult.BOOLEAN_TYPE, booleanValue:r.v, stringValue:r.v.toString() };
+            case 'arr':  return toSnapshotResult(r, XPathResult.UNORDERED_NODE_ITERATOR_TYPE);
+            default: throw new Error('unrecognised internal type: ' + r.t);
+          }
+        case XPathResult.NUMBER_TYPE:  return { resultType:rt, numberValue: asNumber(r),  stringValue:r.v.toString() };
+        case XPathResult.STRING_TYPE:  return { resultType:rt, stringValue: asString(r) };
+        case XPathResult.BOOLEAN_TYPE: return { resultType:rt, booleanValue:asBoolean(r), stringValue:r.v.toString() };
+        case XPathResult.UNORDERED_NODE_ITERATOR_TYPE:
+        case XPathResult.ORDERED_NODE_ITERATOR_TYPE:
+        case XPathResult.UNORDERED_NODE_SNAPSHOT_TYPE:
+        case XPathResult.ORDERED_NODE_SNAPSHOT_TYPE:
+        case XPathResult.ANY_UNORDERED_NODE_TYPE:
+        case XPathResult.FIRST_ORDERED_NODE_TYPE:
+          return toSnapshotResult(r, rt);
+        default: throw new Error('unrecognised return type:', rt);
       }
-
-      if(r.t === 'num') return { resultType:XPathResult.NUMBER_TYPE, numberValue:r.v, stringValue:r.v.toString() };
-      if(r.t === 'bool')return { resultType:XPathResult.BOOLEAN_TYPE, booleanValue:r.v, stringValue:r.v.toString() };
-
-      if(rt > 3) {
-        r = shuffle(r[0], r[1]);
-        return toSnapshotResult(r, rt);
-      }
-
-      if(!r.t && Array.isArray(r)) {
-        if(rt === XPathResult.NUMBER_TYPE) {
-          var v = parseInt(r[0].textContent);
-          return { resultType:XPathResult.NUMBER_TYPE, numberValue:v, stringValue:v.toString() };
-        } else if(rt === XPathResult.STRING_TYPE) {
-          return { resultType:XPathResult.STRING_TYPE, stringValue: r.length ? r[0] : '' };
-        }
-      }
-
-      return { resultType:XPathResult.STRING_TYPE, stringValue: r.v===null ? '' : r.v.toString() };
-    },
-    callFn = function(name, supplied, rt) {
-      // Every second arg should be a comma, but we allow for a trailing comma.
-      // From the spec, this looks valid, if you assume that ExprWhitespace is a
-      // valid Expr.
-      // see: https://www.w3.org/TR/1999/REC-xpath-19991116/#section-Function-Calls
-      var args = [], i;
-      for(i=0; i<supplied.length; ++i) {
-        if(i % 2) {
-          if(supplied[i] !== ',') throw new Error('Weird args (should be separated by commas):' + JSON.stringify(supplied));
-        } else args.push(supplied[i]);
-      }
-
-      if(extendedFuncs.hasOwnProperty(name)) {
-        // if(rt && (/^(date|true|false|now$|today$|randomize$)/.test(name))) args.push(rt);
-        if(rt && (/^(date|now$|today$|randomize$)/.test(name))) args.push(rt);
-        if(/^(true$|false$)/.test(name)) args.push(rt || XPathResult.BOOLEAN_TYPE);
-        return callExtended(name, args);
-      }
-
-      if(name === 'normalize-space' && args.length) {
-        var res = args[0].v;
-        res = res.replace(/\f/g, '\\f');
-        res = res.replace(/\r\v/g, '\v');
-        res = res.replace(/\v/g, '\\v');
-        res = res.replace(/\s+/g, ' ');
-        res = res.replace(/^\s+|\s+$/g, '');
-        res = res.replace(/\\v/g, '\v');
-        res = res.replace(/\\f/g, '\f');
-        return {t: 'str', v: res};
-      }
-
-      if(name === 'string' && args.length > 0 && (
-        args[0].v === Number.POSITIVE_INFINITY ||
-        args[0].v === Number.NEGATIVE_INFINITY ||
-        args[0].v !== args[0].v )) {//NaN
-        return { t:'str', v: args[0].v };
-      }
-      return callNative(name, preprocessNativeArgs(name, args));
-    },
-    callExtended = function(name, args) {
-      var argVals = [], res, i;
-      for(i=0; i<args.length; ++i) argVals.push(args[i]);
-      res = extendedFuncs[name].apply(null, argVals);
-      return res;
-    },
-    callNative = function(name, args) {
-      var argString = '', arg, quote, i;
-      for(i=0; i<args.length; ++i) {
-        arg = args[i];
-        if(arg.t !== 'num' && arg.t !== 'bool') {
-          quote = arg.v.indexOf('"') === -1 ? '"' : "'";
-          argString += quote;
-        }
-        argString += arg.v;
-        if(arg.t === 'bool') argString += '()';
-        if(arg.t !== 'num' && arg.t !== 'bool') argString += quote;
-        if(i < args.length - 1) argString += ', ';
-      }
-      return toInternalResult(wrapped(name + '(' + argString + ')'));
     },
     typefor = function(val) {
       if(extendedProcessors.typefor) {
-        var res = extendedProcessors.typefor(val);
+        const res = extendedProcessors.typefor(val);
         if(res) return res;
       }
       if(typeof val === 'boolean') return 'bool';
-      if(typeof val === 'number') return 'num';
+      if(typeof val === 'number')  return 'num';
       return 'str';
     };
 
   /**
    * @see https://developer.mozilla.org/en-US/docs/Web/API/Document/evaluate
    */
-  this.evaluate = function(input, cN, nR, rT) {
-    input = preprocessInput(input, rT);
-    if(isNamespaceExpr(input)) return handleNamespaceExpr(input, cN);
-
-    if(isNativeFunction(input) &&
-      input.indexOf('[selected(') < 0 &&
-      !(input.startsWith('/') && input.indexOf(' ')>0) &&
-      input !== '/') {
-      var args = inputArgs(input);
-      if(args.length && args[0].length && !isNaN(args[0])) { throw INVALID_ARGS; }
-      if(input === 'lang()') throw TOO_FEW_ARGS;
-      if(/^lang\(/.test(input) && cN.nodeType === 2) cN = cN.ownerElement;
-      var res = wrapped(input, cN);
-      if(rT === XPathResult.NUMBER_TYPE &&
-        (res.resultType === XPathResult.UNORDERED_NODE_ITERATOR_TYPE ||
-         res.resultType === XPathResult.UNORDERED_NODE_ITERATOR_TYPE)) {
-        var val = parseInt(res.iterateNext().textContent);
-        return {
-          resultType: XPathResult.NUMBER_TYPE,
-          numberValue: val,
-          stringValue: val
-        };
-      }
-
-      if(rT === XPathResult.STRING_TYPE &&
-        res.resultType === XPathResult.STRING_TYPE &&
-        res.stringValue.startsWith('<xpath:')) {
-        return {
-          resultType: XPathResult.STRING_TYPE,
-          stringValue: res.stringValue.substring(7, res.stringValue.length-1)
-        };
-      }
-      if(rT === XPathResult.STRING_TYPE && res.resultType >= 6) {
-        if(res.snapshotLength) {
-          return { resultType: rT, stringValue: res.snapshotItem(0).textContent };
-        }
-        return { resultType: rT, stringValue: '' };
-      }
-      if(rT === XPathResult.STRING_TYPE && res.resultType === XPathResult.NUMBER_TYPE) {
-        return { resultType: rT, numberValue: res.numberValue, stringValue: res.numberValue.toString() };
-      }
-      if(rT === XPathResult.STRING_TYPE && res.resultType >= 4) {
-        var firstNode = res.iterateNext();
-        var firstNodeValue =  firstNode ? firstNode.textContent : '';
-        return { resultType: rT, stringValue: firstNodeValue };
-      }
-      if(rT === XPathResult.BOOLEAN_TYPE && res.resultType >= 4) {
-        return { resultType: rT, booleanValue: !!res.iterateNext() };
-      }
-      return res;
-    }
-
-    if(rT > 3 && !input.startsWith('randomize')) {
-      if(input === '/') cN = cN.ownerDocument || cN;
-
-      var selectedExprIdx = input.indexOf('[selected(');
-      if(selectedExprIdx > 0) {
-        var selectedExpr = input.substring(0, selectedExprIdx);
-        var selection = input.substring(selectedExprIdx+10, input.indexOf(')]'));
-        var selectionExpr = selection.split(',').map(s => s.trim());
-        var selectionResult = wrapped(`${selectionExpr[0]}/text()`);
-        if(selectionResult.snapshotLength) {
-          var values = selectionResult.snapshotItem(0)
-            .textContent.split(' ').map(v => `${selectionExpr[1]}="${v}"`);
-          return wrapped(`${selectedExpr}[${values.join(' or ')}]`);
-        }
-        return toSnapshotResult([], rT);
-      }
-
-      var wrappedResult = wrapped(input, cN, nR, rT);
-      // Native count always returns Number even when result type is asking
-      // for a string.
-      if(rT === XPathResult.STRING_TYPE &&
-        wrappedResult.resultType === XPathResult.NUMBER_TYPE) {
-        return {
-          type: XPathResult.STRING_TYPE,
-          stringValue: wrappedResult.numberValue.toString()
-        };
-      }
-      return wrappedResult;
-    }
-
-    if(rT === XPathResult.BOOLEAN_TYPE && input.indexOf('(') < 0 &&
-        input.indexOf('/') < 0 && input.indexOf('=') < 0 &&
-        input.indexOf('!=') < 0) {
-      input = input.replace(/(\n|\r|\t)/g, '');
-      input = input.replace(/"(\d)"/g, '$1');
-      input = input.replace(/'(\d)'/g, '$1');
-      input = `boolean-from-string(${input})`;
-    }
-
-    if(rT === XPathResult.NUMBER_TYPE && input.indexOf('string-length') < 0) {
-      input = input.replace(/(\n|\r|\t)/g, '');
-    }
-
-    var i, cur, stack = [{ t:'root', tokens:[] }],
+  const evaluate = this.evaluate = function(input, cN, nR, rT, _, contextSize=1, contextPosition=1) {
+    let i, cur;
+    const stack = [{ t:'root', tokens:[] }],
       peek = function() { return stack[stack.length-1]; },
       err = function(message) { throw new Error((message||'') + ' [stack=' + JSON.stringify(stack) + '] [cur=' + JSON.stringify(cur) + ']'); },
       newCurrent = function() { cur = { t:'?', v:'' }; },
       pushOp = function(t) {
+        if(t <= AND) {
+          evalOps(t);
+          const prev = asBoolean(prevToken());
+          if(t === OR ? prev : !prev) peek().dead = true;
+        }
         peek().tokens.push({ t:'op', v:t });
         newCurrent();
       },
+      callFn = function(name, supplied) {
+        // Every second arg should be a comma, but we allow for a trailing comma.
+        // From the spec, this looks valid, if you assume that ExprWhitespace is a
+        // valid Expr.
+        // see: https://www.w3.org/TR/1999/REC-xpath-19991116/#section-Function-Calls
+        const args = [];
+        for(let i=0; i<supplied.length; ++i) {
+          if(i % 2) {
+            if(supplied[i] !== ',') throw new Error('Weird args (should be separated by commas):' + JSON.stringify(supplied));
+          } else args.push(supplied[i]);
+        }
+
+        if(Object.prototype.hasOwnProperty.call(extendedFuncs, name)) {
+          return extendedFuncs[name].apply({ cN, contextSize, contextPosition }, args);
+        }
+
+        return callNative(name, preprocessNativeArgs(name, args));
+      },
+      callNative = function(name, args) {
+        let argString = name + '(';
+        for(let i=0; i<args.length; ++i) {
+          if(i) argString += ',';
+          const arg = args[i];
+          switch(arg.t) {
+            case 'arr': throw new Error(`callNative() can't handle nodeset functions yet for ${name}()`);
+            case 'bool': argString += arg.v + '()'; break;
+            case 'num':
+              if     (arg.v ===  Infinity) argString += '( 1 div 0)';
+              else if(arg.v === -Infinity) argString += '(-1 div 0)';
+              else                         argString += arg.v;
+              break;
+            case 'str': {
+              const quote = arg.quote || (arg.v.indexOf('"') === -1 ? '"' : "'");
+              // Firefox's native XPath implementation is 3.0, but Chrome's is 1.0.
+              // XPath 1.0 has no support for escaping quotes in strings, so:
+              if(arg.v.indexOf(quote) !== -1) throw new Error('Quote character found in String Literal: ' + JSON.stringify(arg.v));
+              argString += quote + arg.v + quote;
+            }
+            // there aren't any other native types TODO do we need a hook for allowing date conversion?
+          }
+        }
+        return toInternalResult(wrapped.evaluate(argString + ')', cN, nR, XPathResult.ANY_TYPE, null));
+      },
       evalOp = function(lhs, op, rhs) {
+        if(op > AND && (lhs === D || rhs === D)) {
+          return D;
+        }
         if(extendedProcessors.handleInfix) {
-          var res = extendedProcessors.handleInfix(err, lhs, op, rhs);
+          let res = extendedProcessors.handleInfix(err, lhs, op, rhs);
           if(res && res.t === 'continue') {
             lhs = res.lhs; op = res.op; rhs = res.rhs; res = null;
           }
 
           if(typeof res !== 'undefined' && res !== null) return res;
         }
-        return handleOperation(lhs, op, rhs, config);
+        return handleOperation(lhs, op, rhs);
       },
-      evalOpAt = function(tokens, opIndex) {
-        var res = evalOp(
-            tokens[opIndex - 1],
-            tokens[opIndex],
-            tokens[opIndex + 1]);
+      evalOps = function(lastOp) {
+        const tokens = peek().tokens;
 
-        if(typeof res !== 'undefined' && res !== null) {
-          tokens.splice(opIndex, 2);
-          tokens[opIndex - 1] = { t:typefor(res), v:res };
+        if(peek().dead) for(let i=2; i<tokens.length; ++i) {
+          if(tokens[i] === D) {
+            tokens.splice(i-1);
+            tokens[i-2] = { t:'bool', v:asBoolean(tokens[i-2]) };
+          }
         }
-      },
-      backtrack = function() {
-        // handle infix operators
-        var i, j, ops, tokens;
-        tokens = peek().tokens;
-        for(j=OP_PRECEDENCE.length-1; j>=0; --j) {
-          ops = OP_PRECEDENCE[j];
-          i = 1;
+
+        if(tokens.length < 2) return;
+
+        for(let j=UNION; j>=lastOp; j-=0b100) {
+          let i = 1;
           while(i < tokens.length-1) {
-            if(tokens[i].t === 'op' && ops.indexOf(tokens[i].v) !== -1) {
-              evalOpAt(tokens, i);
+            if(tokens[i].t === 'op' && tokens[i].v >= j) {
+              const res = evalOp(tokens[i-1], tokens[i].v, tokens[i+1]);
+              tokens.splice(i, 2);
+              tokens[i-1] = { t:typefor(res), v:res };
             } else ++i;
           }
         }
       },
-      handleXpathExpr = function(returnType) {
-        var expr = cur.v;
-        var evaluated;
-        if(['position'].includes(peek().v)) {
-          evaluated = wrapped(expr);
-        } else {
-          if(rT > 3 || (cur.v.indexOf('position()=') >= 0 &&
-            stack.length === 1 && !/^[a-z]*[(|[]{1}/.test(cur.v))) {
-            evaluated = toNodes(wrapped(expr, cN, nR, returnType));
-          } else {
-            if(expr.startsWith('$')) {
-              evaluated = expr;
-            } else {
-              evaluated = toInternalResult(wrapped(expr, cN, nR, returnType));
-            }
-          }
+      handleXpathExpr = function() {
+        if(peek().dead) {
+          peek().tokens.push(D);
+          newCurrent();
+          return;
         }
-        peek().tokens.push(evaluated);
+        let expr = cur.v;
+        const { tokens } = peek();
+        if(tokens.length && tokens[tokens.length-1].t === 'arr') {
+          // chop the leading slash from expr
+          if(expr.charAt(0) !== '/') throw new Error(`not sure how to handle expression called on nodeset that doesn't start with a '/': ${expr}`);
+          // prefix a '.' to make the expression relative to the context node:
+          expr = wrapped.createExpression('.' + expr, nR);
+          const newNodeset = [];
+          tokens[tokens.length-1].v.map(node => {
+            const res = toInternalResult(expr.evaluate(node));
+            newNodeset.push(...res.v);
+          });
+          tokens[tokens.length-1].v = newNodeset;
+        } else {
+          peek().tokens.push(toInternalResult(wrapped.evaluate(expr, cN, nR, XPathResult.ANY_TYPE, null)));
+        }
+
         newCurrent();
       },
       nextChar = function() {
         return input.charAt(i+1);
       },
       finaliseNum = function() {
-        cur.v = parseFloat(cur.string);
+        cur.v = parseFloat(cur.str);
         peek().tokens.push(cur);
         newCurrent();
       },
       prevToken = function() {
-        var peeked = peek().tokens;
+        const peeked = peek().tokens;
         return peeked[peeked.length - 1];
       },
       isNum = function(c) {
@@ -332,11 +253,67 @@ var ExtendedXPathEvaluator = function(wrapped, extensions) {
     newCurrent();
 
     for(i=0; i<input.length; ++i) {
-      var c = input.charAt(i);
-      if(cur.sq) {
+      const c = input.charAt(i);
+      if(cur.t === 'sq') {
+        // Build the entire expression found within the square brackets:
+        //
+        // > A predicate filters a node-set with respect to an axis to produce a
+        // > new node-set. For each node in the node-set to be filtered, the
+        // > PredicateExpr is evaluated with that node as the context node, with
+        // > the number of nodes in the node-set as the context size, and with
+        // > the proximity position of the node in the node-set with respect to
+        // > the axis as the context position; if PredicateExpr evaluates to
+        // > true for that node, the node is included in the new node-set;
+        // > otherwise, it is not included.
+        //   - https://www.w3.org/TR/1999/REC-xpath-19991116/#predicates
+        //
+        // Note because the ']' character is allowed within a Literal (string),
+        // there is special handling for tracking when we're within a string.
+        if(cur.inString) {
+          if(cur.inString === c) delete cur.inString;
+        } else if(c === '[') {
+          ++cur.depth;
+        } else if(c === '\'' || c === '"') {
+          cur.inString = c;
+        } else if(c === ']') {
+          if(--cur.depth) {
+            cur.v += c;
+          } else {
+            const head = peek();
+            if(head.dead) {
+              newCurrent();
+              continue;
+            }
+            const { tokens } = head;
+            let contextNodes;
+            if(tokens.length && tokens[tokens.length-1].t === 'arr') {
+              contextNodes = tokens[tokens.length-1].v;
+            } else if(head.t === 'root') {
+              contextNodes = [ cN ];
+              throw new Error('Not sure how to handle a predicate-only expression yet - this will probably break down when re-assigning tokens[tokens.length-1].v');
+            } else throw new Error('Not sure how to handle context node for predicate in this situation.');
+
+            // > A PredicateExpr is evaluated by evaluating the Expr and converting
+            // > the result to a boolean. If the result is a number, the result will
+            // > be converted to true if the number is equal to the context position
+            // > and will be converted to false otherwise; if the result is not a
+            // > number, then the result will be converted as if by a call to the
+            // > boolean function. Thus a location path para[3] is equivalent to
+            // > para[position()=3].
+            //   - https://www.w3.org/TR/1999/REC-xpath-19991116/#predicates
+            const expr = cur.v;
+            const filteredNodes = contextNodes
+              .filter((cN, i) => {
+                const res = toInternalResult(evaluate(expr, cN, nR, XPathResult.ANY_TYPE, null, contextNodes.length, i+1));
+                return res.t === 'num' ? asNumber(res) === 1+i : asBoolean(res);
+              });
+
+            tokens[tokens.length-1].v = filteredNodes;
+            newCurrent();
+          }
+          continue;
+        }
         cur.v += c;
-        if(c === ']') --cur.sq;
-        else if(c === '[') ++cur.sq;
         continue;
       }
       if(cur.t === 'str') {
@@ -347,20 +324,20 @@ var ExtendedXPathEvaluator = function(wrapped, extensions) {
         continue;
       }
       if(cur.t === 'num') {
-        if(DIGIT.test(c) || c === 'e' ||
+        if(isNum(c) || c === 'e' ||
             (c === '-' && input[i-1] === 'e')) {
-          cur.string += c;
+          cur.str += c;
           continue;
-        } else if(c === ' ' && cur.string === '-') {
+        } else if(c === ' ' && cur.str === '-') {
           continue;
         } else if(c === '.' && !cur.decimal) {
           cur.decimal = 1;
-          cur.string += c;
+          cur.str += c;
         } else finaliseNum();
       }
       if(isNum(c)) {
         if(cur.v === '') {
-          cur = { t:'num', string:c };
+          cur = { t:'num', str:c };
         } else cur.v += c;
       } else switch(c) {
         case "'":
@@ -370,50 +347,22 @@ var ExtendedXPathEvaluator = function(wrapped, extensions) {
           } else err('Not sure how to handle: ' + c);
           break;
         case '(':
+          cur.dead = peek().dead;
           cur.t = 'fn';
           cur.tokens = [];
           stack.push(cur);
-          if(cur.v === 'once') {
-            // TODO once() should be a custom function, and we should pass the
-            // context node to all custom functions, or offer a way to access it
-            newCurrent();
-            cur.v = '.';
-            handleXpathExpr();
-            peek().tokens.push(',');
-          }
           newCurrent();
-
           break;
         case ')':
-          if(nextChar() === '[') {
-            // collapse the stack, and let the native evaluator handle this...
-            var tail = stack.pop();
-            tail.v = tail.v + '(' + cur.v + c;
-            tail.t = '?';
-            cur = tail;
-            break;
-          }
-
-          if(cur.v !== '') {
-            handleXpathExpr(input.startsWith('randomize') ? 4 : null);
-          }
-          backtrack();
+          if(cur.v !== '') handleXpathExpr();
+          evalOps(OR);
           cur = stack.pop();
 
           if(cur.t !== 'fn') err('")" outside function!');
-          if(cur.v) {
-            var expectedReturnType = rT;
-            if(rT === XPathResult.BOOLEAN_TYPE) {
-              if(NUMERIC_COMPARATOR.test(input) && !BOOLEAN_FN_COMPARATOR.test(input)) expectedReturnType = XPathResult.NUMBER_TYPE;
-              if(BOOLEAN_COMPARATOR.test(input)) expectedReturnType = XPathResult.BOOLEAN_TYPE;
-              if(COMPARATOR.test(input) && cur.t === 'fn' && /^(date|date-time)$/.test(cur.v)) {
-                expectedReturnType = XPathResult.STRING_TYPE;
-              }
-            }
-            const res = callFn(cur.v, cur.tokens, expectedReturnType);
-            if(cur.v === 'node' && res.t === 'arr' && res.v.length > 0)
-              res.v = [res.v[0]]; // only interested in first element
-            peek().tokens.push(res);
+          if(peek().dead) {
+            peek().tokens.push(D);
+          } else if(cur.v) {
+            peek().tokens.push(callFn(cur.v, cur.tokens));
           } else {
             if(cur.tokens.length !== 1) err('Expected one token, but found: ' + cur.tokens.length);
             peek().tokens.push(cur.tokens[0]);
@@ -422,77 +371,69 @@ var ExtendedXPathEvaluator = function(wrapped, extensions) {
           break;
         case ',':
           if(peek().t !== 'fn') err('Unexpected comma outside function arguments.');
-          if(cur.v !== '') handleXpathExpr();
+          if(cur.v) handleXpathExpr();
           peek().tokens.push(',');
           break;
-        case '*':
-          if(c === '*' && (cur.v !== '' || peek().tokens.length === 0)) {
+        case '*': {
+          // check if part of an XPath expression
+          const prev = prevToken();
+          if(!prev || prev === ',' || prev.t === 'op' || cur.v) {
             cur.v += c;
-            if(cur.v === './*') handleXpathExpr();
-          } else if(cur.v === '' &&
-            ([')', ''].includes(nextChar()) ||
-            input.substring(i+1).trim() === ')')) {
-            cur.v = c;
-            handleXpathExpr();
-          } else {
-            pushOp(c);
+            break;
           }
-          break;
-        case '-':
-          var prev = prevToken();
+          pushOp(MULT);
+        } break;
+        case '-': {
+          const prev = prevToken();
           if(cur.v !== '' && nextChar() !== ' ' && input.charAt(i-1) !== ' ') {
             // function name expr
             cur.v += c;
           } else if(cur.v === '' && (
               !prev ||
-              // ...+-1
+              // match case: ...+-1
               prev.t === 'op' ||
-              // previous XXX
+              // previous was a separate function arg
               prev === ',')) {
             // -ve number
-            cur = { t:'num', string:'-' };
+            cur = { t:'num', str:'-' };
           } else {
-            if(cur.v !== '') { // TODO could just be if(!cur.v)
-              if(!DIGIT.test(cur.v) && input[i-1] !== ' ') throw INVALID_ARGS;
-              peek().tokens.push(cur);
-            }
-            pushOp(c);
+            // TODO do we need to check for cur.v here?
+            pushOp(MINUS);
           }
-          break;
+        } break;
         case '=':
-          if(cur.v === '<' || cur.v === '&lt;' ||
-              cur.v === '>' || cur.v === '&gt;' || cur.v === '!') {
-            cur.v += c;
-            switch(cur.v) {
-              case '<=': case '&lt;=': pushOp('<='); break;
-              case '>=': case '&gt;=': pushOp('>='); break;
-              case '!=':               pushOp('!='); break;
-            }
-          } else {
-            if(cur.v) handleXpathExpr();
-            pushOp(c);
+          switch(cur.v) {
+            case '<': pushOp(LTE); break;
+            case '>': pushOp(GTE); break;
+            case '!': pushOp(NE);  break;
+            default:
+              if(cur.v) handleXpathExpr();
+              pushOp(EQ);
           }
           break;
-        case ';':
-          switch(cur.v) {
-            case '&lt': cur.v = ''; c = '<'; break;
-            case '&gt': cur.v = ''; c = '>'; break;
-            default: cur.v += c; continue;
-          }
-          /* falls through */
         case '>':
         case '<':
           if(cur.v) handleXpathExpr();
           if(nextChar() === '=') {
-            cur.v = c; break;
+            cur.v = c;
+          } else {
+            pushOp(c === '>' ? GT : LT);
           }
-          /* falls through */
-        case '+':
-          pushOp(c);
           break;
+        case '+':
+          if(cur.v) handleXpathExpr();
+          pushOp(PLUS);
+          break;
+        case '|':
+          if(cur.v) handleXpathExpr();
+          pushOp(UNION);
+          break;
+        case '\n':
+        case '\r':
+        case '\t':
         case ' ':
+          // whitespace, as defined at https://www.w3.org/TR/REC-xml/#NT-S
           if(cur.v === '') break; // trim leading whitespace
-          // trim trailing space from function names:
           if(!FUNCTION_NAME.test(cur.v)) handleXpathExpr();
           break;
         case 'v':
@@ -500,7 +441,7 @@ var ExtendedXPathEvaluator = function(wrapped, extensions) {
           // there is no requirement for ExprWhitespace before or after any
           // ExprToken, including OperatorName.
           if(cur.v === 'di') { // OperatorName: 'div'
-            pushOp('/');
+            pushOp(DIV);
           } else cur.v += c;
           break;
         case 'r':
@@ -508,7 +449,7 @@ var ExtendedXPathEvaluator = function(wrapped, extensions) {
           // there is no requirement for ExprWhitespace before or after any
           // ExprToken, including OperatorName.
           if(cur.v === 'o') { // OperatorName: 'or'
-            pushOp('|');
+            pushOp(OR);
           } else cur.v += c;
           break;
         case 'd':
@@ -516,22 +457,23 @@ var ExtendedXPathEvaluator = function(wrapped, extensions) {
           // there is no requirement for ExprWhitespace before or after any
           // ExprToken, including OperatorName.
           if(cur.v === 'an') { // OperatorName: 'and'
-            pushOp('&');
+            pushOp(AND);
           } else if(cur.v === 'mo') { // OperatorName: 'mod'
-            pushOp('%');
+            pushOp(MOD);
           } else cur.v += c;
           break;
         case '[':
-          cur.sq = (cur.sq || 0) + 1;
-          /* falls through */
-        case '.':
-          if(cur.v === '' && nextChar() === ')') {
-            cur.v = c;
+          // evaluate previous part if there is any
+          if(cur.v) {
             handleXpathExpr();
-            break;
+            newCurrent();
           }
+          cur.t = 'sq';
+          cur.depth = 1;
+          break;
+        case '.':
           if(cur.v === '' && isNum(nextChar())) {
-            cur = { t:'num', string:c };
+            cur = { t:'num', str:c };
             break;
           }
           /* falls through */
@@ -539,16 +481,15 @@ var ExtendedXPathEvaluator = function(wrapped, extensions) {
           cur.v += c;
       }
     }
+
     if(cur.t === 'num') finaliseNum();
-    if(cur.t === '?' && cur.v !== '') handleXpathExpr();
-    if(cur.t !== '?' || cur.v !== '' || (cur.tokens && cur.tokens.length)) err('Current item not evaluated!');
-    if(stack.length > 1) err('Stuff left on stack.');
+    if(cur.v) handleXpathExpr();
+    if(stack.length !== 1) err('Stuff left on stack.');
     if(stack[0].t !== 'root') err('Weird stuff on stack.');
     if(stack[0].tokens.length === 0) err('No tokens.');
-    if(stack[0].tokens.length >= 3) backtrack();
-    if(stack[0].tokens.length > 1) err('Too many tokens.');
+    evalOps(OR);
+    if(stack[0].tokens.length !== 1) err('Too many tokens.');
+
     return toExternalResult(stack[0].tokens[0], rT);
   };
 };
-
-module.exports = ExtendedXPathEvaluator;

@@ -1,4 +1,4 @@
-const { assertThrow, assertTrue, assertFalse } = require('../../helpers');
+const { assertThrow, assertTrue, assertFalse } = require('../helpers');
 
 describe('not', () => {
   it('not()', () => {

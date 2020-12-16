@@ -1,4 +1,4 @@
-const { assertTrue, assertFalse, simpleValueIs } = require('../../helpers');
+const { assertTrue, assertFalse, simpleValueIs } = require('../helpers');
 
 describe('#regex()', () => {
   it('should return `true` if value matches supplied regex', () => {

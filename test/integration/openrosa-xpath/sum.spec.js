@@ -1,4 +1,4 @@
-const { assertThrow, assertNumberValue, initDoc } = require('../../helpers');
+const { assertThrow, assertNumberValue, initDoc } = require('../helpers');
 
 describe('#sum()', () => {
 

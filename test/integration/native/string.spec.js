@@ -1,5 +1,5 @@
 const { initDoc, filterAttributes, assertThrow, assertTrue,
-  assertFalse, assertString, assertStringValue, assertNumber } = require('../../helpers');
+  assertFalse, assertString, assertStringValue, assertNumber } = require('../helpers');
 
 describe('native string functions', () => {
 
@@ -30,7 +30,7 @@ describe('native string functions', () => {
     assertString("string(false())", "false");
   });
 
-  it('string() conversion of nodesets', () => {
+  describe('string() conversion of nodesets', () => {
     const doc = initDoc(`
       <div id="FunctionStringCase">
         <div id="FunctionStringCaseStringNodesetElement">aaa</div>
@@ -51,7 +51,6 @@ describe('native string functions', () => {
         </div>
       </div>`);
     let input;
-    let i;
     let node;
     const nodeWithAttributes = doc.getElementById('FunctionStringCaseStringNodesetAttribute');
 
@@ -79,9 +78,11 @@ describe('native string functions', () => {
       input.push(["string()", node, 'some cdata'] );
     }
 
-    for(i = 0; i < input.length; i++) {
-      assertString(input[i][1], null, input[i][0], input[i][2]);
-    }
+    input.forEach(([expr, node, expected]) => {
+      it(`should convert ${expr} to ${expected}`, () => {
+        assertString(node, null, expr, expected);
+      });
+    });
   });
 
   it('string conversion of nodeset with namepace', () => {
@@ -98,7 +99,6 @@ describe('native string functions', () => {
       </html>`);
     const node = doc.getElementById('FunctionStringCaseStringNodesetNamespace');
     assertStringValue(node, null, "string(namespace-uri(/*))", "http://www.w3.org/1999/xhtml");
-    assertStringValue(node, null, "string(namespace::node())", "http://www.w3.org/1999/xhtml");
   });
 
   it('string conversion fails when too many arguments are provided', () => {
@@ -188,21 +188,27 @@ describe('native string functions', () => {
     assertThrow("substring-after(1)");
   });
 
-  it('substring()', () => {
-    assertString("substring('12345', 2, 3)", '234');
-    assertString("substring('12345', 2)", '2345');
-    assertString("substring('12345', -1)", '12345');
-    assertString("substring('12345', 1 div 0)", '');
-    assertString("substring('12345', 0 div 0)", '');
-    assertString("substring('12345', -1 div 0)", '12345');
-    assertString("substring('12345', 1.5, 2.6)", '234');
-    assertString("substring('12345', 1.3, 2.3)", '12');
-    assertString("substring('12345', 0, 3)", '12');
-    assertString("substring('12345', 0, -1 div 0)", '');
-    assertString("substring('12345', 0 div 0, 3)", '');
-    assertString("substring('12345', 1, 0 div 0)", '');
-    assertString("substring('12345', -42, 1 div 0)", '12345');
-    assertString("substring('12345', -1 div 0, 1 div 0)", '');
+  describe('substring()', () => {
+    [
+      [ "substring('12345', 2, 3)", '234' ],
+      [ "substring('12345', 2)", '2345' ],
+      [ "substring('12345', -1)", '12345' ],
+      [ "substring('12345', 1 div 0)", '' ],
+      [ "substring('12345', 0 div 0)", '' ],
+      [ "substring('12345', -1 div 0)", '12345' ], // this diverges from Firefox and Chrome implementations, but seems to follow the spec
+      [ "substring('12345', 1.5, 2.6)", '234' ],
+      [ "substring('12345', 1.3, 2.3)", '12' ],
+      [ "substring('12345', 0, 3)", '12' ],
+      [ "substring('12345', 0, -1 div 0)", '' ],
+      [ "substring('12345', 0 div 0, 3)", '' ],
+      [ "substring('12345', 1, 0 div 0)", '' ],
+      [ "substring('12345', -42, 1 div 0)", '12345' ],
+      [ "substring('12345', -1 div 0, 1 div 0)", '' ],
+    ].forEach(([ expr, expected ]) => {
+      it(`should evaluate "${expr}" to "${expected}"`, () => {
+        assertString(expr, expected);
+      });
+    });
   });
 
   it('substring() fails when too many arguments are provided', () => {
@@ -236,7 +242,7 @@ describe('native string functions', () => {
     assertThrow("string-length(1, 2)");
   });
 
-  it('normalize-space', () => {
+  describe('normalize-space()', () => {
     const doc = initDoc(`
       <div>
         <div id="FunctionStringCaseStringNormalizeSpace1"></div>
@@ -260,8 +266,10 @@ describe('native string functions', () => {
       ["normalize-space()", '', doc.getElementById('FunctionStringCaseStringNormalizeSpace2')],
       ["normalize-space()", 'a b', doc.getElementById('FunctionStringCaseStringNormalizeSpace3')],
       ["normalize-space()", 'a bc c', doc.getElementById('FunctionStringCaseStringNormalizeSpace4')]
-   ].forEach(([expr, expected, node]) => {
-      assertString(node, null, expr, expected);
+    ].forEach(([expr, expected, node]) => {
+      it(`should evaluate ${expr} to ${expected}`, () => {
+        assertString(node, null, expr, expected);
+      });
     });
   });
 

@@ -1,4 +1,4 @@
-const { assertStringValue } = require('../../helpers');
+const { assertStringValue } = require('../helpers');
 
 describe('#format-date-time()', () => {
   [

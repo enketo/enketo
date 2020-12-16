@@ -1,4 +1,4 @@
-const { initDoc, assertTrue, assertFalse } = require('../../helpers');
+const { initDoc, assertTrue, assertFalse } = require('../helpers');
 
 // @see https://docs.opendatakit.org/form-operators-functions/?highlight=checklist#checklist
 describe('#checklist()', () => {

@@ -1,72 +1,82 @@
-var {DATE_STRING, dateToDays} = require('./date');
+const { asNumber, asString } = require('./xpath-cast');
+const xpr = require('../xpr');
 
-var TOO_MANY_ARGS = new Error('too many args');
-var TOO_FEW_ARGS = new Error('too few args');
-var INVALID_ARGS = new Error('invalid args');
+module.exports = { preprocessNativeArgs };
 
-var NATIVE_FUNS = /^id\(|lang\(|local-name|namespace-uri|last\(|name\(|child::|parent::|descendant::|descendant-or-self::|ancestor::|ancestor-or-self::sibling|following::|following-sibling::|preceding-sibling::|preceding::|attribute::|^\/.*$/;
-  
-function isNativeFunction(input) {
-  return NATIVE_FUNS.test(input);
-}
-
-function checkMinMaxArgs(args, min, max) {
-  if(min != null && args.length < min) throw TOO_FEW_ARGS;
-  if(max != null && args.length > max) throw TOO_MANY_ARGS;
-}
-
-function checkNativeFn(name, args) {
-  if(name === 'last') {
-    checkMinMaxArgs(args, null, 0);
-  } else if(/^(boolean|lang|ceiling|name|floor)$/.test(name)) {
-    checkMinMaxArgs(args, 1, 1);
-  } else if(/^(number|string|normalize-space|string-length)$/.test(name)) {
-    checkMinMaxArgs(args, null, 1);
-  } else if(name === 'substring') {
-    checkMinMaxArgs(args, 2, 3);
-  } else if(/^(starts-with|contains|substring-before|substring-after)$/.test(name)) {
-    checkMinMaxArgs(args, 2, 2);
-  } else if(name === 'translate') {
-    checkMinMaxArgs(args, 3, 3);
-  }
-}
+const fns = {
+  'ceiling':          { min:1, max:1 },
+  'contains':         { min:2, max:2 },
+  'floor':            { min:1, max:1 },
+  'id':               { min:1, max:1, conv:r => [ xpr.string(r.t === 'arr' ? r.v.map(asString).join(' ') : asString(r)) ] },
+  'lang':             { min:1, max:1 },
+  'starts-with':      { min:2, max:2 },
+  'substring':        { min:2, max:3, conv:convertSubstringArgs },
+  'substring-after':  { min:2, max:2 },
+  'substring-before': { min:2, max:2 },
+  'translate':        { min:3, max:3 },
+};
 
 function preprocessNativeArgs(name, args) {
-  if(name === 'number' && args.length) {
-    if(args[0].t === 'arr') {
-      args = [{t: 'num', v: args[0].v[0]}];
-    } else if(args[0].t === 'str' && DATE_STRING.test(args[0].v)) {
-      args = [{t: 'num', v: dateToDays(args[0].v)}];
-    } else if(args[0].t === 'num' && args[0].v.toString().indexOf('e-') > 0) {
-      args = [{t: 'num', v: 0}];
-    }
+  const def = fns[name];
+  if(!def) return args;
+  if(args.length < def.min) throw new Error('too few args');
+  if(args.length > def.max) throw new Error('too many args');
+  if(def.conv) {
+    return def.conv(...args);
   }
-  if(name === 'name' && args.length < 2) throw TOO_FEW_ARGS;
-  if(name === 'namespace-uri') {
-    if(args.length > 1) throw TOO_MANY_ARGS;
-    if(args.length === 0) throw TOO_FEW_ARGS;
-    if(args.length === 1 && !isNaN(args[0].v)) throw INVALID_ARGS;
-  }
-  if(name === 'local-name') {
-    if(args.length > 1) throw TOO_MANY_ARGS;
-    if(args.length === 1 && !isNaN(args[0].v)) throw INVALID_ARGS;
-  }
-
-  if(name === 'substring' && args.length > 2 && args[1].v === Number.NEGATIVE_INFINITY && args[2].v === Number.POSITIVE_INFINITY) {
-    args[0].v = '';
-  }
-
-  if(name === 'substring' && args.length > 1 && args[1].v < 0) {
-    args[1].v = 0;
-  }
-  if(name === 'substring' && args.length > 2 && args[2].v === Number.POSITIVE_INFINITY) {
-    args[2].v = args[0].v.length + 1;
-  }
-  checkNativeFn(name, args);
   return args;
 }
 
-module.exports = {
-  isNativeFunction,
-  preprocessNativeArgs
-};
+function convertSubstringArgs(str, start, len) {
+  // special cases explicitly defined in the spec
+  //
+  // - substring("12345",      1.5,     2.6) returns "234"
+  // - substring("12345",        0,       3) returns "12"
+  // - substring("12345",  0 div 0,       3) returns ""
+  // - substring("12345",        1, 0 div 0) returns ""
+  // - substring("12345",      -42, 1 div 0) returns "12345"
+  // - substring("12345", -1 div 0, 1 div 0) returns ""
+  //
+  // see: https://www.w3.org/TR/1999/REC-xpath-19991116/#function-substring
+  //
+  // Try digesting this:
+  //
+  // > The returned substring contains those characters for which the position
+  // > of the character is greater than or equal to the rounded value of the
+  // > second argument and, if the third argument is specified, less than the
+  // > sum of the rounded value of the second argument and the rounded value
+  // > of the third argument.
+  //
+  // The apparent contradictory nature of the final two examples hinges on
+  // IEEE 754-1985 section 7.1 "Invalid Operation" which states:
+  //
+  // > The invalid operation exception is signaled if an operand is invalid
+  // > for the operation on to be performed.  The result, when the exception
+  // > occurs without a trap, shall be a quiet NaN...
+  // > ...
+  // > 2) Addition or subtraction—magnitude subtraction of infinites such as, (+∞) + (−∞)
+  //
+  // Firefox and Chrome XPath implementations agree that
+  // (Infinity + -Infinity) evaluates to NaN.
+  //
+  // And here's an extra special example not defined in the spec:
+  //
+  // - substring("12345", -1 div 0)
+  //
+  // IEEE 754-1985 section 6.1 "Infinity Arithmetic" states:
+  //
+  // > Infinites shall be interpreted in the affine sense, that is,
+  // > −∞ < (every finite number) < +∞
+  //
+  // By my reading, this means substring("12345", -1 div 0) should return
+  // "12345".  Firefox and Chrome XPath implementations disagree with this,
+  // but here we have special handling for it:
+
+  str = xpr.string(asString(str));
+  start = asNumber(start);
+  if(len === undefined) {
+    return [ str, xpr.number(Math.max(0, start)) ];
+  }
+
+  return [ str, xpr.number(start), xpr.number(asNumber(len)) ];
+}

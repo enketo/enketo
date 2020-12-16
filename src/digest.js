@@ -1,6 +1,18 @@
-const forge = require('node-forge');
+/**
+ * XForms 1.1 digest() function.
+ * @see https://www.w3.org/TR/xforms/#fn-digest
+ *
+ * This implementation depends on the node-forge module, and will throw an Error
+ * at runtime if the module is not available.
+ */
+module.exports = (message, algo, encoding) => {
+  let forge;
+  try {
+    forge = require('node-forge');
+  } catch(err) {
+    throw new Error(`Cannot find module 'node-forge'; this is required to use the digest() function.`);
+  }
 
-const digest = (message, algo, encoding) => {
   message = message.v;
   algo = algo && algo.v && algo.v.toLowerCase();
   encoding = (encoding && encoding.v && encoding.v.toLowerCase()) || 'base64';
@@ -17,8 +29,4 @@ const digest = (message, algo, encoding) => {
     return forge.util.encode64(hashBuffer.bytes());
   }
   return md.digest().toHex();
-};
-
-module.exports = {
-  digest
 };

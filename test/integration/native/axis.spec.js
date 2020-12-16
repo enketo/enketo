@@ -1,9 +1,6 @@
-const { initDoc, nsResolver, filterAttributes,
-  parseNamespacesFromAttributes, getAllNodes,
-  assert, assertNodes, assertNodesNamespace
-} = require('../../helpers');
+const { initDoc, nsResolver, filterAttributes, getAllNodes, assert, assertNodes } = require('../helpers');
 
-describe('axes', () => {
+describe('axis', () => {
   let doc, h;
 
   beforeEach(() => {
@@ -204,10 +201,6 @@ describe('axes', () => {
       assertNodes("self::node()", h.getNodeProcessingInstruction(), [h.getNodeProcessingInstruction()]);
     });
 
-    it('works with node namespace context', () => {
-      assertNodes("self::node()", h.getNodeNamespace(), [h.getNodeNamespace()]);
-    });
-
     it('works with document fragment context', () => {
       const fragment = doc.createDocumentFragment();
       const test = () => {
@@ -254,10 +247,6 @@ describe('axes', () => {
     it('works with a processing instruction context', () => {
       assertNodes("child::node()", h.getNodeProcessingInstruction(), []);
     });
-
-    it('works with a namespace context', () => {
-      assertNodes("child::node()", h.getNodeNamespace(), []);
-    });
   });
 
   describe('descendendant axis', () => {
@@ -292,10 +281,6 @@ describe('axes', () => {
 
     it('works with a processing instruction context', () => {
       assertNodes("descendant::node()", h.getNodeProcessingInstruction(), []);
-    });
-
-    it('works with namespace context', () => {
-      assertNodes("descendant::node()", h.getNodeNamespace(), []);
     });
   });
 
@@ -341,12 +326,6 @@ describe('axes', () => {
           h.getNodeProcessingInstruction()
      ]);
     });
-
-    it('works with a namspace context', () => {
-      assertNodes("descendant-or-self::node()", h.getNodeNamespace(), [
-          h.getNodeNamespace()
-     ]);
-    });
   });
 
   describe('parent axis', () => {
@@ -376,10 +355,6 @@ describe('axes', () => {
 
     it('works with a processing instruction', () => {
       assertNodes("parent::node()", h.getNodeProcessingInstruction(), [doc.getElementById('testStepAxisNodeProcessingInstruction')]);
-    });
-
-    it('works with a namespace', () => {
-      assertNodes("parent::node()", h.getNodeNamespace(), [doc.getElementById('testStepAxisNodeNamespace')]);
     });
   });
 
@@ -438,16 +413,6 @@ describe('axes', () => {
           doc.querySelector('body'),
           doc.getElementById('StepAxisCase'),
           doc.getElementById('testStepAxisNodeProcessingInstruction')
-     ]);
-    });
-
-    it('works for a namespace context ', () => {
-      assertNodes("ancestor::node()", h.getNodeNamespace(), [
-          doc,
-          doc.documentElement,
-          doc.querySelector('body'),
-          doc.getElementById('StepAxisCase'),
-          doc.getElementById('testStepAxisNodeNamespace')
      ]);
     });
   });
@@ -517,17 +482,6 @@ describe('axes', () => {
           h.getNodeProcessingInstruction()
      ]);
     });
-
-    it('works for namespace context', () => {
-      assertNodes("ancestor-or-self::node()", h.getNodeNamespace(), [
-          doc,
-          doc.documentElement,
-          doc.querySelector('body'),
-          doc.getElementById('StepAxisCase'),
-          doc.getElementById('testStepAxisNodeNamespace'),
-          h.getNodeNamespace()
-     ]);
-    });
   });
 
   describe('following-sibling axis', () => {
@@ -557,10 +511,6 @@ describe('axes', () => {
 
     it('works for a processing instruction', () => {
       assertNodes("following-sibling::node()", h.getNodeProcessingInstruction(), h.followingSiblingNodes(h.getNodeProcessingInstruction()));
-    });
-
-    it('works for a namespace context', () => {
-      assertNodes("following-sibling::node()", h.getNodeNamespace(), []);
     });
   });
 
@@ -592,10 +542,6 @@ describe('axes', () => {
     it('works for a ProcessingInstruction context', () => {
       assertNodes("preceding-sibling::node()", h.getNodeProcessingInstruction(), h.precedingSiblingNodes(h.getNodeProcessingInstruction()));
     });
-
-    it('works for a Namespace context', () => {
-      assertNodes("preceding-sibling::node()", h.getNodeNamespace(), []);
-    });
   });
 
   describe('following axis', () => {
@@ -625,10 +571,6 @@ describe('axes', () => {
 
     it('works for a processing instruction context', () => {
       assertNodes("following::node()", h.getNodeProcessingInstruction(), h.followingNodes(h.getNodeProcessingInstruction()));
-    });
-
-    it('works for a namespace context', () => {
-      assertNodes("following::node()", h.getNodeNamespace(), h.followingNodes(doc.getElementById('testStepAxisNodeNamespace')));
     });
   });
 
@@ -660,10 +602,6 @@ describe('axes', () => {
     it('works for a processing instruction context', () => {
       assertNodes("preceding::node()", h.getNodeProcessingInstruction(), h.precedingNodes(h.getNodeProcessingInstruction()));
     });
-
-    it('works for a Namespace context', () => {
-        assertNodes("preceding::node()", h.getNodeNamespace(), h.precedingNodes(doc.getElementById('testStepAxisNodeNamespace')));
-    });
   });
 
   describe('attribute axis', () => {
@@ -687,10 +625,6 @@ describe('axes', () => {
       assertNodes("attribute::node()", h.getNodeProcessingInstruction(), []);
     });
 
-    it('works for a namespace context', () => {
-      assertNodes("attribute::node()", h.getNodeNamespace(), []);
-    });
-
     it('works for a 0 context', () => {
       assertNodes("attribute::node()", doc.getElementById('testStepAxisNodeAttribute0'), filterAttributes(doc.getElementById('testStepAxisNodeAttribute0').attributes));
     });
@@ -705,217 +639,6 @@ describe('axes', () => {
 
     it('works for a StartXml context', () => {
       assertNodes("attribute::node()", doc.getElementById('testStepAxisNodeAttributeStartXml'), filterAttributes(doc.getElementById('testStepAxisNodeAttributeStartXml').attributes));
-    });
-  });
-
-  describe('namespace axis', () => {
-
-    it('works for a document context', () => {
-      assertNodesNamespace("namespace::node()", doc, []);
-    });
-
-    it('works for an attribute context', () => {
-      assertNodesNamespace("namespace::node()", h.getNodeAttribute(), []);
-    });
-
-    it('works for a CDATA context', () => {
-      assertNodesNamespace("namespace::node()", h.getNodeCData(), []);
-    });
-
-    it('works for a comment context', () => {
-      assertNodesNamespace("namespace::node()", h.getNodeComment(), []);
-    });
-
-    it('works for a processing instruction context', () => {
-      assertNodesNamespace("namespace::node()", h.getNodeProcessingInstruction(), []);
-    });
-
-    it('works for a namespace context', () => {
-      assertNodesNamespace("namespace::node()", h.getNodeNamespace(), []);
-    });
-
-    it('works for a document element context', () => {
-      assertNodesNamespace("namespace::node()", doc.documentElement, [
-          ['', 'http://www.w3.org/1999/xhtml'],
-          ['ev', 'http://some-namespace.com/nss'],
-          ['xml', 'http://www.w3.org/XML/1998/namespace']
-      ]);
-    });
-
-    it('works for a 0 context', () => {
-      assertNodesNamespace("namespace::node()", doc.getElementById('testStepAxisNodeNamespace0'), [
-          ['', 'http://www.w3.org/1999/xhtml'],
-          ['ev', 'http://some-namespace.com/nss'],
-          ['xml', 'http://www.w3.org/XML/1998/namespace']
-     ]);
-    });
-
-    it('works for a 1 context', () => {
-      assertNodesNamespace("namespace::node()", doc.getElementById('testStepAxisNodeNamespace1'), [
-          ['', 'http://www.w3.org/1999/xhtml'],
-          ['a', 'asdf'],
-          ['ev', 'http://some-namespace.com/nss'],
-          ['xml', 'http://www.w3.org/XML/1998/namespace']
-     ]);
-    });
-
-    it('works for a 1 default context', () => {
-      assertNodesNamespace("namespace::node()", doc.getElementById('testStepAxisNodeNamespace1defaultContainer').firstChild, [
-          ['', 'asdf'],
-          ['ev', 'http://some-namespace.com/nss'],
-          ['xml', 'http://www.w3.org/XML/1998/namespace']]);
-    });
-
-    it('works for a 1 default 2 context', () => {
-      assertNodesNamespace("namespace::node()", doc.getElementById('testStepAxisNodeNamespace1defaultContainer2').firstChild, [
-          ['ev', 'http://some-namespace.com/nss'],
-          ['xml', 'http://www.w3.org/XML/1998/namespace']]);
-    });
-
-    it('works for a 3 context', () => {
-      const namespaces = [],
-          contextNode = doc.getElementById('testStepAxisNodeNamespace3');
-
-      namespaces.push(['', 'http://www.w3.org/1999/xhtml']);
-      parseNamespacesFromAttributes(contextNode.attributes, namespaces);
-      namespaces.push(['ev', 'http://some-namespace.com/nss']);
-      namespaces.push(['xml', 'http://www.w3.org/XML/1998/namespace']);
-
-      assertNodesNamespace("namespace::node()", contextNode, namespaces);
-    });
-
-    it('works for a 3 default context', () => {
-      const namespaces = [],
-          contextNode = doc.getElementById('testStepAxisNodeNamespace3defaultContainer').firstChild;
-
-      parseNamespacesFromAttributes(contextNode.attributes, namespaces);
-      namespaces.push(['ev', 'http://some-namespace.com/nss']);
-      namespaces.push(['xml', 'http://www.w3.org/XML/1998/namespace']);
-
-      assertNodesNamespace("namespace::node()", contextNode, namespaces);
-    });
-
-    it('works with an element context that overrides the namespace', () => {
-      assertNodesNamespace("namespace::node()", doc.getElementById('testStepAxisNodeNamespaceXmlOverride'), [
-          ['', 'http://www.w3.org/1999/xhtml'],
-          ['ev', 'http://some-other-namespace/'],
-          ['xml', 'http://www.w3.org/XML/1998/namespace']
-     ]);
-    });
-
-    it('works with "NoNamespaceNodeSharingAmongstElements" context', () => {
-      let j, result, result2, item, item2, expectedResult;
-
-      expectedResult = [
-          ['', 'http://www.w3.org/1999/xhtml'],
-          ['a', 'asdf'],
-          ['ev', 'http://some-namespace.com/nss'],
-          ['xml', 'http://www.w3.org/XML/1998/namespace']];
-
-      result = doc.xEval("namespace::node()", doc.getElementById('testStepAxisNodeNamespace1'), XPathResult.ORDERED_NODE_SNAPSHOT_TYPE);
-      result2 = doc.xEval("namespace::node()", doc.getElementById('testStepAxisNodeNamespace1b'), XPathResult.ORDERED_NODE_SNAPSHOT_TYPE);
-      assert.equal(result.snapshotLength, expectedResult.length);
-      assert.equal(result2.snapshotLength, expectedResult.length);
-
-      for (j = 0; j < result.snapshotLength; j++) {
-        item = result.snapshotItem(j);
-        item2 = result2.snapshotItem(j);
-
-        assert.equal(item.nodeName, '#namespace');
-        assert.equal(item2.nodeName, '#namespace');
-
-        assert.equal(item.localName, expectedResult[j][0]);
-        assert.equal(item2.localName, expectedResult[j][0]);
-
-        assert.equal(item.namespaceURI, expectedResult[j][1]);
-        assert.equal(item2.namespaceURI, expectedResult[j][1]);
-
-        //TODO we are manually constructing the item
-        // figure out what else to return to differentiate items
-        // assert.notDeepEqual(item2, item);
-      }
-    });
-
-    it('works with "SameNamespaceNodeOnSameElement" context', () => {
-      let j, result, result2, item, item2, expectedResult;
-
-      expectedResult = [
-        ['', 'http://www.w3.org/1999/xhtml'],
-        ['a', 'asdf'],
-        ['ev', 'http://some-namespace.com/nss'],
-        ['xml', 'http://www.w3.org/XML/1998/namespace']];
-
-      const node = doc.getElementById('testStepAxisNodeNamespace1');
-      result = doc.xEval("namespace::node()", node, XPathResult.ORDERED_NODE_SNAPSHOT_TYPE);
-      result2 = doc.xEval("namespace::node()", node, XPathResult.ORDERED_NODE_SNAPSHOT_TYPE);
-
-      for (j = 0; j < result.snapshotLength; j++) {
-        item = result.snapshotItem(j);
-        item2 = result2.snapshotItem(j);
-
-        assert.equal(item.nodeName, '#namespace');
-        assert.equal(item.localName, expectedResult[j][0]);
-        assert.equal(item.namespaceURI, expectedResult[j][1]);
-        assert.deepEqual(item2, item);
-      }
-    });
-  });
-
-  const assertAttributes = (node) => {
-    // TODO confirm this. chrome includes namespaces attrs and firefox does not.
-    // We could exclude them from chrome to be consistent but would have to
-    // manually build the response with an incomplete interface (snapshotItem(idx), etc).
-    // assertNodes("attribute::node()", node, getAttributes(node));
-  };
-
-  describe('attribute && namespace axes', () => {
-    it('works for Attrib1Ns1', () => {
-      const node = doc.getElementById('testStepAxisNodeAttrib1Ns1');
-      assertAttributes(node);
-      assertNodesNamespace("namespace::node()", node, [
-        ['', 'http://www.w3.org/1999/xhtml'],
-        ['a', 'asdf'],
-        ['ev', 'http://some-namespace.com/nss'],
-        ['xml', 'http://www.w3.org/XML/1998/namespace']]);
-    });
-
-    it('works for Attrib1Ns1reversed', () => {
-      const node = doc.getElementById('testStepAxisNodeAttrib1Ns1reversed');
-      assertAttributes(node);
-      assertNodesNamespace("namespace::node()", node, [
-        ['', 'http://www.w3.org/1999/xhtml'],
-        ['a', 'asdf'],
-        ['ev', 'http://some-namespace.com/nss'],
-        ['xml', 'http://www.w3.org/XML/1998/namespace']]);
-    });
-
-    it('works for NodeAttrib2Ns1', () => {
-      const node = doc.getElementById('testStepAxisNodeAttrib2Ns1');
-      assertAttributes(node);
-      assertNodesNamespace("namespace::node()", node, [
-        ['', 'http://www.w3.org/1999/xhtml'],
-        ['c', 'asdf3'],
-        ['ev', 'http://some-namespace.com/nss'],
-        ['xml', 'http://www.w3.org/XML/1998/namespace']]);
-    });
-
-    it('works for Attrib2Ns1reversed', () => {
-      const node = doc.getElementById('testStepAxisNodeAttrib2Ns1reversedContainer').firstChild;
-      assertAttributes(node);
-      assertNodesNamespace("namespace::node()", node, [
-          ['', 'asdf'],
-          ['ev', 'http://some-namespace.com/nss'],
-          ['xml', 'http://www.w3.org/XML/1998/namespace']]);
-    });
-
-    it('works for NodeAttrib2Ns2', () => {
-      const node = doc.getElementById('testStepAxisNodeAttrib2Ns2Container').firstChild;
-      assertAttributes(node);
-      assertNodesNamespace("namespace::node()", node, [
-        ['', 'asdf2'],
-        ['a', 'asdf'],
-        ['ev', 'http://some-namespace.com/nss'],
-        ['xml', 'http://www.w3.org/XML/1998/namespace']]);
     });
   });
 });

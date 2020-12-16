@@ -1,4 +1,4 @@
-const {assertFalse, assertTrue} = require('../helpers');
+const {assertFalse, assertTrue} = require('./helpers');
 
 describe('basic xpath', () => {
   describe('comparing node values', () => {

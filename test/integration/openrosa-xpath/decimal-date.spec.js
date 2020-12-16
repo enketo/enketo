@@ -1,4 +1,4 @@
-const {assertNumberValue } = require('../../helpers');
+const {assertNumberValue } = require('../helpers');
 
 describe('#decimal-date()', () => {
   [

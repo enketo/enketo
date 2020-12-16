@@ -1,4 +1,4 @@
-const { initDoc, nsResolver, assertThrow, assertNumberValue } = require('../../helpers');
+const { initDoc, nsResolver, assertThrow, assertNumberValue } = require('../helpers');
 
 describe('count-non-empty', () => {
   it('count-non-empty', () => {

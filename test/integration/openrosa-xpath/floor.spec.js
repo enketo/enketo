@@ -1,4 +1,4 @@
-const { assertThrow, assertNumberValue } = require('../../helpers');
+const { assertThrow, assertNumberValue } = require('../helpers');
 
 describe('#floor()', () => {
   it('should convert', () => {

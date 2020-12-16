@@ -1,8 +1,7 @@
-const { initDoc, assert, assertNumber, assertNumberValue, assertBoolean } = require('../../helpers');
+const { initDoc, assert, assertNumber, assertNumberValue, assertBoolean } = require('../helpers');
 
 describe('number operators', () => {
-
-  it('+ works', () => {
+  describe('+', () => {
     [
       ["1+1", 2],
       ["0+1", 1],
@@ -18,54 +17,53 @@ describe('number operators', () => {
       ["1.0+1.0", 2],
       ["true()+true()", 2],
       ["false()+1", 1],
+      ["(1 div 0) * 0", NaN],
       ["(1 div 0) + 1", Number.POSITIVE_INFINITY],
       ["(-1 div 0) + 1", Number.NEGATIVE_INFINITY],
-      ["1 + (-1 div 0)", Number.NEGATIVE_INFINITY]
-    ].forEach(t => {
-      assertNumber(t[0], t[1]);
-    });
-
-    [
-      ["number('a') + 0"],
-      ["0 + number('a')"]
-    ].forEach(t => {
-      assertNumber(t[0], NaN);
+      ["1 + (-1 div 0)", Number.NEGATIVE_INFINITY],
+      ["(1 div 0) + (-1 div 0)", NaN],
+      ["number('a') + 0", NaN],
+      ["0 + number('a')", NaN],
+    ].forEach(([ expr, expected ]) => {
+      it(`should evaluate ${expr} as ${expected}`, () => {
+        assertNumber(expr, expected);
+      });
     });
   });
 
-  it('- without spacing works', () => {
-    assertNumber("1-1", 0);
-  });
+  describe('-', () => {
+    it('without spacing works', () => {
+      assertNumber("1-1", 0);
+    });
 
-  it('- with spacing works', () => {
-    assertNumber("1 - 1", 0);
-  });
+    it('with spacing works', () => {
+      assertNumber("1 - 1", 0);
+    });
 
-  it('- with combo with/without spacing 1 works', () => {
-    assertNumber("1 -1", 0);
-  });
+    it('with combo with/without spacing 1 works', () => {
+      assertNumber("1 -1", 0);
+    });
 
-  it('- with combo with/without spacing 2 works', () => {
-    assertNumber("1- 1", 0);
-  });
+    it('with combo with/without spacing 2 works', () => {
+      assertNumber("1- 1", 0);
+    });
 
-  it('- with string without spacing BEFORE - fails', () => {
-    const doc = initDoc('');
-    const test = () => {
-      doc.xEval(doc, null, "asdf- asdf", XPathResult.NUMBER_TYPE);
-    };
-    assert.throw(test);
-  });
+    it('with string without spacing BEFORE - fails', () => {
+      const doc = initDoc('');
+      const test = () => {
+        doc.xEval(doc, null, "'asdf'- 'asdf'", XPathResult.NUMBER_TYPE);
+      };
+      assert.throw(test);
+    });
 
-  it('- with string without spacing AFTER - fails ', () => {
-    assertNumberValue("asdf -asdf", NaN);
-  });
+    it('with string without spacing AFTER - fails ', () => {
+      assertNumberValue("'asdf' -'asdf'", NaN);
+    });
 
-  it('- with strings', () => {
-    assertNumberValue("asdf - asdf", NaN);
-  });
+    it('with strings', () => {
+      assertNumberValue("'asdf' - 'asdf'", NaN);
+    });
 
-  it('- works as expected', () => {
     [
       ["1-1", 0],
       ["0 -1", -1],
@@ -82,16 +80,13 @@ describe('number operators', () => {
       ["true()  \n\r\t -true()", 0],
       ["false()-1", -1],
       ["(1 div 0) - 1", Number.POSITIVE_INFINITY],
-      ["(-1 div 0) - 1", Number.NEGATIVE_INFINITY]
+      ["(-1 div 0) - 1", Number.NEGATIVE_INFINITY],
+      ["number('a') - 0", NaN],
+      ["0 - number('a')", NaN],
     ].forEach(([expr, expected]) => {
-      assertNumberValue(expr, expected);
-    });
-
-    [
-      "number('a') - 0",
-      "0 - number('a')"
-    ].forEach(expr => {
-      assertNumber(expr, NaN);
+      it(`should evaluate ${expr} as ${expected}`, () => {
+        assertNumberValue(expr, expected);
+      });
     });
   });
 
@@ -136,7 +131,7 @@ describe('number operators', () => {
       ["1 mod -1", 0],
       ["0 mod 1", 0],
       ["10 mod (1 div 0)", 10],
-      ["-10 mod (-1 div 0)", -10]
+      ["-10 mod (-1 div 0)", -10],
     ].forEach(t => {
       assertNumber(t[0], t[1]);
     });
@@ -190,7 +185,7 @@ describe('number operators', () => {
       ["true() div true()", 1],
       ["false() div 1", 0],
       ["1 div 0", Number.POSITIVE_INFINITY],
-      ["-1 div 0", Number.NEGATIVE_INFINITY]
+      ["-1 div 0", Number.NEGATIVE_INFINITY],
     ].forEach(t => {
       assertNumberValue(t[0], t[1]);
     });
@@ -218,7 +213,7 @@ describe('number operators', () => {
       ["1.5 * 3", 4.5],
       ["(1 div 0) * 1", Number.POSITIVE_INFINITY],
       ["(-1 div 0) * -1", Number.POSITIVE_INFINITY],
-      ["(1 div 0) * -1", Number.NEGATIVE_INFINITY]
+      ["(1 div 0) * -1", Number.NEGATIVE_INFINITY],
     ].forEach(t => {
       assertNumber(t[0], t[1]);
     });
@@ -247,5 +242,42 @@ describe('number operators', () => {
     assertBoolean('1 + 1', true);
     assertBoolean('0 + 1', true);
     assertBoolean('0 + 0', false);
+  });
+
+  describe('with nodesets', () => {
+    let doc;
+
+    beforeEach(() => {
+      doc = initDoc(`
+        <data>
+          <p>1</p>
+          <p>2</p>
+          <p>3</p>
+          <p>4</p>
+        </data>`);
+    });
+
+    [
+      ["/data/p[1] + /data/p[2]", 3],
+      ["/data/p[1]+ /data/p[2]", 3],
+      ["/data/p[1] +/data/p[2]", 3],
+      ["/data/p[1]+/data/p[2]", 3],
+      ["/data/p[4] - /data/p[2]", 2],
+      ["/data/p[4]- /data/p[2]", 2],
+      ["/data/p[4] -/data/p[2]", 2],
+      ["/data/p[4]-/data/p[2]", 2],
+      ["/data/p[2] * /data/p[3]", 6],
+      ["/data/p[2]* /data/p[3]", 6],
+      ["/data/p[2] */data/p[3]", 6],
+      ["/data/p[2]*/data/p[3]", 6],
+    ].forEach(([expr, value]) => {
+      it(`should evaluate ${expr} as ${value}`, () => {
+        // given
+        const node = doc.getElementById('testFunctionNodeset2');
+
+        // expect
+        assertNumberValue(node, null, expr, value);
+      });
+    });
   });
 });

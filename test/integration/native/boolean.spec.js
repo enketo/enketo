@@ -1,5 +1,5 @@
 const { initDoc, nsResolver, assertThrow,
-  assertTrue, assertFalse } = require('../../helpers');
+  assertTrue, assertFalse } = require('../helpers');
 
 describe('native boolean functions', () => {
   it('boolean() conversion of booleans', () => {

@@ -1,9 +1,7 @@
-const { initDoc, nsResolver, filterAttributes, assert,
-  assertNodes, assertNodesNamespace } = require('../../helpers');
+const { initDoc, nsResolver, filterAttributes, assertNodes } = require('../helpers');
 
 describe('location path', () => {
   let doc;
-  let h;
 
   beforeEach(() => {
     doc = initDoc(`
@@ -30,14 +28,6 @@ describe('location path', () => {
           </div>
         </body>
       </html>`, nsResolver);
-    h = {
-      oneNamespaceNode(node) {
-        const result = doc.xEval("namespace::node()", node, XPathResult.ANY_UNORDERED_NODE_TYPE);
-        const item = result.singleNodeValue;
-        assert.isNotNull(item);
-        return item;
-      }
-    };
   });
 
   it('root', () => {
@@ -68,11 +58,6 @@ describe('location path', () => {
     for (i = 0; i < input.length; i++) {
       assertNodes("/", input[i][0], input[i][1]);
     }
-  });
-
-  it('root namespace', () => {
-    const node = h.oneNamespaceNode(doc.getElementById('LocationPathCaseNamespace'));
-    assertNodes("/", node, [doc]);
   });
 
   it('root node', () => {
@@ -110,28 +95,5 @@ describe('location path', () => {
       doc.getElementById('LocationPathCase'),
       doc.getElementById('LocationPathCaseDuplicates')
     ]);
-  });
-
-  xit('node namespace', () => {
-    const node = doc.getElementById('LocationPathCaseNamespaceParent' );
-
-    assertNodesNamespace("child::* /namespace::*", node, [
-      ['', 'http://asdss/'],
-      ['ev', 'http://some-namespace.com/nss'],
-      ['xml', 'http://www.w3.org/XML/1998/namespace'],
-      ['', 'http://www.w3.org/1999/xhtml'],
-      ['ab', 'hello/world2'],
-      ['a2', 'hello/world'],
-      ['aa', 'http://saa/'],
-      ['ev', 'http://some-namespace.com/nss'],
-      ['xml', 'http://www.w3.org/XML/1998/namespace'],
-      ['', 'http://www.w3.org/1999/xhtml'],
-      ['ev', 'http://some-namespace.com/nss'],
-      ['xml', 'http://www.w3.org/XML/1998/namespace'],
-      ['', 'http://www.w3.org/1999/xhtml'],
-      ['aa', 'http://saa/'],
-      ['ev', 'http://some-namespace.com/nss'],
-      ['xml', 'http://www.w3.org/XML/1998/namespace']
-   ], nsResolver);
   });
 });

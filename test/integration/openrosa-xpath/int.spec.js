@@ -1,4 +1,4 @@
-const { assertNumberValue } = require('../../helpers');
+const { assertNumberValue } = require('../helpers');
 
 const PATH = '/simple/xpath/to/node';
 
@@ -18,7 +18,7 @@ describe('#int()', () => {
     assertNumberValue('int("a")', NaN);
     assertNumberValue('int(7.922021953507237e-12)', 0);
     assertNumberValue('int(1 div 47999799999)', 0);
-    assertNumberValue('int("7.922021953507237e-12")', NaN);
+    assertNumberValue('int("7.922021953507237e-12")', 0);
   });
 
 });

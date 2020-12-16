@@ -1,13 +1,13 @@
-const { initDoc, filterAttributes, assertThrow, assertTrue, assertFalse } = require('../../helpers');
+const { initDoc, assertThrow, assertTrue, assertFalse } = require('../helpers');
 
 describe('lang functions', () => {
   let doc;
   beforeEach(() => {
     doc = initDoc(`
       <!DOCTYPE html>
-      <html xml:lang="en-us" xmlns="http://www.w3.org/1999/xhtml" xmlns:ev="http://some-namespace.com/nss">
+      <html xml:lang="en-US" xmlns="http://www.w3.org/1999/xhtml" xmlns:ev="http://some-namespace.com/nss">
         <body class="yui3-skin-sam" id="body">
-          <div id="testLang" xml:lang="sr-Cyrl-bg">
+          <div id="testLang" xml:lang="pt-BR">
             <div lang="fr">
               <div id="testLang2"></div>
             </div>
@@ -26,22 +26,19 @@ describe('lang functions', () => {
     assertFalse(doc.documentElement, null, "lang('EN-us-boont')");
   });
 
-  it('hierarchy check', () => {
-    let node = doc.querySelector('body');
-    assertTrue(node, null, "lang('EN')");
+  describe('hierarchy check', () => {
+    it('should work on nodes', () => {
+      let node = doc.querySelector('body');
+      assertTrue(node, null, "lang('EN')");
 
-    node = doc.getElementById('testLang2');
-    assertTrue(node, null, "lang('sr')");
-    assertTrue(node, null, "lang('sr-Cyrl-bg')");
-    assertFalse(node, null, "lang('fr')");
+      node = doc.getElementById('testLang2');
+      assertTrue(node, null, "lang('pt')");
+      assertTrue(node, null, "lang('pt-BR')");
+      assertFalse(node, null, "lang('fr')");
 
-    node = doc.getElementById('testLang3');
-    assertTrue(node, null, "lang('sl')");
-
-    // attribute node check
-    const atts = doc.getElementById('testLang4').attributes;
-    node = filterAttributes(atts)[0];
-    assertTrue(node, null, "lang('sr-Cyrl-bg')");
+      node = doc.getElementById('testLang3');
+      assertTrue(node, null, "lang('sl')");
+    });
   });
 
   it('lang() fails when too few arguments are provided', () => {

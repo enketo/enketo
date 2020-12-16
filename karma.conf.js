@@ -1,36 +1,24 @@
+/* eslint-env node */
 module.exports = function(config) {
   process.env.CHROME_BIN = require('puppeteer').executablePath();
   process.env.TZ = 'America/Phoenix';
   config.set({
     frameworks: [
-      'mocha'
+      'mocha',
     ],
     browsers: [
       'ChromeHeadless',
       'FirefoxHeadless',
     ],
     files: [
-      'node_modules/chai/chai.js',
-      'node_modules/lodash/lodash.js',
-      'src/**/*.js',
-      'test/**/*.spec.js'
+      { pattern:'test/integration/index.js', watched:false },
     ],
     preprocessors: {
-      'src/**/*.js': ['webpack'],
-      'test/**/*.spec.js': ['webpack']
+      'test/integration/index.js': ['webpack'],
     },
-    reporters: [
-      'mocha',
-      'coverage'
-    ],
-    singleRun: true,
-    webpack: require('./webpack.test.config.js'),
-    webpackMiddleware: {
-      watchOptions: { poll: 100 }
-    },
-    coverageReporter: {
-      type: 'lcov',
-      subdir: '.'
+    webpack: {
+      mode: 'development',
+      devtool: false,
     },
   });
 };

@@ -1,4 +1,6 @@
-const { assert, initDoc } = require('../../helpers');
+const _ = require('lodash');
+
+const { assert, initDoc } = require('../helpers');
 
 describe('#random()', () => {
   const doc = initDoc('');

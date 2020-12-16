@@ -1,4 +1,4 @@
-const { initDoc, assertBoolean } = require('../../helpers');
+const { initDoc, assertBoolean } = require('../helpers');
 
 const assertOps1 = (...args) => {
   const expected = args[args.length-1];
@@ -170,15 +170,15 @@ describe('Comparison operator', () => {
       assertOps2(node, "10", "*", [false, false, true, true]);
       assertOps2(node, "5", "*", [false, true, true, true]);
       assertOps2(node, "2", "*", [true, true, true, true]);
-      assertOps2(node, "true()", "*", [false, true, false, true]);
-      assertOps2(node, "false()", "*", [true, true, false, false]);
+      assertOps2(node, "true()", "*", [true, true, true, true]);
+      assertOps2(node, "false()", "*", [true, true, true, true]);
       assertOps2(node, "'4'", "*", [true, true, true, true]);
       assertOps2(node, "*", "-10", [false, false, true, true]);
       assertOps2(node, "*", "10", [true, true, false, false]);
       assertOps2(node, "*", "5", [true, true, false, true]);
       assertOps2(node, "*", "2", [true, true, true, true]);
-      assertOps2(node, "*", "true()", [false, true, false, true]);
-      assertOps2(node, "*", "false()", [false, false, true, true]);
+      assertOps2(node, "*", "true()", [true, true, true, true]);
+      assertOps2(node, "*", "false()", [true, true, true, true]);
       assertOps2(node, "*", "'4'", [true, true, true, true]);
 
       node = doc.getElementById('ComparisonOperatorCaseNodesetStrings');
@@ -187,12 +187,12 @@ describe('Comparison operator', () => {
 
       node = doc.getElementById('ComparisonOperatorCaseNodesetEmpty');
       assertOps2(node, "0", "*", [false, false, false, false]);
-      assertOps2(node, "true()", "*", [false, false, true, true]);
-      assertOps2(node, "false()", "*", [false, true, false, true]);
+      assertOps2(node, "true()", "*", [false, false, false, false]);
+      assertOps2(node, "false()", "*", [false, false, false, false]);
       assertOps2(node, "''", "*", [false, false, false, false]);
       assertOps2(node, "*", "0", [false, false, false, false]);
-      assertOps2(node, "*", "true()", [true, true, false, false]);
-      assertOps2(node, "*", "false()", [false, true, false, true]);
+      assertOps2(node, "*", "true()", [false, false, false, false]);
+      assertOps2(node, "*", "false()", [false, false, false, false]);
       assertOps2(node, "*", "''", [false, false, false, false]);
     });
   });

@@ -1,4 +1,4 @@
-const { assertNumberValue } = require('../../helpers');
+const { assertNumberValue } = require('../helpers');
 
 describe('#pow()', () => {
   describe('should return power of text values', () => {

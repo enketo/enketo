@@ -1,4 +1,4 @@
-const { assertMatch, assertStringLength } = require('../../helpers');
+const { assertMatch, assertStringLength } = require('../helpers');
 
 describe('#uuid()', () => {
   it('should provide an RFC 4122 version 4 compliant UUID string', () => {

@@ -1,4 +1,4 @@
-const { initDoc, assertStringValue } = require('../../helpers');
+const { initDoc, assertStringValue } = require('../helpers');
 
 describe('#concat', () => {
   it('should concatenate two xpath values', () => {

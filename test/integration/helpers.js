@@ -1,39 +1,35 @@
-const assert = chai.assert;
-const engine = require('../src/engine');
+const { assert } = require('chai');
+const OpenRosaXpath = require('../../src/openrosa-xpath');
+const { toDbgString } = require('../dbg');
 
-let doc, xEval, evaluator, nsr, rt, node, docs = [];
+let xEval;
 
-const _document = (line) => {
-  docs += line + '\n';
+const nsResolver = {
+  lookupNamespaceURI: prefix => {
+    var ns = {
+      'xhtml' : 'http://www.w3.org/1999/xhtml',
+      'mathml': 'http://www.w3.org/1998/Math/MathML',
+      'jr': 'http://openrosa.org/javarosa'
+    };
+    return ns[prefix];
+  },
 };
 
-const nsResolver = (prefix) => {
-  var ns = {
-    'xhtml' : 'http://www.w3.org/1999/xhtml',
-    'mathml': 'http://www.w3.org/1998/Math/MathML',
-    'jr': 'http://openrosa.org/javarosa'
+const initDoc = (xml, nsr) => {
+  const doc = new DOMParser().parseFromString(xml, 'application/xml');
+  const evaluator = OpenRosaXpath();
+  xEval = function(e, xnode, xrt) {
+    const node = xnode || doc;
+    const rt = xrt || XPathResult.ANY_TYPE;
+    return evaluator.evaluate(e, node, nsr, rt);
   };
-  return ns[prefix] || null;
-};
-
-const initDoc = (xml, xnsr) => {
-  doc = new DOMParser().parseFromString(xml, 'application/xml');
-  node = null;
-  nsr = xnsr;
-  evaluator = new engine.XPathEvaluator();
-  xEval = function(e, xnode, xrt, xnsr) {
-    node = xnode || doc;
-    rt = xrt;
-    _document(e);
-    return evaluator.evaluate(e, node, xnsr || nsr, rt, null);
-  };
-  doc.evaluator = evaluator;
+  doc.evaluate = evaluator.evaluate;
   doc.xEval = xEval;
   return doc;
 };
 
 const simpleValueIs = (textValue) => {
-  initDoc(`<simple><xpath><to>
+  return initDoc(`<simple><xpath><to>
              <node>${textValue}</node>
            </to></xpath><empty/></simple>`);
 };
@@ -74,7 +70,7 @@ const assertString = (...args) => {
     simpleValueIs(args[args.length - 3]);
   }
   const node = args.length > 3 ? args[args.length - 4] : null;
-  assert.equal(xEval(regex, node).stringValue, expected);
+  assert.equal(xEval(regex, node, XPathResult.STRING_TYPE).stringValue, expected);
 };
 
 const assertStringValue = (...args) => {
@@ -140,17 +136,6 @@ beforeEach(() => {
   initBasicXmlDoc();
 });
 
-before(() => {
-  docs = [];
-  _document('## Supported XPath expressions:');
-  _document('');
-});
-
-// Capture all tested functions/docs
-// after(() => {
-//   console.log(docs);
-// });
-
 const getNextChildElementNode = (parentNode) => {
   let childNode = parentNode.firstChild;
   while (childNode.nodeName == '#text') {
@@ -182,11 +167,6 @@ const filterAttributes = (attributes) => {
   var i, name, specifiedAttributes = [];
 
   for(i = 0; i < attributes.length; i++) {
-    if(!attributes[i].specified) {
-      // ignore non-specified attributes
-      continue;
-    }
-
     name = attributes[i].nodeName.split(':');
     if (name[0] === 'xmlns') {
       // ignore namespaces
@@ -198,24 +178,12 @@ const filterAttributes = (attributes) => {
   return specifiedAttributes;
 };
 
-const assertNodesNamespace = (expr, node, expected) => {
-  const result = xEval(expr, node, XPathResult.ORDERED_NODE_SNAPSHOT_TYPE);
-  assert.equal(result.snapshotLength, expected.length);
-  expected = sortedNamespaces(expected);
-  for(let j = 0; j < result.snapshotLength; j++) {
-    const item = result.snapshotItem(j);
-    assert.equal(item.nodeName, '#namespace');
-    assert.equal(item.localName, expected[j][0]);
-    assert.equal(item.namespaceURI, expected[j][1]);
-  }
-};
-
 const assertNodes = (expr, node, expected, nsr) => {
   var result = xEval(expr, node, XPathResult.ORDERED_NODE_SNAPSHOT_TYPE, nsr);
   assert.equal(result.snapshotLength, expected.length);
   for(let j = 0; j < result.snapshotLength; j++) {
     const item = result.snapshotItem(j);
-    assert.equal(item, expected[j]);
+    assert.equal(item, expected[j], `expected: ${toDbgString(expected[j])}, got: ${toDbgString(item)}`);
   }
 };
 
@@ -223,14 +191,6 @@ const sorted = (nodes) => {
   return nodes.sort((a, b) => {
     if (a.nodeName > b.nodeName) return 1;
     if (a.nodeName < b.nodeName) return -1;
-    return 0;
-  });
-};
-
-const sortedNamespaces = (namespaces) => {
-  return namespaces.sort((ns1, ns2) => {
-    if(ns1[0] > ns2[0]) {return 1;}
-    if(ns1[0] < ns2[0]) {return -1;}
     return 0;
   });
 };
@@ -251,22 +211,6 @@ const assertUnorderedNodes = (expr, node, expected) => {
   const expectedNodes = sorted(expected);
   for(let j = 0; j < resultNodes.length; j++) {
     assert.equal(resultNodes[j].nodeName, expectedNodes[j].nodeName);
-  }
-};
-
-const parseNamespacesFromAttributes = (attributes, namespaces) => {
-  var i, name;
-
-  for (i = attributes.length - 1; i >= 0; i--) {
-    name = attributes.item(i).nodeName.split(':');
-
-    if (name[0] === 'xmlns') {
-      if (name.length == 1) {
-        namespaces.unshift(['', attributes.item(i).nodeValue]);
-      } else {
-        namespaces.push([name[1], attributes.item(i).nodeValue]);
-      }
-    }
   }
 };
 
@@ -296,8 +240,6 @@ module.exports = {
   getAllNodes,
   snapshotToArray,
   setAttribute,
-  parseNamespacesFromAttributes,
-  sortedNamespaces,
   assert,
   assertThrow,
   assertNumberValue,
@@ -311,6 +253,5 @@ module.exports = {
   assertFalse,
   assertTrue,
   assertNodes,
-  assertNodesNamespace,
   assertUnorderedNodes
 };

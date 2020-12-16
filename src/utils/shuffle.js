@@ -16,7 +16,7 @@ function shuffle(array, seed) {
 
   if(typeof seed !== 'undefined'){
     if(!Number.isInteger(seed)) {
-      throw new Error('Invalid seed argument. Integer required.');
+      throw new Error('Invalid seed argument. Integer required, but got: ' + seed);
     }
     var rnd = new Random(seed);
     rng = rnd.nextFloat.bind(rnd);

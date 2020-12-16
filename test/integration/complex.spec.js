@@ -1,4 +1,6 @@
-const {initDoc, assert} = require('../helpers');
+const _ = require('lodash');
+
+const {initDoc, assert} = require('./helpers');
 
 const FULL_DATE_MATCH = /(Mon|Tue|Wed|Thu|Fri|Sat|Sun) (Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec) \d\d \d{4} \d\d:\d\d:\d\d GMT([+-]\d\d\d\d \(.+\))?/;
 
@@ -7,10 +9,8 @@ describe('some complex examples', () => {
 
   _.forEach({
     'concat("uuid:", uuid())':/uuid:[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/,
-    '"2015-07-15" &lt; today()': true,
     '"2015-07-15" < today()' : true,
-    "'2015-07-15' &lt; today()" : true,
-    "'2015-07-15' < today()" : true,
+    "'2015-07-15' > today()" : false,
     "'raw-string'" : 'raw-string',
     'format-date-time(date-time(decimal-date-time("2003-03-12") + 280), "%b %e, %Y")': /Dec 17, 2003/,
     "decimal-date-time(today()- 60 )": /^-?[0-9]+(\.[0-9]+)?$/,
@@ -138,14 +138,14 @@ describe('some complex examples', () => {
     "(2+3)": 5,
     "2 + 3": 5,
     "(2 + 3)": 5,
-    "2 + 3": "5", // For some reason, it is evaluated correctly here.
+    "2 + 4": "6",
     "today() < (today() + 1)": true,
     "today() > (today() + 1)": false,
     "today() < '1970-06-03'": false,
     "today() > '1970-06-03'": true,
     "today() + 1 < '1970-06-03'": false,
     "today() + 1 > '1970-06-03'": true,
-    '.': '',
+    '.': [ node => assert.equal(node.nodeName, '#document') ],
 
     // Bracketed expressions inside vs outside function calls:
 
@@ -169,6 +169,9 @@ describe('some complex examples', () => {
     "cos(-1 + (1 + 1))": Math.cos(1),
 
     // These tests exposed a weird bug which would return "Too many tokens" if dot was followed by a comparator
+    // In all these tests, the root node is being passed to `number()` to allow its comparison with the number
+    // 1.  The text is null, so its numeric value is NaN.  This makes all comparisons return false.
+
     ".>1": false,
     ".> 1": false,
     ". >1": false,
@@ -177,14 +180,14 @@ describe('some complex examples', () => {
     ".>= 1": false,
     ". >=1": false,
     ". >= 1": false,
-    ".<1": true,
-    ".< 1": true,
-    ". <1": true,
-    ". < 1": true,
-    ".<=1": true,
-    ".<= 1": true,
-    ". <=1": true,
-    ". <= 1": true,
+    ".<1": false,
+    ".< 1": false,
+    ". <1": false,
+    ". < 1": false,
+    ".<=1": false,
+    ".<= 1": false,
+    ". <=1": false,
+    ". <= 1": false,
 
     '1=1': true,
     '1=0': false,
@@ -218,11 +221,18 @@ describe('some complex examples', () => {
     it('should convert "' + expression + '" to match "' + matcher + '"', () => {
       var evaluated = doc.xEval(expression);
 
-      switch(typeof matcher) {
-        case 'boolean': return assert.equal(evaluated.booleanValue, matcher);
-        case 'number': return assert.equal(evaluated.numberValue, matcher);
-        case 'string': return assert.equal(evaluated.stringValue, matcher);
-        default: assert.match(evaluated.stringValue, matcher);
+      if(Array.isArray(matcher)) {
+        matcher.forEach(nodeMatcher => {
+          nodeMatcher(evaluated.iterateNext());
+        });
+        assert.isNull(evaluated.iterateNext());
+      } else {
+        switch(typeof matcher) {
+          case 'boolean': return assert.equal(evaluated.booleanValue, matcher);
+          case 'number': return assert.equal(evaluated.numberValue, matcher);
+          case 'string': return assert.equal(evaluated.stringValue, matcher);
+          default: assert.match(evaluated.stringValue, matcher);
+        }
       }
     });
   });

@@ -1,4 +1,4 @@
-const { initDoc, assert, getNextChildElementNode, setAttribute } = require('../../helpers');
+const { initDoc, assert, getNextChildElementNode, setAttribute } = require('../helpers');
 
 describe('namespace resolver', () => {
   let doc;

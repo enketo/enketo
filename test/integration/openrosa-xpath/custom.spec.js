@@ -1,38 +1,88 @@
-const {initDoc, assert} = require('../../helpers');
+const { assert } = require('chai');
 
-// TODO need to test this differently - with the actual orxe.min.js loaded.
-describe.skip('custom XPath functions', () => {
-  const doc = initDoc(`<div id="FunctionCustom"></div>`);
-  const node = doc.getElementById('FunctionCustom');
-  const obj = { status: 'good' };
-  node.textContent = JSON.stringify(obj);
-  const evaluator = doc.evaluator;
+const ORXE = require('../../../src/openrosa-xpath');
 
-  afterEach( () => {
-    evaluator.customXPathFunction.remove('comment-status');
+describe('custom XPath functions', () => {
+  const evaluator = new ORXE();
+
+  it('should not allow unexpected arg types', () => {
+    assert.throws(
+      () => evaluator.customXPathFunction.add('f', {
+        fn: () => {},
+        args: [ { t:'string' }, { t:'number' }, { t:'boolean' }, { t:'dog' } ],
+        ret: 'number',
+      }),
+      `Unsupported arg type(s): 'dog'`
+    );
   });
 
-  it('can be added', () => {
-    const test1 = () => evaluator.evaluate('comment-status(.)', node, null, XPathResult.STRING_TYPE, null);
+  it('should not allow unexpected return types', () => {
+    assert.throws(
+      () => evaluator.customXPathFunction.add('f', {
+        fn: () => {},
+        args: [],
+        ret: 'fish',
+      }),
+      `Unsupported return type: 'fish'`
+    );
+  });
 
-    // Check the function doesn't exist before.
-    assert.throw(test1, /Failed to execute/);
+  it('should not allow overriding existing functions', () => {
+    assert.throws(
+      () => evaluator.customXPathFunction.add('cos', { fn:() => {}, args:[], ret:'string' }),
+      `There is already a function with the name: 'cos'`,
+    );
+  });
 
-    // Add custom function
-    evaluator.customXPathFunction.add('comment-status', function(a) {
-      if(arguments.length !== 1) throw new Error('Invalid args');
-      const curValue = a.v[0]; // {t: 'arr', v: [{'status': 'good'}]}
-      const status = JSON.parse(curValue).status;
-      return new evaluator.customXPathFunction.type.StringType(status);
+  it('should not allow overriding existing custom functions', () => {
+    // given
+    evaluator.customXPathFunction.add('f', { fn:() => {}, args:[], ret:'string' }),
+
+    // expect
+    assert.throws(
+      () => evaluator.customXPathFunction.add('f', { fn:() => {}, args:[], ret:'string' }),
+      `There is already a function with the name: 'f'`,
+    );
+  });
+
+  describe('pad2()', () => {
+    evaluator.customXPathFunction.add('pad2', {
+      fn: a => a.padStart(2, '0'),
+      args: [ { t:'string' } ],
+      ret: 'string',
     });
 
-    // Check functioning:
-    assert.equal(test1().stringValue, obj.status);
+    [
+      [   '""',   '00' ],
+      [  '"1"',   '01' ],
+      [ '"11"',   '11' ],
+      [ '"111"', '111' ],
+      [      0,   '00' ],
+      [      1,   '01' ],
+      [     11,   '11' ],
+      [    111,  '111' ],
+    ].forEach(([ input, expectedOutput ]) => {
+      it(`should convert ${input} to '${expectedOutput}'`, () => {
+        // when
+        const actualOutput = evaluator.evaluate(`pad2(${input})`);
 
-    // Check parameter errors:
-    const test2 = () => {
-      evaluator.evaluate('comment-status(., 2)', node, null, XPathResult.STRING_TYPE, null);
-    };
-    assert.throw(test2);
+        // then
+        assert.deepEqual(actualOutput, { resultType:3, stringValue:expectedOutput });
+      });
+    });
+
+    it('should throw if too few args are provided', () => {
+      assert.throws(
+        () => evaluator.evaluate('pad2()'),
+        'Function "pad2" expected 1 arg(s), but got 0',
+      );
+    });
+
+    it('should throw if too many args are provided', () => {
+      assert.throws(
+        () => evaluator.evaluate('pad2("1", 2)'),
+        'Function "pad2" expected 1 arg(s), but got 2',
+      );
+    });
   });
 });

@@ -1,6 +1,10 @@
 var DATE_STRING = /^\d\d\d\d-\d{1,2}-\d{1,2}(?:T\d\d:\d\d:\d\d\.?\d?\d?(?:Z|[+-]\d\d:\d\d)|.*)?$/;
 
-function dateToDays(d, rounded) {
+function dateToDays(d) {
+  return d.getTime() / (1000 * 60 * 60 * 24);
+}
+
+function dateStringToDays(d) {
   var temp = null;
   if(d.indexOf('T') > 0) {
     temp = new Date(d);
@@ -8,8 +12,7 @@ function dateToDays(d, rounded) {
     temp = d.split('-');
     temp = new Date(temp[0], temp[1]-1, temp[2]);
   }
-  var r = (temp.getTime()) / (1000 * 60 * 60 * 24);
-  return rounded === false ? r : Math.round(r*100000)/100000;
+  return dateToDays(temp);
 }
 
 /**
@@ -46,5 +49,6 @@ var isValidDate = function (y, m, d) {
 module.exports = {
   DATE_STRING,
   dateToDays,
+  dateStringToDays,
   isValidDate
 };

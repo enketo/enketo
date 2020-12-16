@@ -1,4 +1,4 @@
-const { initDoc, assertStringValue } = require('../../helpers');
+const { initDoc, assertStringValue } = require('../helpers');
 
 describe('#join()', () => {
   it('should join a list of strings with supplied separator', () => {

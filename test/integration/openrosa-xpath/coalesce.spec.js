@@ -1,4 +1,4 @@
-const { initDoc, assertStringValue } = require('../../helpers');
+const { initDoc, assertStringValue } = require('../helpers');
 
 describe('#coalesce()', () => {
   it('should return first value if provided via xpath', () => {

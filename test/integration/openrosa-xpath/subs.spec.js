@@ -1,4 +1,4 @@
-const { assertStringValue } = require('../../helpers');
+const { assertStringValue } = require('../helpers');
 
 describe('#substr()', () => {
   it('should give the rest of a string if supplied with only startIndex', () => {

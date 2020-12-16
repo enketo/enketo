@@ -1,5 +1,7 @@
+const _ = require('lodash');
+
 const { assert, assertThrow, assertNumberValue,
-  assertNumberRounded, initDoc } = require('../../helpers');
+  assertNumberRounded, initDoc } = require('../helpers');
 
 describe('#number()', () => {
   const doc = initDoc('');

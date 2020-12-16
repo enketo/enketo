@@ -1,4 +1,4 @@
-const { initDoc, nsResolver, filterAttributes, assert } = require('../../helpers');
+const { initDoc, nsResolver, filterAttributes, assert } = require('../helpers');
 
 describe('XPath expression evaluation', () => {
   let doc;
@@ -129,11 +129,11 @@ describe('XPath expression evaluation5', () => {
           </meta>
         </data>
       </instance>
-    </model></html>`);
+    </model></html>`, nsResolver);
 
   it('returns correct result type', () => {
     const expr = '/model/instance[1]/*//*[@template] | /model/instance[1]/*//*[@jr:template]';
-    const res = doc.xEval(expr, doc, 7, nsResolver);
+    const res = doc.xEval(expr, doc, 7);
     assert.equal(res.resultType, 7);
     assert.equal(res.snapshotLength, 0);
   });

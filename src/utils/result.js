@@ -1,32 +1,21 @@
-function toNodes(r) {
-  var n, v = [];
-  while((n = r.iterateNext())) v.push(n);
-  return v;
-}
+var sortByDocumentOrder = require('./sort-by-document-order');
 
-function getNamespaceAtts(result) {
-  var v = [], n;
-  while((n = result.iterateNext())) {
-    if(n.name.indexOf(':')>0) v.unshift(n);
+module.exports = { toSnapshotResult };
+
+function toSnapshotResult(arr, resultType, singleItem) {
+  if( resultType === XPathResult.ORDERED_NODE_ITERATOR_TYPE ||
+      resultType === XPathResult.ORDERED_NODE_SNAPSHOT_TYPE) {
+    sortByDocumentOrder(arr);
   }
-  return v;
-}
 
-function toSnapshotResult(nodes, rt, singleItem) {
-  return function() {
-    var idx = 0;
+  return (nodes => {
+    let idx = 0;
     return {
-      resultType: rt,
-      singleNodeValue: nodes.length ? singleItem || nodes[0] : null,
+      resultType,
+      singleNodeValue: singleItem || nodes[0] || null,
       snapshotLength: nodes.length,
-      snapshotItem: function(i){return nodes[i];},
-      iterateNext: function(){return nodes.length > idx ? nodes[idx++] : null;}
+      snapshotItem: i => nodes[i] || null,
+      iterateNext: () => nodes[idx++] || null,
     };
-  }();
+  })(arr.v);
 }
-
-module.exports = {
-  getNamespaceAtts,
-  toNodes,
-  toSnapshotResult
-};

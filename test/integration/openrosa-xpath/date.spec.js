@@ -1,45 +1,62 @@
 const {initDoc, nsResolver, assertMatch, assertFalse, assertString,
-  assertBoolean, assertStringValue, assertNumberRounded } = require('../../helpers');
+  assertBoolean, assertStringValue, assertNumberRounded } = require('../helpers');
 
 describe('#date()', () => {
 
-  it('invalid dates', () => {
+  describe('invalid dates', () => {
     [
       //TODO "date('1983-09-31')",
       'date("not a date")',
       'date("opv_3")',
       'date(true())'
       //TODO "date(convertible())"
-   ].forEach(expr => {
-     assertFalse(expr);
-     // do the same tests for the alias date-time()
-     expr = expr.replace('date(', 'date-time(');
-     assertFalse(expr);
+    ].forEach(expr => {
+      it(`should convert ${expr} to false`, () => {
+        assertFalse(expr);
+        // do the same tests for the alias date-time()
+        expr = expr.replace('date(', 'date-time(');
+        assertFalse(expr);
+      });
     });
   });
 
   describe('valid date string', () => {
-    it('should be left alone', () => {
-      assertStringValue('date("1970-01-01")', '1970-01-01');
-      assertStringValue('date("2018-01-01")', '2018-01-01');
-      assertStringValue('"2018-01-01"', '2018-01-01');
+    describe('should be left alone', () => {
+      [
+        [ 'date("1970-01-01")', '1970-01-01' ],
+        [ 'date("2018-01-01")', '2018-01-01' ],
+        [ '"2018-01-01"', '2018-01-01' ],
+      ].forEach(([ expr, expected ]) => {
+        it(`should convert ${expr} to ${expected}`, () => {
+          assertStringValue(expr, expected);
+        });
+      });
     });
 
-    it('dates as string', () => {
-      assertStringValue('"2018-01-01"', '2018-01-01');
-      assertStringValue('date("2018-01-01")', '2018-01-01');
-      assertNumberRounded('"2018-01-01" + 1', 17533.29167, 100000);
-      assertStringValue('date("2018-01-01" + 1)', '2018-01-02');
+    describe('dates as string', () => {
+      it('example 1', () => {
+        assertStringValue('"2018-01-01"', '2018-01-01');
+      });
+      it('example 2', () => {
+        assertStringValue('date("2018-01-01")', '2018-01-01');
+      });
+      it('example 3', () => {
+        assertNumberRounded('"2018-01-01" + 1', 17533.29167, 100000);
+      });
+      it('example 4', () => {
+        assertStringValue('date("2018-01-01" + 1)', '2018-01-02');
+      });
 
       [
         'today()',
         'date(today() + 10)',
         'date(10 + today())'
       ].forEach( expr => {
-        assertMatch(expr, /([0-9]{4}-[0-9]{2}-[0-9]{2})$/ );
+        it(`should convert ${expr} to a date string`, () => {
+          assertMatch(expr, /([0-9]{4}-[0-9]{2}-[0-9]{2})$/ );
+        });
       });
     });
-
   });
 
   describe('date string with single-digit day or month values', () => {
@@ -113,15 +130,11 @@ describe('#date()', () => {
     });
   });
 
-  it('datetimes as string', () => {
-    [
-      'now()',
-    ].forEach(t => {
-      assertMatch(t, /([0-9]{4}-[0-9]{2}-[0-9]{2})([T]|[\s])([0-9]){2}:([0-9]){2}([0-9:.]*)(\+|-)([0-9]{2}):([0-9]{2})$/);
-    });
+  it('should convert now() to a date string with time component', () => {
+    assertMatch('now()', /([0-9]{4}-[0-9]{2}-[0-9]{2})([T]|[\s])([0-9]){2}:([0-9]){2}([0-9:.]*)(\+|-)([0-9]{2}):([0-9]{2})$/);
   });
 
-  it('converts dates to numbers', () => {
+  describe('converts dates to numbers', () => {
     [
       ["number(date('1970-01-01'))", 0.29],
       ["number(date('1970-01-02'))", 1.29],
@@ -131,28 +144,37 @@ describe('#date()', () => {
       ["number('2008-09-05')", 14127.29],
       ["number(1 div 1000000000 )", 0]
    ].forEach(([expr, expected]) => {
-      assertNumberRounded(expr, expected, 100);
+      it(`should convert ${expr} to ${expected}`, () => {
+        assertNumberRounded(expr, expected, 100);
+      });
     });
   });
 
-  it('for nodes (where the date datatype is guessed)', () => {
-    const doc = initDoc(`
-      <div id="FunctionDate">
-        <div id="FunctionDateCase1">2012-07-23</div>
-        <div id="FunctionDateCase2">2012-08-20T00:00:00.00+00:00</div>
-        <div id="FunctionDateCase3">2012-08-08T00:00:00+00:00</div>
-        <div id="FunctionDateCase4">2012-06-23</div>
-        <div id="FunctionDateCase5">2012-08-08T06:07:08.123-07:00</div>
-      </div>`, nsResolver);
+  describe('for nodes (where the date datatype is guessed)', () => {
+    let doc;
+
+    before(() => {
+      doc = initDoc(`
+        <div id="FunctionDate">
+          <div id="FunctionDateCase1">2012-07-23</div>
+          <div id="FunctionDateCase2">2012-08-20T00:00:00.00+00:00</div>
+          <div id="FunctionDateCase3">2012-08-08T00:00:00+00:00</div>
+          <div id="FunctionDateCase4">2012-06-23</div>
+          <div id="FunctionDateCase5">2012-08-08T06:07:08.123-07:00</div>
+        </div>`, nsResolver);
+    });
+
     [
-      [".", doc.getElementById("FunctionDateCase1"), 15544.29],
-      [".", doc.getElementById("FunctionDateCase2"), 15572]
-    ].forEach(([expr, node, expected]) => {
-      assertNumberRounded(expr, expected, 100, node);
+      [".", "FunctionDateCase1", 15544.29],
+      [".", "FunctionDateCase2", 15572]
+    ].forEach(([expr, id, expected]) => {
+      it(`should convert ${expr} on ${id} to ${expected}`, () => {
+        assertNumberRounded(expr, expected, 100, doc.getElementById(id));
+      });
     });
   });
 
-  it('datetype comparisons', () => {
+  describe('datetype comparisons', () => {
     [
       ["date('2001-12-26') > date('2001-12-25')", true],
       ["date('1969-07-20') < date('1969-07-21')", true],
@@ -172,71 +194,91 @@ describe('#date()', () => {
       ['"2018-06-25" = "2018-06-25T00:00:00.000-07:00"', true],
       ['"2018-06-25" < "2018-06-25T00:00:00.000-07:00"', false],
       ['"2018-06-25" < "2018-06-25T00:00:00.001-07:00"', true],
-   ].forEach(([expr, expected]) => {
-     assertBoolean(expr, expected);
-     // do the same tests for the alias date-time()
-     expr = expr.replace('date(', 'date-time(' );
-     assertBoolean(expr, expected);
+    ].forEach(([expr, expected]) => {
+      it(`should convert ${expr} to ${expected}`, () => {
+        assertBoolean(expr, expected);
+        // do the same tests for the alias date-time()
+        expr = expr.replace('date(', 'date-time(' );
+        assertBoolean(expr, expected);
+      });
     });
   });
 
-  it('datestring comparisons (date detection)', () => {
-    const doc = initDoc(`
-      <div id="FunctionDate">
-        <div id="FunctionDateCase1">2012-07-23</div>
-        <div id="FunctionDateCase2">2012-08-20T00:00:00.00+00:00</div>
-        <div id="FunctionDateCase3">2012-08-08T00:00:00+00:00</div>
-        <div id="FunctionDateCase4">2012-06-23</div>
-        <div id="FunctionDateCase5">2012-08-08T06:07:08.123-07:00</div>
-      </div>`);
+  describe('datestring comparisons (date detection)', () => {
+    let doc;
+
+    before(() => {
+      doc = initDoc(`
+        <div id="FunctionDate">
+          <div id="FunctionDateCase1">2012-07-23</div>
+          <div id="FunctionDateCase2">2012-08-20T00:00:00.00+00:00</div>
+          <div id="FunctionDateCase3">2012-08-08T00:00:00+00:00</div>
+          <div id="FunctionDateCase4">2012-06-23</div>
+          <div id="FunctionDateCase5">2012-08-08T06:07:08.123-07:00</div>
+        </div>`);
+    });
+
     [
-      [". < date('2012-07-24')", doc.getElementById("FunctionDateCase1" ), true],
+      [ true, 'FunctionDateCase1', ". < date('2012-07-24')" ],
       //returns false if strings are compared but true if dates are compared
-      ["../node()[@id='FunctionDateCase2'] > ../node()[@id='FunctionDateCase3']", doc.getElementById("FunctionDateCase1" ), true]
-    ].forEach(([expr, node, expected]) => {
-      assertBoolean(node, null, expr, expected);
-      expr = expr.replace('date(', 'date-time(');
-      assertBoolean(node, null, expr, expected);
+      [ true, 'FunctionDateCase1', "../node()[@id='FunctionDateCase2'] > ../node()[@id='FunctionDateCase3']" ],
+    ].forEach(([ expected, id, expr ]) => {
+      it(`should convert ${expr} to ${expected}`, () => {
+        const node = doc.getElementById(id);
+        assertBoolean(node, null, expr, expected);
+        expr = expr.replace('date(', 'date-time(');
+        assertBoolean(node, null, expr, expected);
+      });
     });
   });
 
-  it('date calculations', () => {
-    const doc = initDoc(`
-      <!DOCTYPE html>
-      <html xml:lang="en-us" xmlns="http://www.w3.org/1999/xhtml" xmlns:ev="http://some-namespace.com/nss">
-        <head>
-          <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-          <title>xpath-test</title>
-        </head>
-        <body>
-          <div id="FunctionDate">
-            <div id="FunctionDateCase1">2012-07-23</div>
-            <div id="FunctionDateCase4">2012-06-23</div>
-          </div>
-        </body>
-      </html>`, nsResolver);
-    [
-      ["today() > ('2012-01-01' + 10)", doc, true],
-      ["10 + date('2012-07-24') = date('2012-08-03')", doc, true],
-      [". = date('2012-07-24') - 1", doc.getElementById("FunctionDateCase1" ), true],
-      [". > date('2012-07-24') - 2", doc.getElementById("FunctionDateCase1" ), true],
-      [". < date('2012-07-25') - 1", doc.getElementById("FunctionDateCase1" ), true],
-      [". = 30 + /xhtml:html/xhtml:body/xhtml:div[@id='FunctionDate']/xhtml:div[@id='FunctionDateCase4']", doc.getElementById("FunctionDateCase1" ), true],
-      ["10 + '2012-07-24' = '2012-08-03'", doc, true]
-    ].forEach(([expr, node, expected]) => {
-      assertBoolean(node, null, expr, expected);
-      // do the same tests for the alias date-time()
-      expr = expr.replace('date(', 'date-time(');
-      assertBoolean(node, null, expr, expected);
+  describe('date calculations', () => {
+    let doc;
+
+    beforeEach(() => {
+      doc = initDoc(`
+        <!DOCTYPE html>
+        <html xml:lang="en-us" xmlns="http://www.w3.org/1999/xhtml" xmlns:ev="http://some-namespace.com/nss">
+          <head>
+            <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+            <title>xpath-test</title>
+          </head>
+          <body>
+            <div id="FunctionDate">
+              <div id="FunctionDateCase1">2012-07-23</div>
+              <div id="FunctionDateCase4">2012-06-23</div>
+            </div>
+          </body>
+        </html>`, nsResolver);
     });
 
     [
-      ['10 + date("2012-07-24")', doc, 15555.29]
+      [true, doc, "today() > ('2012-01-01' + 10)" ],
+      [true, doc, "10 + date('2012-07-24') = date('2012-08-03')" ],
+      [true, 'FunctionDateCase1', ". = date('2012-07-24') - 1" ],
+      [true, 'FunctionDateCase1', ". > date('2012-07-24') - 2" ],
+      [true, 'FunctionDateCase1', ". < date('2012-07-25') - 1" ],
+      [true, 'FunctionDateCase1', ". = 30 + /xhtml:html/xhtml:body/xhtml:div[@id='FunctionDate']/xhtml:div[@id='FunctionDateCase4']" ],
+      [true, doc, "10 + '2012-07-24' = '2012-08-03'" ],
+    ].forEach(([ expected, node, expr ]) => {
+      it(`should convert ${expr} to ${expected}`, () => {
+        if(node !== doc) node = doc.getElementById(node);
+        assertBoolean(node, null, expr, expected);
+        // do the same tests for the alias date-time()
+        expr = expr.replace('date(', 'date-time(');
+        assertBoolean(node, null, expr, expected);
+      });
+    });
+
+    [
+      ['10 + date("2012-07-24")', doc, 15555.29],
     ].forEach(([expr, node, expected]) => {
-      assertNumberRounded(expr, expected, 100, node);
-      // do the same tests for the alias date-time()
-      expr = expr.replace('date(', 'date-time(' );
-      assertNumberRounded(expr, expected, 100, node);
+      it(`should convert ${expr} to ${expected}`, () => {
+        assertNumberRounded(expr, expected, 100, node);
+        // do the same tests for the alias date-time()
+        expr = expr.replace('date(', 'date-time(' );
+        assertNumberRounded(expr, expected, 100, node);
+      });
     });
   });
 });

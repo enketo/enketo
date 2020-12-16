@@ -1,4 +1,4 @@
-const { initDoc, assertStringValue } = require('../../helpers');
+const { initDoc, assertStringValue } = require('../helpers');
 
 describe('#format-date()', () => {
 
@@ -20,11 +20,6 @@ describe('#format-date()', () => {
           `${date.getDate()} | ${['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'][date.getDay()]}`
       ],
       ['format-date("not a date", "%M")', doc, 'Invalid Date' ],
-      ['format-date("Mon, 02 Jul 2012 00:00:00 GMT", )', doc, '']
-      // the test below probably only works in the GMT -6 timezone...
-      // [ 'format-date(., '%Y | %y | %m | %n | %b | %d | %e | %H | %h | %M | %S | %3 | %a')", doc.getElementById("FunctionDateCase5"),
-      //     '2012 | 12 | 08 | 8 | Aug | 08 | 8 | 06 | 6 | 07 | 08 | 123 | Wed'
-      // ],
     ].forEach(([expr, node, expected]) => {
         assertStringValue(node, null, expr, expected);
         // do the same tests for the alias format-date-time()
@@ -41,7 +36,7 @@ describe('#format-date()', () => {
       ['format-date("2017-05-26T01:00:00-07:00", "%a %b")', 'Fri May', 'en'],
       // ['format-date('2017-05-26T01:00:00-07:00', '%a %b')", 'ven. mai', 'fr'],
       // ['format-date('2017-05-26T01:00:00-07:00', '%a %b')", 'vr mei', 'nl'],
-    ].forEach(([expr, expected, language]) => {
+    ].forEach(([expr, expected/*, language*/]) => {
       assertStringValue(expr, expected);
       // TODO vimago test the language
       // do the same tests for the alias format-date-time()

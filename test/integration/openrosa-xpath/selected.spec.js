@@ -1,4 +1,4 @@
-const { assertTrue, assertFalse, simpleValueIs, initDoc } = require('../../helpers');
+const { assertTrue, assertFalse, simpleValueIs, initDoc } = require('../helpers');
 
 describe('#selected()', () => {
   it('should return true if requested item is in list', () => {

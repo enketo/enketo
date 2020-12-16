@@ -1,4 +1,4 @@
-const { assertTrue, assertFalse, assertThrow } = require('../../helpers');
+const { assertTrue, assertFalse, assertThrow } = require('../helpers');
 
 describe('ends-with', () => {
   it('ends-with', () => {

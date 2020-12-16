@@ -1,4 +1,4 @@
-const { assertString } = require('../../helpers');
+const { assertString } = require('../helpers');
 
   describe('#today()', () => {
     it('should return today\'s date', () => {
