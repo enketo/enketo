@@ -10,13 +10,3 @@ before_script:
   - export DISPLAY=:99.0
 
 script: npm run travis
-
-before_deploy:
-  - "sed -i -E -e \"s/0\\.0\\.0/$TRAVIS_TAG/\" package.json"
-
-deploy:
-  provider: npm
-  api_key: $NPM_API_KEY
-  email: dev@medicmobile.org
-  on:
-    tags: true

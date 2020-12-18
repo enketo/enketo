@@ -2,6 +2,7 @@
   "name": "openrosa-xpath-evaluator",
   "version": "2.0.0-beta.9",
   "description": "Wrapper for browsers' XPath evaluator with added support for OpenRosa extensions.",
+  "homepage": "https://enketo.org",
   "main": "src/openrosa-xpath.js",
   "scripts": {
     "lint": "eslint --ignore-path .gitignore .",
@@ -10,8 +11,13 @@
     "test:karma": "karma start --single-run",
     "travis": "npm run test"
   },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/enketo/openrosa-xpath-evaluator"
+  },
   "author": "Alex",
   "license": "Apache-2.0",
+  "bugs": "https://github.com/enketo/openrosa-xpath-evaluator/issues",
   "devDependencies": {
     "chai": "^4.2.0",
     "eslint": "^7.14.0",

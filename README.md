@@ -1,7 +1,7 @@
 Openrosa XForms Evaluator
 =========================
 
-<a href="https://travis-ci.org/medic/openrosa-xpath-evaluator"><img src="https://travis-ci.org/medic/openrosa-xpath-evaluator.svg?branch=master"/></a>
+<a href="https://travis-ci.org/enketo/openrosa-xpath-evaluator"><img src="https://travis-ci.org/enketo/openrosa-xpath-evaluator.svg?branch=master"/></a>
 
 Wrapper for browsers' XPath evaluator with added support for OpenRosa extensions.
 
@@ -95,3 +95,13 @@ The following XPath/ODK/OpenRosa functions are not implemented in this library, 
 # TODO
 
 * arrange source code, e.g. `src/core` and `src/openrosa`
+
+# Acknowledgement
+
+This library was developed by Medic Mobile for their Enketo-based application. In 2020, it was transferred to the Enketo organization. Many thanks to Medic Mobile for this very valuable contribution to the Enketo and ODK world.
+
+Development of this application was made possible by:
+
+* [Medic Mobile](http://medicmobile.org/)
+* [DIAL Open Source Center](https://www.osc.dial.community/)
+* [OpenClinica](https://www.openclinica.com/)
