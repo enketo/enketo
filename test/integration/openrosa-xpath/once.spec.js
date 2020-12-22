@@ -9,7 +9,7 @@ describe('once()', () => {
       <div id="FunctionSelectedCaseMultiple">ij</div>
     </div>`);
 
-  describe('attempts to change value of empty node', () => {
+  describe('evaluates when context node is empty', () => {
     const node = doc.getElementById('FunctionSelectedCaseEmpty');
 
     it('should set value to a string', () => {
@@ -25,7 +25,7 @@ describe('once()', () => {
     });
   });
 
-  it('should not change value of node with existing value', () => {
+  it('does not evaluate when context node is not empty, but returns current value', () => {
     const node = doc.getElementById('FunctionSelectedCaseSingle');
     assertStringValue(node, null, 'once("aa")', 'ab');
   });
