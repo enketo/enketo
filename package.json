@@ -4,6 +4,13 @@
   "description": "Wrapper for browsers' XPath evaluator with added support for OpenRosa extensions.",
   "homepage": "https://enketo.org",
   "main": "src/openrosa-xpath.js",
+  "keywords": [
+    "enketo",
+    "OpenRosa",
+    "ODK",
+    "XForms",
+    "XPath"
+  ],
   "scripts": {
     "lint": "eslint --ignore-path .gitignore .",
     "test": "npm run lint && npm run test:mocha && npm run test:karma",
