@@ -29,5 +29,43 @@ describe('#if()', () => {
     it(`should evaluate a non-existing node as false`, () => {
       assertStringValue(null, null, 'if(/unreal, "exists", "does not exist")', 'does not exist');
     });
+
+    // TODO: fails with exception 'r' is undefined (Firefox) and 't' is undefined (Chrome)
+    it(`should evaluate an "and" expression that checks values of nodes (1)`, () => {
+      const node = doc.getElementById('FunctionChecklistCase0');
+      assertStringValue(node, null, 'if(. != "0" and /div/div[@id="FunctionCheckListCaseEmpty"] != "", "yes", "no")', 'no');
+    });
+
+    it(`should evaluate an "and" expression that checks values of nodes (2)`, () => {
+      const node = doc.getElementById('FunctionChecklistCase0');
+      assertStringValue(node, null, 'if(. = "0" and /div/div[@id="FunctionCheckListCaseEmpty"] != "", "yes", "no")', 'no');
+    });
+
+    it(`should evaluate an "and" expression that checks values of nodes (3)`, () => {
+      const node = doc.getElementById('FunctionChecklistCase0');
+      assertStringValue(node, null, 'if(. = "0" and /div/div[@id="FunctionChecklistCaseNo"] ="no", "yes", "no")', 'yes');
+    });
+
+    it(`should evaluate an "or" expression that checks values of nodes (1)`, () => {
+      const node = doc.getElementById('FunctionChecklistCase0');
+      assertStringValue(node, null, 'if(. != "0" or /div/div[@id="FunctionCheckListCaseEmpty"] != "", "yes", "no")', 'no');
+    });
+
+    // TODO: fails with exception 'r' is undefined (Firefox) and 't' is undefined (Chrome)
+    it(`should evaluate an "or" expression that checks values of nodes (2)`, () => {
+      const node = doc.getElementById('FunctionChecklistCase0');
+      assertStringValue(node, null, 'if(. = "0" or /div/div[@id="FunctionCheckListCaseEmpty"] != "", "yes", "no")', 'yes');
+    });
+    
+    it(`should evaluate an "or" expression that checks values of nodes (3)`, () => {
+      const node = doc.getElementById('FunctionChecklistCase0');
+      assertStringValue(node, null, 'if(. != "0" or /div/div[@id="FunctionChecklistCaseNo"] ="no", "yes", "no")', 'yes');
+    });
+
+    it(`should evaluate true and false outcomes`, () => {
+      const node = doc.getElementById('FunctionChecklistCase0');
+      assertStringValue(node, null, 'if(false(), "yes", concat(/div/div[@id="FunctionChecklistCaseNo"], "-no"))', 'no-no');
+    });
+
   });
 });
