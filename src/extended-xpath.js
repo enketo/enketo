@@ -187,12 +187,12 @@ module.exports = function(wrapped, extensions) {
         return handleOperation(lhs, op, rhs);
       },
       evalOps = function(lastOp) {
-        const tokens = peek().tokens;
+        const { tokens } = peek();
 
-        if(peek().dead) for(let i=2; i<tokens.length; ++i) {
-          if(tokens[i] === D) {
-            tokens.splice(i-1);
-            tokens[i-2] = { t:'bool', v:asBoolean(tokens[i-2]) };
+        if(peek().dead) {
+          if(tokens[2] === D) {
+            const nextComma = tokens.indexOf(',');
+            tokens.splice(0, nextComma === -1 ? tokens.length : nextComma, { t:'bool', v:asBoolean(tokens[0]) });
           }
         }
 
