@@ -13,7 +13,7 @@ describe('#if()', () => {
     assertStringValue('if("", 5, "abc")', 'abc');
   });
 
-  describe('should evaluate node', () => {
+  describe('with node evaluation', () => {
     const doc = initDoc(`
       <div id="FunctionChecklistCase">
         <div id="FunctionChecklistCaseNo">no</div>
