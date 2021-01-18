@@ -240,7 +240,7 @@ var DATE_MATCH = '(Mon|Tue|Wed|Thu|Fri|Sat|Sun) (Jan|Feb|Mar|Apr|May|Jun|Jul|Aug
 
 describe('ExtendedXpathEvaluator', function() {
   _.map(examples, function(expected, expr) {
-    it(expr + ' should be evaluated', function() {
+    it(`${expr} should evaluate to ${expected}`, function() {
       switch(typeof expected) {
         case 'boolean': return assert.equal(extendedXPathEvaluator.evaluate(expr).booleanValue, expected);
         case 'number':  return assert.equal(extendedXPathEvaluator.evaluate(expr).numberValue,  expected);
