@@ -121,12 +121,22 @@ module.exports = function(wrapped, extensions) {
       err = function(message) { throw new Error((message||'') + ' [stack=' + JSON.stringify(stack) + '] [cur=' + JSON.stringify(cur) + ']'); },
       newCurrent = function() { cur = { t:'?', v:'' }; },
       pushOp = function(t) {
+        const peeked = peek();
+        const { tokens } = peeked;
+        let prev;
+
         if(t <= AND) {
           evalOps(t);
-          const prev = asBoolean(prevToken());
-          if(t === OR ? prev : !prev) peek().dead = true;
+          prev = asBoolean(tokens[tokens.length-1]);
+          if((t === OR ? prev : !prev) && peeked.t !== 'fn') peeked.dead = true;
         }
-        peek().tokens.push({ t:'op', v:t });
+
+        tokens.push({ t:'op', v:t });
+
+        if(t <= AND) {
+          if(t === OR ? prev : !prev) tokens.push(D);
+        }
+
         newCurrent();
       },
       callFn = function(name, supplied) {
@@ -189,14 +199,12 @@ module.exports = function(wrapped, extensions) {
       evalOps = function(lastOp) {
         const { tokens } = peek();
 
-        if(peek().dead) {
-          if(tokens[2] === D) {
-            const nextComma = tokens.indexOf(',');
-            tokens.splice(0, nextComma === -1 ? tokens.length : nextComma, { t:'bool', v:asBoolean(tokens[0]) });
-          }
-        }
-
         if(tokens.length < 2) return;
+
+        if(tokens[2] === D && tokens[1].v >= lastOp) {
+          const endExpr = tokens.indexOf(',', 2);
+          tokens.splice(0, endExpr === -1 ? tokens.length : endExpr, { t:'bool', v:asBoolean(tokens[0]) });
+        }
 
         for(let j=UNION; j>=lastOp; j-=0b100) {
           let i = 1;
@@ -211,7 +219,6 @@ module.exports = function(wrapped, extensions) {
       },
       handleXpathExpr = function() {
         if(peek().dead) {
-          peek().tokens.push(D);
           newCurrent();
           return;
         }
@@ -245,6 +252,17 @@ module.exports = function(wrapped, extensions) {
       prevToken = function() {
         const peeked = peek().tokens;
         return peeked[peeked.length - 1];
+      },
+      isDeadFnArg = () => {
+        const peeked = peek();
+        if(peeked.t === 'fn') {
+          const { tokens } = peeked;
+          for(let i=tokens.length-1; i>=0 && tokens[i] !== ','; --i) {
+            if(tokens[i] === D) {
+              return true;
+            }
+          }
+        }
       },
       isNum = function(c) {
         return c >= '0' && c <= '9';
@@ -280,11 +298,11 @@ module.exports = function(wrapped, extensions) {
             cur.v += c;
           } else {
             const head = peek();
-            if(head.dead) {
+            const { tokens } = head;
+            if(head.dead || tokens[2] === D) {
               newCurrent();
               continue;
             }
-            const { tokens } = head;
             let contextNodes;
             if(tokens.length && tokens[tokens.length-1].t === 'arr') {
               contextNodes = tokens[tokens.length-1].v;
@@ -361,6 +379,8 @@ module.exports = function(wrapped, extensions) {
           if(cur.t !== 'fn') err('")" outside function!');
           if(peek().dead) {
             peek().tokens.push(D);
+          } else if(isDeadFnArg()) {
+            /* do nothing */
           } else if(cur.v) {
             peek().tokens.push(callFn(cur.v, cur.tokens));
           } else {

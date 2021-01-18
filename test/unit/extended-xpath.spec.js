@@ -176,6 +176,12 @@ var DATE_MATCH = '(Mon|Tue|Wed|Thu|Fri|Sat|Sun) (Jan|Feb|Mar|Apr|May|Jun|Jul|Aug
         true,
       '0 and (/explode)':
         false,
+      '1 or 0 and /explode':
+        true,
+      '1 and 0 or 0 or 1 and 1 or 0 or 0 or 0 and /explode or /explode or /explode and /explode':
+        true,
+      '1 and 0 or 0 or 1 and 1 or 0 or 0 or 0 and ([/explode]) or /explode or /explode and /explode':
+        true,
       '0 and concat(/explode)':
         false,
       '0 and /explode[/explode]':
