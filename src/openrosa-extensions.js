@@ -267,7 +267,6 @@ const openrosa_xpath_extensions = function() {
     'normalize-space': function(r) {
       // TODO this seems to do a lot more than the spec at https://www.w3.org/TR/1999/REC-xpath-19991116/#function-normalize-space
       // I think we should just be able to return: XPR.string(asString(r || this.cN).replace(/[\t\r\n ]+/g, ' ').trim());
-      // TODO check XPath 3.0 spec for normalize-space()?  https://www.w3.org/TR/xpath-functions-30/#func-normalize-space
       if(arguments.length > 1) throw new Error('too many args');
 
       let res = asString(r || this.cN);
