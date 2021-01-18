@@ -27,15 +27,6 @@ const openrosa_xpath_extensions = function() {
         }
         return Math.round(num);
       },
-      _uuid_part = function(c) {
-        const r = Math.random()*16|0,
-            v = c == 'x' ? r : r&0x3|0x8;
-        return v.toString(16);
-      },
-      uuid = function() {
-          return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'
-                  .replace(/[xy]/g, _uuid_part);
-      },
       format_date = function(date, format) {
         date = asDate(date);
         format = asString(format);
@@ -627,4 +618,15 @@ const NODEISH = {
 };
 function isNodeish({ nodeType }) {
   return NODEISH[nodeType];
+}
+
+/**
+ * Implementation from https://stackoverflow.com/a/2117523, added in revision
+ * https://stackoverflow.com/revisions/2117523/11, licensed under CC by SA 3.0
+ * (https://creativecommons.org/licenses/by-sa/3.0/), see
+ * https://stackoverflow.com/posts/2117523/timeline.  Formatting may have been
+ * changed.
+ */
+function uuid() {
+  return ([1e7]+-1e3+-4e3+-8e3+-1e11).replace(/[018]/g, c => (c ^ crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> c / 4).toString(16));
 }
