@@ -24,27 +24,27 @@ For more info on extended XPath expressions/bindings supported by XForms/OpenRos
 
 ## Initialisation
 
-    ```js
-    const orxe = require('openrosa-xpath-evaluator');
-    const evaluate = orxe();
-    ```
+```js
+const orxe = require('openrosa-xpath-evaluator');
+const evaluate = orxe();
+```
 
 ## Querying
 
-    ```js
-    var result = evaluate(
-        '//ul/li/text()', // XPath expression
-        document, // context node
-        null, // namespace resolver
-        XPathResult.ORDERED_NODE_SNAPSHOT_TYPE
-    );
+```js
+var result = evaluate(
+    '//ul/li/text()', // XPath expression
+    document, // context node
+    null, // namespace resolver
+    XPathResult.ORDERED_NODE_SNAPSHOT_TYPE
+);
 
-    // loop through results
-    for (var i = 0; i < result.snapshotLength; i++) {
-        var node = result.snapshotItem(i);
-        alert(node.nodeValue);
-    }
-    ```
+// loop through results
+for (var i = 0; i < result.snapshotLength; i++) {
+    var node = result.snapshotItem(i);
+    alert(node.nodeValue);
+}
+```
 
 
 # Dependencies
