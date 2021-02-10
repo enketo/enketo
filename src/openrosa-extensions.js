@@ -32,17 +32,10 @@ const openrosa_xpath_extensions = function() {
         format = asString(format);
         if(isNaN(date)) return 'Invalid Date';
         let c, i, sb = '';
-        const f = {
-          year: 1900 + date.getYear(),
-          month: 1 + date.getMonth(),
-          day: date.getDate(),
-          hour: date.getHours(),
-          minute: date.getMinutes(),
-          second: date.getSeconds(),
-          millis: date.getMilliseconds(),
-          secTicks: date.getTime(),
-          dow: 1 + date.getDay(),
-        };
+        const year = 1900 + date.getYear();
+        const month = 1 + date.getMonth();
+        const day = date.getDate();
+        const hour = date.getHours();
         const locale = window ? window.enketoFormLocale : undefined;
 
         for(i=0; i<format.length; ++i) {
@@ -57,32 +50,31 @@ const openrosa_xpath_extensions = function() {
             if (c === '%') { // literal '%'
               sb += '%';
             } else if (c === 'Y') {  //4-digit year
-              sb += _zeroPad(f.year, 4);
+              sb += _zeroPad(year, 4);
             } else if (c === 'y') {  //2-digit year
-              sb += _zeroPad(f.year, 4).substring(2);
+              sb += _zeroPad(year, 4).substring(2);
             } else if (c === 'm') {  //0-padded month
-              sb += _zeroPad(f.month, 2);
+              sb += _zeroPad(month, 2);
             } else if (c === 'n') {  //numeric month
-              sb += f.month;
+              sb += month;
             } else if (c === 'b') {  //short text month
-              sb += date.toLocaleDateString( locale, { month: 'short' } );
+              sb += date.toLocaleDateString(locale, { month: 'short' });
             } else if (c === 'd') {  //0-padded day of month
-              sb += _zeroPad(f.day, 2);
+              sb += _zeroPad(day, 2);
             } else if (c === 'e') {  //day of month
-              sb += f.day;
+              sb += day;
             } else if (c === 'H') {  //0-padded hour (24-hr time)
-              sb += _zeroPad(f.hour, 2);
+              sb += _zeroPad(hour, 2);
             } else if (c === 'h') {  //hour (24-hr time)
-              sb += f.hour;
+              sb += hour;
             } else if (c === 'M') {  //0-padded minute
-              sb += _zeroPad(f.minute, 2);
+              sb += _zeroPad(date.getMinutes(), 2);
             } else if (c === 'S') {  //0-padded second
-              sb += _zeroPad(f.second, 2);
+              sb += _zeroPad(date.getSeconds(), 2);
             } else if (c === '3') {  //0-padded millisecond ticks (000-999)
-              // sb += _zeroPad(f.secTicks, 3);
-              sb += _zeroPad(f.millis, 3);
+              sb += _zeroPad(date.getMilliseconds(), 3);
             } else if (c === 'a') {  //Three letter short text day
-              sb += date.toLocaleDateString( locale, { weekday: 'short' } );
+              sb += date.toLocaleDateString(locale, { weekday: 'short' });
             } else if (c === 'Z' || c === 'A' || c === 'B') {
               throw new Error('unsupported escape in date format string [%' + c + ']');
             } else {
