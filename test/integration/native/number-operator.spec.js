@@ -90,35 +90,35 @@ describe('number operators', () => {
     });
   });
 
-  it('mod without spacing works', () => {
-    assertNumberValue("1mod1", 0);
-  });
+  describe('mod', () => {
+    it('without spacing works', () => {
+      assertNumberValue("1mod1", 0);
+    });
 
-  it('mod without spacing AFTER mod works', () => {
-    assertNumberValue("1 mod1", 0);
-  });
+    it('without spacing AFTER mod works', () => {
+      assertNumberValue("1 mod1", 0);
+    });
 
-  it('mod without spacing BEFORE mod works', () => {
-    assertNumberValue("1mod 1", 0);
-  });
+    it('without spacing BEFORE mod works', () => {
+      assertNumberValue("1mod 1", 0);
+    });
 
-  it('mod with numbers-as-string works', () => {
-    assertNumberValue("'1'mod'1'", 0);
-  });
+    it('with numbers-as-string works', () => {
+      assertNumberValue("'1'mod'1'", 0);
+    });
 
-  it('mod without spacing after mod and a string fails', () => {
-    const doc = initDoc('');
-    const test = () => {
-      doc.xEval(doc, null, "'1' mod/html'", XPathResult.NUMBER_TYPE);
-    };
-    assert.throw(test);
-  });
+    it('without spacing after mod and a string fails', () => {
+      const doc = initDoc('');
+      const test = () => {
+        doc.xEval(doc, null, "'1' mod/html'", XPathResult.NUMBER_TYPE);
+      };
+      assert.throw(test);
+    });
 
-  it('mod without spacing before mod and a string works', () => {
-    assertNumber("'1'mod '1'", 0);
-  });
+    it('without spacing before mod and a string works', () => {
+      assertNumber("'1'mod '1'", 0);
+    });
 
-  it('mod works as expected', () => {
     [
       ["5 mod 2", 1],
       ["5 mod -2 ", 1],
@@ -132,17 +132,17 @@ describe('number operators', () => {
       ["0 mod 1", 0],
       ["10 mod (1 div 0)", 10],
       ["-10 mod (-1 div 0)", -10],
-    ].forEach(t => {
-      assertNumber(t[0], t[1]);
+    ].forEach(([ expr, expected ]) => {
+      it(`Should evaluate '${expr}} as '${expected}'`, () => assertNumber(expr, expected));
     });
 
     [
-      ["0 mod 0"],
-      ["1 mod 0"],
-      ["(1 div 0) mod 1"],
-      ["(-1 div 0) mod 1"]
-    ].forEach(t => {
-      assertNumber(t[0], NaN);
+      '0 mod 0',
+      '1 mod 0',
+      '(1 div 0) mod 1',
+      '(-1 div 0) mod 1',
+    ].forEach(expr => {
+      it(`should evaluate '${expr}' as NaN`, () => assertNumber(expr, NaN));
     });
   });
 
@@ -170,7 +170,7 @@ describe('number operators', () => {
     assertNumberValue("'1'div '1'", 1);
   });
 
-  it('div works as expected', () => {
+  describe('div', () => {
     [
       ["1div 1", 1],
       ["0 div 1", 0],
@@ -186,8 +186,8 @@ describe('number operators', () => {
       ["false() div 1", 0],
       ["1 div 0", Number.POSITIVE_INFINITY],
       ["-1 div 0", Number.NEGATIVE_INFINITY],
-    ].forEach(t => {
-      assertNumberValue(t[0], t[1]);
+    ].forEach(([ expr, expected ]) => {
+      it(`should evaluate '${expr}' as '${expected}'`, () => assertNumberValue(expr, expected));
     });
 
     [
@@ -225,7 +225,7 @@ describe('number operators', () => {
     });
   });
 
-  it('*,+,-,mod,div precendence rules are applied correctly', () => {
+  describe('*,+,-,mod,div precedence rules are applied correctly', () => {
     [
       ["1+2*3", 7],
       ["2*3+1", 7],
@@ -234,7 +234,7 @@ describe('number operators', () => {
       ["(4-3)*4+5-1", 8],
       ["8 div 2 + 4", 8]
     ].forEach(([expr, expected]) => {
-      assertNumber(expr, expected);
+      it(`should evaluated '${expr}' as '${expected}'`, () => assertNumber(expr, expected));
     });
   });
 
