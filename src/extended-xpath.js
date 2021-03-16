@@ -5,7 +5,7 @@ const { asBoolean, asNumber, asString } = require('./utils/xpath-cast');
 /*
  * From http://www.w3.org/TR/xpath/#section-Expressions XPath infix operator
  * precedence is left-associative.  In the constants that follow, all but the
- * bottom two bits indicate precendence, and the entire value represents the
+ * bottom two bits indicate precedence, and the entire value represents the
  * unique ID of the operator.
  *
  * These values are defined here rather than imported in an object so that they

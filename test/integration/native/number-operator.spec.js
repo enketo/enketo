@@ -225,7 +225,7 @@ describe('number operators', () => {
     });
   });
 
-  it('*,+,-,mod,div precendence rules are applied correctly', () => {
+  it('*,+,-,mod,div precedence rules are applied correctly', () => {
     [
       ["1+2*3", 7],
       ["2*3+1", 7],
