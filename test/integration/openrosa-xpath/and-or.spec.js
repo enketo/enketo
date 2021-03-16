@@ -110,7 +110,7 @@ describe('and/or operators', () => {
     });
   });
 
-  describe('or/and precendence rules are applied correctly', () => {
+  describe('or/and precedence rules are applied correctly', () => {
     [
       [ "true() or true() and false()", true ],
       [ "true() and false() or true()", true ],
