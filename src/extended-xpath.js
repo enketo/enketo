@@ -117,9 +117,9 @@ module.exports = function(wrapped, extensions) {
   const evaluate = this.evaluate = function(input, cN, nR, rT, _, contextSize=1, contextPosition=1) {
     let i, cur;
     const stack = [{ t:'root', tokens:[] }],
-      peek = function() { return stack[stack.length-1]; },
-      err = m => { throw new Error((m||'') + JSON.stringify({ stack, cur })); },
-      newCurrent = function() { cur = { t:'?', v:'' }; },
+      peek = () => stack[stack.length-1],
+      err = m => { throw new Error((m||'') + JSON.stringify({ stack, cur })); },      
+      newCurrent = function() { cur = { v:'' }; },
       pushOp = function(t) {
         const peeked = peek();
         const { tokens } = peeked;
@@ -306,9 +306,6 @@ module.exports = function(wrapped, extensions) {
             let contextNodes;
             if(tokens.length && tokens[tokens.length-1].t === 'arr') {
               contextNodes = tokens[tokens.length-1].v;
-            } else if(head.t === 'root') {
-              contextNodes = [ cN ];
-              throw new Error('Not sure how to handle a predicate-only expression yet - this will probably break down when re-assigning tokens[tokens.length-1].v');
             } else throw new Error('Not sure how to handle context node for predicate in this situation.');
 
             // > A PredicateExpr is evaluated by evaluating the Expr and converting
