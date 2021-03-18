@@ -306,9 +306,6 @@ module.exports = function(wrapped, extensions) {
             let contextNodes;
             if(tokens.length && tokens[tokens.length-1].t === 'arr') {
               contextNodes = tokens[tokens.length-1].v;
-            } else if(head.t === 'root') {
-              contextNodes = [ cN ];
-              throw new Error('Not sure how to handle a predicate-only expression yet - this will probably break down when re-assigning tokens[tokens.length-1].v');
             } else throw new Error('Not sure how to handle context node for predicate in this situation.');
 
             // > A PredicateExpr is evaluated by evaluating the Expr and converting
