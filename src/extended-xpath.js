@@ -226,7 +226,7 @@ module.exports = function(wrapped, extensions) {
         const { tokens } = peek();
         if(tokens.length && tokens[tokens.length-1].t === 'arr') {
           // chop the leading slash from expr
-          if(expr.charAt(0) !== '/') throw new Error(`not sure how to handle expression called on nodeset that doesn't start with a '/': ${expr}`);
+          if(expr.charAt(0) !== '/') err(`not sure how to handle expression called on nodeset that doesn't start with a '/': ${expr}`);
           // prefix a '.' to make the expression relative to the context node:
           expr = wrapped.createExpression('.' + expr, nR);
           const newNodeset = [];
