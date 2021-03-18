@@ -117,24 +117,33 @@ module.exports = function(wrapped, extensions) {
   const evaluate = this.evaluate = function(input, cN, nR, rT, _, contextSize=1, contextPosition=1) {
     let i, cur;
     const stack = [{ t:'root', tokens:[] }],
-      peek = function() { return stack[stack.length-1]; },
-      err = function(message) { throw new Error((message||'') + ' [stack=' + JSON.stringify(stack) + '] [cur=' + JSON.stringify(cur) + ']'); },
-      newCurrent = function() { cur = { t:'?', v:'' }; },
+      peek = () => stack[stack.length-1],
+      pushToken = t => {
+        const { tokens } = peek();
+        if(prevToken() !== D || t !== D) tokens.push(t);
+      },
+      isDeadBranch = () => {
+        const { dead, t, tokens } = peek();
+        if(dead) return true;
+        if(t === 'fn') {
+          return prevToken() === D;
+        } else {
+          return tokens.includes(D);
+        }
+      },
+      err = m => { throw new Error((m||'') + JSON.stringify({ stack, cur })); },
+      newCurrent = function() { cur = { v:'' }; },
       pushOp = function(t) {
-        const peeked = peek();
-        const { tokens } = peeked;
-        let prev;
-
         if(t <= AND) {
           evalOps(t);
-          prev = asBoolean(tokens[tokens.length-1]);
-          if((t === OR ? prev : !prev) && peeked.t !== 'fn') peeked.dead = true;
         }
 
-        tokens.push({ t:'op', v:t });
+        pushToken({ t:'op', v:t });
 
         if(t <= AND) {
-          if(t === OR ? prev : !prev) tokens.push(D);
+          const { tokens } = peek();
+          const prev = asBoolean(tokens[tokens.length-2]);
+          if(t === OR ? prev : !prev) pushToken(D);
         }
 
         newCurrent();
@@ -218,25 +227,25 @@ module.exports = function(wrapped, extensions) {
         }
       },
       handleXpathExpr = function() {
-        if(peek().dead) {
+        if(isDeadBranch()) {
           newCurrent();
           return;
         }
         let expr = cur.v;
-        const { tokens } = peek();
-        if(tokens.length && tokens[tokens.length-1].t === 'arr') {
+        const prev = prevToken();
+        if(prev && prev.t === 'arr') {
           // chop the leading slash from expr
-          if(expr.charAt(0) !== '/') throw new Error(`not sure how to handle expression called on nodeset that doesn't start with a '/': ${expr}`);
+          if(expr.charAt(0) !== '/') err(`not sure how to handle expression called on nodeset that doesn't start with a '/': ${expr}`);
           // prefix a '.' to make the expression relative to the context node:
           expr = wrapped.createExpression('.' + expr, nR);
           const newNodeset = [];
-          tokens[tokens.length-1].v.map(node => {
+          prev.v.map(node => {
             const res = toInternalResult(expr.evaluate(node));
             newNodeset.push(...res.v);
           });
-          tokens[tokens.length-1].v = newNodeset;
+          prev.v = newNodeset;
         } else {
-          peek().tokens.push(toInternalResult(wrapped.evaluate(expr, cN, nR, XPathResult.ANY_TYPE, null)));
+          pushToken(toInternalResult(wrapped.evaluate(expr, cN, nR, XPathResult.ANY_TYPE, null)));
         }
 
         newCurrent();
@@ -246,23 +255,12 @@ module.exports = function(wrapped, extensions) {
       },
       finaliseNum = function() {
         cur.v = parseFloat(cur.str);
-        peek().tokens.push(cur);
+        pushToken(cur);
         newCurrent();
       },
       prevToken = function() {
         const peeked = peek().tokens;
         return peeked[peeked.length - 1];
-      },
-      isDeadFnArg = () => {
-        const peeked = peek();
-        if(peeked.t === 'fn') {
-          const { tokens } = peeked;
-          for(let i=tokens.length-1; i>=0 && tokens[i] !== ','; --i) {
-            if(tokens[i] === D) {
-              return true;
-            }
-          }
-        }
       },
       isNum = function(c) {
         return c >= '0' && c <= '9';
@@ -297,18 +295,14 @@ module.exports = function(wrapped, extensions) {
           if(--cur.depth) {
             cur.v += c;
           } else {
-            const head = peek();
-            const { tokens } = head;
-            if(head.dead || tokens[2] === D) {
+            if(isDeadBranch()) {
               newCurrent();
               continue;
             }
             let contextNodes;
-            if(tokens.length && tokens[tokens.length-1].t === 'arr') {
-              contextNodes = tokens[tokens.length-1].v;
-            } else if(head.t === 'root') {
-              contextNodes = [ cN ];
-              throw new Error('Not sure how to handle a predicate-only expression yet - this will probably break down when re-assigning tokens[tokens.length-1].v');
+            const prev = prevToken();
+            if(prev.t === 'arr') {
+              contextNodes = prev.v;
             } else throw new Error('Not sure how to handle context node for predicate in this situation.');
 
             // > A PredicateExpr is evaluated by evaluating the Expr and converting
@@ -326,7 +320,7 @@ module.exports = function(wrapped, extensions) {
                 return res.t === 'num' ? asNumber(res) === 1+i : asBoolean(res);
               });
 
-            tokens[tokens.length-1].v = filteredNodes;
+            prev.v = filteredNodes;
             newCurrent();
           }
           continue;
@@ -336,7 +330,7 @@ module.exports = function(wrapped, extensions) {
       }
       if(cur.t === 'str') {
         if(c === cur.quote) {
-          peek().tokens.push(cur);
+          pushToken(cur);
           newCurrent();
         } else cur.v += c;
         continue;
@@ -365,10 +359,7 @@ module.exports = function(wrapped, extensions) {
           } else err('Not sure how to handle: ' + c);
           break;
         case '(':
-          cur.dead = peek().dead;
-          cur.t = 'fn';
-          cur.tokens = [];
-          stack.push(cur);
+          stack.push({ v:cur.v, t:'fn', dead:isDeadBranch(), tokens:[] });
           newCurrent();
           break;
         case ')':
@@ -377,22 +368,20 @@ module.exports = function(wrapped, extensions) {
           cur = stack.pop();
 
           if(cur.t !== 'fn') err('")" outside function!');
-          if(peek().dead) {
-            peek().tokens.push(D);
-          } else if(isDeadFnArg()) {
-            /* do nothing */
+          if(cur.dead) {
+            pushToken(D);
           } else if(cur.v) {
-            peek().tokens.push(callFn(cur.v, cur.tokens));
-          } else {
+            pushToken(callFn(cur.v, cur.tokens));
+          } else { // bracketed expression
             if(cur.tokens.length !== 1) err('Expected one token, but found: ' + cur.tokens.length);
-            peek().tokens.push(cur.tokens[0]);
+            pushToken(cur.tokens[0]);
           }
           newCurrent();
           break;
         case ',':
           if(peek().t !== 'fn') err('Unexpected comma outside function arguments.');
           if(cur.v) handleXpathExpr();
-          peek().tokens.push(',');
+          pushToken(',');
           break;
         case '*': {
           // check if part of an XPath expression
