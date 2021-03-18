@@ -117,7 +117,7 @@ module.exports = function(wrapped, extensions) {
   const evaluate = this.evaluate = function(input, cN, nR, rT, _, contextSize=1, contextPosition=1) {
     let i, cur;
     const stack = [{ t:'root', tokens:[] }],
-      peek = function() { return stack[stack.length-1]; },
+      peek = () => stack[stack.length-1],
       err = function(message) { throw new Error((message||'') + ' [stack=' + JSON.stringify(stack) + '] [cur=' + JSON.stringify(cur) + ']'); },
       newCurrent = function() { cur = { v:'' }; },
       pushOp = function(t) {
