@@ -118,23 +118,23 @@ module.exports = function(wrapped, extensions) {
     let i, cur;
     const stack = [{ t:'root', tokens:[] }],
       peek = () => stack[stack.length-1],
-      err = m => { throw new Error((m||'') + JSON.stringify({ stack, cur })); },      
+      err = m => { throw new Error((m||'') + JSON.stringify({ stack, cur })); },
+      pushToken = t => peek().tokens.push(t),
       newCurrent = function() { cur = { v:'' }; },
       pushOp = function(t) {
-        const peeked = peek();
-        const { tokens } = peeked;
         let prev;
 
         if(t <= AND) {
           evalOps(t);
           prev = asBoolean(prevToken());
+          const peeked = peek();
           if((t === OR ? prev : !prev) && peeked.t !== 'fn') peeked.dead = true;
         }
 
-        tokens.push({ t:'op', v:t });
+        pushToken({ t:'op', v:t });
 
         if(t <= AND) {
-          if(t === OR ? prev : !prev) tokens.push(D);
+          if(t === OR ? prev : !prev) pushToken(D);
         }
 
         newCurrent();
@@ -236,7 +236,7 @@ module.exports = function(wrapped, extensions) {
           });
           prev.v = newNodeset;
         } else {
-          peek().tokens.push(toInternalResult(wrapped.evaluate(expr, cN, nR, XPathResult.ANY_TYPE, null)));
+          pushToken(toInternalResult(wrapped.evaluate(expr, cN, nR, XPathResult.ANY_TYPE, null)));
         }
 
         newCurrent();
@@ -246,7 +246,7 @@ module.exports = function(wrapped, extensions) {
       },
       finaliseNum = function() {
         cur.v = parseFloat(cur.str);
-        peek().tokens.push(cur);
+        pushToken(cur);
         newCurrent();
       },
       prevToken = function() {
@@ -334,7 +334,7 @@ module.exports = function(wrapped, extensions) {
       }
       if(cur.t === 'str') {
         if(c === cur.quote) {
-          peek().tokens.push(cur);
+          pushToken(cur);
           newCurrent();
         } else cur.v += c;
         continue;
@@ -376,21 +376,21 @@ module.exports = function(wrapped, extensions) {
 
           if(cur.t !== 'fn') err('")" outside function!');
           if(peek().dead) {
-            peek().tokens.push(D);
+            pushToken(D);
           } else if(isDeadFnArg()) {
             /* do nothing */
           } else if(cur.v) {
-            peek().tokens.push(callFn(cur.v, cur.tokens));
+            pushToken(callFn(cur.v, cur.tokens));
           } else {
             if(cur.tokens.length !== 1) err('Expected one token, but found: ' + cur.tokens.length);
-            peek().tokens.push(cur.tokens[0]);
+            pushToken(cur.tokens[0]);
           }
           newCurrent();
           break;
         case ',':
           if(peek().t !== 'fn') err('Unexpected comma outside function arguments.');
           if(cur.v) handleXpathExpr();
-          peek().tokens.push(',');
+          pushToken(',');
           break;
         case '*': {
           // check if part of an XPath expression
