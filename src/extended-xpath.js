@@ -230,7 +230,7 @@ module.exports = function(wrapped, extensions) {
           // prefix a '.' to make the expression relative to the context node:
           expr = wrapped.createExpression('.' + expr, nR);
           const newNodeset = [];
-          tokens[tokens.length-1].v.map(node => {
+          tokens[tokens.length-1].v.forEach(node => {
             const res = toInternalResult(expr.evaluate(node));
             newNodeset.push(...res.v);
           });
