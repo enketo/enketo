@@ -118,7 +118,7 @@ module.exports = function(wrapped, extensions) {
     let i, cur;
     const stack = [{ t:'root', tokens:[] }],
       peek = () => stack[stack.length-1],
-      err = function(message) { throw new Error((message||'') + ' [stack=' + JSON.stringify(stack) + '] [cur=' + JSON.stringify(cur) + ']'); },
+      err = m => { throw new Error((m||'') + JSON.stringify({ stack, cur })); },      
       newCurrent = function() { cur = { v:'' }; },
       pushOp = function(t) {
         const peeked = peek();
