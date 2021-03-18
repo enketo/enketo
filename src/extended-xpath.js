@@ -118,22 +118,31 @@ module.exports = function(wrapped, extensions) {
     let i, cur;
     const stack = [{ t:'root', tokens:[] }],
       peek = () => stack[stack.length-1],
+      pushToken = t => {
+        const { tokens } = peek();
+        if(prevToken() !== D || t !== D) tokens.push(t);
+      },
+      isDeadBranch = () => {
+        const { dead, t, tokens } = peek();
+        if(dead) return true;
+        if(t === 'fn') {
+          return prevToken() === D;
+        } else {
+          return tokens.includes(D);
+        }
+      },
       err = m => { throw new Error((m||'') + JSON.stringify({ stack, cur })); },
-      pushToken = t => peek().tokens.push(t),
       newCurrent = function() { cur = { v:'' }; },
       pushOp = function(t) {
-        let prev;
-
         if(t <= AND) {
           evalOps(t);
-          prev = asBoolean(prevToken());
-          const peeked = peek();
-          if((t === OR ? prev : !prev) && peeked.t !== 'fn') peeked.dead = true;
         }
 
         pushToken({ t:'op', v:t });
 
         if(t <= AND) {
+          const { tokens } = peek();
+          const prev = asBoolean(tokens[tokens.length-2]);
           if(t === OR ? prev : !prev) pushToken(D);
         }
 
@@ -218,7 +227,7 @@ module.exports = function(wrapped, extensions) {
         }
       },
       handleXpathExpr = function() {
-        if(peek().dead) {
+        if(isDeadBranch()) {
           newCurrent();
           return;
         }
@@ -253,17 +262,6 @@ module.exports = function(wrapped, extensions) {
         const peeked = peek().tokens;
         return peeked[peeked.length - 1];
       },
-      isDeadFnArg = () => {
-        const peeked = peek();
-        if(peeked.t === 'fn') {
-          const { tokens } = peeked;
-          for(let i=tokens.length-1; i>=0 && tokens[i] !== ','; --i) {
-            if(tokens[i] === D) {
-              return true;
-            }
-          }
-        }
-      },
       isNum = function(c) {
         return c >= '0' && c <= '9';
       };
@@ -297,9 +295,7 @@ module.exports = function(wrapped, extensions) {
           if(--cur.depth) {
             cur.v += c;
           } else {
-            const head = peek();
-            const { tokens } = head;
-            if(head.dead || tokens[2] === D) {
+            if(isDeadBranch()) {
               newCurrent();
               continue;
             }
@@ -363,10 +359,7 @@ module.exports = function(wrapped, extensions) {
           } else err('Not sure how to handle: ' + c);
           break;
         case '(':
-          cur.dead = peek().dead;
-          cur.t = 'fn';
-          cur.tokens = [];
-          stack.push(cur);
+          stack.push({ v:cur.v, t:'fn', dead:isDeadBranch(), tokens:[] });
           newCurrent();
           break;
         case ')':
@@ -375,13 +368,11 @@ module.exports = function(wrapped, extensions) {
           cur = stack.pop();
 
           if(cur.t !== 'fn') err('")" outside function!');
-          if(peek().dead) {
+          if(cur.dead) {
             pushToken(D);
-          } else if(isDeadFnArg()) {
-            /* do nothing */
           } else if(cur.v) {
             pushToken(callFn(cur.v, cur.tokens));
-          } else {
+          } else { // bracketed expression
             if(cur.tokens.length !== 1) err('Expected one token, but found: ' + cur.tokens.length);
             pushToken(cur.tokens[0]);
           }

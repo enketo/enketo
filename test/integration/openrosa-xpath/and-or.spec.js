@@ -120,15 +120,88 @@ describe('and/or operators', () => {
 
   describe('or/and precedence rules are applied correctly', () => {
     [
-      [ "true() or true() and false()", true ],
-      [ "true() and false() or true()", true ],
-      [ "false() and false() or false()", false ],
+      [ 'false() or  false() or  false()', false ],
+      [ 'false() or  false() and false()', false ],
+      [ 'false() and false() or  false()', false ],
+      [ 'false() and false() and false()', false ],
+      [ 'false() or  false() or   true()', true  ],
+      [ 'false() or  false() and  true()', false ],
+      [ 'false() and false() or   true()', true  ],
+      [ 'false() and false() and  true()', false ],
+      [ 'false() or   true() or  false()', true  ],
+      [ 'false() or   true() and false()', false ],
+      [ 'false() and  true() or  false()', false ],
+      [ 'false() and  true() and false()', false ],
+      [ 'false() or   true() or   true()', true  ],
+      [ 'false() or   true() and  true()', true  ],
+      [ 'false() and  true() or   true()', true  ],
+      [ 'false() and  true() and  true()', false ],
+      [ ' true() or  false() or  false()', true  ],
+      [ ' true() or  false() and false()', true  ],
+      [ ' true() and false() or  false()', false ],
+      [ ' true() and false() and false()', false ],
+      [ ' true() or  false() or   true()', true  ],
+      [ ' true() or  false() and  true()', true  ],
+      [ ' true() and false() or   true()', true  ],
+      [ ' true() and false() and  true()', false ],
+      [ ' true() or   true() or  false()', true  ],
+      [ ' true() or   true() and false()', true  ],
+      [ ' true() and  true() or  false()', true  ],
+      [ ' true() and  true() and false()', false ],
+      [ ' true() or   true() or   true()', true  ],
+      [ ' true() or   true() and  true()', true  ],
+      [ ' true() and  true() or   true()', true  ],
+      [ ' true() and  true() and  true()', true  ],
+      [ 'false() or (false() and false())', false ],
+      [ '(false() and false()) or false()', false ],
+      [ 'false() or (false() and true())', false ],
+      [ '(false() and false()) or true()', true ],
+      [ 'false() or (true() and false())', false ],
+      [ '(false() and true()) or false()', false ],
+      [ 'false() or (true() and true())', true ],
+      [ '(false() and true()) or true()', true ],
+      [ ' true() or (false() and false())', true ],
+      [ ' (true() and false()) or false()', false ],
+      [ ' true() or (false() and true())', true ],
+      [ ' (true() and false()) or true()', true ],
+      [ ' true() or (true() and false())', true ],
+      [ ' (true() and true()) or false()', true ],
+      [ ' true() or (true() and true())', true ],
+      [ ' (true() and true()) or true()', true ],
       [ "0 or 1 and 0", false ],
-      [ "0 or 1 and 0+1", true ]
+      [ "0 or 1 and 0+1", true ],
+      [ "0 and explode() + 1", false ],
+      [ "0 and 1 + explode()", false ],
+      [ "0 and explode() + explode()", false ],
+      [ "0 and explode(explode()) + explode(explode(explode(1, 2, 3, explode(), explode())))", false ],
+      [ "0 and /explode + 1", false ],
+      [ "0 and 1 + /explode", false ],
+      [ "0 and /explode + /explode", false ],
+      [ "0 and explode(/explode) + explode(explode(explode(1, 2, 3, explode(), /explode)))", false ],
+      [ "0 and /explode[/explode]", false ],
+      [ "0 and fn(/explode)", false ],
+      [ "0 and 1 + explode(/explode)", false ],
     ].forEach(([expr, expected]) => {
       it(`should evaluate ${expr} as ${expected}`, () => {
         assertBoolean(expr, expected);
       });
+    });
+
+    // TODO: depending on the underlying issue this test perhaps belongs with a different spec somewhere above.
+    // REVIEW: I think this is now captured above
+    it('should evaluate', () => {
+      const doc = initDoc(`
+        <data>
+          <a id="A"/>
+          <node>icrc</node>
+        </data>
+      `);
+      const node = doc.getElementById('A');
+      // original:
+      // const expr = " /data/identification/organisation  = 'icrc' and  /data/identification/provisionrfl  = 'yes_rfl' or  /data/identification/organisation  = 'icrc' and  /data/identification/provisionrfl  = 'yes_emergency' or  /data/identification/organisation  = 'icrc' and  /data/identification/provisionrfl  = 'capacitystrengtheningonly'";
+      // minimized:
+      const expr = "false() and false() or /data/node = 'icrc' ";
+      assertBoolean(node, null, expr, true);
     });
   });
 });
