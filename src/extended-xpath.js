@@ -119,7 +119,7 @@ module.exports = function(wrapped, extensions) {
     const stack = [{ t:'root', tokens:[] }],
       peek = function() { return stack[stack.length-1]; },
       err = function(message) { throw new Error((message||'') + ' [stack=' + JSON.stringify(stack) + '] [cur=' + JSON.stringify(cur) + ']'); },
-      newCurrent = function() { cur = { t:'?', v:'' }; },
+      newCurrent = function() { cur = { v:'' }; },
       pushOp = function(t) {
         const peeked = peek();
         const { tokens } = peeked;
