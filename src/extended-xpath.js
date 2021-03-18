@@ -127,7 +127,7 @@ module.exports = function(wrapped, extensions) {
 
         if(t <= AND) {
           evalOps(t);
-          prev = asBoolean(tokens[tokens.length-1]);
+          prev = asBoolean(prevToken());
           if((t === OR ? prev : !prev) && peeked.t !== 'fn') peeked.dead = true;
         }
 
@@ -223,18 +223,18 @@ module.exports = function(wrapped, extensions) {
           return;
         }
         let expr = cur.v;
-        const { tokens } = peek();
-        if(tokens.length && tokens[tokens.length-1].t === 'arr') {
+        const prev = prevToken();
+        if(prev && prev.t === 'arr') {
           // chop the leading slash from expr
           if(expr.charAt(0) !== '/') throw new Error(`not sure how to handle expression called on nodeset that doesn't start with a '/': ${expr}`);
           // prefix a '.' to make the expression relative to the context node:
           expr = wrapped.createExpression('.' + expr, nR);
           const newNodeset = [];
-          tokens[tokens.length-1].v.map(node => {
+          prev.v.map(node => {
             const res = toInternalResult(expr.evaluate(node));
             newNodeset.push(...res.v);
           });
-          tokens[tokens.length-1].v = newNodeset;
+          prev.v = newNodeset;
         } else {
           peek().tokens.push(toInternalResult(wrapped.evaluate(expr, cN, nR, XPathResult.ANY_TYPE, null)));
         }
@@ -304,8 +304,9 @@ module.exports = function(wrapped, extensions) {
               continue;
             }
             let contextNodes;
-            if(tokens.length && tokens[tokens.length-1].t === 'arr') {
-              contextNodes = tokens[tokens.length-1].v;
+            const prev = prevToken();
+            if(prev.t === 'arr') {
+              contextNodes = prev.v;
             } else if(head.t === 'root') {
               contextNodes = [ cN ];
               throw new Error('Not sure how to handle a predicate-only expression yet - this will probably break down when re-assigning tokens[tokens.length-1].v');
@@ -326,7 +327,7 @@ module.exports = function(wrapped, extensions) {
                 return res.t === 'num' ? asNumber(res) === 1+i : asBoolean(res);
               });
 
-            tokens[tokens.length-1].v = filteredNodes;
+            prev.v = filteredNodes;
             newCurrent();
           }
           continue;
