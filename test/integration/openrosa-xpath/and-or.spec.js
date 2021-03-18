@@ -187,21 +187,5 @@ describe('and/or operators', () => {
       });
     });
 
-    // TODO: depending on the underlying issue this test perhaps belongs with a different spec somewhere above.
-    // REVIEW: I think this is now captured above
-    it('should evaluate', () => {
-      const doc = initDoc(`
-        <data>
-          <a id="A"/>
-          <node>icrc</node>
-        </data>
-      `);
-      const node = doc.getElementById('A');
-      // original:
-      // const expr = " /data/identification/organisation  = 'icrc' and  /data/identification/provisionrfl  = 'yes_rfl' or  /data/identification/organisation  = 'icrc' and  /data/identification/provisionrfl  = 'yes_emergency' or  /data/identification/organisation  = 'icrc' and  /data/identification/provisionrfl  = 'capacitystrengtheningonly'";
-      // minimized:
-      const expr = "false() and false() or /data/node = 'icrc' ";
-      assertBoolean(node, null, expr, true);
-    });
   });
 });
