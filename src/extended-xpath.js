@@ -80,17 +80,17 @@ module.exports = function(wrapped, extensions) {
         case null:
         case undefined:
         case XPathResult.ANY_TYPE:
-          // don't convert
+          // derive return type from the return value
           switch(r.t) {
-            case 'num':  return { resultType:XPathResult.NUMBER_TYPE,  numberValue:r.v,  stringValue:r.v.toString() };
-            case 'str':  return { resultType:XPathResult.BOOLEAN_TYPE, stringValue:r.v };
-            case 'bool': return { resultType:XPathResult.BOOLEAN_TYPE, booleanValue:r.v, stringValue:r.v.toString() };
-            case 'arr':  return toSnapshotResult(r, XPathResult.UNORDERED_NODE_ITERATOR_TYPE);
+            case 'num':  return toExternalResult(r, XPathResult.NUMBER_TYPE);
+            case 'str':  return toExternalResult(r, XPathResult.STRING_TYPE);
+            case 'bool': return toExternalResult(r, XPathResult.BOOLEAN_TYPE);
+            case 'arr':  return toExternalResult(r, XPathResult.UNORDERED_NODE_ITERATOR_TYPE);
             default: throw new Error('unrecognised internal type: ' + r.t);
           }
-        case XPathResult.NUMBER_TYPE:  return { resultType:rt, numberValue: asNumber(r),  stringValue:r.v.toString() };
-        case XPathResult.STRING_TYPE:  return { resultType:rt, stringValue: asString(r) };
-        case XPathResult.BOOLEAN_TYPE: return { resultType:rt, booleanValue:asBoolean(r), stringValue:r.v.toString() };
+        case XPathResult.NUMBER_TYPE:  return { resultType:rt, stringValue:asString(r), numberValue:asNumber(r) };
+        case XPathResult.STRING_TYPE:  return { resultType:rt, stringValue:asString(r) };
+        case XPathResult.BOOLEAN_TYPE: return { resultType:rt, stringValue:asString(r), booleanValue:asBoolean(r) };
         case XPathResult.UNORDERED_NODE_ITERATOR_TYPE:
         case XPathResult.ORDERED_NODE_ITERATOR_TYPE:
         case XPathResult.UNORDERED_NODE_SNAPSHOT_TYPE:
