@@ -103,7 +103,7 @@ describe('XPath expression evaluation4', () => {
     ['/thedata/nodeC', false],
   ].forEach(([expr, expected]) => {
     it('returns correct result type', () => {
-      const res = doc.xEval(expr, doc, 3);
+      const res = doc.xEval(expr, doc, XPathResult.BOOLEAN_TYPE);
       assert.equal(res.resultType, 3);
       assert.equal(res.booleanValue, expected);
     });
@@ -133,7 +133,7 @@ describe('XPath expression evaluation5', () => {
 
   it('returns correct result type', () => {
     const expr = '/model/instance[1]/*//*[@template] | /model/instance[1]/*//*[@jr:template]';
-    const res = doc.xEval(expr, doc, 7);
+    const res = doc.xEval(expr, doc, XPathResult.ORDERED_NODE_SNAPSHOT_TYPE);
     assert.equal(res.resultType, 7);
     assert.equal(res.snapshotLength, 0);
   });
