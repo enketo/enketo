@@ -67,7 +67,7 @@ describe('custom XPath functions', () => {
         const actualOutput = evaluator.evaluate(`pad2(${input})`);
 
         // then
-        assert.deepEqual(actualOutput, { resultType:2, stringValue:expectedOutput });
+        assert.deepEqual(actualOutput, { resultType:XPathResult.STRING_TYPE, stringValue:expectedOutput });
       });
     });
 

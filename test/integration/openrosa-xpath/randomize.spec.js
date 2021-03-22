@@ -128,7 +128,7 @@ describe('randomize()', () => {
 
   it('randomizes nodes', () => {
     const expr = 'randomize(/model/instance[@id="crop_list"]/root/item)';
-    const res = doc.xEval(expr, doc, 7);
+    const res = doc.xEval(expr, doc, XPathResult.ORDERED_NODE_SNAPSHOT_TYPE);
     assert.equal(res.resultType, 7);
     assert.equal(res.snapshotLength, 6);
   });
