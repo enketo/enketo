@@ -292,6 +292,14 @@ describe('native string functions', () => {
     });
   });
 
+  it('translate() with a node parameter', () => {
+    const doc = initDoc(`
+      <data>
+        <a id="A">TAXIcab</a>
+      </div>`);
+      assertString(doc.getElementById('A'), null, 'translate( ., "abc", "ABC")', 'TAXICAB');
+  });
+
   it('translate() fails when too many arguments are provided', () => {
     assertThrow("translate(1, 2, 3, 4)");
   });
