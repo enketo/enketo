@@ -294,7 +294,7 @@ describe('native string functions', () => {
 
   it('translate() with a node parameter', () => {
     const doc = initDoc(`
-      <data>
+      <div>
         <a id="A">TAXIcab</a>
       </div>`);
       assertString(doc.getElementById('A'), null, 'translate( ., "abc", "ABC")', 'TAXICAB');
