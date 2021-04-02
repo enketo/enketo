@@ -3,17 +3,19 @@ const xpr = require('../xpr');
 
 module.exports = { preprocessNativeArgs };
 
+const cast = { num:asNumber, str:asString };
+
 const fns = {
-  'ceiling':          { min:1, max:1 },
-  'contains':         { min:2, max:2 },
-  'floor':            { min:1, max:1 },
+  'ceiling':          { min:1, max:1, cast:['num'] },
+  'contains':         { min:2, max:2, cast:['str', 'str'] },
+  'floor':            { min:1, max:1, cast:['num'] },
   'id':               { min:1, max:1, conv:r => [ xpr.string(r.t === 'arr' ? r.v.map(asString).join(' ') : asString(r)) ] },
-  'lang':             { min:1, max:1 },
-  'starts-with':      { min:2, max:2 },
+  'lang':             { min:1, max:1, cast:['str'] },
+  'starts-with':      { min:2, max:2, cast:['str', 'str'] },
   'substring':        { min:2, max:3, conv:convertSubstringArgs },
-  'substring-after':  { min:2, max:2 },
-  'substring-before': { min:2, max:2 },
-  'translate':        { min:3, max:3 },
+  'substring-after':  { min:2, max:2, cast:['str', 'str'] },
+  'substring-before': { min:2, max:2, cast:['str', 'str'] },
+  'translate':        { min:3, max:3, cast:['str', 'str', 'str'] },
 };
 
 function preprocessNativeArgs(name, args) {
@@ -23,6 +25,12 @@ function preprocessNativeArgs(name, args) {
   if(args.length > def.max) throw new Error('too many args');
   if(def.conv) {
     return def.conv(...args);
+  } else if(def.cast) {
+    return args
+      .map((v, i) => {
+        const t = def.cast[i];
+        return { t, v:cast[t](v) };
+      });
   }
   return args;
 }
