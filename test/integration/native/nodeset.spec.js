@@ -401,4 +401,50 @@ describe('native nodeset functions', () => {
   it('name() fails when the wrong argument type is provided', () => {
     assertThrow("name(1)");
   });
+
+  describe('node() as part of a path', () => {
+    const doc = initDoc(`
+      <model xmlns:jr="http://openrosa.org/javarosa">
+        <instance>
+          <data id="nested-repeat-v5" jr:complete="1" complete="0">
+            <node/>
+          </data>
+        </instance>
+      </model>`, nsResolver);
+  
+    [    
+      ['/model/instance[1]/node()/@jr:complete = "1"', true],
+      ['/model/instance[1]/node()/@jr:complete = 1', true],
+      ['/model/instance[1]/node()/@complete = 0', true],
+      ['/model/instance[1]/node()/@complete = "0"', true],
+    ].forEach(([expr, expected]) => {
+      it(`evaluates attribute value comparison (${expr}) correctly`, () => {
+        const res = doc.xEval(expr, doc, XPathResult.BOOLEAN_TYPE);
+        assert.equal(res.booleanValue, expected);
+      });
+    });
+  });
+
+  describe('"*" as part of a path', () => {
+    const doc = initDoc(`
+      <model xmlns:jr="http://openrosa.org/javarosa">
+        <instance>
+          <data id="nested-repeat-v5" jr:complete="1" complete="0">
+            <node/>
+          </data>
+        </instance>
+      </model>`, nsResolver);
+  
+    [    
+      ['/model/instance[1]/*/@jr:complete = "1"', true],
+      ['/model/instance[1]/*/@jr:complete = 1', true],
+      ['/model/instance[1]/*/@complete = 0', true],
+      ['/model/instance[1]/*/@complete = "0"', true],
+    ].forEach(([expr, expected]) => {
+      it(`evaluates attribute value comparison (${expr}) correctly`, () => {
+        const res = doc.xEval(expr, doc, XPathResult.BOOLEAN_TYPE);
+        assert.equal(res.booleanValue, expected);
+      });
+    });
+  });
 });
