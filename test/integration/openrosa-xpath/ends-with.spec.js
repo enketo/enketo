@@ -1,4 +1,4 @@
-const { assertTrue, assertFalse, assertThrow } = require('../helpers');
+const { assertTrue, assertFalse, assertThrow, initDoc } = require('../helpers');
 
 describe('ends-with', () => {
   it('ends-with', () => {
@@ -18,4 +18,13 @@ describe('ends-with', () => {
     assertThrow('ends-with()');
     assertThrow('ends-with(1)');
   });
+
+  it('with a node parameter', () => {
+    const doc = initDoc(`
+      <data>
+        <a id="A">TAXIcab</a>
+      </data>`);
+      assertTrue(doc, null, 'ends-with( /data/a, "cab")');
+  });
+
 });
