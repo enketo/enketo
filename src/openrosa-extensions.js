@@ -284,7 +284,7 @@ const openrosa_xpath_extensions = function() {
     not: function(r) {
       if(arguments.length === 0) throw TOO_FEW_ARGS;
       if(arguments.length > 1) throw TOO_MANY_ARGS;
-      return XPR.boolean(!r.v);
+      return XPR.boolean(!asBoolean(r));
     },
     now: function() {
       return XPR.date(new Date());
