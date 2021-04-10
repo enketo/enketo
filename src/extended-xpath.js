@@ -371,7 +371,13 @@ module.exports = function(wrapped, extensions) {
           if(cur.dead) {
             pushToken(D);
           } else if(cur.v) {
-            pushToken(callFn(cur.v, cur.tokens));
+            if(cur.v.charAt(0) === '/') {
+              if(cur.tokens.length) err('Unexpected args for node test function!');
+              cur.v += '()';
+              handleXpathExpr();
+            } else {
+              pushToken(callFn(cur.v, cur.tokens));
+            }
           } else { // bracketed expression
             if(cur.tokens.length !== 1) err('Expected one token, but found: ' + cur.tokens.length);
             pushToken(cur.tokens[0]);

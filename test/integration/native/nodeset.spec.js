@@ -411,8 +411,8 @@ describe('native nodeset functions', () => {
           </data>
         </instance>
       </model>`, nsResolver);
-  
-    [    
+
+    [
       ['/model/instance[1]/node()/@jr:complete = "1"', true],
       ['/model/instance[1]/node()/@jr:complete = 1', true],
       ['/model/instance[1]/node()/@complete = 0', true],
@@ -434,8 +434,8 @@ describe('native nodeset functions', () => {
           </data>
         </instance>
       </model>`, nsResolver);
-  
-    [    
+
+    [
       ['/model/instance[1]/*/@jr:complete = "1"', true],
       ['/model/instance[1]/*/@jr:complete = 1', true],
       ['/model/instance[1]/*/@complete = 0', true],
