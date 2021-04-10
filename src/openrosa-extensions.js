@@ -206,7 +206,7 @@ const openrosa_xpath_extensions = function() {
     'ends-with': function(a, b) {
       if(arguments.length > 2) throw TOO_MANY_ARGS;
       if(arguments.length < 2) throw TOO_FEW_ARGS;
-      return XPR.boolean(a.v.endsWith(b.v));
+      return XPR.boolean(asString(a).endsWith(asString(b)));
     },
     int: function(v) {
       return XPR.number(asInteger(v));
