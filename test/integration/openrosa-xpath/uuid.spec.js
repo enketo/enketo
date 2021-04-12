@@ -1,4 +1,5 @@
-const { assertMatch, assertStringLength } = require('../helpers');
+const { assert } = require('chai');
+const { assertMatch, assertStringLength, initDoc } = require('../helpers');
 
 describe('#uuid()', () => {
   it('should provide an RFC 4122 version 4 compliant UUID string', () => {
@@ -18,6 +19,37 @@ describe('#uuid()', () => {
       ['uuid(20)', 20],
     ].forEach(([expr, expectedLength]) => {
       assertStringLength(expr, expectedLength);
+    });
+  });
+
+  describe('referencing nodesets', () => {
+    const doc = initDoc(`
+      <numbers>
+        <one>1</one>
+        <two>2</two>
+        <six>6</six>
+        <ninetynine>99</ninetynine>
+      </numbers>
+    `);
+
+    [
+      [ 'uuid(/numbers/one)', 1 ],
+      [ 'uuid(/numbers/two)', 2 ],
+      [ 'uuid(/numbers/six)', 6 ],
+      [ 'uuid(/numbers/ninetynine)', 99 ],
+    ].forEach(([ expr, expectedLength ]) => {
+      it(`should evaluate '${expr}' to a ${expectedLength} string`, () => {
+        assert.equal(doc.xEval(expr).stringValue.length, expectedLength);
+      });
+    });
+
+    [
+      'uuid(/nonsense)',
+      'uuid(/numbers)',
+    ].forEach(expr => {
+      it(`should throw an error when evaluating '${expr}' because the nodeset evaluates to NaN`, () => {
+        assert.throw(() => doc.xEval(expr));
+      });
     });
   });
 });

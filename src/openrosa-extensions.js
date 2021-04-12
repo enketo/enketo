@@ -395,7 +395,7 @@ const openrosa_xpath_extensions = function() {
       return XPR.boolean(true);
     },
     uuid: function(r) {
-      if(r && r.v) return XPR.string(randomToken(r.v));
+      if(r && r.v) return XPR.string(randomToken(asNumber(r)));
       return XPR.string(uuid());
     },
     'weighted-checklist': function(min, max, ...list) {
