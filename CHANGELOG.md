@@ -3,8 +3,8 @@ Change Log
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
-[Unreleased]
-------------------------
+[2.0.5] - 2021-04-12
+---------------------
 ##### Fixed
 - Using `node()` mid-axis, causes an exception.
 - Using `ends-with()` with a node parameter causes an exception.
