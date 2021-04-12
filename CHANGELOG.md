@@ -8,6 +8,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 ##### Fixed
 - Using `node()` mid-axis, causes an exception.
 - The `ends-with()` function causes an exception when the first parameter is a node.
+- Using `not()` with an empty node-set parameter returns `false`.
 
 [2.0.4] - 2021-04-02
 ------------------------
