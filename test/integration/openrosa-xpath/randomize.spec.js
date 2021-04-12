@@ -1,5 +1,20 @@
 const { initDoc, assert, assertThrow, assertTrue, nsResolver } = require('../helpers');
 
+describe.only('randomize()', () => {
+  describe('called on a non-nodeset', () => {
+    [
+      'randomize(1, 2)',
+    ].forEach(expr => {
+      it(`should evaluate '${expr}' as ___TODO___`, () => {
+        // given
+        const doc = initDoc();
+
+        // expect
+        assert.throws(() => doc.evaluate(expr));
+      });
+    });
+  });
+});
 
 describe('randomize()', () => {
   let doc;

@@ -339,6 +339,8 @@ const openrosa_xpath_extensions = function() {
     randomize: function(r, seed) {
       if(!arguments.length) throw TOO_FEW_ARGS;//only rT passed
       if(arguments.length > 2) throw TOO_MANY_ARGS;
+      if(!r || r.t !== 'arr') throw new Error('randomize() must be called on a nodeset');
+
 
       seed = seed && asNumber(seed);
 
