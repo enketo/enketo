@@ -1,3 +1,4 @@
+const { assert } = require('chai');
 const { assertNumberValue, assertNumberRounded, initDoc, nsResolver } = require('../helpers');
 
 describe('math functions', () => {
@@ -97,5 +98,117 @@ describe('math functions', () => {
     assertNumberValue('sqrt(4)', 2);
     assertNumberValue('sqrt(-2)', NaN);
     assertNumberValue('sqrt("NaN")', NaN);
+  });
+
+  describe('referencing nodesets', () => {
+    const doc = initDoc(`
+      <numbers>
+        <minusone>-1</minusone>
+        <minuspointfive>-0.5</minuspointfive>
+        <zero>0</zero>
+        <pointfive>0.5</pointfive>
+        <one>1</one>
+        <nan>nonsense</nan>
+      </numbers>
+    `);
+
+    [
+      [ 'sin(/numbers/minusone)', -0.8414709848078965 ],
+      [ 'sin(/numbers/minuspointfive)', -0.479425538604203 ],
+      [ 'sin(/numbers/zero)', 0 ],
+      [ 'sin(/numbers/pointfive)', 0.479425538604203 ],
+      [ 'sin(/numbers/one)', 0.8414709848078965 ],
+      [ 'sin(/numbers/nan)', NaN ],
+      [ 'sin(/numbers/missing)', NaN ],
+
+      [ 'cos(/numbers/minusone)', 0.5403023058681398 ],
+      [ 'cos(/numbers/minuspointfive)', 0.8775825618903728 ],
+      [ 'cos(/numbers/zero)', 1 ],
+      [ 'cos(/numbers/pointfive)', 0.8775825618903728 ],
+      [ 'cos(/numbers/one)', 0.5403023058681398 ],
+      [ 'cos(/numbers/nan)', NaN ],
+      [ 'cos(/numbers/missing)', NaN ],
+
+      [ 'tan(/numbers/minusone)', -1.5574077246549023 ],
+      [ 'tan(/numbers/minuspointfive)', -0.5463024898437905 ],
+      [ 'tan(/numbers/zero)', 0 ],
+      [ 'tan(/numbers/pointfive)', 0.5463024898437905 ],
+      [ 'tan(/numbers/one)', 1.5574077246549023 ],
+      [ 'tan(/numbers/nan)', NaN ],
+      [ 'tan(/numbers/missing)', NaN ],
+
+      [ 'asin(/numbers/minusone)', -1.5707963267948966 ],
+      [ 'asin(/numbers/minuspointfive)', -0.5235987755982989 ],
+      [ 'asin(/numbers/zero)', 0 ],
+      [ 'asin(/numbers/pointfive)', 0.5235987755982989 ],
+      [ 'asin(/numbers/one)', 1.5707963267948966 ],
+      [ 'asin(/numbers/nan)', NaN ],
+      [ 'asin(/numbers/missing)', NaN ],
+
+      [ 'acos(/numbers/minusone)', 3.141592653589793 ],
+      [ 'acos(/numbers/minuspointfive)', 2.0943951023931957 ],
+      [ 'acos(/numbers/zero)', 1.5707963267948966 ],
+      [ 'acos(/numbers/pointfive)', 1.0471975511965979 ],
+      [ 'acos(/numbers/one)', 0 ],
+      [ 'acos(/numbers/nan)', NaN ],
+      [ 'acos(/numbers/missing)', NaN ],
+
+      [ 'atan(/numbers/minusone)', -0.7853981633974483 ],
+      [ 'atan(/numbers/minuspointfive)', -0.4636476090008061 ],
+      [ 'atan(/numbers/zero)', 0 ],
+      [ 'atan(/numbers/pointfive)', 0.4636476090008061 ],
+      [ 'atan(/numbers/one)', 0.7853981633974483 ],
+      [ 'atan(/numbers/nan)', NaN ],
+      [ 'atan(/numbers/missing)', NaN ],
+
+      [ 'log(/numbers/minusone)', NaN ],
+      [ 'log(/numbers/minuspointfive)', NaN ],
+      [ 'log(/numbers/zero)', -Infinity ],
+      [ 'log(/numbers/pointfive)', -0.6931471805599453 ],
+      [ 'log(/numbers/one)', 0 ],
+      [ 'log(/numbers/nan)', NaN ],
+      [ 'log(/numbers/missing)', NaN ],
+
+      [ 'log10(/numbers/minusone)', NaN ],
+      [ 'log10(/numbers/minuspointfive)', NaN ],
+      [ 'log10(/numbers/zero)', -Infinity ],
+      [ 'log10(/numbers/pointfive)', -0.3010299956639812 ],
+      [ 'log10(/numbers/one)', 0 ],
+      [ 'log10(/numbers/nan)', NaN ],
+      [ 'log10(/numbers/missing)', NaN ],
+
+      [ 'exp(/numbers/minusone)', 0.36787944117144233 ],
+      [ 'exp(/numbers/minuspointfive)', 0.6065306597126334 ],
+      [ 'exp(/numbers/zero)', 1 ],
+      [ 'exp(/numbers/pointfive)', 1.6487212707001282 ],
+      [ 'exp(/numbers/one)', 2.718281828459045 ],
+      [ 'exp(/numbers/nan)', NaN ],
+      [ 'exp(/numbers/missing)', NaN ],
+
+      [ 'exp10(/numbers/minusone)', 0.1 ],
+      [ 'exp10(/numbers/minuspointfive)', 0.31622776601683794 ],
+      [ 'exp10(/numbers/zero)', 1 ],
+      [ 'exp10(/numbers/pointfive)', 3.1622776601683795 ],
+      [ 'exp10(/numbers/one)', 10 ],
+      [ 'exp10(/numbers/nan)', NaN ],
+      [ 'exp10(/numbers/missing)', NaN ],
+
+      [ 'sqrt(/numbers/minusone)', NaN ],
+      [ 'sqrt(/numbers/minuspointfive)', NaN ],
+      [ 'sqrt(/numbers/zero)', 0 ],
+      [ 'sqrt(/numbers/pointfive)', 0.7071067811865476 ],
+      [ 'sqrt(/numbers/one)', 1 ],
+      [ 'sqrt(/numbers/nan)', NaN ],
+      [ 'sqrt(/numbers/missing)', NaN ],
+    ].forEach(([ expr, expected ]) => {
+      it(`should evaluate '${expr}' as '${expected}'`, () => {
+        // when
+        const actual = doc.xEval(expr).numberValue;
+
+        // then
+        if(isNaN(expected)) assert.isNaN(actual);
+        else                assert.equal(actual, expected);
+      });
+    });
   });
 });
