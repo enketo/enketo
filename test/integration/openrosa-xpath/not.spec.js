@@ -1,4 +1,5 @@
-const { assertThrow, assertTrue, assertFalse } = require('../helpers');
+const { assert } = require('chai');
+const { assertThrow, assertTrue, assertFalse, initDoc } = require('../helpers');
 
 describe('not', () => {
   it('not()', () => {
@@ -15,5 +16,25 @@ describe('not', () => {
 
   it('not() fails when too many arguments are provided', () => {
     assertThrow('not(1, 2)');
+  });
+
+  describe('referencing nodesets', () => {
+    const doc = initDoc(`
+      <countries>
+        <country>
+        </country>
+      </countries>
+    `);
+
+    [
+      [     'not(/cities)'    , true  ],
+      [ 'not(not(/cities))'   , false ],
+      [     'not(/countries)' , false ],
+      [ 'not(not(/countries))', true  ],
+    ].forEach(([ expr, expected ]) => {
+      it(`should evaluate '${expr}' as '${expected}'`, () => {
+        assert.equal(doc.xEval(expr).booleanValue, expected);
+      });
+    });
   });
 });
