@@ -1,4 +1,4 @@
-const {assertThrow, assertNumberValue } = require('../helpers');
+const {assertThrow, assertNumberValue, initDoc} = require('../helpers');
 
 describe('decimal-time()', () => {
   it('decimates times', () => {
@@ -14,6 +14,14 @@ describe('decimal-time()', () => {
     assertNumberValue('decimal-time("06:00:60.000-07:00")', NaN);
     assertNumberValue('decimal-time("23:59:00.000-07:60")', NaN);
     assertNumberValue('decimal-time("now()")', NaN);
+  });
+
+  it('decimates times provided with a node parameter', () => {
+    const doc = initDoc(`
+      <data>
+        <a>06:00:00.000-07:00</a>
+      </data>`);
+      assertNumberValue(doc, null, 'decimal-time( /data/a )', 0.250);
   });
 
   it('facilitates time calculations and evaluates', () => {
