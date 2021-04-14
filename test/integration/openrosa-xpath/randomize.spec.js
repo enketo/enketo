@@ -1,6 +1,6 @@
 const { initDoc, assert, assertThrow, assertTrue, nsResolver } = require('../helpers');
 
-describe.only('randomize()', () => {
+describe('randomize()', () => {
   describe('called on a non-nodeset', () => {
     [
       'randomize(1, 2)',
