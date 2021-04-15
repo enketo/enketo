@@ -145,6 +145,27 @@ describe('infix operators', () => {
       });
     });
   });
+  describe('with nodes', () =>{
+    const doc = initDoc(`
+    <data>
+      <a>AA</a>
+      <b>BB</b>
+    </data>`);
+
+    _.forEach({
+      '/data/a!= /data/b': true,
+      '/data/a!=/data/b': true,
+      '/data/a!= "AA"': false,
+      '/data/a!="AA"': false,
+      '"AA" != /data/a': false,
+      '"AA"!= /data/a': false,
+      '"AA"!=/data/a': false,
+    }, (expectedBoolean, expr) => {
+      it('should evaluate "' + expr + '" as ' + expectedBoolean.toString().toUpperCase(), () => {
+        assertBoolean(doc, null, expr, expectedBoolean);
+      });
+    });
+  });
   describe('number operations', () => {
     it( '*,+,-,mod,div precedence rules are applied correctly', () => {
       [
