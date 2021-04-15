@@ -1,7 +1,7 @@
 Openrosa XForms Evaluator
 =========================
 
-<a href="https://travis-ci.org/enketo/openrosa-xpath-evaluator"><img src="https://travis-ci.org/enketo/openrosa-xpath-evaluator.svg?branch=master"/></a>
+<a href="https://travis-ci.com/enketo/openrosa-xpath-evaluator"><img src="https://travis-ci.com/enketo/openrosa-xpath-evaluator.svg?branch=master"/></a>
 
 Wrapper for browsers' XPath evaluator with added support for OpenRosa extensions.
 
