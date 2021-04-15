@@ -17,6 +17,7 @@ describe('#uuid()', () => {
       ['uuid(6)', 6],
       ['uuid(16)', 16],
       ['uuid(20)', 20],
+      ['uuid(0)', 0],
     ].forEach(([expr, expectedLength]) => {
       assertStringLength(expr, expectedLength);
     });
