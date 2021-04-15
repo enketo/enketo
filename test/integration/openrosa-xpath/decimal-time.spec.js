@@ -16,7 +16,7 @@ describe('decimal-time()', () => {
     assertNumberValue('decimal-time("now()")', NaN);
   });
 
-  it('decimates times provided with a node parameter', () => {
+  it('should convert times provided with a node parameter', () => {
     const doc = initDoc(`
       <data>
         <a>06:00:00.000-07:00</a>

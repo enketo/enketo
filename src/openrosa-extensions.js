@@ -160,7 +160,7 @@ const openrosa_xpath_extensions = function() {
     'decimal-time': function(r) {
       if(arguments.length > 1) throw TOO_MANY_ARGS;
       if(r.t === 'num') return XPR.number(NaN);
-      const time = r.v;
+      const time = asString(r);
       // There is no Time type, and so far we don't need it so we do all validation
       // and conversion here, manually.
       const m = time.match(/^(\d\d):(\d\d):(\d\d)(\.\d\d?\d?)?(\+|-)(\d\d):(\d\d)$/);
