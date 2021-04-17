@@ -145,27 +145,45 @@ describe('infix operators', () => {
       });
     });
   });
+
   describe('with nodes', () =>{
     const doc = initDoc(`
     <data>
-      <a>AA</a>
-      <b>BB</b>
+      <a>1</a>
+      <b>2</b>
     </data>`);
 
     _.forEach({
       '/data/a!= /data/b': true,
       '/data/a!=/data/b': true,
-      '/data/a!= "AA"': false,
-      '/data/a!="AA"': false,
-      '"AA" != /data/a': false,
-      '"AA"!= /data/a': false,
-      '"AA"!=/data/a': false,
+      '/data/a!= "1"': false,
+      '/data/a!="1"': false,
+      '"1" != /data/a': false,
+      '"1"!= /data/a': false,
+      '"1"!=/data/a': false,
+
+      '/data/a<= /data/b': true,
+      '/data/a<=/data/b': true,
+      '/data/a<= "1"': true,
+      '/data/a<="1"': true,
+      '"1" <= /data/a': true,
+      '"1"<= /data/a': true,
+      '"1"<=/data/a': true,
+
+      '/data/a>= /data/b': false,
+      '/data/a>=/data/b': false,
+      '/data/a>= "1"': true,
+      '/data/a>="1"': true,
+      '"1" >= /data/a': true,
+      '"1">= /data/a': true,
+      '"1">=/data/a': true,
     }, (expectedBoolean, expr) => {
       it('should evaluate "' + expr + '" as ' + expectedBoolean.toString().toUpperCase(), () => {
         assertBoolean(doc, null, expr, expectedBoolean);
       });
     });
   });
+
   describe('number operations', () => {
     it( '*,+,-,mod,div precedence rules are applied correctly', () => {
       [
