@@ -1,13 +1,27 @@
 const { assertThrow, assertNumberValue } = require('../helpers');
 
 describe('#decimal-date-time()', () => {
-  [
-    ['decimal-date-time("1970-01-01T00:00:00Z")', 0],
-    ['decimal-date-time("1970-01-02T00:00:00Z")', 1],
-    ['decimal-date-time("1969-12-31T00:00:00Z")', -1],
-  ].forEach(([expr, expectedDaysSinceEpoch]) => {
-    it('should convert ' + expr + ' into ' + expectedDaysSinceEpoch, () => {
-      assertNumberValue(expr, expectedDaysSinceEpoch);
+  describe('with full date + timestamp', () => {
+    [
+      ['decimal-date-time("1970-01-01T00:00:00Z")', 0],
+      ['decimal-date-time("1970-01-02T00:00:00Z")', 1],
+      ['decimal-date-time("1969-12-31T00:00:00Z")', -1],
+    ].forEach(([expr, expectedDaysSinceEpoch]) => {
+      it('should convert ' + expr + ' into ' + expectedDaysSinceEpoch, () => {
+        assertNumberValue(expr, expectedDaysSinceEpoch);
+      });
+    });
+  });
+
+  describe('with date only', () => {
+    [
+      ['decimal-date-time("1970-01-01")', 0],
+      ['decimal-date-time("1970-01-02")', 1],
+      ['decimal-date-time("1969-12-31")', -1]
+    ].forEach( ([expr, expectedDaysSinceEpoch]) => {
+      it('should convert ' + expr + ' into ' + expectedDaysSinceEpoch, () => {
+        assertNumberValue(expr, expectedDaysSinceEpoch);
+      });
     });
   });
 
