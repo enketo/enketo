@@ -152,7 +152,7 @@ const openrosa_xpath_extensions = function() {
     date: function(it) {
       return XPR.date(asDate(it));
     },
-    'decimal-date': function(date) {
+    'decimal-date-time': function(date) {
       if(arguments.length > 1) throw TOO_MANY_ARGS;
       const res = Date.parse(asString(date)) / MILLIS_PER_DAY;
       return XPR.number(res);
@@ -424,7 +424,6 @@ const openrosa_xpath_extensions = function() {
 
   // function aliases
   func['date-time'] = func.date;
-  func['decimal-date-time'] = func['decimal-date'];
   func['format-date-time'] = func['format-date'];
 
   const process = {
