@@ -426,6 +426,10 @@ module.exports = function(wrapped, extensions) {
               pushOp(EQ);
           }
           break;
+        case '!':
+          if(cur.v) handleXpathExpr();
+          cur.v = c;
+          break;
         case '>':
         case '<':
           if(cur.v) handleXpathExpr();
