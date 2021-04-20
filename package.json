@@ -1,6 +1,6 @@
 {
   "name": "openrosa-xpath-evaluator",
-  "version": "2.0.5",
+  "version": "2.0.6",
   "description": "Wrapper for browsers' XPath evaluator with added support for OpenRosa extensions.",
   "homepage": "https://enketo.org",
   "main": "src/openrosa-xpath.js",

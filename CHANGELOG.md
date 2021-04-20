@@ -3,6 +3,16 @@ Change Log
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+[2.0.6] - 2021-04-20
+---------------------
+##### Removed
+- `decimal-date()` function (as it was an accident and is not in the spec).
+
+##### Fixed
+- Using `decimal-time()` with a node-set parameter fails.
+- The not-equals operator fails when preceded by a node-set without a trailing space.
+- Using `uuid()` with a node-set parameter fails.
+
 [2.0.5] - 2021-04-12
 ---------------------
 ##### Fixed
