@@ -3,17 +3,18 @@
 /**
  * Converts a native Date UTC String to a RFC 3339-compliant date string with local offsets
  * used in ODK, so it replaces the Z in the ISOstring with a local offset
+ * @param {Date} date
  * @return {string} a datetime string formatted according to RC3339 with local offset
  */
-Date.prototype.toISOLocalString = function() {
+const toISOLocalString = (date) => {
   //2012-09-05T12:57:00.000-04:00 (ODK)
 
-  if(this.toString() === 'Invalid Date') {
-    return this.toString();
+  if(date.toString() === 'Invalid Date') {
+    return date.toString();
   }
 
-  var dt = new Date(this.getTime() - (this.getTimezoneOffset() * 60 * 1000)).toISOString()
-      .replace('Z', this.getTimezoneOffsetAsTime());
+  var dt = new Date(date.getTime() - (date.getTimezoneOffset() * 60 * 1000)).toISOString()
+      .replace('Z', date.getTimezoneOffsetAsTime());
 
   if(dt.indexOf('T00:00:00.000') > 0) {
     return dt.split('T')[0];
@@ -22,7 +23,11 @@ Date.prototype.toISOLocalString = function() {
   }
 };
 
-Date.prototype.getTimezoneOffsetAsTime = function() {
+/**
+ * @param {Date} date
+ * @return {string}
+ */
+const getTimezoneOffsetAsTime = (date) => {
   var offsetMinutesTotal;
   var hours;
   var minutes;
@@ -31,15 +36,36 @@ Date.prototype.getTimezoneOffsetAsTime = function() {
     return (x < 10) ? '0' + x : x;
   };
 
-  if(this.toString() === 'Invalid Date') {
-    return this.toString();
+  if(date.toString() === 'Invalid Date') {
+    return date.toString();
   }
 
-  offsetMinutesTotal = this.getTimezoneOffset();
+  offsetMinutesTotal = date.getTimezoneOffset();
 
   direction = (offsetMinutesTotal < 0) ? '+' : '-';
   hours = pad2(Math.floor(Math.abs(offsetMinutesTotal / 60)));
   minutes = pad2(Math.floor(Math.abs(offsetMinutesTotal % 60)));
 
   return direction + hours + ':' + minutes;
+};
+
+/**
+ * @deprecated
+ * @see {toISOLocalString}
+ */
+Date.prototype.toISOLocalString = function() {
+  return toISOLocalString(this);
+};
+
+/**
+ * @deprecated
+ * @see {getTimezoneOffsetAsTime}
+ */
+Date.prototype.getTimezoneOffsetAsTime = function() {
+  return getTimezoneOffsetAsTime(this);
+};
+
+module.exports = {
+  getTimezoneOffsetAsTime,
+  toISOLocalString,
 };
