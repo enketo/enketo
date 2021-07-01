@@ -2,7 +2,7 @@ const _ = require('lodash');
 
 const {initDoc, assert} = require('./helpers');
 
-const FULL_DATE_MATCH = /(Mon|Tue|Wed|Thu|Fri|Sat|Sun) (Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec) \d\d \d{4} \d\d:\d\d:\d\d GMT([+-]\d\d\d\d \(.+\))?/;
+const SIMPLE_DATE_MATCH = /^\d{4}-[0-1]\d-[0-3]\d$/;
 
 describe('some complex examples', () => {
   const doc = initDoc('');
@@ -12,24 +12,24 @@ describe('some complex examples', () => {
     '"2015-07-15" < today()' : true,
     "'2015-07-15' > today()" : false,
     "'raw-string'" : 'raw-string',
-    'format-date-time(date-time(decimal-date-time("2003-03-12") + 280), "%b %e, %Y")': /Dec 17, 2003/,
+    'format-date-time(date-time(decimal-date-time("2003-03-12") + 280), "%b %e, %Y")': /^Dec 17, 2003$/,
     "decimal-date-time(today()- 60 )": /^-?[0-9]+(\.[0-9]+)?$/,
-    "date-time(decimal-date-time(today()- 60 ))": /\d{4}-\d{2}-\d{2}/,
+    "date-time(decimal-date-time(today()- 60 ))": SIMPLE_DATE_MATCH,
     "if(selected('date' ,'date'), 'first' ,'second')": /^first$/,
     "if(selected('approx' ,'date'), 'first' ,'second')": /^second$/,
     "if(selected(/model/instance[1]/pregnancy/group_lmp/lmp_method, 'date'), /model/instance[1]/pregnancy/group_lmp/lmp_date, 'testing')": /testing/,
     "if(selected(/model/instance[1]/pregnancy/group_lmp/lmp_method, 'date'), /model/instance[1]/pregnancy/group_lmp/lmp_date, concat('testing', '1', '2', '3', '...'))": /testing/,
-    "if(selected(/model/instance[1]/pregnancy/group_lmp/lmp_method, 'date'), /model/instance[1]/pregnancy/group_lmp/lmp_date, date-time(0))": FULL_DATE_MATCH,
-    "if(selected(/model/instance[1]/pregnancy/group_lmp/lmp_method, 'date'), /model/instance[1]/pregnancy/group_lmp/lmp_date, date-time(decimal-date-time(today() - 60)))": FULL_DATE_MATCH,
-    "if(selected(/model/instance[1]/pregnancy/group_lmp/lmp_method ,'date'), /model/instance[1]/pregnancy/group_lmp/lmp_date ,date-time(decimal-date-time(today()- 60 )))": FULL_DATE_MATCH,
-    'if(true(), today(), today())': FULL_DATE_MATCH,
-    'if(false(), today(), today())': FULL_DATE_MATCH,
+    "if(selected(/model/instance[1]/pregnancy/group_lmp/lmp_method, 'date'), /model/instance[1]/pregnancy/group_lmp/lmp_date, date-time(0))": SIMPLE_DATE_MATCH,
+    "if(selected(/model/instance[1]/pregnancy/group_lmp/lmp_method, 'date'), /model/instance[1]/pregnancy/group_lmp/lmp_date, date-time(decimal-date-time(today() - 60)))": SIMPLE_DATE_MATCH,
+    "if(selected(/model/instance[1]/pregnancy/group_lmp/lmp_method ,'date'), /model/instance[1]/pregnancy/group_lmp/lmp_date ,date-time(decimal-date-time(today()- 60 )))": SIMPLE_DATE_MATCH,
+    'if(true(), today(), today())': SIMPLE_DATE_MATCH,
+    'if(false(), today(), today())': SIMPLE_DATE_MATCH,
     'if(true(), "", today())': /^$/,
-    'if(false(), "", today())': FULL_DATE_MATCH,
-    'if(true(), today(), "")': FULL_DATE_MATCH,
+    'if(false(), "", today())': SIMPLE_DATE_MATCH,
+    'if(true(), today(), "")': SIMPLE_DATE_MATCH,
     'if(false(), today(), "")': /^$/,
-    'coalesce(today(), "")': FULL_DATE_MATCH,
-    'coalesce("", today())': FULL_DATE_MATCH,
+    'coalesce(today(), "")': SIMPLE_DATE_MATCH,
+    'coalesce("", today())': SIMPLE_DATE_MATCH,
     'true() or true() or true()': true,
     'true() or true() or false()': true,
     'true() or false() or true()': true,

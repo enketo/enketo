@@ -2,7 +2,7 @@ require('./date-extensions');
 const { asGeopoints, area, distance } = require('./geo');
 const digest = require('./digest');
 const { randomToken } = require('./random-token');
-const { DATE_STRING, dateToDays, dateStringToDays, isValidDate} = require('./utils/date');
+const { DATE_STRING, dateStringToDays, isValidDate } = require('./utils/date');
 const shuffle = require('./utils/shuffle');
 const { asBoolean, asNumber, asString } = require('./utils/xpath-cast');
 const sortByDocumentOrder = require('./utils/sort-by-document-order');
@@ -437,10 +437,10 @@ const openrosa_xpath_extensions = function() {
         if(r.t === 'date') {
           switch(resultType) {
             case XPathResult.BOOLEAN_TYPE: return { resultType, booleanValue:!isNaN(r.v) };
-            case XPathResult.NUMBER_TYPE:  return { resultType, numberValue:dateToDays(r.v) };
+            case XPathResult.NUMBER_TYPE:  return { resultType, numberValue:asNumber(r) };
             case XPathResult.ANY_TYPE:
             case XPathResult.STRING_TYPE:
-              return { resultType, stringValue:r.v.toISOLocalString().replace(/T00:00:00.000.*/, '') };
+              return { resultType, stringValue:asString(r) };
             default: throw new Error(`toExternalResult() doesn't know how to convert a date to ${resultType}`);
           }
         }
