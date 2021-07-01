@@ -33,6 +33,18 @@ describe('#date()', () => {
       });
     });
 
+    describe('dates as number', () => {
+      it('example 1', () => {
+        assertNumberRounded('"2018-01-01" + 1', 17533.29167, 100000);
+      });
+
+      describe('with explicit number() call', () => {
+        it('example 1', () => {
+          assertNumberRounded('number("2018-01-01" + 1)', 17533.29167, 100000);
+        });
+      });
+    });
+
     describe('dates as string', () => {
       it('example 1', () => {
         assertStringValue('"2018-01-01"', '2018-01-01');
@@ -41,9 +53,6 @@ describe('#date()', () => {
         assertStringValue('date("2018-01-01")', '2018-01-01');
       });
       it('example 3', () => {
-        assertNumberRounded('"2018-01-01" + 1', 17533.29167, 100000);
-      });
-      it('example 4', () => {
         assertStringValue('date("2018-01-01" + 1)', '2018-01-02');
       });
 
@@ -54,6 +63,28 @@ describe('#date()', () => {
       ].forEach( expr => {
         it(`should convert ${expr} to a date string`, () => {
           assertMatch(expr, /([0-9]{4}-[0-9]{2}-[0-9]{2})$/ );
+        });
+      });
+
+      describe('with explicit string() call', () => {
+        it('example 1', () => {
+          assertStringValue('string("2018-01-01")', '2018-01-01');
+        });
+        it('example 2', () => {
+          assertStringValue('string(date("2018-01-01"))', '2018-01-01');
+        });
+        it('example 3', () => {
+          assertStringValue('string(date("2018-01-01" + 1))', '2018-01-02');
+        });
+
+        [
+          'string(today())',
+          'string(date(today() + 10))',
+          'string(date(10 + today()))',
+        ].forEach( expr => {
+          it(`should convert ${expr} to a date string`, () => {
+            assertMatch(expr, /([0-9]{4}-[0-9]{2}-[0-9]{2})$/ );
+          });
         });
       });
     });

@@ -32,11 +32,12 @@ function asNumber(r) {
 function asString(r) {
   if(isDomNode(r)) return nodeToString(r);
   switch(r.t) {
-    case 'str': return r.v;
-    case 'arr': return r.v.length ? r.v[0].textContent || '' : '';
+    case 'str':  return r.v;
+    case 'arr':  return r.v.length ? r.v[0].textContent || '' : '';
+    case 'date': return r.v.toISOLocalString().replace(/T00:00:00.000.*/, ''); // TODO should be handled in an extension rather than core code
     case 'num':
     case 'bool':
-    default:    return r.v.toString();
+    default:     return r.v.toString();
   }
 }
 
