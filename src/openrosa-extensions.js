@@ -201,7 +201,7 @@ const openrosa_xpath_extensions = function() {
       if(arguments.length < 2) throw new Error('format-date() :: not enough args');
       return XPR.string(format_date(date, format)); },
     if: function(con, a, b) {
-      return XPR.string(asBoolean(con) ? asString(a) : asString(b));
+      return asBoolean(con) ? a : b;
     },
     'ends-with': function(a, b) {
       if(arguments.length > 2) throw TOO_MANY_ARGS;

@@ -1,4 +1,4 @@
-const { initDoc, assertStringValue } = require('../helpers');
+const { initDoc, assertBoolean, assertStringValue } = require('../helpers');
 
 describe('#if()', () => {
   it('should return first option if true', () => {
@@ -137,5 +137,24 @@ describe('#if()', () => {
       assertStringValue(doc, null, 'if( /data/a ="1" and /data/b ="1", "Eligible", if( /data/d ="0" or /data/b ="0", "Not-Eligible", "nothing"))', 'Not-Eligible');
     });
 
+  });
+
+  describe('deviation from the XForms spec', () => {
+    let doc;
+    before(() => {
+      doc = initDoc(`<div></div>`);
+    });
+
+    describe('it should NOT coerce the result to a string', () => {
+      [
+        [ 'if(true(), true(), false())', 'true', true ],
+        [ 'if(false(), true(), false())', 'false', false ],
+      ].forEach(([ expr, expectedString, expectedBoolean ]) => {
+        it(`should return string value '${expectedString}' and boolean value '${expectedBoolean}' for expression '${expr}'`, () => {
+          assertStringValue(doc, null, expr, expectedString);
+          assertBoolean    (doc, null, expr, expectedBoolean);
+        });
+      });
+    });
   });
 });
