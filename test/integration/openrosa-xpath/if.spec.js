@@ -1,4 +1,4 @@
-const { initDoc, assertBoolean, assertStringValue } = require('../helpers');
+const { initDoc, assertBoolean, assertStringValue, assertNumberValue } = require('../helpers');
 
 describe('#if()', () => {
   it('should return first option if true', () => {
@@ -142,7 +142,7 @@ describe('#if()', () => {
   describe('deviation from the XForms spec', () => {
     let doc;
     before(() => {
-      doc = initDoc(`<div></div>`);
+      doc = initDoc(`<data><a/><b/><b/></data>`);
     });
 
     describe('it should NOT coerce the result to a string', () => {
@@ -155,6 +155,15 @@ describe('#if()', () => {
           assertBoolean    (doc, null, expr, expectedBoolean);
         });
       });
+
+      [
+        ['count( if(true(), //b, //a ))', 2 ]
+      ].forEach(([expr, expectedNumber]) => {
+        it(`should return node-set values for if() expression '${expr}'`, () => {
+          assertNumberValue(doc, null, expr, expectedNumber);
+        });
+      });
+
     });
   });
 });
