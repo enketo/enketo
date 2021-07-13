@@ -27,17 +27,17 @@
   "bugs": "https://github.com/enketo/openrosa-xpath-evaluator/issues",
   "devDependencies": {
     "chai": "^4.3.4",
-    "eslint": "^7.22.0",
-    "karma": "^6.2.0",
+    "eslint": "^7.30.0",
+    "karma": "^6.3.4",
     "karma-chrome-launcher": "^3.1.0",
-    "karma-firefox-launcher": "^2.1.0",
+    "karma-firefox-launcher": "^2.1.1",
     "karma-mocha": "^2.0.1",
     "karma-webpack": "^5.0.0",
     "lodash": "^4.17.21",
-    "mocha": "^8.3.2",
+    "mocha": "^8.4.0",
     "node-forge": "^0.10.0",
     "puppeteer": "^8.0.0",
-    "webpack": "^5.26.3"
+    "webpack": "^5.44.0"
   },
   "peerDependencies": {
     "node-forge": "^0.10.0"
