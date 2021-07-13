@@ -3,6 +3,11 @@ Change Log
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+---------------------
+##### Fixed
+- Inconsistencies with date-as-string result formats.
+- Result of if() is no longer cast to a string (recently updated ODK XForms spec).
+
 [2.0.6] - 2021-04-20
 ---------------------
 ##### Removed
