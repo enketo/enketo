@@ -3,6 +3,7 @@ Change Log
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+[2.0.7] - 2021-07-13
 ---------------------
 ##### Fixed
 - Inconsistencies with date-as-string result formats.
