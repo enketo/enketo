@@ -45,11 +45,16 @@ describe('Date helpers', () => {
     });
 
     describe('toISOLocalString', () => {
-      it('returns the ISO local string consistent with the time zone offset', () => {
-        const date = new Date('August 19, 1975 23:15:30 GMT+07:00');
+      it('returns the ISO local string consistent with a negative time zone offset', () => {
+        const date = new Date('1975-08-19T23:15:30.000+07:00');
+
         timezoneOffset = -60;
 
         assert.equal(date.toISOLocalString(), '1975-08-19T17:15:30.000+01:00');
+      });
+
+      it('returns the ISO local string consistent with a positive time zone offset', () => {
+        const date = new Date('1975-08-19T23:15:30.000+07:00');
 
         timezoneOffset = 60;
 
@@ -74,11 +79,16 @@ describe('Date helpers', () => {
     });
 
     describe('toISOLocalString', () => {
-      it('returns the ISO local string consistent with the time zone offset', () => {
-        const date = new Date('August 19, 1975 23:15:30 GMT+07:00');
+      it('returns the ISO local string consistent with a negative time zone offset', () => {
+        const date = new Date('1975-08-19T23:15:30.000+07:00');
+
         timezoneOffset = -60;
 
         assert.equal(toISOLocalString(date), '1975-08-19T17:15:30.000+01:00');
+      });
+
+      it('returns the ISO local string consistent with a positive time zone offset', () => {
+        const date = new Date('1975-08-19T23:15:30.000+07:00');
 
         timezoneOffset = 60;
 

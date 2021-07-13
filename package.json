@@ -42,8 +42,5 @@
   },
   "peerDependencies": {
     "node-forge": "^0.10.0"
-  },
-  "volta": {
-    "node": "12.22.1"
   }
 }

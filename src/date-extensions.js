@@ -1,5 +1,7 @@
 // imported from https://github.com/enketo/enketo-xpathjs/blob/master/src/date-extensions.js
-// TODO probably shouldn't be changing Date.prototype
+// TODO probably shouldn't be changing Date.prototype - when these can be safely removed,
+// these functions would probably more appropriately be in utils/date.js
+
 /**
  * Converts a native Date UTC String to a RFC 3339-compliant date string with local offsets
  * used in ODK, so it replaces the Z in the ISOstring with a local offset
@@ -14,7 +16,7 @@ const toISOLocalString = (date) => {
   }
 
   var dt = new Date(date.getTime() - (date.getTimezoneOffset() * 60 * 1000)).toISOString()
-      .replace('Z', date.getTimezoneOffsetAsTime());
+      .replace('Z', getTimezoneOffsetAsTime(date));
 
   if(dt.indexOf('T00:00:00.000') > 0) {
     return dt.split('T')[0];
