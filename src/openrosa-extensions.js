@@ -1,4 +1,4 @@
-require('./date-extensions');
+const { getTimezoneOffsetAsTime } = require('./date-extensions');
 const { asGeopoints, area, distance } = require('./geo');
 const digest = require('./digest');
 const { randomToken } = require('./random-token');
@@ -563,7 +563,7 @@ function asDate(r) {
         temp = r.split('-');
         if(isValidDate(temp[0], temp[1], temp[2])) {
           const time = `${_zeroPad(temp[0])}-${_zeroPad(temp[1])}-${_zeroPad(temp[2])}`+
-            'T00:00:00.000' + (new Date(r)).getTimezoneOffsetAsTime();
+            'T00:00:00.000' + getTimezoneOffsetAsTime(new Date(r));
           return new Date(time);
         }
       }

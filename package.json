@@ -37,6 +37,7 @@
     "mocha": "^8.4.0",
     "node-forge": "^0.10.0",
     "puppeteer": "^8.0.0",
+    "sinon": "^11.1.1",
     "webpack": "^5.44.0"
   },
   "peerDependencies": {

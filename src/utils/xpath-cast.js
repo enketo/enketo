@@ -1,4 +1,5 @@
 const { DATE_STRING, dateToDays, dateStringToDays } = require('./date');
+const { toISOLocalString } = require('../date-extensions');
 
 module.exports = {
   asBoolean,
@@ -34,7 +35,7 @@ function asString(r) {
   switch(r.t) {
     case 'str':  return r.v;
     case 'arr':  return r.v.length ? r.v[0].textContent || '' : '';
-    case 'date': return r.v.toISOLocalString().replace(/T00:00:00.000.*/, ''); // TODO should be handled in an extension rather than core code
+    case 'date': return toISOLocalString(r.v).replace(/T00:00:00.000.*/, ''); // TODO should be handled in an extension rather than core code
     case 'num':
     case 'bool':
     default:     return r.v.toString();
