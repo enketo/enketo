@@ -20,7 +20,6 @@ const openrosa_xpath_extensions = function() {
   const
       TOO_MANY_ARGS = new Error('too many args'),
       TOO_FEW_ARGS = new Error('too few args'),
-      MILLIS_PER_DAY = 1000 * 60 * 60 * 24,
       _round = function(num) {
         if(num < 0) {
           return -Math.round(-num);
@@ -152,10 +151,12 @@ const openrosa_xpath_extensions = function() {
     date: function(it) {
       return XPR.date(asDate(it));
     },
-    'decimal-date-time': function(date) {
+    'decimal-date-time': function(r) {
       if(arguments.length > 1) throw TOO_MANY_ARGS;
-      const res = Date.parse(asString(date)) / MILLIS_PER_DAY;
-      return XPR.number(res);
+
+      const days = dateStringToDays(asString(r));
+
+      return XPR.number(days);
     },
     'decimal-time': function(r) {
       if(arguments.length > 1) throw TOO_MANY_ARGS;
