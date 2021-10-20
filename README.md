@@ -96,6 +96,18 @@ The following XPath/ODK/OpenRosa functions are not implemented in this library, 
 
 * arrange source code, e.g. `src/core` and `src/openrosa`
 
+
+# Release
+
+1. Create release PR
+1. Check [Dependabot](https://github.com/enketo/openrosa-xpath-evaluator/security/dependabot) for alerts
+1. Run `npm update`
+1. Run `npm audit fix --production`
+1. Update `CHANGELOG.md`
+1. Update version in `package.json`
+1. Merge PR all changes
+1. Tag and publish the release
+
 # Acknowledgement
 
 This library was developed by Medic Mobile for their Enketo-based application. In 2020, it was transferred to the Enketo organization. Many thanks to Medic Mobile for this very valuable contribution to the Enketo and ODK world.
