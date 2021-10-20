@@ -102,11 +102,16 @@ The following XPath/ODK/OpenRosa functions are not implemented in this library, 
 1. Create release PR
 1. Check [Dependabot](https://github.com/enketo/openrosa-xpath-evaluator/security/dependabot) for alerts
 1. Run `npm update`
-1. Run `npm audit fix --production`
+1. Run `npm audit`
+    - Run `npm audit fix --production` to apply most important fixes
+1. Run `npm ci`
+1. Run `npm test`
 1. Update `CHANGELOG.md`
 1. Update version in `package.json`
-1. Merge PR all changes
+1. Merge PR with all changes
+1. Create GitHub release
 1. Tag and publish the release
+    - GitHub action will publish it to npm public repository
 
 # Acknowledgement
 
