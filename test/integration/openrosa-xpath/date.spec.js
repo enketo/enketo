@@ -38,6 +38,14 @@ describe('#date()', () => {
         assertNumberRounded('"2018-01-01" + 1', 17533.29167, 100000);
       });
 
+      it('example 2', () => {
+        assertNumberRounded('date("1970-01-01T00:00:00.000+00:00")', 0, 100000);
+      });
+
+      it('example 3', () => {
+        assertNumberRounded('date(0)', 0, 100000);
+      });
+
       describe('with explicit number() call', () => {
         it('example 1', () => {
           assertNumberRounded('number("2018-01-01" + 1)', 17533.29167, 100000);
@@ -61,6 +69,10 @@ describe('#date()', () => {
       it('example 5', () => {
         assertStringValue('"2021-11-30" - "2021-11-29"', '1');
       });
+      it('example 6', () => {
+        assertStringValue('date(decimal-date-time("2003-10-20T08:00:00.000-07:00"))', '2003-10-20T08:00:00.000-07:00');
+      });
+        
 
       [
         'today()',

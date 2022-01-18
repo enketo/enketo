@@ -528,25 +528,29 @@ function asInteger(r) {
 
 function asDate(r) {
   let temp;
+  let timeComponent;
   switch(r.t) {
     case 'bool': return new Date(NaN);
     case 'date': return r.v;
-    case 'num':  temp = new Date(1970, 0, 1); temp.setDate(temp.getDate() + r.v); return temp;
+    case 'num':  temp = new Date(0); temp.setTime(temp.getTime() + r.v * 24 * 60 * 60 * 1000); return temp;
     case 'arr':
     case 'str':
       r = asString(r);
       if(RAW_NUMBER.test(r)) {
-        // Create a date at 00:00:00 1st Jan 1970 _in the current timezone_
-        temp = new Date(1970, 0, 1);
-        temp.setDate(1 + parseInt(r, 10));
+        temp = new Date(0);
+        temp.setTime(temp.getTime() + parseInt(r, 10) * 24 * 60 * 60 * 1000);
         return temp;
       } else if(DATE_STRING.test(r)) {
         temp = r.indexOf('T');
-        if(temp !== -1) r = r.substring(0, temp);
+        if(temp !== -1) {
+          timeComponent = r.substring(temp);
+          r = r.substring(0, temp);
+        }
         temp = r.split('-');
         if(isValidDate(temp[0], temp[1], temp[2])) {
+          timeComponent = timeComponent ? timeComponent : 'T00:00:00.000' + getTimezoneOffsetAsTime(new Date(r));
           const time = `${_zeroPad(temp[0])}-${_zeroPad(temp[1])}-${_zeroPad(temp[2])}`+
-            'T00:00:00.000' + getTimezoneOffsetAsTime(new Date(r));
+            timeComponent;
           return new Date(time);
         }
       }
