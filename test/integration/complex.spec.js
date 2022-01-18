@@ -3,6 +3,7 @@ const _ = require('lodash');
 const {initDoc, assert} = require('./helpers');
 
 const SIMPLE_DATE_MATCH = /^\d{4}-[0-1]\d-[0-3]\d$/;
+const SIMPLE_DATE_OR_DATE_TIME_MATCH = /^\d{4}-[0-1]\d-[0-3]\d(T[0-2]\d:[0-5]\d:[0-5]\d\.\d\d\d(Z|[+-][0-1]\d(:[0-5]\d)?))?$/;
 
 describe('some complex examples', () => {
   const doc = initDoc('');
@@ -19,7 +20,7 @@ describe('some complex examples', () => {
     "if(selected('approx' ,'date'), 'first' ,'second')": /^second$/,
     "if(selected(/model/instance[1]/pregnancy/group_lmp/lmp_method, 'date'), /model/instance[1]/pregnancy/group_lmp/lmp_date, 'testing')": /testing/,
     "if(selected(/model/instance[1]/pregnancy/group_lmp/lmp_method, 'date'), /model/instance[1]/pregnancy/group_lmp/lmp_date, concat('testing', '1', '2', '3', '...'))": /testing/,
-    "if(selected(/model/instance[1]/pregnancy/group_lmp/lmp_method, 'date'), /model/instance[1]/pregnancy/group_lmp/lmp_date, date-time(0))": SIMPLE_DATE_MATCH,
+    "if(selected(/model/instance[1]/pregnancy/group_lmp/lmp_method, 'date'), /model/instance[1]/pregnancy/group_lmp/lmp_date, date-time(0))": SIMPLE_DATE_OR_DATE_TIME_MATCH,
     "if(selected(/model/instance[1]/pregnancy/group_lmp/lmp_method, 'date'), /model/instance[1]/pregnancy/group_lmp/lmp_date, date-time(decimal-date-time(today() - 60)))": SIMPLE_DATE_MATCH,
     "if(selected(/model/instance[1]/pregnancy/group_lmp/lmp_method ,'date'), /model/instance[1]/pregnancy/group_lmp/lmp_date ,date-time(decimal-date-time(today()- 60 )))": SIMPLE_DATE_MATCH,
     'if(true(), today(), today())': SIMPLE_DATE_MATCH,
