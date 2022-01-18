@@ -20,13 +20,13 @@ describe('openrosa-extensions', () => {
 
       [
         // addition
-        [  1, '+', new Date(1970, 0,  1), new Date(1970, 0, 2) ],
-        [  1, '+', '1970-1-1',            new Date(1970, 0, 2) ],
-        [  1, '+', [ '1970-1-1' ],        new Date(1970, 0, 2) ],
-        [ 10, '+', new Date(2012, 6, 24), new Date(2012, 7, 3) ],
-        [ new Date(1970, 0, 1), '+', 1, new Date(1970, 0, 2) ],
-        [ '1970-1-1',           '+', 1, new Date(1970, 0, 2) ],
-        [ [ '1970-1-1' ],       '+', 1, new Date(1970, 0, 2) ],
+        [  1, '+', new Date(1970, 0,  1), { t:'continue', lhs:wrapVal(1), op:opVals.PLUS,  rhs:wrapVal(0.2916666666666667) } ], // correctness of decimals tbd later
+        [  1, '+', '1970-1-1',            1.2916666666666667 ], // correctness of decimals tbd later
+        [  1, '+', [ '1970-1-1' ],        1.2916666666666667 ], // correctness of decimals tbd later
+        [ 10, '+', new Date(2012, 6, 24), { t:'continue', lhs:wrapVal(10), op:opVals.PLUS, rhs:wrapVal(15545.2916666666666667) } ], // correctness of decimals tbd later
+        [ new Date(1970, 0, 1), '+', 1,   { t:'continue', lhs:wrapVal(0.2916666666666667), op:opVals.PLUS,  rhs:wrapVal(1) } ], // correctness of decimals tbd later
+        [ '1970-1-1',           '+', 1,   1.2916666666666667 ], // correctness of decimals tbd later
+        [ [ '1970-1-1' ],       '+', 1,   1.2916666666666667 ], // correctness of decimals tbd later
 
         // inequality
         [ true, '!=', new Date(), undefined ],

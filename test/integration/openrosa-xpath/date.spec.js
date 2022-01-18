@@ -55,6 +55,12 @@ describe('#date()', () => {
       it('example 3', () => {
         assertStringValue('date("2018-01-01" + 1)', '2018-01-02');
       });
+      it('example 4', () => {
+        assertStringValue('"2021-11-30" + 1', '18962.291666666668'); // correctness of decimals tbd later
+      });
+      it('example 5', () => {
+        assertStringValue('"2021-11-30" - "2021-11-29"', '1.2916666666666667');
+      });
 
       [
         'today()',
@@ -138,7 +144,9 @@ describe('#date()', () => {
       ['date("2012-01-01") < today()', true],
       ['date("2012-01-01") > today()', false],
       ['date("2100-01-02") > today()', true],
-      ['date("2100-01-02") < today()', false]
+      ['date("2100-01-02") < today()', false],
+      ['date("2100-01-02") > 1', true],
+      ['date("1970-01-02") < 3', true]
     ].forEach(([expr, expected]) => {
       it('should evaluate \'' + expr + '\' to: ' + expected, () => {
         assertBoolean(expr, expected);
@@ -148,12 +156,12 @@ describe('#date()', () => {
 
   describe('math', () => {
     [
-      ['date("2001-12-26") + 5', '2001-12-31'],
-      ['date("2001-12-26") - 5', '2001-12-21'],
-      ['5 + date("2001-12-26")', '2001-12-31'],
-      ['-5 + date("2001-12-26")', '2001-12-21'],
-      ['3 + date("2001-12-26") + 5', '2002-01-03'],
-      ['3 + date("2001-12-26") - 5', '2001-12-24']
+      ['date("2001-12-26") + 5', '11687.291666666666'],
+      ['date("2001-12-26") - 5', '11677.291666666666'],
+      ['5 + date("2001-12-26")', '11687.291666666666'],
+      ['-5 + date("2001-12-26")', '11677.291666666666'],
+      ['3 + date("2001-12-26") + 5', '11690.291666666666'],
+      ['3 + date("2001-12-26") - 5', '11680.291666666666']
     ].forEach(([expr, expected]) => {
       it('should evaluate \'' + expr + '\' to: ' + expected, () => {
         assertString(expr, expected);

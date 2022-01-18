@@ -2,7 +2,7 @@ const { getTimezoneOffsetAsTime } = require('./date-extensions');
 const { asGeopoints, area, distance } = require('./geo');
 const digest = require('./digest');
 const { randomToken } = require('./random-token');
-const { DATE_STRING, dateStringToDays, isValidDate } = require('./utils/date');
+const { DATE_STRING, dateStringToDays, dateToDays, isValidDate } = require('./utils/date');
 const shuffle = require('./utils/shuffle');
 const { asBoolean, asNumber, asString } = require('./utils/xpath-cast');
 const sortByDocumentOrder = require('./utils/sort-by-document-order');
@@ -154,7 +154,7 @@ const openrosa_xpath_extensions = function() {
     'decimal-date-time': function(r) {
       if(arguments.length > 1) throw TOO_MANY_ARGS;
 
-      const days = dateStringToDays(asString(r));
+      const days = r.t === 'num' ? asNumber(r) : dateStringToDays(asString(r));
 
       return XPR.number(days);
     },
@@ -456,27 +456,13 @@ const openrosa_xpath_extensions = function() {
             return;
           }
 
-          // For comparisons, we must make sure that both values are numbers
-          // Dates would be fine, except for equality!
-          if(op >= EQ && op <= GTE) {
-            if(lhs.t === 'arr' || lhs.t === 'str') lhs = XPR.date(asDate(lhs));
-            if(rhs.t === 'arr' || rhs.t === 'str') rhs = XPR.date(asDate(rhs));
-            if(lhs.t !== 'date' || rhs.t !== 'date') {
-              return op === '!=';
-            } else {
-              lhs = { t:'num', v:lhs.v.getTime() };
-              rhs = { t:'num', v:rhs.v.getTime() };
-            }
-          } else if(op === PLUS || op === MINUS) {
-            // for math operators, we need to do it ourselves
-            if(lhs.t === 'date' && rhs.t === 'date') err('No handling for simple arithmetic with two dates.');
-            const d = lhs.t === 'date'? lhs.v: rhs.v,
-                res = new Date(d.getTime());
-            let n = lhs.t !== 'date'? asInteger(lhs): asInteger(rhs);
-            if(op === MINUS) n = -n;
-            res.setDate(d.getDate() + n);
-            return res;
-          }
+          // For comparisons and math, we must make sure that both values are numbers
+          if(lhs.t === 'arr' || lhs.t === 'str') lhs = XPR.date(asDate(lhs));
+          if(rhs.t === 'arr' || rhs.t === 'str') rhs = XPR.date(asDate(rhs));
+          
+          if (lhs.t === 'date') lhs = { t:'num', v:dateToDays(lhs.v) };
+          if (rhs.t === 'date') rhs = { t:'num', v:dateToDays(rhs.v) };
+
           return { t:'continue', lhs:lhs, op:op, rhs:rhs };
         }
 
@@ -489,7 +475,7 @@ const openrosa_xpath_extensions = function() {
             const delta = op === PLUS ? lDays + rDays : lDays - rDays;
             const date = new Date(1970, 0, 1);
             date.setDate(date.getDate() + delta);
-            return date;
+            return dateToDays(date);
           }
 
           const rStr = asString(rhs);
@@ -499,7 +485,7 @@ const openrosa_xpath_extensions = function() {
             const delta = op === PLUS ? lDays + rDays : lDays - rDays;
             const date = new Date(1970, 0, 1);
             date.setDate(date.getDate() + delta);
-            return date;
+            return dateToDays(date);
           }
         } else if(op >= EQ && op <= GTE) {
           const lStr = asString(lhs);
