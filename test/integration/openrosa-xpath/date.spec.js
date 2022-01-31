@@ -38,6 +38,14 @@ describe('#date()', () => {
         assertNumberRounded('"2018-01-01" + 1', 17533.29167, 100000);
       });
 
+      it('example 2', () => {
+        assertNumberRounded('date("1970-01-01T00:00:00.000+00:00")', 0, 100000);
+      });
+
+      it('example 3', () => {
+        assertNumberRounded('date(0)', 0, 100000);
+      });
+
       describe('with explicit number() call', () => {
         it('example 1', () => {
           assertNumberRounded('number("2018-01-01" + 1)', 17533.29167, 100000);
@@ -61,6 +69,10 @@ describe('#date()', () => {
       it('example 5', () => {
         assertStringValue('"2021-11-30" - "2021-11-29"', '1');
       });
+      it('example 6', () => {
+        assertStringValue('date(decimal-date-time("2003-10-20T08:00:00.000-07:00"))', '2003-10-20T08:00:00.000-07:00');
+      });
+        
 
       [
         'today()',
@@ -104,10 +116,10 @@ describe('#date()', () => {
 
   describe('number', () => {
     [
-      ['date(0)', '1970-01-01'],
-      ['date(1)', '1970-01-02'],
-      ['date(1.5)', '1970-01-02'],
-      ['date(-1)', '1969-12-31'],
+      ['date(0)', '1969-12-31T17:00:00.000-07:00'],
+      ['date(1)', '1970-01-01T17:00:00.000-07:00'],
+      ['date(1.5)', '1970-01-02T05:00:00.000-07:00'],
+      ['date(-1)', '1969-12-30T17:00:00.000-07:00'],
     ].forEach(([expr, expected]) => {
       it(expr + ' should be converted to ' + expected, () => {
         assertString(expr, expected);
@@ -131,16 +143,16 @@ describe('#date()', () => {
       ['date("2004-05-01") != date("2004-05-01")', false],
       ['"string" != date("1999-09-09")', true],
       ['"string" = date("1999-09-09")', false],
-      ['date(0) = date("1970-01-01")', true],
-      ['date(0) != date("1970-01-01")', false],
-      ['date(1) = date("1970-01-02")', true],
-      ['date(1) != date("1970-01-02")', false],
-      ['date(-1) = date("1969-12-31")', true],
-      ['date(-1) != date("1969-12-31")', false],
-      ['date(14127) = date("2008-09-05")', true],
-      ['date(14127) != date("2008-09-05")', false],
-      ['date(-10252) = date("1941-12-07")', true],
-      ['date(-10252) != date("1941-12-07")', false],
+      ['date(0) = date("1970-01-01T00:00:00.000Z")', true],
+      ['date(0) != date("1970-01-01T00:00:00.000Z")', false],
+      ['date(1) = date("1970-01-02T00:00:00.000Z")', true],
+      ['date(1) != date("1970-01-02T00:00:00.000Z")', false],
+      ['date(-1) = date("1969-12-31T00:00:00.000Z")', true],
+      ['date(-1) != date("1969-12-31T00:00:00.000Z")', false],
+      ['date(14127) = date("2008-09-05T00:00:00.000Z")', true],
+      ['date(14127) != date("2008-09-05T00:00:00.000Z")', false],
+      ['date(-10252) = date("1941-12-07T00:00:00.000Z")', true],
+      ['date(-10252) != date("1941-12-07T00:00:00.000Z")', false],
       ['date("2012-01-01") < today()', true],
       ['date("2012-01-01") > today()', false],
       ['date("2100-01-02") > today()', true],

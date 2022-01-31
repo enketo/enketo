@@ -79,12 +79,12 @@ describe('openrosa-extensions', () => {
         });
       });
 
-      it('should convert zero to 1 Jan 1970 in local timezone', () => {
+      it('should convert zero to 1 Jan 1970 UTC', () => {
         // when
         const res = date(wrapVal(0));
 
         // then
-        assert.equal(res.v.toISOString(), '1970-01-01T07:00:00.000Z');
+        assert.equal(res.v.toISOString(), '1970-01-01T00:00:00.000Z');
       });
     });
 
@@ -111,12 +111,12 @@ describe('openrosa-extensions', () => {
         });
       });
 
-      it('should convert zero to 1 Jan 1970 in local timezone', () => {
+      it('should convert zero to 1 Jan 1970 UTC', () => {
         // when
         const res = dateTime(wrapVal(0));
 
         // then
-        assert.equal(res.v.toISOString(), '1970-01-01T07:00:00.000Z');
+        assert.equal(res.v.toISOString(), '1970-01-01T00:00:00.000Z');
       });
     });
 
