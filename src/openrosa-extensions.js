@@ -473,9 +473,7 @@ const openrosa_xpath_extensions = function() {
             const lDays = dateStringToDays(lStr);
             const rDays = asNumber(rhs);
             const delta = op === PLUS ? lDays + rDays : lDays - rDays;
-            const date = new Date(1970, 0, 1);
-            date.setDate(date.getDate() + delta);
-            return dateToDays(date);
+            return delta;
           }
 
           const rStr = asString(rhs);
@@ -483,9 +481,7 @@ const openrosa_xpath_extensions = function() {
             const rDays = dateStringToDays(rStr);
             const lDays = asNumber(lhs);
             const delta = op === PLUS ? lDays + rDays : lDays - rDays;
-            const date = new Date(1970, 0, 1);
-            date.setDate(date.getDate() + delta);
-            return dateToDays(date);
+            return delta;
           }
         } else if(op >= EQ && op <= GTE) {
           const lStr = asString(lhs);

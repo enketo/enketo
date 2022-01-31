@@ -59,7 +59,7 @@ describe('#date()', () => {
         assertStringValue('"2021-11-30" + 1', '18962.291666666668'); // correctness of decimals tbd later
       });
       it('example 5', () => {
-        assertStringValue('"2021-11-30" - "2021-11-29"', '1.2916666666666667');
+        assertStringValue('"2021-11-30" - "2021-11-29"', '1');
       });
 
       [
