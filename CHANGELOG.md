@@ -3,10 +3,19 @@ Change Log
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+[2.0.10] - 2022-02-01
+----------------------
+
+##### Fixed
+
+- Date arithmetic correctly returns a number, rather than a date (#143)
+- Date arithmetic correctly applies the local timezone to all operands (#147)
+- Values returned from `date` (and the `date-time` alias) always includes a time component, consistent with the previous evaluator (#148)
+
 [2.0.9] - 2021-10-11
 ---------------------
 ##### Fixed
-- `decimal-date-time()` treated as local time when no offset specified 
+- `decimal-date-time()` treated as local time when no offset specified
 
 [2.0.8] - 2021-09-10
 ---------------------
