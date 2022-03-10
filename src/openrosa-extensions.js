@@ -29,7 +29,7 @@ const openrosa_xpath_extensions = function() {
       format_date = function(date, format) {
         date = asDate(date);
         format = asString(format);
-        if(isNaN(date)) return 'Invalid Date';
+        if(isNaN(date)) return '';
         let c, i, sb = '';
         const year = 1900 + date.getYear();
         const month = 1 + date.getMonth();

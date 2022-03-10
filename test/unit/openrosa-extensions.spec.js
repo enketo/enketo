@@ -54,7 +54,7 @@ describe('openrosa-extensions', () => {
   });
 
   describe('func', () => {
-    const { date, 'date-time':dateTime, min, max, number } = extensions.func;
+    const { date, 'date-time':dateTime, 'format-date':formatDate, min, max, number } = extensions.func;
 
     describe('date()', () => {
       [ 'asdf', 123, true ].forEach(arg => {
@@ -174,6 +174,48 @@ describe('openrosa-extensions', () => {
 
           // then
           assertVal(actual, expected);
+        });
+      });
+    });
+
+    describe('format-date()', () => {
+      // eslint-disable-next-line no-global-assign
+      before(() => window = {});
+      // eslint-disable-next-line no-global-assign
+      after(() => window = undefined);
+
+      [
+        [ '2015-09-02', '2015-09-02', '%Y-%m-%d' ],
+        [ '1999-12-12', '1999-12-12', '%Y-%m-%d' ],
+        [ '15-9-2', '2015-9-2', '%y-%n-%e' ],
+        [ '99-12-12', '1999-12-12', '%y-%n-%e' ],
+        [ 'Sun Dec', '1999-12-12', '%a %b' ],
+        [ '(2015/10/01)', new Date('2015-10-01T00:00:00.000'), '(%Y/%m/%d)' ],
+        [ '2000 06 02', 11111, '%Y %m %d' ],
+        [ '2014201409092222', ['2014-09-22'], '%Y%Y%m%m%d%d' ],
+        [ '', '', '%Y-%m-%d' ],
+        [ '', NaN, '%Y-%m-%d' ],
+        [ '', 'NaN', '%Y-%m-%d' ],
+        [ '', 'invalid', '%Y-%m-%d' ],
+        [ '', '11:11', '%Y-%m-%d' ],
+        [ '', true, '%Y-%m-%d' ],
+        [ '', false, '%Y-%m-%d' ],
+      ].forEach(([ expected, ...args ]) => {
+        it(`should convert ${JSON.stringify(args)} to ${expected}`, () => {
+          // when
+          const actual = formatDate(...args.map(wrapVal));
+
+          // then
+          assert.equal(actual.v, expected);
+        });
+      });
+
+      [
+        ['1999-12-12'],
+        []
+      ].forEach(args => {
+        it(`should throw an error when ${JSON.stringify(args)} is provided`, () => {
+          assert.throws(() => formatDate(...args.map(wrapVal)),'format-date() :: not enough args');
         });
       });
     });

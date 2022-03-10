@@ -19,7 +19,7 @@ describe('#format-date()', () => {
       [`format-date('${date.toString()}', '%e | %a' )`, doc,
           `${date.getDate()} | ${['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'][date.getDay()]}`
       ],
-      ['format-date("not a date", "%M")', doc, 'Invalid Date' ],
+      ['format-date("not a date", "%M")', doc, '' ],
     ].forEach(([expr, node, expected]) => {
         assertStringValue(node, null, expr, expected);
         // do the same tests for the alias format-date-time()
