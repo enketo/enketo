@@ -3,11 +3,10 @@
   "env": {
     "browser": true,
     "commonjs": true,
-    "es6": true
+    "es2020": true
   },
   "parserOptions": {
-    "sourceType": "module",
-    "ecmaVersion": 6
+    "sourceType": "module"
   },
   "rules": {
     "no-console": "error",

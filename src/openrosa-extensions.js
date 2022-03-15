@@ -35,7 +35,7 @@ const openrosa_xpath_extensions = function() {
         const month = 1 + date.getMonth();
         const day = date.getDate();
         const hour = date.getHours();
-        const locale = window ? window.enketoFormLocale : undefined;
+        const locale = globalThis.window?.enketoFormLocale;
 
         for(i=0; i<format.length; ++i) {
           c = format.charAt(i);

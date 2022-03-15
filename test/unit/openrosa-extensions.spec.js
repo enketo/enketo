@@ -179,11 +179,6 @@ describe('openrosa-extensions', () => {
     });
 
     describe('format-date()', () => {
-      // eslint-disable-next-line no-global-assign
-      before(() => window = {});
-      // eslint-disable-next-line no-global-assign
-      after(() => window = undefined);
-
       [
         [ '2015-09-02', '2015-09-02', '%Y-%m-%d' ],
         [ '1999-12-12', '1999-12-12', '%Y-%m-%d' ],
