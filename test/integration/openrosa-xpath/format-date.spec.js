@@ -44,4 +44,10 @@ describe('#format-date()', () => {
       assertStringValue(expr, expected);
     });
   });
+
+  it('format-date() - invalid input', () => {
+    ["''", "number('invalid')"].forEach((expr) => {
+      assertStringValue(`format-date(${expr}, '%Y-%m-%d')`, '');
+    });
+  });
 });

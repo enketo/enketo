@@ -29,7 +29,7 @@ const openrosa_xpath_extensions = function() {
       format_date = function(date, format) {
         date = asDate(date);
         format = asString(format);
-        if(isNaN(date)) return '';
+        if('' === date || isNaN(date)) return '';
         let c, i, sb = '';
         const year = 1900 + date.getYear();
         const month = 1 + date.getMonth();
@@ -149,7 +149,8 @@ const openrosa_xpath_extensions = function() {
       return XPR.number(count);
     },
     date: function(it) {
-      return XPR.date(asDate(it));
+      const value = asDate(it);
+      return typeof value === "string" || value instanceof String ? XPR.string(value): XPR.date(value);
     },
     'decimal-date-time': function(r) {
       if(arguments.length > 1) throw TOO_MANY_ARGS;
@@ -457,8 +458,8 @@ const openrosa_xpath_extensions = function() {
           }
 
           // For comparisons and math, we must make sure that both values are numbers
-          if(lhs.t === 'arr' || lhs.t === 'str') lhs = XPR.date(asDate(lhs));
-          if(rhs.t === 'arr' || rhs.t === 'str') rhs = XPR.date(asDate(rhs));
+          if(lhs.t === 'arr' || lhs.t === 'str') lhs = XPR.date(new Date(asDate(lhs)));
+          if(rhs.t === 'arr' || rhs.t === 'str') rhs = XPR.date(new Date(asDate(rhs)));
           
           if (lhs.t === 'date') lhs = { t:'num', v:dateToDays(lhs.v) };
           if (rhs.t === 'date') rhs = { t:'num', v:dateToDays(rhs.v) };
@@ -536,6 +537,7 @@ function asDate(r) {
     case 'arr':
     case 'str':
       r = asString(r);
+      if(r.length === 0) return '';
       if(RAW_NUMBER.test(r)) {
         temp = new Date(0);
         temp.setTime(temp.getTime() + parseInt(r, 10) * 24 * 60 * 60 * 1000);

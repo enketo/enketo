@@ -37,6 +37,11 @@ describe('openrosa-extensions', () => {
 
         // comparison
         [ '2018-06-25', '<', '2018-06-25T00:00:00.001-07:00', { t:'continue', lhs:wrapVal(17707.291666666668), op:opVals.LT, rhs:wrapVal(17707.29166667824) } ],
+
+        // empty strings in date comparison
+        [ '', '!=', new Date(1970, 0,  1), { t:'continue', lhs:wrapVal(NaN), op:opVals.NE,  rhs:wrapVal(0.2916666666666667) } ],
+        [ new Date(1970, 0,  1), '!=', '', { t:'continue', lhs:wrapVal(0.2916666666666667), op:opVals.NE,  rhs:wrapVal(NaN) } ],
+
       ].forEach(([ lhs, op, rhs, expected ]) => {
         it(`should evaluate ${lhs} ${op} ${rhs} as ${expected}`, () => {
           // when
@@ -85,6 +90,14 @@ describe('openrosa-extensions', () => {
 
         // then
         assert.equal(res.v.toISOString(), '1970-01-01T00:00:00.000Z');
+      });
+
+      it('should convert an empty string to an empty string', () => {
+        // when
+        const res = date(wrapVal(''));
+
+        // then
+        assert.equal(res.v, '');
       });
     });
 
