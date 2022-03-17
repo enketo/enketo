@@ -11,7 +11,7 @@
 const toISOLocalString = (date) => {
   //2012-09-05T12:57:00.000-04:00 (ODK)
 
-  if(date.toString() === 'Invalid Date') {
+  if(['Invalid Date', ''].includes(date.toString())) {
     return date.toString();
   }
 

@@ -2,7 +2,7 @@ const { getTimezoneOffsetAsTime } = require('./date-extensions');
 const { asGeopoints, area, distance } = require('./geo');
 const digest = require('./digest');
 const { randomToken } = require('./random-token');
-const { DATE_STRING, dateStringToDays, dateToDays, isValidDate } = require('./utils/date');
+const { DATE_STRING, dateStringToDays, dateToDays, isValidDate, ORXEDate } = require('./utils/date');
 const shuffle = require('./utils/shuffle');
 const { asBoolean, asNumber, asString } = require('./utils/xpath-cast');
 const sortByDocumentOrder = require('./utils/sort-by-document-order');
@@ -149,8 +149,7 @@ const openrosa_xpath_extensions = function() {
       return XPR.number(count);
     },
     date: function(it) {
-      const value = asDate(it);
-      return typeof value === "string" || value instanceof String ? XPR.string(value): XPR.date(value);
+      return XPR.date(asDate(it));
     },
     'decimal-date-time': function(r) {
       if(arguments.length > 1) throw TOO_MANY_ARGS;
@@ -458,8 +457,8 @@ const openrosa_xpath_extensions = function() {
           }
 
           // For comparisons and math, we must make sure that both values are numbers
-          if(lhs.t === 'arr' || lhs.t === 'str') lhs = XPR.date(new Date(asDate(lhs)));
-          if(rhs.t === 'arr' || rhs.t === 'str') rhs = XPR.date(new Date(asDate(rhs)));
+          if(lhs.t === 'arr' || lhs.t === 'str') lhs = XPR.date(asDate(lhs));
+          if(rhs.t === 'arr' || rhs.t === 'str') rhs = XPR.date(asDate(rhs));
           
           if (lhs.t === 'date') lhs = { t:'num', v:dateToDays(lhs.v) };
           if (rhs.t === 'date') rhs = { t:'num', v:dateToDays(rhs.v) };
@@ -537,7 +536,6 @@ function asDate(r) {
     case 'arr':
     case 'str':
       r = asString(r);
-      if(r.length === 0) return '';
       if(RAW_NUMBER.test(r)) {
         temp = new Date(0);
         temp.setTime(temp.getTime() + parseInt(r, 10) * 24 * 60 * 60 * 1000);
@@ -556,7 +554,7 @@ function asDate(r) {
           return new Date(time);
         }
       }
-      return new Date(r);
+      return new ORXEDate(r);
     default: throw new Error(`asDate() can't handle ${r.t}s yet :-(`);
   }
 }
