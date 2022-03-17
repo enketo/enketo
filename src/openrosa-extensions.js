@@ -1,8 +1,8 @@
-const { getTimezoneOffsetAsTime } = require('./date-extensions');
+const { BlankDate, getTimezoneOffsetAsTime } = require('./date-extensions');
 const { asGeopoints, area, distance } = require('./geo');
 const digest = require('./digest');
 const { randomToken } = require('./random-token');
-const { DATE_STRING, dateStringToDays, dateToDays, isValidDate, ORXEDate } = require('./utils/date');
+const { DATE_STRING, dateStringToDays, dateToDays, isValidDate } = require('./utils/date');
 const shuffle = require('./utils/shuffle');
 const { asBoolean, asNumber, asString } = require('./utils/xpath-cast');
 const sortByDocumentOrder = require('./utils/sort-by-document-order');
@@ -29,7 +29,7 @@ const openrosa_xpath_extensions = function() {
       format_date = function(date, format) {
         date = asDate(date);
         format = asString(format);
-        if('' === date || isNaN(date)) return '';
+        if('' === date.toString() || isNaN(date)) return '';
         let c, i, sb = '';
         const year = 1900 + date.getYear();
         const month = 1 + date.getMonth();
@@ -536,6 +536,7 @@ function asDate(r) {
     case 'arr':
     case 'str':
       r = asString(r);
+      if(r.length === 0) return new BlankDate();
       if(RAW_NUMBER.test(r)) {
         temp = new Date(0);
         temp.setTime(temp.getTime() + parseInt(r, 10) * 24 * 60 * 60 * 1000);
@@ -554,7 +555,7 @@ function asDate(r) {
           return new Date(time);
         }
       }
-      return new ORXEDate(r);
+      return new Date(r);
     default: throw new Error(`asDate() can't handle ${r.t}s yet :-(`);
   }
 }

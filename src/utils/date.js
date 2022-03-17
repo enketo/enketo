@@ -46,23 +46,9 @@ var isValidDate = function (y, m, d) {
   return m >= 0 && m < 12 && d > 0 && d <= daysInMonth(m, y);
 };
 
-class ORXEDate extends Date {
-  constructor(...args) {
-    super(...args);
-
-    /** @private */
-    this.isEmpty = args.length === 1 && args[0] === '';
-  }
-
-  toString() {
-    return this.isEmpty ? '' : super.toString();
-  }
-}
-
 module.exports = {
   DATE_STRING,
   dateToDays,
   dateStringToDays,
-  isValidDate,
-  ORXEDate
+  isValidDate
 };
