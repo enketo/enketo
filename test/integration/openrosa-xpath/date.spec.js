@@ -128,8 +128,14 @@ describe('#date()', () => {
   });
 
   describe('invalid date', () => {
-    it('should not parse, but instead should return a String', () => {
-      assertString("date('nonsense')", 'Invalid Date');
+    ["'nonsense'", "number('invalid')"].forEach(expr => {
+      it(`should not parse ${expr}, but instead should return "Invalid Date"`, () => {
+        assertString(`date(${expr})`, 'Invalid Date');
+      });
+    });
+
+    it('should not parse an empty string, but instead should return an empty string', () => {
+      assertString("date('')", '');
     });
   });
 

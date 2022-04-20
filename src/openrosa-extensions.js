@@ -1,4 +1,4 @@
-const { getTimezoneOffsetAsTime } = require('./date-extensions');
+const { BlankDate, getTimezoneOffsetAsTime } = require('./date-extensions');
 const { asGeopoints, area, distance } = require('./geo');
 const digest = require('./digest');
 const { randomToken } = require('./random-token');
@@ -29,13 +29,13 @@ const openrosa_xpath_extensions = function() {
       format_date = function(date, format) {
         date = asDate(date);
         format = asString(format);
-        if(isNaN(date)) return 'Invalid Date';
+        if('' === date.toString() || isNaN(date)) return '';
         let c, i, sb = '';
         const year = 1900 + date.getYear();
         const month = 1 + date.getMonth();
         const day = date.getDate();
         const hour = date.getHours();
-        const locale = window ? window.enketoFormLocale : undefined;
+        const locale = globalThis.window?.enketoFormLocale;
 
         for(i=0; i<format.length; ++i) {
           c = format.charAt(i);
@@ -536,6 +536,7 @@ function asDate(r) {
     case 'arr':
     case 'str':
       r = asString(r);
+      if(r.length === 0) return new BlankDate();
       if(RAW_NUMBER.test(r)) {
         temp = new Date(0);
         temp.setTime(temp.getTime() + parseInt(r, 10) * 24 * 60 * 60 * 1000);
