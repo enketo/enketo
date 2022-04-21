@@ -3,6 +3,13 @@ Change Log
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+[2.0.11] - 2022-04-21
+----------------------
+
+##### Fixed
+
+- Update format-date to return empty string instead of 'Invalid Date' (#155)
+
 [2.0.10] - 2022-02-01
 ----------------------
 
