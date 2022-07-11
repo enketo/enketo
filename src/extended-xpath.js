@@ -177,7 +177,7 @@ module.exports = function(wrapped, extensions) {
             case 'num':
               if     (arg.v ===  Infinity) argString += '( 1 div 0)';
               else if(arg.v === -Infinity) argString += '(-1 div 0)';
-              else                         argString += arg.v;
+              else                         argString += arg.v.toFixed(20); // Prevent JS from converting to scientific notation
               break;
             case 'str': {
               const quote = arg.quote || (arg.v.indexOf('"') === -1 ? '"' : "'");
