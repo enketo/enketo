@@ -9,6 +9,7 @@ describe('ceiling', () => {
     assertNumberValue("ceiling(5)", 5);
     assertNumberValue("ceiling(1.00)", 1);
     assertNumberValue("ceiling(-1.05)", -1);
+    assertNumberValue('ceiling(0.0000001)', 1);
   });
 
   it('ceiling() fails when too many arguments are provided', () => {

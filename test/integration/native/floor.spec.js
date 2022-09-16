@@ -12,6 +12,7 @@ describe('#floor()', () => {
     assertNumberValue('floor(5)', 5);
     assertNumberValue('floor(1.00)', 1);
     assertNumberValue('floor(-1.005)', -2);
+    assertNumberValue('floor(0.0000001)', 0);
   });
 
   it('floor() fails when too many arguments are provided', () => {
