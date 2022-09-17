@@ -3,6 +3,13 @@ Change Log
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+[2.0.12] - 2022-09-16
+----------------------
+
+##### Fixed
+
+- Prevent conversion of native number params to Scientific Notation (#160)
+
 [2.0.11] - 2022-04-21
 ----------------------
 
