@@ -112,6 +112,7 @@ module.exports = function(wrapped, extensions) {
     };
 
   /**
+   * @type {typeof document.evaluate}
    * @see https://developer.mozilla.org/en-US/docs/Web/API/Document/evaluate
    */
   const evaluate = this.evaluate = function(input, cN, nR, rT, _, contextSize=1, contextPosition=1) {
@@ -245,7 +246,18 @@ module.exports = function(wrapped, extensions) {
           });
           prev.v = newNodeset;
         } else {
-          pushToken(toInternalResult(wrapped.evaluate(expr, cN, nR, XPathResult.ANY_TYPE, null)));
+          // This addresses a bug in Chrome and Safari, where an absolute
+          // nodeset expression evaluated with an attribute contex node
+          // does not evaluate to that nodeset as expected. Using the
+          // attribute's owner document evaluates the expression correctly,
+          // ensuring consistent behavior between Chrome, Safari and Firefox.
+          const contextNode = (
+            cN?.nodeType === Node.ATTRIBUTE_NODE && expr.startsWith('/')
+              ? cN.ownerDocument
+              : cN
+          );
+
+          pushToken(toInternalResult(wrapped.evaluate(expr, contextNode, nR, XPathResult.ANY_TYPE, null)));
         }
 
         newCurrent();
