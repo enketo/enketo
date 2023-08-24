@@ -1,0 +1,16 @@
+{
+  "extends": "eslint:recommended",
+  "env": {
+    "mocha": true,
+    "browser": true,
+    "commonjs": true
+  },
+  "parserOptions": {
+    "sourceType": "module",
+    "ecmaVersion": 2020
+  },
+  "rules": {
+    "eol-last": ["error", "always"],
+    "semi": [ "error", "always" ]
+  }
+}

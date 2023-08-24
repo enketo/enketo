@@ -1,0 +1,46 @@
+{
+  "name": "openrosa-xpath-evaluator",
+  "version": "2.0.13",
+  "description": "Wrapper for browsers' XPath evaluator with added support for OpenRosa extensions.",
+  "homepage": "https://enketo.org",
+  "main": "src/openrosa-xpath.js",
+  "keywords": [
+    "enketo",
+    "OpenRosa",
+    "ODK",
+    "XForms",
+    "XPath"
+  ],
+  "scripts": {
+    "lint": "eslint --ignore-path .gitignore .",
+    "test": "npm run lint && npm run test:mocha && npm run test:karma",
+    "test:mocha": "TZ=America/Phoenix mocha test/unit/mocha-setup.js test/unit/*.spec.js",
+    "test:karma": "karma start --single-run",
+    "travis": "npm run test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/enketo/openrosa-xpath-evaluator"
+  },
+  "author": "Alex",
+  "license": "Apache-2.0",
+  "bugs": "https://github.com/enketo/openrosa-xpath-evaluator/issues",
+  "devDependencies": {
+    "chai": "^4.3.4",
+    "eslint": "^7.30.0",
+    "karma": "^6.3.4",
+    "karma-chrome-launcher": "^3.1.0",
+    "karma-firefox-launcher": "^2.1.1",
+    "karma-mocha": "^2.0.1",
+    "karma-webpack": "^5.0.0",
+    "lodash": "^4.17.21",
+    "mocha": "^9.2.0",
+    "node-forge": "^1.2.1",
+    "puppeteer": "^8.0.0",
+    "sinon": "^11.1.1",
+    "webpack": "^5.44.0"
+  },
+  "peerDependencies": {
+    "node-forge": "^1.2.1"
+  }
+}
