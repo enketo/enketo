@@ -1,0 +1,147 @@
+# =============================================================================
+# 1. Package management
+# =============================================================================
+
+/node_modules/
+/**/node_modules/
+/npm-debug.log
+/packages/*/npm-debug.log
+/yarn-error.log
+/packages/*/yarn-error.log
+
+# =============================================================================
+# 2. OS detritus
+# =============================================================================
+
+.DS_Store
+Thumbs.db
+
+# =============================================================================
+# 3. Editors
+# =============================================================================
+
+*.code-workspace
+*.sublime-project
+*.sublime-workspace
+
+# =============================================================================
+# 4. Environment
+# =============================================================================
+
+# Originally only in enketo-express
+/.env
+# Originally only in enketo-express
+/packages/*/.env
+
+# =============================================================================
+# 5. Tooling
+# =============================================================================
+
+# -----------------------------------------------------------------------------
+# 5.1. Tooling - development
+# -----------------------------------------------------------------------------
+
+/.grunt/
+/packages/*/.grunt/
+# Originally only in enketo-express
+/.nodemon-*
+# Originally only in enketo-express
+/packages/*/.nodemon-*
+
+# -----------------------------------------------------------------------------
+# 5.2. Tooling - test resources (e.g. fixtures)
+# -----------------------------------------------------------------------------
+
+# Was: mock/forms.js & mock/forms.mjs
+/packages/enketo-core/test/mock/
+/packages/enketo-core/test/temp/
+
+# -----------------------------------------------------------------------------
+# 5.3. Tooling - quality control (e.g. test coverage, benchmark results)
+# -----------------------------------------------------------------------------
+
+/.nyc_output/
+/packages/*/.nyc_output/
+/test-coverage/
+/packages/*/test-coverage/
+/coverage.shield.badge.md
+/packages/*/coverage.shield.badge.md
+/.benchmarks.md
+/packages/*/.benchmarks.md
+
+# -----------------------------------------------------------------------------
+# 5.4. Tooling - build artifacts
+# -----------------------------------------------------------------------------
+
+/build/
+/packages/*/build/
+/dist/
+/packages/*/dist/
+
+# -----------------------------------------------------------------------------
+# 5.4.1. Tooling - build artifacts
+# -----------------------------------------------------------------------------
+
+/packages/enketo-express/**/build/*
+/packages/enketo-express/public/css/*.css
+/packages/enketo-express/app/views/styles/component/_widgets.scss
+
+# -----------------------------------------------------------------------------
+# 5.5. Production/deployment
+# -----------------------------------------------------------------------------
+
+/.vagrant/
+/packages/*/.vagrant/
+
+# =============================================================================
+# 6. Enketo Express
+# =============================================================================
+
+# -----------------------------------------------------------------------------
+# 6.1. Enketo Express - config
+# -----------------------------------------------------------------------------
+
+/packages/enketo-express/config/config.json
+
+# -----------------------------------------------------------------------------
+# 6.2. Enketo Express - Docker/etc
+# -----------------------------------------------------------------------------
+
+# Currently the blessed way to introduce secrets, via volume.
+/packages/enketo-express/docker/secrets/*
+
+# Specifically used as a volume in docker-compose. Possibly used to pass Redis
+# data to image from the deployment/runtime environment?
+/packages/enketo-express/docker/redis_main_data/*
+
+# -----------------------------------------------------------------------------
+# 6.3. Enketo Express - logging
+#      Intentionally left package-specific because at least one path is.
+# -----------------------------------------------------------------------------
+
+/packages/enketo-express/**/logs/submissions*
+/packages/enketo-express/**/logs/logrotate
+
+# -----------------------------------------------------------------------------
+# 6.4. Enketo Express - Copypasta...
+#      All from Enketo Express, with commit hash and notes. These paths are
+#      intentionally isolated to the `enketo-express` package. We should
+#      consider removal of some, if not all, of these entries.
+# -----------------------------------------------------------------------------
+
+# Introduced in 601f7f45485ee47e7ecffad525d636938b53de91.
+# Probably used for taking notes while working on that feature?
+/packages/enketo-express/**/.scratchpad
+
+# Introduced in 2976a7935ae99343c965cc322aba78a6e7edb82c.
+# Probably actually ignoring diffs used for manual comparison.
+/packages/enketo-express/**/*.diff
+/packages/enketo-express/**/translation_old.json
+
+# Introduced in 99985af28e1708ae48d733c678513413a6c95605.
+# Not obviously related to the change. Possibly used with docker-compose.
+/packages/enketo-express/**/enketo-main.rdb
+
+# Introduced in d350a63171b16bf8f3bf2f3b11a05be9430c1b66.
+# Exactly what it says on the tin, albeit maybe odd to output under `tools`.
+/packages/enketo-express/tools/.redis-repl.history
