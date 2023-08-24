@@ -1,0 +1,55 @@
+#!/usr/bin/env sh
+
+set -e option;
+
+BASE_DIR=$(dirname $0);
+
+source $BASE_DIR/env;
+
+echo "Beginning migration of Enketo repositories to $TARGET_BRANCH...";
+
+echo "0. Starting from $SOURCE_BRANCH";
+git checkout $SOURCE_BRANCH;
+
+echo "1. Switching to $TARGET_BRANCH";
+git checkout -B $TARGET_BRANCH;
+
+echo "2. Migrating repositories";
+
+for repository in {openrosa-xpath-evaluator,enketo-transformer,enketo-core,enketo-express}; do
+    echo "- Migrating repository: $repository";
+    remote="git@github.com:enketo/$repository.git";
+
+    echo "  - Adding remote: $repository -> $remote";
+    git remote add -f $repository $remote;
+
+    echo "  - Renaming tags: $repository/\*";
+    for unprefixed_tag in $(git tag --list | grep --invert-match "^\(openrosa-\|enketo-\)"); do
+        prefixed_tag="$repository/$unprefixed_tag";
+
+        echo "  - Renaming tag: $unprefixed_tag -> $prefixed_tag";
+        git tag $prefixed_tag $unprefixed_tag;
+
+        git tag --delete $unprefixed_tag;
+    done;
+
+    echo "  - Merging $repository/master";
+    git merge "$repository/master" --allow-unrelated-histories --message "Import commit history from $repository/master";
+
+    mkdir -p "packages/$repository";
+
+    echo "  - Migrating to packages/$repository";
+    for source in $(ls -A | grep --invert-match "^\(\\.git\|\\.monorepo-init\|packages\)$"); do
+        if [[ -f "$source" && "$(git ls-files $source)" = "" ]]; then
+            continue
+        fi
+
+        git mv "$source" "packages/$repository";
+    done;
+
+    echo "  - Committing package $repository";
+    git commit -m "Move files tracked in $repository to packages/$repository";
+
+    echo "  - Removing remote: $repository";
+    git remote remove $repository;
+done;

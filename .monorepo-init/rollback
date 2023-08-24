@@ -1,0 +1,29 @@
+#!/usr/bin/env sh
+
+set -e option;
+
+BASE_DIR=$(dirname $0);
+
+source $BASE_DIR/env;
+
+echo "Switching back to $SOURCE_BRANCH";
+(git checkout $SOURCE_BRANCH || true) 2>/dev/null;
+
+echo "Removing migration branch-specific git config";
+
+(git config --remove-section includeIf.onbranch:$TARGET_BRANCH || true) 2>/dev/null;
+(rm -rf $GIT_BRANCH_CONFIG_DIR || true) 2>/dev/null;
+
+echo "Deleting trial run branch";
+(git branch -D $TARGET_BRANCH || true) 2>/dev/null;
+
+echo "Deleting tags";
+(git tag -d $(git tag -l) || true) 2>/dev/null;
+
+echo "Removing remotes";
+for repository in {openrosa-xpath-evaluator,enketo-transformer,enketo-core,enketo-express}; do
+    (git remote remove $repository || true) 2>/dev/null;
+done;
+
+echo "Removing packages";
+(rm -rf ./packages || true) 2>/dev/null;

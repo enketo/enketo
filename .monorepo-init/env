@@ -1,0 +1,7 @@
+#!/usr/bin/env sh
+
+# Migration will start from and/or roll back to this branch
+SOURCE_BRANCH="${SOURCE_BRANCH:-monorepo/init}";
+
+# Migration will be performed on this branch
+TARGET_BRANCH="${TARGET_BRANCH:-monorepo/import}";
