@@ -1,0 +1,18 @@
+@import './jquery.relevant-dropdown';
+
+input[type='text'].autocomplete {
+    // width of input same as width of regular select
+    width: $input-min-width * $golden-ratio - 14px;
+
+    &.notfound {
+        color: $gray-light;
+    }
+}
+
+.touch {
+    input[type='text'].autocomplete {
+        width: 100%;
+    }
+}
+
+// to remove caret: http://stackoverflow.com/questions/20937475/remove-datalist-dropdown-arrow-in-chrome

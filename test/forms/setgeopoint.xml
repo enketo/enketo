@@ -1,0 +1,53 @@
+<?xml version="1.0"?>
+<h:html xmlns="http://www.w3.org/2002/xforms"
+    xmlns:ev="http://www.w3.org/2001/xml-events"
+    xmlns:h="http://www.w3.org/1999/xhtml"
+    xmlns:jr="http://openrosa.org/javarosa"
+    xmlns:odk="http://www.opendatakit.org/xforms"
+    xmlns:orx="http://openrosa.org/xforms"
+    xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+    <h:head>
+        <h:title>setgeopoint</h:title>
+        <model>
+            <instance>
+                <data id="setgeopoint">
+                    <hidden_first_load/>
+                    <visible_first_load/>
+                    <changes/>
+                    <location_changed/>
+                    <meta>
+                        <instanceID/>
+                    </meta>
+                </data>
+            </instance>
+
+            <bind nodeset="/data/hidden_first_load" type="string"/>
+            <bind nodeset="/data/visible_first_load" type="string"/>
+
+            <bind nodeset="/data/changes" type="int"/>
+            <bind nodeset="/data/location_changed" type="string"/>
+
+            <odk:setgeopoint event="some-unsupported-event odk-instance-first-load" ref="/data/hidden_first_load"/>
+        </model>
+    </h:head>
+    <h:body>
+        <odk:setgeopoint event="odk-instance-first-load" ref="/data/visible_first_load"/>
+        <input ref="/data/visible_first_load">
+            <label>odk-instance-first-load</label>
+        </input>
+
+        <select1 ref="/data/changes" appearance="minimal">
+            <label>xforms-value-changed</label>
+            <odk:setgeopoint event="xforms-value-changed" ref="/data/location_changed"/>
+            <item>
+                <label>10</label>
+                <value>10</value>
+            </item>
+            <item>
+                <label>11</label>
+                <value>11</value>
+            </item>
+        </select1>
+        <input ref="/data/location_changed"/>
+    </h:body>
+</h:html>

@@ -1,0 +1,34 @@
+.file-picker {
+    .fake-file-input {
+        @include form-control;
+        display: inline-block;
+        width: $input-max-width;
+        text-align: start;
+    }
+
+    .file-feedback,
+    .file-preview {
+        @include font-normal;
+    }
+
+    .file-feedback.error {
+        @include question-error-message;
+    }
+
+    .file-feedback.warning {
+        @include question-error-message;
+
+        color: $state-warning-text;
+    }
+
+    .file-preview {
+        margin-top: 10px;
+    }
+
+    .btn-download {
+        margin-right: 0;
+        &[href=''] {
+            display: none;
+        }
+    }
+}

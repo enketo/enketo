@@ -1,0 +1,31 @@
+{
+    "compilerOptions": {
+        "allowJs": true,
+        "allowSyntheticDefaultImports": true,
+        "allowUnreachableCode": false,
+        "baseUrl": ".",
+        "checkJs": false,
+        "declaration": true,
+        "downlevelIteration": true,
+        "emitDeclarationOnly": true,
+        "esModuleInterop": true,
+        "experimentalDecorators": true,
+        "forceConsistentCasingInFileNames": true,
+        "inlineSourceMap": true,
+        "lib": ["DOM", "DOM.Iterable", "ES2018"],
+        "module": "esnext",
+        "moduleResolution": "node",
+        "noFallthroughCasesInSwitch": true,
+        "noUnusedLocals": true,
+        "noUnusedParameters": true,
+        "resolveJsonModule": true,
+        "skipLibCheck": true,
+        "strict": true,
+        "target": "es2018",
+        "paths": {
+            "enketo/config": ["./config.js"]
+        }
+    },
+    "exclude": ["./node_modules/*", "./test-coverage/*"],
+    "include": ["./src/*.js", "./test/*.js"]
+}

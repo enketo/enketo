@@ -1,0 +1,124 @@
+@import '../../../../../node_modules/bootstrap-datepicker/dist/css/bootstrap-datepicker.min';
+
+/** fixes by martijn **/
+
+.question .date {
+    input[type='text'] {
+        display: inline-block;
+        width: $input-min-width;
+        min-width: 0;
+    }
+}
+
+// Bootstrap Table stuff
+
+$table-cell-padding: 8px !default;
+
+//** Padding for cells in `.table-condensed`.
+$table-condensed-cell-padding: 5px !default;
+
+//** Default background color used for all tables.
+$table-bg: transparent !default;
+
+//** Background color used for `.table-striped`.
+$table-bg-accent: #f9f9f9 !default;
+
+//** Background color used for `.table-hover`.
+$table-bg-hover: whitesmoke !default;
+$table-bg-active: $table-bg-hover !default;
+
+//** Border color for table and cell borders.
+$table-border-color: #dddddd !default;
+
+@mixin table-row-variant($state, $background) {
+    // Exact selectors below required to override `.table-striped` and prevent
+    // inheritance to nested tables.
+    .table > thead > tr,
+    .table > tbody > tr,
+    .table > tfoot > tr {
+        > td.#{$state},
+        > th.#{$state},
+        &.#{$state} > td,
+        &.#{$state} > th {
+            background-color: $background;
+        }
+    }
+
+    // Hover states for `.table-hover`
+    // Note: this is not available for cells or rows within `thead` or `tfoot`.
+    .table-hover > tbody > tr {
+        > td.#{$state}:hover,
+        > th.#{$state}:hover,
+        &.#{$state}:hover > td,
+        &.#{$state}:hover > th {
+            background-color: darken($background, 5%);
+        }
+    }
+}
+
+//
+// Tables
+// --------------------------------------------------
+
+table {
+    max-width: 100%;
+    background-color: $table-bg;
+}
+
+th {
+    text-align: left;
+}
+
+.table-condensed {
+    > thead,
+    > tbody,
+    > tfoot {
+        > tr {
+            > th,
+            > td {
+                padding: $table-condensed-cell-padding;
+            }
+        }
+    }
+}
+
+// Hover effect
+//
+// Placed here since it has to come after the potential zebra striping
+
+.table-hover {
+    > tbody > tr:hover {
+        > td,
+        > th {
+            background-color: $table-bg-hover;
+        }
+    }
+}
+
+// Table cell sizing
+//
+// Reset default table behavior
+
+table col[class*='col-'] {
+    position: static;
+
+    // Prevent border hiding in Firefox and IE9/10 (see https://github.com/twbs/bootstrap/issues/11623)
+    float: none;
+    display: table-column;
+}
+
+table {
+    td,
+    th {
+        &[class*='col-'] {
+            position: static;
+
+            // Prevent border hiding in Firefox and IE9/10 (see https://github.com/twbs/bootstrap/issues/11623)
+            float: none;
+            display: table-cell;
+        }
+    }
+}
+
+// Generate the contextual variants
+@include table-row-variant('active', $table-bg-active);

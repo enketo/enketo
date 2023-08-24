@@ -1,0 +1,37 @@
+@import 'timepicker';
+
+.timepicker {
+    input[type='text'] {
+        display: inline-block;
+        width: $input-min-width;
+    }
+}
+
+.timepicker-widget {
+    &.dropdown-menu {
+        input {
+            width: 50px;
+            margin: 0 auto;
+        }
+    }
+}
+
+.timepicker-widget table td span {
+    width: 12px;
+}
+
+.glyphicon-chevron-up {
+    @extend .icon;
+    @extend .icon-chevron-up;
+}
+
+.glyphicon-chevron-down {
+    @extend .icon;
+    @extend .icon-chevron-down;
+}
+
+.timepicker-widget table td a i {
+    width: 11px;
+    height: 17px;
+    display: inline-block;
+}

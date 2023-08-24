@@ -1,0 +1,121 @@
+$padding: 30px;
+
+.or-comment-widget {
+    display: block;
+    position: absolute;
+    z-index: 1001;
+    top: 100%;
+    left: 0;
+    width: 100%;
+    &__overlay {
+        background: rgba(0, 0, 0, 0.3);
+    }
+
+    &__content {
+        position: relative;
+        border: 1px solid $gray;
+        background: white;
+        padding: $padding;
+        padding-bottom: 100px;
+        &__btn-update {
+            position: absolute;
+            right: $padding;
+            bottom: $padding;
+        }
+        &__btn-close-x {
+            top: 20px;
+            right: 13px;
+            position: absolute;
+            content: '\00D7';
+            font-size: 26px;
+            font-weight: normal;
+            line-height: 31px;
+            height: 30px;
+            width: 30px;
+            text-align: center;
+            color: #bbb;
+            background: transparent;
+        }
+    }
+    &__overlay {
+        position: fixed;
+        background: rgba(0, 0, 0, 0.4);
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+    }
+    &__question-label,
+    &__question-value {
+        @include font-normal;
+        font-style: italic;
+        padding-right: 35px;
+    }
+    &__question-value {
+        margin-left: 20px;
+        margin-top: 10px;
+    }
+    .question textarea,
+    .question input[type='text'] {
+        width: 100%;
+    } // Avoid artefacts of linkedQuestion that contains widget
+    // If linked question is invalid, but the widget is not, the message
+    // should stay hidden.
+    .or-required-msg.active,
+    .or-constraint-msg.active,
+    .invalid-value-msg.active {
+        display: none;
+    }
+    .invalid-required > .or-required-msg,
+    .invalid-constraint > .or-constraint-msg,
+    .invalid-value > .invalid-value-msg {
+        display: block;
+    }
+}
+
+.btn-comment {
+    cursor: pointer;
+    .icon {
+        @extend .icon-sticky-note;
+    }
+    &.empty {
+        .icon {
+            @extend .icon-sticky-note-o;
+        }
+    }
+    &.invalid {
+        @include transition-fast;
+        color: $state-dangerest-text;
+        .icon {
+            font-weight: bold;
+        }
+    }
+}
+
+.or[dir='rtl'] {
+    .btn-comment {
+        left: auto;
+        right: calc(100% - 25px);
+    }
+    .or-comment-widget {
+        &__content {
+            &__btn-update {
+                right: auto;
+                left: $padding;
+            }
+            &__btn-close-x {
+                right: auto;
+                left: 13px;
+            }
+        }
+        &__question-label,
+        &__question-value {
+            padding-right: 0;
+            padding-left: 35px;
+        }
+        &__question-value {
+            margin-left: 0;
+            margin-right: 20px;
+        }
+    }
+}
