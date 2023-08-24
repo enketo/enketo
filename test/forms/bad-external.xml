@@ -1,0 +1,90 @@
+<?xml version="1.0"?>
+<h:html xmlns="http://www.w3.org/2002/xforms" xmlns:ev="http://www.w3.org/2001/xml-events" xmlns:h="http://www.w3.org/1999/xhtml" xmlns:jr="http://openrosa.org/javarosa" xmlns:orx="http://openrosa.org/xforms" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <h:head>
+    <h:title>cascading select test</h:title>
+    <model>
+      <itext>
+        <translation lang="French">
+          <text id="/select_one_external/state:label">
+            <value>Le state</value>
+          </text>
+          <text id="/select_one_external/state/texas:label">
+            <value>Le Texas</value>
+          </text>
+          <text id="/select_one_external/state/washington:label">
+            <value>La Washington</value>
+          </text>
+          <text id="/select_one_external/city:label">
+            <value>Ville</value>
+          </text>
+          <text id="/select_one_external/county:label">
+            <value>Pays</value>
+          </text>
+        </translation>
+        <translation lang="English">
+          <text id="/select_one_external/state:label">
+            <value>state</value>
+          </text>
+          <text id="/select_one_external/state/texas:label">
+            <value>Texas</value>
+          </text>
+          <text id="/select_one_external/state/washington:label">
+            <value>Washington</value>
+          </text>
+          <text id="/select_one_external/city:label">
+            <value>city</value>
+          </text>
+          <text id="/select_one_external/county:label">
+            <value>county</value>
+          </text>
+        </translation>
+      </itext>
+      <instance>
+        <select_one_external id="cascading_select_test">
+          <state/>
+          <county/>
+          <city/>
+          <city2/>
+          <meta>
+            <instanceID/>
+          </meta>
+        </select_one_external>
+      </instance>
+      <instance id="existing" src="jr://file/existing.xml"></instance>
+      <bind nodeset="/select_one_external/state" type="select1"/>
+      <bind nodeset="/select_one_external/county" type="string"/>
+      <bind nodeset="/select_one_external/city" type="string"/>
+      <bind nodeset="/select_one_external/city2" type="string"/>
+      <bind calculate="concat('uuid:', uuid())" nodeset="/select_one_external/meta/instanceID" readonly="true()" type="string"/>
+    </model>
+  </h:head>
+  <h:body>
+    <select1 ref="/select_one_external/state">
+      <label ref="jr:itext('/select_one_external/state:label')"/>
+      <item>
+        <label ref="jr:itext('/select_one_external/state/texas:label')"/>
+        <value>texas</value>
+      </item>
+      <item>
+        <label ref="jr:itext('/select_one_external/state/washington:label')"/>
+        <value>washington</value>
+      </item>
+    </select1>
+    <input query="instance('counties')/root/item[state= /select_one_external/state ]" ref="/select_one_external/county">
+      <label ref="jr:itext('/select_one_external/county:label')"/>
+    </input>
+    <input query="instance('cities')/root/item[state= /select_one_external/state  and county= /select_one_external/county ]" ref="/select_one_external/city">
+      <label ref="jr:itext('/select_one_external/city:label')"/>
+    </input>
+    <input appearance="minimal" query="instance('cities')/root/item[state= /select_one_external/state  and county= /select_one_external/county ]" ref="/select_one_external/city2">
+      <label ref="jr:itext('/select_one_external/city:label')"/>
+      <hint>hint</hint>
+    </input>
+    <input query="/root/item[state= /select_one_external/state  and county= /select_one_external/county ]" ref="/select_one_external/error">
+      <label ref="jr:itext('/select_one_external/city:label')"/>
+    </input>
+    <input query="instance('existing')/root/item[state= /select_one_external/state  and county= /select_one_external/county ]" ref="/select_one_external/existing">
+      <label ref="jr:itext('/select_one_external/city:label')"/>
+    </input>
+  </h:body>
+</h:html>

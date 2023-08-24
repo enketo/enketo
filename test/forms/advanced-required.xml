@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<h:html xmlns="http://www.w3.org/2002/xforms" xmlns:ev="http://www.w3.org/2001/xml-events" xmlns:h="http://www.w3.org/1999/xhtml" xmlns:jr="http://openrosa.org/javarosa" xmlns:orx="http://openrosa.org/xforms" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <h:head>
+    <h:title>Advanced Required Fields</h:title>
+    <model>
+      <itext>
+        <translation lang="dutch">
+          <text id="/advanced-required/num:label">
+            <value>Bla bla</value>
+          </text>
+          <text id="/advanced-required/num:jr:requiredMsg">
+            <value>custom verplicht bericht</value>
+          </text>
+          <text id="/advanced-required/txt:label">
+            <value>vul in man</value>
+          </text>
+        </translation>
+        <translation lang="english">
+          <text id="/advanced-required/num:label">
+            <value>This field is required if the first question has an answer</value>
+          </text>
+          <text id="/advanced-required/num:jr:requiredMsg">
+            <value>custom required message</value>
+          </text>
+          <text id="/advanced-required/txt:label">
+            <value>Enter text</value>
+          </text>
+        </translation>
+      </itext>
+      <instance>
+        <advanced-required id="advanced-required" version="201601111644">
+          <formhub>
+            <uuid/>
+          </formhub>
+          <txt/>
+          <num/>
+          <meta>
+            <instanceID/>
+          </meta>
+        </advanced-required>
+      </instance>
+      <bind nodeset="/advanced-required/txt" type="string"/>
+      <bind jr:requiredMsg="jr:itext('/advanced-required/num:jr:requiredMsg')" nodeset="/advanced-required/num" required="string-length( /advanced-required/txt )" type="int"/>
+      <bind calculate="concat('uuid:', uuid())" nodeset="/advanced-required/meta/instanceID" readonly="true()" type="string"/>
+      <bind calculate="'824d87aebcd14d6cba1efb680c8ef40a'" nodeset="/advanced-required/formhub/uuid" type="string"/>
+    </model>
+  </h:head>
+  <h:body>
+    <input ref="/advanced-required/txt">
+      <label ref="jr:itext('/advanced-required/txt:label')"/>
+      <hint>go on!</hint>
+    </input>
+    <input ref="/advanced-required/num">
+      <label ref="jr:itext('/advanced-required/num:label')"/>
+      <hint>go on!</hint>
+    </input>
+  </h:body>
+</h:html>

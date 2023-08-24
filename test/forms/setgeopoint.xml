@@ -1,0 +1,81 @@
+<?xml version="1.0"?>
+<h:html xmlns="http://www.w3.org/2002/xforms"
+    xmlns:ev="http://www.w3.org/2001/xml-events"
+    xmlns:h="http://www.w3.org/1999/xhtml"
+    xmlns:jr="http://openrosa.org/javarosa"
+    xmlns:odk="http://www.opendatakit.org/xforms"
+    xmlns:orx="http://openrosa.org/xforms"
+    xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+    <h:head>
+        <h:title>setgeopoint</h:title>
+        <model>
+            <instance>
+                <data id="setgeopoint">
+                    <hidden_first_load/>
+
+                    <visible_first_load/>
+
+                    <repeats>
+                        <first_load/>
+                        <changes/>
+                        <changed_location/>
+                    </repeats>
+
+                    <changes/>
+                    <changed_location/>
+
+                    <meta>
+                        <instanceID/>
+                    </meta>
+                </data>
+            </instance>
+            <bind nodeset="/data/hidden_first_load" type="geopoint"/>
+            <bind nodeset="/data/visible_first_load" type="geopoint"/>
+
+            <bind nodeset="/data/changes" type="int"/>
+            <bind nodeset="/data/changed_location" type="geopoint"/>
+
+            <bind nodeset="/data/repeats/first_load" type="geopoint"/>
+
+            <bind nodeset="/data/repeats/changes" type="string"/>
+            <bind nodeset="/data/repeats/changed_location" type="geopoint"/>
+
+            <odk:setgeopoint event="odk-instance-first-load" ref="/data/hidden_first_load"/>
+        </model>
+    </h:head>
+    <h:body>
+        <odk:setgeopoint event="odk-instance-first-load" ref="/data/visible_first_load"/>
+        <label>
+            odk-instance-first-load: <output value="/data/visible_first_load"/>
+        </label>
+
+        <repeat nodeset="/data/repeats">
+            <label>
+                odk-instance-first-load: <output value="/data/repeats/first_load"/>
+            </label>
+            <odk:setgeopoint event="odk-new-repeat odk-instance-first-load" ref="/data/repeats/first_load"/>
+
+            <input ref="/data/repeats/changes">
+                <label>
+                    Edit me
+                    xforms-value-changed:
+                    <output value="/data/repeats/changed_location"/>
+                </label>
+                <odk:setgeopoint event="xforms-value-changed" ref="/data/repeats/changed_location"/>
+            </input>
+        </repeat>
+
+        <select ref="/data/changes" appearance="minimal">
+            <label>Your age</label>
+            <odk:setgeopoint event="xforms-value-changed" ref="/data/changed_location"/>
+            <item>
+                <label>10</label>
+                <value>10</value>
+            </item>
+            <item>
+                <label>11</label>
+                <value>11</value>
+            </item>
+        </select>
+    </h:body>
+</h:html>

@@ -1,0 +1,41 @@
+<?xml version="1.0"?>
+<h:html xmlns="http://www.w3.org/2002/xforms" xmlns:ev="http://www.w3.org/2001/xml-events" xmlns:h="http://www.w3.org/1999/xhtml" xmlns:jr="http://openrosa.org/javarosa" xmlns:orx="http://openrosa.org/xforms" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:oc="http://openclinica.org/xforms">
+  <h:head><!-- ODK Aggregate upload time: 2017-07-11T21:06:50.817+0000 on https://enketo-aggregate.appspot.com -->
+    <h:title>relevant-constraint-required</h:title>
+    <model>
+      <instance>
+        <relevant-constraint-required id="relevant-constraint-required">
+          <something/>
+          <rep jr:template="">
+            <val/>
+            <skipq/>
+          </rep>
+          <meta>
+            <instanceID/>
+          </meta>
+        </relevant-constraint-required>
+      </instance>
+      <bind constraint="string-length(.) &gt; 10" jr:constraintMsg="needs &gt; 10" jr:requiredMsg="value needed" nodeset="/relevant-constraint-required/something" relevant="1 + 1 = 2" required="true()" type="string"/>
+      <bind nodeset="/relevant-constraint-required/rep" relevant=" /relevant-constraint-required/something  != ''" oc:relevantMsg="relevant if something is not empty"/>
+      <bind constraint="string-length(.) &gt; 10" jr:constraintMsg="needs &gt; 10" jr:requiredMsg="value needed" oc:relevantMsg="relevant if something is not nothing" nodeset="/relevant-constraint-required/rep/val" relevant=" /relevant-constraint-required/something  != 'nothing'" required="true()" type="string"/>
+      <bind constraint="string-length(.) &gt; 2" jr:constraintMsg="needs &gt; 2" jr:requiredMsg="value needed" oc:relevantMsg="relevant if previous value is diarrhea" nodeset="/relevant-constraint-required/rep/skipq" relevant=" /relevant-constraint-required/rep/val  = 'diarrhea'" required="true()" type="int"/>
+      <bind calculate="concat('uuid:', uuid())" nodeset="/relevant-constraint-required/meta/instanceID" readonly="true()" type="string"/>
+    </model>
+  </h:head>
+  <h:body>
+    <input ref="/relevant-constraint-required/something">
+      <label>something with a relevant that will be cached</label>
+    </input>
+    <group ref="/relevant-constraint-required/rep">
+      <label></label>
+      <repeat nodeset="/relevant-constraint-required/rep">
+        <input ref="/relevant-constraint-required/rep/val">
+          <label>enter value</label>
+        </input>
+        <input ref="/relevant-constraint-required/rep/skipq">
+          <label>enter number</label>
+        </input>
+      </repeat>
+    </group>
+  </h:body>
+</h:html>

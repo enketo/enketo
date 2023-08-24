@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<h:html xmlns="http://www.w3.org/2002/xforms" xmlns:ev="http://www.w3.org/2001/xml-events" xmlns:h="http://www.w3.org/1999/xhtml" xmlns:jr="http://openrosa.org/javarosa" xmlns:orx="http://openrosa.org/xforms" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <h:head>
+    <h:title>formatted output</h:title>
+    <model> 
+      <instance>
+        <output id="output">
+          <txt>text</txt>
+          <nodeA/>
+          <meta>
+            <instanceID/>
+          </meta>
+        </output>
+      </instance>
+      <bind nodeset="/output/nodeA" readonly="true()" type="string"/>
+    </model>
+  </h:head>
+  <h:body>
+    <input ref="/output/nodeA">
+      <label>formatted: *<output value="/output/txt"/>* and _normal_ text</label>
+    </input>
+  </h:body>
+</h:html>

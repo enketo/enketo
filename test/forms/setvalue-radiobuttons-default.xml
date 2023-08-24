@@ -1,0 +1,36 @@
+<?xml version="1.0"?>
+<h:html xmlns="http://www.w3.org/2002/xforms"
+    xmlns:ev="http://www.w3.org/2001/xml-events"
+    xmlns:h="http://www.w3.org/1999/xhtml"
+    xmlns:jr="http://openrosa.org/javarosa"
+    xmlns:odk="http://www.opendatakit.org/xforms"
+    xmlns:orx="http://openrosa.org/xforms"
+    xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+    <h:head>
+        <h:title>setvalue</h:title>
+        <model>
+            <instance>
+                <data id="setvalue">
+                    <sel1/>
+                    <meta>
+                        <instanceID/>
+                    </meta>
+                </data>
+            </instance>
+        </model>
+    </h:head>
+    <h:body>
+        <setvalue event="odk-instance-first-load" ref="/data/sel1" value="12"/>
+        <select1 ref="/data/sel1">
+            <label>Your age</label>
+            <item>
+                <label>10</label>
+                <value>10</value>
+            </item>
+            <item>
+                <label>11</label>
+                <value>11</value>
+            </item>
+        </select1>
+    </h:body>
+</h:html>

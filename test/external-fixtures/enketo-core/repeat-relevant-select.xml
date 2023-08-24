@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<h:html xmlns="http://www.w3.org/2002/xforms" xmlns:ev="http://www.w3.org/2001/xml-events" xmlns:h="http://www.w3.org/1999/xhtml" xmlns:jr="http://openrosa.org/javarosa" xmlns:orx="http://openrosa.org/xforms" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <h:head>
+    <h:title>data</h:title>
+    <model>
+      <instance>
+        <data id="data" version="201708091944">
+          <formhub>
+            <uuid/>
+          </formhub>
+          <details jr:template="">
+            <fruits/>
+            <location/>
+          </details>
+          <meta>
+            <instanceID/>
+          </meta>
+        </data>
+      </instance>
+      <bind nodeset="/data/details" required="true()"/>
+      <bind nodeset="/data/details/fruits" required="true()" type="select"/>
+      <bind nodeset="/data/details/location" relevant="selected( /data/details/fruits ,'mango')" required="true()" type="select"/>
+      <bind calculate="concat('uuid:', uuid())" nodeset="/data/meta/instanceID" readonly="true()" type="string"/>
+      <bind calculate="'65b585404b4c47cc921d142d219c5368'" nodeset="/data/formhub/uuid" type="string"/>
+    </model>
+  </h:head>
+  <h:body>
+    <group ref="/data/details">
+      <label>Details</label>
+      <repeat nodeset="/data/details">
+        <select ref="/data/details/fruits">
+          <label>Fruits</label>
+          <item>
+            <label>mango</label>
+            <value>mango</value>
+          </item>
+          <item>
+            <label>pear</label>
+            <value>pear</value>
+          </item>
+          <item>
+            <label>banana</label>
+            <value>banana</value>
+          </item>
+          <item>
+            <label>passion</label>
+            <value>passion</value>
+          </item>
+        </select>
+        <select ref="/data/details/location">
+          <label>Location</label>
+          <item>
+            <label>nairobi</label>
+            <value>nairobi</value>
+          </item>
+          <item>
+            <label>kisumu</label>
+            <value>kisumu</value>
+          </item>
+          <item>
+            <label>kisii</label>
+            <value>kisii</value>
+          </item>
+          <item>
+            <label>kakamega</label>
+            <value>kakamega</value>
+          </item>
+        </select>
+      </repeat>
+    </group>
+  </h:body>
+</h:html>

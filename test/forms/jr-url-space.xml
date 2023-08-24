@@ -1,0 +1,64 @@
+<?xml version="1.0"?>
+<h:html xmlns="http://www.w3.org/2002/xforms"
+    xmlns:ev="http://www.w3.org/2001/xml-events"
+    xmlns:h="http://www.w3.org/1999/xhtml"
+    xmlns:jr="http://openrosa.org/javarosa"
+    xmlns:odk="http://www.opendatakit.org/xforms"
+    xmlns:orx="http://openrosa.org/xforms"
+    xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+    <h:head>
+        <h:title>jr-url-space</h:title>
+        <model>
+            <itext>
+                <translation default="true()" lang="English">
+                    <text id="/outside/l1:label">
+                        <value form="image">jr://images/first image.jpg</value>
+                    </text>
+                    <text id="/outside/l2:label">
+                        <value form="audio">jr://audio/a song.mp3</value>
+                    </text>
+                    <text id="/outside/l3:label">
+                        <value form="video">jr://video/some video.mp4</value>
+                    </text>
+                </translation>
+            </itext>
+            <instance>
+                <outside>
+                    <a/>
+                    <b/>
+                    <c>jr://images/another image.png</c>
+                    <d/>
+                    <l1/>
+                    <l2/>
+                    <l2/>
+                    <meta>
+                        <instanceID/>
+                    </meta>
+                </outside>
+            </instance>
+            <instance id="file" src="jr://file/an instance.xml" />
+            <instance id="file-csv" src="jr://file-csv/a spreadsheet.csv" />
+            <bind nodeset="/outside/a" type="string"/>
+            <bind nodeset="/outside/b" type="string"/>
+            <bind nodeset="/outside/c" type="binary"/>
+            <bind nodeset="/outside/d" type="string"/>
+
+        </model>
+    </h:head>
+    <h:body>
+        <input ref="/a">
+            <label ref="jr:itext('/outside/l1:label')"/>
+        </input>
+        <input ref="/b">
+            <label ref="jr:itext('/outside/l2:label')"/>
+        </input>
+        <upload appearance="annotate" mediatype="image/*" ref="/outside/c">
+            <label ref="jr:itext('/outside/l3:label')"/>
+        </upload>
+        <input> ref="/d">
+            <label>
+                [markdown](jr://file/a link.xml)
+            </label>
+        </input>
+    </h:body>
+</h:html>

@@ -1,0 +1,49 @@
+<?xml version="1.0"?>
+<h:html xmlns="http://www.w3.org/2002/xforms" 
+    xmlns:ev="http://www.w3.org/2001/xml-events" 
+    xmlns:h="http://www.w3.org/1999/xhtml" 
+    xmlns:jr="http://openrosa.org/javarosa" 
+    xmlns:odk="http://www.opendatakit.org/xforms" 
+    xmlns:orx="http://openrosa.org/xforms" 
+    xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+    <h:head>
+        <h:title>data</h:title>
+        <model>
+            <instance>
+                <data id="data">
+                    <int/>
+                    <meta>
+                        <instanceID/>
+                    </meta>
+                </data>
+            </instance>
+            <bind nodeset="/data/int" type="select1"/>
+            <bind jr:preload="uid" nodeset="/data/meta/instanceID" readonly="true()" type="string"/>
+        </model>
+    </h:head>
+    <h:body>
+        <select1 appearance="minimal" ref="/data/int">
+            <label>a label</label>
+            <item>
+                <label>1</label>
+                <value>1</value>
+            </item>
+            <item>
+                <label>3</label>
+                <value>3</value>
+            </item>
+            <item>
+                <label>5</label>
+                <value>5</value>
+            </item>
+            <item>
+                <label>7</label>
+                <value>7</value>
+            </item>
+            <item>
+                <label>9</label>
+                <value>9</value>
+            </item>
+        </select1>
+    </h:body>
+</h:html>

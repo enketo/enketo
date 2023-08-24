@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="utf-8"?>
+<h:html xmlns="http://www.w3.org/2002/xforms" 
+  xmlns:ev="http://www.w3.org/2001/xml-events" 
+  xmlns:h="http://www.w3.org/1999/xhtml" 
+  xmlns:jr="http://openrosa.org/javarosa" 
+  xmlns:orx="http://openrosa.org/xforms" 
+  xmlns:xsd="http://www.w3.org/2001/XMLSchema" 
+  xmlns:odk="http://www.opendatakit.org/xforms">
+  <h:head>
+    <h:title>select-one-autocomplete</h:title>
+    <model odk:xforms-version="1.0.0">
+      <instance>
+        <select-one-autocomplete id="select-one-autocomplete" version="201702242244">
+          <two/>
+          <three/>
+          <four>1003</four>
+          <six/>
+          <seven/>
+          <eight>1003 1005</eight>
+          <meta>
+            <instanceID/>
+          </meta>
+        </select-one-autocomplete>
+      </instance>
+      <bind nodeset="/select-one-autocomplete/two" type="select1"/>
+      <bind nodeset="/select-one-autocomplete/three" type="select1"/>
+      <bind nodeset="/select-one-autocomplete/four" type="select1"/>
+      <bind nodeset="/select-one-autocomplete/six" type="select"/>
+      <bind nodeset="/select-one-autocomplete/seven" type="select"/>
+      <bind nodeset="/select-one-autocomplete/eight" type="select"/>
+      <bind calculate="concat('uuid:', uuid())" nodeset="/select-one-autocomplete/meta/instanceID" readonly="true()" type="string"/>
+    </model>
+  </h:head>
+  <h:body>
+    <select1 appearance="minimal" ref="/select-one-autocomplete/two">
+      <label>Select one</label>
+      <hint>minimal</hint>
+      <item>
+        <label>Autauga County</label>
+        <value>1001</value>
+      </item>
+      <item>
+        <label>Baldwin County</label>
+        <value>1003</value>
+      </item>
+      <item>
+        <label>Barbour County</label>
+        <value>1005</value>
+      </item>
+    </select1>
+    <select1 appearance="autocomplete" ref="/select-one-autocomplete/three">
+      <label>Select one</label>
+      <hint>minimal autocomplete</hint>
+      <item>
+        <label>Autauga County</label>
+        <value>1001</value>
+      </item>
+      <item>
+        <label>Baldwin County</label>
+        <value>1003</value>
+      </item>
+      <item>
+        <label>Barbour County</label>
+        <value>1005</value>
+      </item>
+    </select1>
+    <select1 appearance="search" ref="/select-one-autocomplete/four">
+      <label>Select one</label>
+      <hint>minimal search</hint>
+      <item>
+        <label>Autauga County</label>
+        <value>1001</value>
+      </item>
+      <item>
+        <label>Baldwin County</label>
+        <value>1003</value>
+      </item>
+      <item>
+        <label>Barbour County</label>
+        <value>1005</value>
+      </item>
+    </select1>
+    <select appearance="minimal" ref="/select-one-autocomplete/six">
+      <label>Select multiple</label>
+      <hint>minimal</hint>
+      <item>
+        <label>Autauga County</label>
+        <value>1001</value>
+      </item>
+      <item>
+        <label>Baldwin County</label>
+        <value>1003</value>
+      </item>
+      <item>
+        <label>Barbour County</label>
+        <value>1005</value>
+      </item>
+    </select>
+    <select appearance="autocomplete" ref="/select-one-autocomplete/seven">
+      <label>Select multiple</label>
+      <hint>minimal autocomplete</hint>
+      <item>
+        <label>Autauga County</label>
+        <value>1001</value>
+      </item>
+      <item>
+        <label>Baldwin County</label>
+        <value>1003</value>
+      </item>
+      <item>
+        <label>Barbour County</label>
+        <value>1005</value>
+      </item>
+    </select>
+    <select appearance="search" ref="/select-one-autocomplete/eight">
+      <label>Select multiple</label>
+      <hint>minimal search</hint>
+      <item>
+        <label>Autauga County</label>
+        <value>1001</value>
+      </item>
+      <item>
+        <label>Baldwin County</label>
+        <value>1003</value>
+      </item>
+      <item>
+        <label>Barbour County</label>
+        <value>1005</value>
+      </item>
+    </select>
+  </h:body>
+</h:html>

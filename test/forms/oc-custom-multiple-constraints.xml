@@ -1,0 +1,29 @@
+<?xml version="1.0"?>
+<h:html xmlns="http://www.w3.org/2002/xforms"
+    xmlns:ev="http://www.w3.org/2001/xml-events"
+    xmlns:h="http://www.w3.org/1999/xhtml"
+    xmlns:jr="http://openrosa.org/javarosa"
+    xmlns:orx="http://openrosa.org/xforms"
+    xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+    xmlns:oc="http://openclinica.org/xforms">
+    <h:head>
+        <h:title>oc-custom-multiple-constraint</h:title>
+        <model>
+            <instance>
+                <data id="data">
+                    <something/>
+                    <orx:meta>
+                        <orx:instanceID/>
+                    </orx:meta>
+                </data>
+            </instance>
+            <bind constraint="string-length(.) &gt; 10" jr:constraintMsg="needs &gt; 10" oc:constraint="'not numbered constraint that will be ignored by enketo=core probably'" oc:constraint1=". != 'a'" oc:constraint2=". != 'b'" oc:constraint20=". != 'c'" oc:constraintMsg="msg to be ignored" oc:constraint1Msg="oc constraint 1 message" oc:constraint20Msg="oc constraint 20 message" nodeset="/data/something" type="string"/>
+            <bind nodeset="/data/meta/instanceID" readonly="true()" type="string"/>
+        </model>
+    </h:head>
+    <h:body>
+        <input ref="/data/something">
+            <label>something</label>
+        </input>
+    </h:body>
+</h:html>

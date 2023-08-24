@@ -1,0 +1,173 @@
+{
+    "env": {
+        "es6": true,
+        "browser": false,
+        "node": true
+    },
+    "globals": {
+        "Promise": true
+    },
+    "extends": ["plugin:@typescript-eslint/recommended", "airbnb", "prettier"],
+    "plugins": [
+        "chai-friendly",
+        "jsdoc",
+        "prettier",
+        "unicorn",
+        "@typescript-eslint"
+    ],
+    "parser": "@typescript-eslint/parser",
+    "parserOptions": {
+        "sourceType": "module",
+        "ecmaVersion": 2020
+    },
+    "settings": {
+        "import/extensions": [".ts", ".tsx"],
+        "import/parsers": {
+            "@typescript-eslint/parser": [".ts", ".tsx"]
+        },
+        "import/resolver": {
+            "node": {
+                "extensions": [".js", ".ts", ".tsx"]
+            }
+        },
+        "jsdoc": {
+            "tagNamePreference": {
+                "returns": "return"
+            }
+        }
+    },
+    "rules": {
+        "@typescript-eslint/no-non-null-assertion": "error",
+        "chai-friendly/no-unused-expressions": "error",
+        "prettier/prettier": "error",
+
+        "guard-for-in": "warn",
+        "import/extensions": "warn",
+        "import/no-extraneous-dependencies": [
+            "error",
+            {
+                "devDependencies": [
+                    "app.js",
+                    "vite.config.ts",
+                    "src/api.ts",
+                    "src/app.ts",
+                    "test/**/*.ts"
+                ],
+                "optionalDependencies": false,
+                "peerDependencies": true
+            }
+        ],
+        "import/no-unresolved": [
+            "error",
+            {
+                "ignore": ["vitest/config", ".*?raw"]
+            }
+        ],
+        "import/order": "warn",
+        "import/prefer-default-export": "off",
+        "no-param-reassign": "warn",
+        "no-restricted-syntax": [
+            "warn",
+            "ForInStatement",
+            "LabeledStatement",
+            "WithStatement"
+        ],
+        "no-shadow": "warn",
+        "no-underscore-dangle": "warn",
+        "no-unused-expressions": "off",
+        "no-use-before-define": [
+            "warn",
+            {
+                "functions": false
+            }
+        ],
+        "prefer-destructuring": "warn"
+    },
+    "overrides": [
+        {
+            "files": ["./.github/**/*.md", "./*.md"],
+            "parser": "markdown-eslint-parser",
+            "rules": {
+                "prettier/prettier": ["error", { "parser": "markdown" }]
+            }
+        },
+
+        {
+            "files": ["./**/*.ts", "./demo/**/*.tsx"],
+            "rules": {
+                "consistent-return": "off",
+                "no-useless-constructor": "off",
+                "@typescript-eslint/no-useless-constructor": "error",
+                "no-unused-vars": "off",
+                "@typescript-eslint/no-unused-vars": [
+                    "error",
+                    {
+                        "argsIgnorePattern": "^_",
+                        "varsIgnorePattern": "^_"
+                    }
+                ],
+                "no-dupe-class-members": "off",
+                "@typescript-eslint/no-dupe-class-members": "error",
+                "no-empty-function": "off",
+                "@typescript-eslint/no-empty-function": "error",
+                "no-undef": "off",
+                "no-redeclare": "off",
+                "@typescript-eslint/no-redeclare": "error",
+                "import/no-unresolved": "off",
+
+                "import/extensions": [
+                    "error",
+                    "ignorePackages",
+                    {
+                        "": "never",
+                        "js": "never",
+                        "jsx": "never",
+                        "ts": "never",
+                        "tsx": "never"
+                    }
+                ]
+            }
+        },
+
+        {
+            "env": {
+                "browser": true,
+                "node": false
+            },
+            "files": ["./demo/**/*"],
+            "rules": {
+                "react/destructuring-assignment": "off",
+                "react/jsx-filename-extension": [
+                    "error",
+                    { "extensions": [".jsx", ".tsx"] }
+                ],
+                "react/no-unknown-property": "off",
+                "react/react-in-jsx-scope": "off"
+            }
+        },
+
+        {
+            "files": ["./test/**/*.ts"],
+            "rules": {
+                "@typescript-eslint/no-unused-expressions": "off"
+            }
+        },
+
+        {
+            "files": ["./**/*.d.ts"],
+            "rules": {
+                "lines-between-class-members": "off",
+                "no-unused-vars": "off"
+            }
+        },
+
+        {
+            "files": ["./test/**/*.ts"],
+            "plugins": ["vitest"],
+            "rules": {
+                "@typescript-eslint/no-non-null-assertion": "off",
+                "no-undef": "off"
+            }
+        }
+    ]
+}

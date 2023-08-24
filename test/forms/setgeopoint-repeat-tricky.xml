@@ -1,0 +1,41 @@
+<?xml version="1.0"?>
+<h:html xmlns="http://www.w3.org/2002/xforms"
+    xmlns:ev="http://www.w3.org/2001/xml-events"
+    xmlns:h="http://www.w3.org/1999/xhtml"
+    xmlns:jr="http://openrosa.org/javarosa"
+    xmlns:odk="http://www.opendatakit.org/xforms"
+    xmlns:orx="http://openrosa.org/xforms"
+    xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+    <h:head>
+        <h:title>setgeopoint</h:title>
+        <model>
+            <instance>
+                <data id="setgeopoint">
+                    <person>
+                        <group>
+                            <age/>
+                        </group>
+                    </person>
+                    <meta>
+                        <instanceID/>
+                    </meta>
+                </data>
+            </instance>
+            <bind nodeset="/data/person/group/age" type="decimal"/>
+        </model>
+    </h:head>
+    <h:body>
+        <input ref="/data/a">
+            <label>label</label>
+            <odk:setgeopoint event="xforms-value-changed" ref="/data/person/group/age"/>
+        </input>
+        <repeat nodeset="/data/person">
+            <group ref="/data/person/group">
+                <odk:setgeopoint event="odk-new-repeat odk-instance-first-load" ref="/data/person/group/age"/>
+                <input ref="/data/person/group/age">
+                    <label>Person's age</label>
+                </input>
+            </group>
+        </repeat>
+    </h:body>
+</h:html>

@@ -1,0 +1,36 @@
+@font-face {
+    font-family: 'Open Sans';
+    src: url('OpenSans-Bold-webfont.woff') format('woff');
+    font-weight: bold;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Open Sans';
+    src: url('OpenSans-BoldItalic-webfont.woff') format('woff');
+    font-weight: bold;
+    font-style: italic;
+}
+
+@font-face {
+    font-family: 'Open Sans';
+    src: url('OpenSans-Italic-webfont.woff') format('woff');
+    font-weight: normal;
+    font-style: italic;
+}
+
+@font-face {
+    font-family: 'Open Sans';
+    src: url('OpenSans-Regular-webfont.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
+
+form.or.theme-mytheme {
+    background-color: rgb(235, 244, 252);
+    font-family: 'Open Sans';
+}
+
+form.or.theme-mytheme #form-title {
+    color: rgb(18, 67, 109);
+}

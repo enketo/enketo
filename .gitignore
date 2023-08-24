@@ -1,0 +1,14 @@
+.vagrant
+.grunt
+node_modules
+npm-debug.log
+*.sublime-project
+*.sublime-workspace
+*.code-workspace
+.DS_Store
+Thumbs.db
+.nyc_output
+test-coverage
+coverage.shield.badge.md
+dist
+.benchmarks.md

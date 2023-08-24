@@ -1,0 +1,61 @@
+<?xml version="1.0"?>
+<h:html xmlns="http://www.w3.org/2002/xforms" 
+    xmlns:ev="http://www.w3.org/2001/xml-events" 
+    xmlns:h="http://www.w3.org/1999/xhtml" 
+    xmlns:jr="http://openrosa.org/javarosa" 
+    xmlns:odk="http://www.opendatakit.org/xforms" 
+    xmlns:orx="http://openrosa.org/xforms" 
+    xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+    <h:head>
+        <h:title>rank</h:title>
+        <model>
+            <itext>
+                <translation default="true()" lang="default">
+                    <text id="static_instance-holiday-3">
+                        <value>The Netherlands</value>
+                    </text>
+                    <text id="static_instance-holiday-2">
+                        <value>USA</value>
+                    </text>
+                    <text id="static_instance-holiday-1">
+                        <value>Mexico</value>
+                    </text>
+                </translation>
+            </itext>
+            <instance>
+                <data id="rank">
+                    <rank/>
+                    <meta>
+                        <instanceID/>
+                    </meta>
+                </data>
+            </instance>
+            <instance id="holiday">
+                <root>
+                    <item>
+                        <itextId>static_instance-holiday-1</itextId>
+                        <name>a</name>
+                    </item>
+                    <item>
+                        <itextId>static_instance-holiday-2</itextId>
+                        <name>c</name>
+                    </item>
+                    <item>
+                        <itextId>static_instance-holiday-3</itextId>
+                        <name>d</name>
+                    </item>
+                </root>
+            </instance>
+            <bind nodeset="/data/rank" type="odk:rank"/>
+        </model>
+    </h:head>
+    <h:body>
+        <odk:rank ref="/data/rank">
+            <label>Rank </label>
+            <itemset nodeset="randomize(instance('holiday')/root/item)">
+                <value ref="name"/>
+                <label ref="jr:itext(itextId)"/>
+            </itemset>
+        </odk:rank>
+    </h:body>
+</h:html>

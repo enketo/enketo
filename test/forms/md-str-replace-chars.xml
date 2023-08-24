@@ -1,0 +1,35 @@
+<?xml version="1.0"?>
+<h:html xmlns="http://www.w3.org/2002/xforms"
+    xmlns:ev="http://www.w3.org/2001/xml-events"
+    xmlns:h="http://www.w3.org/1999/xhtml"
+    xmlns:jr="http://openrosa.org/javarosa"
+    xmlns:odk="http://www.opendatakit.org/xforms"
+    xmlns:orx="http://openrosa.org/xforms"
+    xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+    <h:head>
+        <h:title>md-str-replace-chars</h:title>
+        <model>
+            <itext>
+                <translation default="true()" lang="default">
+                    <text id="special-chars:label">
+                        <value>*$' is $` this $&amp; the $$ real $0 $&lt;life&gt;?*</value>
+                    </text>
+                </translation>
+            </itext>
+            <instance>
+                <data id="rank">
+                    <special-chars/>
+                    <meta>
+                        <instanceID/>
+                    </meta>
+                </data>
+            </instance>
+            <bind nodeset="/data/special-chars"/>
+        </model>
+    </h:head>
+    <h:body>
+        <input ref="/data/special-chars">
+            <label ref="jr:itext('special-chars:label')" />
+        </input>
+    </h:body>
+</h:html>

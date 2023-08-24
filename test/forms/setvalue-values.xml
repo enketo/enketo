@@ -1,0 +1,45 @@
+<?xml version="1.0"?>
+<h:html xmlns="http://www.w3.org/2002/xforms"
+    xmlns:ev="http://www.w3.org/2001/xml-events"
+    xmlns:h="http://www.w3.org/1999/xhtml"
+    xmlns:jr="http://openrosa.org/javarosa"
+    xmlns:odk="http://www.opendatakit.org/xforms"
+    xmlns:orx="http://openrosa.org/xforms"
+    xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+    <h:head>
+        <h:title>setvalue</h:title>
+        <model>
+            <instance>
+                <data id="setvalue">
+                    <a/>
+                    <b/>
+                    <c/>
+                    <d/>
+                    <e/>
+                    <f/>
+                    <g/>
+                    <h/>
+                    <meta>
+                        <instanceID/>
+                    </meta>
+                </data>
+            </instance>
+            <setvalue event="odk-instance-first-load" ref="/data/a">ab</setvalue>
+        </model>
+    </h:head>
+    <h:body>
+        <setvalue event="odk-instance-first-load" ref="/data/b">not ignored</setvalue>
+        <setvalue event="odk-instance-first-load" ref="/data/c" value="string-length('two')">ignored</setvalue>
+        <input ref="/data/e">
+            <label>Enter</label>
+            <setvalue event="xforms-value-changed" ref="/data/f" value="">ignored</setvalue>
+        </input>
+        <input ref="/data/g">
+            <label>Enter</label>
+            <setvalue event="xforms-value-changed" ref="/data/h"/>
+        </input>
+        <input ref="/data/h">
+            <label>Enter</label>
+        </input>
+    </h:body>
+</h:html>

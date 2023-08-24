@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<h:html xmlns="http://www.w3.org/2002/xforms" xmlns:ev="http://www.w3.org/2001/xml-events" xmlns:h="http://www.w3.org/1999/xhtml" xmlns:jr="http://openrosa.org/javarosa" xmlns:orx="http://openrosa.org/xforms" xmlns:enk="http://enketo.org/xforms" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <h:head>
+    <h:title>For</h:title>
+    <model> 
+      <instance>
+        <data id="for">
+          <a/>
+          <a_comment/>
+          <meta>
+            <instanceID/>
+          </meta>
+        </data>
+      </instance>
+      <bind nodeset="/data/a" type="string" />
+      <bind nodeset="/data/a_comment" enk:for="../a" type="string"/>
+    </model>
+  </h:head>
+  <h:body>
+    <input ref="/data/a">
+      <label>text:</label>
+    </input>
+    <input ref="/data/a_comment" appearance="comment">
+      <label>comment:</label>
+    </input>
+  </h:body>
+</h:html>

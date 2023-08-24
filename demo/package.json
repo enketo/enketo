@@ -1,0 +1,25 @@
+{
+    "type": "module",
+    "private": true,
+    "engines": {
+        "node": ">=14 <17",
+        "npm": ">=6 <7"
+    },
+    "volta": {
+        "node": "16.5.0",
+        "npm": "6.14.13"
+    },
+    "scripts": {
+        "demo": "vite",
+        "dev": "ENV=dev vite",
+        "postinstall": "NPM_BIN=`which npm`; ($NPM_BIN explore enketo-transformer -- $NPM_BIN run build)"
+    },
+    "dependencies": {
+        "@solidjs/router": "^0.7.0",
+        "babel-preset-solid": "^1.6.9",
+        "enketo-transformer": "file:..",
+        "solid-js": "^1.6.9",
+        "vite": "^4.0.4",
+        "vite-plugin-solid": "^2.5.0"
+    }
+}

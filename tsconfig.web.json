@@ -1,0 +1,22 @@
+{
+    "extends": "./tsconfig.base.json",
+    "compilerOptions": {
+        "declaration": true,
+        "emitDeclarationOnly": true,
+        "lib": ["DOM", "DOM.Iterable"],
+        "noEmit": false,
+        "outDir": "./dist/enketo-transformer/web",
+        "paths": {
+            "enketo-transformer/dom": ["src/dom/web/index.ts"]
+        }
+    },
+    "exclude": [
+        "dist",
+        "node_modules",
+        "src/dom/node/*",
+        "./typings/env/node.d.ts",
+        "./typings/env/test.d.ts"
+    ],
+    "include": ["config", "src", "typings"],
+    "files": ["./typings/env/web.d.ts"]
+}
