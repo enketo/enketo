@@ -1,0 +1,53 @@
+{
+    "00-getting-started": {
+        "title": "Getting started",
+        "children": {
+            "02-heroku": {
+                "title": "Deployment on Heroku"
+            }
+        }
+    },
+    "10-configure": {
+        "title": "Configure",
+        "children": {
+            "12-ordinals": {
+                "title": "Repeats & Ordinals"
+            }
+        }
+    },
+    "20-update": {
+        "title": "Update"
+    },
+    "30-develop": {
+        "title": "Develop",
+        "children": {
+            "32-api": {
+                "title": "API"
+            },
+            "34-custom-widgets": {
+                "title": "Custom widgets"
+            },
+            "36-theming": {
+                "title": "Custom themes"
+            },
+            "38-iframe-postmessage": {
+                "title": "Messages from iframed forms"
+            },
+            "40-translate": {
+                "title": "Translation workflow (for devs)"
+            }
+        }
+    },
+    "60-authentication-and-security": {
+        "title": "Authentication and Security"
+    },
+    "70-browser-support": {
+        "title": "Browser support"
+    },
+    "80-comments": {
+        "title": "Comment Feature"
+    },
+    "90-duplicates": {
+        "title": "Duplicate Bug"
+    }
+}

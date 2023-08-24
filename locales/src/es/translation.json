@@ -1,0 +1,408 @@
+{
+    "advanced": {
+        "flushdb": "Limpiar almacenamiento"
+    },
+    "alert": {
+        "addtohomescreen": {
+            "androidchrome": {
+                "msg": "Para añadir este formulario a su pantalla de Inicio, haga clic en el icono de configuración del navegador __image1__  y seleccione: 'Añadir a Página de Inicio'."
+            },
+            "androidfirefox": {
+                "msg": "Añade este formulario a la pantalla principal, pulsando un rato la barra de dirección y selecciona 'Añadir a pantalla principal'"
+            },
+            "heading": "Añadir a la pantalla inicial",
+            "iossafari": {
+                "msg": "Para añadir este formulario a su pantalla de Inicio, haga clic en el icono de compartir __image1__ de su navegador y seleccione: '+Añadir a Página de Inicio'."
+            }
+        },
+        "appupdated": {
+            "heading": "Aplicación actualizada!",
+            "msg": "Hemos descargado una nueva versión de esta aplicación. Actualice esta página para cargar la nueva versión."
+        },
+        "closing": {
+            "heading": "Cerrando..."
+        },
+        "default": {
+            "button": "Cerrar",
+            "heading": "Alerta"
+        },
+        "export": {
+            "error": {
+                "filecreatedmsg": "Tranquilo, hemos creado un archivo de exportación aunque está incompleto.",
+                "heading": "Error en la exportación",
+                "msg": "Se han producido errores durante la creación del archivo de exportación de registros de los registros no enviados. Errores: __errors__"
+            },
+            "success": {
+                "heading": "Exportación completa",
+                "msg": "Hemos creado un archivo que contiene todos los registros sin enviar que pertenecen a este formulario."
+            }
+        },
+        "formupdated": {
+            "heading": "Formulario actualizado!",
+            "msg": "Hemos descargado una nueva versión de este formulario. Actualice esta página para cargar la nueva versión."
+        },
+        "gotonotfound": {
+            "msg": "No se pudo encontrar la pregunta \"__path__\" en el formulario. ¿Es correcta la referencia a esta pregunta?"
+        },
+        "loaderror": {
+            "editadvice": "Le recomendamos no editar este registro hasta que esté resuelto.",
+            "entryadvice": "Le recomendamos no usar este formulario para introducir datos hasta que esto se resuelva.",
+            "heading": "Error al cargar",
+            "msg1": "Se ha producido un error en la carga de este formulario.",
+            "msg2": "Por favor contacte con  __emailLink__   indicando la dirección de esta página y el mensaje de error que aparece más abajo:",
+            "heading_plural": "Errores en la carga",
+            "msg1_plural": "Hubo errores durante la carga de este formulario",
+            "msg2_plural": "Por favor contáctese con __emailLink__ indicando la dirección de esta página y el mensaje de error que aparece más abajo:"
+        },
+        "logout": {
+            "heading": "Sesión cerrada.",
+            "msg": "Acaba de cerrar la sesión."
+        },
+        "offlinesupported": {
+            "heading": "El formulario funciona sin conexión!",
+            "msg": [
+                "Este formulario puede ser cargado y usado sin conexión a Internet en este dispositivo. Añádalo a sus favoritos para poder acceder facilmente al mismo sin una conexión.",
+                "Los registros se guardarán y encolarán automáticamente en el navegador hasta que tenga conexión a Internet. Cuando la aplicación esté conectada, los registros se enviarán automáticamente - uno a uno.",
+                "Solo unicamente cuando un registro ha sido enviado con éxito, será eliminado de la cola. Puede cerrar con seguridad su navegador y el dispositivo con elementos en la cola. Seguirán en la cola la próxima vez que cargue el formulario."
+            ]
+        },
+        "offlineunsupported": {
+            "heading": "Esta aplicación no se puede ejecutar sin conexión",
+            "msg": "Este navegador no permite ejecutar la aplicación sin conexión. Puede usar la encuesta sin esta característica o ver las opciones para resolver esto.",
+            "negButton": "Utilícelo",
+            "posButton": "Mostrar opciones",
+            "refresh": "Este formulario ya no se puede iniciar sin conexión. Actualice la página para intentar solucionar esto."
+        },
+        "queuesubmissionsuccess": {
+            "msg": "__recordNames__ enviado correctamente",
+            "msg_plural": "__recordNames__ enviados correctamente"
+        },
+        "recordloadsuccess": {
+            "msg": "__recordName__ cargado"
+        },
+        "recordnotfound": {
+            "msg": "No hemos podido recuperar el registro o bien éste no contenía datos."
+        },
+        "recordsavesuccess": {
+            "draftmsg": "Registro guardado como borrador",
+            "finalmsg": "Registro en cola para envío"
+        },
+        "savedraftinfo": {
+            "heading": "Finalizar registro más tarde",
+            "msg": [
+                "El borrador del registro se guarda solamente en el navegador actual.  Puede cerrar este navegador sin perder el registro guardado.",
+                "Se puede acceder a los registros guardados como borrador al reabrir esta página y haciendo clic en el botón a la izquierda de la pantalla cuya apariencia es así: __icon__",
+                "Atención: Si borra la memoria caché del navegador, todos los borradores y registros finales no enviados serán eliminados permanentemente."
+            ]
+        },
+        "submission": {
+            "msg": "Enviando datos...",
+            "redirectmsg": "Será automáticamente redirigido después del envío"
+        },
+        "submissionerror": {
+            "authrequiredmsg": "Es necesaria la autenticación. Por favor autentifíquese __aquí__ en una pestaña diferente del navegador y pruebe de nuevo.",
+            "fnfmsg": [
+                "No hemos podido recuperar los siguientes archivos de tipo multimedia __failedFiles__ . El envío siguió su curso sin estos archivos y fue un éxito.",
+                "Por favor contáctese con __supportEmail__ para reportar un fallo (bug) y si es posible explicar como se produjo dicho fallo para que sea reproducido y nos permita corregirlo."
+            ],
+            "heading": "Envío incorrecto."
+        },
+        "submissionsuccess": {
+            "heading": "Envío correcto",
+            "msg": "Sus datos fueron enviados al servidor!",
+            "redirectmsg": "Ahora será redirigido."
+        },
+        "thanks": {
+            "heading": "Gracias por participar!",
+            "msg": "Puede cerrar esta ventana ahora.",
+            "msgTaken": "Ya ha completado este formulario."
+        },
+        "validationerror": {
+            "msg": "El formulario contiene errores. Por favor revise los campos marcados en rojo."
+        },
+        "validationsuccess": {
+            "heading": "OK",
+            "msg": "Formulario correcto!"
+        },
+        "valuehasspaces": {
+            "multiple": "Pregunta de Selección múltiple contiene un valor ilegal \"__valor__\" que contiene un espacio."
+        },
+        "xpatherror": {
+            "heading": "Error en la fórmula",
+            "msg": "Error al validar una fórmula. Por favor contacte __emailLink__ indicando el error:"
+        }
+    },
+    "changelog": "Registro de Cambios",
+    "confirm": {
+        "autosaveload": {
+            "heading": "Un registro sin grabar encontrado",
+            "msg": "Enketo ha encontrado un registro sin guardar. ¿Quiere cargar este registro o descartarlo?",
+            "negButton": "Descartar",
+            "posButton": "Cargar registro"
+        },
+        "default": {
+            "heading": "¿Está realmente seguro?",
+            "msg": "Por favor confirme esta acción",
+            "negButton": "Cancelar",
+            "posButton": "Confirmar"
+        },
+        "deleteall": {
+            "heading": "! Pánico ¡",
+            "msg": [
+                "Esto eliminará toda la información almacenada y todos los formularios de la memoria del navegador. Los datos se perderán. Use esto como última opción si la memoria del navegador parece corrupta.",
+                "Cerrar primero todas las otras pestañas de Enketo.",
+                "Se va a recargar la página. Si ve algún error puede repetir esta operación.",
+                "¿ Está seguro ?"
+            ],
+            "posButton": "Eliminar todo"
+        },
+        "discardcurrent": {
+            "heading": "Cambios sin guardar",
+            "msg": "El formulario actual tiene cambios sin guardar. ¿Le gustaría cargar un registro sin guardar los cambios en el formulario en el que está trabajando?",
+            "posButton": "Seguir sin grabar cambios."
+        },
+        "login": {
+            "heading": "Inicio de sesión requerido",
+            "queuedMsg": [
+                "Record queued for submission. In order to submit your queued data, you need to login.",
+                "¿Le gustaría iniciar sesión ahora o más tarde?"
+            ],
+            "msg": [
+                "Si quiere enviar los datos que están en la cola tendrá que iniciar sesión. Si quiere hacerlo ahora mismo, lo redireccionaremos pero perderá los datos que no haya guardado.",
+                "¿Le gustaría iniciar sesión ahora o más tarde?"
+            ],
+            "negButton": "Mas tarde",
+            "posButton": "Iniciar sesión ahora."
+        },
+        "print": {
+            "a4": "A4",
+            "heading": "Seleccione configuración de impresoras",
+            "landscape": "Modo paisaje",
+            "letter": "Modo carta",
+            "msg": "Para preparar una impresión optimizada, por favor seleccione entre las siguientes opciones de impresión",
+            "orientation": "Orientación del papel",
+            "portrait": "Modo retrato",
+            "posButton": "Preparar",
+            "psize": "Tamaño del papel",
+            "reminder": "Recuerde establecer las mismas opciones de impresión en el menú de impresión del navegador!"
+        },
+        "repeatremove": {
+            "heading": "Eliminar este grupo de respuestas?",
+            "msg": "Esta acción es irreversible. Esta seguro de proceder?"
+        },
+        "save": {
+            "existingerror": "Este nombre de registro o ID existe ya. Se debe cambiar.",
+            "hint": "Este nombre le permitirá encontrar facilmente su borrador para poderlo finalizar luego.",
+            "msg": "Hay cambios sin guardar, desea continuar sin guardarlos?",
+            "name": "Nombre del registro",
+            "posButton": "Guardar y cerrar",
+            "renamemsg": "Seguro que desea renombrar __currentName__ a __newName__?",
+            "unkownerror": "Se ha producido un error desconocido a la hora de guardar los datos."
+        }
+    },
+    "constraint": {
+        "invalid": "Este valor no está permitido.",
+        "required": "Este campo es obligatorio"
+    },
+    "contact": {
+        "admin": "Contáctese con el administrador de la encuesta por favor.",
+        "support": "Contáctese por favor con __supportEmail__."
+    },
+    "drawwidget": {
+        "annotation": "archivo y dibujo",
+        "drawing": "dibujo",
+        "signature": "firma"
+    },
+    "enketo": {
+        "power": "Powered by"
+    },
+    "error": {
+        "code": "Código de error: __code__",
+        "dataloadfailed": "Error al cargar __filename__.",
+        "econnrefused": "No se pudo conectar con el servidor de formularios",
+        "encryptionnotsupported": "Este formulario requiere encriptamiento local de registros. Desafortunadamente su navegador actual no lo soporta. Se recomienda cambiarse a una versión más moderna de su navegador o a otro navegador.",
+        "formloadfailed": "Error al cargar formulario",
+        "instancenotfound": "Registro no hallado. Puede haber expirado.",
+        "invalidediturl": "Esta URL no es válida",
+        "loadfailed": "Error al cargar __resource__",
+        "notfoundinformlist": "This form does not exist or you no longer have access to it. Please check the URL for any missing characters.\n\nIf the form existed previously, it may have been archived, disabled or deleted. If this is unexpected, please contact the person who asked you to fill the form.\n\n(Attempted to access form with ID: __formId__)",
+        "notfounddirectformurl": "This form does not exist or you no longer have access to it. Please check the URL for any missing characters.\n\nIf the form existed previously, it may have been archived, disabled or deleted. If this is unexpected, please contact the person who asked you to fill the form.\n\n(Attempted to access form: __notfounddirectformurl__)",
+        "pagenotfound": "No hemos encontrado la página",
+        "surveyidnotactive": "No hay activa ninguna encuesta con este ID",
+        "surveyidnotfound": "No hemos encontrado ninguna encuesta con este ID",
+        "unknown": "Se ha producido un error desconocido"
+    },
+    "feedback": {
+        "header": "Información"
+    },
+    "filepicker": {
+        "file": "archivo",
+        "notFound": "No se pudo encontrar el archivo __existing__ (no lo modifique si ya lo envió y desea preservarlo).",
+        "placeholder": "Haga clic aquí para subir el archivo. (<__maxSize__)",
+        "resetWarning": "Esto eliminará el __item__. ¿Seguro que desea hacer esto?",
+        "toolargeerror": "Archivo demasiado grande (> __maxSize__)",
+        "waitingForPermissions": "Esperando permisos de usuario."
+    },
+    "form": {
+        "chooseLanguage": "Elija idioma",
+        "logout": "Cerrar sesión",
+        "pages": {
+            "back": "Volver",
+            "end": "Ir al final",
+            "next": "Siguiente",
+            "return": "Volver al principio"
+        },
+        "required": "requerido"
+    },
+    "formfooter": {
+        "complete": {
+            "btn": "Completado"
+        },
+        "savedraft": {
+            "btn": "Guardar borrador",
+            "label": "Guardar como borrador"
+        },
+        "submit": {
+            "btn": "Enviar"
+        },
+        "validate": {
+            "btn": "Validar"
+        }
+    },
+    "geopicker": {
+        "accuracy": "precisión (m)",
+        "altitude": "altitud (m)",
+        "closepolygon": "cerrar polígono",
+        "kmlcoords": "coordenadas KML",
+        "kmlpaste": "pegar coordenadas KML aquí",
+        "latitude": "latitud (x.y °)",
+        "longitude": "longitud (x.y °)",
+        "points": "puntos",
+        "removePoint": "Esto eliminará completamente el punto geográfico actual de la lista de puntos geográficos y no se puede deshacerlo. ¿Seguro que quieres hacer esto?",
+        "searchPlaceholder": "buscar lugar o dirección",
+        "bordersintersectwarning": "Las fronteras no pueden cruzarse"
+    },
+    "here": "aquí",
+    "hint": {
+        "guidance": {
+            "details": "más detalles"
+        }
+    },
+    "home": {
+        "msg": "__appTitle__ en ejecución! Por favor acceda a Enketo forms desde su instalación en  __serverName__."
+    },
+    "imagemap": {
+        "svgNotFound": "No se pudo encontrar la imagen SVG"
+    },
+    "langs": {
+        "ar": "Árabe",
+        "cs": "Checo",
+        "de": "Alemán",
+        "el": "Griego",
+        "en": "Inglés",
+        "es": "Español",
+        "fa": "Persa",
+        "fi": "Finlandés",
+        "fr": "Francés",
+        "he": "Hebreo",
+        "hi": "Hindi",
+        "it": "Italiano",
+        "ka": "Georgiano",
+        "km": "Khmer",
+        "lo": "Lao",
+        "nl": "Holandés",
+        "no": "Noruego",
+        "pa": "Panjabi",
+        "pl": "Polaco",
+        "pt": "Portugués",
+        "ro": "Rumano",
+        "ru": "Ruso",
+        "sk": "Eslovaco",
+        "sq": "Albanés",
+        "supported": "Idiomas soportados:",
+        "sv": "Sueco",
+        "sw": "Swahili",
+        "th": "Tailandés",
+        "tr": "Turco",
+        "vi": "Vietnamita",
+        "zh": "Chino"
+    },
+    "literacywidget": {
+        "finish": "Fin",
+        "start": "Inicio"
+    },
+    "page": {
+        "modernbrowsers": {
+            "heading": "Navegadores modernos",
+            "ie": {
+                "heading": "¿ Porqué ese poco cariño por esas endiabladamente malignas versiones de Internet Explorer ?",
+                "msg": "Entendemos que algunas personas, especialmente aquellas que trabajan en grandes empresas o instituciones no tienen acceso a los últimos y mejores navegadores. Como sabemos como de estupenda puede ser la web con las herramientas correctas, tenemos empatía por los usuarios en esta situación. Normalmente intentaríamos buscar la manera de dar soporte a ciertos navegadores populares. Sin embargo la razón por la que Enketo existe es por la disponibilidad de algunas tecnologías de última hora. Desafortunadamente, los usuarios de navegadores antiguos no van a tener la suerte de poder usar Enketo."
+            },
+            "msg1": "Ay! Lo sentimos pero seguramente usted ha llegado aquí porque su navegador no está actualizado o bien es una versión antigua o quizás tiene algunas características clave para Enketo deshabilitadas porque está usando el modo de navegación de incógnito.",
+            "msg2": "Si está utilizando un navegador antiguo le recomendamos que se actualize a una versión reciente de los siguientes excelentes navegadores modernos:"
+        },
+        "offline": {
+            "heading": "No se puede acceder a la página solicitada",
+            "msg1": "Esta página sólo es accesible cuando el navegador tiene conexión a Internet y el servidor es accesible (a menos que la página no exista)."
+        }
+    },
+    "prompt": {
+        "default": {
+            "heading": "Introduzca valores"
+        },
+        "login": {
+            "heading": "Introduzca las credenciales de  __server__",
+            "password": "Contraseña",
+            "remember": "Recordar en este dispositivo",
+            "submit": "Enviar",
+            "username": "Nombre de usuario"
+        }
+    },
+    "rankwidget": {
+        "clickstart": "Haga clic para empezar",
+        "tapstart": "Toque para comenzar"
+    },
+    "record-list": {
+        "export": "Exportar",
+        "msg1": "Los registros se almacenan en su navegador hasta que éstos han sido enviados al servidor (incluso aunque apague el ordenador o pierda la conexión).",
+        "msg2": "Los registros que están en la cola, excepto aquellos marcados como draft __icon__, se envían al servidor automáticamente en segundo plano, cada 5 minutos cuando la página Web está abierta y hay conexión a Internet.",
+        "msg2-nodraft": "Los registros que están en la cola, excepto aquellos marcados como draft __icon__, se envían al servidor automáticamente en segundo plano, cada 5 minutos cuando la página Web está abierta y hay conexión a Internet.",
+        "msg3": "Para forzar un envío entre intentos automáticos haga clic en Enviar datos.",
+        "norecords": "No quedan registros en la cola",
+        "title": "Enviar a la cola",
+        "upload": "Enviar datos"
+    },
+    "selectpicker": {
+        "noneselected": "ninguno seleccionado",
+        "numberselected": "__number__ selected"
+    },
+    "store": {
+        "error": {
+            "iosusesafari": "Su navegador IOS no es capaz de ejecutar este formulario. En IOS recomendamos usar Safari.",
+            "notavailable": "Almacenamiento de navegador requerida pero no disponible, es incorrecto o bien es de solo lectura. Si está navegando en modo 'incógnito' por favor cambie al modo normal, si no quiere puede cambiar a otro navegador. (error: __error__)",
+            "notsupported": "Su navegador no es capaz de ejecutar este formulario. Le recomendamos usar un navegador moderno"
+        }
+    },
+    "submission": {
+        "http0": "El servidor no esta disponible o usted podría no estar conectado a internet",
+        "http2xx": "Respuesta errónea al enviar los datos.",
+        "http400": "El servidor de datos no acepta datos.",
+        "http401": "Ha habido un problema de autenticación con el servidor de datos.",
+        "http403": "No tiene permisos para enviar datos a este servidor de datos.",
+        "http404": "No hemos podido encontrar el servicio de envío de datos en el servidor de datos",
+        "http408": "Servidor de datos no responde.",
+        "http413": "Demasiados datos",
+        "http4xx": "Error sin especificar al enviar datos al servidor.",
+        "http500": "El servidor de datos para su formulario o el servidor de Enketo están apagados o no son accesibles. Por favor pruebe de nuevo o contáctese con __supportEmail__ .",
+        "http504": "No puede establecer conexión con el servidor de datos."
+    },
+    "themes": {
+        "supported": "Temas disponibles"
+    },
+    "version": "versión:",
+    "widget": {
+        "comment": {
+            "update": "Actualiza"
+        }
+    }
+}

@@ -1,0 +1,25 @@
+header.form-header
+  if (offlinePath)
+    .offline-enabled
+      .offline-enabled__icon.not-enabled(title="This form is able to launch offline")
+      .offline-enabled__queue-length(title="Records Queued")
+  .form-progress
+  if (logo.source)
+    if (logo.href)
+      a.form-header__branding(href=`${logo.href || '#'}`)
+        .logo-wrapper
+          img(src=`${logo.source}`, alt="brand logo")
+    else
+      .form-header__branding
+        .logo-wrapper
+          img(src=`${logo.source}`, alt="brand logo")
+  .form-header__filler
+  button.form-header__button--print.btn-bg-icon-only(onclick="return false;")
+  span.form-language-selector.hide: span(data-i18n='form.chooseLanguage')= t('form.chooseLanguage')
+  button.form-header__button--homescreen.btn-icon-only.hide(type="button", aria-label="add to homescreen")
+    i.icon.icon-bookmark-o 
+  nav.pages-toc.hide(role="navigation")
+    label(for="toc-toggle")
+    input#toc-toggle.ignore(type="checkbox" value="show")                
+    ul.pages-toc__list
+    .pages-toc__overlay

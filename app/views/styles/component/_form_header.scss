@@ -1,0 +1,271 @@
+$offline-color: #d15200;
+
+.form-header {
+    display: flex;
+    flex-wrap: nowrap;
+    flex-direction: row; // even for rtl UI
+    text-align: left;
+    align-items: center;
+
+    &__branding {
+        order: 1;
+        padding-right: 10px;
+
+        .logo-wrapper {
+            display: flex;
+            align-items: flex-end;
+        }
+
+        img {
+            max-height: 30px;
+            max-width: 130px;
+        }
+
+        span {
+            display: inline-block;
+            color: #444444;
+            font-weight: bold;
+            font-size: 1.4em;
+
+            &:hover {
+                text-decoration: none;
+                opacity: 0.8;
+            }
+        }
+    }
+
+    // Only if .form-header__branding is an <a>nchor
+    a.form-header__branding:hover {
+        opacity: 0.8;
+    }
+
+    // This filler element makes it easier to keep the same look with RTL UI languages
+    &__filler {
+        order: 20;
+        flex: 1;
+        min-width: 1px;
+        min-height: 1px;
+    }
+
+    .form-language-selector {
+        order: 30;
+    }
+
+    &__button--print {
+        @include icon-print($gray);
+
+        order: 40;
+        width: 32px;
+        height: 30px;
+        margin: 0;
+        margin-left: 20px;
+        margin-right: 0;
+        outline: 0;
+    }
+
+    &__button--homescreen {
+        position: fixed;
+        top: 1px;
+        right: 0;
+        order: 61;
+
+        .icon {
+            font-size: 25px;
+        }
+    }
+
+    .pages-toc {
+        order: 70;
+
+        label[for='toc-toggle'] {
+            background: repeating-linear-gradient(
+                black 2px,
+                black 5px,
+                transparent 5px,
+                transparent 12px
+            );
+        }
+    }
+}
+
+.form-progress {
+    position: fixed;
+    top: 0;
+    left: 0;
+    display: block;
+    max-width: 100% !important; // to make sure animation works the very first time
+    width: 34px; // to make sure that it can't be set lower inline
+    min-width: 34px !important;
+    margin: 0;
+    height: 3px;
+    background-color: $offline-color;
+    z-index: 1000;
+
+    @include transition-slow;
+}
+
+[dir='rtl'] {
+    .form-header {
+        flex-direction: row-reverse;
+    }
+
+    .offline-enabled {
+        top: 0px;
+    }
+
+    .form-progress {
+        right: 0;
+        left: auto;
+    }
+}
+
+.offline-enabled {
+    display: block;
+    position: fixed;
+    top: 3px;
+    left: 0;
+
+    &__icon {
+        width: 34px;
+        height: 34px;
+        background-color: $offline-color;
+        background-image: url('../images/offline-enabled.png');
+        background-repeat: no-repeat;
+        opacity: 1;
+
+        @include transition-slow(opacity, 3s);
+
+        &.not-enabled {
+            height: 0;
+            opacity: 0;
+            width: 0;
+            background: none;
+        }
+
+        &:hover {
+            opacity: 0.8;
+        }
+    }
+
+    // basic style for icon anywhere in HTML
+    &__queue-length {
+        margin-top: 1px;
+        width: 34px;
+        min-height: 34px;
+        color: $offline-color;
+        background-color: #ffffff;
+        text-align: center;
+        padding: 9.5px 0 9.5px 0;
+        line-height: 15px;
+        font-size: 15px;
+        opacity: 1;
+        @include transition-slow(opacity, 3s);
+    }
+
+    // style when it functions as clickable button in .offline-enabled
+    .offline-enabled__queue-length {
+        cursor: pointer;
+
+        &.hide {
+            opacity: 0;
+            display: none;
+        }
+
+        &.submitting {
+            color: #ce4f07;
+        }
+
+        &:hover {
+            color: green;
+        }
+    }
+}
+
+//before they have been moved to the form-header
+#form-languages {
+    display: none;
+}
+
+.form-language-selector {
+    margin: 0;
+
+    #form-languages {
+        display: inline-block;
+    }
+}
+
+@media screen and (max-width: $main-breakpoint + 100px) {
+    .offline-enabled {
+        position: static;
+        display: inline-block;
+        margin-right: 10px;
+
+        &__icon {
+            float: left;
+            display: block;
+        }
+
+        // target inside .offline-enabled only
+        .offline-enabled__queue-length {
+            margin-top: 0;
+            float: left;
+            display: block;
+        }
+    }
+}
+
+@media screen and (max-width: $main-breakpoint) {
+    .form-header {
+        @include flex-wrap(
+            wrap
+        ); // only content of header has top and bottom padding/margin
+        // This ensures that no space is taking up when the header is completely empty,
+        // i.e. no brand/languages/reason-for-change/fs-feedback
+        padding: 0 16px 0 16px;
+        border-bottom: none;
+
+        &__branding {
+            margin-top: 16px;
+        }
+
+        .form-language-selector {
+            // Safari requires this to be set to 100% instead of 1
+            flex: 100%;
+            order: 100;
+            padding-bottom: 0;
+            margin: 0 auto; // force on new line
+            min-width: 280px;
+        }
+
+        &__button--print {
+            display: none;
+        }
+
+        &__button--homescreen {
+            top: -2px;
+            position: static;
+            align-self: flex-start;
+            margin-top: -1px;
+            margin-right: 0;
+        }
+    }
+
+    #form-languages {
+        margin: 0;
+        width: 100%;
+    }
+
+    .or .form-logo img {
+        margin-top: 25px;
+    }
+
+    .offline-enabled {
+        // this vertical-aligns to the top, overruling the align-items rule on .form-header
+        align-self: flex-start; // this negates a padding set on the form-header in enketo-core _response.scss
+        margin-left: -16px;
+
+        .queue-length {
+            background-color: rgb(245, 245, 245);
+        }
+    }
+}

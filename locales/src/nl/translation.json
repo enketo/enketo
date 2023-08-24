@@ -1,0 +1,406 @@
+{
+    "advanced": {
+        "flushdb": "Verwijder Opslag"
+    },
+    "alert": {
+        "addtohomescreen": {
+            "androidchrome": {
+                "msg": "Om dit formulier toe te voegen aan uw beginscherm, klikt u op het pictogram browserinstellingen __image1__ en selecteer: 'Toevoegen aan startscherm'."
+            },
+            "androidfirefox": {
+                "msg": "Om dit formulier om uw startscherm toe te voegen, klik op de adresbalk voor een paar seconden en selecteer 'Toevoegen aan startscherm'."
+            },
+            "heading": "Toevoegen aan startscherm",
+            "iossafari": {
+                "msg": "Om dit formulier toe te voegen aan uw startscherm, klikt op het pictogram Delen __image1__ in de rechter bovenhoek van uw browser, en selecteer: '+ toevoegen aan startscherm."
+            }
+        },
+        "appupdated": {
+            "heading": "App Bijgewerkt!",
+            "msg": "Een nieuwe versie van deze applicatie is gedownload. Vernieuw deze pagina om de bijgewerkte versie te laden."
+        },
+        "closing": {
+            "heading": "Sluiten..."
+        },
+        "default": {
+            "button": "Sluit",
+            "heading": "Let op"
+        },
+        "export": {
+            "error": {
+                "filecreatedmsg": "Toch werd een onvolledig exportbestand gemaakt.",
+                "heading": "Export Fout",
+                "msg": "Fouten opgetreden tijdens het maken van het exportbestand voor unsubmitted records. Fouten: __errors__"
+            },
+            "success": {
+                "heading": "Export Gemaakt",
+                "msg": "Exportbestand gemaakt voor alle niet-verzonden records die behoren by deze survey."
+            }
+        },
+        "formupdated": {
+            "heading": "Enquete Bijgewerkt!",
+            "msg": "Een nieuwe versie van deze enquete is gedownload. Vernieuw deze pagina om de bijgewerkte versie te laden."
+        },
+        "gotonotfound": {
+            "msg": "Kon vraag \"__path__\" niet vinden. Is de referentie naar deze vraag juist?"
+        },
+        "loaderror": {
+            "editadvice": "We raden u aan dit record niet te veranderen totdat dit is opgelost.",
+            "entryadvice": "We raden u aan dit form niet te gebruiken voor gegevensinvoer totdat dit is opgelost.",
+            "heading": "Laad Fout",
+            "msg1": "Er is een fout opgetreden tijdens het laden van deze enquete.",
+            "msg2": "Contacteer __emailLink__ met de link naar dit form en de fout beschrijving hieronder:",
+            "heading_plural": "Laad fouten",
+            "msg1_plural": "Er zijn fouten opgetreden tijdens het laden van dit form.",
+            "msg2_plural": "Contacteer __emailLink__ met de link naar deze enquete met de fout beschrijvingen hieronder:"
+        },
+        "logout": {
+            "heading": "Uitgelogd",
+            "msg": "Je bent uitgelogd."
+        },
+        "offlinesupported": {
+            "heading": "Enquete werkt offline!",
+            "msg": [
+                "Deze enquete kan nu geladen en gebruikt worden zonder een Internet verbinding op dit apparaat. Bookmark het om het makkelijk te kunnen vinden offline.",
+                "Records worden automatisch opgeslagen in de browser en toegevoegd aan de wachtlijst. Als de app online is worden de records automatisch verzonden - één voor één.",
+                "Alleen nadat een record succesvol verzonden is, wordt het verwijderd van de wachtlijst. Je kunt je browser en apparaat veilig afsluiten met records in de wachtlijst. Deze zullen er nog steeds zijn, de volgend keer deze enquete geladen wordt."
+            ]
+        },
+        "offlineunsupported": {
+            "heading": "App kan niet offline opstarten",
+            "msg": "Het opstarten van deze app offline is niet ondersteund in deze browser. Je kunt de enquete gebruiken zonder deze functie of opties bekijken om dit op te lossen.",
+            "negButton": "Gebruik het",
+            "posButton": "Laat opties zien",
+            "refresh": "Dit formulier kan niet langer offline worden gestart. Refresh de pagina om te proberen dit op te lossen."
+        },
+        "queuesubmissionsuccess": {
+            "msg": "__recordNames__ was succesvol verzonden",
+            "msg_plural": "__recordNames__ zijn succesvol verzonden"
+        },
+        "recordloadsuccess": {
+            "msg": "__recordName__ is geladen"
+        },
+        "recordnotfound": {
+            "msg": "Record kon niet geladen worden of was leeg."
+        },
+        "recordsavesuccess": {
+            "draftmsg": "Record opgeslagen als draft.",
+            "finalmsg": "Record aan lijst toegevoegd."
+        },
+        "savedraftinfo": {
+            "heading": "Completeer dit record later",
+            "msg": [
+                "Het draft record wordt opgeslagen in de huidige browser. U kunt deze browser sluiten zonder het opgeslagen record te verliezen.",
+                "U kunt toegang krijgen tot draft records door deze pagina opnieuw te openen en op de knop aan de linkerkant van het scherm te klikken die er als volgt uitziet: __icon__",
+                "Waarschuwing: als u uw browsercache leegmaakt, worden alle draft en de niet-verzonden definitieve records permanent verwijderd."
+            ]
+        },
+        "submission": {
+            "msg": "Verzending gaande...",
+            "redirectmsg": "Je wordt automatisch doorverzonden als de verzending compleet is."
+        },
+        "submissionerror": {
+            "authrequiredmsg": "Identificiéring noodzakelijk. Aub identificeer __here__ in een nieuwe browser tab en probeer opnieuw.",
+            "fnfmsg": [
+                "De volgende media bestanden konden niet gevonden worden: __failedFiles__. De verzending is doorgegaan en gelukt zonder deze bestanden.",
+                "Contacteer __supportEmail__ aub om een 'bug' te rapporteren en indien mogelijk beschrijf hoe het probleem kan worden gereproduceerd. "
+            ],
+            "heading": "Verzenden Niet Succesvol"
+        },
+        "submissionsuccess": {
+            "heading": "Verzending Succesvol!",
+            "msg": "De records zijn verzonden!",
+            "redirectmsg": "Je wordt nu doorgestuurd."
+        },
+        "thanks": {
+            "heading": "Bedankt voor uw deelname!",
+            "msg": "U kunt dit venster nu sluiten.",
+            "msgTaken": "U heeft deze enquete al afgerond."
+        },
+        "validationerror": {
+            "msg": "De enquete bevat fouten. Zie de vragen die rood gekleurd zijn."
+        },
+        "validationsuccess": {
+            "heading": "OK",
+            "msg": "The enquete is geldig!"
+        },
+        "valuehasspaces": {
+            "multiple": "Een \"select multiple\" question heeft een illegale waarde &#39;__waarde&#39; die een spatie bevat."
+        },
+        "xpatherror": {
+            "heading": "Formula fout",
+            "msg": "Er is een formule evaluatie fout opgetreden. Contacteer __emailLink__ met deze fout beschrijving:"
+        }
+    },
+    "changelog": "Wijzigingen logboek",
+    "confirm": {
+        "autosaveload": {
+            "heading": "Niet Opgeslagen Record Gevonden",
+            "msg": "Enketo heeft een niet opgeslagen record gevonden. Wil je dit record laden of verwijderen?",
+            "negButton": "Verwijder",
+            "posButton": "Laad Record"
+        },
+        "default": {
+            "heading": "Weet je het zeker?",
+            "msg": "Confirmeer deze aktie",
+            "negButton": "Annuleer",
+            "posButton": "Confirmeer"
+        },
+        "deleteall": {
+            "heading": "PANIEK!",
+            "msg": [
+                "Dit verwijderd all de opgeslagen records en alle enquetes uit de browser. De records zullen voor altijd verloren gaan. Gebruik dit alleen als noodoplossing als de browser opslag corrupt lijkt te zijn.",
+                "Sluit eerst alle andere Enketo browser tabs.",
+                "De pagine zal zich herladen. Als er een fout opduikt kan het zijn dat je deze aktie moet herhalen.",
+                "Weet je zeker dat je dit wilt doen?"
+            ],
+            "posButton": "Verwijder Alles"
+        },
+        "discardcurrent": {
+            "heading": "Niet opgeslagen edits",
+            "msg": "Er zijn niet-opgeslagen veranderingen gemaakt. Wil je een nieuw record laden zonder deze verandering te bewaren?",
+            "posButton": "Ga verder zonder op te slaan"
+        },
+        "login": {
+            "heading": "Login Noodzakelijk",
+            "msg": [
+                "Om de records te kunnen verzenden dient ingelogd te worden. Als je dit nu wilt doen wordt je doorgestuurd en gaat de on-opgeslagen information verloren.",
+                "Wil je nu inloggen of later?"
+            ],
+            "negButton": "Later",
+            "posButton": "Log nu in"
+        },
+        "print": {
+            "a4": "A4",
+            "heading": "Selecteer Print Instellingen",
+            "landscape": "Landscape",
+            "letter": "Letter (US)",
+            "msg": "Vul the informatie hieronder in om een geoptimaliseerde print versie voor te bereiden.",
+            "orientation": "Papier Orientatie",
+            "portrait": "Portrait",
+            "posButton": "Bereid Voor",
+            "psize": "Papier Formaat",
+            "reminder": "Denk er aan om dezelfde settings te gebruiken in het print menu hierna!"
+        },
+        "repeatremove": {
+            "heading": "Deze group met antwoorden verwijderen?",
+            "msg": "Deze actie is onomkeerbaar. Weet je zeker dat je verder wilt gaan?"
+        },
+        "save": {
+            "existingerror": "Deze recordnaam of ID bestaat al. Verander het alstublieft.",
+            "hint": "Deze naam dient om makkelijk het opgeslagen bestand te kunnen vinden om het later compleet te maken.",
+            "msg": "Er zijn niet-opgeslagen veranderingen gemaakt. Wil je doorgaan zonder deze te bewaren?",
+            "name": "Record Naam",
+            "posButton": "Sla Op & Sluit",
+            "renamemsg": "Weet je zeker dat je __currentName__ naar __newName__ wilt veranderen?",
+            "unkownerror": "Een onbekende fout trad op tijdens het opslaan."
+        }
+    },
+    "constraint": {
+        "invalid": "Waarde niet toegestaan",
+        "required": "Dit veld is verplicht"
+    },
+    "contact": {
+        "admin": "Contacteer de enquete administrateur aub.",
+        "support": "Contacteer __supportEmail__ alsjeblieft."
+    },
+    "drawwidget": {
+        "annotation": "bestand en tekening",
+        "drawing": "tekening",
+        "signature": "handtekening"
+    },
+    "enketo": {
+        "power": "Powered by"
+    },
+    "error": {
+        "code": "Fout Code: __code__",
+        "dataloadfailed": "Kan __filename__ niet laden.",
+        "econnrefused": "Kon niet verbinden met de Form Server",
+        "encryptionnotsupported": "Voor dit formulier is lokale codering van records vereist. Helaas wordt dit niet ondersteund door uw browser. We raden aan over te schakelen naar een moderne browser.",
+        "formloadfailed": "Kan formulier niet laden",
+        "instancenotfound": "Record niet gevonden. Het kan verlopen zijn.",
+        "invalidediturl": "Niet een geldig edit URL",
+        "loadfailed": "Kon __resource__ niet laden",
+        "notfoundinformlist": [
+            "Oeps, deze vorm bestaat niet (meer). Waarschijnlijk heeft de eigenaar van het formulier het verwijderd, gearchiveerd of uitgeschakeld. Neem contact op met de eigenaar van het formulier om te bevestigen.",
+            "Gedetailleerde error: Formulier met ID __formId__ niet gevonden in / formList."
+        ],
+        "pagenotfound": "Pagina niet gevonden",
+        "surveyidnotactive": "Enquete met dit ID is niet langer aktief",
+        "surveyidnotfound": "Enquete met dit ID niet gevonden",
+        "unknown": "Een onbekende fout is opgetreden"
+    },
+    "feedback": {
+        "header": "Informatie"
+    },
+    "filepicker": {
+        "file": "bestand",
+        "notFound": "Bestand __existing__ kan niet gevonden worden (ongewijzigd laten als het al is verzonden en u het wilt behouden).",
+        "placeholder": "Klik hier om het bestand te uploaden. (<__maxSize__)",
+        "resetWarning": "Hiermee wordt de __item__ verwijderd. Weet je zeker dat je dit wilt doen?",
+        "toolargeerror": "Bestand te groot (> __maxSize__)",
+        "waitingForPermissions": "Wachten op gebruiker toestemming."
+    },
+    "form": {
+        "chooseLanguage": "Kies een Taal",
+        "logout": "log uit",
+        "pages": {
+            "back": "Terug",
+            "end": "Ga naar het Einde",
+            "next": "Volgende",
+            "return": "Terug naar het Begin"
+        },
+        "required": "verplicht"
+    },
+    "formfooter": {
+        "complete": {
+            "btn": "Compleet"
+        },
+        "savedraft": {
+            "btn": "Sla Op als Draft",
+            "label": "Sla Op als Draft"
+        },
+        "submit": {
+            "btn": "Verzend"
+        },
+        "validate": {
+            "btn": "Valideer"
+        }
+    },
+    "geopicker": {
+        "accuracy": "nauwkeurigheid (m)",
+        "altitude": "hoogte (m)",
+        "closepolygon": "sluit veelhoek",
+        "kmlcoords": "KML coördinaten",
+        "kmlpaste": "plak KML coördinaten hier",
+        "latitude": "breedtegraad (x.y °)",
+        "longitude": "lengtegraad (x.y °)",
+        "points": "punten",
+        "removePoint": "Hiermee wordt het huidige GPS coordinaat volledig verwijderd uit de lijst met coordinaten en kan dit niet ongedaan worden gemaakt. Weet je zeker dat je dit wilt doen?",
+        "searchPlaceholder": "zoek naar plaats of adres",
+        "bordersintersectwarning": "Grenzen kunnen elkaar niet snijden"
+    },
+    "here": "hier",
+    "hint": {
+        "guidance": {
+            "details": "meer details"
+        }
+    },
+    "home": {
+        "msg": "__appTitle__ werkt! De Enketo enquetes zijn vanaf de __serverName__ installatie toegankelijk."
+    },
+    "imagemap": {
+        "svgNotFound": "SVG-afbeelding kan niet worden gevonden"
+    },
+    "langs": {
+        "ar": "Arabisch",
+        "cs": "Tsjechisch",
+        "de": "Duits",
+        "el": "Grieks",
+        "en": "Engels",
+        "es": "Spaans",
+        "fa": "Perzisch",
+        "fi": "Fins",
+        "fr": "Frans",
+        "he": "Hebreeuws",
+        "hi": "Hindi",
+        "it": "Italiaans",
+        "ka": "Georgisch",
+        "km": "Khmer",
+        "lo": "Laotiaans",
+        "nl": "Nederlands",
+        "no": "Noorweegs",
+        "pa": "Punjabi",
+        "pl": "Pools",
+        "pt": "Portugees",
+        "ro": "Roemeens",
+        "ru": "Russisch",
+        "sk": "Slowaaks",
+        "sq": "Albanees",
+        "supported": "Talen ondersteund:",
+        "sv": "Zweeds",
+        "sw": "Swahili",
+        "th": "Thai",
+        "tr": "Turks",
+        "vi": "Vietnamees",
+        "zh": "Chinees"
+    },
+    "literacywidget": {
+        "finish": "Eind",
+        "start": "Begin"
+    },
+    "page": {
+        "modernbrowsers": {
+            "heading": "Moderne Browsers",
+            "ie": {
+                "heading": "Waarom geen liefde voor die nare ouderwetse versies van Internet Explorer?",
+                "msg": "We begrijpen dat sommige mensen, vooral degenen die werken voor een grote bureaucratie, geen toegang hebben tot the laatste en best browsers. Aangezien we weten hoe fantastisch het Web kan zijn, zijn we empatisch met de gebruikers in zo'n situatie. Normaal, zouden we proberen om hier een oplossing voor te vinden voor de populairste ouderwetse browsers. Alleen in dit geval niet omdat Enketo gebouwd is naar aanleiding van een aantal hele nieuwe technologien. Helaas hebben gebruikers met oudere browsers hierdoor pech."
+            },
+            "msg1": "Au! Sorry, je bent hier waarschijnlijk heen gestuurd omdat je browser te ouderwets is of misschien belangrijke functies heeft uitgeschakeld in 'prive mode'.",
+            "msg2": "Als je een ouderwetse browser gebruikt, raden wij aan om deze te vervangen of up-te-daten met een van de volgende prima moderne browsers:"
+        },
+        "offline": {
+            "heading": "Kan de verzochte pagina niet laden.",
+            "msg1": "Deze pagina is alleen toegankelijk als de browser een Internet verbinding heeft en de server bereikbaar is (tenzij de pagina niet bestaat)."
+        }
+    },
+    "prompt": {
+        "default": {
+            "heading": "Vul waardes in"
+        },
+        "login": {
+            "heading": "Vul je __server__ gegevens in.",
+            "password": "Wachtwoord",
+            "remember": "Onthoud op deze computer",
+            "submit": "Verzend",
+            "username": "Gebruikersnaam"
+        }
+    },
+    "rankwidget": {
+        "clickstart": "Klik om te starten",
+        "tapstart": "Klik om te starten"
+    },
+    "record-list": {
+        "export": "Exporteer",
+        "msg1": "Records worden in je browser opgeslagen totdat ze verzonden zijn (zelfs als je het apparaat uitzet of geen Internet verbinding hebt).",
+        "msg2": "Opgeslagen records, behalve degene die als draft __icon__ gemarkeerd, worden automatisch verzonden in de achtergrond, elke 5 minuten als deze pagina open is en een Internet verbinding aanwezig is.",
+        "msg2-nodraft": "Opgeslagen records worden automatisch verzonden in de achtergrond, elke 5 minuten als deze pagina open is en een Internet verbinding aanwezig is.",
+        "msg3": "Om een verzending te forceren tussen automatische pogingen in, klik op Verzend.",
+        "norecords": "geen records aanwezig",
+        "title": "Records",
+        "upload": "Verzend"
+    },
+    "selectpicker": {
+        "noneselected": "niets geselecteerd",
+        "numberselected": "__number__ geselecteerd"
+    },
+    "store": {
+        "error": {
+            "iosusesafari": "Uw iOS browser kan deze survey niet laden. Op iOS raden wij aan Safari te gebruiken.",
+            "notavailable": "Browser opslag is benodigd maar niet beschikbaar, kapot, of niet beschrijfbaar. Als je in 'prive´ browsing' mode zit, schakel over naar de normale mode. Of probeer een ander browser. (fout: __error__)",
+            "notsupported": "Uw browser kan deze survey niet laden. We raden aan een moderne browser te gebruiken."
+        }
+    },
+    "submission": {
+        "http0": "De server is niet beschikbaar of u bent mogelijk niet verbonden met internet.",
+        "http2xx": "Onverwacht antwoord tijdens record verzending.",
+        "http400": "Data server wilde het record niet accepteren.",
+        "http401": "Autorisatie probleem met de data server.",
+        "http403": "Niet toegestaan om records te verzenden naar deze server.",
+        "http404": "Ontvangst service niet gevonden op data server.",
+        "http408": "Data server time-out.",
+        "http413": "Record is te groot.",
+        "http4xx": "Onbekend ontvangst probleem op de data server.",
+        "http500": "De data server voor deze enquete is niet bereikbaar. Probeer het later nog een keer of contacteer __supportEmail__.",
+        "http504": "Kon geen verbinding met data server opzetten."
+    },
+    "themes": {
+        "supported": "Ondersteunde themes"
+    },
+    "version": "versie:",
+    "widget": {
+        "comment": {
+            "update": "Bijwerken"
+        }
+    }
+}

@@ -1,0 +1,337 @@
+$body-font-family: 'OpenSans' !default;
+$oil: #333333 !default;
+$secondary-color: white !default;
+$global-radius: 3px !default;
+$global-rounded: 1000px !default;
+
+$cursor-default-value: default !default;
+$cursor-pointer-value: pointer !default;
+
+$opposite-direction: right !default;
+
+$default-float: left !default;
+
+$medium-range: 40.063em, 64em !default;
+$screen: 'only screen' !default;
+$medium-up: '#{$screen} and (min-width:#{lower-bound($medium-range)})' !default;
+
+// We use these to build padding for buttons.
+$button-sml: 10px !default;
+$button-med: 16px !default;
+
+// We use this to control the display property.
+$button-display: flex !default;
+$button-margin-bottom: 16px !default;
+
+// We use these to control button text styles.
+$button-font-family: $body-font-family !default;
+$button-font-color: white !default;
+$button-font-color-alt: $oil !default;
+$button-font-tny: 12px !default;
+$button-font-sml: 14px !default;
+$button-font-med: 16px !default;
+$button-font-lrg: 18px !default;
+$button-font-weight: normal !default;
+$button-font-align: center !default;
+
+// We use these to control various hover effects.
+$button-function-factor: -20% !default;
+
+// We use these to control button border styles.
+$button-border-width: 1px !default;
+$button-border-style: solid !default;
+$button-bg-color: $brand-primary-color !default;
+$button-bg-hover: scale-color(
+    $button-bg-color,
+    $lightness: $button-function-factor
+) !default;
+$button-border-color: $button-bg-hover !default;
+$secondary-button-bg-hover: #cccccc !default;
+$secondary-button-border-color: $secondary-button-bg-hover !default;
+
+// We use this to set the default radius used throughout the core.
+$button-radius: $global-radius !default;
+$button-round: $global-rounded !default;
+
+// We use this to set default opacity and cursor for disabled buttons.
+$button-disabled-opacity: 0.7 !default;
+$button-disabled-cursor: $cursor-default-value !default;
+
+@mixin single-transition($property: all, $speed: 300ms, $ease: ease-out) {
+    transition: $property $speed $ease;
+}
+
+@mixin radius($radius: $global-radius) {
+    @if $radius {
+        border-radius: $radius;
+    }
+}
+
+@mixin button-base($style: true, $display: $button-display) {
+    @if $style {
+        border-style: $button-border-style;
+        border-width: $button-border-width;
+        cursor: $cursor-pointer-value;
+        font-family: $button-font-family;
+        font-weight: $button-font-weight;
+        line-height: normal;
+        margin: 0 0 $button-margin-bottom;
+        position: relative;
+        text-decoration: none;
+        text-align: $button-font-align;
+        -webkit-appearance: none;
+        -webkit-border-radius: 0;
+        align-items: center;
+        justify-content: center;
+    }
+
+    @if $display {
+        display: $display;
+    }
+}
+
+@mixin button-size($padding: $button-med, $full-width: false) {
+    @if $padding {
+        padding-top: $padding;
+        padding-#{$opposite-direction}: $padding * 2;
+        padding-bottom: $padding;
+        padding-#{$default-float}: $padding * 2;
+
+        @if $padding==$button-med {
+            font-size: $button-font-med;
+        } @else if $padding==$button-sml {
+            font-size: $button-font-sml;
+        }
+    }
+
+    @if $full-width {
+        @if $padding {
+            padding-top: $padding;
+            padding-bottom: $padding + $padding;
+        } @else if $padding==false {
+            padding-top: 0;
+            padding-bottom: 0;
+        }
+
+        padding-right: 0;
+        padding-left: 0;
+        width: 100%;
+    }
+}
+
+@mixin button-style(
+    $bg: $button-bg-color,
+    $radius: true,
+    $disabled: false,
+    $bg-hover: null,
+    $border-color: null
+) {
+    @if $bg-hover==null {
+        $bg-hover: if(
+            $bg==$button-bg-color,
+            $button-bg-hover,
+            scale-color($bg, $lightness: $button-function-factor)
+        );
+    }
+
+    @if $border-color==null {
+        $border-color: if(
+            $bg==$button-bg-color,
+            $button-border-color,
+            scale-color($bg, $lightness: $button-function-factor)
+        );
+    }
+
+    // This find the lightness percentage of the background color.
+    $bg-lightness: lightness($bg);
+    $bg-hover-lightness: lightness($bg-hover);
+
+    background-color: $bg;
+    border-color: $border-color;
+
+    &:hover,
+    &:focus {
+        background-color: $bg-hover;
+    }
+
+    // We control the text color for you based on the background color.
+    color: if($bg-lightness > 70%, $button-font-color-alt, $button-font-color);
+
+    &:hover,
+    &:focus {
+        color: if(
+            $bg-hover-lightness > 70%,
+            $button-font-color-alt,
+            $button-font-color
+        );
+    }
+
+    &:focus,
+    &:link,
+    &:active,
+    &:visited {
+        text-decoration: none;
+    }
+
+    // We can set $disabled:true to create a disabled transparent button.
+    @if $disabled {
+        cursor: $button-disabled-cursor;
+        opacity: $button-disabled-opacity;
+        box-shadow: none;
+
+        &:hover,
+        &:focus {
+            background-color: $bg;
+        }
+    }
+
+    // We can control how much button radius is used.
+    @if $radius==true {
+        @include radius($button-radius);
+    } @else if $radius {
+        @include radius($radius);
+    }
+}
+
+button {
+    background: none;
+    border: none;
+}
+
+.btn {
+    @include button-base;
+
+    @include button-size;
+
+    @include button-style;
+
+    @include single-transition(background-color);
+
+    &.btn-default {
+        @include button-style(
+            $bg: $secondary-color,
+            $bg_hover: $secondary-button-bg-hover,
+            $border_color: $secondary-button-border-color
+        );
+    }
+
+    &.small {
+        @include button-size($padding: $button-sml);
+    }
+
+    &.disabled,
+    &[disabled] {
+        @include button-style(
+            $bg: $button-bg-color,
+            $disabled: true,
+            $bg_hover: $button-bg-hover,
+            $border_color: $button-border-color
+        );
+
+        &.btn-default {
+            @include button-style(
+                $bg: $secondary-color,
+                $disabled: true,
+                $bg_hover: $secondary-button-bg-hover,
+                $border_color: $secondary-button-border-color
+            );
+        }
+    }
+
+    .icon {
+        margin-right: 6px;
+    }
+}
+
+//firefox 2px fix
+button::-moz-focus-inner {
+    border: 0;
+    padding: 0;
+}
+
+@media #{$medium-up} {
+    button,
+    .button {
+        @include button-base($style: false, $display: inline-block);
+
+        @include button-size($padding: false, $full_width: false);
+    }
+}
+
+// special minimal icon-only buttons
+.btn-icon-only {
+    margin: 0 10px 0 10px;
+    padding: 0;
+    color: $text-color;
+    background: none;
+    border: none;
+    font-size: 20px;
+    box-shadow: none;
+    opacity: 0.7;
+
+    &:hover,
+    &:focus,
+    &:active,
+    &.active,
+    &:disabled,
+    &.disabled {
+        background: none;
+        box-shadow: none;
+    }
+
+    &:hover {
+        color: $text-color;
+        opacity: 0.5;
+    }
+}
+
+// same but for buttons where the icon is a background image
+.btn-bg-icon-only {
+    margin: 0 10px 0 10px;
+    padding: 0;
+    border: none;
+
+    &:hover,
+    &:focus,
+    &:active,
+    &.active,
+    &:disabled,
+    &.disabled {
+        box-shadow: none;
+    }
+
+    &:hover {
+        opacity: 0.5;
+    }
+}
+
+.btn-reset {
+    &[disabled] {
+        display: none;
+    }
+}
+
+// fixes (would be nice if these weren't necessary):
+.question:not(.or-appearance-literacy) .btn-default {
+    padding: 0 15px;
+}
+
+.question .btn-default.dropdown-toggle {
+    padding: 7px 15px;
+}
+
+.or-comment-widget__content__btn-update {
+    @extend .small;
+}
+
+.draw-widget__undo {
+    font-size: 13px;
+}
+
+.add-repeat-btn,
+.repeat-buttons .remove,
+.geopicker [name='geodetect'] {
+    .icon {
+        margin-right: 0;
+    }
+}

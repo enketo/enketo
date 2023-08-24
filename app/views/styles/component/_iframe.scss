@@ -1,0 +1,36 @@
+.iframe {
+    .paper {
+        border-radius: 0;
+        border: none;
+    }
+
+    .form-header__button--homescreen {
+        display: none;
+    }
+}
+
+// https://github.com/PierBover/ios-iframe-fix
+.ios-iframe-bug-wrap {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    overflow: auto;
+    // if -webkit-overflow-srolling: touch is enabled, the ios-iframe bugs come back
+
+    .main-loader {
+        height: 100vh;
+    }
+}
+
+// TODO: remove?
+.edit .paper .branding {
+    display: none;
+}
+
+@media screen and (max-width: 720px) {
+    body.edit .form-header {
+        border-bottom: none;
+    }
+}

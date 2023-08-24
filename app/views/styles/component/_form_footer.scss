@@ -1,0 +1,174 @@
+.form-footer {
+    position: relative;
+
+    &__content {
+        @include display-flex;
+
+        @include flex-direction(column);
+
+        @include flex-wrap(nowrap);
+
+        &__main-controls {
+            flex: 1;
+            margin: 30px auto;
+            width: 100%;
+            text-align: center;
+            position: relative;
+
+            .btn {
+                display: inline-block;
+                min-width: 180px;
+                position: static;
+                min-height: 32px;
+                margin-bottom: 30px;
+                margin-left: 20px;
+                margin-right: 20px;
+
+                progress {
+                    margin: 0;
+                    padding: 0;
+                    width: 100%;
+                }
+            }
+
+            #save-draft {
+                position: relative;
+
+                .save-draft-info {
+                    color: $gray;
+                    position: absolute;
+                    left: 100%;
+                    bottom: 0;
+                    margin: 0 7px;
+
+                    &:hover {
+                        opacity: 0.5;
+                    }
+                }
+            }
+
+            .previous-page,
+            .next-page {
+                display: none;
+            }
+
+            .previous-page {
+                // This button is absolutely positioned to avoid
+                // it pushing up other form footer content when it becomes
+                // visible on page 2 and higher.
+                position: absolute;
+                left: 5px;
+                bottom: 5px;
+            }
+        }
+
+        &__jump-nav {
+            @include display-flex;
+
+            @include flex-direction(row);
+
+            @include flex-wrap(nowrap);
+
+            .first-page,
+            .last-page {
+                //width: 50%;
+                flex: 1;
+                opacity: 0.7;
+                border-radius: 0 !important;
+                display: none;
+                padding: 9px;
+                margin-bottom: 0;
+                float: left;
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+            }
+
+            .first-page {
+                padding-left: 32px;
+
+                &:not(:hover) {
+                    border-right: none;
+                }
+
+                &::before {
+                    @include icon-first(#757474);
+
+                    width: 17px;
+                    height: 16px;
+                    margin-top: 2px;
+                    margin-left: -22px;
+                    content: ' ';
+                    float: left;
+                }
+            }
+
+            .last-page {
+                padding-right: 32px;
+
+                &::before {
+                    @include icon-last(#757474);
+
+                    width: 24px;
+                    height: 16px;
+                    margin-top: 2px;
+                    margin-right: -22px;
+                    content: ' ';
+                    float: right;
+                }
+            }
+        }
+    }
+
+    .logout {
+        width: 100%;
+        display: block;
+        margin-bottom: 30px;
+        text-align: center;
+    }
+
+    .enketo-power {
+        position: static;
+        margin: 0 auto 20px auto;
+        left: auto;
+        width: 100%;
+        line-height: 25px;
+
+        img {
+            width: 51px;
+        }
+    }
+}
+
+.pages ~ .form-footer {
+    .form-footer__content {
+        &__main-controls {
+            margin-bottom: 0;
+            margin-top: 0;
+        }
+    }
+
+    &.end {
+        .logout {
+            margin-bottom: 50px;
+        }
+    }
+}
+
+@media screen and (min-width: $main-breakpoint) {
+    .form-footer .enketo-power {
+        position: absolute;
+        bottom: -85px;
+        right: 5px;
+        width: auto;
+    }
+
+    .pages ~ .form-footer .enketo-power {
+        bottom: -95px;
+    }
+}
+
+.touch .form-footer .draft .option-wrapper > label {
+    border: none !important;
+    width: 100% !important;
+}

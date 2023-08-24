@@ -1,0 +1,33 @@
+doctype html
+html(lang=language, dir=dir(language))
+  head
+    title= title
+
+    meta(charset="utf-8")
+    meta(name="author", content="Martijn van de Rijdt (Enketo LLC)")
+    if !desktop
+      meta(name="viewport", content="width=device-width, initial-scale=1.0")
+
+    link(rel="shortcut icon", href=`${basePath}${offlinePath || ''}/images/favicon.ico`)
+    link(rel="icon", type="image/png", sizes="180x180", href=`${basePath}${offlinePath || ''}/images/icon_180x180.png`)
+    link(rel="apple-touch-icon", sizes="180x180", href=`${basePath}${offlinePath || ''}/images/icon_180x180.png`)
+    
+    block head-script
+
+    block style
+
+  - var cl = (iframe) ? 'iframe' : ''
+  body(class=cl)
+    if iframe
+      .ios-iframe-bug-wrap
+        block content
+    else 
+      block content
+
+    block script
+
+    if analytics
+      include component/analytics
+
+    if livereload
+      script(src="//localhost:35729/livereload.js")

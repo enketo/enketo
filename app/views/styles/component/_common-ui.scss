@@ -1,0 +1,9 @@
+@import 'iframe';
+@import 'modal';
+@import 'alert';
+@import 'feedback-bar';
+@import 'notification';
+
+.main-loader__image {
+    border-color: $brand-primary-color;
+}
