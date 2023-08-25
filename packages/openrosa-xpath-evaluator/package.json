@@ -12,7 +12,7 @@
     "XPath"
   ],
   "scripts": {
-    "lint": "eslint --ignore-path .gitignore .",
+    "lint": "eslint --ignore-path .eslintignore .",
     "test": "npm run lint && npm run test:mocha && npm run test:karma",
     "test:mocha": "TZ=America/Phoenix mocha test/unit/mocha-setup.js test/unit/*.spec.js",
     "test:karma": "karma start --single-run",
