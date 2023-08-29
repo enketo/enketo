@@ -133,15 +133,22 @@ export default defineConfig(async () => {
             // are often not thread safe. In this case, that
             // means we cannot use concurrency for testing
             // functionality which depends on libxmljs/libxslt.
+            //
+            // In Vitest 0.29.0+, the `singleThread` option must
+            // be set to achieve the same behavior as `threads`
+            // did previously. The `threads` option must *also*
+            // be set to prevent spinning up threads which may
+            // fail to close when tests complete.
             threads: false,
+            singleThread: true,
 
-            // For future reference: Vitest version 0.29.0+
-            // would require the `singleThread` setting instead
-            // of `threads`. We decided not to update past
-            // 0.28.5 in the 3.0.1 release, as newer releases
-            // also caused problems with changes to the
-            // snapshot format.
-            // singleThread: true,
+            chaiConfig: {
+                // Preserves previous truncation in snapshots.
+                // This isn't ideal, but it helps to prevent
+                // Vitest from creating an enormous diff of
+                // reordered snapshots which otherwise pass.
+                truncateThreshold: 40,
+            },
 
             coverage: {
                 provider: 'istanbul',
@@ -151,7 +158,7 @@ export default defineConfig(async () => {
             },
 
             globals: true,
-            globalSetup: 'test/web/setup.ts',
+            globalSetup: isWeb ? 'test/web/setup.ts' : undefined,
             include: ['test/**/*.spec.ts'],
             reporters: 'verbose',
             sequence: { shuffle: true },
