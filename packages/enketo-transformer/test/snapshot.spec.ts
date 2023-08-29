@@ -7,10 +7,9 @@
  */
 
 import { basename } from 'path';
-import prettier from 'prettier';
+import prettier from '@prettier/sync';
 import { format as prettyFormat } from 'pretty-format';
 import type { Options as PrettierOptions } from 'prettier';
-import prettierPluginXML from '@prettier/plugin-xml';
 import { NAMESPACES } from '../src/shared';
 import type { TransformedSurvey } from '../src/transformer';
 import {
@@ -126,13 +125,28 @@ describe('Snapshots', () => {
         // Processing instructions have no impact when parsing XML using `DOMParser`.
         const xml = serialized.replace(/^<\?xml .*?\?>/, '');
 
-        return prettier.format(xml, {
-            ...basePrettierOptions,
-            parser: 'xml',
-            plugins: [prettierPluginXML],
-            xmlSelfClosingSpace: true,
-            xmlWhitespaceSensitivity: 'ignore',
-        });
+        return (
+            prettier
+                .format(xml, {
+                    ...basePrettierOptions,
+                    parser: 'xml',
+                    plugins: ['@prettier/plugin-xml'],
+                    xmlSelfClosingSpace: true,
+                    xmlWhitespaceSensitivity: 'ignore',
+                })
+                // Reverses a change released in `@prettier/plugin-xml` 3.0.0. In prior
+                // versions, self-closing tags spanning multiple lines would place their
+                // self-closing `/>` characters outdented on the following line. With the
+                // newer change, those characters are placed on the same line as the
+                // tag's last attribute, with a preceding space.
+                //
+                // These formats are semantically equivalent, so we could theoretically
+                // just update the snapshots and move on. Unfortunately, Vitest does not
+                // preserve snapshot order in this case, producing an update diff which
+                // would not be easily reviewed for such a change. Instead, this ghastly
+                // regex is used to reproduce the old behavior.
+                .replace(/\n  ( +)([^< ].*?) \/>/g, '\n$1  $2\n$1/>')
+        );
     };
 
     const serialize = (transformed: TransformedSurvey) => {

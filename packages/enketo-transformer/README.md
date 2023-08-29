@@ -36,7 +36,7 @@ Neither project currently uses the following functionality:
 
 ## Prerequisites
 
--   Node.js 16 and npm 6 (Node.js 14 is also supported)
+-   Node.js 20 and Yarn 1 (Node.js 16 and 18 are also supported)
 -   [Volta](https://volta.sh/) is recommended for development
 -   For Node/server-side transforms:
     -   Python (at least 3.7, but less than 3.11)
@@ -49,8 +49,8 @@ Enketo Transformer provides a simple web demo which allows you to select any of 
 
 ```sh
 cd ./demo
-npm install
-npm run demo
+yarn install
+yarn run demo
 ```
 
 This will print out the demo URL (typically `http://localhost:3000`, unless that port is already in use).
@@ -63,7 +63,7 @@ Install Enketo Transformer with:
 npm install enketo-transformer
 ```
 
-*If you face issues during installation:* Verify that [these requirements](https://github.com/nodejs/node-gyp#on-unix) are met. We depend on upstream XSLT and XML C++ libraries that require compilation upon installation using [node-gyp](https://github.com/nodejs/node-gyp).
+_If you face issues during installation:_ Verify that [these requirements](https://github.com/nodejs/node-gyp#on-unix) are met. We depend on upstream XSLT and XML C++ libraries that require compilation upon installation using [node-gyp](https://github.com/nodejs/node-gyp).
 
 ### Node
 
@@ -117,7 +117,7 @@ const result = await transform({
 ### Install
 
 ```sh
-npm install
+yarn install
 ```
 
 ### Test/dev server
@@ -125,7 +125,7 @@ npm install
 Enketo Transformer provides a simple server API. It may be used for testing locally, but isn't a robust or secure server implementation so it should not be used in production. You can start it in a local dev environment by running:
 
 ```sh
-npm start
+yarn start
 ```
 
 It provides two endpoints:
@@ -158,7 +158,7 @@ curl -d "xform=<xform>x</xform>&theme=plain&media[myfile.png]=/path/to/somefile.
 
 ### Develop
 
-The script `npm run develop` runs the app on port 8085 and also serves test/forms on port 8081. You could test the transformation output by placing an XForm in test/forms and running
+The script `yarn run develop` runs the app on port 8085 and also serves test/forms on port 8081. You could test the transformation output by placing an XForm in test/forms and running
 http://localhost:8085/transform?xform=http://localhost:8081/autocomplete.xml
 
 There is also a helpful **GET /transform/htmlform** endpoint to easily inspect the HTML form output in the developer console. Example:
@@ -172,9 +172,8 @@ DEBUG=api,transformer,markdown,language node app.js
 
 ### Test
 
--   run tests with `npm test`
--   run tests in watch mode with `npm run test:watch`
--   Tests can be run in watch mode for [TDD](https://en.wikipedia.org/wiki/Test-driven_development) workflows with `npm run test-watch`, and support for debugging in [VSCode](https://code.visualstudio.com/) is provided. For instructions see [./#debugging-test-watch-mode-in-vscode](Debugging test watch mode in VSCode) below
+-   run tests with `yarn test`
+-   Tests can be run in watch mode for [TDD](https://en.wikipedia.org/wiki/Test-driven_development) workflows with `yarn run test:watch`, and support for debugging in [VSCode](https://code.visualstudio.com/) is provided. For instructions see [./#debugging-test-watch-mode-in-vscode](Debugging test watch mode in VSCode) below
 
 #### Debugging test watch mode in VSCode
 
@@ -199,12 +198,12 @@ Releases are done each time a dependent tool needs an `enketo-transformer` chang
 1. Update version in `package.json`
     - Bump to major version if downstream has to make changes.
 1. Check [Dependabot](https://github.com/enketo/enketo-transformer/security/dependabot) for alerts
-1. Run `npm update`
+1. Run `yarn upgrade`
     - Check if `node-libxslt` has been updated because it has caused problems in the past
-1. Run `npm audit`
-    - Run `npm audit fix --production` to apply most important fixes
-1. Run `npm i`
-1. Run `npm test`
+1. Run `yarn audit`
+    - ~~Run `npm audit fix --production` to apply most important fixes~~
+1. Run `yarn install`
+1. Run `yarn test`
 1. Merge PR with all changes
 1. Create GitHub release
 1. Tag and publish the release
