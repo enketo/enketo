@@ -165,14 +165,14 @@ The `language` option overrides the default languages rules of the XForm itself.
 1. install prerequisites:
 
 -   Volta (optional, but recommended)
--   Node.js 16 and npm 6 (Node.js 14 is also supported)
+-   Node.js 20 and Yarn 1 (Node.js 16 and 18 are also supported)
 -   [grunt-cli](https://gruntjs.com/getting-started)
 
-2. install dependencies with `npm install`
-3. build with `grunt` (`npx grunt`)
-4. start built-in auto-reloading development server with `npm start`
+2. install dependencies with `yarn install`
+3. build with `grunt` (`yarn grunt`, `npx grunt`)
+4. start built-in auto-reloading development server with `yarn start`
 5. browse to [http://localhost:8005](http://localhost:8005/) and load an XForm url with the `xform` queryparameter or load a local from the /tests/forms folder in this repo
-6. run tests with `npm test` (headless chrome) and `npm run test-browsers` (browsers); **note:** running tests updates the coverage badge in README.md, but these changes should not be committed except when preparing a release
+6. run tests with `yarn test` (headless chrome) and `yarn run test-browsers` (browsers); **note:** running tests updates the coverage badge in README.md, but these changes should not be committed except when preparing a release
 7. adding the querystring `touch=true` and reducing the window size allows you to simulate mobile touchscreens
 
 ### Notes for JavaScript Developers
@@ -180,7 +180,7 @@ The `language` option overrides the default languages rules of the XForm itself.
 -   When creating new functions/Classes, make sure to describe them with JSDoc comments.
 -   JavaScript style see [ESLint](./eslintrc.json) config files. The check is added to the grunt `test` task. You can also manually run `grunt eslint:fix` to fix style issues.
 -   Testing is done with Mocha and Karma (all: `grunt karma`, headless: `grunt karma:headless`, browsers: `grunt karma:browsers`)
--   Tests can be run in watch mode for [TDD](https://en.wikipedia.org/wiki/Test-driven_development) workflows with `npm run test-watch`, and support for debugging in [VSCode](https://code.visualstudio.com/) is provided. For instructions see [Debugging test watch mode in VSCode](./#debugging-test-watch-mode-in-vscode) below
+-   Tests can be run in watch mode for [TDD](https://en.wikipedia.org/wiki/Test-driven_development) workflows with `yarn run test-watch`, and support for debugging in [VSCode](https://code.visualstudio.com/) is provided. For instructions see [Debugging test watch mode in VSCode](./#debugging-test-watch-mode-in-vscode) below
 -   When making a pull request, please add tests where relevant
 
 #### Debugging test watch mode in VSCode
@@ -427,13 +427,13 @@ Fired when the user moves to a different question in the form.
 1. Update version in `package.json`
     - Bump to major version if consumers have to make changes.
 1. Check [Dependabot](https://github.com/enketo/enketo-core/security/dependabot) for alerts
-1. Run `npm update`
+1. Run `yarn upgrade`
     - Check if `node-forge` has been updated and if so, verify encrypted submissions end-to-end
     - If `enketo-transformer` has been updated, change `Form.requiredTransformerVersion`
-1. Run `npm audit`
-    - Run `npm audit fix --production` to apply most important fixes
-1. Run `npm i`
-1. Run `npm test`
+1. Run `yarn audit`
+    - ~~Run `npm audit fix --production` to apply most important fixes~~
+1. Run `yarn install`
+1. Run `yarn test`
 1. Merge PR with all changes
 1. Create GitHub release
 1. Tag and publish the release
