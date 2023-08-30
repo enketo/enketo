@@ -120,8 +120,8 @@ class DesktopSelectpicker extends Widget {
                             <a class="option-wrapper" tabindex="-1" href="#">
                                 <label>
                                     <input class="ignore" ${inputAttr}${checkedInputAttr} value="${encodeHtmlEntities(
-                        value
-                    )}" />
+                                        value
+                                    )}" />
                                     <span class="option-label">${encodeHtmlEntities(
                                         label
                                     )}</span>
