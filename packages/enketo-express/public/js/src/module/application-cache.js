@@ -17,12 +17,15 @@ function init(survey) {
                             'Offline application service worker registration successful with scope: ',
                             registration.scope
                         );
-                        setInterval(() => {
-                            console.log(
-                                'Checking for offline application cache service worker update'
-                            );
-                            registration.update();
-                        }, 60 * 60 * 1000);
+                        setInterval(
+                            () => {
+                                console.log(
+                                    'Checking for offline application cache service worker update'
+                                );
+                                registration.update();
+                            },
+                            60 * 60 * 1000
+                        );
 
                         if (registration.active) {
                             _reportOfflineLaunchCapable(true);

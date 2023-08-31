@@ -4,10 +4,6 @@
     "homepage": "https://enketo.org",
     "version": "6.2.1",
     "main": "./app.js",
-    "engines": {
-        "node": ">=14.8.0 <17",
-        "npm": ">=6 <7"
-    },
     "repository": {
         "type": "git",
         "url": "https://github.com/enketo/enketo-express"
@@ -27,7 +23,7 @@
         "test": "grunt test",
         "test-browser": "grunt test-browser",
         "test-headless": "grunt karma:headless",
-        "test-server": "grunt mochaTest:all",
+        "test-server": "grunt test-server:all",
         "test-watch-client": "grunt test-watch-client",
         "test-watch-server": "grunt test-watch-server",
         "postinstall": "grunt",
@@ -45,8 +41,8 @@
         "csurf": "^1.11.0",
         "db.js": "^0.15.0",
         "debug": "^4.3.4",
-        "enketo-core": "^7.2.5",
-        "enketo-transformer": "3.0.1",
+        "enketo-core": "file:../enketo-core",
+        "enketo-transformer": "file:../enketo-transformer",
         "evp_bytestokey": "^1.0.3",
         "express": "^4.18.2",
         "express-cls-hooked": "^0.3.8",
@@ -71,7 +67,6 @@
         "puppeteer": "^13.7.0",
         "redis": "^3.1.2",
         "request": "^2.88.2",
-        "request-filtering-agent": "^1.1.2",
         "serve-favicon": "^2.5.0",
         "time-grunt": "^2.0.0",
         "valid-url": "^1.0.9",
@@ -80,33 +75,34 @@
         "xml2js": "^0.5.0"
     },
     "devDependencies": {
-        "@babel/core": "^7.22.10",
-        "@babel/eslint-parser": "^7.22.10",
+        "@babel/core": "^7.22.11",
+        "@babel/eslint-parser": "^7.22.11",
         "@baladins/grunt-nodemon": "^0.4.6",
         "@types/db.js": "^0.14.7",
         "@types/express": "^4.17.17",
         "@types/geojson": "^7946.0.10",
         "@types/redis": "^2.8.32",
         "@types/sinon": "^10.0.16",
-        "@typescript-eslint/eslint-plugin": "^5.62.0",
-        "@typescript-eslint/parser": "^5.62.0",
+        "@typescript-eslint/eslint-plugin": "^6.5.0",
+        "@typescript-eslint/parser": "^6.5.0",
         "abortcontroller-polyfill": "^1.7.5",
         "bootstrap-datepicker": "1.9.0",
         "chai": "^4.3.7",
         "chai-as-promised": "^7.1.1",
         "docdash": "^1.2.0",
         "esbuild": "^0.16.17",
+        "eslint": "^8.47.0",
         "eslint-config-airbnb": "^19.0.4",
-        "eslint-config-prettier": "^8.10.0",
+        "eslint-config-prettier": "^9.0.0",
         "eslint-import-resolver-typescript": "^3.6.0",
         "eslint-plugin-chai-friendly": "^0.7.2",
         "eslint-plugin-import": "^2.28.1",
-        "eslint-plugin-jsdoc": "^36.1.1",
+        "eslint-plugin-jsdoc": "^46.5.0",
         "eslint-plugin-jsx-a11y": "^6.7.1",
-        "eslint-plugin-prettier": "^4.2.1",
+        "eslint-plugin-prettier": "^5.0.0",
         "eslint-plugin-react": "^7.33.2",
         "eslint-plugin-react-hooks": "^4.6.0",
-        "eslint-plugin-unicorn": "^36.0.0",
+        "eslint-plugin-unicorn": "^48.0.1",
         "grunt": "^1.6.1",
         "grunt-concurrent": "^3.0.0",
         "grunt-contrib-watch": "^1.1.0",
@@ -136,12 +132,17 @@
         "nock": "^13.3.3",
         "node-sass": "^7.0.3",
         "nyc": "^15.1.0",
-        "prettier": "^2.8.8",
+        "prettier": "^3.0.3",
         "rimraf": "^3.0.2",
-        "sinon": "^11.1.2",
+        "sinon": "^15.2.0",
         "sinon-chai": "^3.7.0",
         "supertest": "^6.3.3",
-        "typescript": "^5.1.6"
+        "typescript": "^5.2.2"
+    },
+    "resolutions": {
+        "nan": "^2.17.0",
+        "libxslt/nan": "^2.17.0",
+        "node1-libxmljsmt-myh/nan": "^2.17.0"
     },
     "browser": {
         "enketo/config": "./public/js/src/module/client-config",
@@ -156,8 +157,13 @@
         "public/js/src/enketo-webform-view.js",
         "public/js/src/enketo-offline-fallback.js"
     ],
+    "engines": {
+        "node": ">=16 <21",
+        "npm": "please-use-yarn",
+        "yarn": ">= 1.22.19 <2"
+    },
     "volta": {
-        "node": "16.6.1",
-        "npm": "6.14.17"
+        "node": "20.5.1",
+        "yarn": "1.22.19"
     }
 }

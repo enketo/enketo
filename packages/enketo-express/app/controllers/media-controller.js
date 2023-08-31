@@ -9,10 +9,6 @@ const express = require('express');
 
 const router = express.Router();
 const debug = require('debug')('enketo:media-controller');
-const {
-    RequestFilteringHttpAgent,
-    RequestFilteringHttpsAgent,
-} = require('request-filtering-agent');
 const { ResponseError } = require('../lib/custom-error');
 const mediaLib = require('../lib/media');
 
@@ -65,17 +61,6 @@ async function getMedia(req, res, next) {
 
         // due to a bug in request/request using options.method with Digest Auth we won't pass method as an option
         delete options.method;
-
-        // filtering agent to stop private ip access to HEAD and GET
-        if (options.url.startsWith('https')) {
-            options.agent = new RequestFilteringHttpsAgent(
-                req.app.get('ip filtering')
-            );
-        } else {
-            options.agent = new RequestFilteringHttpAgent(
-                req.app.get('ip filtering')
-            );
-        }
 
         if (_isPrintView(req)) {
             request.head(options, (error, response) => {

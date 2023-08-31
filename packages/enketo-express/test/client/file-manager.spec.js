@@ -44,9 +44,8 @@ describe('File manager', () => {
                         'https://example.com/path/to/space%20madness.png',
                 });
 
-                const result = await fileManager.getFileUrl(
-                    'space madness.png'
-                );
+                const result =
+                    await fileManager.getFileUrl('space madness.png');
 
                 expect(result).to.equal(
                     'https://example.com/path/to/space%20madness.png'
@@ -59,9 +58,8 @@ describe('File manager', () => {
                         'https://example.com/path/to/space%20madness.png',
                 });
 
-                const result = await fileManager.getFileUrl(
-                    'space madness.png'
-                );
+                const result =
+                    await fileManager.getFileUrl('space madness.png');
 
                 expect(result).to.equal(
                     'https://example.com/path/to/space%20madness.png'
