@@ -1,0 +1,7 @@
+/node_modules/
+**/node_modules/
+
+/packages/enketo-core/**/jquery.relevant-dropdown.js
+
+/packages/enketo-transformer/**/*.xml
+/packages/enketo-transformer/**/*.xsl
