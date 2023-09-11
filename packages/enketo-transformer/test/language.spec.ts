@@ -1,3 +1,4 @@
+import { describe, expect, it } from 'vitest';
 import { Language, parseLanguage } from '../src/language';
 
 describe('language', () => {
@@ -5,7 +6,7 @@ describe('language', () => {
         type ParserTestParameters = [
             name: string,
             sample: string,
-            language: Language
+            language: Language,
         ];
 
         const test = (t: ParserTestParameters) => {

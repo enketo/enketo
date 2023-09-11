@@ -1,10 +1,6 @@
 import { resolve } from 'path';
 import { fileURLToPath } from 'url';
-import {
-    type ViteDevServer,
-
-    createServer,
-} from 'vite';
+import { type ViteDevServer, createServer } from 'vite';
 import { define } from '../../config/build.shared';
 
 let server!: ViteDevServer;

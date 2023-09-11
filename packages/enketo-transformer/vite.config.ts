@@ -157,7 +157,7 @@ export default defineConfig(async () => {
                 reportsDirectory: './test-coverage',
             },
 
-            globals: true,
+            globals: false,
             globalSetup: isWeb ? 'test/web/setup.ts' : undefined,
             include: ['test/**/*.spec.ts'],
             reporters: 'verbose',

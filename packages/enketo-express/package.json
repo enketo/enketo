@@ -18,7 +18,6 @@
     },
     "contributors": [],
     "scripts": {
-        "preinstall": "pwd && ./scripts/preinstall",
         "start": "node .",
         "test": "grunt test",
         "test-browser": "grunt test-browser",
@@ -41,8 +40,8 @@
         "csurf": "^1.11.0",
         "db.js": "^0.15.0",
         "debug": "^4.3.4",
-        "enketo-core": "file:../enketo-core",
-        "enketo-transformer": "file:../enketo-transformer",
+        "enketo-core": "7.2.5",
+        "enketo-transformer": "3.0.1",
         "evp_bytestokey": "^1.0.3",
         "express": "^4.18.2",
         "express-cls-hooked": "^0.3.8",

@@ -5,7 +5,7 @@
  * _insignificant_ changes. Their reasoning is discussed in JSDoc attached to
  * each function used in serialization.
  */
-
+import { describe, expect, it } from 'vitest';
 import { basename } from 'path';
 import prettier from '@prettier/sync';
 import { format as prettyFormat } from 'pretty-format';

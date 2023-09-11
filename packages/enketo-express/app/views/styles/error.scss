@@ -1,9 +1,9 @@
 @import 'component/variables';
-@import '../../../node_modules/enketo-core/src/sass/core/fonts';
+@import '/packages/enketo-core/src/sass/core/fonts';
 @import 'component/fonts';
-@import '../../../node_modules/enketo-core/src/sass/core/variables';
-@import '../../../node_modules/enketo-core/src/sass/core/mixins';
-@import '../../../node_modules/enketo-core/src/sass/formhub/mixins';
+@import '/packages/enketo-core/src/sass/core/variables';
+@import '/packages/enketo-core/src/sass/core/mixins';
+@import '/packages/enketo-core/src/sass/formhub/mixins';
 
 body {
     @include font-normal;

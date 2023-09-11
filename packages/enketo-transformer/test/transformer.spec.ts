@@ -1,3 +1,4 @@
+import { beforeAll, describe, expect, it } from 'vitest';
 import type { Survey, TransformedSurvey } from '../src/transformer';
 import {
     getTransformedForm,
