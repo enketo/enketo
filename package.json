@@ -1,0 +1,24 @@
+{
+  "name": "enketo",
+  "description": "Enketo Web Forms",
+  "repository": "https://github.com/enketo/enketo",
+  "private": true,
+  "workspaces": {
+    "packages": ["packages/*"],
+    "nohoist": ["**/vex-js"]
+  },
+  "resolutions": {
+      "nan": "^2.17.0",
+      "libxslt/nan": "^2.17.0",
+      "node1-libxmljsmt-myh/nan": "^2.17.0"
+  },
+  "engines": {
+      "node": ">=16 <21",
+      "npm": "please-use-yarn",
+      "yarn": ">= 1.22.19 <2"
+  },
+  "volta": {
+      "node": "20.5.1",
+      "yarn": "1.22.19"
+  }
+}

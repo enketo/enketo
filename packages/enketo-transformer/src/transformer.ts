@@ -169,7 +169,7 @@ const evaluateXPathExpression = (
 };
 
 const getNodesByXPathExpression = <
-    T extends DOM.Element | DOM.Attr = DOM.Element
+    T extends DOM.Element | DOM.Attr = DOM.Element,
 >(
     context: DOM.Document | DOM.Element,
     expression: string,
@@ -191,7 +191,7 @@ const getNodesByXPathExpression = <
 };
 
 const getNodeByXPathExpression = <
-    T extends DOM.Element | DOM.Attr = DOM.Element
+    T extends DOM.Element | DOM.Attr = DOM.Element,
 >(
     context: DOM.Document | DOM.Element,
     expression: string,

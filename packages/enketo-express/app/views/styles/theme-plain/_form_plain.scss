@@ -1,13 +1,13 @@
-@import '../../../../node_modules/enketo-core/src/sass/core/variables';
-@import '../../../../node_modules/enketo-core/src/sass/core/mixins';
+@import '/packages/enketo-core/src/sass/core/variables';
+@import '/packages/enketo-core/src/sass/core/mixins';
 
-@import '../../../../node_modules/enketo-core/src/sass/core/reset';
-@import '../../../../node_modules/enketo-core/src/sass/core/utilities';
-@import '../../../../node_modules/enketo-core/src/sass/core/icons';
-@import '../../../../node_modules/enketo-core/src/sass/core/layout';
-@import '../../../../node_modules/enketo-core/src/sass/core/buttons';
-@import '../../../../node_modules/enketo-core/src/sass/core/main';
-@import '../../../../node_modules/enketo-core/src/sass/core/pages';
+@import '/packages/enketo-core/src/sass/core/reset';
+@import '/packages/enketo-core/src/sass/core/utilities';
+@import '/packages/enketo-core/src/sass/core/icons';
+@import '/packages/enketo-core/src/sass/core/layout';
+@import '/packages/enketo-core/src/sass/core/buttons';
+@import '/packages/enketo-core/src/sass/core/main';
+@import '/packages/enketo-core/src/sass/core/pages';
 @import '../component/widgets';
-@import '../../../../node_modules/enketo-core/src/sass/core/dropdown';
-@import '../../../../node_modules/enketo-core/src/sass/core/responsive';
+@import '/packages/enketo-core/src/sass/core/dropdown';
+@import '/packages/enketo-core/src/sass/core/responsive';

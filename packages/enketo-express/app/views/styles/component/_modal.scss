@@ -1,5 +1,5 @@
-@import '../../../../node_modules/vex-js/sass/vex';
-@import '../../../../node_modules/vex-js/sass/vex-theme-plain';
+@import '/packages/enketo-express/node_modules/vex-js/sass/vex.sass';
+@import '/packages/enketo-express/node_modules/vex-js/sass/vex-theme-plain.sass';
 
 .vex.vex-theme-plain {
     h3 {

@@ -1,3 +1,4 @@
+import { beforeAll, describe, expect, it } from 'vitest';
 import { NAMESPACES } from '../src/shared';
 import {
     Document,

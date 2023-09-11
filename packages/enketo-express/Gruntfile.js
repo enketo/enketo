@@ -1,3 +1,112 @@
+const fs = require('fs');
+const path = require('path');
+const loadGruntTasks = require('load-grunt-tasks');
+const nodeSass = require('node-sass');
+const timeGrunt = require('time-grunt');
+
+const dependencyRoots = [
+    // Direct, unshared dependencies
+    path.resolve(__dirname, './node_modules'),
+
+    // Monorepo-shared dependencies
+    path.resolve(__dirname, '../../node_modules'),
+];
+
+/** @type {Map<string, string>} */
+const dependencyPaths = new Map();
+
+/**
+ * Resolves the base path of an installed dependency. Ideally we could use
+ * `require.resolve` for this, but it eagerly resolves a given package's
+ * `main`/`module`/etc entry paths, rather than the package's base path.
+ *
+ * @param {string} dependencyName
+ */
+const resolveDependencyPath = (dependencyName) => {
+    const cached = dependencyPaths.get(dependencyName);
+
+    if (cached != null) {
+        return cached;
+    }
+
+    for (const root of dependencyRoots) {
+        const resolved = path.resolve(root, dependencyName);
+
+        if (fs.existsSync(resolved)) {
+            dependencyPaths.set(dependencyName, resolved);
+
+            return resolved;
+        }
+    }
+
+    throw new Error(`Unable to resolve dependency path: ${dependencyName}`);
+};
+
+const ENKETO_CORE_PREFIX = `${resolveDependencyPath('enketo-core')}/`;
+
+const MONOREPO_ROOT_PATH = path.resolve(__dirname, '../..');
+
+const sassFilePrefixes = ['', '_'];
+const resolvableSassExtensions = ['.scss', '.sass', '.css'];
+
+/**
+ * Resolves any Sass imports from dependencies, referenced by an "absolute" path,
+ * where "absolute" is actually relative to the monorepo root. This simplifies
+ * and stabilizes those imports, and preserves navigation in supporting editors.
+ *
+ * @param {string} imported
+ */
+const resolveSassPackageImport = (imported) => {
+    if (!imported.startsWith('/')) {
+        return null;
+    }
+
+    const packageRelativePath = imported.replace('/', './');
+    const absolutePath = path.resolve(MONOREPO_ROOT_PATH, packageRelativePath);
+    const extension = path.extname(absolutePath);
+
+    if (extension !== '') {
+        return {
+            file: absolutePath,
+        };
+    }
+
+    const dirName = path.dirname(absolutePath);
+    const fileName = path.basename(absolutePath);
+
+    const sassPaths = sassFilePrefixes.flatMap((prefix) =>
+        resolvableSassExtensions.map((suffix) =>
+            path.resolve(dirName, `${prefix}${fileName}${suffix}`)
+        )
+    );
+
+    const sassPath = sassPaths.find((item) => fs.existsSync(item));
+
+    if (sassPath == null) {
+        return null;
+    }
+
+    return {
+        file: sassPath,
+    };
+};
+
+/**
+ * @param {string} imported
+ */
+const resolveWidgetESMImport = (imported) => {
+    if (imported.includes('../node_modules/enketo-core/')) {
+        return imported
+            .replace(
+                /^(\.\.\/)+node_modules\/enketo-core\//,
+                ENKETO_CORE_PREFIX
+            )
+            .replace(/(\.js)?$/, '.js');
+    }
+
+    return imported;
+};
+
 module.exports = (grunt) => {
     const eslintInclude = [
         './*.md',
@@ -9,11 +118,9 @@ module.exports = (grunt) => {
         '!docs/**',
         '!test-coverage/**',
     ];
-    const path = require('path');
-    const nodeSass = require('node-sass');
 
-    require('time-grunt')(grunt);
-    require('load-grunt-tasks')(grunt);
+    timeGrunt(grunt);
+    loadGruntTasks(grunt);
 
     let serverRootHooks;
 
@@ -42,6 +149,8 @@ module.exports = (grunt) => {
         sass: {
             options: {
                 implementation: nodeSass,
+
+                importer: resolveSassPackageImport,
             },
             compile: {
                 cwd: 'app/views/styles',
@@ -56,7 +165,12 @@ module.exports = (grunt) => {
         },
         watch: {
             sass: {
-                files: ['app/views/styles/**/*.scss', 'widget/**/*.scss'],
+                files: [
+                    '../enketo-core/src/**/*.scss',
+                    '../enketo-core/widget/**/*.scss',
+                    'app/views/styles/**/*.scss',
+                    'widget/**/*.scss',
+                ],
                 tasks: ['shell:clean-css', 'sass'],
                 options: {
                     spawn: false,
@@ -264,16 +378,20 @@ module.exports = (grunt) => {
         const paths = Object.keys(widgets).map(
             (key) => coreWidgets[widgets[key]] || widgets[key]
         );
+
         let num = 0;
         let content = `${
             PRE +
             paths
                 .map((p) => {
-                    if (grunt.file.exists(WIDGETS_JS_LOC, `${p}.js`)) {
+                    const widgetPath = resolveWidgetESMImport(p);
+
+                    if (grunt.file.exists(widgetPath)) {
                         num++;
 
-                        return `import w${num} from '${p}';`;
+                        return `import w${num} from '${widgetPath}';`;
                     }
+
                     return `//${p} not found`;
                 })
                 .join('\n')
@@ -286,11 +404,15 @@ module.exports = (grunt) => {
             PRE +
             paths
                 .map((p) => {
-                    p = path.join('../', p);
+                    p = p.replace(/^(\.\.\/)+node_modules\//, '/node_modules/');
 
-                    return grunt.file.exists(WIDGETS_SASS_LOC, `${p}.scss`)
-                        ? `@import "${p}"`
-                        : `//${p} not found`;
+                    const resolved = resolveSassPackageImport(p);
+
+                    if (resolved == null) {
+                        return `//${p} not found`;
+                    }
+
+                    return `@import "${p}"`;
                 })
                 .join(';\n')
         };`;
