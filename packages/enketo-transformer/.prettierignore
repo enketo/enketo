@@ -1,9 +1,0 @@
-# Ignore artifacts:
-
-.nyc*
-*/node_modules/*
-dist/*
-docs/*
-test-coverage/*
-src/xsl/**
-test/**/*.xml
