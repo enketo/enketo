@@ -26,7 +26,9 @@ export default {
         }
 
         if (!this.form.features.required) {
-            this.update = () => {};
+            this.update = () => {
+                // Form noop
+            };
         }
 
         this.update();

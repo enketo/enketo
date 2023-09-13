@@ -30,8 +30,12 @@ export default {
         }
 
         if (!this.form.features.calculate) {
-            this.update = () => {};
-            this.performAction = () => {};
+            this.update = () => {
+                // Form noop
+            };
+            this.performAction = () => {
+                // Form noop
+            };
 
             return;
         }

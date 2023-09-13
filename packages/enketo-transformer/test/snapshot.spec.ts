@@ -145,7 +145,7 @@ describe('Snapshots', () => {
                 // preserve snapshot order in this case, producing an update diff which
                 // would not be easily reviewed for such a change. Instead, this ghastly
                 // regex is used to reproduce the old behavior.
-                .replace(/\n  ( +)([^< ].*?) \/>/g, '\n$1  $2\n$1/>')
+                .replace(/\n {2}( +)([^< ].*?) \/>/g, '\n$1  $2\n$1/>')
         );
     };
 
@@ -174,7 +174,9 @@ describe('Snapshots', () => {
             return serialize(transformed);
         },
 
-        test(value: any): value is TransformedSurvey {
+        test(
+            value: Record<PropertyKey, unknown> | null | undefined
+        ): value is TransformedSurvey {
             return (
                 typeof value === 'object' &&
                 value != null &&

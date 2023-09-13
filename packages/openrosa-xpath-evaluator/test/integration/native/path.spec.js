@@ -1,10 +1,16 @@
-const { initDoc, nsResolver, filterAttributes, assertNodes } = require('../helpers');
+const {
+    initDoc,
+    nsResolver,
+    filterAttributes,
+    assertNodes,
+} = require('../helpers');
 
 describe('location path', () => {
-  let doc;
+    let doc;
 
-  beforeEach(() => {
-    doc = initDoc(`
+    beforeEach(() => {
+        doc = initDoc(
+            `
       <!DOCTYPE html>
       <html xml:lang="en-us" xmlns="http://www.w3.org/1999/xhtml" xmlns:ev="http://some-namespace.com/nss">
         <head>
@@ -27,73 +33,87 @@ describe('location path', () => {
             <div id="LocationPathCaseNamespaceParent"><div xmlns="http://asdss/"></div><div xmlns:aa="http://saa/" xmlns:a2="hello/world" xmlns:ab="hello/world2"></div><div></div><div xmlns:aa="http://saa/"></div></div>
           </div>
         </body>
-      </html>`, nsResolver);
-  });
+      </html>`,
+            nsResolver
+        );
+    });
 
-  it('root', () => {
-    let i;
-    let node;
+    it('root', () => {
+        let i;
+        let node;
 
-    const input = [
-      [doc, [doc]], // Document
-      [doc.documentElement, [doc]], // Element
-      [doc.getElementById('LocationPathCase'), [doc]], // Element
-      [doc.getElementById('LocationPathCaseText').firstChild, [doc]], // Text
-      [doc.getElementById('LocationPathCaseComment').firstChild, [doc]], // Comment
-      // [filterAttributes(doc.getElementById('LocationPathCaseAttribute').attributes)[0], [doc]] // Attribute
-   ];
+        const input = [
+            [doc, [doc]], // Document
+            [doc.documentElement, [doc]], // Element
+            [doc.getElementById('LocationPathCase'), [doc]], // Element
+            [doc.getElementById('LocationPathCaseText').firstChild, [doc]], // Text
+            [doc.getElementById('LocationPathCaseComment').firstChild, [doc]], // Comment
+            // [filterAttributes(doc.getElementById('LocationPathCaseAttribute').attributes)[0], [doc]] // Attribute
+        ];
 
-    // ProcessingInstruction
-    node = doc.getElementById('LocationPathCaseProcessingInstruction').firstChild;
-    if (node && node.nodeType == 7) {
-      input.push([node, [doc]]);
-    }
+        // ProcessingInstruction
+        node = doc.getElementById(
+            'LocationPathCaseProcessingInstruction'
+        ).firstChild;
+        if (node && node.nodeType === 7) {
+            input.push([node, [doc]]);
+        }
 
-    // CDATASection
-    node = doc.getElementById('LocationPathCaseCData').firstChild;
-    if (node && node.nodeType == 4) {
-      input.push([node, [doc]]);
-    }
+        // CDATASection
+        node = doc.getElementById('LocationPathCaseCData').firstChild;
+        if (node && node.nodeType === 4) {
+            input.push([node, [doc]]);
+        }
 
-    for (i = 0; i < input.length; i++) {
-      assertNodes("/", input[i][0], input[i][1]);
-    }
-  });
+        for (i = 0; i < input.length; i++) {
+            assertNodes('/', input[i][0], input[i][1]);
+        }
+    });
 
-  it('root node', () => {
-    assertNodes("/html", doc, []);
-    assertNodes("/xhtml:html", doc, [doc.documentElement]);
-    assertNodes("/xhtml:html", doc.getElementById('LocationPathCase'), [doc.documentElement]);
-    assertNodes("/htmlnot", doc.getElementById('LocationPathCase'), []);
-  });
+    it('root node', () => {
+        assertNodes('/html', doc, []);
+        assertNodes('/xhtml:html', doc, [doc.documentElement]);
+        assertNodes('/xhtml:html', doc.getElementById('LocationPathCase'), [
+            doc.documentElement,
+        ]);
+        assertNodes('/htmlnot', doc.getElementById('LocationPathCase'), []);
+    });
 
-  it('root node node', () => {
-    assertNodes("/xhtml:html/xhtml:body", doc.getElementById('LocationPathCase'), [doc.querySelector('body')]);
-  });
+    it('root node node', () => {
+        assertNodes(
+            '/xhtml:html/xhtml:body',
+            doc.getElementById('LocationPathCase'),
+            [doc.querySelector('body')]
+        );
+    });
 
-  it('node (node)', () => {
-    assertNodes("html", doc, []);
-    assertNodes("xhtml:html", doc, [doc.documentElement]);
-    assertNodes("xhtml:html/xhtml:body", doc, [doc.querySelector('body')]);
-  });
+    it('node (node)', () => {
+        assertNodes('html', doc, []);
+        assertNodes('xhtml:html', doc, [doc.documentElement]);
+        assertNodes('xhtml:html/xhtml:body', doc, [doc.querySelector('body')]);
+    });
 
-  it('node attribute', () => {
-    const node = doc.getElementById('LocationPathCaseAttributeParent');
-    assertNodes("child::*/attribute::*", node, [
-      filterAttributes(node.childNodes[0].attributes)[0],
-      filterAttributes(node.childNodes[1].attributes)[0],
-      filterAttributes(node.childNodes[1].attributes)[1],
-      filterAttributes(node.childNodes[2].attributes)[0],
-      filterAttributes(node.childNodes[3].attributes)[0]
-    ]);
-  });
+    it('node attribute', () => {
+        const node = doc.getElementById('LocationPathCaseAttributeParent');
+        assertNodes('child::*/attribute::*', node, [
+            filterAttributes(node.childNodes[0].attributes)[0],
+            filterAttributes(node.childNodes[1].attributes)[0],
+            filterAttributes(node.childNodes[1].attributes)[1],
+            filterAttributes(node.childNodes[2].attributes)[0],
+            filterAttributes(node.childNodes[3].attributes)[0],
+        ]);
+    });
 
-  it('duplicates handled correctly', () => {
-    assertNodes("ancestor-or-self::* /ancestor-or-self::*", doc.getElementById('LocationPathCaseDuplicates'), [
-      doc.documentElement,
-      doc.querySelector('body'),
-      doc.getElementById('LocationPathCase'),
-      doc.getElementById('LocationPathCaseDuplicates')
-    ]);
-  });
+    it('duplicates handled correctly', () => {
+        assertNodes(
+            'ancestor-or-self::* /ancestor-or-self::*',
+            doc.getElementById('LocationPathCaseDuplicates'),
+            [
+                doc.documentElement,
+                doc.querySelector('body'),
+                doc.getElementById('LocationPathCase'),
+                doc.getElementById('LocationPathCaseDuplicates'),
+            ]
+        );
+    });
 });

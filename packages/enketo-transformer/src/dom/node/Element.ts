@@ -6,15 +6,17 @@ import { NodeTypes } from '../shared';
 const { Element, parseXml } = libxmljs;
 
 /** @package */
+// eslint-disable-next-line @typescript-eslint/no-unsafe-declaration-merging
 export interface DOMExtendedElement extends DOM.Node {
     remove(): void;
 }
 
+// eslint-disable-next-line @typescript-eslint/no-unsafe-declaration-merging
 export class DOMExtendedElement implements DOM.Element {
     readonly nodeType = NodeTypes.DOCUMENT_NODE;
 
     get attributes() {
-        return (this as any as DOMExtendedElement & Element)
+        return (this as unknown as DOMExtendedElement & Element)
             .attrs()
             .map((attr) => ({
                 name: attr.name(),
@@ -24,15 +26,19 @@ export class DOMExtendedElement implements DOM.Element {
     }
 
     get firstChild() {
-        return (this as any as DOMExtendedElement & Element).child(0) ?? null;
+        return (
+            (this as unknown as DOMExtendedElement & Element).child(0) ?? null
+        );
     }
 
     get firstElementChild(): Element | null {
-        return (this as any as DOMExtendedElement & Element).get('*') ?? null;
+        return (
+            (this as unknown as DOMExtendedElement & Element).get('*') ?? null
+        );
     }
 
     get localName() {
-        const prefix = (this as any as Element).namespace()?.prefix();
+        const prefix = (this as unknown as Element).namespace()?.prefix();
 
         if (prefix == null) {
             return this.nodeName;
@@ -42,11 +48,11 @@ export class DOMExtendedElement implements DOM.Element {
     }
 
     get nodeName() {
-        return (this as any as Element).name();
+        return (this as unknown as Element).name();
     }
 
     get outerHTML() {
-        return (this as any as Element).toString(false);
+        return (this as unknown as Element).toString(false);
     }
 
     append(this: DOMExtendedElement & Element, ...nodes: Node[]) {

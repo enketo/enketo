@@ -14,13 +14,13 @@
  * for consistency with historical behavior.
  */
 class BlankDate extends Date {
-  constructor() {
-    super(NaN);
-  }
+    constructor() {
+        super(NaN);
+    }
 
-  toString() {
-    return '';
-  }
+    toString() {
+        return '';
+    }
 }
 
 /**
@@ -30,20 +30,20 @@ class BlankDate extends Date {
  * @return {string} a datetime string formatted according to RC3339 with local offset
  */
 const toISOLocalString = (date) => {
-  //2012-09-05T12:57:00.000-04:00 (ODK)
+    // 2012-09-05T12:57:00.000-04:00 (ODK)
 
-  if(['Invalid Date', ''].includes(date.toString())) {
-    return date.toString();
-  }
+    if (['Invalid Date', ''].includes(date.toString())) {
+        return date.toString();
+    }
 
-  var dt = new Date(date.getTime() - (date.getTimezoneOffset() * 60 * 1000)).toISOString()
-      .replace('Z', getTimezoneOffsetAsTime(date));
+    const dt = new Date(date.getTime() - date.getTimezoneOffset() * 60 * 1000)
+        .toISOString()
+        .replace('Z', getTimezoneOffsetAsTime(date));
 
-  if(dt.indexOf('T00:00:00.000') > 0) {
-    return dt.split('T')[0];
-  } else {
+    if (dt.indexOf('T00:00:00.000') > 0) {
+        return dt.split('T')[0];
+    }
     return dt;
-  }
 };
 
 /**
@@ -51,45 +51,43 @@ const toISOLocalString = (date) => {
  * @return {string}
  */
 const getTimezoneOffsetAsTime = (date) => {
-  var offsetMinutesTotal;
-  var hours;
-  var minutes;
-  var direction;
-  var pad2 = function(x) {
-    return (x < 10) ? '0' + x : x;
-  };
+    const pad2 = function (x) {
+        return x < 10 ? `0${x}` : x;
+    };
 
-  if(date.toString() === 'Invalid Date') {
-    return date.toString();
-  }
+    if (date.toString() === 'Invalid Date') {
+        return date.toString();
+    }
 
-  offsetMinutesTotal = date.getTimezoneOffset();
+    const offsetMinutesTotal = date.getTimezoneOffset();
 
-  direction = (offsetMinutesTotal < 0) ? '+' : '-';
-  hours = pad2(Math.floor(Math.abs(offsetMinutesTotal / 60)));
-  minutes = pad2(Math.floor(Math.abs(offsetMinutesTotal % 60)));
+    const direction = offsetMinutesTotal < 0 ? '+' : '-';
+    const hours = pad2(Math.floor(Math.abs(offsetMinutesTotal / 60)));
+    const minutes = pad2(Math.floor(Math.abs(offsetMinutesTotal % 60)));
 
-  return direction + hours + ':' + minutes;
+    return `${direction + hours}:${minutes}`;
 };
 
 /**
  * @deprecated
  * @see {toISOLocalString}
  */
-Date.prototype.toISOLocalString = function() {
-  return toISOLocalString(this);
+// eslint-disable-next-line no-extend-native
+Date.prototype.toISOLocalString = function () {
+    return toISOLocalString(this);
 };
 
 /**
  * @deprecated
  * @see {getTimezoneOffsetAsTime}
  */
-Date.prototype.getTimezoneOffsetAsTime = function() {
-  return getTimezoneOffsetAsTime(this);
+// eslint-disable-next-line no-extend-native
+Date.prototype.getTimezoneOffsetAsTime = function () {
+    return getTimezoneOffsetAsTime(this);
 };
 
 module.exports = {
-  BlankDate,
-  getTimezoneOffsetAsTime,
-  toISOLocalString,
+    BlankDate,
+    getTimezoneOffsetAsTime,
+    toISOLocalString,
 };

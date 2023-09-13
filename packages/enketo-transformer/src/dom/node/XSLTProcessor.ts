@@ -5,7 +5,7 @@ import type { DOM } from '../abstract';
 
 /** @package */
 export class XSLTProcessor {
-    private parameters: Record<string, any> = {};
+    private parameters: Record<string, unknown> = {};
 
     private stylesheet: XSLTStylesheet | null = null;
 
@@ -23,7 +23,7 @@ export class XSLTProcessor {
         this.stylesheet = null;
     }
 
-    setParameter(_namespaceURI: string | null, name: string, value: any) {
+    setParameter(_namespaceURI: string | null, name: string, value: unknown) {
         this.parameters[name] = value;
     }
 

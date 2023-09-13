@@ -539,7 +539,9 @@ function _saveRecord(survey, draft, recordName, confirmed) {
     if (draft && !confirmed) {
         return _confirmRecordName(recordName, draft)
             .then((name) => _saveRecord(survey, draft, name, true))
-            .catch(() => {});
+            .catch(() => {
+                // Ignore error
+            });
     }
 
     return autoSavePromise

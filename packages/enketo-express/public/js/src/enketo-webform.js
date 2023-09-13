@@ -168,7 +168,9 @@ function _setEmergencyHandlers() {
                 .then(() => {
                     location.reload();
                 })
-                .catch(() => {});
+                .catch(() => {
+                    // Ignore error
+                });
         });
     }
 }

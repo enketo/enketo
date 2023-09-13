@@ -476,7 +476,9 @@ const surveyStore = {
 
                 return Promise.all(tasks);
             })
-            .then(() => {});
+            .then(() => {
+                // Resolves to `void`
+            });
     },
     /**
      * removes all surveys and survey resources

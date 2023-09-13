@@ -12,11 +12,11 @@ Object.assign(libxmljs, {
 /** @package */
 export class DOMExtendedNode implements DOM.Node {
     get nodeName() {
-        return (this as any as Node & DOMExtendedNode).name();
+        return (this as unknown as Node & DOMExtendedNode).name();
     }
 
     get nodeType() {
-        const type = (this as any as Node & DOMExtendedNode).type();
+        const type = (this as unknown as Node & DOMExtendedNode).type();
 
         switch (type) {
             case 'attribute': {
@@ -47,24 +47,24 @@ export class DOMExtendedNode implements DOM.Node {
 
     get ownerDocument() {
         if (this.nodeType === NodeTypes.DOCUMENT_NODE) {
-            return this as any as Document;
+            return this as unknown as Document;
         }
 
-        return (this as any as DOMExtendedNode & Node).doc();
+        return (this as unknown as DOMExtendedNode & Node).doc();
     }
 
     get parentElement() {
         return (
-            this as any as DOMExtendedNode & Node
+            this as unknown as DOMExtendedNode & Node
         ).parent() as Element | null;
     }
 
     get textContent(): string | null {
-        return (this as any as DOMExtendedNode & Node).text();
+        return (this as unknown as DOMExtendedNode & Node).text();
     }
 
     set textContent(value: string) {
-        (this as any as DOMExtendedNode & Node).text(value);
+        (this as unknown as DOMExtendedNode & Node).text(value);
     }
 
     cloneNode<T extends Node>(

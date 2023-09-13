@@ -380,7 +380,9 @@ function getMaximumSubmissionSize(survey) {
                 );
             }
         })
-        .catch(() => {})
+        .catch(() => {
+            // Ignore error
+        })
         .then(() => survey);
 }
 

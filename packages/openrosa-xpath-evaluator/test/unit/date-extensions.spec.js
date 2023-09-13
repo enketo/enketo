@@ -7,93 +7,109 @@
 
 const { assert } = require('chai');
 const sinon = require('sinon');
-const { getTimezoneOffsetAsTime, toISOLocalString } = require('../../src/date-extensions');
+const {
+    getTimezoneOffsetAsTime,
+    toISOLocalString,
+} = require('../../src/date-extensions');
 
 describe('Date helpers', () => {
-  /** @type {import('sinon').SinonSandbox} */
-  let sandbox;
+    /** @type {import('sinon').SinonSandbox} */
+    let sandbox;
 
-  /** @type {number} */
-  let timezoneOffset;
+    /** @type {number} */
+    let timezoneOffset;
 
-  beforeEach(() => {
-    sandbox = sinon.createSandbox();
+    beforeEach(() => {
+        sandbox = sinon.createSandbox();
 
-    timezoneOffset = 0;
+        timezoneOffset = 0;
 
-    sandbox.stub(Date.prototype, 'getTimezoneOffset')
-      .callsFake(() => timezoneOffset);
-  });
-
-  afterEach(() => {
-    sandbox.restore();
-  });
-
-  describe('legacy prototype methods', () => {
-    describe('getTimezoneOffsetAsTime', () => {
-      it('returns the time zone offset in hours when given a time zone difference in minutes', () => {
-        timezoneOffset = -60;
-
-        assert.equal((new Date()).getTimezoneOffsetAsTime(), '+01:00');
-      });
-
-      it('returns a negative time zone offset when given a positive time zone difference', () => {
-        timezoneOffset = 60;
-
-        assert.equal((new Date()).getTimezoneOffsetAsTime(), '-01:00');
-      });
+        sandbox
+            .stub(Date.prototype, 'getTimezoneOffset')
+            .callsFake(() => timezoneOffset);
     });
 
-    describe('toISOLocalString', () => {
-      it('returns the ISO local string consistent with a negative time zone offset', () => {
-        const date = new Date('1975-08-19T23:15:30.000+07:00');
-
-        timezoneOffset = -60;
-
-        assert.equal(date.toISOLocalString(), '1975-08-19T17:15:30.000+01:00');
-      });
-
-      it('returns the ISO local string consistent with a positive time zone offset', () => {
-        const date = new Date('1975-08-19T23:15:30.000+07:00');
-
-        timezoneOffset = 60;
-
-        assert.equal(date.toISOLocalString(), '1975-08-19T15:15:30.000-01:00');
-      });
-    });
-  });
-
-  describe('plain functions', () => {
-    describe('getTimezoneOffsetAsTime', () => {
-      it('returns the time zone offset in hours when given a time zone difference in minutes', () => {
-        timezoneOffset = -60;
-
-        assert.equal(getTimezoneOffsetAsTime(new Date()), '+01:00');
-      });
-
-      it('returns a negative time zone offset when given a positive time zone difference', () => {
-        timezoneOffset = 60;
-
-        assert.equal(getTimezoneOffsetAsTime(new Date()), '-01:00');
-      });
+    afterEach(() => {
+        sandbox.restore();
     });
 
-    describe('toISOLocalString', () => {
-      it('returns the ISO local string consistent with a negative time zone offset', () => {
-        const date = new Date('1975-08-19T23:15:30.000+07:00');
+    describe('legacy prototype methods', () => {
+        describe('getTimezoneOffsetAsTime', () => {
+            it('returns the time zone offset in hours when given a time zone difference in minutes', () => {
+                timezoneOffset = -60;
 
-        timezoneOffset = -60;
+                assert.equal(new Date().getTimezoneOffsetAsTime(), '+01:00');
+            });
 
-        assert.equal(toISOLocalString(date), '1975-08-19T17:15:30.000+01:00');
-      });
+            it('returns a negative time zone offset when given a positive time zone difference', () => {
+                timezoneOffset = 60;
 
-      it('returns the ISO local string consistent with a positive time zone offset', () => {
-        const date = new Date('1975-08-19T23:15:30.000+07:00');
+                assert.equal(new Date().getTimezoneOffsetAsTime(), '-01:00');
+            });
+        });
 
-        timezoneOffset = 60;
+        describe('toISOLocalString', () => {
+            it('returns the ISO local string consistent with a negative time zone offset', () => {
+                const date = new Date('1975-08-19T23:15:30.000+07:00');
 
-        assert.equal(toISOLocalString(date), '1975-08-19T15:15:30.000-01:00');
-      });
+                timezoneOffset = -60;
+
+                assert.equal(
+                    date.toISOLocalString(),
+                    '1975-08-19T17:15:30.000+01:00'
+                );
+            });
+
+            it('returns the ISO local string consistent with a positive time zone offset', () => {
+                const date = new Date('1975-08-19T23:15:30.000+07:00');
+
+                timezoneOffset = 60;
+
+                assert.equal(
+                    date.toISOLocalString(),
+                    '1975-08-19T15:15:30.000-01:00'
+                );
+            });
+        });
     });
-  });
+
+    describe('plain functions', () => {
+        describe('getTimezoneOffsetAsTime', () => {
+            it('returns the time zone offset in hours when given a time zone difference in minutes', () => {
+                timezoneOffset = -60;
+
+                assert.equal(getTimezoneOffsetAsTime(new Date()), '+01:00');
+            });
+
+            it('returns a negative time zone offset when given a positive time zone difference', () => {
+                timezoneOffset = 60;
+
+                assert.equal(getTimezoneOffsetAsTime(new Date()), '-01:00');
+            });
+        });
+
+        describe('toISOLocalString', () => {
+            it('returns the ISO local string consistent with a negative time zone offset', () => {
+                const date = new Date('1975-08-19T23:15:30.000+07:00');
+
+                timezoneOffset = -60;
+
+                assert.equal(
+                    toISOLocalString(date),
+                    '1975-08-19T17:15:30.000+01:00'
+                );
+            });
+
+            it('returns the ISO local string consistent with a positive time zone offset', () => {
+                const date = new Date('1975-08-19T23:15:30.000+07:00');
+
+                timezoneOffset = 60;
+
+                assert.equal(
+                    toISOLocalString(date),
+                    '1975-08-19T15:15:30.000-01:00'
+                );
+            });
+        });
+    });
 });

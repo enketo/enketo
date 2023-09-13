@@ -2,44 +2,51 @@ const { DATE_STRING, dateToDays, dateStringToDays } = require('./date');
 const { toISOLocalString } = require('../date-extensions');
 
 module.exports = {
-  asBoolean,
-  asNumber,
-  asString,
+    asBoolean,
+    asNumber,
+    asString,
 };
 
 // cast to boolean, as per https://www.w3.org/TR/1999/REC-xpath-19991116/#section-Boolean-Functions
 function asBoolean(r) {
-  if(isDomNode(r)) return !!asString(r).trim();
-  switch(r.t) {
-    case 'arr':  return !!r.v.length;
-    case 'date': return !isNaN(r.v); // TODO should be handled in an extension rather than core code
-    default:     return !!r.v;
-  }
+    if (isDomNode(r)) return !!asString(r).trim();
+    switch (r.t) {
+        case 'arr':
+            return !!r.v.length;
+        case 'date':
+            return !Number.isNaN(Number(r.v)); // TODO should be handled in an extension rather than core code
+        default:
+            return !!r.v;
+    }
 }
 
 // cast to number, as per https://www.w3.org/TR/1999/REC-xpath-19991116/#section-Number-Functions
 function asNumber(r) {
-  if(r.t === 'num')  return r.v;
-  if(r.t === 'bool') return r.v ? 1 : 0;
-  if(r.t === 'date') return dateToDays(r.v); // TODO should be handled in an extension rather than core code
+    if (r.t === 'num') return r.v;
+    if (r.t === 'bool') return r.v ? 1 : 0;
+    if (r.t === 'date') return dateToDays(r.v); // TODO should be handled in an extension rather than core code
 
-  const str = asString(r).trim();
-  if(str === '') return NaN;
-  if(DATE_STRING.test(str)) return dateStringToDays(str); // TODO should be handled in an extension rather than core code
-  return +str;
+    const str = asString(r).trim();
+    if (str === '') return NaN;
+    if (DATE_STRING.test(str)) return dateStringToDays(str); // TODO should be handled in an extension rather than core code
+    return +str;
 }
 
 // cast to string, as per https://www.w3.org/TR/1999/REC-xpath-19991116/#section-String-Functions
 function asString(r) {
-  if(isDomNode(r)) return nodeToString(r);
-  switch(r.t) {
-    case 'str':  return r.v;
-    case 'arr':  return r.v.length ? r.v[0].textContent || '' : '';
-    case 'date': return toISOLocalString(r.v).replace(/T00:00:00.000.*/, ''); // TODO should be handled in an extension rather than core code
-    case 'num':
-    case 'bool':
-    default:     return r.v.toString();
-  }
+    if (isDomNode(r)) return nodeToString(r);
+    switch (r.t) {
+        case 'str':
+            return r.v;
+        case 'arr':
+            return r.v.length ? r.v[0].textContent || '' : '';
+        case 'date':
+            return toISOLocalString(r.v).replace(/T00:00:00.000.*/, ''); // TODO should be handled in an extension rather than core code
+        case 'num':
+        case 'bool':
+        default:
+            return r.v.toString();
+    }
 }
 
 // Per https://www.w3.org/TR/1999/REC-xpath-19991116/#dt-string-value:
@@ -51,17 +58,20 @@ function asString(r) {
 // 6. > The string-value of comment is the content of the comment not including the opening <!-- or the closing -->.
 // 7. > The string-value of a text node is the character data.
 function nodeToString(node) {
-  switch(node.nodeType) {
-    case Node.DOCUMENT_NODE: return node.documentElement.textContent;
-    case Node.TEXT_NODE:
-    case Node.CDATA_SECTION_NODE:
-    case Node.PROCESSING_INSTRUCTION_NODE:
-    case Node.COMMENT_NODE:
-    case Node.ELEMENT_NODE:
-      return node.textContent; // potentially not to spec for Element, but much simpler than recursing
-    case Node.ATTRIBUTE_NODE: return node.value;
-    default: throw new Error(`TODO No handling for node type: ${node.nodeType}`);
-  }
+    switch (node.nodeType) {
+        case Node.DOCUMENT_NODE:
+            return node.documentElement.textContent;
+        case Node.TEXT_NODE:
+        case Node.CDATA_SECTION_NODE:
+        case Node.PROCESSING_INSTRUCTION_NODE:
+        case Node.COMMENT_NODE:
+        case Node.ELEMENT_NODE:
+            return node.textContent; // potentially not to spec for Element, but much simpler than recursing
+        case Node.ATTRIBUTE_NODE:
+            return node.value;
+        default:
+            throw new Error(`TODO No handling for node type: ${node.nodeType}`);
+    }
 }
 
 /**
@@ -69,5 +79,5 @@ function nodeToString(node) {
  * @see https://developer.mozilla.org/en-US/docs/Web/API/Node
  */
 function isDomNode(thing) {
-  return thing instanceof Node;
+    return thing instanceof Node;
 }

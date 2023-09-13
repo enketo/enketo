@@ -1,7 +1,16 @@
-/node_modules/
-**/node_modules/
+**/.nyc*
+**/node_modules/**
+**/docs/**
+**/test-coverage/**
+**/coverage.shield.badge.md
 
+/packages/enketo-transformer/dist/*
+/packages/enketo-transformer/src/xsl/*
+/packages/enketo-transformer/test/**/*.xml
+
+/packages/enketo-core/build/*
 /packages/enketo-core/**/jquery.relevant-dropdown.js
+/packages/enketo-core/test/mock/forms.js
 
-/packages/enketo-transformer/**/*.xml
-/packages/enketo-transformer/**/*.xsl
+/packages/enketo-express/public/js/build/*
+/packages/enketo-express/**/offline-app-worker-partial.js

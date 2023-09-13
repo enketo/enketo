@@ -18,7 +18,7 @@ describe('calculate functionality', () => {
 
         sandbox.stub(dialog, 'confirm').resolves(true);
 
-        timers = sandbox.useFakeTimers();
+        timers = sandbox.useFakeTimers(Date.now());
 
         excludeNonRelevant = false;
 
@@ -225,12 +225,8 @@ describe('calculate functionality', () => {
     });
 
     describe('Excluding non-relevant nodes', () => {
-        /** @type {import('sinon').SinonFakeTimers} */
-        let timers;
-
         beforeEach(() => {
             excludeNonRelevant = true;
-            timers = sandbox.useFakeTimers(Date.now());
         });
 
         afterEach(() => {

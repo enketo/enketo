@@ -1,9 +1,8 @@
 const { assertNumberValue, initDoc } = require('../helpers');
 
 describe('#position()', () => {
-
-  it('position(node) with an argument', () => {
-    const doc = initDoc(`
+    it('position(node) with an argument', () => {
+        const doc = initDoc(`
       <!DOCTYPE html>
       <html xml:lang="en-us" xmlns="http://www.w3.org/1999/xhtml" xmlns:ev="http://some-namespace.com/nss">
         <head>
@@ -33,13 +32,13 @@ describe('#position()', () => {
         </body>
       </html>`);
 
-    let node = doc.getElementById('FunctionNumberCaseNumberMultiple');
-    assertNumberValue(node, null, 'position(..)', 6);
-    assertNumberValue(node, null, 'position(.)', 3);
-  });
+        const node = doc.getElementById('FunctionNumberCaseNumberMultiple');
+        assertNumberValue(node, null, 'position(..)', 6);
+        assertNumberValue(node, null, 'position(.)', 3);
+    });
 
-  it('position(node) with p node', () => {
-    const doc = initDoc(`
+    it('position(node) with p node', () => {
+        const doc = initDoc(`
       <div id="testFunctionNodeset">
         <div id="testFunctionNodeset2">
           <p>1</p>
@@ -62,8 +61,8 @@ describe('#position()', () => {
           </div>
         </div>
       </div>`);
-    const node = doc.getElementById('testFunctionNodeset3NodeP');
-    assertNumberValue(node, null, 'position(../..)', 2);
-  });
-  //   throw new Error('nodeset provided to position() contained multiple nodes');
+        const node = doc.getElementById('testFunctionNodeset3NodeP');
+        assertNumberValue(node, null, 'position(../..)', 2);
+    });
+    //   throw new Error('nodeset provided to position() contained multiple nodes');
 });

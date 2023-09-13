@@ -24,7 +24,9 @@ export default {
         }
 
         if (!this.form.features.output) {
-            this.update = () => {};
+            this.update = () => {
+                // Form noop
+            };
 
             return;
         }

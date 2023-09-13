@@ -94,7 +94,9 @@ class Widget {
      * Updates form-defined language strings, <option>s (cascading selects, and (calculated) values.
      * Most of the times, this function needs to be overridden in the widget.
      */
-    update() {}
+    update() {
+        // Part of interface, to be overridden
+    }
 
     /**
      * Returns widget properties. May need to be extended.
@@ -155,7 +157,9 @@ class Widget {
      * @param {*} value - value to set
      * @type {*}
      */
-    set value(value) {} // eslint-disable-line no-empty-function -- this is defining the API
+    set value(value) {
+        // Part of interface, to be overridden
+    }
 
     /**
      * Obtains the value from the original form control the widget is instantiated on.

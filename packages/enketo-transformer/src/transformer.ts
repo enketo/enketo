@@ -32,7 +32,7 @@ export interface Survey {
     theme?: string;
 }
 
-export type TransformedSurvey<T = any> = Omit<T, keyof Survey> & {
+export type TransformedSurvey<T = unknown> = Omit<T, keyof Survey> & {
     form: string;
     languageMap: Record<string, string>;
     model: string;
@@ -50,10 +50,6 @@ const getPreprocess = (
         return survey.preprocess;
     }
 };
-
-const isFunction = <T extends (...args: any[]) => any>(
-    value: unknown
-): value is T => typeof value === 'function';
 
 /**
  * Performs XSLT transformation on XForm and process the result.
@@ -77,10 +73,15 @@ export const transform: Transform = async (survey) => {
 
     const preprocess = getPreprocess(survey);
 
-    if (isFunction(preprocess)) {
+    if (typeof preprocess === 'function') {
         const { libxmljs } = await import('libxslt');
 
-        xformDoc = preprocess.call(libxmljs, xformDoc as any);
+        // This passes with the Node and test configs, but now fails with the
+        // web config... where it is never used. Ignoring the error after
+        // several futile, probably pointless, attempts to appease the compiler.
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment -- ^
+        // @ts-ignore
+        xformDoc = preprocess.call(libxmljs, xformDoc as LibXMLJS.Document);
     }
 
     processBinaryDefaults(xformDoc, mediaMap);

@@ -1,5 +1,5 @@
-var MAX_INT32 = 2147483647;
-var MINSTD = 16807;
+const MAX_INT32 = 2147483647;
+const MINSTD = 16807;
 
 /**
  * Performs the "inside-out" variant of the Fisher-Yates array shuffle.
@@ -11,27 +11,29 @@ var MINSTD = 16807;
  * @return {<*>}        the suffled array
  */
 function shuffle(array, seed) {
-  var rng;
-  var result = [];
+    let rng;
+    const result = [];
 
-  if(typeof seed !== 'undefined'){
-    if(!Number.isInteger(seed)) {
-      throw new Error('Invalid seed argument. Integer required, but got: ' + seed);
+    if (typeof seed !== 'undefined') {
+        if (!Number.isInteger(seed)) {
+            throw new Error(
+                `Invalid seed argument. Integer required, but got: ${seed}`
+            );
+        }
+        const rnd = new Random(seed);
+        rng = rnd.nextFloat.bind(rnd);
+    } else {
+        rng = Math.random;
     }
-    var rnd = new Random(seed);
-    rng = rnd.nextFloat.bind(rnd);
-  } else {
-    rng = Math.random;
-  }
 
-  for (var i = 0; i < array.length; ++i) {
-    var j = Math.floor(rng() * (i + 1));
-    if(j !== i) {
-      result[i] = result[j];
+    for (let i = 0; i < array.length; ++i) {
+        const j = Math.floor(rng() * (i + 1));
+        if (j !== i) {
+            result[i] = result[j];
+        }
+        result[j] = array[i];
     }
-    result[j] = array[i];
-  }
-  return result;
+    return result;
 }
 
 /**
@@ -42,17 +44,17 @@ function shuffle(array, seed) {
  */
 function Random(seed) {
     this._seed = seed % MAX_INT32;
-  if(this._seed <= 0) {
-    this._seed += (MAX_INT32 - 1);
-  }
+    if (this._seed <= 0) {
+        this._seed += MAX_INT32 - 1;
+    }
 }
 
 /**
  * Returns a pseudo-random integer value.
  */
 Random.prototype.next = function () {
-  this._seed = this._seed * MINSTD % MAX_INT32;
-  return this._seed;
+    this._seed = (this._seed * MINSTD) % MAX_INT32;
+    return this._seed;
 };
 
 /**

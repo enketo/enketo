@@ -1,7 +1,7 @@
 const { initDoc, assertBoolean } = require('../helpers');
 
 describe('Comparison operator (2)', () => {
-  const doc = initDoc(`
+    const doc = initDoc(`
     <div id="ComparisonOperatorCase">
       <div id="ComparisonOperatorCaseNodesetNegative5to5">
         <div>-5</div>
@@ -46,147 +46,320 @@ describe('Comparison operator (2)', () => {
     </div>
   `);
 
-  it('correctly evaluates = and !=', () => {
-    const input = [
-      [[ "1", "1" ], [ true, false ], doc],
-      [[ "1", "0" ], [ false, true ], doc],
-      [[ "1", "'1'" ], [ true, false ], doc],
-      [[ "1", "'0'" ], [ false, true ], doc],
-      [[ "1", "true()" ], [ true, false ], doc],
-      [[ "1", "false()" ], [ false, true ], doc],
-      [[ "0", "false()" ], [ true, false ], doc],
-      [[ "-10", "*" ], [ false, true ], doc.getElementById('ComparisonOperatorCaseNodesetNegative5to5' )],
-      [[ "4", "*" ], [ true, true ], doc.getElementById('ComparisonOperatorCaseNodesetNegative5to5' )],
-      [[ "4.3", "*" ],[ false, true ], doc.getElementById('ComparisonOperatorCaseNodesetNegative5to5' )],
-      [[ "0", "*" ], [ false, false ], doc.getElementById('ComparisonOperatorCaseNodesetEmpty' )],
-      [[ "true()", "true()" ], [ true, false ], doc],
-      [[ "false()", "false()" ], [ true, false ], doc],
-      [[ "true()", "false()" ], [ false, true ], doc],
-      [[ "true()", "'1'" ], [ true, false ], doc],
-      [[ "true()", "''" ], [ false, true ], doc],
-      [[ "false()", "'0'" ], [ false, true ], doc],
-      [[ "false()", "''" ], [ true, false ], doc],
-      [[ "true()", "*" ], [ true, false ], doc.getElementById('ComparisonOperatorCaseNodesetNegative5to5' )],
-      [[ "false()", "*" ], [ false, true ], doc.getElementById('ComparisonOperatorCaseNodesetNegative5to5' )],
-      [[ "true()", "*" ], [ false, true ], doc.getElementById('ComparisonOperatorCaseNodesetEmpty' )],
-      [[ "false()", "*" ], [ true, false ], doc.getElementById('ComparisonOperatorCaseNodesetEmpty' )],
-      [[ "'1a'", "'1a'" ], [ true, false ], doc],
-      [[ "'1'", "'0'" ], [ false, true ], doc],
-      [[ "''", "''" ], [ true, false ], doc],
-      [[ "''", "'0'" ], [ false, true ], doc],
-      [[ "'aaa'", "*" ], [ true, true ], doc.getElementById('ComparisonOperatorCaseNodesetStrings' )],
-      [[ "'bb'", "*" ], [ false, true ], doc.getElementById('ComparisonOperatorCaseNodesetStrings' )],
-      [[ "''", "*" ], [ false, true ], doc.getElementById('ComparisonOperatorCaseNodesetStrings' )],
-      [[ "''", "*" ], [ false, false ], doc.getElementById('ComparisonOperatorCaseNodesetEmpty' )],
-      // [[ "id('ComparisonOperatorCaseNodesetNegative5to5')/*", "id('ComparisonOperatorCaseNodesetEmpty')/*" ], [ false, false ], doc],
-      // [[ "id('ComparisonOperatorCaseNodesetNegative5to5')/*", "id('ComparisonOperatorCaseNodeset4to8')/*" ], [ true, true ], doc],
-      // [[ "id('ComparisonOperatorCaseNodesetNegative5to5')/*", "id('ComparisonOperatorCaseNodeset6to10')/*" ], [ false, true ], doc]
-    ];
+    it('correctly evaluates = and !=', () => {
+        const input = [
+            [['1', '1'], [true, false], doc],
+            [['1', '0'], [false, true], doc],
+            [['1', "'1'"], [true, false], doc],
+            [['1', "'0'"], [false, true], doc],
+            [['1', 'true()'], [true, false], doc],
+            [['1', 'false()'], [false, true], doc],
+            [['0', 'false()'], [true, false], doc],
+            [
+                ['-10', '*'],
+                [false, true],
+                doc.getElementById('ComparisonOperatorCaseNodesetNegative5to5'),
+            ],
+            [
+                ['4', '*'],
+                [true, true],
+                doc.getElementById('ComparisonOperatorCaseNodesetNegative5to5'),
+            ],
+            [
+                ['4.3', '*'],
+                [false, true],
+                doc.getElementById('ComparisonOperatorCaseNodesetNegative5to5'),
+            ],
+            [
+                ['0', '*'],
+                [false, false],
+                doc.getElementById('ComparisonOperatorCaseNodesetEmpty'),
+            ],
+            [['true()', 'true()'], [true, false], doc],
+            [['false()', 'false()'], [true, false], doc],
+            [['true()', 'false()'], [false, true], doc],
+            [['true()', "'1'"], [true, false], doc],
+            [['true()', "''"], [false, true], doc],
+            [['false()', "'0'"], [false, true], doc],
+            [['false()', "''"], [true, false], doc],
+            [
+                ['true()', '*'],
+                [true, false],
+                doc.getElementById('ComparisonOperatorCaseNodesetNegative5to5'),
+            ],
+            [
+                ['false()', '*'],
+                [false, true],
+                doc.getElementById('ComparisonOperatorCaseNodesetNegative5to5'),
+            ],
+            [
+                ['true()', '*'],
+                [false, true],
+                doc.getElementById('ComparisonOperatorCaseNodesetEmpty'),
+            ],
+            [
+                ['false()', '*'],
+                [true, false],
+                doc.getElementById('ComparisonOperatorCaseNodesetEmpty'),
+            ],
+            [["'1a'", "'1a'"], [true, false], doc],
+            [["'1'", "'0'"], [false, true], doc],
+            [["''", "''"], [true, false], doc],
+            [["''", "'0'"], [false, true], doc],
+            [
+                ["'aaa'", '*'],
+                [true, true],
+                doc.getElementById('ComparisonOperatorCaseNodesetStrings'),
+            ],
+            [
+                ["'bb'", '*'],
+                [false, true],
+                doc.getElementById('ComparisonOperatorCaseNodesetStrings'),
+            ],
+            [
+                ["''", '*'],
+                [false, true],
+                doc.getElementById('ComparisonOperatorCaseNodesetStrings'),
+            ],
+            [
+                ["''", '*'],
+                [false, false],
+                doc.getElementById('ComparisonOperatorCaseNodesetEmpty'),
+            ],
+            // [[ "id('ComparisonOperatorCaseNodesetNegative5to5')/*", "id('ComparisonOperatorCaseNodesetEmpty')/*" ], [ false, false ], doc],
+            // [[ "id('ComparisonOperatorCaseNodesetNegative5to5')/*", "id('ComparisonOperatorCaseNodeset4to8')/*" ], [ true, true ], doc],
+            // [[ "id('ComparisonOperatorCaseNodesetNegative5to5')/*", "id('ComparisonOperatorCaseNodeset6to10')/*" ], [ false, true ], doc]
+        ];
 
-    const ops = [ '=', '!=' ];
+        const ops = ['=', '!='];
 
-    for(let k = 0; k < ops.length; k++ ) { // different operators
-      for(let j = 0; j < 2; j++ ) { // switch parameter order
-        for(let i = 0; i < input.length; i++ ) { // all cases
-          const expr = `${input[i][0][j % 2]} ${ops[k]} ${input[i][0][(j + 1) % 2]}`;
-          assertBoolean(input[i][2], null, expr, input[i][1][k]);
+        for (let k = 0; k < ops.length; k++) {
+            // different operators
+            for (let j = 0; j < 2; j++) {
+                // switch parameter order
+                for (let i = 0; i < input.length; i++) {
+                    // all cases
+                    const expr = `${input[i][0][j % 2]} ${ops[k]} ${
+                        input[i][0][(j + 1) % 2]
+                    }`;
+                    assertBoolean(input[i][2], null, expr, input[i][1][k]);
+                }
+            }
         }
-      }
-    }
-  });
+    });
 
-  it('correctly evaluates <, <=, > and >=', () => {
-    const input = [
-      [[ "1", "2" ], [ true, true, false, false ], doc],
-      [[ "1", "1" ], [ false, true, false, true ], doc],
-      [[ "1", "0" ], [ false, false, true, true ], doc],
-      [[ "1", "'2'" ], [ true, true, false, false ], doc],
-      [[ "1", "'1'" ], [ false, true, false, true ], doc],
-      [[ "1", "'0'" ], [ false, false, true, true ], doc],
-      [[ "2", "true()" ], [ false, false, true, true ], doc],
-      [[ "1", "true()" ], [ false, true, false, true ], doc],
-      [[ "1", "false()" ], [ false, false, true, true ], doc],
-      [[ "0", "false()" ], [ false, true, false, true ], doc],
-      [[ "0", "true()" ], [ true, true, false, false ], doc],
-      [[ "true()", "2" ], [ true, true, false, false ], doc],
-      [[ "true()", "1" ], [ false, true, false, true ], doc],
-      [[ "false()", "1" ], [ true, true, false, false ], doc],
-      [[ "false()", "0" ], [ false, true, false, true ], doc],
-      [[ "true()", "0" ], [ false, false, true, true ], doc],
-      [[ "true()", "true()" ], [ false, true, false, true ], doc],
-      [[ "true()", "false()" ], [ false, false, true, true ], doc],
-      [[ "false()", "false()" ], [ false, true, false, true ], doc],
-      [[ "false()", "true()" ], [ true, true, false, false ], doc],
-      [[ "true()", "'1'" ], [ false, true, false, true ], doc],
-      [[ "true()", "''" ], [ false, false, false, false ], doc],
-      [[ "false()", "'0'" ], [ false, true, false, true ], doc],
-      [[ "false()", "''" ], [ false, false, false, false ], doc],
-      [[ "'2'", "1" ], [ false, false, true, true ], doc],
-      [[ "'1'", "1" ], [ false, true, false, true ], doc],
-      [[ "'0'", "1" ], [ true, true, false, false ], doc],
-      [[ "'1'", "true()" ], [ false, true, false, true ], doc],
-      [[ "''", "true()" ], [ false, false, false, false ], doc],
-      [[ "'0'", "false()" ], [ false, true, false, true ], doc],
-      [[ "''", "false()" ], [ false, false, false, false ], doc],
-      // [[ "'1a'", "'1a'" ],[ false, false, false, false ], doc],
-      [[ "'1'", "'0'" ], [ false, false, true, true ], doc],
-      // [[ "''", "''" ], [ false, false, false, false ], doc],
-      // [[ "''", "'0'" ], [ false, false, false, false ], doc],
-    ];
+    it('correctly evaluates <, <=, > and >=', () => {
+        const input = [
+            [['1', '2'], [true, true, false, false], doc],
+            [['1', '1'], [false, true, false, true], doc],
+            [['1', '0'], [false, false, true, true], doc],
+            [['1', "'2'"], [true, true, false, false], doc],
+            [['1', "'1'"], [false, true, false, true], doc],
+            [['1', "'0'"], [false, false, true, true], doc],
+            [['2', 'true()'], [false, false, true, true], doc],
+            [['1', 'true()'], [false, true, false, true], doc],
+            [['1', 'false()'], [false, false, true, true], doc],
+            [['0', 'false()'], [false, true, false, true], doc],
+            [['0', 'true()'], [true, true, false, false], doc],
+            [['true()', '2'], [true, true, false, false], doc],
+            [['true()', '1'], [false, true, false, true], doc],
+            [['false()', '1'], [true, true, false, false], doc],
+            [['false()', '0'], [false, true, false, true], doc],
+            [['true()', '0'], [false, false, true, true], doc],
+            [['true()', 'true()'], [false, true, false, true], doc],
+            [['true()', 'false()'], [false, false, true, true], doc],
+            [['false()', 'false()'], [false, true, false, true], doc],
+            [['false()', 'true()'], [true, true, false, false], doc],
+            [['true()', "'1'"], [false, true, false, true], doc],
+            [['true()', "''"], [false, false, false, false], doc],
+            [['false()', "'0'"], [false, true, false, true], doc],
+            [['false()', "''"], [false, false, false, false], doc],
+            [["'2'", '1'], [false, false, true, true], doc],
+            [["'1'", '1'], [false, true, false, true], doc],
+            [["'0'", '1'], [true, true, false, false], doc],
+            [["'1'", 'true()'], [false, true, false, true], doc],
+            [["''", 'true()'], [false, false, false, false], doc],
+            [["'0'", 'false()'], [false, true, false, true], doc],
+            [["''", 'false()'], [false, false, false, false], doc],
+            // [[ "'1a'", "'1a'" ],[ false, false, false, false ], doc],
+            [["'1'", "'0'"], [false, false, true, true], doc],
+            // [[ "''", "''" ], [ false, false, false, false ], doc],
+            // [[ "''", "'0'" ], [ false, false, false, false ], doc],
+        ];
 
-    const ops = [ '<', '<=', '>', '>=' ];
+        const ops = ['<', '<=', '>', '>='];
 
-    for(let k = 0; k < ops.length; k++) { // different operators
-      for(let i = 0; i < input.length; i++) { // all cases
-        const expr = `${input[i][0][0]} ${ops[k]} ${input[i][0][1]}`;
-        assertBoolean(input[i][2], null, expr, input[i][1][k]);
-      }
-    }
-  });
+        for (let k = 0; k < ops.length; k++) {
+            // different operators
+            for (let i = 0; i < input.length; i++) {
+                // all cases
+                const expr = `${input[i][0][0]} ${ops[k]} ${input[i][0][1]}`;
+                assertBoolean(input[i][2], null, expr, input[i][1][k]);
+            }
+        }
+    });
 
-  describe('with nodes', () => {
-    const input = [
-      [[ "true()", "*" ], [ true, true, true, true ], doc.getElementById('ComparisonOperatorCaseNodesetNegative5to5' )],
-      [[ "false()", "*" ], [ true, true, true, true ], doc.getElementById('ComparisonOperatorCaseNodesetNegative5to5' )],
-      [[ "*", "true()" ], [ true, true, true, true ], doc.getElementById('ComparisonOperatorCaseNodesetNegative5to5' )],
-      [[ "*", "false()" ], [ true, true, true, true ], doc.getElementById('ComparisonOperatorCaseNodesetNegative5to5' )],
-      [[ "0", "*" ], [ false, false, false, false ], doc.getElementById('ComparisonOperatorCaseNodesetEmpty' )],
-      [[ "*", "0" ], [ false, false, false, false ], doc.getElementById('ComparisonOperatorCaseNodesetEmpty' )],
-      [[ "true()", "*" ], [ false, false, false, false ], doc.getElementById('ComparisonOperatorCaseNodesetEmpty' )],
-      [[ "false()", "*" ], [ false, false, false, false ], doc.getElementById('ComparisonOperatorCaseNodesetEmpty' )],
-      [[ "*", "true()" ], [ false, false, false, false ], doc.getElementById('ComparisonOperatorCaseNodesetEmpty' )],
-      [[ "*", "false()" ], [ false, false, false, false ], doc.getElementById('ComparisonOperatorCaseNodesetEmpty' )],
-      [[ "-10", "*" ], [ true, true, false, false ], doc.getElementById('ComparisonOperatorCaseNodesetNegative5to5' )],
-      [[ "10", "*" ], [ false, false, true, true ], doc.getElementById('ComparisonOperatorCaseNodesetNegative5to5' )],
-      [[ "5", "*" ], [ false, true, true, true ], doc.getElementById('ComparisonOperatorCaseNodesetNegative5to5' )],
-      [[ "2", "*" ], [ true, true, true, true ], doc.getElementById('ComparisonOperatorCaseNodesetNegative5to5' )],
-      [[ "'4'", "*" ], [ true, true, true, true ], doc.getElementById('ComparisonOperatorCaseNodesetNegative5to5' )],
-      [[ "'aaa'", "*" ], [ false, false, false, false ], doc.getElementById('ComparisonOperatorCaseNodesetStrings' )],
-      [[ "''", "*" ], [ false, false, false, false ], doc.getElementById('ComparisonOperatorCaseNodesetEmpty' )],
-      [[ "*", "-10" ], [ false, false, true, true ], doc.getElementById('ComparisonOperatorCaseNodesetNegative5to5' )],
-      [[ "*", "10" ], [ true, true, false, false ], doc.getElementById('ComparisonOperatorCaseNodesetNegative5to5' )],
-      [[ "*", "5" ], [ true, true, false, true ], doc.getElementById('ComparisonOperatorCaseNodesetNegative5to5' )],
-      [[ "*", "2" ], [ true, true, true, true ], doc.getElementById('ComparisonOperatorCaseNodesetNegative5to5' )],
-      [[ "*", "'4'" ], [ true, true, true, true ], doc.getElementById('ComparisonOperatorCaseNodesetNegative5to5' )],
-      [[ "*", "'aaa'" ], [ false, false, false, false ], doc.getElementById('ComparisonOperatorCaseNodesetStrings' )],
-      [[ "*", "''" ], [ false, false, false, false ], doc.getElementById('ComparisonOperatorCaseNodesetEmpty' )],
-      [[ "id('ComparisonOperatorCaseNodesetNegative5to5')/*", "id('ComparisonOperatorCaseNodesetEmpty')/*" ], [ false, false, false, false ], doc],
-      [[ "id('ComparisonOperatorCaseNodesetNegative5to5')/*", "id('ComparisonOperatorCaseNodeset4to8')/*" ], [ true, true, true, true ], doc],
-      [[ "id('ComparisonOperatorCaseNodesetNegative5to5')/*", "id('ComparisonOperatorCaseNodeset6to10')/*" ], [ true, true, false, false ], doc]
-    ];
+    describe('with nodes', () => {
+        const input = [
+            [
+                ['true()', '*'],
+                [true, true, true, true],
+                doc.getElementById('ComparisonOperatorCaseNodesetNegative5to5'),
+            ],
+            [
+                ['false()', '*'],
+                [true, true, true, true],
+                doc.getElementById('ComparisonOperatorCaseNodesetNegative5to5'),
+            ],
+            [
+                ['*', 'true()'],
+                [true, true, true, true],
+                doc.getElementById('ComparisonOperatorCaseNodesetNegative5to5'),
+            ],
+            [
+                ['*', 'false()'],
+                [true, true, true, true],
+                doc.getElementById('ComparisonOperatorCaseNodesetNegative5to5'),
+            ],
+            [
+                ['0', '*'],
+                [false, false, false, false],
+                doc.getElementById('ComparisonOperatorCaseNodesetEmpty'),
+            ],
+            [
+                ['*', '0'],
+                [false, false, false, false],
+                doc.getElementById('ComparisonOperatorCaseNodesetEmpty'),
+            ],
+            [
+                ['true()', '*'],
+                [false, false, false, false],
+                doc.getElementById('ComparisonOperatorCaseNodesetEmpty'),
+            ],
+            [
+                ['false()', '*'],
+                [false, false, false, false],
+                doc.getElementById('ComparisonOperatorCaseNodesetEmpty'),
+            ],
+            [
+                ['*', 'true()'],
+                [false, false, false, false],
+                doc.getElementById('ComparisonOperatorCaseNodesetEmpty'),
+            ],
+            [
+                ['*', 'false()'],
+                [false, false, false, false],
+                doc.getElementById('ComparisonOperatorCaseNodesetEmpty'),
+            ],
+            [
+                ['-10', '*'],
+                [true, true, false, false],
+                doc.getElementById('ComparisonOperatorCaseNodesetNegative5to5'),
+            ],
+            [
+                ['10', '*'],
+                [false, false, true, true],
+                doc.getElementById('ComparisonOperatorCaseNodesetNegative5to5'),
+            ],
+            [
+                ['5', '*'],
+                [false, true, true, true],
+                doc.getElementById('ComparisonOperatorCaseNodesetNegative5to5'),
+            ],
+            [
+                ['2', '*'],
+                [true, true, true, true],
+                doc.getElementById('ComparisonOperatorCaseNodesetNegative5to5'),
+            ],
+            [
+                ["'4'", '*'],
+                [true, true, true, true],
+                doc.getElementById('ComparisonOperatorCaseNodesetNegative5to5'),
+            ],
+            [
+                ["'aaa'", '*'],
+                [false, false, false, false],
+                doc.getElementById('ComparisonOperatorCaseNodesetStrings'),
+            ],
+            [
+                ["''", '*'],
+                [false, false, false, false],
+                doc.getElementById('ComparisonOperatorCaseNodesetEmpty'),
+            ],
+            [
+                ['*', '-10'],
+                [false, false, true, true],
+                doc.getElementById('ComparisonOperatorCaseNodesetNegative5to5'),
+            ],
+            [
+                ['*', '10'],
+                [true, true, false, false],
+                doc.getElementById('ComparisonOperatorCaseNodesetNegative5to5'),
+            ],
+            [
+                ['*', '5'],
+                [true, true, false, true],
+                doc.getElementById('ComparisonOperatorCaseNodesetNegative5to5'),
+            ],
+            [
+                ['*', '2'],
+                [true, true, true, true],
+                doc.getElementById('ComparisonOperatorCaseNodesetNegative5to5'),
+            ],
+            [
+                ['*', "'4'"],
+                [true, true, true, true],
+                doc.getElementById('ComparisonOperatorCaseNodesetNegative5to5'),
+            ],
+            [
+                ['*', "'aaa'"],
+                [false, false, false, false],
+                doc.getElementById('ComparisonOperatorCaseNodesetStrings'),
+            ],
+            [
+                ['*', "''"],
+                [false, false, false, false],
+                doc.getElementById('ComparisonOperatorCaseNodesetEmpty'),
+            ],
+            [
+                [
+                    "id('ComparisonOperatorCaseNodesetNegative5to5')/*",
+                    "id('ComparisonOperatorCaseNodesetEmpty')/*",
+                ],
+                [false, false, false, false],
+                doc,
+            ],
+            [
+                [
+                    "id('ComparisonOperatorCaseNodesetNegative5to5')/*",
+                    "id('ComparisonOperatorCaseNodeset4to8')/*",
+                ],
+                [true, true, true, true],
+                doc,
+            ],
+            [
+                [
+                    "id('ComparisonOperatorCaseNodesetNegative5to5')/*",
+                    "id('ComparisonOperatorCaseNodeset6to10')/*",
+                ],
+                [true, true, false, false],
+                doc,
+            ],
+        ];
 
-    const ops = [ '<', '<=', '>', '>=' ];
-    for(let i = 0; i < input.length; i++) { // all cases
-      const node = input[i][2];
-      for(let k = 0; k < ops.length; k++) { // different operators
-        const op = ops[k];
-        const expr = `${input[i][0][0]} ${op} ${input[i][0][1]}`;
-        const expected = input[i][1][k];
-        it(`[${op}, test:${i}] should evaluate ${expr} as ${expected}`, () => {
-          assertBoolean(node, null, expr, expected);
-        });
-      }
-    }
-
-  });
+        const ops = ['<', '<=', '>', '>='];
+        for (let i = 0; i < input.length; i++) {
+            // all cases
+            const node = input[i][2];
+            for (let k = 0; k < ops.length; k++) {
+                // different operators
+                const op = ops[k];
+                const expr = `${input[i][0][0]} ${op} ${input[i][0][1]}`;
+                const expected = input[i][1][k];
+                it(`[${op}, test:${i}] should evaluate ${expr} as ${expected}`, () => {
+                    assertBoolean(node, null, expr, expected);
+                });
+            }
+        }
+    });
 });

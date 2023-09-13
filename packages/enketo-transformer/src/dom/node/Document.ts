@@ -9,12 +9,13 @@ type Node = typeof libxmljs.Node;
 const { Document, Element } = libxmljs;
 
 /** @package */
-// eslint-disable-next-line @typescript-eslint/no-empty-interface
+// eslint-disable-next-line @typescript-eslint/no-unsafe-declaration-merging
 export interface DOMExtendedDocument extends DOM.Node {}
 
+// eslint-disable-next-line @typescript-eslint/no-unsafe-declaration-merging
 export class DOMExtendedDocument implements DOM.Document {
     get documentElement() {
-        return (this as any as DOMExtendedDocument & Document).root();
+        return (this as unknown as DOMExtendedDocument & Document).root();
     }
 
     readonly nodeName = '#document';

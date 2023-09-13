@@ -289,9 +289,11 @@ const XML_LOCAL_NAME_PATTERN = (() => {
     const nameCharRanges = [
         '-', // Must come first or last in a `RegExp` character class
         ...nameStartCharRanges,
+        // TODO: this looks like probably a mistake??
         '"."',
         '\\u{B7}',
         '0-9',
+        // TODO: is this actually a "misleading character class" range?
         '\\u{0300}-\\u{036F}',
         '\\u{203F}-\\u{2040}',
     ];
@@ -300,6 +302,7 @@ const XML_LOCAL_NAME_PATTERN = (() => {
     const nameChar = `[${nameCharRanges.join('')}]`;
     const name = `^${nameStartChar}${nameChar}*$`;
 
+    // eslint-disable-next-line no-misleading-character-class
     return new RegExp(name, 'u');
 })();
 
