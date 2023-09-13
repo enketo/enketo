@@ -30,10 +30,13 @@ vex.defaultOptions.className = 'vex-theme-plain';
 function init() {
     initTranslator().then(setEventHandlers);
 
+    // TODO: remove
     // avoid Windows console errors
     if (typeof window.console === 'undefined') {
         window.console = {
-            log() {},
+            log() {
+                // Intentional noop
+            },
         };
     }
     if (typeof window.console.debug === 'undefined') {

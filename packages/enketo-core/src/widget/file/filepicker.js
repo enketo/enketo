@@ -143,7 +143,9 @@ class Filepicker extends Widget {
                                 this.originalInputValue = '';
                             }
                         })
-                        .catch(() => {});
+                        .catch(() => {
+                            // Ignore error
+                        });
                 }
             });
         }
@@ -200,7 +202,9 @@ class Filepicker extends Widget {
                             resizedFile.dataURI;
                         file = resizedFile.blob;
                     })
-                    .catch(() => {})
+                    .catch(() => {
+                        // Ignore error
+                    })
                     .finally(() => {
                         fileManager
                             .getFileUrl(file, fileName)

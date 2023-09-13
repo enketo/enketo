@@ -1557,12 +1557,16 @@ FormModel.prototype.evaluate = function (
 /**
  * Placeholder function meant to be overwritten
  */
-FormModel.prototype.getUpdateEventData = () => /* node, type */ {};
+FormModel.prototype.getUpdateEventData = () => /* node, type */ {
+    // Part of interface, to be overridden
+};
 
 /**
  * Placeholder function meant to be overwritten
  */
-FormModel.prototype.getRemovalEventData = () => /* node */ {};
+FormModel.prototype.getRemovalEventData = () => /* node */ {
+    // Part of interface, to be overridden
+};
 
 /**
  * Exposed {@link module:types|types} to facilitate extending with custom types

@@ -1,5 +1,4 @@
-Openrosa XForms Evaluator
-=========================
+# Openrosa XForms Evaluator
 
 <a href="https://travis-ci.com/enketo/openrosa-xpath-evaluator"><img src="https://travis-ci.com/enketo/openrosa-xpath-evaluator.svg?branch=master"/></a>
 
@@ -7,8 +6,7 @@ Wrapper for browsers' XPath evaluator with added support for OpenRosa extensions
 
 For more info on extended XPath expressions/bindings supported by XForms/OpenRosa/OpenDataKit (ODK) see:
 
-* [ODK XForm Specification](https://getodk.github.io/xforms-spec/)
-
+-   [ODK XForm Specification](https://getodk.github.io/xforms-spec/)
 
 # Installation
 
@@ -46,7 +44,6 @@ for (var i = 0; i < result.snapshotLength; i++) {
 }
 ```
 
-
 # Dependencies
 
 This library has no explicit dependencies, but expects various DOM & XPath-related values to be supplied by the browser (`Element`, `Node`, `XPathResult` etc.).
@@ -55,25 +52,22 @@ To use the [ODK `digest()` function](https://getodk.github.io/xforms-spec/#fn:di
 you'll need to add [`node-forge`](https://www.npmjs.com/package/node-forge) to
 your project.
 
-
 # Development
 
 ## Useful resources
 
-* https://www.w3.org/TR/1999/REC-xpath-19991116/
-* https://getodk.github.io/xforms-spec/
-* https://developer.mozilla.org/en-US/docs/Web/API/XPathEvaluator
-* https://developer.mozilla.org/en-US/docs/Web/API/Document/evaluate
-* https://developer.mozilla.org/en-US/docs/Web/XPath/Introduction_to_using_XPath_in_JavaScript
-* https://developer.mozilla.org/en-US/docs/Web/API/XPathResult
-* https://developer.mozilla.org/en-US/docs/Web/API/Node
-
+-   https://www.w3.org/TR/1999/REC-xpath-19991116/
+-   https://getodk.github.io/xforms-spec/
+-   https://developer.mozilla.org/en-US/docs/Web/API/XPathEvaluator
+-   https://developer.mozilla.org/en-US/docs/Web/API/Document/evaluate
+-   https://developer.mozilla.org/en-US/docs/Web/XPath/Introduction_to_using_XPath_in_JavaScript
+-   https://developer.mozilla.org/en-US/docs/Web/API/XPathResult
+-   https://developer.mozilla.org/en-US/docs/Web/API/Node
 
 # Known limitations
 
-* namespace:: axis is not supported (but it might work in your browser if you're lucky)
-* xpath variables (`$var`) are not supported
-
+-   namespace:: axis is not supported (but it might work in your browser if you're lucky)
+-   xpath variables (`$var`) are not supported
 
 # Not implemented
 
@@ -81,21 +75,19 @@ The following XPath/ODK/OpenRosa functions are not implemented in this library, 
 
 ## XPath 1.0 functions
 
-* instance()
-* current()
+-   instance()
+-   current()
 
 ## ODK functions
 
-* pulldata()
-* jr:choice-name()
-* jr:itext()
-* indexed-repeat()
-
+-   pulldata()
+-   jr:choice-name()
+-   jr:itext()
+-   indexed-repeat()
 
 # TODO
 
-* arrange source code, e.g. `src/core` and `src/openrosa`
-
+-   arrange source code, e.g. `src/core` and `src/openrosa`
 
 # Release
 
@@ -119,6 +111,6 @@ This library was developed by Medic Mobile for their Enketo-based application. I
 
 Development of this application was made possible by:
 
-* [Medic Mobile](http://medicmobile.org/)
-* [DIAL Open Source Center](https://www.osc.dial.community/)
-* [OpenClinica](https://www.openclinica.com/)
+-   [Medic Mobile](http://medicmobile.org/)
+-   [DIAL Open Source Center](https://www.osc.dial.community/)
+-   [OpenClinica](https://www.openclinica.com/)

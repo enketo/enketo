@@ -6,20 +6,16 @@ const fs = require('fs');
 const path = require('path');
 const nodeSass = require('node-sass');
 const transformer = require('enketo-transformer');
+const timeGrunt = require('time-grunt');
+const loadGruntTasks = require('load-grunt-tasks');
 
 module.exports = (grunt) => {
     // show elapsed time at the end
-    require('time-grunt')(grunt);
+    timeGrunt(grunt);
     // load all grunt tasks
-    require('load-grunt-tasks')(grunt);
-
-    const eslintInclude = [
-        '*.js',
-        'scripts/**/*.js',
-        'src/**/*.js',
-        'test/**/*.js',
-        '!test/mock/forms.js',
-    ];
+    loadGruntTasks(grunt, {
+        config: '../../package.json',
+    });
 
     const karmaWatchOptions = {
         autoWatch: true,
@@ -64,17 +60,6 @@ module.exports = (grunt) => {
                 options: {
                     port: 8000,
                 },
-            },
-        },
-        eslint: {
-            check: {
-                src: eslintInclude,
-            },
-            fix: {
-                options: {
-                    fix: true,
-                },
-                src: eslintInclude,
             },
         },
         watch: {
@@ -173,7 +158,7 @@ module.exports = (grunt) => {
         },
         shell: {
             transformer: {
-                command: 'node node_modules/enketo-transformer/app.js',
+                command: 'node ../enketo-transformer/app.js',
             },
             build: {
                 command: 'node ./scripts/build.js',
@@ -271,7 +256,6 @@ module.exports = (grunt) => {
     grunt.registerTask('compile', ['shell:build']);
     grunt.registerTask('test', [
         'transforms',
-        'eslint:check',
         'compile',
         'karma:headless',
         'css',

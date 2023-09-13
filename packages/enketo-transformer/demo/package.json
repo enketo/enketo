@@ -1,25 +1,26 @@
 {
+    "name": "enketo-transformer-demo",
+    "version": "0.0.0",
     "type": "module",
     "private": true,
     "engines": {
-        "node": ">=14 <17",
-        "npm": ">=6 <7"
+        "node": ">=16 <21",
+        "npm": "please-use-yarn",
+        "yarn": ">= 1.22.19 <2"
     },
     "volta": {
-        "node": "16.6.1",
-        "npm": "6.14.17"
+        "node": "20.5.1",
+        "yarn": "1.22.19"
     },
     "scripts": {
         "demo": "vite",
-        "dev": "ENV=dev vite",
-        "postinstall": "NPM_BIN=`which npm`; ($NPM_BIN explore enketo-transformer -- $NPM_BIN run build)"
+        "dev": "ENV=dev vite"
     },
     "dependencies": {
-        "@solidjs/router": "^0.7.0",
-        "babel-preset-solid": "^1.6.9",
-        "enketo-transformer": "file:..",
-        "solid-js": "^1.6.9",
-        "vite": "^4.0.4",
-        "vite-plugin-solid": "^2.5.0"
+        "@solidjs/router": "^0.8.3",
+        "babel-preset-solid": "^1.7.7",
+        "enketo-transformer": "3.0.1",
+        "solid-js": "^1.7.11",
+        "vite-plugin-solid": "^2.7.0"
     }
 }

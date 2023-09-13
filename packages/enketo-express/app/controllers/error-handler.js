@@ -35,7 +35,7 @@ module.exports = {
      * @param {Function} next - Express callback
      */
     // Express uses arguments length to determine whether a callback is an error handler.
-    // eslint-disable-next-line no-unused-vars
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     production(err, req, res, next) {
         // eslint-disable-line no-unused-vars
         const body = {
@@ -57,7 +57,7 @@ module.exports = {
      * @param {Function} next - Express callback
      */
     // Express uses arguments length to determine whether a callback is an error handler.
-    // eslint-disable-next-line no-unused-vars
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     development(err, req, res, next) {
         // eslint-disable-line no-unused-vars
         const body = {

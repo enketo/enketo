@@ -118,9 +118,9 @@ const validateGeometryType = (data) => {
     if (
         data == null ||
         typeof data !== 'object' ||
-        // @ts-expect-error
+        // @ts-expect-error - checking unknown property as part of type assertion
         !SUPPORTED_TYPES.has(data.type) ||
-        // @ts-expect-error
+        // @ts-expect-error - checking unknown property as part of type assertion
         !Array.isArray(data.coordinates)
     ) {
         throw new TypeError(SUPPORTED_TYPES_MESSAGE);
@@ -156,7 +156,7 @@ const validateFeature = (data) => {
         throw new TypeError('Feature object expected');
     }
 
-    // @ts-expect-error
+    // @ts-expect-error - checking unknown properties as part of type assertion
     const { geometry, type } = data;
 
     if (type !== FEATURE || geometry == null) {
@@ -179,7 +179,7 @@ const FEATURE_COLLECTION = 'FeatureCollection';
  * @return {asserts data is SupportedFeatureCollection}
  */
 const validateFeatureCollection = (data) => {
-    // @ts-expect-error
+    // @ts-expect-error - checking unknown properties as part of type assertion
     const { type, features } = data ?? {};
 
     if (type !== FEATURE_COLLECTION || !Array.isArray(features)) {

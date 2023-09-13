@@ -19,6 +19,10 @@
  * @param {Form} form
  */
 export const setRefTypeClasses = (form) => {
+    if (form.input == null) {
+        throw new Error('Must be called after `form.input` initialization');
+    }
+
     const rootElement = form.view.html;
 
     const hasActions =
@@ -87,7 +91,6 @@ export const setRefTypeClasses = (form) => {
 
             const container = /** @type {HTMLElement} */ (
                 element.closest('.itemset-template') ??
-                    // @ts-ignore
                     form.input.getWrapNode(element)
             );
 

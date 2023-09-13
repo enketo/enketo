@@ -14,11 +14,14 @@ declare module 'libxslt' {
         );
 
     interface XSLTStylesheet {
-        apply(doc: XMLJSDocument, params: Record<string, any>): XMLJSDocument;
+        apply(
+            doc: XMLJSDocument,
+            params: Record<string, unknown>
+        ): XMLJSDocument;
 
         apply(
             doc: XMLJSDocument,
-            params: Record<string, any>,
+            params: Record<string, unknown>,
             callback: ResultCallback<XMLJSDocument>
         ): void;
     }

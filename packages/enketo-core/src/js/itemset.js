@@ -67,7 +67,9 @@ export default {
         }
 
         if (!this.form.features.itemset) {
-            this.update = () => {};
+            this.update = () => {
+                // Form noop
+            };
 
             return;
         }

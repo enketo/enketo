@@ -152,8 +152,12 @@ export default {
         }
 
         if (!this.form.features.repeatCount) {
-            this.countUpdate = () => {};
-            this.updateRepeatInstancesFromCount = () => {};
+            this.countUpdate = () => {
+                // Form noop
+            };
+            this.updateRepeatInstancesFromCount = () => {
+                // Form noop
+            };
         }
 
         $repeatInfos = this.form.view.$.find('.or-repeat-info');

@@ -81,7 +81,9 @@ export default {
         }
 
         if (!this.form.features.relevant) {
-            this.update = () => {};
+            this.update = () => {
+                // Form noop
+            };
 
             return;
         }
@@ -488,7 +490,9 @@ export default {
                 );
             }
         } else {
-            this.toggleNonRelevantModelNodes = () => {};
+            this.toggleNonRelevantModelNodes = () => {
+                // Configured noop
+            };
         }
     },
 

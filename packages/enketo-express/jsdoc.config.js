@@ -1,3 +1,5 @@
+const path = require('path');
+
 module.exports = {
     opts: {
         encoding: 'utf8',
@@ -13,7 +15,7 @@ module.exports = {
         */
         // package: 'package.json',
         readme: 'README.md',
-        template: 'node_modules/docdash',
+        template: path.dirname(require.resolve('docdash')),
     },
     plugins: ['jsdoc-ts-utils', 'plugins/markdown'],
     source: {

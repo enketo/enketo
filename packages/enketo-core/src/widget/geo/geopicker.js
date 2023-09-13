@@ -230,7 +230,9 @@ class Geopicker extends Widget {
                             that._removePoint();
                         }
                     })
-                    .catch(() => {});
+                    .catch(() => {
+                        // Ignore error
+                    });
             }
         });
 
@@ -334,7 +336,9 @@ class Geopicker extends Widget {
                             defaultZoom
                         );
                     })
-                    .catch(() => {});
+                    .catch(() => {
+                        // Ignore error
+                    });
             }
         } else {
             // center map around first loaded geopoint value
@@ -726,7 +730,9 @@ class Geopicker extends Widget {
                             'Error. Geocoding service may not be available or app is offline'
                         );
                     })
-                    .always(() => {});
+                    .always(() => {
+                        // Ignore error
+                    });
             }
         });
     }
@@ -782,7 +788,9 @@ class Geopicker extends Widget {
                 .then(() => {
                     that._updateDynamicMapView(latLng, zoom);
                 })
-                .catch(() => {});
+                .catch(() => {
+                    // Ignore error
+                });
         }
     }
 

@@ -108,19 +108,10 @@ const resolveWidgetESMImport = (imported) => {
 };
 
 module.exports = (grunt) => {
-    const eslintInclude = [
-        './*.md',
-        '{.github,app,tutorials}/**/*.md',
-        '**/*.js',
-        '!.nyc_output',
-        '!**/node_modules/**',
-        '!public/js/build/**',
-        '!docs/**',
-        '!test-coverage/**',
-    ];
-
     timeGrunt(grunt);
-    loadGruntTasks(grunt);
+    loadGruntTasks(grunt, {
+        config: '../../package.json',
+    });
 
     let serverRootHooks;
 
@@ -232,17 +223,6 @@ module.exports = (grunt) => {
             nyc: {
                 command:
                     'nyc --reporter html --reporter text-summary --reporter json --reporter lcov --report-dir ./test-coverage/server --include "app/**/*.js" grunt test-server:all',
-            },
-        },
-        eslint: {
-            check: {
-                src: eslintInclude,
-            },
-            fix: {
-                options: {
-                    fix: true,
-                },
-                src: eslintInclude,
             },
         },
         // test server JS
@@ -440,7 +420,6 @@ module.exports = (grunt) => {
         'sass',
         'shell:nyc',
         'karma:headless',
-        'eslint:check',
     ]);
     grunt.registerTask('test-browser', ['env:test', 'sass', 'karma:browsers']);
     grunt.registerTask('test-watch-client', ['env:test', 'karma:watch']);

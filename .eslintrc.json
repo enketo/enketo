@@ -1,0 +1,657 @@
+{
+    "root": true,
+
+    "extends": ["plugin:@typescript-eslint/recommended", "airbnb", "prettier"],
+
+    "env": {
+        "es2022": true,
+
+        // No environment assumptions by default
+        "browser": false,
+        "commonjs": false,
+        "node": false
+    },
+
+    "plugins": [
+        "chai-friendly",
+        "jsdoc",
+        "prettier",
+        "unicorn",
+        "@typescript-eslint"
+    ],
+
+    "parser": "@typescript-eslint/parser",
+    "parserOptions": {
+        "ecmaVersion": 2022,
+        "sourceType": "module"
+    },
+
+    "settings": {
+        "import/extensions": [
+            ".cjs",
+            ".cts",
+            ".js",
+            ".jsx",
+            ".mjs",
+            ".mts",
+            ".ts",
+            ".tsx"
+        ],
+        "import/parsers": {
+            "@typescript-eslint/parser": [
+                ".cjs",
+                ".cts",
+                ".js",
+                ".jsx",
+                ".mjs",
+                ".mts",
+                ".ts",
+                ".tsx"
+            ]
+        },
+        "import/resolver": {
+            "node": {
+                "extensions": [
+                    ".cjs",
+                    ".cts",
+                    ".js",
+                    ".jsx",
+                    ".mjs",
+                    ".mts",
+                    ".ts",
+                    ".tsx"
+                ]
+            },
+            "typescript": {
+                "alwaysTryTypes": true
+            }
+        },
+        "jsdoc": {
+            "tagNamePreference": {
+                "returns": "return"
+            }
+        }
+    },
+
+    "globals": {
+        "Promise": true,
+        "sinon": true
+    },
+
+    "rules": {
+        "prettier/prettier": "error",
+
+        "import/extensions": "warn",
+        "import/order": "warn",
+        "import/prefer-default-export": "off",
+
+        "no-unused-expressions": "off",
+        "chai-friendly/no-unused-expressions": "error",
+
+        "class-methods-use-this": ["error", {
+            "enforceForClassFields": false
+        }],
+        "eol-last": ["error", "always"],
+        "no-restricted-syntax": [
+            "warn",
+            "ForInStatement",
+            "LabeledStatement",
+            "WithStatement"
+        ],
+
+        "@typescript-eslint/no-this-alias": "warn",
+        "@typescript-eslint/no-var-requires": "warn",
+        /**
+         * TypeScript overrides of less capable base rules
+         */
+        "no-loss-of-precision": "off",
+        "@typescript-eslint/no-loss-of-precision": "error",
+
+        "no-useless-constructor": "off",
+        "@typescript-eslint/no-useless-constructor": "error",
+
+        "no-unused-vars": "off",
+        "@typescript-eslint/no-unused-vars": [
+            "error",
+            {
+                "argsIgnorePattern": "^_",
+                "varsIgnorePattern": "^_"
+            }
+        ],
+
+        "no-dupe-class-members": "off",
+        "@typescript-eslint/no-dupe-class-members": "error",
+
+        "no-empty-function": "off",
+        "@typescript-eslint/no-empty-function": "error",
+
+        "no-redeclare": "off",
+        "@typescript-eslint/no-redeclare": "error"
+    },
+
+    "overrides": [
+        /**
+         * Format specific overrides
+         */
+        {
+            "files": [
+                "packages/*/.github/**/*.md",
+                "packages/*.md",
+                "packages/**/*.md",
+                "packages/*/tutorials/**/*.md"
+            ],
+
+            "parser": "markdown-eslint-parser",
+
+            "rules": {
+                "prettier/prettier": ["error", { "parser": "markdown" }]
+            }
+        },
+
+        {
+            "files": ["**/*.d.ts"],
+
+            "rules": {
+                "import/no-extraneous-dependencies": "off"
+            }
+        },
+
+        {
+            "files": [
+                "**/*.ts",
+                "**/*.tsx"
+            ],
+
+            "rules": {
+                "@typescript-eslint/no-non-null-assertion": "error",
+
+                /**
+                 * Inferior and/or redundant to TypeScript
+                 */
+
+                "consistent-return": "off",
+                "no-undef": "off"
+            }
+        },
+
+        {
+            "files": ["**/*.d.ts"],
+            "rules": {
+                "lines-between-class-members": "off"
+            }
+        },
+
+        /**
+         * Project specific overrides
+         */
+
+        {
+            "files": ["packages/openrosa-xpath-evaluator/**/*"],
+
+            "env": {
+                "browser": true,
+                "commonjs": true
+            },
+
+            "rules": {
+                "class-methods-use-this": "warn",
+                "consistent-return": "warn",
+                "no-continue": "warn",
+                "no-param-reassign": "warn",
+                "no-plusplus": "warn",
+                "no-shadow": "warn",
+                "no-underscore-dangle": "warn",
+                "no-use-before-define": [
+                    "warn",
+                    {
+                        "functions": false
+                    }
+                ]
+            },
+
+            "overrides": [
+                {
+                    "files": ["packages/openrosa-xpath-evaluator/src/**/*.js"],
+
+                    "rules": {
+                        "import/no-extraneous-dependencies": [
+                            "error",
+                            {
+                                "peerDependencies": true,
+                                "packageDir": [
+                                    ".",
+                                    "./packages/openrosa-xpath-evaluator"
+                                ]
+                            }
+                        ],
+
+                        "no-console": "error"
+                    }
+                },
+
+                {
+                    "files": [
+                        "packages/openrosa-xpath-evaluator/karma.conf.js",
+                        "packages/openrosa-xpath-evaluator/test/**/*.js"
+                    ],
+
+                    "env": {
+                        "mocha": true
+                    },
+
+                    "rules": {
+                        "import/no-extraneous-dependencies": [
+                            "error",
+                            {
+                                "devDependencies": true,
+                                "peerDependencies": true,
+                                "packageDir": [
+                                    ".",
+                                    "./packages/openrosa-xpath-evaluator"
+                                ]
+                            }
+                        ]
+                    }
+                }
+            ]
+        },
+
+        {
+            "files": [
+                "packages/enketo-*/**/*"
+            ],
+
+            "rules": {
+                "no-param-reassign": "warn",
+                "no-shadow": "warn",
+                "no-underscore-dangle": "warn",
+                "no-use-before-define": [
+                    "warn",
+                    {
+                        "functions": false
+                    }
+                ],
+                "prefer-destructuring": "warn"
+            }
+        },
+
+        {
+            "files": [
+                "packages/enketo-transformer/**/*",
+                "packages/enketo-core/**/*"
+            ],
+
+            "rules": {
+                "guard-for-in": "warn"
+            }
+        },
+
+        {
+            "files": [
+                "packages/enketo-core/**/*",
+                "packages/enketo-express/**/*"
+            ],
+
+            "rules": {
+                "import/no-unresolved": [
+                    "error",
+                    {
+                        "ignore": [
+                            // TODO can these be handled with TypeScript `paths` config?
+                            "enketo/config",
+                            "enketo/widgets",
+                            "enketo/translator",
+                            "enketo/dialog",
+                            "enketo/file-manager",
+                            "enketo/xpath-evaluator-binding"
+                        ]
+                    }
+                ],
+
+                "consistent-return": "warn",
+                "global-require": "warn",
+                "no-cond-assign": "warn",
+                "no-nested-ternary": "warn",
+                "no-plusplus": "warn",
+                "no-return-assign": "warn",
+                "prefer-const": "warn",
+                "prefer-promise-reject-errors": "warn"
+            }
+        },
+
+        {
+            "files": ["packages/enketo-transformer/**/*"],
+
+            "settings": {
+                "import/resolver": {
+                    "typescript": {
+                        "alwaysTryTypes": true,
+                        "project": "packages/enketo-transformer/tsconfig.json"
+                    }
+                }
+            },
+
+            "overrides": [
+                {
+                    "files": ["packages/enketo-transformer/demo/**/*"],
+
+                    "env": {
+                        "browser": true,
+                        "node": false
+                    },
+
+                    "rules": {
+                        "react/destructuring-assignment": "off",
+                        "react/jsx-filename-extension": [
+                            "error",
+                            { "extensions": [".jsx", ".tsx"] }
+                        ],
+                        "react/no-unknown-property": "off",
+                        "react/react-in-jsx-scope": "off"
+                    }
+                },
+
+                {
+                    "files": [
+                        "packages/enketo-transformer/app.js",
+                        "packages/enketo-transformer/vite.config.ts",
+                        "packages/enketo-transformer/src/api.ts",
+                        "packages/enketo-transformer/src/app.ts",
+                        "packages/enketo-transformer/test/**/*.ts"
+                    ],
+
+                    "env": {
+                        "node": true
+                    },
+
+                    "rules": {
+                        "import/no-extraneous-dependencies": [
+                            "error",
+                            {
+                                "devDependencies": true,
+                                "optionalDependencies": false,
+                                "peerDependencies": true,
+                                "packageDir": [".", "./packages/enketo-transformer"]
+                            }
+                        ],
+
+                        "consistent-return": "off"
+                    }
+                },
+
+                {
+                    "files": ["packages/enketo-transformer/demo/vite.config.ts"],
+
+                    "rules": {
+                        "import/no-extraneous-dependencies": [
+                            "error",
+                            {
+                                "devDependencies": true,
+                                "packageDir": [
+                                    ".",
+                                    "./packages/enketo-transformer",
+                                    "./packages/enketo-transformer/demo"
+                                ]
+                            }
+                        ]
+                    }
+                },
+
+                {
+                    "files": [
+                        "packages/enketo-transformer/**/*.ts",
+                        "packages/enketo-transformer/demo/**/*.tsx"
+                    ],
+
+                    "rules": {
+                        "import/extensions": [
+                            "error",
+                            "ignorePackages",
+                            {
+                                "": "never",
+                                "js": "never",
+                                "jsx": "never",
+                                "ts": "never",
+                                "tsx": "never"
+                            }
+                        ]
+                    }
+                },
+
+                {
+                    "files": ["packages/enketo-transformer/test/**/*.ts"],
+                    "plugins": ["vitest"],
+                    "rules": {
+                        "@typescript-eslint/no-non-null-assertion": "off",
+                        "no-undef": "off"
+                    }
+                }
+            ]
+        },
+
+        {
+            "files": ["packages/enketo-core/**/*"],
+
+            "env": {
+                "browser": true,
+                "node": false,
+                "commonjs": false
+            },
+
+            "rules": {
+                "class-methods-use-this": "warn",
+                "default-case": "warn",
+                "no-constructor-return": "warn",
+                "no-continue": "warn",
+                "no-loop-func": "warn",
+                "no-new": "warn",
+                "no-restricted-globals": ["warn", "isFinite", "isNaN"],
+                "no-throw-literal": "warn",
+                "no-useless-concat": "warn"
+            },
+
+            "overrides": [
+                {
+                    "files": [
+                        "packages/enketo-core/Gruntfile.js",
+                        "packages/enketo-core/scripts/build.js"
+                    ],
+
+                    "env": {
+                        "browser": false,
+                        "node": true,
+                        "commonjs": true
+                    },
+
+                    "rules": {
+                        "import/no-extraneous-dependencies": [
+                            "error",
+                            {
+                                "devDependencies": true,
+                                "packageDir": [".", "./packages/enketo-core"]
+                            }
+                        ]
+                    }
+                },
+
+                {
+                    "files": ["packages/enketo-core/test/**/*.js"],
+                    "excludedFiles": ["packages/enketo-core/test/karma.conf.js"],
+
+                    "env": { "mocha": true },
+
+                    "globals": {
+                        "expect": true,
+                        "sinon": true
+                    },
+
+                    "rules": {
+                        "no-console": "off",
+
+                        "import/no-extraneous-dependencies": [
+                            "error",
+                            {
+                                "devDependencies": true,
+                                "packageDir": [".", "./packages/enketo-core"]
+                            }
+                        ]
+                    }
+                }
+            ]
+        },
+
+        {
+            "files": ["packages/enketo-express/**/*"],
+
+            "rules": {
+                "array-callback-return": "warn",
+                "no-promise-executor-return": "warn",
+                "no-restricted-globals": "warn",
+                "import/no-dynamic-require": "warn"
+            },
+
+            "overrides": [
+                {
+                    "files": [
+                        "packages/enketo-express/i18next-parser.config.js",
+                        "packages/enketo-express/jsdoc.config.js",
+                        "packages/enketo-express/config/build.js",
+                        "packages/enketo-express/config/express.js",
+                        "packages/enketo-express/scripts/build.js",
+                        "packages/enketo-express/test/server/**/*.js",
+                        "packages/enketo-express/tools/**/*.js"
+                    ],
+
+                    "env": {
+                        "node": true,
+                        "commonjs": true
+                    },
+
+                    "ecmaFeatures": {
+                        "modules": false
+                    },
+
+                    "rules": {
+                        "import/no-extraneous-dependencies": [
+                            "error",
+                            {
+                                "devDependencies": true,
+                                "packageDir": [".", "./packages/enketo-express"]
+                            }
+                        ]
+                    }
+                },
+
+                {
+                    "files": [
+                        "packages/enketo-express/app.js",
+                        "packages/enketo-express/app/**/*.js",
+                        "packages/enketo-express/test/server/**/*.js",
+                        "packages/enketo-express/tools/redis-repl"
+                    ],
+                    "excludedFiles": [
+                        "packages/enketo-express/app/views/**/*.js"
+                    ],
+
+                    "env": {
+                        "commonjs": true,
+                        "node": true
+                    },
+
+                    "ecmaFeatures": { "modules": false }
+                },
+
+                {
+                    "files": [
+                        "packages/enketo-express/public/**/*",
+                        "packages/enketo-express/app/views/**/*.js",
+                        "packages/enketo-express/test/client/**/*.js"
+                    ],
+
+                    "env": { "browser": true }
+                },
+
+                {
+                    "files": [
+                        "packages/enketo-express/public/js/src/module/offline-app-worker-partial.js"
+                    ],
+                    "globals": {
+                        "self": true,
+                        "version": true,
+                        "resources": true
+                    }
+                },
+
+                {
+                    "files": [
+                        "packages/enketo-express/test/client/**/*.js",
+                        "packages/enketo-express/test/server/**/*.js"
+                    ],
+
+                    "env": { "mocha": true },
+
+                    "globals": {
+                        "expect": true,
+                        "sinon": true
+                    },
+
+                    "rules": {
+                        "no-console": "off",
+                        "import/no-extraneous-dependencies": [
+                            "error",
+                            {
+                                "devDependencies": true,
+                                "packageDir": [".", "./packages/enketo-express"]
+                            }
+                        ]
+                    }
+                },
+
+                {
+                    "files": ["packages/enketo-express/**/*.mjs"],
+                    "parser": "@babel/eslint-parser",
+                    "parserOptions": {
+                        "sourceType": "module",
+                        "ecmaVersion": 2021,
+                        "requireConfigFile": false
+                    }
+                }
+            ]
+        },
+
+        /**
+         * Global overrides
+         */
+
+        // Known dev modules run in a Node/CJS context
+        {
+            "files": [
+                "**/Gruntfile.js",
+                "**/karma.conf.js"
+            ],
+
+            "env": {
+                "browser": false,
+                "commonjs": true,
+                "node": true
+            }
+        },
+
+        // Shared test overrides
+        {
+            "files": [
+                "**/*.spec.*"
+            ],
+
+            "rules": {
+                "no-console": "off",
+
+                "no-unused-expressions": "off",
+                "chai-friendly/no-unused-expressions": "warn",
+
+                "@typescript-eslint/no-empty-function": "off",
+                "@typescript-eslint/no-this-alias": "off"
+            }
+        }
+    ]
+}
