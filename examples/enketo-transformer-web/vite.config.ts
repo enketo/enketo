@@ -2,7 +2,7 @@ import { defineConfig } from 'vite';
 import type { AliasOptions, ResolveOptions } from 'vite';
 import solidPlugin from 'vite-plugin-solid';
 
-import { define } from '../config/build.shared';
+import { define } from '../../packages/enketo-transformer/config/build.shared';
 
 const { ENV } = process.env;
 

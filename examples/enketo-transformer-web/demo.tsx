@@ -10,8 +10,7 @@ import {
 } from 'solid-js';
 import type { JSX } from 'solid-js';
 import { For, Match, Show, Switch, render } from 'solid-js/web';
-// eslint-disable-next-line import/no-relative-packages
-import { fixtures as baseFixtures } from '../test/fixtures';
+import { fixtures as baseFixtures } from '../../packages/enketo-transformer/test/fixtures';
 
 interface CodeBlockProps
     extends Omit<JSX.IntrinsicElements['pre'], 'children'> {

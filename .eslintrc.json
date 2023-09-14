@@ -258,6 +258,7 @@
 
         {
             "files": [
+                "examples/enketo-transformer-web/**/*",
                 "packages/enketo-*/**/*"
             ],
 
@@ -277,6 +278,7 @@
 
         {
             "files": [
+                "examples/enketo-transformer-web/**/*",
                 "packages/enketo-transformer/**/*",
                 "packages/enketo-core/**/*"
             ],
@@ -320,6 +322,26 @@
         },
 
         {
+            "files": [
+                "packages/enketo-transformer/**/*.ts"
+            ],
+
+            "rules": {
+                "import/extensions": [
+                    "error",
+                    "ignorePackages",
+                    {
+                        "": "never",
+                        "js": "never",
+                        "jsx": "never",
+                        "ts": "never",
+                        "tsx": "never"
+                    }
+                ]
+            }
+        },
+
+        {
             "files": ["packages/enketo-transformer/**/*"],
 
             "settings": {
@@ -332,25 +354,6 @@
             },
 
             "overrides": [
-                {
-                    "files": ["packages/enketo-transformer/demo/**/*"],
-
-                    "env": {
-                        "browser": true,
-                        "node": false
-                    },
-
-                    "rules": {
-                        "react/destructuring-assignment": "off",
-                        "react/jsx-filename-extension": [
-                            "error",
-                            { "extensions": [".jsx", ".tsx"] }
-                        ],
-                        "react/no-unknown-property": "off",
-                        "react/react-in-jsx-scope": "off"
-                    }
-                },
-
                 {
                     "files": [
                         "packages/enketo-transformer/app.js",
@@ -376,45 +379,6 @@
                         ],
 
                         "consistent-return": "off"
-                    }
-                },
-
-                {
-                    "files": ["packages/enketo-transformer/demo/vite.config.ts"],
-
-                    "rules": {
-                        "import/no-extraneous-dependencies": [
-                            "error",
-                            {
-                                "devDependencies": true,
-                                "packageDir": [
-                                    ".",
-                                    "./packages/enketo-transformer",
-                                    "./packages/enketo-transformer/demo"
-                                ]
-                            }
-                        ]
-                    }
-                },
-
-                {
-                    "files": [
-                        "packages/enketo-transformer/**/*.ts",
-                        "packages/enketo-transformer/demo/**/*.tsx"
-                    ],
-
-                    "rules": {
-                        "import/extensions": [
-                            "error",
-                            "ignorePackages",
-                            {
-                                "": "never",
-                                "js": "never",
-                                "jsx": "never",
-                                "ts": "never",
-                                "tsx": "never"
-                            }
-                        ]
                     }
                 },
 
@@ -614,6 +578,78 @@
                         "sourceType": "module",
                         "ecmaVersion": 2021,
                         "requireConfigFile": false
+                    }
+                }
+            ]
+        },
+
+        /**
+         * Example packages
+         */
+
+        {
+            "files": ["examples/**/*"],
+
+            "rules": {
+                "import/no-relative-packages": "warn"
+            }
+        },
+
+        {
+            "files": ["examples/enketo-transformer-web/**/*"],
+
+            "env": {
+                "browser": true,
+                "node": false
+            },
+
+            "rules": {
+                "react/destructuring-assignment": "off",
+                "react/jsx-filename-extension": [
+                    "error",
+                    { "extensions": [".jsx", ".tsx"] }
+                ],
+                "react/no-unknown-property": "off",
+                "react/react-in-jsx-scope": "off"
+            },
+
+            "overrides": [
+
+                {
+                    "files": [
+                        "examples/enketo-transformer-web/vite.config.ts",
+                        "examples/enketo-transformer-web/**/*.tsx"
+                    ],
+
+                    "rules": {
+                        "import/extensions": [
+                            "error",
+                            "ignorePackages",
+                            {
+                                "": "never",
+                                "js": "never",
+                                "jsx": "never",
+                                "ts": "never",
+                                "tsx": "never"
+                            }
+                        ]
+                    }
+                },
+
+                {
+                    "files": ["examples/enketo-transformer-web/vite.config.ts"],
+
+                    "rules": {
+                        "import/no-extraneous-dependencies": [
+                            "error",
+                            {
+                                "devDependencies": true,
+                                "packageDir": [
+                                    ".",
+                                    "./examples/enketo-transformer-web"
+                                ]
+                            }
+                        ]
                     }
                 }
             ]

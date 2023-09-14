@@ -87,17 +87,10 @@
         "@types/benchmark": "^2.1.2",
         "@types/css.escape": "^1.5.0",
         "@types/prettier": "^3.0.0",
-        "@vitest/coverage-istanbul": "^0.34.3",
-        "@vitest/runner": "^0.34.3",
-        "@vitest/utils": "^0.34.3",
         "benchmark": "^2.1.4",
         "http-server": "^13.1.0",
         "libxslt": "0.10.2",
-        "pretty-format": "^29.6.2",
-        "vite": "^4.4.9",
-        "vite-node": "^0.34.3",
-        "vite-plugin-node": "^3.0.2",
-        "vitest": "^0.34.3"
+        "pretty-format": "^29.6.2"
     },
     "peerDependencies": {
         "libxslt": "0.10.2"
