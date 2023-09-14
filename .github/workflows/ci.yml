@@ -1,0 +1,351 @@
+name: 'ci'
+run-name: 'Enketo CI'
+
+on:
+    push:
+    pull_request:
+    release:
+        types:
+            - 'published'
+
+jobs:
+    changes:
+        runs-on: 'ubuntu-latest'
+
+        outputs:
+            root: ${{ steps.changes.outputs.root }}
+            evaluator: ${{ steps.changes.outputs.evaluator }}
+            transformer: ${{ steps.changes.outputs.transformer }}
+            core: ${{ steps.changes.outputs.core }}
+            express: ${{ steps.changes.outputs.express }}
+
+        steps:
+            - uses: 'actions/checkout@v3'
+            - uses: dorny/paths-filter@v2
+              id: changes
+              with:
+                filters: |
+                      root:
+                          - '*'
+                          - '.github/workflows/*'
+
+                      evaluator:
+                          - 'packages/openrosa-xpath-evaluator/**'
+
+                      transformer:
+                          - 'packages/enketo-transformer/**'
+
+                      core:
+                          - 'packages/enketo-core/**'
+
+                      express:
+                          - 'packages/enketo-express/**'
+
+    install-and-build:
+        runs-on: 'ubuntu-latest'
+
+        strategy:
+            matrix:
+                node-version: [ '18', '20' ]
+
+        steps:
+            - uses: 'actions/checkout@v3'
+
+            - uses: 'volta-cli/action@v4'
+              with:
+                  node-version: '${{ matrix.node-version }}'
+                  yarn-version: '1.22.19'
+
+            - uses: 'actions/cache@v3'
+              id: cache-install
+              with:
+                  path: |
+                      ~/.cache/puppeteer
+                      ~/.cache/ms-playwright
+                      node_modules
+                      **/node_modules
+                  key: install-${{ matrix.node-version }}-${{ hashFiles('yarn.lock', 'examples/*/yarn.lock', 'packages/*/yarn.lock') }}
+
+            - uses: 'actions/cache@v3'
+              id: cache-build
+              with:
+                  path: |
+                      examples/*/dist
+                      packages/*/build
+                      packages/*/dist
+                      packages/enketo-core/test/mock/forms.*
+                  key: build-${{ matrix.node-version }}-${{ github.sha }}
+
+            - if: steps.cache-install.outputs.cache-hit != 'true' && matrix.node-version != '20'
+              run: 'yarn install --frozen-lockfile'
+
+            - if: steps.cache-install.outputs.cache-hit != 'true' && matrix.node-version == '20'
+              run: 'yarn install --frozen-lockfile && yarn playwright install chromium firefox webkit'
+
+            - if: steps.cache-install.outputs.cache-hit == 'true'
+              run: 'yarn build'
+
+    lint:
+        needs: ['install-and-build', 'changes']
+        runs-on: 'ubuntu-latest'
+
+        strategy:
+            matrix:
+                node-version: [ '20' ]
+
+        steps:
+            - uses: 'actions/checkout@v3'
+
+            - uses: 'volta-cli/action@v4'
+              with:
+                  node-version: '${{ matrix.node-version }}'
+                  yarn-version: '1.22.19'
+
+            - uses: 'actions/cache@v3'
+              id: cache-install
+              with:
+                  path: |
+                      ~/.cache/puppeteer
+                      ~/.cache/ms-playwright
+                      node_modules
+                      **/node_modules
+                  key: install-${{ matrix.node-version }}-${{ hashFiles('yarn.lock', 'examples/*/yarn.lock', 'packages/*/yarn.lock') }}
+                  fail-on-cache-miss: true
+
+            - uses: 'actions/cache@v3'
+              id: cache-build
+              with:
+                  path: |
+                      examples/*/dist
+                      packages/*/build
+                      packages/*/dist
+                      packages/enketo-core/test/mock/forms.*
+                  key: build-${{ matrix.node-version }}-${{ github.sha }}
+                  fail-on-cache-miss: true
+
+            - run: 'yarn lint'
+
+    test-evaluator:
+        needs: ['install-and-build', 'changes']
+        if: needs.changes.outputs.root == 'true' || needs.changes.outputs.evaluator == 'true'
+        runs-on: 'ubuntu-latest'
+
+        strategy:
+            matrix:
+                node-version: [ '20' ]
+
+        steps:
+            - uses: 'actions/checkout@v3'
+
+            - uses: 'volta-cli/action@v4'
+              with:
+                  node-version: '${{ matrix.node-version }}'
+                  yarn-version: '1.22.19'
+
+            - uses: 'actions/cache@v3'
+              id: cache-install
+              with:
+                  path: |
+                      ~/.cache/puppeteer
+                      ~/.cache/ms-playwright
+                      node_modules
+                      **/node_modules
+                  key: install-${{ matrix.node-version }}-${{ hashFiles('yarn.lock', 'examples/*/yarn.lock', 'packages/*/yarn.lock') }}
+                  fail-on-cache-miss: true
+
+            - uses: 'actions/cache@v3'
+              id: cache-build
+              with:
+                  path: |
+                      examples/*/dist
+                      packages/*/build
+                      packages/*/dist
+                      packages/enketo-core/test/mock/forms.*
+                  key: build-${{ matrix.node-version }}-${{ github.sha }}
+                  fail-on-cache-miss: true
+
+            - run: 'yarn workspace openrosa-xpath-evaluator test'
+
+            # - if: github.event_name == 'release' && github.event.action == 'published' && unknown_condition_tbd
+            #   run: npm publish
+            #   env:
+            #       NODE_AUTH_TOKEN: ${{secrets.npm_token}}
+
+    test-transformer:
+        needs: ['install-and-build', 'changes']
+        if: needs.changes.outputs.root == 'true' || needs.changes.outputs.transformer == 'true'
+        runs-on: 'ubuntu-latest'
+
+        strategy:
+            matrix:
+                target: ['Node']
+                node-version: [ '18', '20' ]
+                include:
+                    - target: Web
+                      node-version: 20
+                      browser: Firefox
+                    - target: Web
+                      node-version: 20
+                      browser: Chromium
+                    - target: Web
+                      node-version: 20
+                      browser: WebKit
+
+        steps:
+            - uses: 'actions/checkout@v3'
+
+            - uses: 'volta-cli/action@v4'
+              with:
+                  node-version: '${{ matrix.node-version }}'
+                  yarn-version: '1.22.19'
+
+            - uses: 'actions/cache@v3'
+              id: cache-install
+              with:
+                  path: |
+                      ~/.cache/puppeteer
+                      ~/.cache/ms-playwright
+                      node_modules
+                      **/node_modules
+                  key: install-${{ matrix.node-version }}-${{ hashFiles('yarn.lock', 'examples/*/yarn.lock', 'packages/*/yarn.lock') }}
+                  fail-on-cache-miss: true
+
+            - uses: 'actions/cache@v3'
+              id: cache-build
+              with:
+                  path: |
+                      examples/*/dist
+                      packages/*/build
+                      packages/*/dist
+                      packages/enketo-core/test/mock/forms.*
+                  key: build-${{ matrix.node-version }}-${{ github.sha }}
+                  fail-on-cache-miss: true
+
+            # Caching this step seems infeasible...
+            - if: ${{ matrix.node-version == '20' && matrix.target == 'Web' && matrix.browser == 'WebKit' }}
+              run: 'yarn playwright install-deps'
+
+            - run: 'ENV=${{ matrix.target }} BROWSER=${{ matrix.browser }} yarn workspace enketo-transformer test'
+
+            # - if: github.event_name == 'release' && github.event.action == 'published' && matrix.node == '20' && matrix.target == 'Node' && unknown_condition_tbd
+            #   run: npm publish
+            #   env:
+            #       NODE_AUTH_TOKEN: ${{secrets.npm_token}}
+
+    test-core:
+        needs: ['install-and-build', 'changes']
+        if: needs.changes.outputs.root == 'true' || needs.changes.outputs.evaluator == 'true' || needs.changes.outputs.transformer == 'true' || needs.changes.outputs.core == 'true'
+        runs-on: 'ubuntu-latest'
+
+        strategy:
+            matrix:
+                target: ['Node', 'Web']
+                node-version: [ '20' ]
+
+        steps:
+            - uses: 'actions/checkout@v3'
+
+            - uses: 'volta-cli/action@v4'
+              with:
+                  node-version: '${{ matrix.node-version }}'
+                  yarn-version: '1.22.19'
+
+            - uses: 'actions/cache@v3'
+              id: cache-install
+              with:
+                  path: |
+                      ~/.cache/puppeteer
+                      ~/.cache/ms-playwright
+                      node_modules
+                      **/node_modules
+                  key: install-${{ matrix.node-version }}-${{ hashFiles('yarn.lock', 'examples/*/yarn.lock', 'packages/*/yarn.lock') }}
+                  fail-on-cache-miss: true
+
+            - uses: 'actions/cache@v3'
+              id: cache-build
+              with:
+                  path: |
+                      examples/*/dist
+                      packages/*/build
+                      packages/*/dist
+                      packages/enketo-core/test/mock/forms.*
+                  key: build-${{ matrix.node-version }}-${{ github.sha }}
+                  fail-on-cache-miss: true
+
+            - if: ${{ matrix.target == 'Node' }}
+              run: 'yarn workspace enketo-core test'
+
+            - if: ${{ matrix.target == 'Web' }}
+              run: |
+                sudo apt-get install xvfb
+                xvfb-run --auto-servernum yarn workspace enketo-core test-browsers
+
+            # - if: github.event_name == 'release' && github.event.action == 'published' && matrix.node == '20' && unknown_condition_tbd
+            #   run: npm publish
+            #   env:
+            #       NODE_AUTH_TOKEN: ${{secrets.npm_token}}
+
+    test-express:
+        needs: ['install-and-build', 'changes']
+        if: needs.changes.outputs.root == 'true' || needs.changes.outputs.evaluator == 'true' || needs.changes.outputs.transformer == 'true' || needs.changes.outputs.core == 'true' || needs.changes.outputs.express == 'true'
+        runs-on: 'ubuntu-latest'
+
+        env:
+            TEST_REDIS_MAIN_PORT: 6379
+            TEST_REDIS_CACHE_PORT: 6380
+
+        strategy:
+            matrix:
+                node-version: [ '18', '20' ]
+
+        services:
+            redis-6379:
+                image: redis
+                options: >-
+                    --health-cmd "redis-cli ping"
+                    --health-interval 10s
+                    --health-timeout 5s
+                    --health-retries 5
+                ports:
+                    - '6379:6379'
+            redis-6380:
+                image: redis
+                options: >-
+                    --health-cmd "redis-cli ping"
+                    --health-interval 10s
+                    --health-timeout 5s
+                    --health-retries 5
+                ports:
+                    - '6380:6379'
+
+        steps:
+            - uses: 'actions/checkout@v3'
+
+            - uses: 'volta-cli/action@v4'
+              with:
+                  node-version: '${{ matrix.node-version }}'
+                  yarn-version: '1.22.19'
+
+            - uses: 'actions/cache@v3'
+              id: cache-install
+              with:
+                  path: |
+                      ~/.cache/puppeteer
+                      ~/.cache/ms-playwright
+                      node_modules
+                      **/node_modules
+                  key: install-${{ matrix.node-version }}-${{ hashFiles('yarn.lock', 'examples/*/yarn.lock', 'packages/*/yarn.lock') }}
+                  fail-on-cache-miss: true
+
+            - uses: 'actions/cache@v3'
+              id: cache-build
+              with:
+                  path: |
+                      examples/*/dist
+                      packages/*/build
+                      packages/*/dist
+                      packages/enketo-core/test/mock/forms.*
+                  key: build-${{ matrix.node-version }}-${{ github.sha }}
+                  fail-on-cache-miss: true
+
+            - run: 'yarn workspace enketo-express test'
