@@ -1,0 +1,10 @@
+{
+    "extends": "../../packages/enketo-transformer/tsconfig.json",
+    "compilerOptions": {
+        "lib": ["DOM", "DOM.Iterable"],
+        "jsx": "preserve",
+        "jsxImportSource": "solid-js"
+    },
+    "exclude": ["node_modules", "../../node_modules"],
+    "include": [".", "../../packages/enketo-transformer/src"]
+}

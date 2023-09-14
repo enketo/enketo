@@ -1,5 +1,5 @@
 {
-    "name": "enketo-transformer-demo",
+    "name": "enketo-transformer-web",
     "version": "0.0.0",
     "type": "module",
     "private": true,
