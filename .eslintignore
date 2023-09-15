@@ -4,6 +4,7 @@
 **/test-coverage/**
 **/coverage.shield.badge.md
 
+/examples/*/dist/*
 /packages/enketo-transformer/dist/*
 /packages/enketo-transformer/src/xsl/*
 /packages/enketo-transformer/test/**/*.xml

@@ -12,6 +12,7 @@
     "XPath"
   ],
   "scripts": {
+    "build": "echo 'openrosa-xpath-evaluator build (currently a noop) complete'",
     "test": "yarn test:mocha && yarn test:karma",
     "test:mocha": "TZ=America/Phoenix mocha test/unit/mocha-setup.js test/unit/*.spec.js",
     "test:karma": "karma start --single-run"
