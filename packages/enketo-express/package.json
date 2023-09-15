@@ -18,6 +18,7 @@
     },
     "contributors": [],
     "scripts": {
+        "build": "grunt && echo 'enketo-express build complete'",
         "start": "node .",
         "test": "grunt test",
         "test-browser": "grunt test-browser",
@@ -25,7 +26,6 @@
         "test-server": "grunt test-server:all",
         "test-watch-client": "grunt test-watch-client",
         "test-watch-server": "grunt test-watch-server",
-        "postinstall": "grunt",
         "build-docs": "rimraf docs && jsdoc -c jsdoc.config.js"
     },
     "private": true,

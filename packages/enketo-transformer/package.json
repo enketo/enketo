@@ -49,9 +49,8 @@
     "contributors": [],
     "scripts": {
         "benchmarks": "vite-node ./test/benchmarks.ts",
-        "build": "EMPTY_OUT_DIR=true vite build && ENV=web vite build && yarn tsc",
+        "build": "EMPTY_OUT_DIR=true vite build && ENV=web vite build && yarn tsc && echo 'enketo-transformer build complete'",
         "prepare": "yarn build",
-        "install": "yarn build",
         "test": "vitest run --coverage && yarn tsc && node update-readme-with-shield-badge.cjs",
         "test:watch": "vitest",
         "test:watch:web": "ENV=web vitest",

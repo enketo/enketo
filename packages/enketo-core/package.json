@@ -37,6 +37,7 @@
     "bugs": "https://github.com/enketo/enketo-core/issues",
     "main": "src/js/form.js",
     "scripts": {
+        "build": "grunt css && grunt compile && grunt transforms && echo 'enketo-core build complete'",
         "start": "grunt develop",
         "test": "cross-env NODE_OPTIONS='--max-old-space-size=8192' grunt test",
         "test-browsers": "cross-env NODE_OPTIONS='--max-old-space-size=8192' grunt karma:browsers",

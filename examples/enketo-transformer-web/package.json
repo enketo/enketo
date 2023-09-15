@@ -13,6 +13,7 @@
         "yarn": "1.22.19"
     },
     "scripts": {
+        "build": "vite build && echo 'enketo-transformer-web build complete'",
         "demo": "vite",
         "dev": "ENV=dev vite"
     },

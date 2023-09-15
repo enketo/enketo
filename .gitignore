@@ -5,8 +5,10 @@
 /node_modules/
 /**/node_modules/
 /npm-debug.log
+/examples/*/npm-debug.log
 /packages/*/npm-debug.log
 /yarn-error.log
+/examples/*/yarn-error.log
 /packages/*/yarn-error.log
 
 # =============================================================================
@@ -31,6 +33,7 @@ Thumbs.db
 # Originally only in enketo-express
 /.env
 # Originally only in enketo-express
+/examples/*/.env
 /packages/*/.env
 
 # =============================================================================
@@ -42,10 +45,12 @@ Thumbs.db
 # -----------------------------------------------------------------------------
 
 /.grunt/
+/examples/*/.grunt/
 /packages/*/.grunt/
 # Originally only in enketo-express
 /.nodemon-*
 # Originally only in enketo-express
+/examples/*/.nodemon-*
 /packages/*/.nodemon-*
 
 # -----------------------------------------------------------------------------
@@ -61,12 +66,16 @@ Thumbs.db
 # -----------------------------------------------------------------------------
 
 /.nyc_output/
+/examples/*/.nyc_output/
 /packages/*/.nyc_output/
 /test-coverage/
+/examples/*/test-coverage/
 /packages/*/test-coverage/
 /coverage.shield.badge.md
+/examples/*/coverage.shield.badge.md
 /packages/*/coverage.shield.badge.md
 /.benchmarks.md
+/examples/*/.benchmarks.md
 /packages/*/.benchmarks.md
 
 # -----------------------------------------------------------------------------
@@ -74,8 +83,10 @@ Thumbs.db
 # -----------------------------------------------------------------------------
 
 /build/
+/examples/*/build/
 /packages/*/build/
 /dist/
+/examples/*/dist/
 /packages/*/dist/
 
 # -----------------------------------------------------------------------------

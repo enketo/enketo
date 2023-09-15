@@ -5,15 +5,20 @@
   "private": true,
   "workspaces": {
     "packages": [
-        "examples/*",
-        "packages/*"
+        "packages/openrosa-xpath-evaluator",
+        "packages/enketo-transformer",
+        "packages/enketo-core",
+        "packages/enketo-express",
+        "examples/*"
     ],
     "nohoist": [
       "**/vex-js"
     ]
   },
   "scripts": {
-    "lint": "eslint ."
+    "build": "yarn workspaces run build",
+    "lint": "eslint .",
+    "postinstall": "yarn build"
   },
   "devDependencies": {
     "@babel/core": "^7.22.11",
