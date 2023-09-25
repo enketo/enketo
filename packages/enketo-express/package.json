@@ -102,7 +102,7 @@
         "public/js/src/enketo-offline-fallback.js"
     ],
     "engines": {
-        "node": ">=16 <21",
+        "node": ">=18 <21",
         "npm": "please-use-yarn",
         "yarn": ">= 1.22.19 <2"
     },

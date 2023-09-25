@@ -75,7 +75,7 @@
         "signature_pad": "^4.1.6"
     },
     "engines": {
-        "node": ">=16 <21",
+        "node": ">=18 <21",
         "npm": "please-use-yarn",
         "yarn": ">= 1.22.19 <2"
     },
