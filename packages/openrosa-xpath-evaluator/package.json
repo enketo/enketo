@@ -1,43 +1,43 @@
 {
-  "name": "openrosa-xpath-evaluator",
-  "version": "2.0.13",
-  "description": "Wrapper for browsers' XPath evaluator with added support for OpenRosa extensions.",
-  "homepage": "https://enketo.org",
-  "main": "src/openrosa-xpath.js",
-  "keywords": [
-    "enketo",
-    "OpenRosa",
-    "ODK",
-    "XForms",
-    "XPath"
-  ],
-  "scripts": {
-    "build": "echo 'openrosa-xpath-evaluator build (currently a noop) complete'",
-    "test": "yarn test:mocha && yarn test:karma",
-    "test:mocha": "TZ=America/Phoenix mocha test/unit/mocha-setup.js test/unit/*.spec.js",
-    "test:karma": "karma start --single-run"
-  },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/enketo/openrosa-xpath-evaluator"
-  },
-  "author": "Alex",
-  "license": "Apache-2.0",
-  "bugs": "https://github.com/enketo/openrosa-xpath-evaluator/issues",
-  "devDependencies": {
-    "lodash": "^4.17.21",
-    "node-forge": "^1.2.1"
-  },
-  "peerDependencies": {
-    "node-forge": "^1.2.1"
-  },
-  "engines": {
-    "node": ">=16 <21",
-    "npm": "please-use-yarn",
-    "yarn": ">= 1.22.19 <2"
-  },
-  "volta": {
-    "node": "20.5.1",
-    "yarn": "1.22.19"
-  }
+    "name": "openrosa-xpath-evaluator",
+    "version": "2.0.13",
+    "description": "Wrapper for browsers' XPath evaluator with added support for OpenRosa extensions.",
+    "homepage": "https://enketo.org",
+    "main": "src/openrosa-xpath.js",
+    "keywords": [
+        "enketo",
+        "OpenRosa",
+        "ODK",
+        "XForms",
+        "XPath"
+    ],
+    "scripts": {
+        "build": "echo 'openrosa-xpath-evaluator build (currently a noop) complete'",
+        "test": "yarn test:mocha && yarn test:karma",
+        "test:mocha": "TZ=America/Phoenix mocha test/unit/mocha-setup.js test/unit/*.spec.js",
+        "test:karma": "karma start --single-run"
+    },
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/enketo/openrosa-xpath-evaluator"
+    },
+    "author": "Alex",
+    "license": "Apache-2.0",
+    "bugs": "https://github.com/enketo/openrosa-xpath-evaluator/issues",
+    "devDependencies": {
+        "lodash": "^4.17.21",
+        "node-forge": "^1.2.1"
+    },
+    "peerDependencies": {
+        "node-forge": "^1.2.1"
+    },
+    "engines": {
+        "node": ">=18 <21",
+        "npm": "please-use-yarn",
+        "yarn": ">= 1.22.19 <2"
+    },
+    "volta": {
+        "node": "20.5.1",
+        "yarn": "1.22.19"
+    }
 }
