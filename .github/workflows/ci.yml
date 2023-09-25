@@ -24,7 +24,7 @@ jobs:
             - uses: dorny/paths-filter@v2
               id: changes
               with:
-                filters: |
+                  filters: |
                       root:
                           - '*'
                           - '.github/workflows/*'
@@ -46,7 +46,7 @@ jobs:
 
         strategy:
             matrix:
-                node-version: [ '18', '20' ]
+                node-version: ['18.18.0', '20.5.1']
 
         steps:
             - uses: 'actions/checkout@v3'
@@ -76,10 +76,10 @@ jobs:
                       packages/enketo-core/test/mock/forms.*
                   key: build-${{ matrix.node-version }}-${{ github.sha }}
 
-            - if: steps.cache-install.outputs.cache-hit != 'true' && matrix.node-version != '20'
+            - if: steps.cache-install.outputs.cache-hit != 'true' && matrix.node-version != '20.5.1'
               run: 'yarn install --frozen-lockfile'
 
-            - if: steps.cache-install.outputs.cache-hit != 'true' && matrix.node-version == '20'
+            - if: steps.cache-install.outputs.cache-hit != 'true' && matrix.node-version == '20.5.1'
               run: 'yarn install --frozen-lockfile && yarn playwright install chromium firefox webkit'
 
             - if: steps.cache-install.outputs.cache-hit == 'true'
@@ -91,7 +91,7 @@ jobs:
 
         strategy:
             matrix:
-                node-version: [ '20' ]
+                node-version: ['20.5.1']
 
         steps:
             - uses: 'actions/checkout@v3'
@@ -132,7 +132,7 @@ jobs:
 
         strategy:
             matrix:
-                node-version: [ '20' ]
+                node-version: ['20.5.1']
 
         steps:
             - uses: 'actions/checkout@v3'
@@ -179,17 +179,17 @@ jobs:
         strategy:
             matrix:
                 target: ['Node']
-                node-version: [ '18', '20' ]
+                node-version: ['18.18.0', '20.5.1']
                 include:
-                    - target: Web
-                      node-version: 20
-                      browser: Firefox
-                    - target: Web
-                      node-version: 20
-                      browser: Chromium
-                    - target: Web
-                      node-version: 20
-                      browser: WebKit
+                    - target: 'Web'
+                      node-version: '20.5.1'
+                      browser: 'Firefox'
+                    - target: 'Web'
+                      node-version: '20.5.1'
+                      browser: 'Chromium'
+                    - target: 'Web'
+                      node-version: '20.5.1'
+                      browser: 'WebKit'
 
         steps:
             - uses: 'actions/checkout@v3'
@@ -222,12 +222,12 @@ jobs:
                   fail-on-cache-miss: true
 
             # Caching this step seems infeasible...
-            - if: ${{ matrix.node-version == '20' && matrix.target == 'Web' && matrix.browser == 'WebKit' }}
+            - if: ${{ matrix.node-version == '20.5.1' && matrix.target == 'Web' && matrix.browser == 'WebKit' }}
               run: 'yarn playwright install-deps'
 
             - run: 'ENV=${{ matrix.target }} BROWSER=${{ matrix.browser }} yarn workspace enketo-transformer test'
 
-            # - if: github.event_name == 'release' && github.event.action == 'published' && matrix.node == '20' && matrix.target == 'Node' && unknown_condition_tbd
+            # - if: github.event_name == 'release' && github.event.action == 'published' && matrix.node == '20.5.1' && matrix.target == 'Node' && unknown_condition_tbd
             #   run: npm publish
             #   env:
             #       NODE_AUTH_TOKEN: ${{secrets.npm_token}}
@@ -240,7 +240,7 @@ jobs:
         strategy:
             matrix:
                 target: ['Node', 'Web']
-                node-version: [ '20' ]
+                node-version: ['20.5.1']
 
         steps:
             - uses: 'actions/checkout@v3'
@@ -277,10 +277,10 @@ jobs:
 
             - if: ${{ matrix.target == 'Web' }}
               run: |
-                sudo apt-get install xvfb
-                xvfb-run --auto-servernum yarn workspace enketo-core test-browsers
+                  sudo apt-get install xvfb
+                  xvfb-run --auto-servernum yarn workspace enketo-core test-browsers
 
-            # - if: github.event_name == 'release' && github.event.action == 'published' && matrix.node == '20' && unknown_condition_tbd
+            # - if: github.event_name == 'release' && github.event.action == 'published' && matrix.node == '20.5.1' && unknown_condition_tbd
             #   run: npm publish
             #   env:
             #       NODE_AUTH_TOKEN: ${{secrets.npm_token}}
@@ -296,7 +296,7 @@ jobs:
 
         strategy:
             matrix:
-                node-version: [ '18', '20' ]
+                node-version: ['18.18.0', '20.5.1']
 
         services:
             redis-6379:
