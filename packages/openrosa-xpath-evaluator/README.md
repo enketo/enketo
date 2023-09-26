@@ -1,6 +1,4 @@
-# Openrosa XForms Evaluator
-
-<a href="https://travis-ci.com/enketo/openrosa-xpath-evaluator"><img src="https://travis-ci.com/enketo/openrosa-xpath-evaluator.svg?branch=master"/></a>
+# Openrosa XPath Evaluator
 
 Wrapper for browsers' XPath evaluator with added support for OpenRosa extensions.
 
@@ -93,11 +91,10 @@ The following XPath/ODK/OpenRosa functions are not implemented in this library, 
 
 1. Create release PR
 1. Check [Dependabot](https://github.com/enketo/openrosa-xpath-evaluator/security/dependabot) for alerts
-1. Run `npm update`
-1. Run `npm audit`
-    - Run `npm audit fix --production` to apply most important fixes
-1. Run `npm ci`
-1. Run `npm test`
+1. Run `yarn update`
+1. Run `yarn audit`
+1. Run `yarn ci`
+1. Run `yarn test`
 1. Update `CHANGELOG.md`
 1. Update version in `package.json`
 1. Merge PR with all changes
