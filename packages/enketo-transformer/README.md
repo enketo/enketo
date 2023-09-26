@@ -201,7 +201,6 @@ Releases are done each time a dependent tool needs an `enketo-transformer` chang
 1. Run `yarn upgrade`
     - Check if `node-libxslt` has been updated because it has caused problems in the past
 1. Run `yarn audit`
-    - ~~Run `npm audit fix --production` to apply most important fixes~~
 1. Run `yarn install`
 1. Run `yarn test`
 1. Merge PR with all changes

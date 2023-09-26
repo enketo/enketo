@@ -1,4 +1,4 @@
-[![npm version](https://badge.fury.io/js/enketo-core.svg)](http://badge.fury.io/js/enketo-core) ![Build Status](https://github.com/enketo/enketo-core/actions/workflows/npmjs.yml/badge.svg)
+[![npm version](https://badge.fury.io/js/enketo-core.svg)](http://badge.fury.io/js/enketo-core)
 
 # Enketo Core
 
@@ -431,7 +431,6 @@ Fired when the user moves to a different question in the form.
     - Check if `node-forge` has been updated and if so, verify encrypted submissions end-to-end
     - If `enketo-transformer` has been updated, change `Form.requiredTransformerVersion`
 1. Run `yarn audit`
-    - ~~Run `npm audit fix --production` to apply most important fixes~~
 1. Run `yarn install`
 1. Run `yarn test`
 1. Merge PR with all changes

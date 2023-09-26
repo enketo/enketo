@@ -31,7 +31,6 @@ _Send a message if you'd like to contribute! We use an easy web interface provid
 1. Run `yarn upgrade`
     - Check if `node-forge` has been updated and if so, verify encrypted submissions end-to-end
 1. Run `yarn audit`
-    - ~~Run `npm audit fix --production` to apply most important fixes~~
 1. Update version in `package.json`
     - Bump to major version if consumers have to make changes.
 1. Run `yarn install`
