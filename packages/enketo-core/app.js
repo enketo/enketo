@@ -13,6 +13,50 @@ import fileManager from './src/js/file-manager';
 import events from './src/js/event';
 import { fixGrid, styleToAll, styleReset } from './src/js/print';
 
+/**
+ * @type {Map<string, HTMLLinkElement[]>}
+ */
+const themeStylesheets = Array.from(
+    document.head.querySelectorAll('link[data-theme]')
+).reduce(
+    /**
+     * @param {HTMLLinkElement} link
+     */
+    (acc, link) => {
+        const theme = link.dataset.theme;
+        const links = acc.get(theme) ?? [];
+
+        links.push(link);
+
+        acc.set(theme, links);
+
+        return acc;
+    },
+    new Map()
+);
+
+/**
+ * @param {HTMLFormElement} formElement
+ */
+const setTheme = (formElement) => {
+    let theme = 'formhub';
+
+    for (const className of formElement.classList) {
+        const [, formTheme] = className.match(/^theme-(.*)$/) ?? [];
+
+        if (themeStylesheets.has(formTheme)) {
+            theme = formTheme;
+            break;
+        }
+    }
+
+    for (const [key, links] of themeStylesheets) {
+        links.forEach((link) => {
+            link.rel = key === theme ? 'stylesheet' : 'alternate-stylesheet';
+        });
+    }
+};
+
 let form;
 let formStr;
 let modelStr;
@@ -64,6 +108,9 @@ if (xform && xform !== 'null') {
                 .createContextualFragment(formStr)
                 .querySelector('form');
             document.querySelector('.form-header').after(formEl);
+
+            setTheme(formEl);
+
             initializeForm();
         } catch (error) {
             // eslint-disable-next-line no-alert
@@ -104,6 +151,7 @@ document.querySelector('#validate-form').addEventListener('click', () => {
 // initialize the form
 function initializeForm() {
     const formEl = document.querySelector('form.or');
+
     form = new Form(
         formEl,
         {
@@ -113,6 +161,7 @@ function initializeForm() {
             printRelevantOnly: false,
         }
     );
+
     // for debugging
     window.form = form;
     // initialize form and check for load errors
