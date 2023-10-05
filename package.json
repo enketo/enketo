@@ -12,6 +12,7 @@
             "examples/*"
         ],
         "nohoist": [
+            "**/bootstrap-datepicker",
             "**/vex-js"
         ]
     },
