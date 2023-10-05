@@ -39,7 +39,7 @@ const themeStylesheets = Array.from(
  * @param {HTMLFormElement} formElement
  */
 const setTheme = (formElement) => {
-    let theme = 'formhub';
+    let theme = 'odk';
 
     for (const className of formElement.classList) {
         const [, formTheme] = className.match(/^theme-(.*)$/) ?? [];
@@ -52,7 +52,11 @@ const setTheme = (formElement) => {
 
     for (const [key, links] of themeStylesheets) {
         links.forEach((link) => {
-            link.rel = key === theme ? 'stylesheet' : 'alternate-stylesheet';
+            const rel = key === theme ? 'stylesheet' : 'alternate-stylesheet';
+
+            if (link.rel !== rel) {
+                link.rel = rel;
+            }
         });
     }
 };
