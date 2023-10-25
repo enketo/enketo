@@ -1,5 +1,2 @@
 Dockerfile
 node_modules
-setup/docker/envfile.txt
-setup/docker/secrets
-
