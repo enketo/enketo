@@ -1,11 +1,11 @@
-FROM node:16
+FROM node:20
 
 ENV ENKETO_SRC_DIR=/srv/src/enketo_express
 WORKDIR ${ENKETO_SRC_DIR}
 
 COPY . ${ENKETO_SRC_DIR}
 
-RUN npm install -g npm@^6 && npm clean-install && npx grunt && npm prune --production
+RUN yarn install --frozen-lockfile && yarn grunt && yarn install --production
 
 # Persist the `secrets` directory so the encryption key remains consistent.
 RUN mkdir -p ${ENKETO_SRC_DIR}/setup/docker/secrets
