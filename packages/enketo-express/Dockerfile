@@ -13,4 +13,4 @@ VOLUME ${ENKETO_SRC_DIR}/setup/docker/secrets
 
 EXPOSE 8005
 
-CMD ${ENKETO_SRC_DIR}/setup/docker/start.sh
+CMD ["$ENKETO_SRC_DIR/setup/docker/start.sh"]
