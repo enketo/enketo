@@ -22,7 +22,7 @@ The app should now be running on [localhost](http://localhost).
 
 ### How to install a production server
 
-See [this tutorial](http://blog.enketo.org/install-enketo-production-ubuntu/) for detailed instructions. Another option, for some people, is {@tutorial 02-heroku}.
+See [this tutorial](http://blog.enketo.org/install-enketo-production-ubuntu/) for detailed instructions.
 
 ### How to configure
 
