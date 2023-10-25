@@ -10,16 +10,6 @@
 6. Create config/config.json. See [How To configure](#how-to-configure).
 7. Install dependencies and build with `npm install` from the project root
 
-#### Using Docker:
-
-1. Install [Docker Compose](http://docs.docker.com/compose/install/).
-2. Create a [config file](#how-to-configure) at `config/config.json` specifying at minimum an API key.
-3. **(Optional)** For HTTPS, copy your SSL certificate and key files to `setup/docker/secrets/ssl.crt` and `setup/docker/secrets/ssl.key` respectively (take care not to commit these files back to any public git repository). Plain HTTP requests to Enketo Express will be automatically redirected to HTTPS.
-4. Execute `docker-compose up -d` from the [`setup/docker`](https://github.com/enketo/enketo-express/blob/master/setup/docker) directory and wait to see e.g. `Worker 1 ready for duty...`.
-5. To stop, execute `docker-compose stop` from the [`setup/docker`](https://github.com/enketo/enketo-express/blob/master/setup/docker) directory. Database dumps from the main Redis instance will be mapped into the directory `setup/docker/redis_main_data/`.
-
-The app should now be running on [localhost](http://localhost).
-
 ### How to install a production server
 
 See [this tutorial](http://blog.enketo.org/install-enketo-production-ubuntu/) for detailed instructions.
