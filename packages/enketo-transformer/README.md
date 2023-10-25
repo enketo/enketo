@@ -164,7 +164,7 @@ http://localhost:8085/transform?xform=http://localhost:8081/autocomplete.xml
 There is also a helpful **GET /transform/htmlform** endpoint to easily inspect the HTML form output in the developer console. Example:
 http://localhost:8085/transform/htmlform?xform=http://localhost:8081/autocomplete.xml
 
-A vagrant configuration file and provisioning script is also included. Use DEBUG environment variable to see debug terminal output, e.g.:
+You may use the `DEBUG` environment variable to see debug terminal output, e.g.:
 
 ```bash
 DEBUG=api,transformer,markdown,language node app.js

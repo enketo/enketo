@@ -10,19 +10,6 @@
 6. Create config/config.json. See [How To configure](#how-to-configure).
 7. Install dependencies and build with `npm install` from the project root
 
-#### Using vagrant:
-
-This takes several shortcuts. Do not use for production!
-
-1. Install [Vagrant](http://docs.vagrantup.com/v2/installation/index.html) and [VirtualBox](https://www.virtualbox.org/wiki/Downloads)
-2. Run `vagrant up` from project folder and wait until it completes \*
-3. Log in to the VM with `vagrant ssh` and run `cd /vagrant && npm start`
-
-The app should now be running on [localhost:8006](http://localhost:8006). You can test the API in a different console window with:
-`curl --user enketorules: -d "server_url=https://ona.io/enketo&form_id=widgets" http://localhost:8006/api/v2/survey`.
-
-_\* sometimes `vagrant up` fails for reasons beyond our control - e.g. if external resources are temporarily unavailable. Try running `vagrant reload --provision` to resolve this._
-
 #### Using Docker:
 
 1. Install [Docker Compose](http://docs.docker.com/compose/install/).
@@ -43,7 +30,7 @@ All configuration is normally done in config/config.json. This file only has to 
 
 As an alternative, there is an option to use environment variables instead of a config/config.json file. If the config/config.json file is missing Enketo will assume configuration is done with environment variables. A combination of both options is not supported. See [config/sample.env](https://github.com/enketo/enketo-express/blob/master/config/sample.env) for more information on equivalent environment variable names.
 
-The default production configuration includes 2 redis instances. You can **greatly simplify installation by using 1 redis instance** instead (for development usage). To do this set the redis.cache.port to 6379 (same as redis.main.port). To set up 2 instances properly for production, you might find the vagrant setup steps in [bootstrap.sh](https://github.com/enketo/enketo-express/blob/master/setup/vagrant/bootstrap.sh) useful.
+The default production configuration includes 2 redis instances. You can **greatly simplify installation by using 1 redis instance** instead (for development usage). To do this set the redis.cache.port to 6379 (same as redis.main.port).
 
 For development usages, it is helpful to set "linked form and data server" -> "server url" to `""`, so you can use any OpenRosa server with your local Enketo Express.
 
@@ -55,7 +42,7 @@ To configure your own custom external authentication also see [this document](ht
 
 Run with `npm start` from project root.
 
-You can now check that the app is running by going to e.g. http://localhost:8005 (depending on your server and port set in config/config.json or the port forwarding set up in Vagrant (default is 8006))
+You can now check that the app is running by going to e.g. http://localhost:8005 (depending on your server and port set in config/config.json)
 
 ### How to enable debug logs
 
