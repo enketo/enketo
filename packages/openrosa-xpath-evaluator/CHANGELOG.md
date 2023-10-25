@@ -3,6 +3,10 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## [3.0.0] - 2023-10-25
+
+-   Support Node 18 and 20, drop support for older versions
+
 ## [2.0.13] - 2022-10-26
 
 ##### Fixed

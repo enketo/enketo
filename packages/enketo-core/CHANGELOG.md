@@ -3,6 +3,10 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## [8.0.0] - 2023-10-25
+
+-   Support Node 18 and 20, drop support for older versions
+
 ## [7.2.5] - 2023-08-18
 
 -   Fix: multiple "static" itemset datalists in the same repeat (#995)

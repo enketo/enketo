@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## 7.0.0 - 2023-10-25
+
+-   Support Node 18 and 20, drop support for older versions
+-   Update Dockerfile Node version
+-   Remove pm2 runtime in Dockerfile
+-   Remove outdated examples for Vagrant, Docker Compose, Heroku
+-   Remove outdated support for request-filtering-agent
+
 ## 6.2.2 - 2023-08-22
 
 -   Fix changelog versions

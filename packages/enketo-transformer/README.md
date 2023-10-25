@@ -1,4 +1,4 @@
-![coverage-shield-badge-1](https://img.shields.io/badge/coverage-96.09%25-brightgreen.svg)
+![coverage-shield-badge-1](https://img.shields.io/badge/coverage-87.86%25-brightgreen.svg)
 [![npm version](https://badge.fury.io/js/enketo-transformer.svg)](http://badge.fury.io/js/enketo-transformer)
 
 # Enketo Transformer

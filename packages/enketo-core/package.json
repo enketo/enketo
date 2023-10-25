@@ -2,7 +2,7 @@
     "name": "enketo-core",
     "description": "Extensible Enketo form engine",
     "homepage": "https://enketo.org",
-    "version": "7.2.5",
+    "version": "8.0.0",
     "license": "Apache-2.0",
     "os": [
         "darwin",
@@ -44,7 +44,7 @@
         "test-watch": "cross-env NODE_OPTIONS='--max-old-space-size=8192' grunt test:watch"
     },
     "devDependencies": {
-        "enketo-transformer": "3.0.1",
+        "enketo-transformer": "4.0.0",
         "libxslt": "0.10.2"
     },
     "resolutions": {
@@ -71,7 +71,7 @@
         "leaflet.gridlayer.googlemutant": "^0.13.5",
         "mergexml": "1.2.3",
         "node-forge": "^1.3.1",
-        "openrosa-xpath-evaluator": "2.0.13",
+        "openrosa-xpath-evaluator": "3.0.0",
         "signature_pad": "^4.1.6"
     },
     "engines": {
