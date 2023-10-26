@@ -8,6 +8,7 @@ const nodeSass = require('node-sass');
 const transformer = require('enketo-transformer');
 const timeGrunt = require('time-grunt');
 const loadGruntTasks = require('load-grunt-tasks');
+const { resolveSassPackageImport } = require('../../tools/grunt/sass-paths');
 
 module.exports = (grunt) => {
     // show elapsed time at the end
@@ -134,16 +135,7 @@ module.exports = (grunt) => {
             options: {
                 implementation: nodeSass,
                 sourceMap: false,
-                importer(url, prev, done) {
-                    // Fixes enketo-core submodule references.
-                    // Those references are correct in apps that use enketo-core as a submodule.
-                    url = /\.\.\/\.\.\/node_modules\//.test(url)
-                        ? url.replace('../../node_modules/', 'node_modules/')
-                        : url;
-                    done({
-                        file: url,
-                    });
-                },
+                importer: resolveSassPackageImport,
             },
             compile: {
                 cwd: 'src/sass',
