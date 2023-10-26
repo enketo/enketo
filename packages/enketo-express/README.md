@@ -24,24 +24,6 @@ The user interface was translated by: Oleg Zhyliak (Ukrainian), Karol Kozyra (Sw
 
 _Send a message if you'd like to contribute! We use an easy web interface provided by [Transifex](https://www.transifex.com/projects/p/enketo-express/)._
 
-### Releases
-
-1. Create release PR
-1. Check [Dependabot](https://github.com/enketo/enketo-express/security/dependabot) for alerts
-1. Run `yarn upgrade`
-    - Check if `node-forge` has been updated and if so, verify encrypted submissions end-to-end
-1. Run `yarn audit`
-1. Update version in `package.json`
-    - Bump to major version if consumers have to make changes.
-1. Run `yarn install`
-1. Run `yarn test`
-1. Run `yarn run build-docs`
-1. Update `CHANGELOG.md`
-1. Merge PR with all changes
-1. Create GitHub release
-1. Tag and publish the release
-    - GitHub Action will publish it to npm
-
 ### Funding
 
 The development of this application is now led by [ODK](https://getodk.org) and funded by customers of the ODK Cloud hosted service.

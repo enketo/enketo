@@ -189,25 +189,6 @@ Optionally, you can add a keyboard shortcut to select launch tasks:
 2. Search for `workbench.action.debug.selectandstart`
 3. Click the + button to add your preferred keybinding keybinding
 
-## Release
-
-Releases are done each time a dependent tool needs an `enketo-transformer` change.
-
-1. Create release PR
-1. Update `CHANGELOG.md`
-1. Update version in `package.json`
-    - Bump to major version if downstream has to make changes.
-1. Check [Dependabot](https://github.com/enketo/enketo-transformer/security/dependabot) for alerts
-1. Run `yarn upgrade`
-    - Check if `node-libxslt` has been updated because it has caused problems in the past
-1. Run `yarn audit`
-1. Run `yarn install`
-1. Run `yarn test`
-1. Merge PR with all changes
-1. Create GitHub release
-1. Tag and publish the release
-    - GitHub Action will publish it to npm
-
 ## License
 
 See [license document](./LICENSE).
