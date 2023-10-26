@@ -1,11 +1,11 @@
-name: Build and push image to Docker Hub
+name: Build and push Enketo Express image to Docker Hub
 
 on:
     push:
         # Don't waste time building every push: consider only tags, which are
         # usually releases
         tags:
-            - '*'
+            - 'enketo-express/*'
 
 jobs:
     docker-build-push:
@@ -16,6 +16,6 @@ jobs:
               with:
                   image: enketo/enketo-express
                   registry: docker.io
-                  dockerfile: Dockerfile
+                  dockerfile: packages/enketo-express/Dockerfile
                   username: ${{ secrets.DOCKER_HUB_USERNAME }}
                   password: ${{ secrets.DOCKER_HUB_PASSWORD }}
