@@ -16,6 +16,6 @@ jobs:
               with:
                   image: enketo/enketo-express
                   registry: docker.io
-                  dockerfile: packages/enketo-express/Dockerfile
+                  dockerfile: Dockerfile
                   username: ${{ secrets.DOCKER_HUB_USERNAME }}
                   password: ${{ secrets.DOCKER_HUB_PASSWORD }}
