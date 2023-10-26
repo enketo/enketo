@@ -5,7 +5,8 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [8.0.0] - 2023-10-25
 
--   Support Node 18 and 20, drop support for older versions
+-   Breaking change: in the move to a monorepo, some paths in Sass styles have been updated to reflect the new file structure. The impact should be minimal, but custom themes may need to be updated. Generally, paths which cross package boundaries (i.e. imports from Enketo Express to styles in Enketo Core, or imports of third party styles from NPM packages) should use absolute paths from the monorepo root. You may refer to existing theme styles for examples.
+-   Breaking change: Support Node 18 and 20, drop support for older versions
 
 ## [7.2.5] - 2023-08-18
 

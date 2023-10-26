@@ -5,8 +5,8 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [4.0.0] - 2023-10-25
 
--   Support Node 18 and 20, drop support for older versions
--   Remove outdated Vagrantfile
+-   Breaking change: Support Node 18 and 20, drop support for older versions
+-   Breaking change: Remove outdated Vagrantfile
 
 ## [3.0.1] - 2023-08-18
 
