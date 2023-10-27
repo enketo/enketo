@@ -8,12 +8,6 @@ Enketo's form engine is compatible with tools in the ODK ecosystem and complies 
 
 This repo is meant to be used as a building block for any Enketo-powered application. See [this page](https://enketo.org/develop/#libraries) for a schematic overview of a real-life full-fledged data collection application and how Enketo Core fits into this.
 
-## Project status
-
-As of 2022, Enketo is maintained by the [ODK team](https://getodk.org/about/team.html) (primarily [Trevor Schmidt](https://github.com/eyelidlessness/)). Martijn, its original author, continues to provide advice and continuity. The ODK project sets priorities in collaboration with its [Technical Advisory Board](https://getodk.org/about/ecosystem.html).
-
-Broader context is available in [the Enketo Express repository](https://github.com/enketo/enketo-express#project-status).
-
 ## Browser support
 
 The following browsers are officially supported:

@@ -7,7 +7,7 @@ NodeJS library that transforms [ODK forms](https://docs.getodk.org/form-design-i
 
 ## Project status
 
-Enketo Transformer is maintained by [the ODK team](https://getodk.org/about/team.html) (primarily [Trevor Schmidt](https://github.com/eyelidlessness/)). Broader context is available in [the Enketo Express repository](https://github.com/enketo/enketo-express#project-status).
+Enketo Transformer is maintained by [the ODK team](https://getodk.org/about/team.html) (primarily [Trevor Schmidt](https://github.com/eyelidlessness/)). Broader context is available at [the toplevel](https://github.com/enketo/enketo#project-status).
 
 ODK XForms are based off of [W3C XForms](https://en.wikipedia.org/wiki/XForms) which were originally intended to be supported natively by web browsers. Browser support did not happen and the ODK standard drifted too far from the W3C standard to have used it anyway. Enketo chose to transform XForms to HTML5 forms before rendering them. Enketo Transformer performs this work by applying an XSL transform followed by a few post-processing steps in Javascript. This was time-consuming for forms with certain characteristics so the transformation was designed to happen on the backend so it could be cached across client requests.
 
