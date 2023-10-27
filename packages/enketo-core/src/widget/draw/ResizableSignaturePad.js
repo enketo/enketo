@@ -402,11 +402,36 @@ export class ResizableSignaturePad extends SignaturePad {
         const { offsetWidth, offsetHeight } = this.displayCanvas;
         const ratio = Math.max(window.devicePixelRatio || 1, 1);
 
-        this.displayCanvas.width =
-            (offsetWidth || this.displayCanvasMaxWidth) * ratio;
-        this.displayCanvas.height =
-            (offsetHeight || this.displayCanvasMaxHeight) * ratio;
-        get2dRenderingContext(this.displayCanvas).scale(ratio, ratio);
+        const width = (offsetWidth || this.displayCanvasMaxWidth) * ratio;
+        const height = (offsetHeight || this.displayCanvasMaxHeight) * ratio;
+
+        // https://github.com/enketo/enketo-core/issues/1001
+        //
+        // Don't resize for a canvas which is hidden or has non-positive
+        // dimensions (e.g. in a non-current page in the current pages mode).
+        // This ensures browser APIs like `canvas.toBlob` continue to work even
+        // if the pad becomes hidden after use. Otherwise, the behavior
+        // resembles data loss on form submission (resembles, because the data
+        // is still present, but the `HTMLCanvasElement` itself does not produce
+        // data as expected).
+        //
+        // Note that this only addresses one bug. A related bug is also likely
+        // to exist: Enketo Express's `file-manager.js` is still calling into
+        // the visible canvas to access image data for submission. So even while
+        // higher fidelity data is preserved while a user is filling a form,
+        // that fidelty may be lost on smaller screens at submission time.
+        //
+        // This particular fix is reasonable regardless, but the other bug would
+        // be better solved by reconsidering how file data is submitted (i.e. it
+        // is form state, and it is already known independent of the visible
+        // canvas element, so that is probably not the best way to produce state
+        // for submission).
+        if (width > 0 && height > 0) {
+            this.displayCanvas.width = width;
+            this.displayCanvas.height = height;
+
+            get2dRenderingContext(this.displayCanvas).scale(ratio, ratio);
+        }
     }
 
     /** @private */
