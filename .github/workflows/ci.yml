@@ -127,7 +127,7 @@ jobs:
 
     test-evaluator:
         needs: ['install-and-build', 'changes']
-        if: needs.changes.outputs.root == 'true' || needs.changes.outputs.evaluator == 'true'
+        if: github.event_name == 'release' || needs.changes.outputs.root == 'true' || needs.changes.outputs.evaluator == 'true'
         runs-on: 'ubuntu-latest'
 
         strategy:
@@ -173,7 +173,7 @@ jobs:
 
     test-transformer:
         needs: ['install-and-build', 'changes']
-        if: needs.changes.outputs.root == 'true' || needs.changes.outputs.transformer == 'true'
+        if: github.event_name == 'release' || needs.changes.outputs.root == 'true' || needs.changes.outputs.transformer == 'true'
         runs-on: 'ubuntu-latest'
 
         strategy:
@@ -234,7 +234,7 @@ jobs:
 
     test-core:
         needs: ['install-and-build', 'changes']
-        if: needs.changes.outputs.root == 'true' || needs.changes.outputs.evaluator == 'true' || needs.changes.outputs.transformer == 'true' || needs.changes.outputs.core == 'true'
+        if: github.event_name == 'release' || needs.changes.outputs.root == 'true' || needs.changes.outputs.evaluator == 'true' || needs.changes.outputs.transformer == 'true' || needs.changes.outputs.core == 'true'
         runs-on: 'ubuntu-latest'
 
         strategy:
