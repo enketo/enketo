@@ -1,6 +1,6 @@
 {
     "name": "enketo-transformer",
-    "version": "3.0.1",
+    "version": "4.0.0",
     "description": "Library that transforms ODK-compliant XForms into a format that Enketo can consume",
     "license": "Apache-2.0",
     "type": "module",

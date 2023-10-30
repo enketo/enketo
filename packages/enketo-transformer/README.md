@@ -1,4 +1,4 @@
-![coverage-shield-badge-1](https://img.shields.io/badge/coverage-96.09%25-brightgreen.svg)
+![coverage-shield-badge-1](https://img.shields.io/badge/coverage-87.86%25-brightgreen.svg)
 [![npm version](https://badge.fury.io/js/enketo-transformer.svg)](http://badge.fury.io/js/enketo-transformer)
 
 # Enketo Transformer
@@ -7,7 +7,7 @@ NodeJS library that transforms [ODK forms](https://docs.getodk.org/form-design-i
 
 ## Project status
 
-Enketo Transformer is maintained by [the ODK team](https://getodk.org/about/team.html) (primarily [Trevor Schmidt](https://github.com/eyelidlessness/)). Broader context is available in [the Enketo Express repository](https://github.com/enketo/enketo-express#project-status).
+Enketo Transformer is maintained by [the ODK team](https://getodk.org/about/team.html) (primarily [Trevor Schmidt](https://github.com/eyelidlessness/)). Broader context is available at [the toplevel](https://github.com/enketo/enketo#project-status).
 
 ODK XForms are based off of [W3C XForms](https://en.wikipedia.org/wiki/XForms) which were originally intended to be supported natively by web browsers. Browser support did not happen and the ODK standard drifted too far from the W3C standard to have used it anyway. Enketo chose to transform XForms to HTML5 forms before rendering them. Enketo Transformer performs this work by applying an XSL transform followed by a few post-processing steps in Javascript. This was time-consuming for forms with certain characteristics so the transformation was designed to happen on the backend so it could be cached across client requests.
 
@@ -164,7 +164,7 @@ http://localhost:8085/transform?xform=http://localhost:8081/autocomplete.xml
 There is also a helpful **GET /transform/htmlform** endpoint to easily inspect the HTML form output in the developer console. Example:
 http://localhost:8085/transform/htmlform?xform=http://localhost:8081/autocomplete.xml
 
-A vagrant configuration file and provisioning script is also included. Use DEBUG environment variable to see debug terminal output, e.g.:
+You may use the `DEBUG` environment variable to see debug terminal output, e.g.:
 
 ```bash
 DEBUG=api,transformer,markdown,language node app.js
@@ -188,25 +188,6 @@ Optionally, you can add a keyboard shortcut to select launch tasks:
 1. Open the keyboard shortcuts settings (cmd+k cmd+s on Mac, ctrl+k ctrl+s on other OSes)
 2. Search for `workbench.action.debug.selectandstart`
 3. Click the + button to add your preferred keybinding keybinding
-
-## Release
-
-Releases are done each time a dependent tool needs an `enketo-transformer` change.
-
-1. Create release PR
-1. Update `CHANGELOG.md`
-1. Update version in `package.json`
-    - Bump to major version if downstream has to make changes.
-1. Check [Dependabot](https://github.com/enketo/enketo-transformer/security/dependabot) for alerts
-1. Run `yarn upgrade`
-    - Check if `node-libxslt` has been updated because it has caused problems in the past
-1. Run `yarn audit`
-1. Run `yarn install`
-1. Run `yarn test`
-1. Merge PR with all changes
-1. Create GitHub release
-1. Tag and publish the release
-    - GitHub Action will publish it to npm
 
 ## License
 

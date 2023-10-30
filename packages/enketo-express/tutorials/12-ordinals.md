@@ -6,7 +6,7 @@ When setting the following in config.json, Enketo will add 2 new attributes to r
 }
 ```
 
-The only known server that makes use of this feature is OpenClinica, so users of Ona, KoBoToolbox, ODK Aggregate should probably leave this feature switched off.
+The only known server that makes use of this feature is OpenClinica, so users of Ona, KoBoToolbox, ODK Central should probably leave this feature switched off.
 
 If a repeat has not been cloned, i.e. there is only one repeat instance, no attributes are added, so this feature does not appear.
 

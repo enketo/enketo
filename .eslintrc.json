@@ -88,9 +88,12 @@
         "no-unused-expressions": "off",
         "chai-friendly/no-unused-expressions": "error",
 
-        "class-methods-use-this": ["error", {
-            "enforceForClassFields": false
-        }],
+        "class-methods-use-this": [
+            "error",
+            {
+                "enforceForClassFields": false
+            }
+        ],
         "eol-last": ["error", "always"],
         "no-restricted-syntax": [
             "warn",
@@ -157,10 +160,7 @@
         },
 
         {
-            "files": [
-                "**/*.ts",
-                "**/*.tsx"
-            ],
+            "files": ["**/*.ts", "**/*.tsx"],
 
             "rules": {
                 "@typescript-eslint/no-non-null-assertion": "error",
@@ -322,9 +322,7 @@
         },
 
         {
-            "files": [
-                "packages/enketo-transformer/**/*.ts"
-            ],
+            "files": ["packages/enketo-transformer/**/*.ts"],
 
             "rules": {
                 "import/extensions": [
@@ -374,7 +372,10 @@
                                 "devDependencies": true,
                                 "optionalDependencies": false,
                                 "peerDependencies": true,
-                                "packageDir": [".", "./packages/enketo-transformer"]
+                                "packageDir": [
+                                    ".",
+                                    "./packages/enketo-transformer"
+                                ]
                             }
                         ],
 
@@ -440,7 +441,9 @@
 
                 {
                     "files": ["packages/enketo-core/test/**/*.js"],
-                    "excludedFiles": ["packages/enketo-core/test/karma.conf.js"],
+                    "excludedFiles": [
+                        "packages/enketo-core/test/karma.conf.js"
+                    ],
 
                     "env": { "mocha": true },
 
@@ -614,7 +617,6 @@
             },
 
             "overrides": [
-
                 {
                     "files": [
                         "examples/enketo-transformer-web/vite.config.ts",
@@ -661,10 +663,7 @@
 
         // Known dev modules run in a Node/CJS context
         {
-            "files": [
-                "**/Gruntfile.js",
-                "**/karma.conf.js"
-            ],
+            "files": ["tools/**/*.js", "**/Gruntfile.js", "**/karma.conf.js"],
 
             "env": {
                 "browser": false,
@@ -675,9 +674,7 @@
 
         // Shared test overrides
         {
-            "files": [
-                "**/*.spec.*"
-            ],
+            "files": ["**/*.spec.*"],
 
             "rules": {
                 "no-console": "off",

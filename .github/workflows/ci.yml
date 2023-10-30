@@ -166,10 +166,10 @@ jobs:
 
             - run: 'yarn workspace openrosa-xpath-evaluator test'
 
-            # - if: github.event_name == 'release' && github.event.action == 'published' && unknown_condition_tbd
-            #   run: npm publish
-            #   env:
-            #       NODE_AUTH_TOKEN: ${{secrets.npm_token}}
+            - if: github.event_name == 'release' && github.event.action == 'published' && startsWith(github.event.ref, 'refs/tags/openrosa-xpath-evaluator/') && matrix.node-version == '20.5.1'
+              run: yarn workspace openrosa-xpath-evaluator publish
+              env:
+                  NODE_AUTH_TOKEN: ${{secrets.npm_token}}
 
     test-transformer:
         needs: ['install-and-build', 'changes']
@@ -227,10 +227,10 @@ jobs:
 
             - run: 'ENV=${{ matrix.target }} BROWSER=${{ matrix.browser }} yarn workspace enketo-transformer test'
 
-            # - if: github.event_name == 'release' && github.event.action == 'published' && matrix.node == '20.5.1' && matrix.target == 'Node' && unknown_condition_tbd
-            #   run: npm publish
-            #   env:
-            #       NODE_AUTH_TOKEN: ${{secrets.npm_token}}
+            - if: github.event_name == 'release' && github.event.action == 'published' && startsWith(github.event.ref, 'refs/tags/enketo-transformer/') && matrix.target == 'Node' && matrix.node-version == '20.5.1'
+              run: yarn workspace enketo-transformer publish
+              env:
+                  NODE_AUTH_TOKEN: ${{secrets.npm_token}}
 
     test-core:
         needs: ['install-and-build', 'changes']
@@ -280,10 +280,10 @@ jobs:
                   sudo apt-get install xvfb
                   xvfb-run --auto-servernum yarn workspace enketo-core test-browsers
 
-            # - if: github.event_name == 'release' && github.event.action == 'published' && matrix.node == '20.5.1' && unknown_condition_tbd
-            #   run: npm publish
-            #   env:
-            #       NODE_AUTH_TOKEN: ${{secrets.npm_token}}
+            - if: github.event_name == 'release' && github.event.action == 'published' && startsWith(github.event.ref, 'refs/tags/enketo-core/') && matrix.target == 'Node' && matrix.node-version == '20.5.1'
+              run: yarn workspace enketo-core publish
+              env:
+                  NODE_AUTH_TOKEN: ${{secrets.npm_token}}
 
     test-express:
         needs: ['install-and-build', 'changes']

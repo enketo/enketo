@@ -8,12 +8,6 @@ Enketo's form engine is compatible with tools in the ODK ecosystem and complies 
 
 This repo is meant to be used as a building block for any Enketo-powered application. See [this page](https://enketo.org/develop/#libraries) for a schematic overview of a real-life full-fledged data collection application and how Enketo Core fits into this.
 
-## Project status
-
-As of 2022, Enketo is maintained by the [ODK team](https://getodk.org/about/team.html) (primarily [Trevor Schmidt](https://github.com/eyelidlessness/)). Martijn, its original author, continues to provide advice and continuity. The ODK project sets priorities in collaboration with its [Technical Advisory Board](https://getodk.org/about/ecosystem.html).
-
-Broader context is available in [the Enketo Express repository](https://github.com/enketo/enketo-express#project-status).
-
 ## Browser support
 
 The following browsers are officially supported:
@@ -420,24 +414,6 @@ Fired on form.or element when validation completes.
 
 Fired when the user moves to a different question in the form.
 
-## Release
-
-1. Create release PR
-1. Update `CHANGELOG.md`
-1. Update version in `package.json`
-    - Bump to major version if consumers have to make changes.
-1. Check [Dependabot](https://github.com/enketo/enketo-core/security/dependabot) for alerts
-1. Run `yarn upgrade`
-    - Check if `node-forge` has been updated and if so, verify encrypted submissions end-to-end
-    - If `enketo-transformer` has been updated, change `Form.requiredTransformerVersion`
-1. Run `yarn audit`
-1. Run `yarn install`
-1. Run `yarn test`
-1. Merge PR with all changes
-1. Create GitHub release
-1. Tag and publish the release
-    - GitHub Action will publish it to npm
-
 ## Sponsors
 
 The development of this library is now led by [ODK](https://getodk.org) and funded by customers of the ODK Cloud hosted service.
@@ -455,22 +431,3 @@ Past sponsors include:
 -   [Medic](https://medic.org/)
 -   [Esri](https://esri.com)
 -   [DIAL Open Source Center](https://www.osc.dial.community/)
-
-## License
-
-See [license](https://github.com/enketo/enketo-core/blob/master/LICENSE) document and additional clause below:
-
-Any product that uses enketo-core is required to have a "Powered by Enketo" footer, according to the specifications below, on all screens in which enketo-core or parts thereof, are used, unless explicity exempted from this requirement by Enketo LLC in writing. Partners and sponsors of the Enketo Project, listed on [https://enketo.org/about/sponsors/](https://enketo.org/about/sponsors/) and on [this page](#sponsors) are exempted from this requirements and so are contributors listed in [package.json](https://github.com/enketo/enketo-core/blob/master/package.json).
-
-The aim of this requirement is to force adopters to give something back to the Enketo project, by at least spreading the word and thereby encouraging further adoption.
-
-Specifications:
-
-1. The word "Enketo" is displayed using Enketo's logo.
-2. The minimum font-size of "Powered by" is 12 points.
-3. The minimum height of the Enketo logo matches the font-size used.
-4. The Enketo logo is hyperlinked to https://enketo.org
-
-Example:
-
-Powered by <a href="https://enketo.org"><img height="16" style="height: 16px;" src="https://enketo.org/media/images/logos/enketo_bare_150x56.png" /></a>

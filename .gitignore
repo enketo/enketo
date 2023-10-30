@@ -97,13 +97,6 @@ Thumbs.db
 /packages/enketo-express/public/css/*.css
 /packages/enketo-express/app/views/styles/component/_widgets.scss
 
-# -----------------------------------------------------------------------------
-# 5.5. Production/deployment
-# -----------------------------------------------------------------------------
-
-/.vagrant/
-/packages/*/.vagrant/
-
 # =============================================================================
 # 6. Enketo Express
 # =============================================================================
@@ -120,10 +113,6 @@ Thumbs.db
 
 # Currently the blessed way to introduce secrets, via volume.
 /packages/enketo-express/docker/secrets/*
-
-# Specifically used as a volume in docker-compose. Possibly used to pass Redis
-# data to image from the deployment/runtime environment?
-/packages/enketo-express/docker/redis_main_data/*
 
 # -----------------------------------------------------------------------------
 # 6.3. Enketo Express - logging
@@ -148,10 +137,6 @@ Thumbs.db
 # Probably actually ignoring diffs used for manual comparison.
 /packages/enketo-express/**/*.diff
 /packages/enketo-express/**/translation_old.json
-
-# Introduced in 99985af28e1708ae48d733c678513413a6c95605.
-# Not obviously related to the change. Possibly used with docker-compose.
-/packages/enketo-express/**/enketo-main.rdb
 
 # Introduced in d350a63171b16bf8f3bf2f3b11a05be9430c1b66.
 # Exactly what it says on the tin, albeit maybe odd to output under `tools`.

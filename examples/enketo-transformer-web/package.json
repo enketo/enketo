@@ -15,12 +15,13 @@
     "scripts": {
         "build": "vite build && echo 'enketo-transformer-web build complete'",
         "demo": "vite",
-        "dev": "ENV=dev vite"
+        "dev": "ENV=dev vite",
+        "test": "echo 'pass'"
     },
     "dependencies": {
         "@solidjs/router": "^0.8.3",
         "babel-preset-solid": "^1.7.7",
-        "enketo-transformer": "3.0.1",
+        "enketo-transformer": "4.0.0",
         "solid-js": "^1.7.11",
         "vite-plugin-solid": "^2.7.0"
     }
