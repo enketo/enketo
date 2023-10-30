@@ -34,7 +34,7 @@ To use Enketo Core, see [its README](./packages/enketo-core#usage-as-a-library).
 
 ### Using Enketo Express
 
-The recommended way to run Enketo Express is using Docker. We publish a [minimal image](https://github.com/enketo/enketo/pkgs/container/enketo) which builds Enketo Express using the default configuration and then launches it. You will need to supply a configuration appropriate for your environment which must set at least the "linked form and data server", "api key", and secrets. You will also need to run `redis` and make sure that Enketo Express can talk to both the `redis` database(s) and a form server. See a simple example `docker-compose` file for doing this from [ODK Central](https://github.com/getodk/central/blob/master/docker-compose.yml). Learn more about configuring Enketo Express [in its README](./packages/enketo-express).
+The recommended way to run Enketo Express is using Docker. We publish a [minimal image](https://github.com/enketo/enketo/pkgs/container/enketo) which builds Enketo Express using the default configuration and then launches it. You will need to supply a configuration appropriate for your environment which must set at least the "linked form and data server", "api key", and secrets. You will also need to run `redis` and make sure that Enketo Express can talk to both the `redis` database(s) and a form server. See a simple example `docker-compose` file for running a full platform on a single host with [ODK Central](https://github.com/getodk/central/blob/master/docker-compose.yml). Another common configuration is to run Enketo Express on a separate host. Learn more about configuring Enketo Express [in its README](./packages/enketo-express).
 
 > [!IMPORTANT]
 > If you used the Enketo Express Docker image [from before the monorepo migration](https://github.com/enketo/enketo-express/blob/master/Dockerfile), you will need to make adjustments:
@@ -50,6 +50,11 @@ The recommended way to run Enketo Express is using Docker. We publish a [minimal
 -   **Node:** Enketo supports the current [Node LTS](https://nodejs.dev/en/about/releases/) environments (presently versions 18 and 20). Local development targets the latest LTS release (20).
 -   **Yarn:** Package management and monorepo tasks use [Yarn 1 ("classic")](https://classic.yarnpkg.com/lang/en/).
 -   **Volta:** It is highly recommended to use [Volta](https://volta.sh/) to manage Node and Yarn versions automatically while working in Enketo.
+
+For running Enketo Express:
+
+-   **redis**
+-   An OpenRosa form server (ODK Central, Ona, Kobo, etc)
 
 ### Install
 
@@ -125,3 +130,24 @@ In each dependent package, if its dependencies are updated it should also be pre
 8. Create a release PR with all of these changes.
 9. Once merged, create GitHub releases for each package with a pending release.
 10. Tag and publish each release, "bottom up". GitHub Actions will publish each to the appropriate registry (e.g. NPM, GHRC, Docker Hub).
+
+## License
+
+See each package for its licence.
+
+Additionally, any product that uses enketo-core is required to have a "Powered by Enketo" footer, according to the specifications below, on all screens in which enketo-core or parts thereof, are used, unless explicity exempted from this requirement by Enketo LLC in writing. Partners and sponsors of the Enketo Project, listed on [https://enketo.org/about/sponsors/](https://enketo.org/about/sponsors/) are exempted from this requirements and so are contributors listed in [package.json](https://github.com/enketo/enketo-core/blob/master/package.json).
+
+The aim of this requirement is to force adopters to give something back to the Enketo project, by at least spreading the word and thereby encouraging further adoption.
+
+Specifications:
+
+1. The word "Enketo" is displayed using Enketo's logo.
+2. The minimum font-size of "Powered by" is 12 points.
+3. The minimum height of the Enketo logo matches the font-size used.
+4. The Enketo logo is hyperlinked to https://enketo.org
+
+Example:
+
+Powered by <a href="https://enketo.org"><img height="16" style="height: 16px;" src="https://enketo.org/media/images/logos/enketo_bare_150x56.png" /></a>
+
+The Enketo logo and Icons are trademarked by [Enketo LLC](https://www.linkedin.com/company/enketo-llc) and should only be used for the 'Powered by Enketo' requirement mentioned above (if applicable). To prevent infringement simply replace the logo images in [/public/images](https://github.com/enketo/enketo-express/blob/master/public/images) with your own or contact [Enketo LLC](mailto:info@enketo.org) to discuss the use inside your app.
