@@ -4,11 +4,11 @@ _The [Enketo Smart Paper](https://enketo.org) web application._ It can be used d
 
 ## Configuring Enketo Express
 
-To run Enketo Express, you will first need to configure it. Read about all configuration options [here](./blob/master/tutorials/10-configure.md)
+To run Enketo Express, you will first need to configure it. Read about all configuration options [here](./tutorials/10-configure.md)
 
-All configuration is normally done in `config/config.json`. This file only has to contain the [default properties](./blob/master/config/default-config.json) that you'd like to override. For some it may be preferable to include all properties, to avoid surprises when the default configuration changes. Others may want to reduce hassle and keep the `config.json` as small as possible to automatically deploy configuration changes (e.g. new widgets). The application needs to be rebuilt when the `widget` configuration is changed but otherwise a restart should be sufficient.
+All configuration is normally done in `config/config.json`. This file only has to contain the [default properties](./config/default-config.json) that you'd like to override. For some it may be preferable to include all properties, to avoid surprises when the default configuration changes. Others may want to reduce hassle and keep the `config.json` as small as possible to automatically deploy configuration changes (e.g. new widgets). The application needs to be rebuilt when the `widget` configuration is changed but otherwise a restart should be sufficient.
 
-You can use environment variables instead of a `config/config.json` file. If the `config/config.json` file is missing Enketo will assume configuration is done with environment variables. A combination of both options is not supported. See [config/sample.env](./blob/master/config/sample.env) for more information on equivalent environment variable names.
+You can use environment variables instead of a `config/config.json` file. If the `config/config.json` file is missing Enketo will assume configuration is done with environment variables. A combination of both options is not supported. See [config/sample.env](./config/sample.env) for more information on equivalent environment variable names.
 
 **Always leave config/default-config.json unchanged.**
 
