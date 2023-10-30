@@ -166,7 +166,7 @@ jobs:
 
             - run: 'yarn workspace openrosa-xpath-evaluator test'
 
-            - if: github.event_name == 'release' && github.event.action == 'published' && startsWith(github.event.ref, 'refs/tags/openrosa-xpath-evaluator/') && matrix.node-version == '20.5.1'
+            - if: github.event_name == 'release' && github.event.action == 'published' && startsWith(github.ref, 'refs/tags/openrosa-xpath-evaluator/') && matrix.node-version == '20.5.1'
               run: yarn workspace openrosa-xpath-evaluator publish
               env:
                   NODE_AUTH_TOKEN: ${{secrets.npm_token}}
@@ -227,7 +227,7 @@ jobs:
 
             - run: 'ENV=${{ matrix.target }} BROWSER=${{ matrix.browser }} yarn workspace enketo-transformer test'
 
-            - if: github.event_name == 'release' && github.event.action == 'published' && startsWith(github.event.ref, 'refs/tags/enketo-transformer/') && matrix.target == 'Node' && matrix.node-version == '20.5.1'
+            - if: github.event_name == 'release' && github.event.action == 'published' && startsWith(github.ref, 'refs/tags/enketo-transformer/') && matrix.target == 'Node' && matrix.node-version == '20.5.1'
               run: yarn workspace enketo-transformer publish
               env:
                   NODE_AUTH_TOKEN: ${{secrets.npm_token}}
@@ -280,7 +280,7 @@ jobs:
                   sudo apt-get install xvfb
                   xvfb-run --auto-servernum yarn workspace enketo-core test-browsers
 
-            - if: github.event_name == 'release' && github.event.action == 'published' && startsWith(github.event.ref, 'refs/tags/enketo-core/') && matrix.target == 'Node' && matrix.node-version == '20.5.1'
+            - if: github.event_name == 'release' && github.event.action == 'published' && startsWith(github.ref, 'refs/tags/enketo-core/') && matrix.target == 'Node' && matrix.node-version == '20.5.1'
               run: yarn workspace enketo-core publish
               env:
                   NODE_AUTH_TOKEN: ${{secrets.npm_token}}
