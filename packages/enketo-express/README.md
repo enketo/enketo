@@ -51,9 +51,16 @@ The easiest way to start the app in development and debugging mode with liverelo
 
 ### Testing
 
-Testing is done with Mocha and Karma. - all: `yarn workspace enketo-express run test` - headless: `yarn workspace enketo-express run test-headless` - browsers: `yarn workspace enketo-express run test-browsers`
+Testing is done with Mocha and Karma:
 
-Tests can be run in watch mode for [TDD](https://en.wikipedia.org/wiki/Test-driven_development) workflows with: - client: `yarn workspace enketo-express run test-watch-client` - server: `yarn workspace enketo-express run test-watch-server`
+-   all: `yarn workspace enketo-express run test`
+-   headless: `yarn workspace enketo-express run test-headless`
+-   browsers: `yarn workspace enketo-express run test-browsers`
+
+Tests can be run in watch mode for [TDD](https://en.wikipedia.org/wiki/Test-driven_development) workflows with:
+
+-   client: `yarn workspace enketo-express run test-watch-client`
+-   server: `yarn workspace enketo-express run test-watch-server`
 
 #### Debugging test watch mode in VSCode
 
