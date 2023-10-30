@@ -95,6 +95,10 @@ Enketo uses the npm `debug` module. All debug statements are prefixed with `enke
 export DEBUG=enketo*
 ```
 
+## Customizing Enketo Express
+
+Enketo Express includes a number of customization and extension points. See [tutorials](./tutorials) for details, especially on themes and widgets.
+
 ## Credits
 
 ### Translation
