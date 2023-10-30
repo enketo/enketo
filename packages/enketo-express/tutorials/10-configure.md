@@ -181,7 +181,7 @@ Completely disable save-as-draft functionality in offline-capable webforms by se
 
 ## repeat ordinals
 
-Whether to add custom http://enketo.org/xforms namespaced `ordinal` and `last-used-ordinal` attributes to repeat nodes in the model. The default is `false`. Most users will not need to set this configuration item.
+Whether to add custom http://enketo.org/xforms namespaced `ordinal` and `last-used-ordinal` attributes to repeat nodes in the model. The default is `false`. Most users will not need to set this configuration item. [Learn more](./12-ordinals.md).
 
 ## validate continuously
 
