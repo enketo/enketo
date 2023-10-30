@@ -38,10 +38,10 @@ The recommended way to run Enketo Express is using Docker. We publish a [minimal
 
 > [!IMPORTANT]
 > If you used the Enketo Express Docker image [from before the monorepo migration](https://github.com/enketo/enketo-express/blob/master/Dockerfile), you will need to make adjustments:
-
--   Paths have changed. The working directory was previously the Enketo Express root so you would put your config at `config/config.json`. Now it is the Enketo monorepo root so your config must go to `packages/enketo-express/config/config.json`.
--   Previous versions generated and templated in secrets using a Python script. If you need a templated configuration, you need to manage that yourself in your deployment infrastructure.
--   Previous versions installed `pm2` and started Enketo Express with it.
+>
+> -   Paths have changed. The working directory was previously the Enketo Express root so you would put your config at `config/config.json`. Now it is the Enketo monorepo root so your config must go to `packages/enketo-express/config/config.json`.
+> -   Previous versions generated and templated in secrets using a Python script. If you need a templated configuration, you need to manage that yourself in your deployment infrastructure.
+> -   Previous versions installed `pm2` and started Enketo Express with it.
 
 ## Development setup and local usage
 
