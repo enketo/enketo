@@ -1,4 +1,4 @@
-Below is a complete list of all configuration items. The **bold items are important to set**. Others are less important.
+Below is a complete list of all configuration items. The **bold items** also highlighted with 👉 are important to set. Others are less important.
 
 ## app name
 
@@ -28,7 +28,7 @@ If you are tempted to make this setting as short as possible, make sure you unde
 
 -   name: The (short) name of your form server. This name will be used in various places in the app to provide feedback to the user. E.g. "ODK Aggregate", "KoboToolbox", "MyCoolService"
 -   👉 **server url**: For local development, this can be an empty string (`""`). This will allow any server that knows the secret api key to use your Enketo installation. If you'd like to lock the usage down to a particular form server, fill in your domain without the protocol. E.g. "kobotoolbox.org". Depending on your form server, you can even specify that the server can only be used for a particular account e.g. "myformhub.org/janedoe". You can also use a regular expression string e.g. `"opendatakit\\.appspot\\.com"` (it will be used to create a regular expression with RegExp()).
--   **api key**: The key that will be used to authenticate any API usage. Your form server will need to know this key. You can use any hard-to-guess alphanumeric string you want. We're not aware of limitations in length or characters.\*\*
+-   👉 **api key**: The key that will be used to authenticate any API usage. Your form server will need to know this key. You can use any hard-to-guess alphanumeric string you want. We're not aware of limitations in length or characters.
 -   legacy formhub: Formhub is a dead project and therefore has bugs that won't be fixed. Setting this setting to `true` temporarily works around some of these bugs to give you time to switch to a better alternative that is alive.
 -   authentication: an object that configures the type of authentication to use. See examples and details below:
 
@@ -85,11 +85,11 @@ Connection timeout in milliseconds used throughout Enketo. This is particularly 
 
 Expiry in milliseconds for a cached record from the moment it is offered to Enketo for editing through one of Enketo's **/instance/\*** API endpoints. Once the expiry time is reached, the record is removed.
 
-## encryption key
+## 👉 encryption key
 
 Enketo will use this to encrypt sensitive information whenever necessary (e.g. for the form server credentials that are stored in a cookie in the user's browser). Never share this key and never change it after the initial configuration (unless it was compromised). No specific key length requirements as far as we are aware.
 
-## less secure encryption key
+## 👉 less secure encryption key
 
 Enketo will use this to symmetrically encrypt enketo IDs (in URLs) for the special single-submission webform views to avoid easy guessing of the equivalent multi-submission view of the same form. This encryption should be considered crackable and is not used for sensitive data. For security reasons it therefore requires a separate key. Do not change this key after initial configuration as it will break some webform URLs.
 
@@ -109,9 +109,9 @@ The basepath Enketo should use for everything. The default is `""`, which gives 
 
 An array of theme names to enable. This can be used to disable certain themes. If this configuration item is absent or an empty array, all installed themes will be enabled.
 
-## support
+## 👉 support
 
--   **email: The email address your users can contact when they experience problems with the service.**
+-   **email**: The email address your users can contact when they experience problems with the service.
 
 ## widgets
 
@@ -161,7 +161,7 @@ For GMaps layers you have the four options as tiles values: `"GOOGLE_SATELLITE"`
 
 Specifies the name of a query parameter that will be copied from an Enketo URL to the submission and formList requests. The value of this parameter can be used by the data server to e.g. track submission sources, perform form access control, or serve custom external data per user.
 
-## redis
+## 👉 redis
 
 -   main -> host: The IP address of the main redis database instance. If installed on the same server as Enketo Express, the value is `"127.0.0.1"`
 -   👉 **main -> port**: The port of the main redis database instance. This is the important persistent database that contains the unique IDs for each forms. The default value is `"6379"`
