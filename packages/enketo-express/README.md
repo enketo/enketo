@@ -39,6 +39,48 @@ yarn workspace enketo-express start
 
 You can now check that the app is running by going to e.g. http://localhost:8005 (depending on your server and port set in `config/config.json`)
 
+### Running in development mode
+
+The easiest way to start the app in development and debugging mode with livereload is with `yarn workspace enketo-express grunt develop`.
+
+### Testing
+
+Testing is done with Mocha and Karma. - all: `yarn workspace enketo-express run test` - headless: `yarn workspace enketo-express run test-headless` - browsers: `yarn workspace enketo-express run test-browsers`
+
+Tests can be run in watch mode for [TDD](https://en.wikipedia.org/wiki/Test-driven_development) workflows with: - client: `yarn workspace enketo-express run test-watch-client` - server: `yarn workspace enketo-express run test-watch-server`
+
+#### Debugging test watch mode in VSCode
+
+Basic usage:
+
+1. Go to VSCode's "Run and Debug" panel
+2. Select "Test client (watch + debug)" or "Test server (watch + debug)"
+3. Click the play button
+
+Optionally, you can add a keyboard shortcut to select launch tasks:
+
+1. Open the keyboard shortcuts settings (cmd+k cmd+s on Mac, ctrl+k ctrl+s on other OSes)
+2. Search for `workbench.action.debug.selectandstart`
+3. Click the + button to add your preferred keybinding keybinding
+
+### Launch a test form
+
+Enketo Express needs an OpenRosa-compliant server to obtain forms from and submit data to. For development you can use any public or local server.
+For example to use your https://kobotoolbox.org or https://ona.io account "ali", the _server_url_ to use in API calls is `"https://kc.kobotoolbox.org/ali"` or `"https://ona.io/ali"`.
+
+An API call to get the Enketo webform url for a form called "TestForm" can be made like this:
+
+```bash
+curl --user enketorules: -d "server_url=https://kc.kobotoolbox.org/ali&form_id=TestForm" http://localhost:8005/api/v2/survey
+
+```
+
+Once you have the Enketo webform URL can start development on a feature or bug.
+
+Another convenient way for some subset of development work is to put your XForm on any webserver (local, public), and use a preview url with a query parameter, e.g.:
+
+`http://localhost:8005/preview?xform=http://example.org/myform.xml` (officially, the query parameter should be URL encoded, though for development use this is often fine).
+
 ### How to enable debug logs
 
 Enketo uses the npm `debug` module. All debug statements are prefixed with `enketo:` and will not appear unless the environment variable is set. To enable debugging logs for enketo specifically, set `DEBUG` as follows:
