@@ -58,6 +58,20 @@ const resolveWidgetESMImport = (imported) => {
             .replace(/(\.js)?$/, '.js');
     }
 
+    if (imported.includes('../node_modules/')) {
+        try {
+            const unresolvedModule = imported.replace(
+                /^(\.\.\/)+node_modules\/(.*)$/,
+                '$2'
+            );
+            const resolvedModule = require.resolve(unresolvedModule);
+
+            return resolvedModule;
+        } catch {
+            return imported;
+        }
+    }
+
     return imported;
 };
 
@@ -317,7 +331,7 @@ module.exports = (grunt) => {
         let content = `${
             PRE +
             paths
-                .map((p) => {
+                .flatMap((p) => {
                     const widgetPath = resolveWidgetESMImport(p);
 
                     if (grunt.file.exists(widgetPath)) {
@@ -326,7 +340,14 @@ module.exports = (grunt) => {
                         return `import w${num} from '${widgetPath}';`;
                     }
 
-                    return `//${p} not found`;
+                    console.warn('Failed to resolve widget path', widgetPath);
+
+                    return [
+                        `// ${p} not found`,
+                        `console.log('Failed to resolve widget path', ${JSON.stringify(
+                            p
+                        )})`,
+                    ];
                 })
                 .join('\n')
         }\n\nexport default [${[...Array(num).keys()]
