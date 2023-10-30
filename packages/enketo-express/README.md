@@ -2,6 +2,12 @@
 
 _The [Enketo Smart Paper](https://enketo.org) web application._ It can be used directly by form servers or used as inspiration for building applications that wrap [Enketo Core](https://github.com/enketo/enketo/packages/enketo-core). See [this diagram](https://enketo.org/develop/) for a summary of how the different Enketo components are related.
 
+## Browser support
+
+See [this faq](https://enketo.org/faq/#browsers).
+
+**Enketo endeavors to show a helpful (multi-lingual) error message on unsupported browsers when the form is loaded to avoid serious issues.**
+
 ## Configuring Enketo Express
 
 To run Enketo Express, you will first need to configure it. Read about all configuration options [here](./tutorials/10-configure.md)

@@ -26,7 +26,7 @@ If you are tempted to make this setting as short as possible, make sure you unde
 
 ## linked form and data server
 
--   name: The (short) name of your form server. This name will be used in various places in the app to provide feedback to the user. E.g. "ODK Aggregate", "KoboToolbox", "MyCoolService"
+-   name: The (short) name of your form server. This name will be used in various places in the app to provide feedback to the user. E.g. "ODK Central", "KoboToolbox", "MyCoolService"
 -   👉 **server url**: For local development, this can be an empty string (`""`). This will allow any server that knows the secret api key to use your Enketo installation. If you'd like to lock the usage down to a particular form server, fill in your domain without the protocol. E.g. "kobotoolbox.org". Depending on your form server, you can even specify that the server can only be used for a particular account e.g. "myformhub.org/janedoe". You can also use a regular expression string e.g. `"opendatakit\\.appspot\\.com"` (it will be used to create a regular expression with RegExp()).
 -   👉 **api key**: The key that will be used to authenticate any API usage. Your form server will need to know this key. You can use any hard-to-guess alphanumeric string you want. We're not aware of limitations in length or characters.
 -   legacy formhub: Formhub is a dead project and therefore has bugs that won't be fixed. Setting this setting to `true` temporarily works around some of these bugs to give you time to switch to a better alternative that is alive.
