@@ -25,8 +25,7 @@
         "test-headless": "grunt karma:headless",
         "test-server": "grunt test-server:all",
         "test-watch-client": "grunt test-watch-client",
-        "test-watch-server": "grunt test-watch-server",
-        "build-docs": "rimraf docs && jsdoc -c jsdoc.config.js"
+        "test-watch-server": "grunt test-watch-server"
     },
     "private": true,
     "license": "Apache-2.0",
@@ -76,8 +75,6 @@
         "@types/geojson": "^7946.0.10",
         "@types/redis": "^2.8.32",
         "abortcontroller-polyfill": "^1.7.5",
-        "jsdoc": "^4.0.2",
-        "jsdoc-ts-utils": "^5.0.0",
         "nock": "^13.3.3",
         "node-sass": "^9.0.0",
         "supertest": "^6.3.3"
