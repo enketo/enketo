@@ -28,7 +28,7 @@ We generally recommend deploying Enketo Express using Docker. See [the toplevel 
 
 ## Development setup and local usage
 
-First, make sure `redis` is running and available at the port(s) configured in `config/config.json`. You should also read the section on [configuring Enketo Express](./#configuring-enketo-express) above. You will also need to have an OpenRosa server running and accessible to Enketo Express.
+First, make sure `redis` is running and available at the port(s) configured in `config/config.json`. You should also read the section on [configuring Enketo Express](./#configuring-enketo-express) above. You will also need to have an OpenRosa server running and accessible to Enketo Express and which knows about the API key in the configuration.
 
 As described in the [the toplevel README](./#using-enketo-express), all tasks should be run from the project root. To build and start Enketo Express:
 
