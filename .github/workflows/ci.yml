@@ -141,6 +141,7 @@ jobs:
               with:
                   node-version: '${{ matrix.node-version }}'
                   yarn-version: '1.22.19'
+                  registry-url: 'https://registry.npmjs.org'
 
             - uses: 'actions/cache@v3'
               id: cache-install
@@ -169,7 +170,7 @@ jobs:
             - if: github.event_name == 'release' && github.event.action == 'published' && startsWith(github.ref, 'refs/tags/openrosa-xpath-evaluator/') && matrix.node-version == '20.5.1'
               run: yarn workspace openrosa-xpath-evaluator publish
               env:
-                  NODE_AUTH_TOKEN: ${{secrets.npm_token}}
+                  NODE_AUTH_TOKEN: ${{secrets.NPM_TOKEN}}
 
     test-transformer:
         needs: ['install-and-build', 'changes']
@@ -198,6 +199,7 @@ jobs:
               with:
                   node-version: '${{ matrix.node-version }}'
                   yarn-version: '1.22.19'
+                  registry-url: 'https://registry.npmjs.org'
 
             - uses: 'actions/cache@v3'
               id: cache-install
@@ -230,7 +232,7 @@ jobs:
             - if: github.event_name == 'release' && github.event.action == 'published' && startsWith(github.ref, 'refs/tags/enketo-transformer/') && matrix.target == 'Node' && matrix.node-version == '20.5.1'
               run: yarn workspace enketo-transformer publish
               env:
-                  NODE_AUTH_TOKEN: ${{secrets.npm_token}}
+                  NODE_AUTH_TOKEN: ${{secrets.NPM_TOKEN}}
 
     test-core:
         needs: ['install-and-build', 'changes']
@@ -249,6 +251,7 @@ jobs:
               with:
                   node-version: '${{ matrix.node-version }}'
                   yarn-version: '1.22.19'
+                  registry-url: 'https://registry.npmjs.org'
 
             - uses: 'actions/cache@v3'
               id: cache-install
@@ -283,7 +286,7 @@ jobs:
             - if: github.event_name == 'release' && github.event.action == 'published' && startsWith(github.ref, 'refs/tags/enketo-core/') && matrix.target == 'Node' && matrix.node-version == '20.5.1'
               run: yarn workspace enketo-core publish
               env:
-                  NODE_AUTH_TOKEN: ${{secrets.npm_token}}
+                  NODE_AUTH_TOKEN: ${{secrets.NPM_TOKEN}}
 
     test-express:
         needs: ['install-and-build', 'changes']
