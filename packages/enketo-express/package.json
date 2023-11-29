@@ -6,17 +6,11 @@
     "main": "./app.js",
     "repository": {
         "type": "git",
-        "url": "https://github.com/enketo/enketo-express"
+        "url": "https://github.com/enketo/enketo"
     },
     "bugs": {
-        "url": "https://github.com/enketo/enketo-express/issues"
+        "url": "https://github.com/enketo/enketo/issues"
     },
-    "author": {
-        "name": "Martijn van de Rijdt",
-        "email": "martijn@enketo.org",
-        "url": "https://www.linkedin.com/in/martijnvanderijdt"
-    },
-    "contributors": [],
     "scripts": {
         "build": "grunt && echo 'enketo-express build complete'",
         "start": "node .",
