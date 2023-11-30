@@ -45,7 +45,8 @@
 
             <bind nodeset="/data/group-page/group-readonly-empty-field" readonly="true()" />
             <bind nodeset="/data/group-page/group-readonly-calc-field" readonly="true()" calculate="'calculated'" />
-            <bind nodeset="/data/group-page/group-field" />
+            <!-- "enk:for" attribute bug: https://github.com/enketo/enketo/issues/1285 -->
+            <bind nodeset="/data/group-page/group-field" enk:for="/data/group-page/group-field2" />
             <bind nodeset="/data/group-page/group-field2" />
 
             <bind nodeset="/data/repeats-page/repeats-readonly-empty-field" readonly="true()" />
