@@ -24,6 +24,40 @@ module.exports = (app) => {
 router.param('enketo_id', routerUtils.enketoId);
 router.param('encrypted_enketo_id_single', routerUtils.encryptedEnketoIdSingle);
 router.param('encrypted_enketo_id_view', routerUtils.encryptedEnketoIdView);
+router.param(
+    'encrypted_enketo_id_view_dn',
+    routerUtils.encryptedEnketoIdViewDn
+);
+router.param(
+    'encrypted_enketo_id_view_dn_c',
+    routerUtils.encryptedEnketoIdViewDnC
+);
+router.param('encrypted_enketo_id_fs_c', routerUtils.encryptedEnketoIdFsC);
+router.param(
+    'encrypted_enketo_id_fs_participant',
+    routerUtils.encryptedEnketoIdFsParticipant
+);
+router.param(
+    'encrypted_enketo_id_full_participant',
+    routerUtils.encryptedEnketoIdFullParticipant
+);
+router.param('encrypted_enketo_id_rfc', routerUtils.encryptedEnketoIdEditRfc);
+router.param(
+    'encrypted_enketo_id_rfc_c',
+    routerUtils.encryptedEnketoIdEditRfcC
+);
+router.param(
+    'encrypted_enketo_id_headless',
+    routerUtils.encryptedEnketoIdEditHeadless
+);
+router.param(
+    'encrypted_enketo_id_inc_rfc',
+    routerUtils.encryptedEnketoIdIncRfc
+);
+router.param(
+    'encrypted_enketo_id_inc_rfc_c',
+    routerUtils.encryptedEnketoIdIncRfcC
+);
 
 router
     .all('*', (req, res, next) => {
@@ -32,11 +66,36 @@ router
     })
     .get('/max-size/:encrypted_enketo_id_single', maxSize)
     .get('/max-size/:encrypted_enketo_id_view', maxSize)
+    .get('/max-size/:encrypted_enketo_id_fs_c', maxSize)
+    .get('/max-size/:encrypted_enketo_id_view_dn', maxSize)
+    .get('/max-size/:encrypted_enketo_id_view_dn_c', maxSize)
+    .get('/max-size/:encrypted_enketo_id_rfc', maxSize)
+    .get('/max-size/:encrypted_enketo_id_rfc_c', maxSize)
+    .get('/max-size/:encrypted_enketo_id_inc_rfc', maxSize)
+    .get('/max-size/:encrypted_enketo_id_inc_rfc_c', maxSize)
+    .get('/max-size/:encrypted_enketo_id_headless', maxSize)
+    .get('/max-size/:encrypted_enketo_id_full_participant', maxSize)
+    .get('/max-size/:encrypted_enketo_id_fs_participant', maxSize)
+    .get('/:encrypted_enketo_id_fs_c', getInstance)
     .get('/max-size/:enketo_id?', maxSize)
     .get('/:encrypted_enketo_id_view', getInstance)
+    .get('/:encrypted_enketo_id_view_dn', getInstance)
+    .get('/:encrypted_enketo_id_view_dn_c', getInstance)
+    .get('/:encrypted_enketo_id_rfc', getInstance)
+    .get('/:encrypted_enketo_id_rfc_c', getInstance)
+    .get('/:encrypted_enketo_id_inc_rfc', getInstance)
+    .get('/:encrypted_enketo_id_inc_rfc_c', getInstance)
+    .get('/:encrypted_enketo_id_headless', getInstance)
+    .get('/:encrypted_enketo_id_fs_participant', getInstance)
     .get('/:enketo_id', getInstance)
     .post('/:encrypted_enketo_id_single', submit)
     .post('/:enketo_id', submit)
+    .post('/:encrypted_enketo_id_fs_participant', submit)
+    .post('/:encrypted_enketo_id_full_participant', (req, res, next) => {
+        req.fullRecord = true;
+
+        return submit(req, res, next);
+    })
     .all('/*', (req, res, next) => {
         const error = new Error('Not allowed');
         error.status = 405;
@@ -75,7 +134,10 @@ async function submit(req, res, next) {
         const id = req.enketoId;
         const survey = await surveyModel.get(id);
         const submissionUrl =
-            communicator.getSubmissionUrl(survey.openRosaServer) + query;
+            communicator.getSubmissionUrl(
+                survey.openRosaServer,
+                req.fullRecord
+            ) + query;
         const credentials = userModel.getCredentials(req);
         const authHeader = await communicator.getAuthHeader(
             submissionUrl,

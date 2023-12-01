@@ -598,6 +598,8 @@ function _generateWebformUrls(id, req) {
     )}/`;
     const idPartOnce = `${utils.insecureAes192Encrypt(id, keys.singleOnce)}`;
     const idPartView = `${utils.insecureAes192Encrypt(id, keys.view)}`;
+    const idPartPreview = utils.insecureAes192Encrypt(id, keys.preview);
+
     let queryParts;
 
     req.webformType = req.webformType || 'default';
@@ -610,7 +612,7 @@ function _generateWebformUrls(id, req) {
             ]);
             obj[
                 `preview${iframePart ? '_iframe' : ''}_url`
-            ] = `${baseUrl}preview/${iframePart}${id}${queryString}${hash}`;
+            ] = `${baseUrl}preview/${iframePart}${idPartPreview}${queryString}${hash}`;
             // Keep in a bug since apps probably started relying on this.
 
             if (iframePart) {
@@ -672,7 +674,7 @@ function _generateWebformUrls(id, req) {
             obj.single_url = `${baseUrl}single/${id}${queryString}`;
             obj.single_once_url = `${baseUrl}single/${idPartOnce}${queryString}`;
             obj.offline_url = baseUrl + OFFLINEPATH + id;
-            obj.preview_url = `${baseUrl}preview/${id}${queryString}`;
+            obj.preview_url = `${baseUrl}preview/${idPartPreview}${queryString}`;
             // iframe views
             queryString = _generateQueryString([
                 req.defaultsQueryParam,
@@ -681,7 +683,7 @@ function _generateWebformUrls(id, req) {
             obj.iframe_url = baseUrl + IFRAMEPATH + id + queryString;
             obj.single_iframe_url = `${baseUrl}single/${IFRAMEPATH}${id}${queryString}`;
             obj.single_once_iframe_url = `${baseUrl}single/${IFRAMEPATH}${idPartOnce}${queryString}`;
-            obj.preview_iframe_url = `${baseUrl}preview/${IFRAMEPATH}${id}${queryString}`;
+            obj.preview_iframe_url = `${baseUrl}preview/${IFRAMEPATH}${idPartPreview}${queryString}`;
             // rest
             obj.enketo_id = id;
             break;

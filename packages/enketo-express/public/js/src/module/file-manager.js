@@ -120,6 +120,18 @@ function getFileUrl(subject) {
     });
 }
 
+function getInstanceAttachmentUrl(subject) {
+    if (
+        subject &&
+        instanceAttachments &&
+        Object.prototype.hasOwnProperty.call(instanceAttachments, subject)
+    ) {
+        return instanceAttachments[subject];
+    }
+
+    return null;
+}
+
 /**
  * Similar to getFileURL, except that this one is guaranteed to return an objectURL
  *
@@ -272,6 +284,7 @@ export default {
     init,
     setInstanceAttachments,
     getFileUrl,
+    getInstanceAttachmentUrl,
     getObjectUrl,
     getCurrentFiles,
     getCurrentFile,

@@ -1,11 +1,12 @@
 /**
  * @module pdf
  */
-const config = require('../models/config-model').server;
-
-const { timeout } = config.headless;
-const puppeteer = require('puppeteer');
 const { URL } = require('url');
+const config = require('../models/config-model').server;
+const { BrowserHandler, getBrowser } = require('./headless-browser');
+
+const browserHandler = new BrowserHandler();
+const { timeout } = config.headless;
 
 /**
  * @typedef PdfGetOptions
@@ -35,34 +36,51 @@ const DEFAULTS = {
  * @param {PdfGetOptions} [options] - PDF options
  * @return { Promise } a promise that returns the PDF
  */
-async function get(url, options = {}) {
+async function get(
+    url,
+    {
+        format = DEFAULTS.FORMAT,
+        margin = DEFAULTS.MARGIN,
+        landscape = DEFAULTS.LANDSCAPE,
+        scale = DEFAULTS.SCALE,
+    } = {}
+) {
     if (!url) {
         throw new Error('No url provided');
     }
 
-    options.format = options.format || DEFAULTS.FORMAT;
-    options.margin = options.margin || DEFAULTS.MARGIN;
-    options.landscape = options.landscape || DEFAULTS.LANDSCAPE;
-    options.scale = options.scale || DEFAULTS.SCALE;
-
     const urlObj = new URL(url);
-    urlObj.searchParams.append('format', options.format);
-    urlObj.searchParams.append('margin', options.margin);
-    urlObj.searchParams.append('landscape', options.landscape);
-    urlObj.searchParams.append('scale', options.scale);
+    urlObj.searchParams.append('format', format);
+    urlObj.searchParams.append('margin', margin);
+    urlObj.searchParams.append('landscape', landscape);
+    urlObj.searchParams.append('scale', scale);
 
-    const browser = await puppeteer.launch({ headless: true });
+    const browser = await getBrowser(browserHandler);
     const page = await browser.newPage();
 
     let pdf;
 
     try {
-        await page
+        // To use an eventhandler here and catch a specific error,
+        // we have to return a Promise (in this case one that never resolves).
+        const detect401 = new Promise((resolve, reject) => {
+            page.on('requestfinished', (request) => {
+                if (request.response().status() === 401) {
+                    const e = new Error('Authentication required');
+                    e.status = 401;
+                    reject(e);
+                }
+            });
+        });
+        const goToPage = page
             .goto(urlObj.href, { waitUntil: 'networkidle0', timeout })
             .catch((e) => {
                 e.status = /timeout/i.test(e.message) ? 408 : 400;
                 throw e;
             });
+
+        // Either a 401 error is thrown or goto succeeds (or encounters a real loading error)
+        await Promise.race([detect401, goToPage]);
 
         /*
          * This works around an issue with puppeteer not printing canvas
@@ -84,23 +102,24 @@ async function get(url, options = {}) {
                 image.style['max-width'] = '100%';
                 image.className = element.className;
 
-                element.parentNode?.insertBefore(image, element);
-                element.parentNode?.removeChild(element);
+                element.parentNode &&
+                    element.parentNode.insertBefore(image, element);
+                element.parentNode && element.parentNode.removeChild(element);
             }
 
             document.querySelectorAll('canvas').forEach(canvasToImage);
         });
 
         pdf = await page.pdf({
-            landscape: options.landscape,
-            format: options.format,
+            landscape,
+            format,
             margin: {
-                top: options.margin,
-                left: options.margin,
-                right: options.margin,
-                bottom: options.margin,
+                top: margin,
+                left: margin,
+                right: margin,
+                bottom: margin,
             },
-            scale: options.scale,
+            scale,
             printBackground: true,
             timeout,
         });
@@ -111,7 +130,6 @@ async function get(url, options = {}) {
     }
 
     await page.close();
-    await browser.close();
 
     return pdf;
 }

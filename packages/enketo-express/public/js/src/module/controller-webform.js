@@ -908,11 +908,13 @@ function inIframe() {
  * @param  {Event} event - event
  */
 function postEventAsMessageToParentWindow(event) {
+    const nextPrompt = document.querySelector('input[name=next-prompt]');
     if (event && event.type) {
         try {
             window.parent.postMessage(
                 JSON.stringify({
                     enketoEvent: event.type,
+                    nextForm: nextPrompt && nextPrompt.checked,
                 }),
                 settings.parentWindowOrigin
             );

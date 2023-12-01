@@ -19,9 +19,19 @@ block style
   link(rel='stylesheet', media=`${media}`, type='text/css' href=`${basePath}${offlinePath || ''}/css/theme-${defaultTheme}.print.css`)
 
 block script
-  - var suffix = (type && type !== 'preview' && type !== 'single') ? '-' + type : ''
-    script#main-script(defer, type="module", src=`${basePath}${offlinePath || ''}/js/build/enketo-webform${suffix}.js`)
+  - var suffix = (type && type !== 'single') ? '-' + (type === 'full' || type === 'preview' || type === 'fieldsubmission' ? 'oc' : type): ''
+    script#main-script(defer, type='module', src=`${basePath}${offlinePath || ''}/js/build/enketo-webform${suffix}.js`)
 
+  -// load jini stuff asynchronously (OC)
+  if jini && !headless
+    script(async, src=`${jini['script url']}`)
+    script.
+      var jiniSheet = document.createElement('link');
+      jiniSheet.rel = 'stylesheet';
+      jiniSheet.href = '#{jini["style url"]}';
+      jiniSheet.type = 'text/css';
+      jiniSheet.media = 'all';
+      document.head.appendChild(jiniSheet);
   script.
     var env = !{JSON.stringify(clientConfig).replace(/<\//g, '<\\/')};
 

@@ -20,7 +20,26 @@ const settingsMap = [
     'landscape',
     'margin',
     'touch',
+    { q: 'PID', s: 'pid' },
+    'loadWarning',
+    'ecid',
+    { q: 'load_warning', s: 'loadWarning' },
+    'goToErrorUrl',
+    { q: 'go_to_error_url', s: 'goToErrorUrl' },
+    'interface',
 ];
+
+window.addEventListener(
+    'message',
+    (event) => {
+        if (event.origin === window.parent.location.origin) {
+            document.cookie = `__authToken=${encodeURIComponent(
+                event.data.authToken
+            )}; path=/; max-age=${24 * 60 * 60}; samesite = strict `; // TODO secure=true ?
+        }
+    },
+    false
+);
 
 // rename query string parameters to settings, but only if they do not exist already
 settingsMap.forEach((obj) => {
@@ -97,6 +116,17 @@ if (
     settings.type = 'other';
 }
 
+// determine whether DN close button should be shown
+settings.dnCloseButton = window.location.pathname.indexOf('/c/') !== -1;
+
+// headless?
+if (
+    window.location.pathname.includes('/pdf') > 0 ||
+    window.location.pathname.includes('/headless')
+) {
+    settings.headless = true;
+}
+
 // Determine whether view is offline-capable
 settings.offline = window.location.pathname.includes('/x/');
 settings.offlinePath = settings.offline ? '/x' : '';
@@ -116,7 +146,38 @@ settings.goTo =
     settings.type === 'view';
 
 // A bit crude and hackable by users, but this way also type=view with a record will be caught.
-settings.printRelevantOnly = !!settings.instanceId;
+settings.printRelevantOnly = !(
+    (settings.type === 'view' && !settings.instanceId) ||
+    settings.type === 'preview'
+);
+
+// Reason for change functionality
+settings.reasonForChange = /\/rfc\//.test(window.location.pathname);
+settings.incompleteAllowed = /\/inc\//.test(window.location.pathname);
+
+settings.participant = /\/participant\//.test(window.location.pathname);
+
+// Strict validation functionality (now true for everything but used to be specific to certain views)
+settings.strictViolationSelector =
+    '.oc-strict-constraint.invalid-constraint, .oc-strict-required.invalid-required, .oc-strict-relevant.invalid-relevant';
+
+settings.strictViolationBlocksNavigation =
+    settings.type !== 'view' && !/\/fs\/dn\//.test(window.location.pathname);
+settings.openSingleDnThreadAutomaticallyUponLoadAndGoToDn =
+    !/\/fs\/dn\//.test(window.location.pathname) && !settings.reasonForChange;
+
+settings.autoQueries =
+    settings.reasonForChange ||
+    !/\/(view|dn|participant)\//.test(window.location.pathname);
+
+if (/\/full\//.test(window.location.pathname)) {
+    settings.fullRecord = true;
+}
+
+// For non-anonymous Participate views only
+if (!settings.fullRecord && settings.participant) {
+    settings.relevantIsStrict = true;
+}
 
 function _getAllQueryParams() {
     let val;

@@ -1,0 +1,166 @@
+.or {
+    // multiple constraints, see equivalent rules in enketo-core
+    @for $number from 1 through $max-constraints {
+        .invalid-constraint#{$number} {
+            .or-constraint#{$number}-msg.active {
+                display:none;
+            }
+        }
+    }
+}
+
+.or-appearance-dn {
+    width: 100% !important;
+    flex: 100% !important;
+
+    &.printified {
+        display: inherit !important;
+
+        input {
+            display: none;
+        }
+
+        table.temp-print {
+            order: 5;
+        }
+
+        &::after {
+            content: none;
+        }
+    }
+}
+
+.or.print-relevant-only {
+
+    //.question.or-branch.disabled,
+    .or-branch.disabled {
+        display: inherit;
+
+        &.question:not(.or-appearance-dn):not(.printified),
+        .question:not(.or-appearance-dn):not(.printified) {
+            display: none;
+        }
+    }
+
+    .question.or-appearance-dn.printified {
+
+        &[role="comment"] {
+            padding-top: 5px;
+            padding-bottom: 10px;
+            height: 100% !important;
+
+        }
+    }
+
+    &.pages.or {
+
+        [role="page"].current:not(.question) {
+
+            .or-group:not(.disabled),
+            .or-group-data:not(.disabled),
+            .or-repeat:not(.disabled) {
+                display: block;
+            }
+        }
+    }
+}
+
+
+.dn-temp-print {
+    margin-top: 5px;
+    margin-bottom: 0px;
+
+    .or-comment-widget {
+        &__content__history__row,
+        &.audit {
+            margin-bottom: 5px;
+            display: table;
+            border-collapse: separate;
+            border-spacing: 15px 0;
+            page-break-inside: avoid;
+
+            &:not(:last-child) {
+                margin-bottom: 2px;
+            }
+
+            &__start {
+                display: table-cell;
+
+                &__username {
+                    border: none;
+                    height: 18px;
+                    line-height: 18px;
+                    display: inline-block;
+                }
+
+            }
+
+            &__main {
+                border: none;
+                padding: 0;
+                display: table-cell;
+
+                &--audit {
+                    padding: 0 20px 0 10px;
+
+                    .or-comment-widget__content__history__row__main__comment__meta {
+                        display: none;
+                    }
+
+                }
+
+                &:before,
+                &:after {
+                    opacity: 0;
+                }
+
+                &__comment__meta {
+                    display: inline-block; // 'display: block' result in some margin on print preview
+                }
+            }
+        }
+    }
+}
+
+.btn-dn {
+    display: none;
+}
+
+.or-appearance-analog-scale {
+    // if analog-scale widget is a non-current page the display is set to block
+    // which moves the vertical widget below the label instead of next to it.
+    &:not(.or-appearance-horizontal) {
+        display: flex !important;
+        flex-wrap: nowrap;
+    }
+
+    .scale__ticks {
+        display: none;
+    }
+
+    .slider-vertical .slider-track {
+        border-right: 1px solid black;
+        margin-left: -8.5px;
+    }
+
+    .slider-horizontal .slider-track {
+        border-bottom: 1px solid black;
+        margin-top: -10px;
+    }
+
+    .slider-handle {
+        border: 1px solid black;
+    }
+
+    .slider-vertical .slider-handle {
+        margin-left: -1px;
+    }
+
+    .slider-horizontal .slider-handle {
+        margin-top: -1px;
+    }
+
+    .slider-vertical .min-label {
+        margin-top: 10px;
+    }
+}

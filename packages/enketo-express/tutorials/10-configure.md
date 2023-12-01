@@ -77,6 +77,17 @@ Please note that using authentication tokens in form URLs may pose a security ri
     }
 ```
 
+### External token-passed-via-message authentication.
+
+Similar to the previous authentication but passes a message, using the postMessage API, with a data object containing an `authToken` property to the iframed form. The config.json configuration is:
+
+```json
+"authentication" : {
+    "type": "token message",
+    "url": "http://example.com/login?return={RETURNURL}"
+}
+```
+
 ## timeout
 
 Connection timeout in milliseconds used throughout Enketo. This is particularly relevant for submissions from Enketo to the OpenRosa server.

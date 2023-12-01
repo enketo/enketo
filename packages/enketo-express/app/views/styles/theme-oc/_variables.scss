@@ -1,0 +1,12 @@
+$body-bg: #f0f0f0;
+
+// OC Orange
+$brand-primary-color: #f58220;
+$brand-secondary-color: lighten($brand-primary-color, 35%);
+$repeat-bg: lighten($brand-primary-color, 50%);
+$button-border-width: 1px;
+
+
+// wider forms
+$max-content-width: 900px;
+$main-breakpoint: $max-content-width;

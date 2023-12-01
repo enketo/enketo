@@ -15,7 +15,7 @@ const loadConfig = () => {
 };
 
 describe('Config Model', () => {
-    const themes = ['formhub', 'grid', 'kobo', 'plain'];
+    const themes = ['formhub', 'grid', 'kobo', 'oc', 'plain'];
 
     /** @type {typeof import('../../app/models/config-model')} */
     let config;

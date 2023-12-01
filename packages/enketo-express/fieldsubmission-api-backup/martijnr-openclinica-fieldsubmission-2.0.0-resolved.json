@@ -1,0 +1,978 @@
+{
+  "openapi": "3.0.2",
+  "info": {
+    "title": "OpenClinica Fieldsubmission API",
+    "description": "An API that receives individual submissions for each changed form field to build up a complete record.",
+    "license": {
+      "name": "Apache 2.0",
+      "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
+    },
+    "version": "2.0.0"
+  },
+  "servers": [
+    {
+      "url": "https://example.com/fieldsubmission"
+    }
+  ],
+  "paths": {
+    "/ecid/{ecid}/instance/{instanceId}/repeat-group/{repeatNodeName}/ordinal/{repeatOrdinal}/node/{nodeName}": {
+      "put": {
+        "tags": [
+          "fieldsubmission"
+        ],
+        "description": "Updates a single field for a existing and completed record.\n",
+        "parameters": [
+          {
+            "name": "X-OpenClinica-Version",
+            "in": "header",
+            "description": "Fixed X-OpenClinica-Version header.",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "$ref": "#/components/headers/ocHeader"
+            }
+          },
+          {
+            "name": "ecid",
+            "in": "path",
+            "description": "The ECID value.",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          {
+            "name": "instanceId",
+            "in": "path",
+            "description": "The instanceID of the record.",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "string",
+                  "format": "uuid"
+                }
+              }
+            }
+          },
+          {
+            "name": "repeatNodeName",
+            "in": "path",
+            "description": "The XML nodeName of the repeat of the resource that has changed, or 0 if not\n  applicable.",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          {
+            "name": "repeatOrdinal",
+            "in": "path",
+            "description": "The ordinal of the repeat of the resource that has changed, or 0 if not\n  applicable.",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "number"
+                }
+              }
+            }
+          },
+          {
+            "name": "nodeName",
+            "in": "path",
+            "description": "The XML nodeName of the node that has changed.",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        ],
+        "requestBody": {
+          "$ref": "#/components/requestBodies/newValue"
+        },
+        "responses": {
+          "201": {
+            "description": "Submission received. Field changed in database.",
+            "headers": {
+              "X-OpenClinica-Version": {
+                "$ref": "#/components/headers/ocHeader"
+              }
+            }
+          },
+          "202": {
+            "description": "Submission received but no change required. Field unchanged in database.",
+            "headers": {
+              "X-OpenClinica-Version": {
+                "$ref": "#/components/headers/ocHeader"
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request.",
+            "headers": {
+              "X-OpenClinica-Version": {
+                "$ref": "#/components/headers/ocHeader"
+              }
+            }
+          },
+          "401": {
+            "description": "Not Allowed. Invalid API Key.",
+            "headers": {
+              "X-OpenClinica-Version": {
+                "$ref": "#/components/headers/ocHeader"
+              }
+            }
+          },
+          "404": {
+            "description": "Record/repeat not found.",
+            "headers": {
+              "X-OpenClinica-Version": {
+                "$ref": "#/components/headers/ocHeader"
+              }
+            }
+          },
+          "409": {
+            "description": "Forbidden. Form is locked.",
+            "headers": {
+              "X-OpenClinica-Version": {
+                "$ref": "#/components/headers/ocHeader"
+              }
+            }
+          },
+          "413": {
+            "description": "Payload too large.",
+            "headers": {
+              "X-OpenClinica-Version": {
+                "$ref": "#/components/headers/ocHeader"
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "auth": []
+          }
+        ]
+      },
+      "post": {
+        "tags": [
+          "fieldsubmission"
+        ],
+        "description": "Submits a single field for a new and incomplete record.\n",
+        "parameters": [
+          {
+            "name": "X-OpenClinica-Version",
+            "in": "header",
+            "description": "Fixed X-OpenClinica-Version header.",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "$ref": "#/components/headers/ocHeader"
+            }
+          },
+          {
+            "name": "ecid",
+            "in": "path",
+            "description": "The ECID value.",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          {
+            "name": "instanceId",
+            "in": "path",
+            "description": "The instanceID of the record.",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "string",
+                  "format": "uuid"
+                }
+              }
+            }
+          },
+          {
+            "name": "repeatNodeName",
+            "in": "path",
+            "description": "The XML nodeName of the repeat of the resource that has changed, or 0 if not\n  applicable.",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          {
+            "name": "repeatOrdinal",
+            "in": "path",
+            "description": "The ordinal of the repeat of the resource that has changed, or 0 if not\n  applicable.",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "number"
+                }
+              }
+            }
+          },
+          {
+            "name": "nodeName",
+            "in": "path",
+            "description": "The XML nodeName of the node that has changed.",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        ],
+        "requestBody": {
+          "$ref": "#/components/requestBodies/newValue"
+        },
+        "responses": {
+          "201": {
+            "description": "Submission received. Field changed in database.",
+            "headers": {
+              "X-OpenClinica-Version": {
+                "$ref": "#/components/headers/ocHeader"
+              }
+            }
+          },
+          "202": {
+            "description": "Submission received but no change required. Field unchanged in database.",
+            "headers": {
+              "X-OpenClinica-Version": {
+                "$ref": "#/components/headers/ocHeader"
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request.",
+            "headers": {
+              "X-OpenClinica-Version": {
+                "$ref": "#/components/headers/ocHeader"
+              }
+            }
+          },
+          "401": {
+            "description": "Not Allowed. Invalid API Key.",
+            "headers": {
+              "X-OpenClinica-Version": {
+                "$ref": "#/components/headers/ocHeader"
+              }
+            }
+          },
+          "409": {
+            "description": "Forbidden. Form is locked.",
+            "headers": {
+              "X-OpenClinica-Version": {
+                "$ref": "#/components/headers/ocHeader"
+              }
+            }
+          },
+          "413": {
+            "description": "Payload too large.",
+            "headers": {
+              "X-OpenClinica-Version": {
+                "$ref": "#/components/headers/ocHeader"
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "auth": []
+          }
+        ]
+      }
+    },
+    "/ecid/{ecid}/instance/{instanceId}/repeat-group/{repeatNodeName}/ordinal/{repeatOrdinal}": {
+      "delete": {
+        "tags": [
+          "fieldsubmission"
+        ],
+        "description": "Delete a repeat.\n",
+        "parameters": [
+          {
+            "name": "X-OpenClinica-Version",
+            "in": "header",
+            "description": "Fixed X-OpenClinica-Version header.",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "$ref": "#/components/headers/ocHeader"
+            }
+          },
+          {
+            "name": "ecid",
+            "in": "path",
+            "description": "The ECID value.",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          {
+            "name": "instanceId",
+            "in": "path",
+            "description": "The instanceID of the record.",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "string",
+                  "format": "uuid"
+                }
+              }
+            }
+          },
+          {
+            "name": "repeatNodeName",
+            "in": "path",
+            "description": "The XML nodeName of the repeat of the resource that has changed, or 0 if not\n  applicable.",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          {
+            "name": "repeatOrdinal",
+            "in": "path",
+            "description": "The ordinal of the repeat of the resource that has changed, or 0 if not\n  applicable.",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "number"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Removed from database.",
+            "headers": {
+              "X-OpenClinica-Version": {
+                "$ref": "#/components/headers/ocHeader"
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request.",
+            "headers": {
+              "X-OpenClinica-Version": {
+                "$ref": "#/components/headers/ocHeader"
+              }
+            }
+          },
+          "401": {
+            "description": "Not Allowed. Invalid API Key.",
+            "headers": {
+              "X-OpenClinica-Version": {
+                "$ref": "#/components/headers/ocHeader"
+              }
+            }
+          },
+          "404": {
+            "description": "Record/repeat not found.",
+            "headers": {
+              "X-OpenClinica-Version": {
+                "$ref": "#/components/headers/ocHeader"
+              }
+            }
+          },
+          "409": {
+            "description": "Forbidden. Form is locked.",
+            "headers": {
+              "X-OpenClinica-Version": {
+                "$ref": "#/components/headers/ocHeader"
+              }
+            }
+          },
+          "413": {
+            "description": "Payload too large.",
+            "headers": {
+              "X-OpenClinica-Version": {
+                "$ref": "#/components/headers/ocHeader"
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "auth": []
+          }
+        ]
+      }
+    },
+    "/complete/ecid/{ecid}/instance/{instanceId}/repeat-group/{repeatNodeName}/ordinal/{repeatOrdinal}/node/{nodeName}": {
+      "put": {
+        "tags": [
+          "fieldsubmission"
+        ],
+        "description": "Mark an edited record as complete.\n",
+        "parameters": [
+          {
+            "name": "X-OpenClinica-Version",
+            "in": "header",
+            "description": "Fixed X-OpenClinica-Version header.",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "$ref": "#/components/headers/ocHeader"
+            }
+          },
+          {
+            "name": "ecid",
+            "in": "path",
+            "description": "The ECID value.",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          {
+            "name": "instanceId",
+            "in": "path",
+            "description": "The instanceID of the record.",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "string",
+                  "format": "uuid"
+                }
+              }
+            }
+          },
+          {
+            "name": "repeatNodeName",
+            "in": "path",
+            "description": "The XML nodeName of the repeat of the resource that has changed, or 0 if not\n  applicable.",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          {
+            "name": "repeatOrdinal",
+            "in": "path",
+            "description": "The ordinal of the repeat of the resource that has changed, or 0 if not\n  applicable.",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "number"
+                }
+              }
+            }
+          },
+          {
+            "name": "nodeName",
+            "in": "path",
+            "description": "The XML nodeName of the node that has changed.",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        ],
+        "requestBody": {
+          "$ref": "#/components/requestBodies/newValue"
+        },
+        "responses": {
+          "201": {
+            "description": "Submission received. Field changed in database.",
+            "headers": {
+              "X-OpenClinica-Version": {
+                "$ref": "#/components/headers/ocHeader"
+              }
+            }
+          },
+          "202": {
+            "description": "Submission received but no change required. Field unchanged in database.",
+            "headers": {
+              "X-OpenClinica-Version": {
+                "$ref": "#/components/headers/ocHeader"
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request.",
+            "headers": {
+              "X-OpenClinica-Version": {
+                "$ref": "#/components/headers/ocHeader"
+              }
+            }
+          },
+          "401": {
+            "description": "Not Allowed. Invalid API Key.",
+            "headers": {
+              "X-OpenClinica-Version": {
+                "$ref": "#/components/headers/ocHeader"
+              }
+            }
+          },
+          "404": {
+            "description": "Record/repeat not found.",
+            "headers": {
+              "X-OpenClinica-Version": {
+                "$ref": "#/components/headers/ocHeader"
+              }
+            }
+          },
+          "409": {
+            "description": "Forbidden. Form is locked.",
+            "headers": {
+              "X-OpenClinica-Version": {
+                "$ref": "#/components/headers/ocHeader"
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "auth": []
+          }
+        ]
+      },
+      "post": {
+        "tags": [
+          "fieldsubmission"
+        ],
+        "description": "Mark a never-completed record as complete.\n",
+        "parameters": [
+          {
+            "name": "X-OpenClinica-Version",
+            "in": "header",
+            "description": "Fixed X-OpenClinica-Version header.",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "$ref": "#/components/headers/ocHeader"
+            }
+          },
+          {
+            "name": "ecid",
+            "in": "path",
+            "description": "The ECID value.",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          {
+            "name": "instanceId",
+            "in": "path",
+            "description": "The instanceID of the record.",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "string",
+                  "format": "uuid"
+                }
+              }
+            }
+          },
+          {
+            "name": "repeatNodeName",
+            "in": "path",
+            "description": "The XML nodeName of the repeat of the resource that has changed, or 0 if not\n  applicable.",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          {
+            "name": "repeatOrdinal",
+            "in": "path",
+            "description": "The ordinal of the repeat of the resource that has changed, or 0 if not\n  applicable.",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "number"
+                }
+              }
+            }
+          },
+          {
+            "name": "nodeName",
+            "in": "path",
+            "description": "The XML nodeName of the node that has changed.",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        ],
+        "requestBody": {
+          "$ref": "#/components/requestBodies/newValue"
+        },
+        "responses": {
+          "201": {
+            "description": "Submission received. Field changed in database.",
+            "headers": {
+              "X-OpenClinica-Version": {
+                "$ref": "#/components/headers/ocHeader"
+              }
+            }
+          },
+          "202": {
+            "description": "Submission received but no change required. Field unchanged in database.",
+            "headers": {
+              "X-OpenClinica-Version": {
+                "$ref": "#/components/headers/ocHeader"
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request.",
+            "headers": {
+              "X-OpenClinica-Version": {
+                "$ref": "#/components/headers/ocHeader"
+              }
+            }
+          },
+          "401": {
+            "description": "Not Allowed. Invalid API Key.",
+            "headers": {
+              "X-OpenClinica-Version": {
+                "$ref": "#/components/headers/ocHeader"
+              }
+            }
+          },
+          "404": {
+            "description": "Record/repeat not found.",
+            "headers": {
+              "X-OpenClinica-Version": {
+                "$ref": "#/components/headers/ocHeader"
+              }
+            }
+          },
+          "409": {
+            "description": "Forbidden. Form is locked.",
+            "headers": {
+              "X-OpenClinica-Version": {
+                "$ref": "#/components/headers/ocHeader"
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "auth": []
+          }
+        ]
+      }
+    }
+  },
+  "components": {
+    "schemas": {},
+    "responses": {
+      "changed": {
+        "description": "Submission received. Field changed in database.",
+        "headers": {
+          "X-OpenClinica-Version": {
+            "$ref": "#/components/headers/ocHeader"
+          }
+        }
+      },
+      "unchanged": {
+        "description": "Submission received but no change required. Field unchanged in database.",
+        "headers": {
+          "X-OpenClinica-Version": {
+            "$ref": "#/components/headers/ocHeader"
+          }
+        }
+      },
+      "removed": {
+        "description": "Removed from database.",
+        "headers": {
+          "X-OpenClinica-Version": {
+            "$ref": "#/components/headers/ocHeader"
+          }
+        }
+      },
+      "unauthorized": {
+        "description": "Not Allowed. Invalid API Key.",
+        "headers": {
+          "X-OpenClinica-Version": {
+            "$ref": "#/components/headers/ocHeader"
+          }
+        }
+      },
+      "bad": {
+        "description": "Bad Request.",
+        "headers": {
+          "X-OpenClinica-Version": {
+            "$ref": "#/components/headers/ocHeader"
+          }
+        }
+      },
+      "notfound": {
+        "description": "Record/repeat not found.",
+        "headers": {
+          "X-OpenClinica-Version": {
+            "$ref": "#/components/headers/ocHeader"
+          }
+        }
+      },
+      "locked": {
+        "description": "Forbidden. Form is locked.",
+        "headers": {
+          "X-OpenClinica-Version": {
+            "$ref": "#/components/headers/ocHeader"
+          }
+        }
+      },
+      "toolarge": {
+        "description": "Payload too large.",
+        "headers": {
+          "X-OpenClinica-Version": {
+            "$ref": "#/components/headers/ocHeader"
+          }
+        }
+      }
+    },
+    "parameters": {
+      "ocHeader": {
+        "name": "X-OpenClinica-Version",
+        "in": "header",
+        "description": "Fixed X-OpenClinica-Version header.",
+        "required": true,
+        "style": "simple",
+        "explode": false,
+        "schema": {
+          "$ref": "#/components/headers/ocHeader"
+        }
+      },
+      "ecid": {
+        "name": "ecid",
+        "in": "path",
+        "description": "The ECID value.",
+        "required": true,
+        "style": "simple",
+        "explode": false,
+        "content": {
+          "text/plain": {
+            "schema": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "instanceId": {
+        "name": "instanceId",
+        "in": "path",
+        "description": "The instanceID of the record.",
+        "required": true,
+        "style": "simple",
+        "explode": false,
+        "content": {
+          "text/plain": {
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        }
+      },
+      "repeatNodeName": {
+        "name": "repeatNodeName",
+        "in": "path",
+        "description": "The XML nodeName of the repeat of the resource that has changed, or 0 if not\n  applicable.",
+        "required": true,
+        "style": "simple",
+        "explode": false,
+        "content": {
+          "text/plain": {
+            "schema": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "repeatOrdinal": {
+        "name": "repeatOrdinal",
+        "in": "path",
+        "description": "The ordinal of the repeat of the resource that has changed, or 0 if not\n  applicable.",
+        "required": true,
+        "style": "simple",
+        "explode": false,
+        "content": {
+          "text/plain": {
+            "schema": {
+              "type": "number"
+            }
+          }
+        }
+      },
+      "nodeName": {
+        "name": "nodeName",
+        "in": "path",
+        "description": "The XML nodeName of the node that has changed.",
+        "required": true,
+        "style": "simple",
+        "explode": false,
+        "content": {
+          "text/plain": {
+            "schema": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    },
+    "requestBodies": {
+      "newValue": {
+        "description": "The new value of the changed node.",
+        "content": {
+          "multipart/form-data": {
+            "schema": {
+              "properties": {
+                "newValue": {
+                  "type": "string"
+                },
+                "file": {
+                  "type": "string",
+                  "format": "binary"
+                }
+              }
+            }
+          }
+        },
+        "required": true
+      }
+    },
+    "headers": {
+      "ocHeader": {
+        "style": "simple",
+        "explode": false,
+        "schema": {
+          "type": "string",
+          "enum": [
+            "2.0"
+          ]
+        }
+      }
+    },
+    "securitySchemes": {
+      "auth": {
+        "type": "http",
+        "description": "API key as username. Password empty.",
+        "scheme": "basic"
+      }
+    }
+  }
+}

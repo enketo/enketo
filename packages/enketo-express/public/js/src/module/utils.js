@@ -71,6 +71,27 @@ function blobToArrayBuffer(blob) {
     });
 }
 
+function blobToString(blob) {
+    const reader = new FileReader();
+
+    return new Promise((resolve, reject) => {
+        reader.onloadend = function () {
+            resolve(reader.result);
+        };
+        reader.onerror = function (e) {
+            reject(e);
+        };
+
+        // There is some quirky Chrome and Safari behaviour if blob is undefined or a string
+        // so we peform an additional check
+        if (!(blob instanceof Blob)) {
+            reject(new Error('TypeError: Require Blob'));
+        } else {
+            reader.readAsText(blob);
+        }
+    });
+}
+
 /**
  * The inverse of blobToDataUri, that converts a dataURL back to a Blob
  *
@@ -347,6 +368,7 @@ function getEnketoId(path) {
 export default {
     blobToDataUri,
     blobToArrayBuffer,
+    blobToString,
     dataUriToBlob,
     dataUriToBlobSync, // why export this?
     getThemeFromFormStr,

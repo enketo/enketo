@@ -3,30 +3,53 @@ section.form-footer
     if !headless
       .form-footer__content__main-controls
         if type === 'preview'
+          if nextPrompt
+            fieldset.question.next-prompt
+              .option-wrapper: label
+                input.ignore(type='checkbox', name='next-prompt')
+                span.option-label #{nextPrompt}
           button#validate-form.btn.btn-primary
             i.icon.icon-check= ' '
             span(data-i18n='formfooter.validate.btn')= t('formfooter.validate.btn')
-        else if type === 'view'
-          button#close-form.btn.btn-default.hide
-            span(data-i18n='alert.default.button')= t('alert.default.button')
-        else
+        else if type === 'full'
           if draftEnabled && offlinePath
             button#save-draft.btn.btn-default
-              i.icon.icon-info-circle.save-draft-info= ' '
-              i.icon.icon-pencil= ' '
-              span(data-i18n='formfooter.savedraft.btn')= t( 'formfooter.savedraft.btn' )
+                i.icon.icon-info-circle.save-draft-info= ' '
+                i.icon.icon-pencil= ' '
+                span(data-i18n='formfooter.savedraft.btn')= t( 'formfooter.savedraft.btn' )
           button#submit-form.btn.btn-primary
             i.icon.icon-check= ' '
             span(data-i18n='formfooter.submit.btn')= t('formfooter.submit.btn')
+        else if type === 'fieldsubmission' || type === 'view'
+          if nextPrompt && completeButton
+            fieldset.question.next-prompt
+              .option-wrapper: label
+                input.ignore(type='checkbox', name='next-prompt')
+                span.option-label #{nextPrompt}
+          if participant
+            button(id="exit-form", class="btn btn-default participant", data-i18n='formfooter.exit.btn')= t('formfooter.exit.btn')
+            button(id="close-form", class="btn btn-primary participant", data-i18n='formfooter.done.btn')= t('formfooter.done.btn')
+          else if closeButton
+            button(id="close-form", class=`btn ${completeButton ? 'btn-default' : 'btn-primary'}`, data-i18n='alert.default.button')= t('alert.default.button')
+          if completeButton
+            button(id="complete-form", class=`btn btn-primary`)
+              if !closeButton
+                span(data-i18n='alert.default.button')= t('alert.default.button')
+              else
+                i.icon.icon-check= ' '
+                span(data-i18n='formfooter.complete.btn')= t('formfooter.complete.btn')
         a.btn.btn-primary.next-page(href="#")
           i.icon.icon-arrow-right
           span(data-i18n='form.pages.next')= t('form.pages.next')
 
         include _logout
         include _enketo-power
-        a.previous-page.disabled(href="#", data-i18n='form.pages.back')= t('form.pages.back')
+        a.btn.btn-default.previous-page.disabled(href="#")
+          i.icon.icon-arrow-left
+          span(data-i18n='form.pages.back')= t('form.pages.back')
 
       .form-footer__content__jump-nav
-        a.btn.btn-default.disabled.first-page(href="#", data-i18n='form.pages.return')= t('form.pages.return')
-        a.btn.btn-default.disabled.last-page(href="#", data-i18n='form.pages.end')= t('form.pages.end')
+        if !nojump
+          a.btn.btn-default.disabled.first-page(href="#", data-i18n='form.pages.return')= t('form.pages.return')
+          a.btn.btn-default.disabled.last-page(href="#", data-i18n='form.pages.end')= t('form.pages.end')
 

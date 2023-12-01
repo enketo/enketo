@@ -390,7 +390,8 @@ describe('Connection', () => {
             expect(xmlString).to.equal(externalInstanceXML);
         });
 
-        it('fails to load when external data is missing', async () => {
+        // OC: wants this to not fail
+        xit('fails to load when external data is missing', async () => {
             resolveExternalInstance = false;
 
             /** @type {Error | null} */

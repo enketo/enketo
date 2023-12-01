@@ -1,6 +1,17 @@
-# Enketo Express
+# Enketo Express fork for OpenClinica
 
 _The [Enketo Smart Paper](https://enketo.org) web application._ It can be used directly by form servers or used as inspiration for building applications that wrap [Enketo Core](https://github.com/enketo/enketo/packages/enketo-core). See [this diagram](https://enketo.org/develop/) for a summary of how the different Enketo components are related.
+
+---
+
+This is a fork of [enketo/enketo-express](https://github.com/enketo/enketo-express) that has the following additions:
+
+1. An [account manager](https://swaggerhub.com/api/Enketo/enketo-express-oc-account-manager) to use multiple accounts with a single Enketo installation.
+2. A [fieldsubmission](./doc/fieldsubmission.md) webform view that uses [OpenClinica's Fieldsubmission API](https://swaggerhub.com/api/martijnr/openclinica-fieldsubmission).
+3. An OpenClinica theme: [theme-oc](https://github.com/OpenClinica/enketo-express-oc/tree/master/app/views/styles/theme-oc).
+4. [Advanced comment widgets](./doc/advanced-comment-widgets.md): [discrepancy note widget](./doc/advanced-comment-widgets.md#discrepancy-notes-widget)
+
+---
 
 ## Browser support
 
@@ -19,6 +30,22 @@ You can use environment variables instead of a `config/config.json` file. If the
 **Always leave config/default-config.json unchanged.**
 
 The default production configuration includes 2 redis instances: one for caching form transformations (see [Enketo Transformer](../../packages/enketo-transformer)) and one for persistent data like associations between form server URLs and Enketo form IDs. You can **greatly simplify installation by using 1 redis instance** instead (for development usage). To do this set the redis.cache.port to 6379 (same as redis.main.port).
+
+----
+
+OpenClinica users, in addition to the configuration documentation linked above, may want to take special note of the following recommended settings:
+
+0. Set a secret value for `"account manager api key"` (or set it to `false` if OC's custom Account Manager is not used).
+1. The `"linked form and data server"` object should not have `"server url"` and `"api key"` properties (if OC's custom Account Manager API is used).
+2. Set `"disable save as draft": true`
+3. Set `"repeat ordinals": true`. [This feature](./doc/ordinals.md) is required for the fieldsubmission webform views.
+4. Set `"query parameter to pass to submission": "ecid"`
+5. Set `"validate continuously": true`
+6. Set `"validate page": false` (though some applications may wish to use `true`)
+7. Set `"default theme": "oc"`
+8. Set `"text field character limit": 3999`
+
+----
 
 For development usages, it is helpful to set "linked form and data server" -> "server url" to `""`, so you can use any OpenRosa server with your local Enketo Express.
 

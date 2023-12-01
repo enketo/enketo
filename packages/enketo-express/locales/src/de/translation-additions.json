@@ -1,0 +1,536 @@
+﻿{
+    "advanced": {
+        "flushdb": "Speicher leeren"
+    },
+    "alert": {
+        "addtohomescreen": {
+            "androidchrome": {
+                "msg": "Um Ihrem Startbildschirm dieses Formular hinzuzufügen, klicken Sie auf das Symbol für die Browsereinstellungen __image1__ und wählen Sie „Zum Startbildschirm hinzufügen“ aus."
+            },
+            "androidfirefox": {
+                "msg": "Um Ihrem Startbildschirm dieses Formular hinzuzufügen, drücken Sie lange auf die Adressleiste und wählen Sie „Zum Startbildschirm hinzufügen“ aus."
+            },
+            "heading": "Zum Startbildschirm hinzufügen",
+            "iossafari": {
+                "msg": "Um Ihrem Startbildschirm dieses Formular hinzuzufügen, klicken Sie rechts oben in Ihrem Browser auf das Teilen-Symbol __image1__ und wählen „+ Zum Startbildschirm hinzufügen“ aus."
+            }
+        },
+        "appupdated": {
+            "heading": "Bitte aktualisieren",
+            "msg": "Aktualisieren Sie diese Webseite, damit Formulare offline verwenden werden können (Ref.: Anwendung)"
+        },
+        "closing": {
+            "heading": "Wird geschlossen..."
+        },
+        "default": {
+            "button": "Schließen",
+            "heading": "Warnung"
+        },
+        "export": {
+            "error": {
+                "filecreatedmsg": "Trotzdem wurde eine unvollständige Exportdatei erstellt.",
+                "heading": "Exportfehler",
+                "msg": "Fehler beim Erstellen der Datensatzexportdatei für nicht übermittelte Datensätze. Fehler: __errors__"
+            },
+            "success": {
+                "heading": "Export erstellt",
+                "msg": "Für alle nicht übermittelten Datensätze, die zu diesem Formular gehören, wurde eine Exportdatei erstellt."
+            }
+        },
+        "formupdated": {
+            "heading": "Bitte aktualisieren",
+            "msg": "Aktualisieren Sie diese Webseite, damit Formulare offline verwenden werden können (Ref.: Definition)"
+        },
+        "gotonotfound": {
+            "msg": "Frage „__path__“ wurde im Formular nicht gefunden. Ist der Verweis auf diese Frage korrekt?"
+        },
+        "loaderror": {
+            "editadvice": "",
+            "entryadvice": "",
+            "heading": "Einen Moment bitte...",
+            "msg1": "Wenden Sie sich bitte an Ihr Supportteam mit einem Link auf diese Seite und der nachstehenden Meldung, wenn Sie weitere Hilfe benötigen.",
+            "msg2": "",
+            "heading_plural": "Einen Moment bitte...",
+            "msg1_plural": "Wenden Sie sich bitte an Ihr Supportteam mit einem Link auf diese Seite und den nachstehenden Meldungen, wenn Sie weitere Hilfe benötigen.",
+            "msg2_plural": ""
+        },
+        "logout": {
+            "heading": "Abgemeldet",
+            "msg": "Sie wurden abgemeldet."
+        },
+        "offlinesupported": {
+            "heading": "Formular funktioniert offline!",
+            "msg": [
+                "Dieses Formular kann jetzt geladen und ohne Internetverbindung auf diesem Gerät verwendet werden. Setzen Sie ein Lesezeichen, um offline einfach drauf zuzugreifen.",
+                "Datensätze werden automatisch gespeichert und in Ihrem Browser in die Warteschlange gestellt, bis eine Internetverbindung verfügbar ist. Wenn die App online ist, werden die Datensätze nacheinander automatisch übermittelt.",
+                "Ein Datensatz wird erst aus der Warteschlange entfernt, wenn er erfolgreich übermittelt wurde. Sie können Ihren Browser und Ihr Gerät mit Einträgen in der Warteschlange gefahrlos schließen. Wenn Sie das Formular das nächste Mal laden, sind sie nach wie vor vorhanden."
+            ]
+        },
+        "offlineunsupported": {
+            "heading": "Anwendung kann offline nicht gestartet werden",
+            "msg": "Das Starten von Offline-Anwendungen wird von Ihrem Browser nicht unterstützt. Sie können die Umfrage auch ohne diese Funktion verwenden oder die Optionen zur Behebung dieses Problems anzeigen.",
+            "negButton": "Verwenden",
+            "posButton": "Optionen anzeigen",
+            "refresh": "Dieses Formular kann nicht mehr offline gestartet werden. Aktualisieren Sie die Seite, um dieses Problem zu beheben."
+        },
+        "queuesubmissionsuccess": {
+            "msg": "__recordNames__ wurde erfolgreich übermittelt",
+            "msg_plural": "__recordNames__ wurden erfolgreich übermittelt"
+        },
+        "recordloadsuccess": {
+            "msg": "__recordName__ wurde geladen"
+        },
+        "recordnotfound": {
+            "msg": "Datensatz konnte nicht abgerufen werden oder enthielt keine Daten."
+        },
+        "recordsavesuccess": {
+            "draftmsg": "Datensatz als Entwurf gespeichert.",
+            "finalmsg": "Datensatz für die Übermittlung in die Warteschlange gestellt."
+        },
+        "savedraftinfo": {
+            "heading": "Datensatz später fertigstellen",
+            "msg": [
+                "Der Datensatzentwurf wird nur im aktuellen Browser gespeichert. Sie können diesen Browser schließen, ohne dass gespeicherte Datensätze verloren gehen.",
+                "Auf Datensatzentwürfe kann durch erneutes Öffnen dieser Seite und Klicken auf die Schaltfläche __icon__ links auf dem Bildschirm zugegriffen werden.",
+                "Warnung: Wenn Sie den Browser-Cache leeren, werden alle Entwürfe und nicht übermittelten fertiggestellten Datensätze dauerhaft gelöscht."
+            ]
+        },
+        "submission": {
+            "msg": "Wird übermittelt...",
+            "redirectmsg": "Nach der Übermittlung werden Sie automatisch umgeleitet.",
+            "http500": "Es ist ein Problem mit Ihrer Übermittlung aufgetreten. Versuchen Sie es erneut oder wenden Sie sich an __supportEmail__, wenn das Problem weiterhin besteht."
+        },
+        "submissionerror": {
+            "authrequiredmsg": "Authentifizierung erforderlich. Authentifizieren Sie sich __here__ auf einer anderen Browser-Registerkarte und versuchen Sie es erneut.",
+            "fnfmsg": [
+                "Die folgenden Mediendateien konnten nicht abgerufen werden: __failedFiles__. Die Übermittlung wurde ohne diese Dateien erfolgreich ausgeführt.",
+                "Wenden Sie sich an __supportEmail__, um einen Fehler zu melden, und erläutern Sie möglichst, wie der Fehler reproduziert werden kann."
+            ],
+            "heading": "Übermittlung fehlgeschlagen"
+        },
+        "submissionsuccess": {
+            "heading": "Übermittlung erfolgreich",
+            "msg": "Ihre Daten wurden übermittelt.",
+            "redirectmsg": "Sie werden nun umgeleitet."
+        },
+        "thanks": {
+            "heading": "Vielen Dank für Ihre Teilnahme.",
+            "msg": "Sie können dieses Fenster jetzt schließen.",
+            "msgTaken": "Sie haben diese Umfrage bereits abgeschlossen."
+        },
+        "validationerror": {
+            "msg": "Das Formular enthält Fehler. Bitte beachten Sie die rot markierten Felder."
+        },
+        "validationsuccess": {
+            "heading": "OK",
+            "msg": "Das Formular ist gültig."
+        },
+        "valuehasspaces": {
+            "multiple": "Die Mehrfachauswahlfrage hat einen unzulässigen Wert „__value__“, der ein Leerzeichen enthält."
+        },
+        "xpatherror": {
+            "heading": "Formelfehler",
+            "msg": "Bei der Auswertung der Formel ist ein Fehler aufgetreten. Kontaktieren Sie __emailLink__ mit diesem Fehler:"
+        },
+        "goto": {
+            "irrelevant": "Das Element, auf das Sie zugreifen möchten, ist aktuell ausgeblendet.",
+            "invisible": "Das Element, auf das Sie zugreifen möchten, ist auf dem Formular nicht sichtbar.",
+            "notfound": "Das Element, auf das Sie zugreifen möchten, wurde aus diesem Formular entfernt.",
+            "msg1": "Verwenden Sie das Symbol „Nur Abfrage anzeigen“ anstatt des Symbols „Abfrage im Datensatz anzeigen“, um es anzuzeigen.",
+            "msg2": "Besuchen Sie __miniform__, um es anzuzeigen.",
+            "form": "dieses Formular"
+        }
+    },
+    "changelog": "Änderungsprotokoll",
+    "confirm": {
+        "deleteall": {
+            "heading": "WARNUNG",
+            "msg": [
+                "Damit werden alle Daten in der Warteschlange und alle Ihre Formulare aus dem Browserspeicher gelöscht. Die Daten sind für immer verloren und die Formulare können erst erneut verwendet werden, wenn Sie wieder online sind. Verwenden Sie dies nur, wenn Ihr Browserspeicher beschädigt ist.",
+                "Schließen Sie vor dem Fortfahren alle anderen Registerkarten der Offline-Formulare. Diese Seite wird neu geladen. Wenn ein Fehler angezeigt wird, müssen Sie diese Aktion möglicherweise wiederholen.",
+                "Möchten Sie fortfahren?"
+            ],
+            "posButton": "Alle löschen"
+        },
+        "autosaveload": {
+            "heading": "Nicht gespeicherten Datensatz gefunden",
+            "msg": "Enketo hat einen nicht gespeicherten Datensatz gefunden. Möchten Sie diesen Datensatz laden oder verwerfen?",
+            "negButton": "Verwerfen",
+            "posButton": "Datensatz laden"
+        },
+        "default": {
+            "heading": "Sind Sie sicher?",
+            "msg": "Bitte bestätigen Sie diese Aktion",
+            "negButton": "Abbrechen",
+            "posButton": "Bestätigen"
+        },
+        "discardcurrent": {
+            "heading": "Nicht gespeicherte Bearbeitungen",
+            "msg": "Das aktuelle Formular enthält nicht gespeicherte Änderungen. Möchten Sie einen Datensatz laden, ohne die Änderungen an dem aktuellen Formular zu speichern?",
+            "posButton": "Fortfahren ohne speichern"
+        },
+        "login": {
+            "heading": "Anmeldung erforderlich",
+            "msg": [
+                "Um die Daten in der Warteschlange zu übermitteln, müssen Sie angemeldet sein. Wenn Sie dies jetzt vornehmen möchten, werden Sie umgeleitet und nicht gespeicherte Informationen gehen verloren.",
+                "Möchten Sie sich jetzt oder später anmelden?"
+            ],
+            "negButton": "Später",
+            "posButton": "Jetzt anmelden"
+        },
+        "print": {
+            "a4": "A4",
+            "landscape": "Querformat",
+            "letter": "Letter",
+            "orientation": "Papierausrichtung",
+            "portrait": "Hochformat",
+            "posButton": "Vorbereiten",
+            "psize": "Papierformat",
+            "reminder": "Denken Sie daran, die gleichen Druckeinstellungen anschließend im Druckmenü des Browsers vorzunehmen!",
+            "queries": "Verlauf anzeigen",
+            "queryShow": "anzeigen",
+            "heading": "Optionen",
+            "msg": "Zum Vorbereiten eines optimierten Ausdrucks wählen Sie die Optionen unten aus."
+
+        },
+        "repeatremove": {
+            "heading": "Diese Antwortgruppe löschen?",
+            "msg": "Diese Aktion kann nicht rückgängig gemacht werden (sie wird im Prüfpfad erfasst). Möchten Sie wirklich fortfahren?"
+        },
+        "save": {
+            "existingerror": "Datensatzname oder ID ist bereits vorhanden. Bitte ändern.",
+            "hint": "Anhand dieses Namens können Sie Ihren Datensatzentwurf einfach finden, um ihn später fertigzustellen.",
+            "msg": "Es sind nicht gespeicherte Änderungen vorhanden. Möchten Sie fortfahren, ohne diese Änderungen zu speichern?",
+            "name": "Datensatzname",
+            "posButton": "Speichern und schließen",
+            "renamemsg": "Möchten Sie __currentName__ wirklich in __newName__ umbenennen?",
+            "unkownerror": "Beim Speichern der Daten ist ein unbekannter Fehler aufgetreten."
+        }
+    },
+    "constraint": {
+        "invalid": "Wert nicht zulässig",
+        "required": "Dieses Feld ist erforderlich.",
+        "relevant": "Durch eine Antwort wurde zu einer anderen Frage gewechselt, für die diese Frage ausgeblendet werden muss, sie kann aber nicht ausgeblendet werden, solange sie Daten enthält. Löschen Sie die Daten oder ändern Sie die abhängigen Antworten."
+    },
+    "contact": {
+        "admin": "Bitte wenden Sie sich an den Umfrage-Administrator.",
+        "support": "Bitte wenden Sie sich an __supportEmail__."
+    },
+    "drawwidget": {
+        "annotation": "Datei und Zeichnen",
+        "drawing": "Zeichnen",
+        "signature": "Signatur"
+    },
+    "enketo": {
+        "power": "Powered by"
+    },
+    "error": {
+        "code": "Fehlercode: __code__",
+        "dataloadfailed": "Laden von __filename__ fehlgeschlagen.",
+        "econnrefused": "Verbindung mit dem Formularserver nicht möglich",
+        "encryptionnotsupported": "Dieses Formular erfordert die lokale Verschlüsselung von Datensätzen. Dies wird leider von Ihrem Browser nicht unterstützt. Wir empfehlen Ihnen, zu einem modernen Browser zu wechseln.",
+        "formloadfailed": "Laden des Formulars fehlgeschlagen",
+        "instancenotfound": "Datensatz nicht vorhanden. Er ist möglicherweise abgelaufen.",
+        "invalidediturl": "Keine gültige Bearbeitungs-URL",
+        "loadfailed": "Laden von __resource__ fehlgeschlagen.",
+        "notfoundinformlist": [
+            "Dieses Formular ist nicht (mehr) vorhanden. Höchstwahrscheinlich hat es der Eigentümer des Formulars gelöscht, archiviert oder deaktiviert. Bitte kontaktieren Sie den Eigentümer des Formulars, um dies zu bestätigen.",
+            "Detaillierter Fehler: Formular mit ID __formId__ nicht in /formList gefunden."
+        ],
+        "pagenotfound": "Seite nicht gefunden",
+        "surveyidnotactive": "Umfrage mit dieser ID ist nicht mehr aktiv",
+        "surveyidnotfound": "Umfrage mit dieser ID nicht gefunden",
+        "unknown": "Unbekannter Fehler aufgetreten"
+    },
+    "feedback": {
+        "header": "Informationen"
+    },
+    "filepicker": {
+        "file": "Datei",
+        "notFound": "Datei __existing__ wurde nicht gefunden (unverändert belassen, wenn sie bereits übermittelt wurde und Sie sie beibehalten möchten).",
+        "placeholder": "Zum Hochladen der Datei hier klicken. (< __maxSize__)",
+        "resetWarning": "Dadurch wird __item__ entfernt. Möchten Sie diese Aktion wirklich durchführen?",
+        "toolargeerror": "Datei zu groß (> __maxSize__)",
+        "waitingForPermissions": "Warten auf Benutzerberechtigungen."
+    },
+    "form": {
+        "chooseLanguage": "Sprache auswählen",
+        "logout": "abmelden",
+        "pages": {
+            "back": "Zurück",
+            "end": "Zum Ende",
+            "next": "Weiter",
+            "return": "Zurück zum Anfang"
+        },
+        "required": "erforderlich"
+    },
+    "formfooter": {
+        "complete": {
+            "btn": "Abgeschlossen"
+        },
+        "savedraft": {
+            "btn": "Entwurf speichern",
+            "label": "Als Entwurf speichern"
+        },
+        "submit": {
+            "btn": "Übermitteln"
+        },
+        "validate": {
+            "btn": "Validieren"
+        }
+    },
+    "geopicker": {
+        "accuracy": "Genauigkeit (m)",
+        "altitude": "Höhe (m)",
+        "closepolygon": "Polygon schließen",
+        "kmlcoords": "KML-Koordinaten",
+        "kmlpaste": "KML-Koordinaten hier einfügen",
+        "latitude": "Breitengrad (x.y °)",
+        "longitude": "Längengrad (x.y °)",
+        "points": "Punkte",
+        "removePoint": "Dadurch wird der aktuelle Geopunkt vollständig aus der Liste der Geopunkte entfernt. Dies kann nicht rückgängig gemacht werden. Möchten Sie diese Aktion wirklich durchführen?",
+        "searchPlaceholder": "nach Ort oder Adresse suchen",
+        "bordersintersectwarning": "Grenzen können sich nicht überschneiden"
+    },
+    "here": "hier",
+    "hint": {
+        "guidance": {
+            "details": "weitere Details"
+        }
+    },
+    "home": {
+        "msg": "__appTitle__ wird ausgeführt. Rufen Sie OpenClinica-Formulare von Ihrer __serverName__-Installation aus auf."
+    },
+    "imagemap": {
+        "svgNotFound": "SVG-Bild nicht gefunden"
+    },
+    "langs": {
+        "ar": "Arabisch",
+        "cs": "Tschechisch",
+        "de": "Deutsch",
+        "el": "Griechisch",
+        "en": "Englisch",
+        "es": "Spanisch",
+        "fa": "Persisch",
+        "fi": "Finnisch",
+        "fr": "Französisch",
+        "he": "Hebräisch",
+        "hi": "Hindi",
+        "it": "Italienisch",
+        "ka": "Georgisch",
+        "km": "Khmer",
+        "lo": "Laotisch",
+        "nl": "Niederländisch",
+        "no": "Norwegisch",
+        "pa": "Panjabi",
+        "pl": "Polnisch",
+        "pt": "Portugiesisch",
+        "ro": "Rumänisch",
+        "ru": "Russisch",
+        "sk": "Slowakisch",
+        "sq": "Albanisch",
+        "supported": "Unterstützte Sprachen: ",
+        "sv": "Schwedisch",
+        "sw": "Suaheli",
+        "th": "Thai",
+        "tr": "Türkisch",
+        "vi": "Vietnamesisch",
+        "zh": "Chinesisch"
+    },
+    "literacywidget": {
+        "finish": "Beenden",
+        "start": "Starten"
+    },
+    "page": {
+        "modernbrowsers": {
+            "heading": "Moderne Browser",
+            "ie": {
+                "heading": "Warum werden diese veralteten Versionen von Internet Explorer nicht unterstützt?",
+                "msg": "Wir haben Verständnis dafür, dass manche Menschen, insbesondere diejenigen, die in großen Behörden arbeiten, keinen Zugang zu den neuesten und besten Browsern haben. Da wir wissen, wie großartig das Web mit den richtigen Tools sein könnte, haben wir großes Mitgefühl für Benutzer in dieser unglücklichen Lage. Normalerweise würden wir versuchen, Workarounds bereitzustellen, um einige populäre, veraltete Browser zu unterstützen. Der Grund für die Existenz von Enketo ist jedoch die Verfügbarkeit einiger sehr ausgeklügelter Spitzentechnologien. Auf Benutzer älterer Browser kann daher keine Rücksicht genommen werden."
+            },
+            "msg1": "Es tut uns leid! Sie wurden wahrscheinlich hierher umgeleitet, weil Ihr Browser veraltet ist oder die wichtigsten Funktionen durch die Verwendung des Modus „Privates Surfen“ deaktiviert sind.",
+            "msg2": "Wenn Sie einen veralteten Browser verwenden, empfehlen wir Ihnen ein Upgrade auf eine aktuelle Version eines der folgenden hervorragenden modernen Browser:"
+        },
+        "offline": {
+            "heading": "Auf die angeforderte Seite kann nicht zugegriffen werden",
+            "msg1": "Auf diese Seite kann nur zugegriffen werden, wenn der Browser mit dem Internet verbunden und der Server zugänglich ist (außer die Seite ist nicht vorhanden)."
+        }
+    },
+    "prompt": {
+        "default": {
+            "heading": "Werte eingeben"
+        },
+        "login": {
+            "heading": "Anmeldeinformationen für __server__ eingeben",
+            "password": "Kennwort",
+            "remember": "Auf diesem Computer speichern",
+            "submit": "Übermitteln",
+            "username": "Benutzername"
+        }
+    },
+    "rankwidget": {
+        "clickstart": "Zum Starten klicken",
+        "tapstart": "Zum Starten tippen"
+    },
+    "record-list": {
+        "export": "Exportieren",
+        "msg1": "Datensätze werden so lange in Ihrem Browser gespeichert, bis sie hochgeladen wurden (sogar wenn Sie Ihren Computer ausschalten oder offline gehen).",
+        "msg2": "Datensätze in der Warteschlange, außer denjenigen, die als Entwurf __icon__ markiert sind, werden alle 5 Minuten automatisch im Hintergrund hochgeladen, wenn die Webseite geöffnet und eine Internetverbindung vorhanden ist.",
+        "msg2-nodraft": "Datensätze in der Warteschlange werden alle 5 Minuten automatisch im Hintergrund hochgeladen, wenn die Webseite geöffnet und eine Internetverbindung vorhanden ist.",
+        "msg3": "Um das Hochladen zwischen den automatischen Versuchen zu erzwingen, klicken Sie auf „Hochladen“.",
+        "norecords": "keine Datensätze in der Warteschlange",
+        "title": "Warteschlange",
+        "upload": "Hochladen"
+    },
+    "selectpicker": {
+        "noneselected": "keine ausgewählt",
+        "numberselected": "__number__ ausgewählt"
+    },
+    "store": {
+        "error": {
+            "iosusesafari": "Ihr iOS-Browser kann dieses Formular nicht ausführen. Wir empfehlen, für iOS Safari zu verwenden.",
+            "notavailable": "Browserspeicher ist erforderlich, ist aber nicht verfügbar, ist beschädigt oder nicht beschreibbar. Wenn Sie im Modus „Privates Surfen“ arbeiten, wechseln Sie bitte in den normalen Modus, wechseln Sie ansonsten zu einem anderen Browser. (Fehler: __error__)",
+            "notsupported": "Ihr Browser kann dieses Formular nicht ausführen. Wir empfehlen, einen modernen Browser zu verwenden."
+        }
+    },
+    "submission": {
+        "http0": "Der Server ist nicht verfügbar oder Sie sind nicht mit dem Internet verbunden.",
+        "http2xx": "Unerwartete Antwort bei der Datenübermittlung.",
+        "http400": "Der Datenserver hat die Daten nicht akzeptiert.",
+        "http401": "Authentifizierungsproblem beim Datenserver.",
+        "http403": "Es ist nicht zulässig, Daten an diesen Datenserver zu senden.",
+        "http404": "Übermittlungsdienst auf Datenserver nicht gefunden.",
+        "http408": "Zeitüberschreitung beim Datenserver.",
+        "http413": "Daten sind zu groß.",
+        "http4xx": "Unbekanntes Übermittlungsproblem auf Datenserver.",
+        "http500": "Der Datenserver für Ihr Formular oder der Enketo-Server ist ausgefallen. Versuchen Sie es später erneut oder wenden Sie sich an __supportEmail__.",
+        "http504": "Verbindung mit dem Datenserver konnte nicht hergestellt werden."
+    },
+    "themes": {
+        "supported": "Unterstützte Designs"
+    },
+    "version": "Version:",
+    "widget": {
+        "comment": {
+            "update": "Aktualisieren"
+        },
+        "dn": {
+            "assignto": "Zuweisen zu:",
+            "assignedto": "__id__ zugewiesen zu __assignee__.",
+            "closequerytext": "Diese Abfrage schließen",
+            "notifytext": "E-Mail?",
+            "addquerybutton": "Abfrage hinzufügen",
+            "addannotationbutton": "Anmerkung hinzufügen",
+            "addnewtext": "Neu",
+            "emptyhistorytext": "Kein Verlauf",
+            "printhistoryheading": "Verlauf für – __labelText__ (__questionName__)",
+            "me": "Mich",
+            "status": "Status: __status__",
+            "reopen": "Erneut öffnen",
+            "reopenlabel": "Zum erneuten Öffnen hier eingeben",
+            "autoclosed": "Abfrage vom System geschlossen, da dieses Element ausgeblendet war",
+            "valuechange": "Wert geändert von __previous__ in __new__",
+            "autoconstraint": "Automatische Abfrage für: __errorMsg__",
+            "autonoreason": "Automatische Abfrage für: Wert geändert und kein Grund für die Änderung angegeben",
+            "closedmodified": "Daten nach Schließen der Abfrage geändert",
+            "newfile": "Neue Datei hochgeladen",
+            "fileremoved": "Datei entfernt",
+            "addnewquery": "Neue Abfrage hinzufügen",
+            "addnewannotation": "Neue Anmerkung hinzufügen",
+            "typeresponse": "Auf Abfrage antworten",
+            "allhistory": "Gesamten Verlauf anzeigen",
+            "queries": "Abfragen",
+            "annotations": "Anmerkungen",
+            "showvaluechanges": "Wertänderungen anzeigen",
+            "now": "Gerade eben",
+            "second": "__count__ Sekunde",
+            "second_plural": "__count__ Sekunden",
+            "minute": "__count__ Minute",
+            "minute_plural": "__count__ Minuten",
+            "hour": "__count__ Stunde",
+            "hour_plural": "__count__ Stunden",
+            "day": "__count__ Tag",
+            "day_plural": "__count__ Tage",
+            "month": "__count__ Monat",
+            "month_plural": "__count__ Monate",
+            "year": "__count__ Jahr",
+            "year_plural": "__count__ Jahre"
+        }
+    },
+    "fieldsubmission": {
+        "alert": {
+            "close": {
+                "heading1": "Wird geschlossen",
+                "heading2": "Warnung",
+                "msg1": "Nicht gespeicherte Daten werden übermittelt...",
+                "msg2": "Nicht alle Daten wurden übermittelt. Wenn Sie diese Seite verlassen, gehen sie verloren."
+            },
+            "locked": {
+                "heading": "Gesperrt",
+                "msg": "Dieses Formular oder dieser Datensatz ist gesperrt und Übermittlungen können nicht gespeichert werden."
+            },
+            "complete": {
+                "msg": "Daten konnten nicht übermittelt werden."
+            },
+            "validationerror": {
+                "msg": "Sie müssen alle Fehler in diesem Formular beheben, bevor es als abgeschlossen markiert werden kann. Aktualisieren Sie den Wert oder fügen Sie eine Abfrage für jedes rot markierte Feld hinzu."
+            },
+            "relevantvalidationerror": {
+                "msg": "Durch die Antwort(en) in einem (einigen) Feld(ern) werden einige Daten in diesem Formular ungültig. Das muss korrigiert werden, damit das Formular als abgeschlossen markiert werden kann."
+            },
+            "reasonforchangevalidationerror": {
+                "msg": "Für jedes geänderte Feld muss ein Grund für die Änderung angegeben werden. Fügen Sie die fehlenden Gründe hinzu."
+            },
+            "stricterror": {
+                "heading": "Ungültiger Wert",
+                "msg": "Geben Sie einen passenden Wert zum Aktualisieren des Felds ein."
+            },
+            "participanterror": {
+                "msg": [ "Einige Felder scheinen Ihre Aufmerksamkeit zu benötigen.", "Überprüfen Sie sie, bevor Sie fortfahren." ]
+            }
+        },
+        "confirm": {
+            "autoquery": {
+                "msg1": "Einige Feldwerte enthalten Fehler. Diese müssen behoben werden, bevor das Formular geschlossen wird.",
+                "msg2": [
+                    "Klicken Sie auf „Abbrechen“, um zum Formular zurückzukehren und den Wert manuell zu aktualisieren oder eine Abfrage für jedes rot markierte Feld hinzuzufügen.",
+                    "Klicken Sie auf „Fortfahren“, um mit dem Schließen des Formulars fortzufahren.  Für jedes rot markierte Feld wird automatisch eine Abfrage hinzugefügt."
+                ],
+                "automatic": "Fortfahren",
+                "manual": "Abbrechen"
+            },
+            "complete": {
+                "msg": "Möchten Sie diesen Datensatz abschließen und beenden?",
+                "heading": "Abschluss bestätigen"
+            },
+            "leaveanyway": {
+                "msg": "Möchten Sie die Änderungen verwerfen und trotzdem beenden?",
+                "button": "Trotzdem beenden"
+            }
+        },
+        "prompt": {
+            "reason": {
+                "msg": "Wenn ja, geben Sie bitte einen Grund für das Löschen der Gruppe an."
+            }
+        },
+        "feedback": {
+            "ongoing": "Wird gespeichert...",
+            "success": "Alle Änderungen gespeichert.",
+            "fail": "Speichern der Änderungen fehlgeschlagen.",
+            "disabled": "Speichern ist deaktiviert."
+        },
+        "readonly": {
+            "msg": "Sie arbeiten im schreibgeschützten Modus."
+        },
+        "noteonly": {
+            "msg": "Sie arbeiten im Modus „Nur überprüfen“."
+        },
+        "reason": {
+            "heading": "Sie haben anscheinend Aktualisierungen vorgenommen. Teilen Sie uns bitte mit, warum:",
+            "placeholder1": "Grund für die Änderungen eingeben",
+            "placeholder2": "Grund für die Änderung dieses Werts eingeben",
+            "applytoall": "Für alle anwenden",
+            "questionmsg": "Geben Sie einen Grund für die Änderung unten auf der Seite ein."
+        }
+    }
+}

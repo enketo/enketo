@@ -120,6 +120,7 @@ app.use((req, res, next) => {
     res.locals.defaultTheme =
         req.app.get('default theme').replace('theme-', '') || 'kobo';
     res.locals.title = req.app.get('app name');
+    res.locals.power = req.app.get('powered by');
     res.locals.dir = (lng) => i18next.dir(lng);
     res.locals.basePath = req.app.get('base path');
     res.locals.draftEnabled = !req.app.get('disable save as draft');

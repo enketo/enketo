@@ -8,7 +8,9 @@ const config = require('./config-model').server;
 const customGetAccount = config['account lib']
     ? require(config['account lib']).getAccount
     : undefined;
-// var debug = require( 'debug' )( 'account-model' );
+const pending = {};
+const { mainClient } = require('../lib/db');
+// const debug = require( 'debug' )( 'account-model' );
 
 /**
  * @typedef AccountObj
@@ -77,6 +79,245 @@ function get(survey) {
 }
 
 /**
+ * Create an account
+ *
+ * @param  {{linkedServer: string, key: string}} account - [description]
+ * @return {[type]}        [description]
+ */
+function set(account) {
+    let error;
+    let dbKey;
+    const hardcodedAccount = _getHardcodedAccount();
+
+    return new Promise((resolve, reject) => {
+        if (!account.linkedServer || !account.key) {
+            error = new Error('Bad Request. Server URL and/or API key missing');
+            error.status = 400;
+            reject(error);
+        } else if (!utils.isValidUrl(account.linkedServer)) {
+            error = new Error('Bad Request. Server URL is not a valid URL.');
+            error.status = 400;
+            reject(error);
+        } else if (
+            !account.key ||
+            typeof account.key !== 'string' ||
+            account.key.length === 0
+        ) {
+            error = new Error(
+                'Bad Request. Account API key malformed or missing.'
+            );
+            error.status = 400;
+            reject(error);
+        } else {
+            dbKey = `ac:${utils.cleanUrl(account.linkedServer)}`;
+            if (pending[dbKey]) {
+                error = new Error(
+                    'Conflict. Busy handling pending request for same account'
+                );
+                error.status = 409;
+                reject(error);
+            }
+            if (
+                hardcodedAccount &&
+                _isAllowed(hardcodedAccount, account.linkedServer)
+            ) {
+                resolve(account);
+            } else {
+                // to avoid issues with fast subsequent requests
+                pending[dbKey] = true;
+
+                mainClient.hgetall(dbKey, (error, obj) => {
+                    if (error) {
+                        delete pending[dbKey];
+                        reject(error);
+                    } else if (!obj || obj.openRosaServer) {
+                        // also update if deprecated openRosaServer property is present
+                        mainClient.hmset(dbKey, account, (error) => {
+                            delete pending[dbKey];
+                            if (error) {
+                                reject(error);
+                            }
+                            // remove deprecated field, don't wait for result
+                            if (obj && obj.openRosaServer) {
+                                mainClient.hdel(dbKey, 'openRosaServer');
+                            }
+                            account.status = 201;
+                            resolve(account);
+                        });
+                    } else if (!obj.linkedServer || !obj.key) {
+                        delete pending[dbKey];
+                        error = new Error('Account information is incomplete.');
+                        error.status = 406;
+                        reject(error);
+                    } else {
+                        delete pending[dbKey];
+                        obj.status = 200;
+                        resolve(obj);
+                    }
+                });
+            }
+        }
+    });
+}
+
+/**
+ * Update an account
+ *
+ * @param  {{linkedServer: string, key: string}} account - [description]
+ * @return {[type]}        [description]
+ */
+function update(account) {
+    let error;
+    let dbKey;
+    const hardcodedAccount = _getHardcodedAccount();
+
+    return new Promise((resolve, reject) => {
+        if (!account.linkedServer) {
+            error = new Error('Bad Request. Server URL missing');
+            error.status = 400;
+            reject(error);
+        } else if (!utils.isValidUrl(account.linkedServer)) {
+            error = new Error('Bad Request. Server URL is not a valid URL.');
+            error.status = 400;
+            reject(error);
+        } else if (
+            !account.key ||
+            typeof account.key !== 'string' ||
+            account.key.length === 0
+        ) {
+            error = new Error(
+                'Bad Request. Account API key malformed or missing.'
+            );
+            error.status = 400;
+            reject(error);
+        } else if (
+            hardcodedAccount &&
+            _isAllowed(hardcodedAccount, account.linkedServer)
+        ) {
+            resolve(account);
+        } else {
+            dbKey = `ac:${utils.cleanUrl(account.linkedServer)}`;
+            mainClient.hgetall(dbKey, (error, obj) => {
+                if (error) {
+                    reject(error);
+                } else if (!obj) {
+                    error = new Error('Account Not found. Nothing to update');
+                    error.status = 404;
+                    reject(error);
+                } else if (utils.areOwnPropertiesEqual(obj, account)) {
+                    account.status = 200;
+                    resolve(account);
+                } else {
+                    mainClient.hmset(dbKey, account, (error) => {
+                        if (error) {
+                            reject(error);
+                        }
+                        // remove deprecated field, don't wait for result
+                        if (obj.openRosaServer) {
+                            mainClient.hdel(dbKey, 'openRosaServer');
+                        }
+                        account.status = 201;
+                        resolve(account);
+                    });
+                }
+            });
+        }
+    });
+}
+
+/**
+ * Remove an account
+ *
+ * @param  {{linkedServer: string, key: string}} account - [description]
+ * @return {[type]}        [description]
+ */
+function remove(account) {
+    let error;
+    let dbKey;
+    const hardcodedAccount = _getHardcodedAccount();
+
+    return new Promise((resolve, reject) => {
+        if (!account.linkedServer) {
+            error = new Error('Bad Request. Server URL missing');
+            error.status = 400;
+            reject(error);
+        } else if (!utils.isValidUrl(account.linkedServer)) {
+            error = new Error('Bad Request. Server URL is not a valid URL.');
+            error.status = 400;
+            reject(error);
+        } else if (
+            hardcodedAccount &&
+            _isAllowed(hardcodedAccount, account.linkedServer)
+        ) {
+            error = new Error(
+                'Not Allowed. Hardcoded account cannot be removed via API.'
+            );
+            error.status = 405;
+            reject(error);
+        } else {
+            dbKey = `ac:${utils.cleanUrl(account.linkedServer)}`;
+            mainClient.hgetall(dbKey, (error, obj) => {
+                if (error) {
+                    reject(error);
+                } else if (!obj) {
+                    error = new Error('Not Found. Account not present.');
+                    error.status = 404;
+                    reject(error);
+                } else {
+                    mainClient.del(dbKey, (error) => {
+                        if (error) {
+                            reject(error);
+                        } else {
+                            resolve(account);
+                        }
+                    });
+                }
+            });
+        }
+    });
+}
+
+/**
+ * Obtains a list of acccounts
+ *
+ * @return {[type]} [description]
+ */
+function getList() {
+    let hardcodedAccount;
+    let multi;
+    const list = [];
+
+    hardcodedAccount = _getHardcodedAccount();
+
+    if (hardcodedAccount) {
+        list.push(hardcodedAccount);
+    }
+
+    return new Promise((resolve, reject) => {
+        mainClient.keys('ac:*', (error, accounts) => {
+            if (error) {
+                reject(error);
+            } else if (accounts.length === 0) {
+                resolve(list);
+            } else if (accounts.length > 0) {
+                multi = mainClient.multi();
+
+                accounts.forEach((account) => {
+                    multi.hgetall(account);
+                });
+
+                multi.exec((errors, replies) => {
+                    if (errors) {
+                        reject(errors[0]);
+                    }
+                    resolve(list.concat(replies));
+                });
+            }
+        });
+    });
+}
+
+/**
  * Check if account for passed survey is active, and not exceeding quota.
  * This passes back the original survey object and therefore differs from the get function!
  *
@@ -101,10 +342,11 @@ function check(survey) {
  */
 function _isAllowed(account, serverUrl) {
     return (
-        account.linkedServer === '' ||
-        new RegExp(`https?://${_stripProtocol(account.linkedServer)}`).test(
-            serverUrl
-        )
+        account &&
+        (account.linkedServer === '' ||
+            new RegExp(`https?://${_stripProtocol(account.linkedServer)}`).test(
+                serverUrl
+            ))
     );
 }
 
@@ -136,7 +378,7 @@ function _stripProtocol(url) {
 function _getAccount(serverUrl) {
     const hardcodedAccount = _getHardcodedAccount();
 
-    if (_isAllowed(hardcodedAccount, serverUrl)) {
+    if (hardcodedAccount && _isAllowed(hardcodedAccount, serverUrl)) {
         return Promise.resolve(hardcodedAccount);
     }
 
@@ -144,12 +386,29 @@ function _getAccount(serverUrl) {
         return customGetAccount(serverUrl, config['account api url']);
     }
 
-    const error = new Error(
-        'Forbidden. This server is not linked with Enketo.'
-    );
-    error.status = 403;
-
-    return Promise.reject(error);
+    return new Promise((resolve, reject) => {
+        mainClient.hgetall(`ac:${utils.cleanUrl(serverUrl)}`, (error, obj) => {
+            if (error) {
+                reject(error);
+            }
+            if (!obj) {
+                error = new Error(
+                    'Forbidden. This server is not linked with Enketo'
+                );
+                error.status = 403;
+                reject(error);
+            } else {
+                // correct deprecated property name if necessary
+                resolve({
+                    linkedServer: obj.linkedServer
+                        ? obj.linkedServer
+                        : obj.openRosaServer,
+                    key: obj.key,
+                    quota: obj.quota || Infinity,
+                });
+            }
+        });
+    });
 }
 
 /**
@@ -163,6 +422,7 @@ function _getHardcodedAccount() {
 
     // check if configuration is acceptable
     if (
+        config['account manager api key'] ||
         !linkedServer ||
         typeof linkedServer['server url'] === 'undefined' ||
         typeof linkedServer['api key'] === 'undefined'
@@ -185,14 +445,26 @@ function _getHardcodedAccount() {
  * @return { string|null } server
  */
 function _getServer(survey) {
-    if (!survey || (typeof survey === 'object' && !survey.openRosaServer)) {
+    if (
+        !survey ||
+        (typeof survey === 'object' &&
+            !survey.openRosaServer &&
+            !survey.linkedServer)
+    ) {
         return null;
     }
+    if (typeof survey === 'string') {
+        return survey;
+    }
 
-    return typeof survey === 'string' ? survey : survey.openRosaServer;
+    return survey.linkedServer || survey.openRosaServer;
 }
 
 module.exports = {
     get,
     check,
+    set,
+    update,
+    remove,
+    getList,
 };
