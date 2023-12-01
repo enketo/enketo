@@ -1,7 +1,7 @@
 {
     "name": "enketo",
-    "description": "Enketo Web Forms",
-    "repository": "https://github.com/enketo/enketo",
+    "description": "Enketo Web Forms Fork for OpenClinica",
+    "repository": "https://github.com/OpenClinica/enketo-oc",
     "private": true,
     "workspaces": {
         "packages": [
