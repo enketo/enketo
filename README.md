@@ -1,6 +1,6 @@
 # Enketo
 
-This is the Enketo web forms monorepo. Enketo is an open source project that produces web form software for the [ODK ecosystem](https://getodk.org).
+This is the OpenClinica fork of the Enketo web forms monorepo. Enketo is an open source project that produces web form software for the [ODK ecosystem](https://getodk.org).
 
 ## Packages
 
