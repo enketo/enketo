@@ -102,9 +102,10 @@ async function get(
                 image.style['max-width'] = '100%';
                 image.className = element.className;
 
-                element.parentNode &&
+                if (element.parentNode) {
                     element.parentNode.insertBefore(image, element);
-                element.parentNode && element.parentNode.removeChild(element);
+                    element.parentNode.removeChild(element);
+                }
             }
 
             document.querySelectorAll('canvas').forEach(canvasToImage);

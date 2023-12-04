@@ -532,7 +532,8 @@
                     "files": [
                         "packages/enketo-express/public/**/*",
                         "packages/enketo-express/app/views/**/*.js",
-                        "packages/enketo-express/test/client/**/*.js"
+                        "packages/enketo-express/test/client/**/*.js",
+                        "packages/enketo-express/widget/**/*"
                     ],
 
                     "env": { "browser": true }

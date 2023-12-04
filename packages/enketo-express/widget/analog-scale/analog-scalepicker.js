@@ -35,7 +35,10 @@ class AnalogScaleWidget extends RangeWidget {
         return html;
     }
 
-    _updateMercury() {}
+    // eslint-disable-next-line class-methods-use-this
+    _updateMercury() {
+        // make no-op
+    }
 
     /**
      * (re-)Renders the widget labels based on the current content of .question-label.active

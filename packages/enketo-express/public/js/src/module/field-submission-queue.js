@@ -312,9 +312,12 @@ class FieldSubmissionQueue {
 
     _resetSubmissionInterval() {
         this._clearSubmissionInterval();
-        this.submissionInterval = setInterval(() => {
-            this.submitAll();
-        }, 1 * 60 * 1000);
+        this.submissionInterval = setInterval(
+            () => {
+                this.submitAll();
+            },
+            1 * 60 * 1000
+        );
     }
 
     _clearSubmissionInterval() {

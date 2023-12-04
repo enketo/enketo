@@ -323,6 +323,7 @@ class Comment extends Widget {
             this._getThreadFirsts(this.notes).forEach((item) => {
                 const status = this._getQueryThreadStatus(
                     this.notes,
+                    // eslint-disable-next-line camelcase
                     item.thread_id
                 );
                 const open = status === 'updated' || status === 'new';
@@ -703,8 +704,8 @@ class Comment extends Widget {
                                                     ? 'short'
                                                     : ''
                                             }"><span>${
-                                            item.comment
-                                        }</span></span>
+                                                item.comment
+                                            }</span></span>
                                         </a>
                                     </li>`
                                 )
@@ -735,8 +736,8 @@ class Comment extends Widget {
                                                     ? 'short'
                                                     : ''
                                             }"><span>${
-                                            item.comment
-                                        }</span></span>
+                                                item.comment
+                                            }</span></span>
                                         </a>
                                     </li>`
                                 )
@@ -1116,6 +1117,7 @@ class Comment extends Widget {
         notify,
         user,
         type = 'comment',
+        // eslint-disable-next-line camelcase
         thread_id = this.options.helpers.evaluate('uuid()', 'string')
     ) {
         const that = this;
@@ -1127,6 +1129,7 @@ class Comment extends Widget {
             status,
             assigned_to: assignee,
             notify,
+            // eslint-disable-next-line camelcase
             thread_id,
         };
 
@@ -1595,7 +1598,7 @@ class Comment extends Widget {
                     '>': '&gt;',
                     "'": '&#39;',
                     '"': '&quot;',
-                }[tag])
+                })[tag]
         );
     }
 
@@ -1641,8 +1644,10 @@ class Comment extends Widget {
             }">
                 <div class="or-comment-widget__content__history__row__start">
                     <span class="or-comment-widget__content__history__row__start__username tooltip" data-title="${fullName}${
-            item.user ? ` (${item.user})` : ''
-        }">${options.username === 'full' ? fullName : initials}</span>
+                        item.user ? ` (${item.user})` : ''
+                    }">${
+                        options.username === 'full' ? fullName : initials
+                    }</span>
                     <span class="or-comment-widget__content__history__row__start__datetime tooltip" data-title="${rdDatetime}">${time}</span>
                 </div>
                 <div class="or-comment-widget__content__history__row__main${

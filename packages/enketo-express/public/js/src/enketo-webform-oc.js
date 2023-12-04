@@ -219,7 +219,9 @@ function _setEmergencyHandlers() {
                 .then(() => {
                     location.reload();
                 })
-                .catch(() => {});
+                .catch(() => {
+                    // Ignore error
+                });
         });
     }
 }
@@ -247,19 +249,27 @@ function _convertToReadonly(formParts, notesEnabled) {
         );
     };
     console.info('Setvalue disabled.');
-    calculationModule.setvalue = () => {};
+    calculationModule.setvalue = () => {
+        // make no-op
+    };
 
     // Completely disable preload items
     console.info('Preloaders disabled.');
-    preloadModule.init = () => {};
+    preloadModule.init = () => {
+        // make no-op
+    };
 
     // Disable clearing (and submissions) of non-relevant readonly values
     console.info('Clearing of non-relevant values disabled.');
-    relevantModule.clear = () => {};
+    relevantModule.clear = () => {
+        // make no-op
+    };
 
     // Disable removing repeats (in case model contains more repeats than repeat count number)
     console.info('Disabling repeat removal');
-    repeatModule.remove = () => {};
+    repeatModule.remove = () => {
+        // make no-op
+    };
 
     // change status message
     const i18nKey = notesEnabled

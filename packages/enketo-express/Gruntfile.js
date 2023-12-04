@@ -72,12 +72,10 @@ const resolveWidgetESMImport = (imported) => {
         }
     }
 
-    if (imported.startsWith('/packages/enketo-express/')){
+    if (imported.startsWith('/packages/enketo-express/')) {
         const LOCAL_WIDGETS_PREFIX = path.resolve(__dirname, './');
         return imported
-            .replace(/^\/packages\/enketo-express/,
-                LOCAL_WIDGETS_PREFIX
-            )
+            .replace(/^\/packages\/enketo-express/, LOCAL_WIDGETS_PREFIX)
             .replace(/(\.js)?$/, '.js');
     }
 

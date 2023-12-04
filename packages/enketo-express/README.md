@@ -31,7 +31,7 @@ You can use environment variables instead of a `config/config.json` file. If the
 
 The default production configuration includes 2 redis instances: one for caching form transformations (see [Enketo Transformer](../../packages/enketo-transformer)) and one for persistent data like associations between form server URLs and Enketo form IDs. You can **greatly simplify installation by using 1 redis instance** instead (for development usage). To do this set the redis.cache.port to 6379 (same as redis.main.port).
 
-----
+---
 
 OpenClinica users, in addition to the configuration documentation linked above, may want to take special note of the following recommended settings:
 
@@ -45,7 +45,7 @@ OpenClinica users, in addition to the configuration documentation linked above, 
 7. Set `"default theme": "oc"`
 8. Set `"text field character limit": 3999`
 
-----
+---
 
 For development usages, it is helpful to set "linked form and data server" -> "server url" to `""`, so you can use any OpenRosa server with your local Enketo Express.
 

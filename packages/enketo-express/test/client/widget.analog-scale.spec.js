@@ -31,6 +31,7 @@ describe('Analog-scale widget with show-scale', () => {
         const fragment = document
             .createRange()
             .createContextualFragment(FORM_SHOW_SCALE);
+        // eslint-disable-next-line no-new
         new AnalogScaleWidget(fragment.querySelector('input'));
         const widget = fragment.querySelector('.range-widget');
 
