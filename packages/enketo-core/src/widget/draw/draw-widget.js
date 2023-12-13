@@ -49,7 +49,7 @@ class DrawWidget extends Widget {
                 penColor: that.props.colors[0] || 'black',
             });
 
-            this.pad.addEventListener('change', () => {
+            this.pad.addEventListener('endStroke', () => {
                 this._updateValue();
             });
 
