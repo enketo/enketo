@@ -108,6 +108,15 @@ document.body.append(detachedCanvasContainer);
  */
 
 /**
+ * @typedef BaseResizableSignaturePadOptions
+ * @property {Blob | string | null} [baseImage]
+ */
+
+/**
+ * @typedef {SignaturePadOptions & BaseResizableSignaturePadOptions} ResizableSignaturePadOptions
+ */
+
+/**
  * @typedef {import('signature_pad').PointGroup} PointGroup
  */
 
@@ -164,7 +173,7 @@ export class ResizableSignaturePad extends SignaturePad {
      *   element is observed directly.
      *
      * In both implementations, there is a need to perform the same "resize"
-     * logic upon initializtion, as the canvas element's default size may not
+     * logic upon initialization, as the canvas element's default size may not
      * match the initial display size.
      *
      * - Previously, this was performed by explicitly invoking the resize logic
@@ -310,12 +319,30 @@ export class ResizableSignaturePad extends SignaturePad {
         return (this.displayCanvasMaxWidth ?? 0) * this.canvasHeightRatio;
     }
 
+    /** @private */
+    isInitialized = false;
+
+    /** @type {Promise<void>} */
+    initialization;
+
     /**
      * @param {HTMLCanvasElement} canvas
-     * @param {SignaturePadOptions} [options]
+     * @param {ResizableSignaturePadOptions} [options]
      */
-    constructor(canvas, options) {
-        super(canvas, options);
+    constructor(canvas, options = {}) {
+        const { baseImage, ...signaturePadOptions } = options;
+
+        super(canvas, signaturePadOptions);
+
+        if (baseImage == null) {
+            this.initialization = Promise.resolve();
+        } else {
+            this.initialization = this.setBaseImage(baseImage);
+        }
+
+        this.initialization.then(() => {
+            this.isInitialized = true;
+        });
 
         ResizableSignaturePad.canvasToPad.set(canvas, this);
         ResizableSignaturePad.intersectionObserver.observe(canvas);
@@ -513,7 +540,10 @@ export class ResizableSignaturePad extends SignaturePad {
         this.baseImage?.close();
         this.baseImage = await createImageBitmap(blob);
         this.redraw();
-        this.dispatchChangeEvent();
+
+        if (this.isInitialized) {
+            this.dispatchChangeEvent();
+        }
     }
 
     /**

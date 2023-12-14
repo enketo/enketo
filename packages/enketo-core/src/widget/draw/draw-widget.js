@@ -47,23 +47,34 @@ class DrawWidget extends Widget {
         this.initialize = (async () => {
             await fileManager.init();
 
+            /** @type {File | string | null} */
+            let baseImage = null;
+
+            if (existingFilename) {
+                this.element.value = existingFilename;
+
+                baseImage = await this._loadFile(existingFilename);
+            }
+
             this.pad = new ResizableSignaturePad(canvas, {
+                baseImage,
                 penColor: that.props.colors[0] || 'black',
             });
 
+            await this.pad.initialization;
+
             this.pad.addEventListener('change', () => {
-                console.log('this.pad change event');
                 this._updateValue();
             });
 
             this.pad.off();
 
-            if (existingFilename) {
+            if (existingFilename && baseImage != null) {
                 this.element.value = existingFilename;
 
-                const fileURL = await this._loadFileIntoPad(existingFilename);
+                const objectURL = await this.pad.toObjectURL();
 
-                return this._updateDownloadLink(fileURL);
+                return this._updateDownloadLink(objectURL);
             }
 
             return true;
