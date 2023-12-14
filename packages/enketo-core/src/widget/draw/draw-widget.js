@@ -44,7 +44,9 @@ class DrawWidget extends Widget {
             this._handleFiles(existingFilename);
         }
 
-        this.initialize = fileManager.init().then(() => {
+        this.initialize = (async () => {
+            await fileManager.init();
+
             this.pad = new ResizableSignaturePad(canvas, {
                 penColor: that.props.colors[0] || 'black',
             });
@@ -56,15 +58,15 @@ class DrawWidget extends Widget {
             this.pad.off();
 
             if (existingFilename) {
-                that.element.value = existingFilename;
+                this.element.value = existingFilename;
 
-                return that
-                    ._loadFileIntoPad(existingFilename)
-                    .then(that._updateDownloadLink.bind(that));
+                const fileURL = await this._loadFileIntoPad(existingFilename);
+
+                return this._updateDownloadLink(fileURL);
             }
 
             return true;
-        });
+        })();
 
         this.disable();
         this.initialize
@@ -348,7 +350,7 @@ class DrawWidget extends Widget {
 
     /**
      * @param {string | File} file - Either a filename or a file.
-     * @return {Promise<string>} promise resolving with a string
+     * @return {Promise<string>} Promise resolving to loaded object URL, or empty string if file is not specified
      */
     async _loadFileIntoPad(file) {
         if (!file) {
