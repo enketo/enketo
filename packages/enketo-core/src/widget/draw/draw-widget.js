@@ -52,6 +52,7 @@ class DrawWidget extends Widget {
             });
 
             this.pad.addEventListener('change', () => {
+                console.log('this.pad change event');
                 this._updateValue();
             });
 
@@ -349,18 +350,18 @@ class DrawWidget extends Widget {
     }
 
     /**
-     * @param {string | File} file - Either a filename or a file.
-     * @return {Promise<string>} Promise resolving to loaded object URL, or empty string if file is not specified
+     * @param {File | string} file - Either a filename, media (jr:) URL, or a file object.
+     * @return {Promise<File | string | null>} - see comments in body for each case
      */
-    async _loadFileIntoPad(file) {
+    async _loadFile(file) {
+        // If `file` is falsy, resolve `null`
         if (!file) {
-            this.pad.clearBaseImage();
-
-            return '';
+            return null;
         }
 
         let fileOrURL = file;
 
+        // Attempt to resolve file URL with `fileManager`
         if (typeof file === 'string') {
             try {
                 fileOrURL = await fileManager.getFileUrl(file);
@@ -369,15 +370,40 @@ class DrawWidget extends Widget {
             }
         }
 
-        try {
-            if (
-                typeof fileOrURL === 'string' &&
-                fileOrURL.startsWith('jr://') &&
-                this.element.dataset.loadedUrl
-            ) {
-                fileOrURL = this.element.dataset.loadedUrl;
-            }
+        // Whether above attempt succeeded or failed, attempt to map a `jr:`
+        // media URL to its `loadedUrl` (which is set in `Form#setAllVals`,
+        // tracing that further is an exercise to the reader for now)
+        if (
+            typeof fileOrURL === 'string' &&
+            fileOrURL.startsWith('jr://') &&
+            this.element.dataset.loadedUrl
+        ) {
+            return this.element.dataset.loadedUrl;
+        }
 
+        return fileOrURL;
+    }
+
+    /**
+     * @param {string | File} file - Either a filename or a file.
+     * @return {Promise<'' | string | void>} - see comments in body for each case
+     */
+    async _loadFileIntoPad(file) {
+        const fileOrURL = await this._loadFile(file);
+
+        // If `_loadFile` returns a falsy value (likely `null`), resolve an
+        // empty string.
+        if (!fileOrURL) {
+            this.pad.clearBaseImage();
+
+            return '';
+        }
+
+        // Attempt to set the `ResizableSignaturePad` base image. If successful,
+        // resolve its object URL representation.
+        //
+        // If setting the base image fails, implicitly resolve no value.
+        try {
             this.pad.reset();
 
             await this.pad.setBaseImage(fileOrURL);
