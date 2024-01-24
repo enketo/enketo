@@ -18,23 +18,13 @@
     ],
     "repository": {
         "type": "git",
-        "url": "https://github.com/enketo/enketo-core"
+        "url": "https://github.com/enketo/enketo"
     },
-    "author": {
-        "name": "Martijn van de Rijdt",
-        "email": "martijn@enketo.org",
-        "url": "https://www.linkedin.com/in/martijnvanderijdt"
-    },
-    "contributors": [
-        {
-            "name": "Alex Anderson"
-        }
-    ],
     "files": [
         "src/",
         "config.js"
     ],
-    "bugs": "https://github.com/enketo/enketo-core/issues",
+    "bugs": "https://github.com/enketo/enketo/issues",
     "main": "src/js/form.js",
     "scripts": {
         "build": "grunt css && grunt compile && grunt transforms && echo 'enketo-core build complete'",
