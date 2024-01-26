@@ -3,6 +3,11 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## 7.1.0 - 2024-01-25
+
+-   Fix: "for" attribute throws off ability to open to the right page upon load (#1286)
+-   Revert change from v7.2.0 to preserve high resolution annotated images (#1292)
+
 ## 7.0.0 - 2023-10-30
 
 -   Breaking change: in the move to a monorepo, some paths in Sass styles have been updated to reflect the new file structure. The impact should be minimal, but custom themes may need to be updated. Generally, paths which cross package boundaries (i.e. imports from Enketo Express to styles in Enketo Core, or imports of third party styles from NPM packages) should use absolute paths from the monorepo root. You may refer to existing theme styles for examples.
