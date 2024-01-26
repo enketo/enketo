@@ -6,7 +6,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 ## 7.1.0 - 2024-01-25
 
 -   Fix: "for" attribute throws off ability to open to the right page upon load (#1286)
--   Revert change from v7.2.0 to preserve high resolution annotated images (#1292)
+-   Revert change from v6.1.0 to preserve high resolution annotated images (#1292)
 
 ## 7.0.0 - 2023-10-30
 
