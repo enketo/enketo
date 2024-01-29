@@ -482,7 +482,7 @@ export default {
                         const preInitRelevance =
                             this.preInitRelevance.get(element);
 
-                        if (preInitRelevance != null && !this.initialized ) {
+                        if (preInitRelevance != null && !this.initialized) {
                             return preInitRelevance;
                         }
 

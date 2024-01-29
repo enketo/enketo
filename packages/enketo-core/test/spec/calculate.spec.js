@@ -684,18 +684,16 @@ describe('calculate functionality', () => {
         });
     });
 
-
     describe('function', () => {
-
         it('_isRelevant() determines relevancy correctly', () => {
             const form = loadForm('relevant-calcs.xml', null);
 
             form.init();
             const props = {
-                "name": "/data/grp/four",
-                "expr": "if( /data/a  != 'ignore', concat('fo', 'ur'), 'ignore')",
-                "dataType": "string",
-                "index": 0
+                name: '/data/grp/four',
+                expr: "if( /data/a  != 'ignore', concat('fo', 'ur'), 'ignore')",
+                dataType: 'string',
+                index: 0,
             };
 
             expect(form.calc._isRelevant(props)).to.equal(false);
@@ -707,6 +705,5 @@ describe('calculate functionality', () => {
 
             expect(form.calc._isRelevant(props)).to.equal(true);
         });
-
-    })
+    });
 });
