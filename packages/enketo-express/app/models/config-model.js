@@ -241,10 +241,14 @@ function _extractRedisConfigFromUrl(redisUrl) {
         parsedUrl.auth && parsedUrl.auth.split(':')[1]
             ? parsedUrl.auth.split(':')[1]
             : null;
+    const dbIndex = parsedUrl.path 
+        ? parsedUrl.path.substr(1)
+        : 0;
 
     return {
         host: parsedUrl.hostname,
         port: parsedUrl.port,
+        db: dbIndex,
         password,
     };
 }

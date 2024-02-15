@@ -196,6 +196,35 @@ describe('Config Model', () => {
             );
             expect(config.server.redis.main.port).to.equal('6869');
             expect(config.server.redis.main.password).to.equal('pwd');
+            expect(config.server.redis.main.db).to.equal(0);
+        });
+
+        it('parses a redis main url with db index to its components', () => {
+            stubEnv(
+                'ENKETO_REDIS_MAIN_URL',
+                'redis://h:pwd@ec2-54-221-230-53.compute-1.amazonaws.com:6869/4'
+            );
+            config = loadConfig();
+            expect(config.server.redis.main.host).to.equal(
+                'ec2-54-221-230-53.compute-1.amazonaws.com'
+            );
+            expect(config.server.redis.main.port).to.equal('6869');
+            expect(config.server.redis.main.password).to.equal('pwd');
+            expect(config.server.redis.main.db).to.equal(4);
+        });
+
+        it('parses a redis cache url with db index to its components', () => {
+            stubEnv(
+                'ENKETO_REDIS_CACHE_URL',
+                'redis://h:cache_pwd@ec2-54-221-230-53.compute-1.amazonaws.com:6380/5'
+            );
+            config = loadConfig();
+            expect(config.server.redis.cache.host).to.equal(
+                'ec2-54-221-230-53.compute-1.amazonaws.com'
+            );
+            expect(config.server.redis.cache.port).to.equal('6380');
+            expect(config.server.redis.cache.password).to.equal('cache_pwd');
+            expect(config.server.redis.cache.db).to.equal(5);
         });
     });
 
