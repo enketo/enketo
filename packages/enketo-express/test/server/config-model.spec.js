@@ -210,7 +210,7 @@ describe('Config Model', () => {
             );
             expect(config.server.redis.main.port).to.equal('6869');
             expect(config.server.redis.main.password).to.equal('pwd');
-            expect(config.server.redis.main.db).to.equal(4);
+            expect(config.server.redis.main.db).to.equal('4');
         });
 
         it('parses a redis cache url with db index to its components', () => {
@@ -224,7 +224,7 @@ describe('Config Model', () => {
             );
             expect(config.server.redis.cache.port).to.equal('6380');
             expect(config.server.redis.cache.password).to.equal('cache_pwd');
-            expect(config.server.redis.cache.db).to.equal(5);
+            expect(config.server.redis.cache.db).to.equal('5');
         });
     });
 
