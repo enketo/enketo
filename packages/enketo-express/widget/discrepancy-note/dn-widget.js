@@ -12,7 +12,7 @@ import reasons from '../../public/js/src/module/reasons';
 let currentUser;
 let users;
 let annotationIconDataUri;
-const SYSTEM_USER = 'root';
+const SYSTEM_USER = 'system';
 
 const pad2 = (x) => (x < 10 ? `0${x}` : x);
 

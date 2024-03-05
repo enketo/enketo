@@ -345,11 +345,11 @@ describe('DN object', () => {
             ['{"queries":[], "logs":[{"type": "comment"}]}', ''],
             // first has system user
             [
-                '{"queries":[], "logs":[{"type": "comment", "status": "updated", "user": "root", "date_time":2}]}',
+                '{"queries":[], "logs":[{"type": "comment", "status": "updated", "user": "system", "date_time":2}]}',
                 '',
             ],
             [
-                '{"queries":[{"type": "comment", "status": "updated", "user": "root", "date_time":2}], "logs":[]}',
+                '{"queries":[{"type": "comment", "status": "updated", "user": "system", "date_time":2}], "logs":[]}',
                 '',
             ],
             // first has empty user
@@ -372,20 +372,20 @@ describe('DN object', () => {
             ],
             // first root ignored, next is taken
             [
-                '{"queries":[], "logs":[{"type": "audit", "user": "root", "date_time":2},{"type": "comment", "user": "jen", "date_time":1}]}',
+                '{"queries":[], "logs":[{"type": "audit", "user": "system", "date_time":2},{"type": "comment", "user": "jen", "date_time":1}]}',
                 'jen',
             ],
             [
-                '{"queries":[{"type": "audit", "user": "root", "date_time":2},{"type": "comment", "user": "jen", "date_time":1}], "logs":[]}',
+                '{"queries":[{"type": "audit", "user": "system", "date_time":2},{"type": "comment", "user": "jen", "date_time":1}], "logs":[]}',
                 'jen',
             ],
             // same, but switched order (same date_time) to test ordering
             [
-                '{"queries":[], "logs":[{"type": "comment", "user": "jen", "date_time":1}, {"type": "audit", "user": "root", "date_time":2}]}',
+                '{"queries":[], "logs":[{"type": "comment", "user": "jen", "date_time":1}, {"type": "audit", "user": "system", "date_time":2}]}',
                 'jen',
             ],
             [
-                '{"queries":[{"type": "comment", "user": "jen", "date_time":1}, {"type": "audit", "user": "root", "date_time":2}], "logs":[]}',
+                '{"queries":[{"type": "comment", "user": "jen", "date_time":1}, {"type": "audit", "user": "system", "date_time":2}], "logs":[]}',
                 'jen',
             ],
         ].forEach((test) => {
