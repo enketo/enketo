@@ -1598,7 +1598,7 @@ class Comment extends Widget {
                     '>': '&gt;',
                     "'": '&#39;',
                     '"': '&quot;',
-                }[tag])
+                })[tag]
         );
     }
 
@@ -1612,7 +1612,7 @@ class Comment extends Widget {
                     '&gt;': '>',
                     '&#39;': "'",
                     '&quot;': '"',
-                }[tag])
+                })[tag]
         );
     }
 
