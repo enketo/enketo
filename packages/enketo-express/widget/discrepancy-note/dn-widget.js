@@ -404,7 +404,7 @@ class Comment extends Widget {
                 : t('widget.dn.fileremoved');
         }
 
-        this._addAudit(comment, '', false);
+        this._addAudit(this._decodeHtml(comment), '', false);
 
         if (settings.reasonForChange && !this.linkedQuestionReadonly) {
             const reasonQuestion = reasons.addField(this.linkedQuestion);
@@ -1598,7 +1598,21 @@ class Comment extends Widget {
                     '>': '&gt;',
                     "'": '&#39;',
                     '"': '&quot;',
-                })[tag]
+                }[tag])
+        );
+    }
+
+    _decodeHtml(str) {
+        return str.replace(
+            /(&amp;)|(&lt;)|(&gt;)|(&#39;)|(&quot;)/g,
+            (tag) =>
+                ({
+                    '&amp;': '&',
+                    '&lt;': '<',
+                    '&gt;': '>',
+                    '&#39;': "'",
+                    '&quot;': '"',
+                }[tag])
         );
     }
 
