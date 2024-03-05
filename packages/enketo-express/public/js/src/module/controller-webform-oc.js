@@ -153,7 +153,13 @@ function init(formEl, data, loadErrors = []) {
                 );
 
                 // For Participant empty-form view in order to show Close button on all pages
-                if (settings.participant && settings.type !== 'edit') {
+                // add settings.reasonForChange condition to prevent Close button show on all pages
+                // for non Participant empty-form that does not have calculate items
+                if (
+                    settings.participant &&
+                    settings.reasonForChange &&
+                    settings.type !== 'edit'
+                ) {
                     form.view.html.classList.add('empty-untouched');
                 }
 
