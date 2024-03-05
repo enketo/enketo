@@ -2,21 +2,15 @@
     "name": "enketo-express",
     "description": "Webforms evolved.",
     "homepage": "https://enketo.org",
-    "version": "7.0.0",
+    "version": "7.1.0",
     "main": "./app.js",
     "repository": {
         "type": "git",
-        "url": "https://github.com/enketo/enketo-express"
+        "url": "https://github.com/enketo/enketo"
     },
     "bugs": {
-        "url": "https://github.com/enketo/enketo-express/issues"
+        "url": "https://github.com/enketo/enketo/issues"
     },
-    "author": {
-        "name": "Martijn van de Rijdt",
-        "email": "martijn@enketo.org",
-        "url": "https://www.linkedin.com/in/martijnvanderijdt"
-    },
-    "contributors": [],
     "scripts": {
         "build": "grunt && echo 'enketo-express build complete'",
         "start": "node .",
@@ -39,7 +33,7 @@
         "csurf": "^1.11.0",
         "db.js": "^0.15.0",
         "debug": "^4.3.4",
-        "enketo-core": "8.0.0",
+        "enketo-core": "8.1.0",
         "enketo-transformer": "4.0.0",
         "enketo-xpath-extensions-oc": "github:OpenClinica/enketo-xpath-extensions-oc#ab81eeb7d0f1fb34bcf2615d2c6a27c3b0915f56",
         "evp_bytestokey": "^1.0.3",
