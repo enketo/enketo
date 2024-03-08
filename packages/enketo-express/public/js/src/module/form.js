@@ -1,6 +1,8 @@
 // Extend the Enketo Core Form class, and expose it for local testing.
 import { Form, FormModel } from 'enketo-core';
 import events from 'enketo-core/src/js/event';
+import { scrollIntoViewIfNeeded } from 'enketo-core/src/js/dom-utils';
+import $ from 'jquery';
 import config from 'enketo/config';
 import gui from './gui';
 import settings from './settings';
@@ -419,6 +421,51 @@ Form.prototype.updateValidityInUi = function (control, result) {
     if (!passed) {
         control.dispatchEvent(events.Invalidated());
     }
+};
+
+Form.prototype.goToTarget = function (target, options = {}) {
+    if (target) {
+        if (this.pages.active && !options.isPageFlip) {
+            // Flip to page
+            this.pages.flipToPageContaining($(target));
+        }
+        // check if the target has a form control
+        if (target.closest('.calculation, .setvalue, .setgeopoint')) {
+            // It is up to the apps to decide what to do with this event.
+            target.dispatchEvent(events.GoToInvisible());
+        }
+        // check if the nearest question or group is irrelevant after page flip
+        if (target.closest('.or-branch.disabled')) {
+            // It is up to the apps to decide what to do with this event.
+            target.dispatchEvent(events.GoToIrrelevant());
+        }
+
+        // Focus on the first non .ignore form control which is not currently readonly.
+        // If the element is hidden (e.g. because it's been replaced by a widget),
+        // the focus event will not fire, so we also trigger an applyfocus event that widgets can listen for.
+        let selector;
+        if (target.closest('.question')) {
+            selector =
+                'input:not(.ignore):not([readonly]), textarea:not(.ignore):not([readonly]), select:not(.ignore):not([readonly])';
+        } else {
+            // For repeat DOM, prevent focus on DN dome when all element is readonly or ignore(#733)
+            selector =
+                '.question:not(.or-appearance-dn) input:not(.ignore):not([readonly]), .question:not(.or-appearance-dn) textarea:not(.ignore):not([readonly]), .question:not(.or-appearance-dn) select:not(.ignore):not([readonly])';
+        }
+
+        const input = target.querySelector(selector);
+
+        if (input != null) {
+            input.focus();
+            input.dispatchEvent(events.ApplyFocus());
+        }
+
+        // Scroll to element if needed. This will generally be a noop unless no
+        // focusable control was found (e.g. readonly question in pages mode).
+        scrollIntoViewIfNeeded(target);
+    }
+
+    return !!target;
 };
 
 /* eslint import/prefer-default-export: "off" */
