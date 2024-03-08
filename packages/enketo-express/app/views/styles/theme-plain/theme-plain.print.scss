@@ -1,4 +1,6 @@
 @import '/packages/enketo-core/src/sass/core/variables';
 @import '/packages/enketo-core/src/sass/core/mixins';
 @import '/packages/enketo-core/src/sass/core/print';
+@import '../component/variables';
 @import '../component/print';
+@import '../component/print-oc';

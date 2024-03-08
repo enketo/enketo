@@ -10,6 +10,8 @@ const account = require('../models/account-model');
 
 const router = express.Router();
 const quotaErrorMessage = 'Forbidden. No quota left';
+const keys = require('../lib/router-utils').idEncryptionKeys;
+const utils = require('../lib/utils');
 // var debug = require( 'debug' )( 'api-controller-v1' );
 
 module.exports = (app) => {
@@ -398,12 +400,13 @@ function _generateWebformUrls(id, req) {
         'base path'
     )}/`;
     const offline = req.app.get('offline enabled');
+    const idPartPreview = utils.insecureAes192Encrypt(id, keys.preview);
 
     req.webformType = req.webformType || 'default';
 
     switch (req.webformType) {
         case 'preview':
-            obj.preview_url = `${baseUrl}preview/${iframePart}${id}`;
+            obj.preview_url = `${baseUrl}preview/${iframePart}${idPartPreview}`;
             break;
         case 'edit':
             queryString = _generateQueryString([
@@ -415,7 +418,7 @@ function _generateWebformUrls(id, req) {
         case 'all':
             // non-iframe views
             obj.url = offline ? `${baseUrl}x/${id}` : baseUrl + id;
-            obj.preview_url = `${baseUrl}preview/${id}`;
+            obj.preview_url = `${baseUrl}preview/${idPartPreview}`;
             // iframe views
             obj.iframe_url = baseUrl + IFRAMEPATH + id;
             obj.preview_iframe_url = `${baseUrl}preview/${IFRAMEPATH}${id}`;

@@ -77,6 +77,7 @@ Thumbs.db
 /.benchmarks.md
 /examples/*/.benchmarks.md
 /packages/*/.benchmarks.md
+/packages/enketo-express/chromium-cache/*
 
 # -----------------------------------------------------------------------------
 # 5.4. Tooling - build artifacts

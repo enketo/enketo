@@ -1,0 +1,185 @@
+{
+    "widget": {
+        "dn": {
+            "assignto": "Assign to:",
+            "assignedto": "__id__ assigned to __assignee__.",
+            "closequerytext": "Close This Query",
+            "notifytext": "Email?",
+            "addquerybutton": "Add Query",
+            "addannotationbutton": "Add Annotation",
+            "addnewtext": "New",
+            "emptyhistorytext": "No History",
+            "printhistoryheading": "History for - __labelText__ (__questionName__)",
+            "me": "Me",
+            "status": "Status: __status__",
+            "reopen": "Reopen",
+            "reopenlabel": "Type here to reopen",
+            "autoclosed": "Query closed by system because this item was hidden",
+            "valuechange": "Value changed from __previous__ to __new__",
+            "autoconstraint": "Automatic query for: __errorMsg__",
+            "autonoreason": "Automatic query for: Value changed and no reason for change provided",
+            "closedmodified": "Data changed after query was closed",
+            "newfile": "New file uploaded",
+            "fileremoved": "File removed",
+            "addnewquery": "Add a new query",
+            "addnewannotation": "Add a new annotation",
+            "typeresponse": "Respond to query",
+            "allhistory": "View All History",
+            "queries": "Queries",
+            "annotations": "Annotations",
+            "showvaluechanges": "Show value changes",
+            "now": "Just now",
+            "second": "__count__ second",
+            "second_plural": "__count__ seconds",
+            "minute": "__count__ minute",
+            "minute_plural": "__count__ minutes",
+            "hour": "__count__ hour",
+            "hour_plural": "__count__ hours",
+            "day": "__count__ day",
+            "day_plural": "__count__ days",
+            "month": "__count__ month",
+            "month_plural": "__count__ months",
+            "year": "__count__ year",
+            "year_plural": "__count__  years"
+        }
+    },
+    "fieldsubmission": {
+        "alert": {
+            "close": {
+                "heading1": "Closing",
+                "heading2": "Warning",
+                "msg1": "Submitting unsaved data...",
+                "msg2": "Not all data has been submitted. If you exit this page, it will be lost."
+            },
+            "locked": {
+                "heading": "Locked",
+                "msg": "This form or record is locked and submissions cannot be saved."
+            },
+            "complete": {
+                "msg": "Data could not be submitted."
+            },
+            "validationerror": {
+                "msg": "You must address all errors on this form before it can be marked complete. Please update the value or add a query for each field marked in red."
+            },
+            "relevantvalidationerror": {
+                "msg": "Response(s) in some field(s) make some data on this form invalid. This must be corrected to mark the form complete."
+            },
+            "reasonforchangevalidationerror": {
+                "msg": "For each changed field a reason for change has to be provided. Please add any missing reasons."
+            },
+            "stricterror": {
+                "heading": "Invalid Value",
+                "msg": "Please enter a suitable value to update the field."
+            },
+            "participanterror": {
+                "msg": [ "It looks like some fields need attention", "Please review them before proceeding." ]
+            },
+            "signatureservicenotavailable": {
+                "msg": "Signature service is currently not available. The question has been unchecked."
+            },
+            "signatureservicefailed":{
+                "msg": "Signature not received. The question has been unchecked."
+            }
+        },
+        "confirm": {
+            "autoquery": {
+                "msg1": "Some field values have errors. These must be addressed before the form is closed.",
+                "msg2": [
+                    "Click Cancel to return to the form to manually update the value or add a query for each field marked in red.",
+                    "Click Proceed to continue closing the form now.  A query will be automatically added for each field marked in red."
+                ],
+                "automatic": "Proceed",
+                "manual": "Cancel"
+            },
+            "complete": {
+                "msg": "Would you like to complete this record and exit?",
+                "heading": "Confirm Completion"
+            },
+            "leaveanyway": {
+                "msg": "Would you like to discard the changes and leave anyway?",
+                "button": "Leave Anyway"
+            }
+        },
+        "prompt": {
+            "reason": {
+                "msg": "If so, please enter a reason for deleting the group."
+            }
+        },
+        "feedback": {
+            "ongoing": "Saving...",
+            "success": "All changes saved.",
+            "fail": "Failed to save changes.",
+            "disabled": "Saving is disabled."
+        },
+        "readonly": {
+            "msg": "You're in read-only mode."
+        },
+        "noteonly": {
+            "msg": "You're in review-only mode."
+        },
+        "reason": {
+            "heading": "Looks like you've made some updates. Please tell us why:",
+            "placeholder1": "Enter a reason for your changes",
+            "placeholder2": "Enter a reason for changing this value",
+            "applytoall": "Apply to all",
+            "questionmsg": "Please enter a reason for change at bottom of page."
+        }
+    },
+    "confirm": {
+        "deleteall": {
+            "heading": "WARNING",
+            "msg": [
+                "This will delete all of your queued data and all of your forms from the browser storage. The data will be lost forever and the forms will not be usable until you are back online. Use this only if your browser storage seems corrupt.",
+                "Before proceeding, please close all of your other Offline Form tabs. This page will reload. If you see an error, you may have to repeat this action.",
+                "Would you like to proceed?"
+            ],
+            "posButton": "Delete All"
+        },
+        "print": {
+            "queries": "Show History",
+            "queryShow": "show",
+            "heading": "Options",
+            "msg": "To prepare an optimized print, please select the options below"
+        },
+        "repeatremove": {
+            "msg": "This action is irreversible (it will be recorded in the audit trail). Are you sure you want to proceed?"
+        }
+    },
+    "constraint": {
+        "relevant": "An answer has changed to another question that requires this question to be hidden, but we cannot hide it while it has data. Please clear out the data or modify the dependent answers."
+    },
+    "home": {
+        "msg": "__appTitle__ is running! Please access OpenClinica forms from your __serverName__ installation."
+    },
+    "alert": {
+        "appupdated": {
+            "heading": "Please refresh",
+            "msg": "Please refresh this webpage to use the form offline (ref: application)"
+        },
+        "formupdated": {
+            "heading": "Please refresh",
+            "msg": "Please refresh this webpage to use the form offline (ref: definition)"
+        },
+        "goto": {
+            "irrelevant": "The item you are trying to access is currently hidden.",
+            "invisible": "The item you are trying to access is not visible on the form.",
+            "notfound": "The item you are trying to access has been removed from this form.",
+            "msg1": "Please use the View Query Only icon instead of the View Query Within Record icon to see it.",
+            "msg2": "Please visit __miniform__ to see it.",
+            "form": "this form"
+        },
+        "loaderror": {
+            "editadvice": "",
+            "entryadvice": "",
+            "heading": "Hold on a second...",
+            "msg1": "Please contact your support team with the link to this page and the message below if you need further help.",
+            "msg2": "",
+            "heading_plural": "Hold on a second...",
+            "msg1_plural": "Please contact your support team with the link to this page and the messages below if you need further help.",
+            "msg2_plural": ""
+        }
+    },
+    "submission": {
+        "http500": "There was a problem with your submission. Please try again or contact __supportEmail__ if this persists."
+    }
+}

@@ -1,0 +1,40 @@
+.question .btn-dn {
+    margin: 0 8px;
+    top: -2px;
+}
+
+.question legend .btn-dn {
+    top: -4px;
+}
+
+// Error messages on groups (which is a feature that doesn't exist in Enketo Express and Enketo Core)
+.or-group,
+.or-group-data {
+    &.invalid-relevant {
+        margin: 0;
+        padding: 0;
+        border-radius: 0;
+    }
+}
+
+.or-comment-widget__content__user__dn-assignee select,
+.or-comment-widget__content__type select {
+    border: 0;
+    outline: 1px solid black;
+}
+
+.repeat-buttons .remove {
+    line-height: 20px;
+}
+
+// This extra push is to integrate with the dn-widget. Hence it's not included in Enketo Core as part of the analog scale widget
+.or-analog-scale-initialized.or-appearance-vertical:not(.disabled) .analog-scale-widget {
+    margin-top: 15px;
+}
+
+// multiple constraints, see equivalent rules in enketo-core
+@for $number from 1 through $max-constraints {
+    .or-constraint#{$number}-msg{
+        order: 5; //used in Grid Theme
+    }
+}

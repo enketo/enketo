@@ -13,13 +13,14 @@ module.exports = (config) => {
 
         // list of files / patterns to load in the browser
         files: [
-            { pattern: 'test/client/**/*.spec.js', type: 'module' },
             {
                 pattern: 'public/js/src/**/*.js',
                 included: false,
                 served: true,
                 type: 'module',
             },
+            // For OC's customizations to be loaded this needs to follow the public/js/src files...
+            { pattern: 'test/client/**/*.spec.js', type: 'module' },
             {
                 pattern: 'test/fixtures/**/*.geojson',
                 included: false,

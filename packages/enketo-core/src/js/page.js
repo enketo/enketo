@@ -113,12 +113,12 @@ export default {
      */
     flipToPageContaining($e) {
         const e = $e[0];
-        const closest = e.closest('[role="page"]');
+        const closestPage = e.closest('[role="page"]');
 
-        if (closest) {
-            this._flipTo(closest);
-        } else {
-            // If $e is a comment question, and it is not inside a group, there will be no closest.
+        if (closestPage) {
+            this._flipTo(closestPage);
+        } else if (e.closest('.question')) {
+            // If $e is a comment question, and it is not inside a group, there will be no closestPage.
             const referer = e.querySelector('[data-for]');
             const ancestor = e.closest('.or-repeat, form.or');
             if (referer && ancestor) {

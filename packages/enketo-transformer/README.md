@@ -63,8 +63,6 @@ Install Enketo Transformer with:
 npm install enketo-transformer
 ```
 
-_If you face issues during installation:_ Verify that [these requirements](https://github.com/nodejs/node-gyp#on-unix) are met. We depend on upstream XSLT and XML C++ libraries that require compilation upon installation using [node-gyp](https://github.com/nodejs/node-gyp).
-
 ### Node
 
 ```ts
@@ -110,7 +108,11 @@ const result = await transform({
 });
 ```
 
-**Note:** because `preprocess` depends on `libxmljs` which is only available for Node, `preprocess` is also not supported on the web. If you must preprocess an XForm before it is transformed, you may do that before calling `transform`.
+> [!NOTE]
+> Because `preprocess` depends on `libxmljs` which is only available for Node, `preprocess` is also not supported on the web. If you must preprocess an XForm before it is transformed, you may do that before calling `transform`.
+
+> [!NOTE]
+> If your project uses Webpack or another bundler, you may need to [tell it to ignore the `libxslt` package](https://github.com/enketo/enketo-transformer/issues/185#issuecomment-1802426670).
 
 ## Development/local usage
 

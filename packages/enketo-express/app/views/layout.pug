@@ -14,9 +14,10 @@ html(lang=language, dir=dir(language))
     
     block head-script
 
-    block style
+    if !headless
+      block style
 
-  - var cl = (iframe) ? 'iframe' : ''
+  - var cl = (iframe) ? 'iframe' : ( headless ? 'headless' : '')
   body(class=cl)
     if iframe
       .ios-iframe-bug-wrap

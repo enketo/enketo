@@ -1,4 +1,5 @@
 // variables
+@import 'variables';
 @import '../component/variables';
 @import '/packages/enketo-core/src/sass/grid/variables';
 @import '/packages/enketo-core/src/sass/formhub/variables';
@@ -37,3 +38,6 @@
 @import 'form-grid';
 @import '../component/form_header';
 @import '../component/form_footer';
+
+// custom OC
+@import '../component/grid-oc';

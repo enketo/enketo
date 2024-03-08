@@ -1,0 +1,618 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "description": "An API that receives individual submissions for each changed form field to build up a complete record.",
+    "version": "1.0.0",
+    "title": "OpenClinica Fieldsubmission API",
+    "license": {
+      "name": "Apache 2.0",
+      "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
+    }
+  },
+  "host": "example.com",
+  "basePath": "/acc",
+  "schemes": [
+    "https",
+    "http"
+  ],
+  "consumes": [
+    "multipart/form-data"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "paths": {
+    "/fieldsubmission": {
+      "head": {
+        "tags": [
+          "fieldsubmission"
+        ],
+        "description": "Return headers. Useful to check if the requested API version is supported.\n",
+        "parameters": [
+          {
+            "name": "X-OpenClinica-Version",
+            "in": "header",
+            "description": "Fixed X-OpenClinica-Version header.",
+            "required": true,
+            "type": "string",
+            "enum": [
+              "1.0"
+            ]
+          }
+        ],
+        "security": [
+          {
+            "auth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Headers only.",
+            "headers": {
+              "X-OpenClinica-Version": {
+                "type": "string",
+                "description": "1.0"
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request.",
+            "headers": {
+              "X-OpenClinica-Version": {
+                "type": "string",
+                "description": "1.0"
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "fieldsubmission"
+        ],
+        "description": "Submits a single field for a new and incomplete record.\n",
+        "parameters": [
+          {
+            "name": "X-OpenClinica-Version",
+            "in": "header",
+            "description": "Fixed X-OpenClinica-Version header.",
+            "required": true,
+            "type": "string",
+            "enum": [
+              "1.0"
+            ]
+          },
+          {
+            "$ref": "#/parameters/xml_fragment"
+          },
+          {
+            "$ref": "#/parameters/media_file"
+          },
+          {
+            "$ref": "#/parameters/instance_id"
+          }
+        ],
+        "security": [
+          {
+            "auth": []
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Submission received. Field changed in database.",
+            "headers": {
+              "X-OpenClinica-Version": {
+                "type": "string",
+                "description": "1.0"
+              }
+            }
+          },
+          "202": {
+            "description": "Submission received but no change required. Field unchanged in database.",
+            "headers": {
+              "X-OpenClinica-Version": {
+                "type": "string",
+                "description": "1.0"
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request.",
+            "headers": {
+              "X-OpenClinica-Version": {
+                "type": "string",
+                "description": "1.0"
+              }
+            }
+          },
+          "401": {
+            "description": "Not Allowed. Invalid API Key.",
+            "headers": {
+              "X-OpenClinica-Version": {
+                "type": "string",
+                "description": "1.0"
+              }
+            }
+          },
+          "409": {
+            "description": "Forbidden. Form is locked.",
+            "headers": {
+              "X-OpenClinica-Version": {
+                "type": "string",
+                "description": "1.0"
+              }
+            }
+          },
+          "413": {
+            "description": "Payload too large.",
+            "headers": {
+              "X-OpenClinica-Version": {
+                "type": "string",
+                "description": "1.0"
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "fieldsubmission"
+        ],
+        "description": "Updates a single field for a existing and completed record.\n",
+        "parameters": [
+          {
+            "name": "X-OpenClinica-Version",
+            "in": "header",
+            "description": "Fixed X-OpenClinica-Version header.",
+            "required": true,
+            "type": "string",
+            "enum": [
+              "1.0"
+            ]
+          },
+          {
+            "$ref": "#/parameters/xml_fragment"
+          },
+          {
+            "$ref": "#/parameters/media_file"
+          },
+          {
+            "$ref": "#/parameters/instance_id"
+          },
+          {
+            "$ref": "#/parameters/deprecated_id"
+          }
+        ],
+        "security": [
+          {
+            "auth": []
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Submission received. Field changed in database.",
+            "headers": {
+              "X-OpenClinica-Version": {
+                "type": "string",
+                "description": "1.0"
+              }
+            }
+          },
+          "202": {
+            "description": "Submission received but no change required. Field unchanged in database.",
+            "headers": {
+              "X-OpenClinica-Version": {
+                "type": "string",
+                "description": "1.0"
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request.",
+            "headers": {
+              "X-OpenClinica-Version": {
+                "type": "string",
+                "description": "1.0"
+              }
+            }
+          },
+          "401": {
+            "description": "Not Allowed. Invalid API Key.",
+            "headers": {
+              "X-OpenClinica-Version": {
+                "type": "string",
+                "description": "1.0"
+              }
+            }
+          },
+          "404": {
+            "description": "Record/repeat not found.",
+            "headers": {
+              "X-OpenClinica-Version": {
+                "type": "string",
+                "description": "1.0"
+              }
+            }
+          },
+          "409": {
+            "description": "Forbidden. Form is locked.",
+            "headers": {
+              "X-OpenClinica-Version": {
+                "type": "string",
+                "description": "1.0"
+              }
+            }
+          },
+          "413": {
+            "description": "Payload too large.",
+            "headers": {
+              "X-OpenClinica-Version": {
+                "type": "string",
+                "description": "1.0"
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "fieldsubmission"
+        ],
+        "description": "Delete a repeat.\n",
+        "parameters": [
+          {
+            "name": "X-OpenClinica-Version",
+            "in": "header",
+            "description": "Fixed X-OpenClinica-Version header.",
+            "required": true,
+            "type": "string",
+            "enum": [
+              "1.0"
+            ]
+          },
+          {
+            "$ref": "#/parameters/xml_fragment"
+          },
+          {
+            "$ref": "#/parameters/instance_id"
+          },
+          {
+            "$ref": "#/parameters/deprecated_id_optional"
+          }
+        ],
+        "security": [
+          {
+            "auth": []
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Removed from database.",
+            "headers": {
+              "X-OpenClinica-Version": {
+                "type": "string",
+                "description": "1.0"
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request.",
+            "headers": {
+              "X-OpenClinica-Version": {
+                "type": "string",
+                "description": "1.0"
+              }
+            }
+          },
+          "401": {
+            "description": "Not Allowed. Invalid API Key.",
+            "headers": {
+              "X-OpenClinica-Version": {
+                "type": "string",
+                "description": "1.0"
+              }
+            }
+          },
+          "404": {
+            "description": "Record/repeat not found.",
+            "headers": {
+              "X-OpenClinica-Version": {
+                "type": "string",
+                "description": "1.0"
+              }
+            }
+          },
+          "409": {
+            "description": "Forbidden. Form is locked.",
+            "headers": {
+              "X-OpenClinica-Version": {
+                "type": "string",
+                "description": "1.0"
+              }
+            }
+          },
+          "413": {
+            "description": "Payload too large.",
+            "headers": {
+              "X-OpenClinica-Version": {
+                "type": "string",
+                "description": "1.0"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/fieldsubmission/complete": {
+      "post": {
+        "tags": [
+          "fieldsubmission"
+        ],
+        "description": "Mark a never-completed record as complete.\n",
+        "parameters": [
+          {
+            "name": "X-OpenClinica-Version",
+            "in": "header",
+            "description": "Fixed X-OpenClinica-Version header.",
+            "required": true,
+            "type": "string",
+            "enum": [
+              "1.0"
+            ]
+          },
+          {
+            "$ref": "#/parameters/instance_id"
+          }
+        ],
+        "security": [
+          {
+            "auth": []
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Submission received. Field changed in database.",
+            "headers": {
+              "X-OpenClinica-Version": {
+                "type": "string",
+                "description": "1.0"
+              }
+            }
+          },
+          "202": {
+            "description": "Submission received but no change required. Field unchanged in database.",
+            "headers": {
+              "X-OpenClinica-Version": {
+                "type": "string",
+                "description": "1.0"
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request.",
+            "headers": {
+              "X-OpenClinica-Version": {
+                "type": "string",
+                "description": "1.0"
+              }
+            }
+          },
+          "401": {
+            "description": "Not Allowed. Invalid API Key.",
+            "headers": {
+              "X-OpenClinica-Version": {
+                "type": "string",
+                "description": "1.0"
+              }
+            }
+          },
+          "404": {
+            "description": "Record/repeat not found.",
+            "headers": {
+              "X-OpenClinica-Version": {
+                "type": "string",
+                "description": "1.0"
+              }
+            }
+          },
+          "409": {
+            "description": "Forbidden. Form is locked.",
+            "headers": {
+              "X-OpenClinica-Version": {
+                "type": "string",
+                "description": "1.0"
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "fieldsubmission"
+        ],
+        "description": "Mark an edited record as complete.\n",
+        "parameters": [
+          {
+            "name": "X-OpenClinica-Version",
+            "in": "header",
+            "description": "Fixed X-OpenClinica-Version header.",
+            "required": true,
+            "type": "string",
+            "enum": [
+              "1.0"
+            ]
+          },
+          {
+            "$ref": "#/parameters/instance_id"
+          },
+          {
+            "$ref": "#/parameters/deprecated_id"
+          }
+        ],
+        "security": [
+          {
+            "auth": []
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Submission received. Field changed in database.",
+            "headers": {
+              "X-OpenClinica-Version": {
+                "type": "string",
+                "description": "1.0"
+              }
+            }
+          },
+          "202": {
+            "description": "Submission received but no change required. Field unchanged in database.",
+            "headers": {
+              "X-OpenClinica-Version": {
+                "type": "string",
+                "description": "1.0"
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request.",
+            "headers": {
+              "X-OpenClinica-Version": {
+                "type": "string",
+                "description": "1.0"
+              }
+            }
+          },
+          "401": {
+            "description": "Not Allowed. Invalid API Key.",
+            "headers": {
+              "X-OpenClinica-Version": {
+                "type": "string",
+                "description": "1.0"
+              }
+            }
+          },
+          "404": {
+            "description": "Record/repeat not found.",
+            "headers": {
+              "X-OpenClinica-Version": {
+                "type": "string",
+                "description": "1.0"
+              }
+            }
+          },
+          "409": {
+            "description": "Forbidden. Form is locked.",
+            "headers": {
+              "X-OpenClinica-Version": {
+                "type": "string",
+                "description": "1.0"
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "securityDefinitions": {
+    "auth": {
+      "description": "API key as username. Password empty.",
+      "type": "basic"
+    }
+  },
+  "definitions": {},
+  "parameters": {
+    "oc_header": {
+      "name": "X-OpenClinica-Version",
+      "in": "header",
+      "description": "Fixed X-OpenClinica-Version header.",
+      "required": true,
+      "type": "string",
+      "enum": [
+        "1.0"
+      ]
+    }
+  },
+  "responses": {
+    "headers": {
+      "description": "Headers only.",
+      "headers": {
+        "X-OpenClinica-Version": {
+          "type": "string",
+          "description": "1.0"
+        }
+      }
+    },
+    "changed": {
+      "description": "Submission received. Field changed in database.",
+      "headers": {
+        "X-OpenClinica-Version": {
+          "type": "string",
+          "description": "1.0"
+        }
+      }
+    },
+    "unchanged": {
+      "description": "Submission received but no change required. Field unchanged in database.",
+      "headers": {
+        "X-OpenClinica-Version": {
+          "type": "string",
+          "description": "1.0"
+        }
+      }
+    },
+    "removed": {
+      "description": "Removed from database.",
+      "headers": {
+        "X-OpenClinica-Version": {
+          "type": "string",
+          "description": "1.0"
+        }
+      }
+    },
+    "unauthorized": {
+      "description": "Not Allowed. Invalid API Key.",
+      "headers": {
+        "X-OpenClinica-Version": {
+          "type": "string",
+          "description": "1.0"
+        }
+      }
+    },
+    "bad": {
+      "description": "Bad Request.",
+      "headers": {
+        "X-OpenClinica-Version": {
+          "type": "string",
+          "description": "1.0"
+        }
+      }
+    },
+    "notfound": {
+      "description": "Record/repeat not found.",
+      "headers": {
+        "X-OpenClinica-Version": {
+          "type": "string",
+          "description": "1.0"
+        }
+      }
+    },
+    "locked": {
+      "description": "Forbidden. Form is locked.",
+      "headers": {
+        "X-OpenClinica-Version": {
+          "type": "string",
+          "description": "1.0"
+        }
+      }
+    },
+    "toolarge": {
+      "description": "Payload too large.",
+      "headers": {
+        "X-OpenClinica-Version": {
+          "type": "string",
+          "description": "1.0"
+        }
+      }
+    }
+  }
+}

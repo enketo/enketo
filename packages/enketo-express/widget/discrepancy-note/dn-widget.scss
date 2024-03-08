@@ -1,0 +1,869 @@
+// NOTE, this widget has a style dependency on the generic "comment widget" styles.
+
+$padding: 30px;
+$max-height: 500px;
+
+$dn-nav-hover-bg: lighten($gray-lighter, 2%);
+$dn-nav-bg: rgb(228, 228, 228);
+$dn-updated-color:#FFA500;
+$dn-closed-color:#555555;
+$dn-closed-modified-color:#808080;
+$dn-new-color:#FF8080;
+$dn-default-color: #575756;
+
+// from https://codepen.io/zandroid/pen/qdgBRw
+@mixin multiline-ellipsis($lines,
+    $bgColor: white,
+    $lineHeight: 1.4,
+    $ellipsisWidth: 1.2em) {
+    box-sizing: content-box;
+    overflow: hidden;
+    height: $lines * $lineHeight * 1em;
+    line-height: $lineHeight;
+
+    &:before {
+        content: "";
+        float: left;
+        width: 5px;
+        height: $lines * $lineHeight * 1em;
+    }
+
+    &>*:first-child {
+        float: right;
+        width: 100%;
+        margin-left: -5px;
+    }
+
+    &:after {
+        content: "\02026";
+
+        float: right;
+        position: relative;
+        top: -$lineHeight * 1em;
+        left: 100%;
+        box-sizing: content-box !important;
+        width: $ellipsisWidth;
+        margin-left: -$ellipsisWidth;
+        padding-right: 5px;
+        text-align: right;
+    }
+
+    @include multiline-ellipsis-bg-color($bgColor);
+}
+
+@mixin multiline-ellipsis-bg-color($bgColor: white) {
+    &:after {
+        background: linear-gradient(to right, rgba(255, 255, 255, 0), $bgColor 10%, $bgColor);
+    }
+}
+
+@mixin dn-icon($color:$dn-default-color, $fill:false, $annotation: false, $multi:false) {
+    $annotation-path: annotation-paths();
+    $single-path: "<path d='M306.2 148.7C140.6 148.7 6.3 257.8 6.3 392.4 6.3 448.2 29.6 499.3 68.3 540.4 50.8 586.6 14.5 625.7 13.9 626.2 6.2 634.4 4 646.3 8.5 656.6 12.9 667 23.1 673.6 34.4 673.6 106.5 673.6 163.3 643.5 197.4 619.4 231.2 630 267.8 636.1 306.2 636.1 471.9 636.1 606.2 527.1 606.2 392.4 606.2 257.8 471.9 148.7 306.2 148.7zM306.2 579.9C274.9 579.9 244 575.1 214.4 565.7L187.8 557.3 164.9 573.4C148.2 585.3 125.2 598.5 97.6 607.4 106.1 593.2 114.4 577.3 120.9 560.3L133.3 527.4 109.2 501.9C87.9 479.2 62.5 441.9 62.5 392.4 62.5 289.1 171.8 204.9 306.2 204.9 440.6 204.9 550 289.1 550 392.4 550 495.8 440.6 579.9 306.2 579.9z' fill='#{$color}'/>";
+    $multi-path: "<path d='M473.3 6.3C307.6 6.3 173.3 115.4 173.3 250.1 173.3 308.2 198.4 361.4 240.1 403.2 225.4 462.3 176.4 514.9 175.9 515.5 173.3 518.2 172.6 522.2 174.1 525.7 175.6 529.2 178.9 531.3 182.6 531.3 260.3 531.3 318.6 494.1 347.4 471.1 385.7 485.5 428.3 493.8 473.3 493.8 639 493.8 773.3 384.7 773.3 250.1 773.3 115.4 639 6.3 473.3 6.3z' fill='#{$color}'/>";
+
+    &:before {
+        content: "";
+    }
+
+    @if not $annotation {
+        $annotation-path: "";
+    }
+
+    @if not $multi {
+        $multi-path: "";
+    }
+
+    @else {
+        $fill: false;
+    }
+
+    @if $fill {
+        $single-path: "<path d='M305.4 148.2C139.7 148.2 5.4 257.3 5.4 391.9 5.4 450 30.5 503.2 72.2 545.1 57.5 604.1 8.6 656.8 8 657.3 5.4 660 4.7 664 6.2 667.5 7.7 671.1 11 673.2 14.8 673.2 92.5 673.2 150.7 635.9 179.5 612.9 217.9 627.3 260.4 635.7 305.4 635.7 471.1 635.7 605.4 526.6 605.4 391.9 605.4 257.3 471.1 148.2 305.4 148.2z' fill='#{$color}'/>";
+    }
+
+    background-image: svg-as-url("<svg xmlns='http://www.w3.org/2000/svg' width='970' height='680' viewBox='0 0 970 680'>#{$annotation-path}#{$multi-path}#{$single-path}</svg>");
+    background-size: 100%;
+}
+
+@function annotation-paths($color: $dn-default-color) {
+    @return "<path d='M842.2 604.7C842.2 613.8 833.2 621.2 822.1 621.2 811 621.2 802 613.8 802 604.7L802 519.4C802 510.4 811 503 822.1 503 833.2 503 842.2 510.4 842.2 519.4L842.2 604.7z' fill='#{$color}'/><path d='M836.4 479C832.4 483.1 827.6 485.2 822 485.2 816.4 485.2 811.6 483.1 807.7 479 803.8 474.8 801.8 469.7 801.8 463.8 801.8 457.8 803.8 452.7 807.7 448.5 811.6 444.2 816.4 442.1 822 442.1 827.7 442.1 832.5 444.2 836.5 448.5 840.4 452.7 842.4 457.8 842.4 463.8 842.4 469.7 840.4 474.8 836.4 479z' fill='#{$color}'/><path d='M823.8 393.7C746.5 393.7 683.8 456.4 683.8 533.7 683.8 611 746.5 673.7 823.8 673.7 901.1 673.7 963.8 611 963.8 533.7 963.8 456.4 901.1 393.7 823.8 393.7zM823.8 646.1C761.7 646.1 711.4 595.7 711.4 533.7 711.4 471.6 761.7 421.3 823.8 421.3 885.9 421.3 936.2 471.6 936.2 533.7 936.2 595.7 885.9 646.1 823.8 646.1z' fill='#{$color}'/>";
+}
+
+@mixin dn-icon-states($color) {
+    .icon {
+        @include dn-icon($color, true, false, false);
+    }
+
+    &.annotation .icon {
+        @include dn-icon($color, true, true, false);
+    }
+
+    &.multi .icon {
+        @include dn-icon($color, true, false, true);
+    }
+
+    &.annotation.multi .icon {
+        @include dn-icon($color, true, true, true);
+    }
+}
+
+@mixin dn-icon-info($color: $dn-default-color) {
+    width: 15px;
+    height: 15px;
+    margin-top: 5px;
+    background-image: svg-as-url("<svg xmlns='http://www.w3.org/2000/svg' width='285' height='285' viewBox='0 0 285 285'><path d='M160.9 213.6C160.9 222.6 151.9 230 140.8 230 129.7 230 120.7 222.6 120.7 213.6L120.7 128.3C120.7 119.2 129.7 111.8 140.8 111.8 151.9 111.8 160.9 119.2 160.9 128.3L160.9 213.6z' fill='#{$color}'/><path d='M155.1 87.8C151.1 92 146.3 94.1 140.7 94.1 135.1 94.1 130.3 92 126.4 87.8 122.5 83.6 120.5 78.6 120.5 72.6 120.5 66.6 122.5 61.5 126.4 57.3 130.3 53.1 135.1 51 140.7 51 146.4 51 151.2 53.1 155.2 57.3 159.1 61.5 161.1 66.6 161.1 72.6 161.1 78.6 159.1 83.6 155.1 87.8z' fill='#{$color}'/><path d='M142.5 2.5C65.2 2.5 2.5 65.2 2.5 142.5 2.5 219.8 65.2 282.5 142.5 282.5 219.8 282.5 282.5 219.8 282.5 142.5 282.5 65.2 219.8 2.5 142.5 2.5zM142.5 254.9C80.4 254.9 30.1 204.6 30.1 142.5 30.1 80.4 80.4 30.1 142.5 30.1 204.6 30.1 254.9 80.4 254.9 142.5 254.9 204.6 204.6 254.9 142.5 254.9z' fill='#{$color}'/></svg>");
+    background-size: 100%;
+
+    &:before {
+        content: "";
+    }
+}
+
+.icon-delta:before {
+    content: "Δ";
+    font-size: 19px;
+}
+
+.icon-dn-annotation {
+    @include dn-icon-info();
+}
+
+// the .widget specificity is used to override the common comment widget styles
+.widget {
+
+    .or-comment-widget__content {
+        padding-top: 45px;
+        padding-bottom: 45px;
+    }
+
+    .or-comment-widget__content__btn-close-x {
+        top: 8px;
+        right: -5px;
+    }
+}
+
+.or-comment-widget {
+    display: flex !important;
+    border: 1px solid $gray-light;
+
+    @include flex-direction(row);
+
+    @include flex-wrap(nowrap);
+
+    &__overlay {
+
+        &--click-preventer,
+        &--shadow-giver {
+            position: fixed;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            left: 0;
+        }
+
+        &--shadow-giver {
+            background: rgba(0, 0, 0, 0.3);
+            z-index: 1000;
+
+            +.or-appearance-dn {
+                background: white;
+                z-index: 1001;
+            }
+        }
+
+        &--click-preventer {
+            background: rgba(0, 0, 0, 0.1);
+
+            &:hover {
+                cursor: not-allowed;
+            }
+        }
+
+    }
+
+    &__view-toggle {
+        // TODO: replace with nice SVG icon
+        background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAQAAAAEACAMAAABrrFhUAAAAolBMVEUAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD///+grwMoAAAANHRSTlMACAkKCxATFBYXGBkaGx4fICEiIygqLDNobp2hpaepsrfU1dbZ3d7f4OHi5+jp9/j5+v3+4M7x7AAAAAFiS0dENd622WsAAAGjSURBVHja7d03VgNBFEXBBgQIK5zw3nv79782AggQYggheFU7uC/pSf6Z1gAAAAAAAAAAAAAAAAAAAAB+M7nWS86f2Xuql4O52P6l86qquloN7Z8/qw+369n9oQt86Y9cYKQ/cIFv/XELjPWHLTBzXuOug17DvaroBaaeKnuB1arsBXrP6QvsV/gC/cv0BZYvOhcI+R6wgAUsYAELWMACFrCABSxgAQtYwAIWsIAFLGABC1jAAhawgAUsYAELWMACFrCABSxgAQtYwAIWsIAFLGABC1jAAhawgAUGV913RivpC5xOpC+w3cIXOMgY4Iej+0+H4f21E95/0cvuv98I6O+fdPY/bOrXr1+/fv369evXr1+/fv369evXr1+/fv369evXr1+/fv369evXr1+/fv369evXr1+/fv369evX/8+mT7vvf4YB/W03vH/yMbu/+6erIf2t95Ld39pheH9buMnu//EQPuL9/2WBsP6xBeL6vy0Q2D+yQGT/lwVC+1tbv62qqrthS7V49Fpvx4MWbHar3wAAAAAAAAAAAAAAAOBPvQMwOMrQLSuu9wAAAABJRU5ErkJggg==") !important;
+        background-size: cover !important;
+        background-repeat: no-repeat;
+    }
+
+    &__view-toggle {
+        display: none !important;
+        z-index: 11;
+        border: none !important;
+
+        &:checked {
+            transform: rotate(180deg) !important;
+        }
+    }
+
+    &__nav {
+
+        padding: 0;
+        margin: 0;
+        min-width: $dn-nav-min-width;
+        max-width: $dn-nav-max-width;
+        background: white;
+        z-index: 10;
+        max-height: $max-height;
+        overflow-y: auto;
+        overflow-x: visible;
+        background: $dn-nav-bg;
+
+        .active {
+            background: white; //$gray-lighter;
+            border-top: 1px solid $gray-light;
+            border-bottom: 1px solid $gray-light;
+            position: relative;
+
+            &::after {
+                content: "";
+                position: absolute;
+                background: white;
+                display: block;
+                top: 0;
+                right: -1px;
+                width: 1px;
+                height: 100%;
+            }
+
+            &:hover {
+                background: white;
+            }
+
+            &:hover .or-comment-widget__nav__item__text,
+            .or-comment-widget__nav__item__text {
+                @include multiline-ellipsis-bg-color(white);
+            }
+        }
+
+        a:hover {
+            background: $dn-nav-hover-bg;
+
+            .or-comment-widget__nav__item__text {
+                @include multiline-ellipsis-bg-color($dn-nav-hover-bg);
+            }
+        }
+
+        .border {
+            border-right: 1px solid $gray-light;
+            padding: 20px 0;
+            height: 100%;
+        }
+
+        &__main {
+            font-size: 1em;
+            margin: 25px 0px 4px 0px;
+            display: flex;
+
+            >.or-comment-widget__nav__main__title,
+            >a {
+                font-size: 15px;
+                font-weight: bold;
+                color: black;
+                padding: 4px 25px;
+                text-decoration: none;
+                display: inline-block;
+            }
+
+            >a {
+                width: 100%;
+            }
+
+            >.btn.small {
+                font-size: 12px;
+                display: inline-flex;
+                padding: 3px 12px;
+                margin: 3px 0;
+            }
+        }
+
+        ul {
+            margin: 0;
+            padding: 0;
+            list-style-type: none;
+        }
+
+        &__item {
+            width: 100%;
+            margin: 0;
+            padding: 0;
+
+
+
+            &__start {
+                width: 30px;
+                display: flex;
+                flex-direction: column;
+
+                .icon {
+                    margin-left: 5px;
+                    display: block;
+                    width: 20px;
+                    height: 14px;
+                    margin-top: 1px;
+
+                    &.new {
+                        @include dn-icon($dn-new-color, true);
+                    }
+
+                    &.updated {
+                        @include dn-icon($dn-updated-color, true);
+                    }
+
+                    &.closed {
+                        @include dn-icon($dn-closed-color, true);
+                    }
+
+                    &.closed-modified {
+                        @include dn-icon($dn-closed-modified-color, true);
+                    }
+
+                    &.icon-dn-annotation {
+                        width: 14px;
+                    }
+                }
+
+                &__id {
+                    font-size: 9px;
+                    height: 1em;
+                    padding: 0 2px;
+                }
+            }
+
+            &__text {
+                flex: 1;
+                padding-left: 10px;
+                @include multiline-ellipsis(4, $dn-nav-bg);
+
+                &.short {
+                    @include multiline-ellipsis(2, $dn-nav-bg);
+                }
+            }
+
+            a,
+            a:visited,
+            a:link {
+                display: flex;
+                flex-direction: row;
+                flex-wrap: nowrap;
+                list-style-type: none;
+                font-size: 13px;
+                text-decoration: none;
+                font-weight: normal;
+                color: black;
+                padding: 4px 25px 4px 30px;
+            }
+
+        }
+    }
+
+    &__content {
+        max-height: $max-height;
+        overflow: auto;
+        flex: 1;
+        border: none !important;
+
+        &__form {
+            @include display-flex;
+
+            @include flex-direction(row);
+
+            @include flex-wrap(wrap);
+
+            &:not(:empty) {
+                margin-bottom: 30px;
+            }
+
+            .or-appearance-dn {
+                width: 100%;
+                flex: 100% !important;
+                margin-top: 3px;
+                border: 1px solid black;
+                padding: 6px 6px 13px 6px;
+
+                // battle non-Grid theme style
+                &:hover {
+                    background: #fffded;
+
+                    input[type=text]:focus,
+                    textarea:focus {
+                        border: none;
+                        box-shadow: none;
+                        background: transparent;
+                    }
+
+                }
+
+                .question-label {
+                    font-size: 14px;
+                    font-weight: normal;
+                }
+            }
+
+            // battle non-Grid theme style
+            input[type=text],
+            textarea {
+                border: none;
+                box-shadow: none;
+
+                &:focus {
+                    border: none;
+                    box-shadow: none;
+                }
+            }
+
+            // override Draw widget rule
+            input[type="text"][name="dn-comment"] {
+                display: block;
+            }
+
+            &__query-btns {
+                @include display-flex;
+
+                @include flex-direction(row);
+
+                @include flex-wrap(nowrap);
+
+                @include flex(1);
+
+                white-space: nowrap;
+                justify-content: flex-end;
+                align-items: center;
+
+                .btn {
+                    height: 40px;
+                }
+
+                .btn+.btn {
+                    margin-left: 20px;
+                }
+            }
+
+            &__btn-submit {
+                @extend .small;
+
+                margin-bottom: 0;
+                margin-top: 0;
+
+                &.btn-default {
+                    // override .question .btn-default
+                    //padding: 10px 20px;
+                }
+            }
+
+            &__user {
+                @include display-flex;
+
+                @include flex-direction(row);
+
+                @include flex-wrap(wrap);
+
+                margin-bottom: 10px; // push down Close/Update button on small screens
+
+                &__dn-assignee {
+                    @include flex(1);
+
+                    display: inline-block;
+
+                    select {
+                        display: inline-block;
+                        margin-left: 10px;
+                        margin-right: 20px;
+                        width: 140px;
+                        border: 1px solid $gray;
+                    }
+                }
+
+                &__dn-notify {
+                    width: 120px;
+                    align-self: center;
+                    display: inline-block;
+                    margin-right: -10px;
+                    margin-left: -10px;
+                    
+                    &.option-wrapper {
+
+                        .option-label {
+                            word-break: normal;
+                        }
+                    }
+                }
+
+            }
+        }
+
+        &__history {
+            font-weight: normal;
+            font-size: 15px;
+            width: 100%;
+            display: flex;
+            flex-direction: row;
+            flex-wrap: wrap;
+
+            &__value-change-toggle,
+            &__value-change-filler,
+            label[for="dn-show-value-changes"] {
+                order: 2;
+                margin-top: 20px;
+                text-align: right;
+                align-self: flex-end;
+                float: none;
+                vertical-align: text-bottom;
+                flex: none;
+                font-size: 14px;
+            }
+
+            &__value-change-filler {
+                min-width: 10px;
+                flex: 1;
+            }
+
+            &__value-change-toggle:not(:checked) {
+                ~.or-comment-widget__content__history__content {
+                    .audit {
+                        display: none;
+                    }
+                }
+            }
+
+            &__content {
+                width: 100%;
+            }
+
+            &__row {
+                order: 1;
+                margin: 0 0 11px 0;
+                display: flex;
+                flex-direction: row;
+                flex-wrap: nowrap;
+
+                &__start {
+                    display: inline-block;
+                    width: 62px;
+                    min-width: 62px;
+                    text-align: center;
+
+
+                    &__username {
+                        display: block;
+                        margin: 0 auto;
+                        border: 1px solid $gray-light;
+                        width: 35px;
+                        height: 35px;
+                        border-radius: 17.5px;
+                        line-height: 33px;
+                    }
+
+                    &__datetime {
+                        display: block;
+                        margin: 0 auto;
+                        font-size: 10px;
+                        width: 100%;
+                        overflow: hidden;
+                    }
+                }
+
+                &__main,
+                &__main--audit {
+                    padding: 7px 20px 7px 10px;
+                    position: relative;
+                    vertical-align: top;
+                }
+
+                &__main--audit {
+                    margin-left: 0;
+
+                    .or-comment-widget__content__history__row__main {
+                        &__comment {
+                            font-size: 10px;
+                            padding-top: 3px;
+                        }
+
+                        &__icon {
+                            display: none;
+                        }
+                    }
+
+                }
+
+                &__main {
+                    display: flex;
+                    flex-direction: row;
+                    flex-wrap: nowrap;
+                    border: 1px solid $gray-light;
+                    margin-left: 21px;
+
+                    &:after,
+                    &:before {
+                        content: '';
+                        position: absolute;
+                        left: 0;
+                        top: 17.5px;
+                        width: 0;
+                        height: 0;
+                        border: 10px solid transparent;
+                        border-right-color: $gray-light;
+                        border-left: 0;
+                        margin-top: -10px;
+                        margin-left: -10px;
+                    }
+
+                    &:after {
+                        left: -9px;
+                        border: 9px solid transparent;
+                        border-right-color: white;
+                        margin-top: -9px;
+                        margin-left: -9px;
+                    }
+
+                    &__icon {
+                        height: 100%;
+                        display: inline-block;
+
+                        // dn-annotation-icon hack with <img> to ensure it is always printed
+                        img {
+                            width: 15px;
+                            height: 15px;
+                            max-width: inherit;
+                        }
+                    }
+
+                    &__comment {
+                        margin-left: 10px;
+
+                        &__meta {
+                            display: block;
+                            width: 100%;
+                            font-size: 10px;
+                            color: $gray-light;
+                        }
+                    }
+
+                }
+
+                &__filler {
+                    flex: 1;
+                }
+
+            }
+
+        }
+
+        .or-appearance-dn {
+            margin-bottom: 20px;
+        }
+
+        .btn-dn {
+            position: absolute;
+            top: 27px;
+            right: 55px;
+            left: auto;
+            outline: 0;
+        }
+
+    }
+
+}
+
+// Fight no-buttons appearance of linked question so Email checkbox is always visible.
+.question.or-appearance-columns-pack.or-appearance-no-buttons .or-comment-widget .option-wrapper>label input {
+    top: 0;
+    left: 0;
+    width: 20px;
+    height: 20px;
+    z-index: auto;
+}
+
+.dn-tooltip-visible {
+    @include font-normal;
+    padding: 2px 8px;
+    font-size: 10px;
+    color: $gray;
+    position: absolute;
+    white-space: nowrap;
+    z-index: 20;
+    border: 1px solid rgb(101, 172, 210);
+    opacity: 1;
+    background-color: white;
+}
+
+.btn-comment.btn-dn {
+    cursor: pointer;
+    $color: $dn-default-color;
+    opacity: 1;
+
+    .icon {
+        width: 26px;
+        height: 18px;
+
+        // this is the "none" state
+        @include dn-icon($color, false, false, false);
+
+        &:hover {
+            opacity: 0.5;
+        }
+    }
+
+    &.annotation .icon {
+        @include dn-icon($color, false, true, false);
+    }
+
+    &.new {
+        @include dn-icon-states($dn-new-color);
+    }
+
+    &.updated {
+        @include dn-icon-states($dn-updated-color);
+    }
+
+    &.invalid {
+        @include dn-icon-states($state-dangerest-text);
+    }
+
+    &.closed {
+        @include dn-icon-states($dn-closed-color);
+    }
+
+    &.closed-modified {
+        @include dn-icon-states($dn-closed-modified-color);
+    }
+}
+
+
+// small screens
+@media screen and (max-width: 800px) {
+    .or-comment-widget {
+        &__nav {
+            max-width: $dn-nav-min-width;
+        }
+    }
+}
+
+@media screen and (max-width: 700px) {
+    .or-comment-widget {
+        &__view-toggle {
+            position: absolute;
+            top: 70px;
+            left: 135px;
+
+            &:checked {
+                display: block !important;
+                left: 10px;
+                top: 15px;
+
+                ~.or-comment-widget__nav {
+                    display: none;
+                }
+
+                ~.or-comment-widget__content {
+                    display: block;
+                    width: 100%;
+                }
+            }
+        }
+
+        &__nav {
+            min-width: 100%;
+
+            .border {
+                background: white;
+            }
+
+            .active {
+                border-top: none;
+                border-bottom: none;
+                position: static;
+                background: none;
+            }
+
+            &__item {
+                &__text {
+                    @include multiline-ellipsis-bg-color(white);
+                }
+            }
+        }
+
+        &__content {
+            display: none;
+        }
+    }
+}
+
+// Right-to-left scripts
+.or[dir="rtl"] {
+    .btn-dn {
+        left: 55px;
+    }
+
+    .or-comment-widget {
+        &__content {
+            &__query-btns {
+                .btn+.btn {
+                    margin-left: auto;
+                    margin-right: 20px;
+                }
+            }
+
+            &__history {
+                tbody td[colspan="4"] {
+                    text-align: left;
+                }
+            }
+
+            &__user {
+                &__dn-assignee {
+                    select {
+                        margin-left: 20px;
+                        margin-right: 10px;
+                    }
+                }
+            }
+        }
+    }
+}
+
+.touch {
+    .or-comment-widget__content__form__user__dn-assignee {
+        select {
+            border: 1px solid $gray;
+        }
+    }
+}
+
+.dn-temp-print {
+    margin-top: 10px;
+    order: 100;
+
+    .or-comment-widget__content__history__row__start {
+        width: auto;
+        max-width: 200px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+
+        &__username {
+            border-radius: 2px;
+            width: auto;
+        }
+    }
+}
+
+// used to override the image-map widget styles
+.or-image-map-initialized {
+    .or-comment-widget {
+        &__content {
+            &__form {
+                &__user {
+                    &__dn-notify {
+                        &.option-wrapper {
+                            // showing normally on dn-widget
+                            display: block;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

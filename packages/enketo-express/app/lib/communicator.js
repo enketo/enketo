@@ -242,13 +242,14 @@ function getFormListUrl(server, id, customParam) {
 
 /**
  * @static
+ * @param full
  * @param { string } server - server URL
  * @return { string } url
  */
-function getSubmissionUrl(server) {
+function getSubmissionUrl(server, full = false) {
     return server.lastIndexOf('/') === server.length - 1
         ? `${server}submission`
-        : `${server}/submission`;
+        : `${server}/submission${full ? '-full' : ''}`;
 }
 
 /**

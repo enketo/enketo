@@ -439,12 +439,12 @@ const getExternalData = async (survey, model, options = {}) => {
                 };
             } catch (error) {
                 tasks.splice(index, 1);
-
+                // OC fork: no difference between previews and non-previews,
+                // but to minimize diff with enketo/enketo-express
+                // and to avoid ESLINT errors, we keep, the options param and log something
                 if (options.isPreview) {
-                    return;
+                    console.log('failed to load', src);
                 }
-
-                throw error;
             }
         };
 
@@ -464,7 +464,7 @@ const transformPreviewXForm = async (xformURL) => {
         mode: 'cors',
     });
     const xform = await response.text();
-    const transformed = await transform({ xform });
+    const transformed = await transform({ xform, openclinica: true });
 
     // Since media attachments will not be available for preview-by-URL, map
     // media file names to empty `data:` URLs.

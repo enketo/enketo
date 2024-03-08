@@ -1,0 +1,482 @@
+// background of default button
+$secondary-color: #eeeeee;
+
+// error block inside a modal dialog (e.g. upon Complete button click).
+.vex.vex-theme-plain .vex-dialog-form .vex-dialog-message {
+    color: inherit;
+}
+
+.vex-dialog-title {
+    .icon {
+        margin-right: 10px;
+    }
+}
+
+.or .or-repeat .repeat-number {
+    display: none;
+}
+
+// centering of image labels
+.or .question-label~img {
+    max-width: 90%;
+    max-height: inherit;
+}
+
+// headless views
+.headless {
+    //background-image: repeating-linear-gradient(45deg, #ccc, #ccc 30px, #dbdbdb 30px, #dbdbdb 60px);
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' version='1.1' height='50px' width='110px'><text x='0' y='15' fill='gray' font-size='20'>headless</text></svg>");
+}
+
+// readonly and note-only views
+.oc-view,
+.touch .oc-view {
+    .form-progress {
+        display: none;
+    }
+
+    // hover style of radiobuttons and checkboxes
+    .option-wrapper:not(.or-comment-widget__content__user__dn-notify)>label:hover {
+        background: inherit !important;
+    }
+
+    // suppress focus style, for most form controls except for discrepancy note controls
+    select:not([name=dn-assignee]),
+    textarea:not([name=dn-comment]),
+    input:not([name=dn-notify], [name=dn-comment]),
+    .draw-widget__body__canvas {
+        &:focus {
+            box-shadow: inherit !important;
+
+            &:not(:checked) {
+                border-color: $input-border !important;
+            }
+        }
+    }
+
+    // suppress focus style for pulldown widgets
+    a:focus {
+        outline: 0 !important;
+    }
+
+    // suppress image grid focus style
+    input:focus~.active {
+        box-shadow: inherit !important;
+        border: none !important;
+    }
+}
+
+// Error messages on groups (which is a feature that doesn't exist in Enketo Express and Enketo Core)
+.or-group,
+.or-group-data {
+    &.invalid-relevant {
+        border: 2px solid $state-danger-text;
+
+        .or-repeat {
+            background: transparent;
+        }
+
+        .or-relevant-msg {
+            padding: 4px 8px;
+        }
+
+        // only show relevant error message that belong to groups (not questions)
+        >.or-relevant-msg {
+            display: block;
+            width: 100%;
+        }
+
+        .or-repeat,
+        .or-group,
+        .or-group-data {
+            >.or-relevant-msg {
+                display: block;
+            }
+        }
+
+        // hide constraint and required messages that are descendants of an
+        // irrelevant group
+        .or-constraint-msg.active,
+        .or-required-msg.active {
+            display: none;
+        }
+    }
+}
+
+.or-branch.or-branch.pre-init.invalid-relevant {
+    display: inherit;
+}
+
+
+.fieldsubmission-status {
+    order: 15;
+    color: #555;
+    font-size: 12px;
+    line-height: 1.5em;
+    min-height: 1.5em;
+    padding-right: 10px;
+    max-width: 220px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+
+    &.error,
+    &.fail {
+        color: $state-danger-text;
+    }
+
+    &.readonly {
+        font-weight: bold;
+    }
+}
+
+.record-signed-status {
+    text-align: center;
+    font-weight: bold;
+}
+
+.form-footer__feedback.fieldsubmission-status {
+    margin: 10px auto;
+    text-align: center;
+    max-width: 100%;
+}
+
+// regular non-pages-mode webform
+.form-footer .form-footer__content__main-controls {
+
+    #complete-form,
+    #close-form {
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
+    }
+}
+
+.reason-for-change {
+    $b: 1px solid $gray-light;
+    margin-bottom: 10px;
+
+    &__item {
+        margin: 0;
+        padding: 10px 10px 0 10px;
+        border-left: $b;
+        border-right: $b;
+        border-bottom: 1px solid transparent;
+        background-color: #f1f1f1;
+
+        &:first-of-type {
+            border-top: $b;
+        }
+
+        &:last-of-type {
+            border-bottom: $b;
+            padding-bottom: 10px;
+        }
+
+        &__repeat-number {
+            padding: 0 5px;
+        }
+
+        &.added:not(.edited) {
+            input[type=text] {
+                opacity: 0.5;
+            }
+        }
+
+        &.invalid {
+            input[type=text] {
+                @extend .invalid-required;
+                border: 1px solid $state-danger-border;
+                margin: inherit !important;
+                padding: inherit !important;
+                border-radius: 0;
+            }
+        }
+
+        &:not(.added) {
+
+            .reason-for-change__item__label,
+            .reason-for-change__item__repeat-number {
+                &:last-of-type::after {
+                    content: '*';
+                    color: $brand-primary-color;
+                    padding: 0 3px;
+                }
+            }
+        }
+
+        input[type=text] {
+            @include form-control;
+            background-color: $question-bg;
+            padding-left: 5px;
+            padding-right: 5px;
+            width: 100%;
+        }
+    }
+
+    &__header {
+        h5 {
+            margin-bottom: 5px;
+        }
+
+        &__apply-to-all.question {
+            display: flex;
+            flex-direction: row;
+            border: $b;
+            border-bottom: none;
+            margin-bottom: 0;
+            padding: 10px;
+
+            &.question:not(.note):not(.focus):hover {
+                background: none;
+            }
+
+            .option-wrapper {
+                flex-direction: row;
+                align-items: center;
+                margin-left: 10px;
+            }
+
+            input[type=text] {
+                @include form-control;
+                flex: 1;
+                width: auto;
+                background-color: $question-bg;
+                padding-left: 5px;
+                padding-right: 5px;
+                border: 1px solid #ccc;
+                margin: 0;
+            }
+
+        }
+
+        // do not show heading if there is no following sibling
+        &:last-child {
+            display: none
+        }
+    }
+}
+
+.bootstrap-select .btn-default.dropdown-toggle {
+    background: white;
+}
+
+.oc-reason-msg {
+    @extend .or-required-msg;
+    color: #4f89bd !important;
+    display: block !important;
+}
+
+// multiple constraints, see equivalent rules in enketo-core
+@for $number from 1 through $max-constraints {
+    .invalid-constraint#{$number} {
+        @include question-invalid;
+        .or-constraint#{$number}-msg.active {
+            @include question-error-message;
+            display: block;
+        }
+    }
+    .or-constraint#{$number}-msg{
+        display: none;
+    }
+}
+
+.pages ~ .form-footer {
+    .form-footer {
+        &__content {
+            &__main-controls {
+                $marg: 15px;
+
+                display: flex;
+                flex-direction: row;
+                flex-wrap: wrap;
+                justify-content: space-around;
+
+                .btn {
+                    padding-left: 10px;
+                    padding-right: 10px;
+
+                    .icon {
+                        margin-left: 6px;
+                    }
+
+                    // show save-draft and exit-form button on every page
+                    &#save-draft{
+                        display: inline-block;
+                    }
+                    &#exit-form{
+                        display: block;
+                    }
+                }
+
+                .previous-page,
+                #close-form,
+                #complete-form,
+                .next-page {
+                    margin-left: $marg;
+                    margin-right: $marg;
+                    max-width: calc(33% - (2 * #{$marg}));
+                }
+
+                #complete-form,
+                #close-form,
+                #exit-form {
+                    min-width: 140px;
+                }
+
+                .previous-page,
+                .next-page {
+                    position: static;
+                    min-width: 90px;
+                }
+
+                .previous-page {
+                    order: 1;
+
+                    &.disabled {
+                        display: block;
+                        visibility: hidden;
+                    }
+                }
+
+                #close-form,
+                #exit-form,
+                #save-draft,
+                #submit-form,
+                #validate-form,
+                #complete-form {
+                    order: 2;
+                }
+
+                #close-form {
+                    display: block;
+                }
+
+                #close-form.participant,
+                #close-form ~ #complete-form {
+                    visibility: hidden;
+                }
+
+                .next-page {
+                    order: 3;
+                    // reverse icon and text
+                    display: flex;
+
+                    .icon {
+                        order: 2;
+                    }
+
+                    &.disabled {
+                        display: block;
+                        visibility: hidden;
+                    }
+                }
+
+                #close-form ~ #complete-form,
+                #exit-form ~ #close-form {
+                    display: block;
+                    margin: 0 30% 20px 30%;
+                    order: 4;
+                }
+
+                .logout {
+                    order: 5;
+                }
+
+                .enketo-power {
+                    order: 6;
+                }
+            }
+        }
+    }
+
+    &.end {
+
+        #close-form ~ #complete-form,
+        #submit-form,
+        #close-form.participant,
+        #validate-form {
+            visibility: visible;
+        }
+        .next-prompt {
+            display: block;
+            width: 100%;
+        }
+        .logout {
+            margin-bottom: 50px;
+        }
+    }
+}
+
+.pages~.form-footer, form:not(.pages)~.form-footer {
+    .next-prompt {
+        border: none;
+        display: none;
+        &:not(.focus):hover {
+            background: transparent;
+        }
+
+        .option-wrapper {
+            display: inline-block;
+        }
+
+        input[type=checkbox] {
+            float: none;
+        }
+
+        span {
+            vertical-align: top;
+            margin-left: 0;
+            display: inline-block;
+        }
+    }
+}
+
+form:not(.pages)~.form-footer {
+    .next-prompt {
+        display: block;
+    }
+}
+
+.pages.empty-untouched~.form-footer {
+    .form-footer__content {
+        &__main-controls {
+            #close-form.participant {
+                visibility: visible;
+            }
+        }
+    }
+}
+
+@media screen and (max-width: 430px) {
+    .fieldsubmission-status {
+        order: 65;
+        max-width: 100%;
+        width: 100%;
+        margin-top: 16px;
+    }
+
+    .pages~.form-footer {
+        .form-footer {
+            &__content {
+                &__main-controls {
+
+                    .previous-page,
+                    .next-page {
+                        margin-left: 5px;
+                        margin-right: 5px;
+                        min-width: 40px;
+
+                        span {
+                            display: none;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+.icon-exclamation-circle {
+    @extend .fa-exclamation-circle;
+}

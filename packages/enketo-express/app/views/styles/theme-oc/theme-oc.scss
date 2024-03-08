@@ -1,0 +1,50 @@
+// variables, in the right order
+@import 'variables';
+@import '../component/variables';
+@import '/packages/enketo-core/src/sass/formhub/variables';
+@import '/packages/enketo-core/src/sass/core/variables';
+
+// fonts
+@import '../component/fonts';
+
+// mixins, in the right order
+@import '/packages/enketo-core/src/sass/core/mixins';
+@import '/packages/enketo-core/src/sass/formhub/mixins';
+@import '../component/mixins';
+
+// reset
+@import '/packages/enketo-core/src/sass/core/reset';
+
+// common styles
+@import '../component/common-ui';
+
+// utilities
+@import '/packages/enketo-core/src/sass/core/utilities';
+
+// icons
+@import '../component/icons';
+
+.or-repeat-info .icon-plus:before {
+    content: 'Add Another';
+    font-family: 'OpenSansRegular', Arial, sans-serif;
+    font-size: 15px;
+}
+
+.or-repeat .icon-minus:before {
+    content: 'Remove';
+    font-family: 'OpenSansRegular', Arial, sans-serif;
+    font-size: 15px;
+}
+
+// buttons
+@import '../component/buttons';
+
+// layout
+@import '/packages/enketo-core/src/sass/core/layout';
+@import '/packages/enketo-core/src/sass/core/pages';
+
+// components
+@import '../component/side-slider';
+@import '../theme-formhub/form_formhub';
+@import '../component/form_header';
+@import '../component/form_footer';

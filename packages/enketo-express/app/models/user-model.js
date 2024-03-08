@@ -44,6 +44,14 @@ function getCredentials(req) {
                 bearer: tokenValue,
             };
         }
+    } else if (authType === 'token message') {
+        const tokenValue = req.cookies.__authToken;
+        // Obtain token value from GET/POST request cookie that was set by Enketo in the client in settings.js
+        if (tokenValue) {
+            creds = {
+                bearer: tokenValue,
+            };
+        }
     }
 
     return creds;

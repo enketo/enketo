@@ -42,6 +42,7 @@ describe('Account Model', () => {
                 config['linked form and data server']['server url'] =
                     accountServerUrl;
                 config['linked form and data server']['api key'] = accountKey;
+                config['account manager api key'] = '';
 
                 getAccountPromise = model.get(survey);
 

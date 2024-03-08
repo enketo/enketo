@@ -14,6 +14,17 @@ const config = require('../models/config-model').server;
 const keys = {
     singleOnce: config['less secure encryption key'],
     view: `${config['less secure encryption key']}view`,
+    viewDn: `${config['less secure encryption key']}view-dn`,
+    viewDnC: `${config['less secure encryption key']}view-dnc`,
+    preview: `${config['less secure encryption key']}preview-oc`,
+    fsC: `${config['less secure encryption key']}fs-c`,
+    fsParticipant: `${config['less secure encryption key']}fs-participant`,
+    fullParticipant: `${config['less secure encryption key']}full-participant`,
+    editRfc: `${config['less secure encryption key']}edit-rfc`,
+    editRfcC: `${config['less secure encryption key']}edit-rfc-c`,
+    editHeadless: `${config['less secure encryption key']}edit-headless`,
+    incRfc: `${config['less secure encryption key']}inc-rfc`,
+    incRfcC: `${config['less secure encryption key']}inc-rfc-c`,
 };
 
 /**
@@ -64,6 +75,50 @@ function encryptedEnketoIdParamView(req, res, next, id) {
     _encryptedEnketoIdParam(req, res, next, id, keys.view);
 }
 
+function encryptedEnketoIdPreview(req, res, next, id) {
+    _encryptedEnketoIdParam(req, res, next, id, keys.preview);
+}
+
+function encryptedEnketoIdViewDn(req, res, next, id) {
+    _encryptedEnketoIdParam(req, res, next, id, keys.viewDn);
+}
+
+function encryptedEnketoIdViewDnC(req, res, next, id) {
+    _encryptedEnketoIdParam(req, res, next, id, keys.viewDnC);
+}
+
+function encryptedEnketoIdFsC(req, res, next, id) {
+    _encryptedEnketoIdParam(req, res, next, id, keys.fsC);
+}
+
+function encryptedEnketoIdFsParticipant(req, res, next, id) {
+    _encryptedEnketoIdParam(req, res, next, id, keys.fsParticipant);
+}
+
+function encryptedEnketoIdFullParticipant(req, res, next, id) {
+    _encryptedEnketoIdParam(req, res, next, id, keys.fullParticipant);
+}
+
+function encryptedEnketoIdEditRfc(req, res, next, id) {
+    _encryptedEnketoIdParam(req, res, next, id, keys.editRfc);
+}
+
+function encryptedEnketoIdEditRfcC(req, res, next, id) {
+    _encryptedEnketoIdParam(req, res, next, id, keys.editRfcC);
+}
+
+function encryptedEnketoIdIncRfc(req, res, next, id) {
+    _encryptedEnketoIdParam(req, res, next, id, keys.incRfc);
+}
+
+function encryptedEnketoIdIncRfcC(req, res, next, id) {
+    _encryptedEnketoIdParam(req, res, next, id, keys.incRfcC);
+}
+
+function encryptedEnketoIdEditHeadless(req, res, next, id) {
+    _encryptedEnketoIdParam(req, res, next, id, keys.editHeadless);
+}
+
 /**
  * Returns decrypted Enketo ID
  *
@@ -107,4 +162,15 @@ module.exports = {
     idEncryptionKeys: keys,
     encryptedEnketoIdSingle: encryptedEnketoIdParamSingle,
     encryptedEnketoIdView: encryptedEnketoIdParamView,
+    encryptedEnketoIdPreview,
+    encryptedEnketoIdViewDn,
+    encryptedEnketoIdViewDnC,
+    encryptedEnketoIdFsC,
+    encryptedEnketoIdEditRfc,
+    encryptedEnketoIdEditRfcC,
+    encryptedEnketoIdIncRfc,
+    encryptedEnketoIdIncRfcC,
+    encryptedEnketoIdEditHeadless,
+    encryptedEnketoIdFullParticipant,
+    encryptedEnketoIdFsParticipant,
 };

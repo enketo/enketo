@@ -20,6 +20,12 @@ let homeScreenGuidance;
 let updateStatus;
 let formTheme;
 
+/**
+ * @typedef HeadlessResult
+ * @property { string= } error
+ * @property { number= } fieldSubmissions
+ */
+
 // Customize vex
 vex.registerPlugin(vexEnketoDialog);
 vex.defaultOptions.className = 'vex-theme-plain';
@@ -65,7 +71,7 @@ function setEventHandlers() {
         $('body').removeClass('show-side-slider');
     });
 
-    $('.form-header__button--print').on('click', printForm);
+    $('.form-header__button--print').on('click', printOcForm);
 
     $('.side-slider__toggle, .offline-enabled__queue-length').on(
         'click',
@@ -204,7 +210,7 @@ function feedback(message, duration, heading = t('feedback.header')) {
  *
  * @param { string } message - message to show
  * @param {string=} heading - heading to show
- * @param {string=} level - css class or normal (no styling) ('alert', 'info', 'warning', 'error', 'success')
+ * @param {string=} level - css class or normal (no styling) ('alert', 'info', 'warning', 'error', 'success', 'oc-strict-error')
  * @param {number=} duration - duration in secondsafter which dialog should self-destruct
  */
 function alert(message, heading, level, duration) {
@@ -346,6 +352,7 @@ function confirmLogin(msg) {
  * @param {string} [advice] -  a string with advice
  * @param {AlertLoadErrorsOptions} [options]
  */
+/*
 function alertLoadErrors(loadErrors, advice, options = {}) {
     const errors = loadErrors.map(
         (error) => `<p>${error.split('\n\n').join('</p><p>')}</p>`
@@ -386,12 +393,55 @@ function alertLoadErrors(loadErrors, advice, options = {}) {
         t('alert.loaderror.heading', params)
     );
 }
+*/
+
+function alertLoadErrorsOc(loadErrors) {
+    const errorStringHTML = loadErrors
+        .map((error) => `<p>${error}</p>`)
+        .join('');
+    alert(errorStringHTML, t('alert.loaderror.heading'));
+}
+
+function alertStrictError(msg) {
+    msg += `<p><strong>${t(
+        'fieldsubmission.alert.stricterror.msg'
+    )}</strong></p>`;
+    alert(
+        msg,
+        t('fieldsubmission.alert.stricterror.heading'),
+        'oc-strict-error'
+    );
+}
+
+function alertStrictBlock() {
+    const icon =
+        '<i class="icon icon-exclamation-circle oc-strict-error"> </i>';
+    alert(
+        t('fieldsubmission.alert.participanterror.msg'),
+        icon + t('alert.loaderror.heading'),
+        'oc-strict-error'
+    );
+}
 
 function alertHomeScreenGuidance() {
     alert(
         _getHomeScreenGuidance(),
         t('alert.addtohomescreen.heading'),
         'normal'
+    );
+}
+
+function confirmAutoQueries() {
+    return confirm(
+        {
+            heading: t('alert.default.heading'),
+            errorMsg: t('fieldsubmission.confirm.autoquery.msg1'),
+            msg: t('fieldsubmission.confirm.autoquery.msg2'),
+        },
+        {
+            posButton: t('fieldsubmission.confirm.autoquery.automatic'),
+            negButton: t('fieldsubmission.confirm.autoquery.manual'),
+        }
     );
 }
 
@@ -438,6 +488,7 @@ function _getHomeScreenGuidanceObj(imageClass1, imageClass2) {
 /**
  * Prompts for print settings (for Grid Theme) and prints from the regular view of the form.
  */
+/*
 function printForm() {
     const components = getPrintDialogComponents();
     const texts = {
@@ -476,6 +527,87 @@ function printForm() {
 
     return Promise.resolve();
 }
+*/
+
+function printOcForm() {
+    const components = getPrintDialogComponents();
+    const texts = {
+        heading: components.heading,
+        msg: components.msg,
+    };
+    const options = {
+        posButton: components.posButton,
+        negButton: components.negButton,
+    };
+    const inputDn = `<fieldset>
+            <legend>${t('confirm.print.queries')}</legend>
+            <label>
+                <input name="queries" style="margin-left: 10px;" type="checkbox" value="yes" checked/>
+                <span>${t('confirm.print.queryShow')}</span>
+            </label>
+        </fieldset>`;
+    const gridInputs = inputDn + components.gridInputs + components.gridWarning;
+    const regularInputs = inputDn;
+
+    const dns = document.querySelectorAll('.or-appearance-dn');
+    const textPrints = document.querySelectorAll(
+        '.question:not(.or-appearance-autocomplete):not(.or-appearance-url) > input[type=text]:not(.ignore):not([data-for]), .question:not(.or-appearance-autocomplete):not(.or-appearance-url) > textarea:not(.ignore):not([data-for])'
+    );
+    let historyAdded;
+
+    return new Promise((resolve) => {
+        if (formTheme === 'grid' || (!formTheme && printHelper.isGrid())) {
+            return prompt(texts, options, gridInputs).then((format) => {
+                if (!format) {
+                    return;
+                }
+                if (format.queries === 'yes') {
+                    historyAdded = true;
+                    dns.forEach((dn) => {
+                        dn.dispatchEvent(events.Printify());
+                    });
+                }
+                textPrints.forEach((textPrint) => {
+                    textPrint.dispatchEvent(events.Printify());
+                });
+
+                return printGrid(format).then(resolve);
+            });
+        }
+        return prompt(texts, options, regularInputs).then((format) => {
+            if (!format) {
+                return;
+            }
+            if (format.queries === 'yes') {
+                historyAdded = true;
+                dns.forEach((dn) => {
+                    dn.dispatchEvent(events.Printify());
+                });
+            }
+            textPrints.forEach((textPrint) => {
+                textPrint.dispatchEvent(events.Printify());
+            });
+            setTimeout(window.print, 100);
+            resolve();
+        });
+    }).then(() => {
+        textPrints.forEach((textPrint) => {
+            textPrint.dispatchEvent(events.DePrintify());
+        });
+        if (!historyAdded) {
+            return;
+        }
+
+        return new Promise((resolve) => {
+            setTimeout(() => {
+                dns.forEach((dn) => {
+                    dn.dispatchEvent(events.DePrintify());
+                });
+                resolve();
+            }, 1000);
+        });
+    });
+}
 
 /**
  * Separated this to allow using parts in custom print dialogs.
@@ -507,23 +639,30 @@ function getPrintDialogComponents() {
     };
 }
 
-function printGrid(format) {
+function printGrid(format, delay = 800) {
     const swapped = printHelper.styleToAll();
 
-    return printHelper
-        .fixGrid(format)
-        .then(window.print)
-        .catch(console.error)
-        .then(() => {
-            if (swapped) {
-                return new Promise((resolve) => {
-                    setTimeout(() => {
-                        printHelper.styleReset();
-                        resolve();
-                    }, 500);
+    // https://github.com/OpenClinica/enketo-express-oc/issues/456
+    // changing style on chrome takes longer than other browser
+    return new Promise((resolve) =>
+        setTimeout(() => {
+            printHelper
+                .fixGrid(format)
+                .then(window.print)
+                .catch(console.error)
+                .then(() => {
+                    if (swapped) {
+                        return new Promise((resolve) => {
+                            setTimeout(() => {
+                                printHelper.styleReset();
+                                resolve();
+                            }, 500);
+                        });
+                    }
                 });
-            }
-        });
+            resolve();
+        }, delay)
+    );
 }
 
 /**
@@ -646,6 +785,45 @@ function getErrorResponseMsg(statusCode) {
     return msg;
 }
 
+/**
+ * Shows a form loading result that a headless API responder can parse.
+ *
+ * @param {HeadlessResult} result
+ */
+function showHeadlessResult(result) {
+    const resultFragment = document
+        .createRange()
+        .createContextualFragment(
+            `<div
+                id="headless-result"
+                style="position: fixed; width: 100%; background: pink; top: 0; left: 0;
+                    border: 5px solid black; padding: 10px 20px; text-align:center;"
+            ></div>`
+        )
+        .querySelector('#headless-result');
+
+    if (result.error) {
+        resultFragment.append(
+            document
+                .createRange()
+                .createContextualFragment(
+                    `<div id="error">${result.error}</div>`
+                )
+        );
+    } else {
+        resultFragment.append(
+            document.createRange().createContextualFragment(
+                `<div
+            id="fieldsubmissions"
+            style="border: 5px dotted black; display: inline-block; padding: 10px 20px;"
+        >${result.fieldsubmissions}</div>`
+            )
+        );
+    }
+
+    document.querySelector('body').append(resultFragment);
+}
+
 $(document).ready(() => {
     init();
 });
@@ -659,10 +837,13 @@ export default {
     pages,
     swapTheme,
     confirmLogin,
-    alertLoadErrors,
+    alertLoadErrors: alertLoadErrorsOc,
     alertCacheUnsupported,
+    confirmAutoQueries,
     getErrorResponseMsg,
     applyPrintStyle,
     getPrintDialogComponents,
-    printForm,
+    alertStrictError,
+    alertStrictBlock,
+    showHeadlessResult,
 };

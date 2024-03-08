@@ -1,0 +1,22 @@
+$c: #f58220;
+
+@mixin oc-strict-error {
+    border-color: $c;
+    background-color: lighten($c, 30%);
+}
+
+.oc-strict-constraint.invalid-constraint,
+.oc-strict-required.invalid-required,
+.oc-strict-relevant.invalid-relevant {
+    @include oc-strict-error;
+}
+
+.alert-box.oc-strict-error {
+    @include oc-strict-error;
+}
+
+.vex-dialog-title {
+    .icon.oc-strict-error {
+        color: lighten($c, 20%);
+    }
+}

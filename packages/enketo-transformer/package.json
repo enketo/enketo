@@ -38,15 +38,8 @@
         }
     },
     "bugs": {
-        "url": "https://github.com/enketo/enketo-transformer/issues",
-        "email": "martijn@enketo.org"
+        "url": "https://github.com/enketo/enketo/issues"
     },
-    "author": {
-        "name": "Martijn van de Rijdt",
-        "email": "martijn@enketo.org",
-        "url": "https://www.linkedin.com/in/martijnvanderijdt"
-    },
-    "contributors": [],
     "scripts": {
         "benchmarks": "vite-node ./test/benchmarks.ts",
         "build": "EMPTY_OUT_DIR=true vite build && ENV=web vite build && yarn tsc && echo 'enketo-transformer build complete'",
@@ -60,7 +53,7 @@
     },
     "repository": {
         "type": "git",
-        "url": "https://github.com/enketo/enketo-transformer.git"
+        "url": "https://github.com/enketo/enketo"
     },
     "keywords": [
         "Enketo",

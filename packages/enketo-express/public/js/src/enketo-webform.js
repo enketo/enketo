@@ -34,7 +34,6 @@ if (settings.offline) {
         .init(survey)
         .then(initTranslator)
         .then(formCache.init)
-        .then(_addBranding)
         .then(_swapTheme)
         .then(formCache.updateMaxSubmissionSize)
         .then(_updateMaxSizeSetting)
@@ -61,7 +60,6 @@ if (settings.offline) {
             })
         )
         .then(_swapTheme)
-        .then(_addBranding)
         .then((survey) => {
             if (isPreview && settings.xformUrl) {
                 return survey;
@@ -173,29 +171,6 @@ function _setEmergencyHandlers() {
                 });
         });
     }
-}
-
-/**
- * Adds/replaces branding if necessary, and unhides branding.
- *
- * @param { object } survey - [description]
- */
-function _addBranding(survey) {
-    const brandImg = document.querySelector('.form-header__branding img');
-    const attribute = settings.offline ? 'data-offline-src' : 'src';
-
-    if (
-        brandImg &&
-        survey.branding &&
-        survey.branding.source &&
-        brandImg.src !== survey.branding.source
-    ) {
-        brandImg.src = '';
-        brandImg.setAttribute(attribute, survey.branding.source);
-    }
-    brandImg.classList.remove('hide');
-
-    return survey;
 }
 
 /**

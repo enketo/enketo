@@ -1,0 +1,41 @@
+<?xml version="1.0"?>
+<h:html xmlns="http://www.w3.org/2002/xforms" xmlns:ev="http://www.w3.org/2001/xml-events" xmlns:h="http://www.w3.org/1999/xhtml" xmlns:jr="http://openrosa.org/javarosa" xmlns:orx="http://openrosa.org/xforms" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:oc="http://openclinica.org/xforms">
+  <h:head><!-- ODK Aggregate upload time: 2017-07-11T21:43:45.170+0000 on https://enketo-aggregate.appspot.com -->
+    <h:title>relevant-constraint-required</h:title>
+    <model>
+      <instance>
+        <data id="relevant-constraint-required">
+          <something/>
+          <rep jr:template="">
+            <val/>
+            <skipq/>
+          </rep>
+          <meta>
+            <instanceID/>
+          </meta>
+        </data>
+      </instance>
+      <bind constraint="string-length(.) &gt; 10" jr:constraintMsg="needs &gt; 10" jr:requiredMsg="value needed" oc:relevantMsg="always relevant" nodeset="/data/something" relevant="1 + 1 = 2" required="true()" type="string"/>
+      <bind nodeset="/data/rep" relevant=" /data/something  != ''" oc:relevantMsg="relevant if something is not empty"/>
+      <bind constraint="string-length(.) &gt; 10" jr:constraintMsg="needs &gt; 10" jr:requiredMsg="value needed" oc:relevantMsg="relevant if something is not nothing" nodeset="/data/rep/val" relevant=" /data/something  != 'nothing'" required="true()" type="string"/>
+      <bind constraint="string-length(.) &gt; 2" jr:constraintMsg="needs &gt; 2" jr:requiredMsg="value needed" oc:relevantMsg="relevant if previous value is diarrhea" nodeset="/data/rep/skipq" relevant=" /data/rep/val  = 'diarrhea'" required="true()" type="int"/>
+      <bind calculate="concat('uuid:', uuid())" nodeset="/data/meta/instanceID" readonly="true()" type="string"/>
+    </model>
+  </h:head>
+  <h:body>
+    <input ref="/data/something">
+      <label>something with a relevant that will be cached</label>
+    </input>
+    <group ref="/data/rep">
+      <label></label>
+      <repeat nodeset="/data/rep">
+        <input ref="/data/rep/val">
+          <label>enter value</label>
+        </input>
+        <input ref="/data/rep/skipq">
+          <label>enter number</label>
+        </input>
+      </repeat>
+    </group>
+  </h:body>
+</h:html>

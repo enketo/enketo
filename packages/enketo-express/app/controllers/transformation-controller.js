@@ -26,6 +26,44 @@ module.exports = (app) => {
 router.param('enketo_id', routerUtils.enketoId);
 router.param('encrypted_enketo_id_single', routerUtils.encryptedEnketoIdSingle);
 router.param('encrypted_enketo_id_view', routerUtils.encryptedEnketoIdView);
+router.param(
+    'encrypted_enketo_id_view_dn',
+    routerUtils.encryptedEnketoIdViewDn
+);
+router.param(
+    'encrypted_enketo_id_view_dn_c',
+    routerUtils.encryptedEnketoIdViewDnC
+);
+router.param(
+    'encrypted_enketo_id_preview',
+    routerUtils.encryptedEnketoIdPreview
+);
+router.param('encrypted_enketo_id_fs_c', routerUtils.encryptedEnketoIdFsC);
+router.param(
+    'encrypted_enketo_id_fs_participant',
+    routerUtils.encryptedEnketoIdFsParticipant
+);
+router.param(
+    'encrypted_enketo_id_full_participant',
+    routerUtils.encryptedEnketoIdFullParticipant
+);
+router.param('encrypted_enketo_id_rfc', routerUtils.encryptedEnketoIdEditRfc);
+router.param(
+    'encrypted_enketo_id_rfc_c',
+    routerUtils.encryptedEnketoIdEditRfcC
+);
+router.param(
+    'encrypted_enketo_id_headless',
+    routerUtils.encryptedEnketoIdEditHeadless
+);
+router.param(
+    'encrypted_enketo_id_inc_rfc',
+    routerUtils.encryptedEnketoIdIncRfc
+);
+router.param(
+    'encrypted_enketo_id_inc_rfc_c',
+    routerUtils.encryptedEnketoIdIncRfcC
+);
 
 router
     .post('*', (req, res, next) => {
@@ -35,9 +73,21 @@ router
     })
     .post('/xform/:encrypted_enketo_id_single', getSurveyParts)
     .post('/xform/:encrypted_enketo_id_view', getSurveyParts)
+    .post('/xform/:encrypted_enketo_id_preview', getSurveyParts)
+    .post('/xform/:encrypted_enketo_id_view_dn', getSurveyParts)
+    .post('/xform/:encrypted_enketo_id_view_dn_c', getSurveyParts)
+    .post('/xform/:encrypted_enketo_id_fs_c', getSurveyParts)
+    .post('/xform/:encrypted_enketo_id_rfc', getSurveyParts)
+    .post('/xform/:encrypted_enketo_id_rfc_c', getSurveyParts)
+    .post('/xform/:encrypted_enketo_id_inc_rfc', getSurveyParts)
+    .post('/xform/:encrypted_enketo_id_inc_rfc_c', getSurveyParts)
+    .post('/xform/:encrypted_enketo_id_fs_participant', getSurveyParts)
+    .post('/xform/:encrypted_enketo_id_full_participant', getSurveyParts)
+    .post('/xform/:encrypted_enketo_id_headless', getSurveyParts)
     .post('/xform/:enketo_id', getSurveyParts)
     .post('/xform', getSurveyParts)
-    .post('/xform/hash/:enketo_id', getSurveyHash);
+    .post('/xform/hash/:enketo_id', getSurveyHash)
+    .post('/xform/hash/:encrypted_enketo_id_full_participant', getSurveyHash);
 
 /**
  * Obtains HTML Form, XML model, and existing XML instance
@@ -155,7 +205,7 @@ function _updateCache(survey) {
                 delete survey.mediaHash;
                 delete survey.mediaUrlHash;
                 delete survey.formHash;
-
+                survey.openclinica = true;
                 return communicator
                     .getXForm(survey)
                     .then(transformer.transform)

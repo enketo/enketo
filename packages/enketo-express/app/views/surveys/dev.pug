@@ -1,0 +1,53 @@
+extends ../layout
+
+block style
+  // trying to mimic situation in OC-hosted iframe parent window
+  style.
+    html {
+      box-sizing: border-box;
+    }
+    body {
+      font-size: 100%;
+      font-family: 'Open Sans', Helvetica, Arial, sans-serif;
+      margin: 0;
+      width: 100% !important;
+      overflow: auto;
+    }
+    .iframe-parent{
+      overflow: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+    iframe {
+      z-index:1011;
+      width:100vw;
+      height:100vh;
+    }
+
+block content
+  div.iframe-parent
+    iframe(src=decodeURIComponent(src))
+  script.
+    window.addEventListener('message', receiveMessage, false);
+    function receiveMessage(event){
+      const data = JSON.parse(event.data);
+      // TODO in real life, for security reasons, check origin! -> if (event.origin !== "http://enk.to:8080") return;
+      console.log('data received from iframe', data);
+      console.log('origin of message', event.origin);
+      console.log('source of message', event.source);
+      if (data.enketoEvent === 'signature-request'){
+        document.querySelector( 'iframe' ).contentWindow.postMessage(
+            JSON.stringify({
+                event: 'signature-request-received'
+            }),
+            location.href
+        );
+      }
+    }
+  script.
+    const iframe = document.querySelector( 'iframe' );
+    const enketoUrl = iframe.src
+    // Send message once the iframe has completely finished loading.
+    // Pass an object with a `token` property
+    iframe.contentWindow.addEventListener( 'load' , () => {
+      iframe.contentWindow.postMessage( { 'authToken': 'abc123456' }, enketoUrl );
+    });

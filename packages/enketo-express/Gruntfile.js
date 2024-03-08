@@ -72,6 +72,13 @@ const resolveWidgetESMImport = (imported) => {
         }
     }
 
+    if (imported.startsWith('/packages/enketo-express/')) {
+        const LOCAL_WIDGETS_PREFIX = path.resolve(__dirname, './');
+        return imported
+            .replace(/^\/packages\/enketo-express/, LOCAL_WIDGETS_PREFIX)
+            .replace(/(\.js)?$/, '.js');
+    }
+
     return imported;
 };
 
@@ -314,6 +321,47 @@ module.exports = (grunt) => {
         );
     });
 
+    grunt.registerTask('transforms', 'Creating forms.js', function () {
+        const forms = {};
+        const done = this.async();
+        const formsJsPath = 'test/client/forms/forms.js';
+        const xformsPaths = grunt.file.expand({}, 'test/client/forms/*.xml');
+        const transformer = require('enketo-transformer');
+        grunt.log.write('Transforming XForms ');
+        xformsPaths
+            .reduce(
+                (prevPromise, filePath) =>
+                    prevPromise.then(() => {
+                        const xformStr = grunt.file.read(filePath);
+                        grunt.log.write('.');
+
+                        return transformer
+                            .transform({
+                                xform: xformStr,
+                                openclinica: true,
+                            })
+                            .then((result) => {
+                                forms[
+                                    filePath.substring(
+                                        filePath.lastIndexOf('/') + 1
+                                    )
+                                ] = {
+                                    html_form: result.form,
+                                    xml_model: result.model,
+                                };
+                            });
+                    }),
+                Promise.resolve()
+            )
+            .then(() => {
+                grunt.file.write(
+                    formsJsPath,
+                    `export default ${JSON.stringify(forms, null, 4)};`
+                );
+                done();
+            });
+    });
+
     grunt.registerTask('widgets', 'generate widget reference files', () => {
         const WIDGETS_JS_LOC = 'public/js/build/';
         const WIDGETS_JS = `${WIDGETS_JS_LOC}widgets.js`;
@@ -391,6 +439,7 @@ module.exports = (grunt) => {
     grunt.registerTask('js', ['widgets', 'shell:build']);
     grunt.registerTask('test', [
         'env:test',
+        'transforms',
         'js',
         'sass',
         'shell:nyc',
