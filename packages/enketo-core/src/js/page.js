@@ -9,6 +9,7 @@ import config from 'enketo/config';
 import events from './event';
 import { getSiblingElement, getAncestors } from './dom-utils';
 import 'jquery-touchswipe';
+import reasons from './reasons';
 
 /**
  * @typedef {import('./form').Form} Form
