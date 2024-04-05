@@ -154,6 +154,7 @@ function maxSize(req, res, next) {
         surveyModel
             .get(req.enketoId)
             .then((survey) => {
+                survey.cookie = req.headers.cookie;
                 survey.credentials = userModel.getCredentials(req);
 
                 return survey;
