@@ -12,15 +12,15 @@ const config = require('../models/config-model').server;
 
 function _getRedisUrl(redisConfig) {
     if (redisConfig.url) {
-        return redisConfig.url
-    }
-    else {
-        return `redis://:${redisConfig.password}@${redisConfig.host}:${redisConfig.port}`
+        return redisConfig.url;
+    } else {
+        const auth = redisConfig.password ? `:${redisConfig.password}@` : '';
+        return `redis://${auth}${redisConfig.host}:${redisConfig.port}`;
     }
 }
 
-const mainClient = redis.createClient(_getRedisUrl(config.redis.main))
-const cacheClient = redis.createClient(_getRedisUrl(config.redis.cache))
+const mainClient = redis.createClient(_getRedisUrl(config.redis.main));
+const cacheClient = redis.createClient(_getRedisUrl(config.redis.cache));
 
 module.exports = {
     mainClient,
