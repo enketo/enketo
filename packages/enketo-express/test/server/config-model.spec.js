@@ -185,17 +185,49 @@ describe('Config Model', () => {
             expect(config.server.maps[2].tiles).to.deep.equal(['d', 'e']);
         });
 
-        it('parses a redis url to its components', () => {
+        it('builds a redis url from components without password', () => {
+            stubEnv('ENKETO_REDIS_CACHE_HOST', 'ec2-5.compute.amazonaws.com');
+            stubEnv('ENKETO_REDIS_CACHE_PORT', '12');
+
+            config = loadConfig();
+            expect(config.server.redis.cache.url).to.equal(
+                'redis://ec2-5.compute.amazonaws.com:12'
+            );
+        });
+
+        it('builds a redis url from components with password', () => {
+            stubEnv('ENKETO_REDIS_MAIN_HOST', 'ec2-5.compute-1.amazonaws.com');
+            stubEnv('ENKETO_REDIS_MAIN_PASSWORD', 'stilettos');
+            stubEnv('ENKETO_REDIS_MAIN_PORT', '12');
+
+            config = loadConfig();
+            expect(config.server.redis.main.url).to.equal(
+                'redis://:stilettos@ec2-5.compute-1.amazonaws.com:12'
+            );
+        });
+
+        it('passes through a complex redis main URL', () => {
             stubEnv(
                 'ENKETO_REDIS_MAIN_URL',
-                'redis://h:pwd@ec2-54-221-230-53.compute-1.amazonaws.com:6869'
+                'rediss://user:pass@ec2-5.compute-1.amazonaws.com:12/14'
             );
+
             config = loadConfig();
-            expect(config.server.redis.main.host).to.equal(
-                'ec2-54-221-230-53.compute-1.amazonaws.com'
+            expect(config.server.redis.main.url).to.equal(
+                'rediss://user:pass@ec2-5.compute-1.amazonaws.com:12/14'
             );
-            expect(config.server.redis.main.port).to.equal('6869');
-            expect(config.server.redis.main.password).to.equal('pwd');
+        });
+
+        it('passes through a complex redis cache URL', () => {
+            stubEnv(
+                'ENKETO_REDIS_CACHE_URL',
+                'rediss://user:pass@ec2-5.compute-1.amazonaws.com:12/14'
+            );
+
+            config = loadConfig();
+            expect(config.server.redis.cache.url).to.equal(
+                'rediss://user:pass@ec2-5.compute-1.amazonaws.com:12/14'
+            );
         });
     });
 

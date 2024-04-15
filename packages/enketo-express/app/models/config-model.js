@@ -7,7 +7,6 @@ const pkg = require('../../package.json');
 const mergeWith = require('lodash/mergeWith');
 const path = require('path');
 const fs = require('fs');
-const url = require('url');
 
 const themePath = path.join(__dirname, '../../public/css');
 const languagePath = path.join(__dirname, '../../locales/src');
@@ -34,8 +33,10 @@ try {
         'No local config.json found. Will check environment variables instead.'
     );
     _updateConfigFromEnv(config);
-    _setRedisConfigFromEnv();
+    _setRedisUrlsFromEnv();
 }
+
+_transformRedisConfigToUrls();
 
 /**
  * Updates all configuration items for which an environment variable was set.
@@ -215,18 +216,43 @@ function _emptyObjectProperties(obj) {
 }
 
 /**
- * Overrides any redis settings if a special enviroment URL variable is set.
+ * The Redis url property is not specified in default-config since it overlaps with host/password/port configuration. This means
+ * we have to explicitly use the URL env var if it exists.
  */
-function _setRedisConfigFromEnv() {
-    const redisMainUrl = process.env.ENKETO_REDIS_MAIN_URL;
-    const redisCacheUrl = process.env.ENKETO_REDIS_CACHE_URL;
+function _setRedisUrlsFromEnv() {
+    if (process.env.ENKETO_REDIS_MAIN_URL) {
+        config.redis.main.url = process.env.ENKETO_REDIS_MAIN_URL;
+    }
 
-    if (redisMainUrl) {
-        config.redis.main.url = redisMainUrl;
+    if (process.env.ENKETO_REDIS_CACHE_URL) {
+        config.redis.cache.url = process.env.ENKETO_REDIS_CACHE_URL;
     }
-    if (redisCacheUrl) {
-        config.redis.cache.url = redisCacheUrl;
+}
+
+/**
+ * If a redis URL is set, use that. Otherwise, build one from host/password/port configuration.
+ */
+function _transformRedisConfigToUrls() {
+    if (!config.redis.main.url) {
+        config.redis.main.url = _buildRedisUrl(config.redis.main);
     }
+
+    if (!config.redis.cache.url) {
+        config.redis.cache.url = _buildRedisUrl(config.redis.cache);
+    }
+}
+
+/**
+ * Builds a redis url from configured host, port and optional password
+ *
+ * @static
+ * @param { object } redisConfig - Local redis configuration settings imported from the config model.
+ * @return { string } Redis url
+ */
+
+function _buildRedisUrl(redisConfig) {
+    const auth = redisConfig.password ? `:${redisConfig.password}@` : '';
+    return `redis://${auth}${redisConfig.host}:${redisConfig.port}`;
 }
 
 /**
