@@ -68,6 +68,18 @@ describe('markdown', () => {
                 '[link](http://example.org)',
                 '<a href="http://example.org" rel="noopener" target="_blank">link</a>',
             ],
+            [
+                '[_link text in italics_](http://example.org)',
+                '<a href="http://example.org" rel="noopener" target="_blank"><em>link text in italics</em></a>',
+            ],
+            [
+                '[link text](http://example.org/snake_case_path)',
+                '<a href="http://example.org/snake_case_path" rel="noopener" target="_blank">link text</a>',
+            ],
+            [
+                '[_link text in italics_](http://example.org/snake_case_path)',
+                '<a href="http://example.org/snake_case_path" rel="noopener" target="_blank"><em>link text in italics</em></a>',
+            ],
             // incorrect links
             ['[link(http://example.org)', '[link(http://example.org)'],
             ['[link(http://example.org)]', '[link(http://example.org)]'],
@@ -189,7 +201,7 @@ describe('markdown', () => {
             ['_A\\_B\\_C_', '<em>A_B_C</em>'],
             ['A_B\\_C', 'A_B_C'],
             ['A\\_B_C', 'A_B_C'],
-            ['A_B_C', 'A<em>B</em>C'],
+            ['A_B_C'],
             ['\\__AB\\__', '_<em>AB_</em>'],
             ['\\\\_AB\\_\\\\_', '\\<em>AB_\\</em>'],
             ['A\\*B\\*C', 'A*B*C'],

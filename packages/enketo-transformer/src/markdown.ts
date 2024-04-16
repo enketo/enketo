@@ -43,7 +43,7 @@ export const markdownToHTML = (text: string): string => {
         .replace(/__(.*?)__/gm, '<strong>$1</strong>')
         .replace(/\*\*(.*?)\*\*/gm, '<strong>$1</strong>')
         // emphasis
-        .replace(/_([^\s][^_\n]*)_/gm, '<em>$1</em>')
+        .replace(/(^|\W)_([^\s][^_\n]*)_(\W|$)/gm, '$1<em>$2</em>$3')
         .replace(/\*([^\s][^*\n]*)\*/gm, '<em>$1</em>')
         // links
         .replace(
