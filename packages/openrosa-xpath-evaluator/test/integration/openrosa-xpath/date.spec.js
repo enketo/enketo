@@ -14,7 +14,8 @@ describe('#date()', () => {
         [
             // TODO "date('1983-09-31')",
             'date("not a date")',
-            'date("opv_3")',
+            'date("opv3")',
+            // TODO 'date("opv_3")' once https://bugzilla.mozilla.org/show_bug.cgi?id=1881930 is addressed
             'date(true())',
             // TODO "date(convertible())"
         ].forEach((expr) => {
