@@ -79,9 +79,12 @@ const ignoreMatch = <M extends Matches>(fn: Replacer<M>) => {
 };
 /* eslint-enable */
 
-const createAnchor = ignoreMatch((label: string, href: string) => {
-    return `<a href="${encodeURI(href)}" rel="noopener" target="_blank">${label}</a>`;
-});
+const createAnchor = ignoreMatch(
+    (label: string, href: string) =>
+        `<a href="${encodeURI(
+            href
+        )}" rel="noopener" target="_blank">${label}</a>`
+);
 
 /**
  * @param hashtags - Before header text. `#` gives `<h1>`, `####` gives `<h4>`.
