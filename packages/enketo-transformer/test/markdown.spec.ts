@@ -228,6 +228,19 @@ describe('markdown', () => {
             ['\\', '\\'],
             ['\\\\', '\\'],
             ['\\\\\\', '\\\\'],
+            // Examples from https://github.com/enketo/enketo/issues/24
+            ['SEA_774_BOB', 'SEA_774_BOB'],
+            ['SEA _774_BOB', 'SEA _774_BOB'],
+            ['SEA_774_ BOB', 'SEA_774_ BOB'],
+            ['SEA _774_ BOB', 'SEA <em>774</em> BOB'],
+            ['SE4_774_8OB', 'SE4_774_8OB'],
+            ['SE4 _774_8OB', 'SE4 _774_8OB'],
+            ['SE4_774_ 8OB', 'SE4_774_ 8OB'],
+            ['SE4 _774_ 8OB', 'SE4 <em>774</em> 8OB'],
+            ['SE._774_*OB', 'SE.<em>774</em>*OB'],
+            ['SE. _774_*OB', 'SE. <em>774</em>*OB'],
+            ['SE._774_ *OB', 'SE.<em>774</em> *OB'],
+            ['SE. _774_ *OB', 'SE. <em>774</em> *OB'],
             ['&92;'],
         ].forEach((test) => {
             const source = test[0];
