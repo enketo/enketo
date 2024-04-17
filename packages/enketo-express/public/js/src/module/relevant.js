@@ -4,56 +4,6 @@ import branchModule from 'enketo-core/src/js/relevant';
 import { getXPath } from 'enketo-core/src/js/dom-utils';
 import events from 'enketo-core/src/js/event';
 
-/**
- * Overwrite core functionality by **always** adding
- * .or-group.invalid-relevant and .or-group-data.invalid-relevant.
- *
- * @param updated
- */
-branchModule.update = function (updated) {
-    if (!this.form) {
-        throw new Error(
-            'Branch module not correctly instantiated with form property.'
-        );
-    }
-
-    const nodes = this.form
-        .getRelatedNodes('data-relevant', '', updated)
-        // the OC customization:
-        .add(this.form.getRelatedNodes('data-relevant', '.invalid-relevant'))
-        .get();
-
-    this.updateNodes(nodes);
-};
-
-branchModule.originalSelfRelevant = branchModule.selfRelevant;
-
-// Overwrite in order to add the && !branchNode.classList.contains('invalid-relevant') clause because an irrelevant branch in OC,
-// would not be disabled if it is a question with a value!
-branchModule.selfRelevant = function (branchNode) {
-    return (
-        this.originalSelfRelevant(branchNode) &&
-        !branchNode.classList.contains('invalid-relevant')
-    );
-};
-
-branchModule.originalEnable = branchModule.enable;
-
-/**
- * Overwrite core functionality.
- * The reason for this customization is to remove any shown irrelevant errors on the group (and perhaps question as well?)
- * once it becomes relevant again.
- *
- * @param branchNode
- * @param path
- */
-branchModule.enable = function (branchNode, path) {
-    const change = this.originalEnable(branchNode, path);
-    branchNode.classList.remove('invalid-relevant');
-
-    return change;
-};
-
 /*
  * Overwrite to always call this.clear if ever enabled and currently relevant.
  */

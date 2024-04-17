@@ -98,8 +98,14 @@ export default {
     update(updated, forceClearNonRelevant = config.forceClearNonRelevant) {
         const nodes = this.form
             .getRelatedNodes('data-relevant', '', updated)
+            // the OC customization: **always** add
+            // .or-group.invalid-relevant and .or-group-data.invalid-relevant
+            .add(
+                this.form.getRelatedNodes('data-relevant', '.invalid-relevant')
+            )
             .get();
-
+        // OC sets forceClearNonRelevant to false always
+        forceClearNonRelevant = false;
         this.updateNodes(nodes, forceClearNonRelevant, updated ?? {});
     },
 
@@ -331,8 +337,12 @@ export default {
     selfRelevant(branchNode) {
         return (
             !branchNode.classList.contains('disabled') &&
-            !branchNode.classList.contains('pre-init')
+            !branchNode.classList.contains('pre-init') &&
+            !branchNode.classList.contains('invalid-relevant')
         );
+        // The third clause is an OC customization that ensures
+        // that a branch will not be disabled if it has a question with
+        // a value.
     },
 
     /**
@@ -526,6 +536,9 @@ export default {
             this.form.widgets.enable(branchNode);
             this.activate(branchNode);
         }
+        // OC customization to remove any shown irrelevant errors on the group
+        // (and perhaps question as well?) once it becomes relevant again.
+        branchNode.classList.remove('invalid-relevant');
 
         return change;
     },
