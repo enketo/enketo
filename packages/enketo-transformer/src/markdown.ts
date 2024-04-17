@@ -115,7 +115,7 @@ const createItem = ignoreMatch(
 
 const createParagraph = ignoreMatch((line: string) => {
     const trimmed = line.trim();
-    if (/^<\/?(ul|ol|li|h|p|bl)/i.test(trimmed)) {
+    if (/^<\/?(ul|ol|li|h|p)/i.test(trimmed)) {
         return line;
     }
 
