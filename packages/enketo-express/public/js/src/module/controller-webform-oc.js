@@ -23,7 +23,7 @@ import records from './records-queue';
 import formCache from './form-cache';
 import FieldSubmissionQueue from './field-submission-queue';
 import rc from './controller-webform';
-import reasons from './reasons';
+import reasons from 'enketo-core/src/js/reasons';
 import { replaceMediaSources, replaceModelMediaSources } from './media';
 
 let fieldSubmissionQueue;

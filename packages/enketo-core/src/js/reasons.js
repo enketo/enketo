@@ -1,4 +1,4 @@
-import { t } from './translator';
+import { t } from 'enketo/translator';
 import events from './event';
 
 const range = document.createRange();
