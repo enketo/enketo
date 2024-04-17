@@ -12,11 +12,12 @@ const { expect } = chai;
 
 // help function to ensure subsequent database entries don't have the exact same timestamp
 // redis is fast...
-const _wait1ms = () =>
+// 1ms is not enough to guarantee ISO timestamps are different.
+const _wait2ms = () =>
     new Promise((resolve) => {
         setTimeout(() => {
             resolve();
-        }, 1);
+        }, 2);
     });
 
 describe('Survey Model', () => {
@@ -356,9 +357,9 @@ describe('Survey Model', () => {
             const getNumber = model
                 .set(survey1)
                 .then(() => model.set(survey2))
-                .then(_wait1ms)
+                .then(_wait2ms)
                 .then(() => model.set(survey3))
-                .then(_wait1ms)
+                .then(_wait2ms)
                 .then(() => model.set(survey4))
                 .then(() => model.getNumber(server));
             return expect(getNumber).to.eventually.equal(3);
@@ -368,9 +369,9 @@ describe('Survey Model', () => {
             const getNumber = model
                 .set(survey1)
                 .then(() => model.set(survey2))
-                .then(_wait1ms)
+                .then(_wait2ms)
                 .then(() => model.set(survey3))
-                .then(_wait1ms)
+                .then(_wait2ms)
                 .then(() => model.set(survey4))
                 .then(() =>
                     model.update({
@@ -408,11 +409,11 @@ describe('Survey Model', () => {
         it('obtains the list surveys if all are active in ascending launch date order', () => {
             const getList = model
                 .set(survey1)
-                .then(_wait1ms)
+                .then(_wait2ms)
                 .then(() => model.set(survey2))
-                .then(_wait1ms)
+                .then(_wait2ms)
                 .then(() => model.set(survey3))
-                .then(_wait1ms)
+                .then(_wait2ms)
                 .then(() => model.set(survey4))
                 .then(() => model.getList(server))
                 .then((list) =>
@@ -441,11 +442,11 @@ describe('Survey Model', () => {
         it('obtains the list of active surveys only', () => {
             const getList = model
                 .set(survey1)
-                .then(_wait1ms)
+                .then(_wait2ms)
                 .then(() => model.set(survey2))
-                .then(_wait1ms)
+                .then(_wait2ms)
                 .then(() => model.set(survey3))
-                .then(_wait1ms)
+                .then(_wait2ms)
                 .then(() => model.set(survey4))
                 .then(() =>
                     model.update({
