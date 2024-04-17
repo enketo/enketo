@@ -46,10 +46,7 @@ export const markdownToHTML = (text: string): string => {
         .replace(/_([^\s][^_\n]*)_/gm, '<em>$1</em>')
         .replace(/\*([^\s][^*\n]*)\*/gm, '<em>$1</em>')
         // links
-        .replace(
-            /\[([^\]]*)\]\(([^)]+)\)/gm,
-            '<a href="$2" rel="noopener" target="_blank">$1</a>'
-        )
+        .replace(/\[([^\]]*)\]\(([^)]+)\)/gm, createAnchor)
         // headers
         .replace(/^\s*(#{1,6})\s?([^#][^\n]*)(\n|$)/gm, createHeader)
         // unordered lists
@@ -81,6 +78,13 @@ const ignoreMatch = <M extends Matches>(fn: Replacer<M>) => {
     return (_match: string, ...args: M) => fn(...args);
 };
 /* eslint-enable */
+
+const createAnchor = ignoreMatch(
+    (label: string, href: string) =>
+        `<a href="${encodeURI(
+            href
+        )}" rel="noopener" target="_blank">${label}</a>`
+);
 
 /**
  * @param hashtags - Before header text. `#` gives `<h1>`, `####` gives `<h4>`.
