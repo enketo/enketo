@@ -2,7 +2,7 @@
  * @module submissions-controller
  */
 
-const request = require('request');
+const request = require('@cypress/request');
 const express = require('express');
 const errors = require('../lib/custom-error');
 const mediaLib = require('../lib/media');

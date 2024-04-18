@@ -7,7 +7,7 @@ const express = require('express');
 const request = require('supertest');
 
 const { expect } = chai;
-const { Auth } = require('request/lib/auth');
+const { Auth } = require('@cypress/request/lib/auth');
 const communicator = require('../../app/lib/communicator');
 const config = require('../../app/models/config-model').server;
 const sinon = require('sinon');

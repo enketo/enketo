@@ -2,8 +2,8 @@
  * @module communicator
  */
 
-const request = require('request');
-const { Auth } = require('request/lib/auth');
+const request = require('@cypress/request');
+const { Auth } = require('@cypress/request/lib/auth');
 const TError = require('./custom-error').TranslatedError;
 const config = require('../models/config-model').server;
 const debug = require('debug')('enketo:openrosa-communicator');

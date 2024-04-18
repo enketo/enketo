@@ -35,7 +35,7 @@
         "enketo-core": "8.1.0",
         "enketo-transformer": "4.0.0",
         "evp_bytestokey": "^1.0.3",
-        "express": "^4.18.2",
+        "express": "^4.19.2",
         "express-cls-hooked": "^0.3.8",
         "i18next": "^20.6.1",
         "i18next-browser-languagedetector": "^6.1.8",
@@ -56,7 +56,7 @@
         "pug": "^3.0.2",
         "puppeteer": "^13.7.0",
         "redis": "^3.1.2",
-        "request": "^2.88.2",
+        "@cypress/request": "^3.0.1",
         "serve-favicon": "^2.5.0",
         "time-grunt": "^2.0.0",
         "valid-url": "^1.0.9",
@@ -97,7 +97,7 @@
         "yarn": ">= 1.22.19 <2"
     },
     "volta": {
-        "node": "20.5.1",
+        "node": "20.12.2",
         "yarn": "1.22.19"
     }
 }

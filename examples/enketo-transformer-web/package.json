@@ -9,8 +9,8 @@
         "yarn": ">= 1.22.19 <2"
     },
     "volta": {
-        "node": "20.5.1",
-        "yarn": "1.22.19"
+        "node": "20.12.2",
+        "yarn": "1.22.22"
     },
     "scripts": {
         "build": "vite build && echo 'enketo-transformer-web build complete'",
