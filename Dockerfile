@@ -1,4 +1,4 @@
-FROM node:20.12
+FROM node:20.12.2
 
 ENV ENKETO_SRC_DIR=/srv/src/enketo
 WORKDIR ${ENKETO_SRC_DIR}
