@@ -80,6 +80,18 @@ describe('markdown', () => {
                 '[_link text in italics_](http://example.org/snake_case_path)',
                 '<a href="http://example.org/snake_case_path" rel="noopener" target="_blank"><em>link text in italics</em></a>',
             ],
+            [
+                '[link](http://example.org/cgi-bin/Markdown.pl?a=1&b=2)',
+                '<a href="http://example.org/cgi-bin/Markdown.pl?a=1&b=2" rel="noopener" target="_blank">link</a>',
+            ],
+            [
+                '[link with a "quote" inside](http://example.org)',
+                '<a href="http://example.org" rel="noopener" target="_blank">link with a "quote" inside</a>',
+            ],
+            [
+                '[link](http://example.org" quote & space "=ok)',
+                '<a href="http://example.org%22%20quote%20&%20space%20%22=ok" rel="noopener" target="_blank">link</a>',
+            ],
             // incorrect links
             ['[link(http://example.org)', '[link(http://example.org)'],
             ['[link(http://example.org)]', '[link(http://example.org)]'],
