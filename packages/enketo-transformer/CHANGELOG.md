@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## [4.1.0] - 2024-04-19
+
+-   URL-encode href attributes
+-   Remove handling of `bl` tag because it doesn't exist
+-   Only treat `_` as markdown italics if separated by whitespace
+
 ## [4.0.0] - 2023-10-30
 
 -   Breaking change: Support Node 18 and 20, drop support for older versions
