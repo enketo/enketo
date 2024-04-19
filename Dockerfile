@@ -3,7 +3,8 @@ FROM node:20.12.2-slim
 RUN apt-get update \
     && apt-get install -y --no-install-recommends \
         python3 \
-        build-essential
+        build-essential \
+        git
 
 ENV ENKETO_SRC_DIR=/srv/src/enketo
 WORKDIR ${ENKETO_SRC_DIR}
