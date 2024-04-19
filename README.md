@@ -121,8 +121,8 @@ In each dependent package, if its dependencies are updated it should also be pre
     - Check [Dependabot](https://github.com/enketo/enketo/security/dependabot) for any vulnerabilities which may have been missed by Yarn (like `npm audit`, these sometimes differ). You may have to check `yarn.lock` for subdependencies.
 1. Update the `CHANGELOG.md` for each package which will be released, with its new version/date and any released changes. Breaking changes should be noted explicitly.
 1. Update package versions, "bottom up" (see above):
-    - For each package which has updates pending release, update its version in `packages/$PACKAGE_NAME/package.json`. We follow
-    - For each package which depends on that package, update its `package.json` to reference the new version. If
+    - For each package which has updates pending release, update its version in `packages/$PACKAGE_NAME/package.json`. We follow semantic versioning.
+    - For each package which depends on that package, update its `package.json` to reference the new version.
     - If `enketo-transformer` has been updated, also update `Form.requiredTransformerVersion` in `packages/enketo-core/src/js/form.js`.
 1. Ensure all updates are installed and applied in `yarn.lock`: `yarn install`. This will also verify that each package's main build process succeeds.
 1. Test all packages with updates applied: `yarn test`.
