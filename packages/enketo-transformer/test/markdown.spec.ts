@@ -253,6 +253,19 @@ describe('markdown', () => {
             ['SE. _774_*OB', 'SE. <em>774</em>*OB'],
             ['SE._774_ *OB', 'SE.<em>774</em> *OB'],
             ['SE. _774_ *OB', 'SE. <em>774</em> *OB'],
+            // Example from https://github.com/enketo/enketo/pull/1305#issuecomment-2064934924
+            ['SEA*774*BOB', 'SEA<em>774</em>BOB'],
+            ['SEA *774*BOB', 'SEA <em>774</em>BOB'],
+            ['SEA*774* BOB', 'SEA<em>774</em> BOB'],
+            ['SEA *774* BOB', 'SEA <em>774</em> BOB'],
+            ['SE4*774*8OB', 'SE4<em>774</em>8OB'],
+            ['SE4 *774*8OB', 'SE4 <em>774</em>8OB'],
+            ['SE4*774* 8OB', 'SE4<em>774</em> 8OB'],
+            ['SE4 *774* 8OB', 'SE4 <em>774</em> 8OB'],
+            ['SE.*774*.OB', 'SE.<em>774</em>.OB'],
+            ['SE. *774*.OB', 'SE. <em>774</em>.OB'],
+            ['SE.*774* .OB', 'SE.<em>774</em> .OB'],
+            ['SE. *774* .OB', 'SE. <em>774</em> .OB'],
             ['&92;'],
         ].forEach((test) => {
             const source = test[0];
