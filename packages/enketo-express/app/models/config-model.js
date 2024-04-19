@@ -251,7 +251,9 @@ function _transformRedisConfigToUrls() {
  */
 
 function _buildRedisUrl(redisConfig) {
-    const auth = redisConfig.password ? `:${redisConfig.password}@` : '';
+    const auth = redisConfig.password
+        ? `:${encodeURIComponent(redisConfig.password)}@`
+        : '';
     return `redis://${auth}${redisConfig.host}:${redisConfig.port}`;
 }
 
