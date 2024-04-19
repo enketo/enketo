@@ -10,10 +10,8 @@ WORKDIR ${ENKETO_SRC_DIR}
 
 COPY . ${ENKETO_SRC_DIR}
 
-# Install and build, first with dev dependencies, then with production only (yarn 1 has no prune)
+# Install and build, leaving dev dependencies (yarn 1 has no prune)
 RUN yarn install --frozen-lockfile \
-    && yarn remove $(cat package.json | jq -r '.devDependencies | keys | join(" ")') -W \
-    && yarn install --production --frozen-lockfile --ignore-scripts \
     && yarn cache clean
 
 EXPOSE 8005
