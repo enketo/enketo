@@ -1,8 +1,5 @@
 import pageModule from 'enketo-core/src/js/page';
-import { getAncestors } from 'enketo-core/src/js/dom-utils';
 import $ from 'jquery';
-import events from './event';
-import reasons from './reasons';
 import settings from './settings';
 import gui from './gui';
 
@@ -29,59 +26,6 @@ pageModule.flipToPageContaining = function ($e) {
         }
     }
     this.$toc.parent().find('.pages-toc__overlay').click();
-};
-
-/*
- * The only thing we want to change in this function for OC,
- * is to NOT flip to the next page when a repeat is the same as a page and
- * and a new repeat instance is created,
- * while there are empty reason-for-change fields.
- */
-pageModule.setRepeatHandlers = function () {
-    this.form.view.html.addEventListener(events.AddRepeat().type, (event) => {
-        this._updateAllActive();
-
-        // ---------- Custom OC --------------
-        if (
-            event.target.getAttribute('role') === 'page' &&
-            !reasons.validate()
-        ) {
-            this.toggleButtons();
-        }
-        // ------- End of Custom OC ----------
-
-        // Don't flip if the user didn't create the repeat with the + button.
-        // or if is the default first instance created during loading.
-        // except if the new repeat is actually the first page in the form, or contains the first page
-        if (
-            event.detail.trigger === 'user' ||
-            this.activePages[0] === event.target ||
-            getAncestors(this.activePages[0], '.or-repeat').includes(
-                event.target
-            )
-        ) {
-            this.flipToPageContaining($(event.target));
-        } else {
-            this._toggleButtons();
-        }
-    });
-
-    this.form.view.html.addEventListener(
-        events.RemoveRepeat().type,
-        (event) => {
-            // if the current page is removed
-            // note that that.current will have length 1 even if it was removed from DOM!
-            if (this.current && this.current.closest('html')) {
-                this._updateAllActive();
-                let $target = $(event.target).prev();
-                if ($target.length === 0) {
-                    $target = $(event.target);
-                }
-                // is it best to go to previous page always?
-                this.flipToPageContaining($target);
-            }
-        }
-    );
 };
 
 // const originalPageModuleNext = pageModule._next;

@@ -9,6 +9,7 @@ import config from 'enketo/config';
 import events from './event';
 import { getSiblingElement, getAncestors } from './dom-utils';
 import 'jquery-touchswipe';
+import reasons from './reasons';
 
 /**
  * @typedef {import('./form').Form} Form
@@ -252,6 +253,22 @@ export default {
             events.AddRepeat().type,
             (event) => {
                 this._updateAllActive();
+
+                // ---------- Custom OC --------------
+                /*
+                 * The only thing we want to change in this function for OC,
+                 * is to NOT flip to the next page when a repeat is the same as a page and
+                 * and a new repeat instance is created,
+                 * while there are empty reason-for-change fields.
+                 */
+                if (
+                    event.target.getAttribute('role') === 'page' &&
+                    !reasons.validate()
+                ) {
+                    this.toggleButtons();
+                }
+                // ------- End of Custom OC ----------
+
                 // Don't flip if the user didn't create the repeat with the + button.
                 // or if is the default first instance created during loading.
                 // except if the new repeat is actually the first page in the form, or contains the first page

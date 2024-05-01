@@ -3,7 +3,7 @@ import repeatModule from 'enketo-core/src/js/repeat';
 import $ from 'jquery';
 import events from './event';
 import settings from './settings';
-import reasons from './reasons';
+import reasons from 'enketo-core/src/js/reasons';
 import { t } from './translator';
 import gui from './gui';
 
