@@ -36,8 +36,6 @@ try {
     _setRedisUrlsFromEnv();
 }
 
-_transformRedisConfigToUrls();
-
 /**
  * Updates all configuration items for which an environment variable was set.
  */
@@ -227,34 +225,6 @@ function _setRedisUrlsFromEnv() {
     if (process.env.ENKETO_REDIS_CACHE_URL) {
         config.redis.cache.url = process.env.ENKETO_REDIS_CACHE_URL;
     }
-}
-
-/**
- * If a redis URL is set, use that. Otherwise, build one from host/password/port configuration.
- */
-function _transformRedisConfigToUrls() {
-    if (!config.redis.main.url) {
-        config.redis.main.url = _buildRedisUrl(config.redis.main);
-    }
-
-    if (!config.redis.cache.url) {
-        config.redis.cache.url = _buildRedisUrl(config.redis.cache);
-    }
-}
-
-/**
- * Builds a redis url from configured host, port and optional password
- *
- * @static
- * @param { object } redisConfig - Local redis configuration settings imported from the config model.
- * @return { string } Redis url
- */
-
-function _buildRedisUrl(redisConfig) {
-    const auth = redisConfig.password
-        ? `:${encodeURIComponent(redisConfig.password)}@`
-        : '';
-    return `redis://${auth}${redisConfig.host}:${redisConfig.port}`;
 }
 
 /**

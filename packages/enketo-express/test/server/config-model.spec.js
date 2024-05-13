@@ -185,38 +185,6 @@ describe('Config Model', () => {
             expect(config.server.maps[2].tiles).to.deep.equal(['d', 'e']);
         });
 
-        it('builds a redis url from components without password', () => {
-            stubEnv('ENKETO_REDIS_CACHE_HOST', 'ec2-5.compute.amazonaws.com');
-            stubEnv('ENKETO_REDIS_CACHE_PORT', '12');
-
-            config = loadConfig();
-            expect(config.server.redis.cache.url).to.equal(
-                'redis://ec2-5.compute.amazonaws.com:12'
-            );
-        });
-
-        it('builds a redis url from components with password', () => {
-            stubEnv('ENKETO_REDIS_MAIN_HOST', 'ec2-5.compute-1.amazonaws.com');
-            stubEnv('ENKETO_REDIS_MAIN_PASSWORD', 'stilettos');
-            stubEnv('ENKETO_REDIS_MAIN_PORT', '12');
-
-            config = loadConfig();
-            expect(config.server.redis.main.url).to.equal(
-                'redis://:stilettos@ec2-5.compute-1.amazonaws.com:12'
-            );
-        });
-
-        it('builds a redis url from components with password with special characters', () => {
-            stubEnv('ENKETO_REDIS_MAIN_HOST', 'ec2-5.compute-1.amazonaws.com');
-            stubEnv('ENKETO_REDIS_MAIN_PASSWORD', '&onBsidv6#XeKFd}=BDDyRrv:@');
-            stubEnv('ENKETO_REDIS_MAIN_PORT', '12');
-
-            config = loadConfig();
-            expect(config.server.redis.main.url).to.equal(
-                'redis://:%26onBsidv6%23XeKFd%7D%3DBDDyRrv%3A%40@ec2-5.compute-1.amazonaws.com:12'
-            );
-        });
-
         it('passes through a complex redis main URL', () => {
             stubEnv(
                 'ENKETO_REDIS_MAIN_URL',
