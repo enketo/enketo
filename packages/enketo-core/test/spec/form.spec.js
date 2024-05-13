@@ -730,7 +730,8 @@ describe('branching functionality', () => {
             expect(form.model.node(three).getVal()).to.equal('three');
         });
 
-        it('by clearing values of non-relevant questions when form.clearNonRelevant() is called', () => {
+        // OC disabled forceClearing of non-relevant values
+        xit('by clearing values of non-relevant questions when form.clearNonRelevant() is called', () => {
             const form = loadForm(name);
             form.init();
             expect(form.model.node(two).getVal()).to.equal('two');
