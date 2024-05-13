@@ -1,4 +1,4 @@
-const request = require('request');
+const request = require('@cypress/request');
 const express = require('express');
 const communicator = require('../lib/communicator');
 const surveyModel = require('../models/survey-model');

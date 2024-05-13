@@ -3,10 +3,19 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## 7.2.0 - 2024-04-19
+
+-   Reduce size of Docker image by using slim base and only building once (leaving dev deps)
+-   Forward auth cookie when making max-size request to form server
+-   Fix \_isRelevant function in calculation module returns incorrect cached result after initialization
+-   URL-encode href attributes
+-   Remove handling of `bl` tag because it doesn't exist
+-   Only treat `_` as markdown italics if separated by whitespace
+
 ## 7.1.0 - 2024-01-25
 
 -   Fix: "for" attribute throws off ability to open to the right page upon load (#1286)
--   Revert change from v7.2.0 to preserve high resolution annotated images (#1292)
+-   Revert change from v6.1.0 to preserve high resolution annotated images (#1292)
 
 ## 7.0.0 - 2023-10-30
 
