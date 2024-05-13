@@ -8,7 +8,6 @@ import gui from './gui';
 import settings from './settings';
 import './calculate';
 import './relevant';
-import './required';
 import './page';
 import './repeat';
 import './input';
