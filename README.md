@@ -14,15 +14,12 @@ This is the Enketo web forms monorepo. Enketo is an open source project that pro
 
 Enketo was initiated in 2009 by Martijn van de Rijdt as a web-based alternative or complement to [ODK Collect](https://docs.getodk.org/collect-intro/). It has become a core component of the ODK ecosystem and been adopted by several organizations beyond that ecosystem.
 
-Since 2021, Enketo has been maintained by the [ODK team](https://getodk.org/about/team.html) (primarily [Trevor Schmidt](https://github.com/eyelidlessness/)). Martijn continues to provide advice and continuity. The ODK project sets priorities in collaboration with its [Technical Advisory Board](https://getodk.org/about/ecosystem.html).
+Since 2021, Enketo has been maintained by the [ODK team](https://getodk.org/about/team.html). The ODK team's goals have been to increase alignment with ODK Collect, improve error messages to help users get out of bad states and improve long-term maintainability by modernizing the code base, removing code duplication, and simplifying state mutation.
 
-Our current primary goals are:
+> [!IMPORTANT]  
+> The ODK team will transition out of being primary maintainers of Enketo by the end of 2024. We are currently [seeking new maintainers](https://github.com/enketo/enketo/issues/1316).
 
--   Increasing alignment with ODK Collect, particularly in service of submission edits.
--   Improving error messages so that users can get out of bad states.
--   Improving long-term maintainability by modernizing code bases, removing code duplication, and simplifying state mutation.
-
-Feature requests and project discussion are welcome on the [ODK forum](https://forum.getodk.org/).
+Please use the issues for discussion (but we will also continue to respond on the [ODK forum](https://forum.getodk.org/)).
 
 ## Using Enketo in your system
 
