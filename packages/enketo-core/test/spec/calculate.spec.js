@@ -683,4 +683,27 @@ describe('calculate functionality', () => {
             expect(q2.value).to.equal('8');
         });
     });
+
+    describe('function', () => {
+        it('_isRelevant() determines relevancy correctly', () => {
+            const form = loadForm('relevant-calcs.xml', null);
+
+            form.init();
+            const props = {
+                name: '/data/grp/four',
+                expr: "if( /data/a  != 'ignore', concat('fo', 'ur'), 'ignore')",
+                dataType: 'string',
+                index: 0,
+            };
+
+            expect(form.calc._isRelevant(props)).to.equal(false);
+
+            const a = form.view.html.querySelector('input[name="/data/a"]');
+
+            a.value = 'a';
+            a.dispatchEvent(events.Change());
+
+            expect(form.calc._isRelevant(props)).to.equal(true);
+        });
+    });
 });

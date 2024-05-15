@@ -2,7 +2,7 @@
  * @module submissions-controller
  */
 
-const request = require('request');
+const request = require('@cypress/request');
 const express = require('express');
 const errors = require('../lib/custom-error');
 const mediaLib = require('../lib/media');
@@ -216,6 +216,7 @@ function maxSize(req, res, next) {
         surveyModel
             .get(req.enketoId)
             .then((survey) => {
+                survey.cookie = req.headers.cookie;
                 survey.credentials = userModel.getCredentials(req);
 
                 return survey;
