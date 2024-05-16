@@ -7,7 +7,6 @@ const pkg = require('../../package.json');
 const mergeWith = require('lodash/mergeWith');
 const path = require('path');
 const fs = require('fs');
-const url = require('url');
 
 const themePath = path.join(__dirname, '../../public/css');
 const languagePath = path.join(__dirname, '../../locales/src');
@@ -34,7 +33,7 @@ try {
         'No local config.json found. Will check environment variables instead.'
     );
     _updateConfigFromEnv(config);
-    _setRedisConfigFromEnv();
+    _setRedisUrlsFromEnv();
 }
 
 /**
@@ -215,38 +214,17 @@ function _emptyObjectProperties(obj) {
 }
 
 /**
- * Overrides any redis settings if a special enviroment URL variable is set.
+ * The Redis url property is not specified in default-config since it overlaps with host/password/port configuration. This means
+ * we have to explicitly use the URL env var if it exists.
  */
-function _setRedisConfigFromEnv() {
-    const redisMainUrl = process.env.ENKETO_REDIS_MAIN_URL;
-    const redisCacheUrl = process.env.ENKETO_REDIS_CACHE_URL;
-
-    if (redisMainUrl) {
-        config.redis.main = _extractRedisConfigFromUrl(redisMainUrl);
+function _setRedisUrlsFromEnv() {
+    if (process.env.ENKETO_REDIS_MAIN_URL) {
+        config.redis.main.url = process.env.ENKETO_REDIS_MAIN_URL;
     }
-    if (redisCacheUrl) {
-        config.redis.cache = _extractRedisConfigFromUrl(redisCacheUrl);
+
+    if (process.env.ENKETO_REDIS_CACHE_URL) {
+        config.redis.cache.url = process.env.ENKETO_REDIS_CACHE_URL;
     }
-}
-
-/**
- * Parses a redis URL and returns an object with `host`, `port` and `password` properties.
- *
- * @param { string } redisUrl - A compliant redis url
- * @return {{host: string, port: string, password: string|null}} config object
- */
-function _extractRedisConfigFromUrl(redisUrl) {
-    const parsedUrl = url.parse(redisUrl);
-    const password =
-        parsedUrl.auth && parsedUrl.auth.split(':')[1]
-            ? parsedUrl.auth.split(':')[1]
-            : null;
-
-    return {
-        host: parsedUrl.hostname,
-        port: parsedUrl.port,
-        password,
-    };
 }
 
 /**

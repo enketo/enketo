@@ -1,4 +1,6 @@
-Below is a complete list of all configuration items. The **bold items** also highlighted with 👉 are important to set. Others are less important.
+Below is a complete list of all configuration items. These are set in the `config.json` file or environment variables as described [in the README](./packages/enketo-express#configuring-enketo-express).
+
+The **bold items** also highlighted with 👉 are important to set. Others are less important.
 
 ## app name
 
@@ -162,6 +164,9 @@ For GMaps layers you have the four options as tiles values: `"GOOGLE_SATELLITE"`
 Specifies the name of a query parameter that will be copied from an Enketo URL to the submission and formList requests. The value of this parameter can be used by the data server to e.g. track submission sources, perform form access control, or serve custom external data per user.
 
 ## 👉 redis
+
+> [!NOTE]
+> You can use `main -> url` or `cache --> url` or the corresponding environmental variables instead of the host/port/password combination described below. Use a URL to specify additional Redis configuration such as SSL, username, or DB index. A URL takes precedence over the separate configuration items.
 
 -   main -> host: The IP address of the main redis database instance. If installed on the same server as Enketo Express, the value is `"127.0.0.1"`
 -   👉 **main -> port**: The port of the main redis database instance. This is the important persistent database that contains the unique IDs for each forms. The default value is `"6379"`
