@@ -299,6 +299,15 @@ export default {
      * @param {boolean} [emptyNonRelevant] - Whether to set the calculation result to empty if non-relevant
      */
     _updateCalc(control, props, emptyNonRelevant) {
+        // OC customization:
+        // Always clear if not relevant except if the setvalue target is a visible form control and is user-editable.
+        emptyNonRelevant = !(
+            props.type === 'setvalue' &&
+            control &&
+            control.closest('.question') &&
+            !control.matches('[readonly]')
+        );
+
         if (
             !emptyNonRelevant &&
             props.type !== 'setvalue' &&

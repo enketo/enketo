@@ -6,7 +6,6 @@ import $ from 'jquery';
 import config from 'enketo/config';
 import gui from './gui';
 import settings from './settings';
-import './calculate';
 import './relevant';
 import './required';
 import './page';

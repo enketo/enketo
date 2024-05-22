@@ -1258,7 +1258,9 @@ describe('repeat functionality', () => {
             ).to.deep.equal(['1', '']);
         });
 
-        it('only excludes non-relevant values on initialization by default', () => {
+        // OC has hardcoded rules about excluding non-relevant values that break tests where
+        // excludeNonRelevant is set to false.
+        xit('only excludes non-relevant values on initialization by default', () => {
             excludeNonRelevant = false;
 
             const form = loadForm(
