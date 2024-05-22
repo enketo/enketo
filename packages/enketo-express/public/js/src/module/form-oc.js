@@ -10,7 +10,6 @@ import './relevant-oc';
 import './page-oc';
 import './repeat-oc';
 import './input-oc';
-import './download-utils-oc';
 
 Form.constraintNames = Array.from(Array(21)).map(
     (val, i) => `constraint${i !== 0 ? i : ''}`
