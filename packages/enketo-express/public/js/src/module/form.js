@@ -7,7 +7,6 @@ import config from 'enketo/config';
 import gui from './gui';
 import settings from './settings';
 import './relevant';
-import './required';
 import './page';
 import './repeat';
 import './input';
