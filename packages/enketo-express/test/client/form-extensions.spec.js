@@ -1,6 +1,6 @@
-import { Form } from '../../public/js/src/module/form';
+import { Form } from '../../public/js/src/module/form-oc';
 import forms from './forms/forms';
-import '../../public/js/src/module/form-model';
+import '../../public/js/src/module/form-model-oc';
 
 const range = document.createRange();
 

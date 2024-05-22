@@ -9,8 +9,8 @@ import $ from 'jquery';
 import gui from './gui';
 import connection from './connection';
 import settings from './settings';
-import { Form } from './form'; // modified for OC
-import { FormModel } from './form-model'; // modified for OC
+import { Form } from './form-oc'; // modified for OC
+import { FormModel } from './form-model-oc'; // modified for OC
 import fileManager from './file-manager';
 import events from './event';
 import {

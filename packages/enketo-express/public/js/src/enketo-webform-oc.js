@@ -12,12 +12,12 @@ import {
     loadTranslation,
 } from './module/translator';
 import store from './module/store';
-import relevantModule from './module/relevant';
-import repeatModule from './module/repeat';
+import relevantModule from './module/relevant-oc';
+import repeatModule from './module/repeat-oc';
 import events from './module/event';
 import formCache from './module/form-cache';
 import applicationCache from './module/application-cache';
-import oc from './module/custom';
+import oc from './module/custom-oc';
 
 const loader = document.querySelector('.main-loader');
 const formheader = document.querySelector('.main > .paper > .form-header');

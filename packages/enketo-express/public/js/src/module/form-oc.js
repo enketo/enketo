@@ -6,11 +6,11 @@ import $ from 'jquery';
 import config from 'enketo/config';
 import gui from './gui';
 import settings from './settings';
-import './relevant';
-import './page';
-import './repeat';
-import './input';
-import './download-utils';
+import './relevant-oc';
+import './page-oc';
+import './repeat-oc';
+import './input-oc';
+import './download-utils-oc';
 
 Form.constraintNames = Array.from(Array(21)).map(
     (val, i) => `constraint${i !== 0 ? i : ''}`
