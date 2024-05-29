@@ -5,7 +5,7 @@ import { getXPath } from 'enketo-core/src/js/dom-utils';
 import $ from 'jquery';
 
 // load customized nodeset module
-import './nodeset';
+import './nodeset-oc';
 
 const ENKETO_XFORMS_NS = 'http://enketo.org/xforms';
 
