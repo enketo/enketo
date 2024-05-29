@@ -108,7 +108,7 @@ The `maps` configuration can include an array of Mapbox TileJSON objects (or a s
 [
   {
     "name": "street",
-    "tiles": [ "http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" ],
+    "tiles": [ "https://tile.openstreetmap.org/{z}/{x}/{y}.png" ],
     "attribution": "Map data © <a href=\"http://openstreetmap.org\">OpenStreetMap</a> contributors"
   },
   {
