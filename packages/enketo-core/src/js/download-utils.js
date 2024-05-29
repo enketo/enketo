@@ -9,6 +9,10 @@
 function updateDownloadLink(anchor, objectUrl, fileName) {
     anchor.setAttribute('href', objectUrl || '');
     anchor.setAttribute('download', fileName || '');
+    anchor.setAttribute(
+        'title',
+        'Right click and select "Save link as..." to download'
+    );
 }
 
 // Export as default to facilitate overriding this function.
