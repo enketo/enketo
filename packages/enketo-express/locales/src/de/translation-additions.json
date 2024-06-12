@@ -532,5 +532,13 @@
             "applytoall": "Für alle anwenden",
             "questionmsg": "Geben Sie einen Grund für die Änderung unten auf der Seite ein."
         }
+    },
+    "repeat": {
+        "addanother": {
+            "btn": "Ein Weiteres Hinzufügen"
+        },
+        "remove": {
+            "btn": "Entfernen"
+        }
     }
 }

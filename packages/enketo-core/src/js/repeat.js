@@ -183,13 +183,17 @@ export default {
         $repeatInfos
             .filter('*:not([data-repeat-fixed]):not([data-repeat-count])')
             .append(
-                '<button type="button" class="btn btn-default add-repeat-btn"><i class="icon icon-plus"> </i></button>'
+                `<button type="button" class="btn btn-default add-repeat-btn" data-i18n="repeat.addanother.btn">${t(
+                    'repeat.addanother.btn'
+                )}</button>`
             )
             .siblings('.or-repeat')
             .append(
                 `<div class="repeat-buttons"><button type="button" ${
                     disableFirstRepeatRemoval ? ' disabled ' : ' '
-                }class="btn btn-default remove"><i class="icon icon-minus"> </i></button></div>`
+                }class="btn btn-default remove" data-i18n="repeat.remove.btn">${t(
+                    'repeat.remove.btn'
+                )}</button></div>`
             );
         /**
          * The model also requires storing repeat templates for repeats that do not have a jr:template.
