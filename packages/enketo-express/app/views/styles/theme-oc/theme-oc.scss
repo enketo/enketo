@@ -24,14 +24,8 @@
 // icons
 @import '../component/icons';
 
-.or-repeat-info .icon-plus:before {
-    content: 'Add Another';
-    font-family: 'OpenSansRegular', Arial, sans-serif;
-    font-size: 15px;
-}
-
-.or-repeat .icon-minus:before {
-    content: 'Remove';
+.or-repeat-info .add-repeat-btn,
+.or-repeat .remove {
     font-family: 'OpenSansRegular', Arial, sans-serif;
     font-size: 15px;
 }
