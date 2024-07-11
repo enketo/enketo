@@ -250,9 +250,9 @@ const openrosaXPathExtensions = function () {
         digest(msg, algo, encoding) {
             return XPR.string(digest(msg, algo, encoding));
         },
-        distance(r) {
+        distance(...r) {
             if (arguments.length === 0) throw TOO_FEW_ARGS;
-            return XPR.number(distance(asGeopoints(r)));
+            return XPR.number(distance(asGeopoints(...r)));
         },
         exp(r) {
             return XPR.number(Math.exp(asNumber(r)));
