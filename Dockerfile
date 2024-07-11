@@ -4,7 +4,8 @@ RUN apt-get update \
     && apt-get install -y --no-install-recommends \
         python3 \
         build-essential \
-        git
+        git \
+        gettext-base
 
 ENV ENKETO_SRC_DIR=/srv/src/enketo
 WORKDIR ${ENKETO_SRC_DIR}
