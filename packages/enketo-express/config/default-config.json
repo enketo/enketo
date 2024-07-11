@@ -123,5 +123,6 @@
     "exclude non-relevant": false,
     "experimental optimizations": {
         "computeAsync": false
-    }
+    },
+    "redirectToForm": false
 }
