@@ -1,7 +1,7 @@
 /**
  * Deals with the main high level survey controls: saving, submitting etc.
  */
-
+import config from 'enketo/config';
 import { Form } from 'enketo-core';
 import downloadUtils from 'enketo-core/src/js/download-utils';
 import $ from 'jquery';
@@ -438,9 +438,13 @@ function _submitRecord(survey) {
                 msg += t('alert.submissionsuccess.redirectmsg');
                 gui.alert(msg, t('alert.submissionsuccess.heading'), level);
                 setTimeout(() => {
-                    location.href = decodeURIComponent(
-                        settings.returnUrl || settings.defaultReturnUrl
-                    );
+                    if (config.redirectToForm == true){
+                        location.href = window.location.href;
+                    } else {
+                        location.href = decodeURIComponent(
+                            settings.returnUrl || settings.defaultReturnUrl
+                        );
+                    }
                 }, 1200);
             } else {
                 msg = msg.length > 0 ? msg : t('alert.submissionsuccess.msg');
