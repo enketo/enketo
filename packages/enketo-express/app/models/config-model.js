@@ -349,6 +349,7 @@ module.exports = {
         csrfCookieName: config['csrf cookie name'],
         excludeNonRelevant: config['exclude non-relevant'],
         experimentalOptimizations: config['experimental optimizations'],
+        redirectToForm: config.redirectToForm,
     },
     getThemesSupported,
 };
