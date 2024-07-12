@@ -3,6 +3,10 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## [4.1.1] - 2024-07-12
+
+-   Update dependencies
+
 ## [4.1.0] - 2024-04-19
 
 -   URL-encode href attributes
