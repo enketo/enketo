@@ -24,6 +24,7 @@
     "private": true,
     "license": "Apache-2.0",
     "dependencies": {
+        "@cypress/request": "^3.0.1",
         "basic-auth": "^2.0.1",
         "body-parser": "^1.20.2",
         "bristol": "^0.4.0",
@@ -54,9 +55,8 @@
         "papaparse": "^5.4.1",
         "pkg-dir": "^5.0.0",
         "pug": "^3.0.2",
-        "puppeteer": "^13.7.0",
+        "puppeteer": "^22.13.0",
         "redis": "^3.1.2",
-        "@cypress/request": "^3.0.1",
         "serve-favicon": "^2.5.0",
         "time-grunt": "^2.0.0",
         "valid-url": "^1.0.9",
@@ -94,10 +94,10 @@
     "engines": {
         "node": ">=18 <21",
         "npm": "please-use-yarn",
-        "yarn": ">= 1.22.19 <2"
+        "yarn": ">= 1.22.22 <2"
     },
     "volta": {
-        "node": "20.12.2",
-        "yarn": "1.22.19"
+        "node": "20.15.1",
+        "yarn": "1.22.22"
     }
 }

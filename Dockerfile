@@ -14,13 +14,14 @@
 #
 # Note that adding new widgets or themes requires Enketo Express to be rebuilt.
 
-FROM node:20.12.2-slim
+FROM node:20.15.1-slim
 
 RUN apt-get update \
     && apt-get install -y --no-install-recommends \
         python3 \
         build-essential \
-        git
+        git \
+        gettext-base
 
 ENV ENKETO_SRC_DIR=/srv/src/enketo
 WORKDIR ${ENKETO_SRC_DIR}
