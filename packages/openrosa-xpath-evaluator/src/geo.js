@@ -124,9 +124,14 @@ module.exports = {
     distance,
 };
 
-function asGeopoints(r) {
-    if (r.t === 'arr' && r.v.length > 1) {
-        return r.v.map(asString);
+function asGeopoints(...r) {
+    if (r.length > 1) {
+        return r.map(asString);
     }
-    return asString(r).split(';');
+
+    if (r[0].t === 'arr' && r[0].v.length > 1) {
+        return r[0].v.map(asString);
+    }
+
+    return asString(r[0]).split(';');
 }

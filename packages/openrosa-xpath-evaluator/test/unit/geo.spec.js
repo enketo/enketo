@@ -23,5 +23,12 @@ describe('geo', () => {
                 assert.deepEqual(asGeopoints(r), expected);
             });
         });
+
+        it(`should handle multiple arguments`, () => {
+            assert.deepEqual(
+                asGeopoints(wrapVal('1'), wrapVal('2'), wrapVal('3')),
+                ['1', '2', '3']
+            );
+        });
     });
 });

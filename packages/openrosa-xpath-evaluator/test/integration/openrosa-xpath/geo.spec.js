@@ -86,6 +86,33 @@ describe('distance() and area() functions', () => {
         });
     });
 
+    describe('variadic distance', () => {
+        // https://www.mapdevelopers.com/area_finder.php?polygons=[[[[38.253094215699576%2C21.756382658677467]%2C[38.25021274773806%2C21.756382658677467]]]]
+        it('works with literal geopoint string arguments', () => {
+            assertNumberValue(
+                "distance('38.253094215699576 21.756382658677467 0 0', '38.25021274773806 21.756382658677467 0 0')",
+                320.76
+            );
+        });
+
+        it('works with nodeset reference arguments', () => {
+            const doc = initDoc(`
+                    <root id="root">
+                        <point1>38.253094215699576 21.756382658677467 0 0</point1>
+                        <point2>38.25021274773806 21.756382658677467 0 0</point2>
+                    </root>
+                `);
+
+            const node = doc.getElementById('root');
+            assertNumberValue(
+                node,
+                null,
+                'distance(/root/point1, /root/point2)',
+                320.76
+            );
+        });
+    });
+
     it('throws error when no parameters are provided', () => {
         assertThrow('area()');
         assertThrow('distance()');
