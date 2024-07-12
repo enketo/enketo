@@ -3,6 +3,10 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## [3.1.0] - 2024-07-12
+
+-   Add multi-argument support to distance function (#1328)
+
 ## [3.0.0] - 2023-10-30
 
 -   Breaking change: Support Node 18 and 20, drop support for older versions

@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## 7.3.0 - 2024-07-12
+
+-   If redis is configured with a URL, use the url as-is (#1297)
+-   Update OSM URLs to one that supports HTTP/2 and HTTP/3 (#11)
+-   Add multi-argument support to distance function (#1328)
+
 ## 7.2.0 - 2024-04-19
 
 -   Reduce size of Docker image by using slim base and only building once (leaving dev deps)

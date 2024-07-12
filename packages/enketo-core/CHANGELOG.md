@@ -3,6 +3,11 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## [8.3.0] - 2024-07-12
+
+-   Update OSM URLs to one that supports HTTP/2 and HTTP/3 (#11)
+-   Add multi-argument support to distance function (#1328)
+
 ## [8.2.0] - 2024-04-19
 
 -   Fix \_isRelevant function in calculation module returns incorrect cached result after initialization
