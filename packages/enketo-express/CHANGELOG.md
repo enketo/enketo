@@ -3,6 +3,10 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## 7.3.1 - 2024-07-15
+
+-   Publish to DockerHub as enketo-express (not enketo like GHCR)
+
 ## 7.3.0 - 2024-07-12
 
 -   If redis is configured with a URL, use the url as-is (#1297)
