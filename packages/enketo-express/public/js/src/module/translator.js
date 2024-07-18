@@ -87,34 +87,44 @@ const localize = (container, lng) => {
         })
         .then(() => {
             list.forEach((el) => {
-                const key = el.dataset.i18n;
+                let key = el.dataset.i18n;
+                // translation key for element with i18nNumber is i18n-i18nNumber
+                if (el.dataset.i18nNumber) {
+                    key = `${key}-${el.dataset.i18nNumber}`;
+                }
                 if (key) {
-                    if (!cache[key]) {
-                        let options = {};
-                        // quick hack for __icon__ replacement
-                        if (el.dataset.i18nIcon) {
-                            options = {
-                                icon: `<span class="icon ${el.dataset.i18nIcon}"> </span>`,
-                                interpolation: { escapeValue: false },
-                            };
-                        }
-                        if (el.dataset.i18nNumber) {
-                            options = {
-                                number: el.dataset.i18nNumber,
-                            };
-                        }
-                        cache[key] = t(key, options);
+                    let options = {};
+                    // quick hack for __icon__ replacement
+                    if (el.dataset.i18nIcon) {
+                        options = {
+                            icon: `<span class="icon ${el.dataset.i18nIcon}"> </span>`,
+                            interpolation: { escapeValue: false },
+                        };
                     }
+                    if (el.dataset.i18nNumber) {
+                        options = {
+                            number: el.dataset.i18nNumber,
+                        };
+                    }
+
+                    // Insert cache only if the translation is new
+                    if (!cache[key]) {
+                        cache[key] = t(el.dataset.i18n, options);
+                    }
+
                     // This assumes that if the element has a placeholder, that's the thing that
                     // needs to be localized, since placeholders are only used on form controls,
                     // and the textContent of a form control is never translatable.
+                    const translationCache = cache[key];
                     if (el.placeholder) {
-                        el.placeholder = cache[key];
+                        el.placeholder = translationCache;
                     } else if (el.dataset.i18nIcon) {
                         el.textContent = '';
-                        el.append(range.createContextualFragment(cache[key]));
+                        el.append(
+                            range.createContextualFragment(translationCache)
+                        );
                     } else {
-                        el.textContent = cache[key];
+                        el.textContent = translationCache;
                     }
                 }
             });
