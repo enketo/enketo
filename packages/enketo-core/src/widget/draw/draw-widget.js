@@ -392,7 +392,7 @@ class DrawWidget extends Widget {
             .then(async (objectUrl) => {
                 this.baseImage = {
                     objectUrl,
-                    options: await this._getImageScalingOptions(objectUrl)
+                    options: await this._getImageScalingOptions(objectUrl),
                 };
                 return this._redrawPad();
             })
@@ -529,7 +529,9 @@ class DrawWidget extends Widget {
         const needFile = this.props.load && !this.element.value;
 
         this.initialize.then(() => {
-            this.resizeObserver.observe(this.$widget[0].querySelector('.draw-widget__body'));
+            this.resizeObserver.observe(
+                this.$widget[0].querySelector('.draw-widget__body')
+            );
 
             if (!this.props.readonly && !needFile && !touchNotFull) {
                 this.pad.on();
