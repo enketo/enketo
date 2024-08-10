@@ -159,7 +159,7 @@ The `language` option overrides the default languages rules of the XForm itself.
 1. install prerequisites:
 
 -   Volta (optional, but recommended)
--   Node.js 20 and Yarn 1 (Node.js 16 and 18 are also supported)
+-   Node.js 20 and [Yarn 1](https://classic.yarnpkg.com/) (Node.js 16 and 18 are also supported)
 -   [grunt-cli](https://gruntjs.com/getting-started)
 
 2. install dependencies with `yarn install`
@@ -168,6 +168,12 @@ The `language` option overrides the default languages rules of the XForm itself.
 5. browse to [http://localhost:8005](http://localhost:8005/) and load an XForm url with the `xform` queryparameter or load a local from the /tests/forms folder in this repo
 6. run tests with `yarn test` (headless chrome) and `yarn run test-browsers` (browsers); **note:** running tests updates the coverage badge in README.md, but these changes should not be committed except when preparing a release
 7. adding the querystring `touch=true` and reducing the window size allows you to simulate mobile touchscreens
+
+### Common development setup issue troubleshooting
+
+-   `ERESOLVE unable to resolve dependency tree`: Make sure you're using node >=18 <21. Try [nvm](https://github.com/nvm-sh/nvm?tab=readme-ov-file#installing-and-updating).
+-   `Error: Cannot find module...` and `npm ERR! code ENOWORKSPACES`: This is a monorepo. Make sure you run `yarn install` in the root of this project before moving into `packages/enketo-core`. If your using nvm, make sure you run `nvm use` from the root of this project before moving into `packages/enketo-core`. Running `nvm use` from `packages/enketo-core` will not work.
+-   `EADDRINUSE`: If you get an `EADDRINUSE` error when you `yarn start`, try searching for a ghost node process and killing it.
 
 ### Notes for JavaScript Developers
 
