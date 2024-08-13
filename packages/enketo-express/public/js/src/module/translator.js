@@ -93,22 +93,21 @@ const localize = (container, lng) => {
                     key = `${key}-${el.dataset.i18nNumber}`;
                 }
                 if (key) {
-                    let options = {};
-                    // quick hack for __icon__ replacement
-                    if (el.dataset.i18nIcon) {
-                        options = {
-                            icon: `<span class="icon ${el.dataset.i18nIcon}"> </span>`,
-                            interpolation: { escapeValue: false },
-                        };
-                    }
-                    if (el.dataset.i18nNumber) {
-                        options = {
-                            number: el.dataset.i18nNumber,
-                        };
-                    }
-
                     // Insert cache only if the translation is new
                     if (!cache[key]) {
+                        let options = {};
+                        // quick hack for __icon__ replacement
+                        if (el.dataset.i18nIcon) {
+                            options = {
+                                icon: `<span class="icon ${el.dataset.i18nIcon}"> </span>`,
+                                interpolation: { escapeValue: false },
+                            };
+                        }
+                        if (el.dataset.i18nNumber) {
+                            options = {
+                                number: el.dataset.i18nNumber,
+                            };
+                        }
                         cache[key] = t(el.dataset.i18n, options);
                     }
 
