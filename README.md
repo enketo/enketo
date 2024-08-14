@@ -17,7 +17,7 @@ Enketo was initiated in 2009 by Martijn van de Rijdt as a web-based alternative 
 Since 2021, Enketo has been maintained by the [ODK team](https://getodk.org/about/team.html). The ODK team's goals have been to increase alignment with ODK Collect, improve error messages to help users get out of bad states and improve long-term maintainability by modernizing the code base, removing code duplication, and simplifying state mutation.
 
 > [!IMPORTANT]  
-> The ODK team will transition out of being primary maintainers of Enketo by the end of 2024. We are currently [seeking new maintainers](https://github.com/enketo/enketo/issues/1316).
+> The ODK team will transition out of being primary maintainers of Enketo by the end of 2024. Kobo will then take on primary maintainership.
 
 Please use the issues for discussion (but we will also continue to respond on the [ODK forum](https://forum.getodk.org/)).
 
