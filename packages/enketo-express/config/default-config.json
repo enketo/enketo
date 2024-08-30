@@ -63,8 +63,7 @@
     "analytics": "google",
     "google": {
         "analytics": {
-            "ua": "",
-            "domain": ""
+            "measurementId": ""
         },
         "api key": ""
     },

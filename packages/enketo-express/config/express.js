@@ -109,8 +109,7 @@ app.use((req, res, next) => {
     res.locals.environment = req.app.get('env');
     res.locals.analytics = req.app.get('analytics');
     res.locals.googleAnalytics = {
-        ua: req.app.get('google').analytics.ua,
-        domain: req.app.get('google').analytics.domain || 'auto',
+        measurementId: req.app.get('google').analytics.measurementId,
     };
     res.locals.piwikAnalytics = {
         trackerUrl: req.app.get('piwik').analytics['tracker url'],
