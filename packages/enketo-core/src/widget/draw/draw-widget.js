@@ -60,6 +60,7 @@ class DrawWidget extends Widget {
             if (existingFilename) {
                 this.element.value = existingFilename;
 
+                this._resizeCanvas();
                 return this._loadFileIntoPad(existingFilename).then(
                     this._updateDownloadLink.bind(this)
                 );
