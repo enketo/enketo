@@ -386,6 +386,7 @@ class DrawWidget extends Widget {
                     this._redrawPad()
                 );
                 await this.promisedRedrawPad;
+                return this.baseImage.data;
             })
             .catch(() => {
                 this._showFeedback(
