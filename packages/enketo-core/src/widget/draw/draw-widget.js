@@ -128,20 +128,9 @@ class DrawWidget extends Widget {
                 this._showFeedback(error.message);
             });
 
-        $(this.element)
-            .on('applyfocus', () => {
-                this.canvas.focus();
-            })
-            .closest('[role="page"]')
-            .on(events.PageFlip().type, () => {
-                // When an existing value is loaded into the canvas and is not
-                // the first page, it won't become visible until the canvas is clicked
-                // or the window is resized:
-                // https://github.com/kobotoolbox/enketo-express/issues/895
-                // This also fixes a similar issue with an empty canvas:
-                // https://github.com/kobotoolbox/enketo-express/issues/844
-                this._resizeCanvas();
-            });
+        $(this.element).on('applyfocus', () => {
+            this.canvas.focus();
+        });
     }
 
     // All this is copied from the file-picker widget
@@ -447,6 +436,11 @@ class DrawWidget extends Widget {
                 // Cache the base64 data of the image so we never re-fetch it.
                 const data = canvas.toDataURL();
 
+                // No point in calculating options until the canvas is visible
+                if (!this._isCanvasVisible()) {
+                    resolve({ data });
+                }
+
                 const imgWidth = image.width;
                 const imgHeight = image.height;
                 const hRatio = width / imgWidth;
@@ -486,6 +480,11 @@ class DrawWidget extends Widget {
 
     async _redrawPad(padData = []) {
         if (this.baseImage) {
+            if (!this.baseImage.options && this._isCanvasVisible()) {
+                // Calculate the options once the canvas is visible
+                this.baseImage = await this._getBaseImage(this.baseImage.data);
+            }
+
             this.pad.clear();
             await this.pad.fromDataURL(
                 this.baseImage.data,
@@ -495,6 +494,10 @@ class DrawWidget extends Widget {
         } else {
             this.pad.fromData(padData);
         }
+    }
+
+    _isCanvasVisible() {
+        return this.canvas.offsetWidth > 0;
     }
 
     /**
@@ -507,7 +510,7 @@ class DrawWidget extends Widget {
     _resizeCanvas() {
         // Use a little trick to avoid resizing currently-hidden canvases
         // https://github.com/enketo/enketo-core/issues/605
-        if (this.canvas.offsetWidth > 0) {
+        if (this._isCanvasVisible()) {
             // When zoomed out to less than 100%, for some very strange reason,
             // some browsers report devicePixelRatio as less than 1
             // and only part of the canvas is cleared then.
