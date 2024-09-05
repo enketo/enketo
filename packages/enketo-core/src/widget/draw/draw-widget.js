@@ -391,16 +391,8 @@ class DrawWidget extends Widget {
         return fileManager
             .getObjectUrl(file)
             .then(async (objectUrl) => {
-                // Draw the image on the canvas and then cache the Base64 data of the drawn image
-                await this._redrawPad([], {
-                    objectUrl,
-                    options: await this._getImageScalingOptions(objectUrl),
-                });
-                const dataURL = this.pad.toDataURL();
-                this.baseImage = {
-                    objectUrl: dataURL,
-                    options: await this._getImageScalingOptions(dataURL),
-                };
+                this.baseImage = await this._getBaseImage(objectUrl);
+                await this._redrawPad();
             })
             .catch(() => {
                 this._showFeedback(
@@ -440,7 +432,7 @@ class DrawWidget extends Widget {
         );
     }
 
-    async _getImageScalingOptions(dataUrl) {
+    async _getBaseImage(dataUrl) {
         return new Promise((resolve) => {
             const image = new Image();
             const deviceRatio = window.devicePixelRatio || 1;
@@ -448,6 +440,13 @@ class DrawWidget extends Widget {
             const height = this.canvas.height / deviceRatio;
 
             image.onload = () => {
+                const canvas = document.createElement('canvas');
+                canvas.width = image.naturalWidth;
+                canvas.height = image.naturalHeight;
+                canvas.getContext('2d').drawImage(image, 0, 0);
+                // Cache the base64 data of the image so we never re-fetch it.
+                const data = canvas.toDataURL();
+
                 const imgWidth = image.width;
                 const imgHeight = image.height;
                 const hRatio = width / imgWidth;
@@ -459,30 +458,39 @@ class DrawWidget extends Widget {
                     const left = (width - imgWidth * ratio) / 2;
                     const top = (height - imgHeight * ratio) / 2;
                     resolve({
-                        xOffset: left,
-                        yOffset: top,
-                        width: imgWidth * ratio,
-                        height: imgHeight * ratio,
+                        data,
+                        options: {
+                            xOffset: left,
+                            yOffset: top,
+                            width: imgWidth * ratio,
+                            height: imgHeight * ratio,
+                        },
                     });
                 }
                 // if image is smaller than canvas then show it in the center and don't stretch it
                 const left = (width - imgWidth) / 2;
                 const top = (height - imgHeight) / 2;
                 resolve({
-                    xOffset: left,
-                    yOffset: top,
-                    width: imgWidth,
-                    height: imgHeight,
+                    data,
+                    options: {
+                        xOffset: left,
+                        yOffset: top,
+                        width: imgWidth,
+                        height: imgHeight,
+                    },
                 });
             };
             image.src = dataUrl;
         });
     }
 
-    async _redrawPad(padData = [], baseImage = this.baseImage) {
-        if (baseImage) {
+    async _redrawPad(padData = []) {
+        if (this.baseImage) {
             this.pad.clear();
-            await this.pad.fromDataURL(baseImage.objectUrl, baseImage.options);
+            await this.pad.fromDataURL(
+                this.baseImage.data,
+                this.baseImage.options
+            );
             this.pad.fromData(padData, { clear: false });
         } else {
             this.pad.fromData(padData);
