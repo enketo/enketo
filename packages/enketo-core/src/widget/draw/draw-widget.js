@@ -43,6 +43,7 @@ class DrawWidget extends Widget {
             '.draw-widget__body__canvas'
         );
         this.resizeObserver = new ResizeObserver(this._resizeCanvas.bind(this));
+        this.promisedRedrawPad = Promise.resolve();
 
         if (this.props.load) {
             this._handleFiles(existingFilename);
@@ -96,9 +97,9 @@ class DrawWidget extends Widget {
                         const data = that.pad.toData();
                         if (data) {
                             data.pop();
-                            that._redrawPad(data).then(
-                                that._updateValue.bind(that)
-                            );
+                            that.promisedRedrawPad = that.promisedRedrawPad
+                                .then(() => that._redrawPad(data))
+                                .then(that._updateValue.bind(that));
                         }
                     })
                     .end()
@@ -381,7 +382,10 @@ class DrawWidget extends Widget {
             .getObjectUrl(file)
             .then(async (objectUrl) => {
                 this.baseImage = await this._getBaseImage(objectUrl);
-                await this._redrawPad();
+                this.promisedRedrawPad = this.promisedRedrawPad.then(() =>
+                    this._redrawPad()
+                );
+                await this.promisedRedrawPad;
             })
             .catch(() => {
                 this._showFeedback(
@@ -518,7 +522,9 @@ class DrawWidget extends Widget {
             this.canvas.width = this.canvas.offsetWidth * ratio;
             this.canvas.height = this.canvas.offsetHeight * ratio;
             this.canvas.getContext('2d').scale(ratio, ratio);
-            this._redrawPad(this.pad.toData());
+            this.promisedRedrawPad = this.promisedRedrawPad.then(() =>
+                this._redrawPad(this.pad.toData())
+            );
         }
     }
 
