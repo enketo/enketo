@@ -391,11 +391,16 @@ class DrawWidget extends Widget {
         return fileManager
             .getObjectUrl(file)
             .then(async (objectUrl) => {
-                this.baseImage = {
+                // Draw the image on the canvas and then cache the Base64 data of the drawn image
+                await this._redrawPad([], {
                     objectUrl,
                     options: await this._getImageScalingOptions(objectUrl),
+                });
+                const dataURL = this.pad.toDataURL();
+                this.baseImage = {
+                    objectUrl: dataURL,
+                    options: await this._getImageScalingOptions(dataURL),
                 };
-                return this._redrawPad();
             })
             .catch(() => {
                 this._showFeedback(
@@ -474,13 +479,10 @@ class DrawWidget extends Widget {
         });
     }
 
-    async _redrawPad(padData = []) {
-        if (this.baseImage) {
+    async _redrawPad(padData = [], baseImage = this.baseImage) {
+        if (baseImage) {
             this.pad.clear();
-            await this.pad.fromDataURL(
-                this.baseImage.objectUrl,
-                this.baseImage.options
-            );
+            await this.pad.fromDataURL(baseImage.objectUrl, baseImage.options);
             this.pad.fromData(padData, { clear: false });
         } else {
             this.pad.fromData(padData);
