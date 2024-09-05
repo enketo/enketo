@@ -116,7 +116,6 @@ class DrawWidget extends Widget {
                     .on('click', () => {
                         that.$widget.removeClass('full-screen');
                         that.pad.off();
-                        that._updateValue();
                         that._resizeCanvas();
 
                         return false;
