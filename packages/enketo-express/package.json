@@ -58,6 +58,7 @@
         "pkg-dir": "^5.0.0",
         "pug": "^3.0.2",
         "puppeteer": "^13.7.0",
+        "qs": "^6.13.0",
         "redis": "^3.1.2",
         "@cypress/request": "^3.0.1",
         "serve-favicon": "^2.5.0",
