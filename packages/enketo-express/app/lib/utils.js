@@ -5,6 +5,7 @@
 const crypto = require('crypto');
 const evpBytesToKey = require('evp_bytestokey');
 const validUrl = require('valid-url');
+const qs = require('qs');
 // var debug = require( 'debug' )( 'utils' );
 
 /**
@@ -224,6 +225,30 @@ function areOwnPropertiesEqual(a, b) {
     return true;
 }
 
+/**
+ * Custom URL parser that preserves certain URLs in their original form.
+ *
+ * @param {string} str - The string to be parsed
+ * @return {object} The parsed object
+ */
+function preserveURLParser(str) {
+    const parsed = qs.parse(str, {
+        decoder: (str, defaultDecoder, charset, type) => {
+            // Preserve URLs that start with 'http' or 'https:'
+            if (
+                type === 'value' &&
+                (str.startsWith('http') || str.startsWith('https'))
+            ) {
+                // Return the original string without decoding for URLs
+                return str;
+            }
+            // For non-URL values, use the default decoder
+            return defaultDecoder(str);
+        },
+    });
+    return parsed;
+}
+
 module.exports = {
     getOpenRosaKey,
     getXformsManifestHash,
@@ -235,4 +260,5 @@ module.exports = {
     areOwnPropertiesEqual,
     insecureAes192Decrypt,
     insecureAes192Encrypt,
+    preserveURLParser,
 };

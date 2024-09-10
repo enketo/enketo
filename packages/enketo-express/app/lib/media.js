@@ -84,6 +84,7 @@ const markupEntities = {
 /**
  * @param {string} fileName
  */
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const escapeFileName = (fileName) =>
     transformer
         .escapeURLPath(fileName)
@@ -132,6 +133,7 @@ const getMediaMap = async (resourceId, media, options) => {
 
     await Promise.all(
         mediaEntries.map(({ filename, hash, downloadUrl }) => {
+            filename = encodeURIComponent(filename);
             const mediaURL = createMediaURL({
                 basePath,
                 fileName: filename,
@@ -149,7 +151,7 @@ const getMediaMap = async (resourceId, media, options) => {
              * escaping logic here to ensure keys match file names when they have
              * special URL characters.
              */
-            result[escapeFileName(filename)] = mediaURL;
+            result[filename] = mediaURL;
 
             if (resourceType === ResourceType.MANIFEST) {
                 return cacheModel.cacheManifestItem(
@@ -213,7 +215,7 @@ const getInstanceAttachments = async (instanceId) => {
 
     return Object.fromEntries(
         Object.entries(instanceAttachments).map(([key, value]) => [
-            escapeFileName(key),
+            encodeURIComponent(key),
             escapeURL(value),
         ])
     );
