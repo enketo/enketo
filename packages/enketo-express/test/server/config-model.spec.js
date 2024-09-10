@@ -139,7 +139,9 @@ describe('Config Model', () => {
         });
 
         it('for a config item that has a default value of ""', () => {
-            expect(config.server.google.analytics.measurementId).to.deep.equal('');
+            expect(config.server.google.analytics.measurementId).to.deep.equal(
+                ''
+            );
             stubEnv('ENKETO_GOOGLE_ANALYTICS_MEASUREMENTID', testStringValue);
             config = loadConfig();
             expect(config.server.google.analytics.measurementId).to.deep.equal(
