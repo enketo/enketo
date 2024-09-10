@@ -36,6 +36,15 @@ class TextPrintWidget extends Widget {
             this.element.after(printElement);
             this.element.classList.add('print-hide');
 
+            // If previous element is a fake input in date widget, hide it as well
+            const previousElement = this.element.previousElementSibling;
+            if (
+                previousElement !== null &&
+                previousElement.classList.contains('date')
+            ) {
+                previousElement.classList.add('print-hide');
+            }
+
             this.widget = this.element.parentElement.querySelector(
                 `.${className}`
             );
