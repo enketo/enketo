@@ -16,7 +16,7 @@ class MediaPicker extends Widget {
 
     _init() {
         this.element
-            .querySelectorAll('.option-label')
+            .querySelectorAll('.option-label:not(video):not(audio):not(img)')
             .forEach((optionLabel) => {
                 if (getSiblingElement(optionLabel, 'img, video, audio')) {
                     optionLabel.style.display = 'none';
