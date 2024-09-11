@@ -1,0 +1,69 @@
+<?xml version="1.0"?>
+<h:html xmlns="http://www.w3.org/2002/xforms" xmlns:h="http://www.w3.org/1999/xhtml" xmlns:ev="http://www.w3.org/2001/xml-events" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:jr="http://openrosa.org/javarosa" xmlns:orx="http://openrosa.org/xforms" xmlns:odk="http://www.opendatakit.org/xforms">
+  <h:head>
+    <h:title>Test form title</h:title>
+    <model odk:xforms-version="1.0.0">
+      <itext>
+        <translation lang="fran&#xE7;ais(fr)">
+          <text id="satis-0">
+            <value>Plut&#xF4;t insatisfait.e</value>
+            <value form="image">jr://images/mecontent.jpg</value>
+          </text>
+          <text id="satis-1">
+            <value>Tr&#xE8;s insatisfait.e</value>
+            <value form="image">jr://images/t_mecontent.jpg</value>
+          </text>
+          <text id="/data/satis_global:label">
+            <value>Dans quelle mesure &#xEA;tes-vous satisfait(e) de l'activit&#xE9;?</value>
+            <value form="audio">jr://audio/Question_1.mp4</value>
+          </text>
+        </translation>
+        <translation lang="wolof(wl)">
+          <text id="satis-0">
+            <value>Plut&#xF4;t insatisfait.e</value>
+            <value form="image">jr://images/mecontent.jpg</value>
+          </text>
+          <text id="satis-1">
+            <value>Tr&#xE8;s insatisfait.e</value>
+            <value form="image">jr://images/t_mecontent.jpg</value>
+          </text>
+          <text id="/data/satis_global:label">
+            <value>Dans quelle mesure &#xEA;tes-vous satisfait(e) de l'activit&#xE9;?</value>
+            <value form="audio">jr://audio/Question_1.mp4</value>
+          </text>
+        </translation>
+      </itext>
+      <instance>
+        <data id="EVAL_FEP">
+          <satis_global/>
+          <meta>
+            <instanceID/>
+          </meta>
+        </data>
+      </instance>
+      <instance id="satis">
+        <root>
+          <item>
+            <itextId>satis-0</itextId>
+            <name>1</name>
+          </item>
+          <item>
+            <itextId>satis-1</itextId>
+            <name>0</name>
+          </item>
+        </root>
+      </instance>
+      <bind nodeset="/data/satis_global" type="string" required="false()"/>
+      <bind nodeset="/data/meta/instanceID" type="string" readonly="true()" jr:preload="uid"/>
+    </model>
+  </h:head>
+  <h:body>
+    <select1 appearance="no-buttons likert" ref="/data/satis_global">
+      <label ref="jr:itext('/data/satis_global:label')"/>
+      <itemset nodeset="instance('satis')/root/item">
+        <value ref="name"/>
+        <label ref="jr:itext(itextId)"/>
+      </itemset>
+    </select1>
+  </h:body>
+</h:html>

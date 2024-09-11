@@ -546,7 +546,9 @@ export default {
     createOptionTranslation(translation, value) {
         const el = document.createElement(translation.type || 'span');
         if (translation.contentNodes) {
-            el.classList.add('option-label');
+            if (!['IMG', 'AUDIO', 'VIDEO'].includes(el.tagName)) {
+                el.classList.add('option-label');
+            }
             translation.contentNodes.forEach((node) =>
                 el.appendChild(node.cloneNode(true))
             );

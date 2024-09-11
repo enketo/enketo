@@ -108,7 +108,7 @@ const FORM2 = `<fieldset class="question or-appearance-no-buttons or-appearance-
                     />
                 </span>
             </div>
-        </fieldset>`
+        </fieldset>`;
 
 describe('custom tests for media picker re.', () => {
     it('show img options correctly', () => {
@@ -123,7 +123,5 @@ describe('custom tests for media picker re.', () => {
         const imgLabels = question.querySelectorAll('img');
         expect(imgLabels[0].style.display).to.equal('');
         expect(imgLabels[1].style.display).to.equal('');
-
     });
-
 });
