@@ -33,4 +33,3 @@ describe('custom tests for media picker re.', () => {
         expect(textLabels[1].style.display).to.equal('none');
     });
 });
-

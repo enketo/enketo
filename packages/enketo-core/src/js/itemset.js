@@ -316,7 +316,10 @@ export default {
                                 ].map((label) => {
                                     const language = label.getAttribute('lang');
                                     const type = label.nodeName;
-                                    const { src } = label;
+                                    const src =
+                                        label.getAttribute(
+                                            'data-offline-src'
+                                        ) || label.getAttribute('src');
                                     const contentNodes = [...label.childNodes];
                                     const active =
                                         label.classList.contains('active');
