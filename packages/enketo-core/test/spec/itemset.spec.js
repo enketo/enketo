@@ -958,4 +958,16 @@ describe('Itemset functionality', () => {
             ]);
         });
     });
+
+    describe('form with translations using images as labels', () => {
+        it("don't add option-label class to image labels", () => {
+            const form = loadForm('images-used-as-labels.xml');
+            form.init();
+
+            const imageOption = form.view.html.querySelector(
+                '.option-wrapper label img[src="jr://images/t_mecontent.jpg"]'
+            );
+            expect(imageOption.getAttribute('class')).to.equal('active');
+        });
+    });
 });

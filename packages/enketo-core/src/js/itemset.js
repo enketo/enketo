@@ -316,7 +316,10 @@ export default {
                                 ].map((label) => {
                                     const language = label.getAttribute('lang');
                                     const type = label.nodeName;
-                                    const { src } = label;
+                                    const src =
+                                        label.getAttribute(
+                                            'data-offline-src'
+                                        ) || label.getAttribute('src');
                                     const contentNodes = [...label.childNodes];
                                     const active =
                                         label.classList.contains('active');
@@ -546,7 +549,9 @@ export default {
     createOptionTranslation(translation, value) {
         const el = document.createElement(translation.type || 'span');
         if (translation.contentNodes) {
-            el.classList.add('option-label');
+            if (!['IMG', 'AUDIO', 'VIDEO'].includes(el.tagName)) {
+                el.classList.add('option-label');
+            }
             translation.contentNodes.forEach((node) =>
                 el.appendChild(node.cloneNode(true))
             );
