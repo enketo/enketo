@@ -14,7 +14,7 @@
 #
 # Note that adding new widgets or themes requires Enketo Express to be rebuilt.
 
-FROM node:20.15.1-slim
+FROM node:20.17.0-slim
 
 RUN apt-get update \
     && apt-get install -y --no-install-recommends \
