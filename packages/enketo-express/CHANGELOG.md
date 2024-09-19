@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## 7.4.0 - 2024-09-19
+
+-   Fixed translation cache of element with i18nNumber (#1336)
+-   Hide date widget fake input when rendering pdf (#1341)
+-   Add support for Google Analytics 4 (#1343)
+-   Fix issue with displaying image choices in translated form (#1353)
+
 ## 7.3.1 - 2024-07-15
 
 -   Publish to DockerHub as enketo-express (not enketo like GHCR)
