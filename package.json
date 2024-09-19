@@ -68,7 +68,7 @@
         "istanbul": "^0.4.5",
         "istanbul-lib-instrument": "^6.0.0",
         "istanbul-reporter-shield-badge": "^1.2.1",
-        "karma": "^6.4.3",
+        "karma": "^6.4.4",
         "karma-chrome-launcher": "^3.2.0",
         "karma-coverage": "^2.2.1",
         "karma-esbuild": "^2.2.5",
@@ -92,16 +92,17 @@
         "sinon-chai": "^3.7.0",
         "time-grunt": "^2.0.0",
         "typescript": "^5.2.2",
-        "vite": "^4.5.3",
-        "vite-node": "^1.5.0",
+        "vite": "^5.4.6",
+        "vite-node": "^2.1.1",
         "vite-plugin-node": "^3.1.0",
         "vitest": "^0.34.6",
-        "webpack": "^5.88.2"
+        "webpack": "^5.94.0"
     },
     "resolutions": {
         "nan": "^2.17.0",
         "libxslt/nan": "^2.17.0",
-        "node1-libxmljsmt-myh/nan": "^2.17.0"
+        "node1-libxmljsmt-myh/nan": "^2.17.0",
+        "ws": "^8.18.0"
     },
     "engines": {
         "node": ">=18 <21",
