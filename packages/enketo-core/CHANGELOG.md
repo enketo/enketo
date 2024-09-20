@@ -3,6 +3,11 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## [8.3.1] - 2024-09-19
+
+-   Hide date widget fake input when rendering pdf (#1341)
+-   Fix issue with displaying image choices in translated form (#1353)
+
 ## [8.3.0] - 2024-07-12
 
 -   Update OSM URLs to one that supports HTTP/2 and HTTP/3 (#11)
