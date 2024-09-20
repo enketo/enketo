@@ -125,9 +125,6 @@ export default defineConfig(async () => {
         resolve: { alias },
         server: {
             port: config.port,
-            fs: {
-                cachedChecks: false, // https://github.com/vitejs/vite/issues/15784
-            },
         },
         test: {
             // Vitest uses thread-based concurrency by defualt.
