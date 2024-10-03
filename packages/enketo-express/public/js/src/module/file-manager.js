@@ -185,14 +185,18 @@ function getCurrentFiles() {
                 );
             }
         } else if (
-            input.value
-            && !URL_RE.test(input.value)
-            && input.dataset?.cache
+            input.value &&
+            !URL_RE.test(input.value) &&
+            input.dataset?.cache
         ) {
             // Load drawing from cache
             const blob = utils.dataUriToBlobSync(input.dataset.cache);
             blob.name = input.value;
-            fileTasks.push(new Promise((resolve) => resolve(_processNameAndSize(input, blob))));
+            fileTasks.push(
+                new Promise((resolve) =>
+                    resolve(_processNameAndSize(input, blob))
+                )
+            );
         }
     });
 
