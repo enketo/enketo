@@ -341,7 +341,7 @@ class DrawWidget extends Widget {
                         return;
                     }
                     that.pad.clear();
-                    that.cache = null;
+                    delete that.element.dataset.cache;
                     that.baseImage = null;
                     // Only upon reset is loadedFileName removed, so that "undo" will work
                     // for drawings loaded from storage.
@@ -621,11 +621,11 @@ class DrawWidget extends Widget {
      * @type {string}
      */
     get value() {
-        return this.cache || '';
+        return this.element.dataset.cache || '';
     }
 
     set value(dataUrl) {
-        this.cache = dataUrl;
+        this.element.dataset.cache = dataUrl;
     }
 }
 
