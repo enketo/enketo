@@ -87,7 +87,12 @@ class DatepickerExtended extends Widget {
     _setChangeHandler($fakeDateI) {
         const { settings } = this;
 
-        $fakeDateI.on('change paste', (e) => {
+        let changeEvent = 'change';
+        if (!$fakeDateI.closest('label').hasClass('readonly')) {
+            changeEvent += ' paste';
+        }
+
+        $fakeDateI.on(changeEvent, (e) => {
             let convertedValue = '';
             let value =
                 e.type === 'paste'

@@ -15,7 +15,7 @@ export default {
                     <header class="reason-for-change__header">
                         <h5>${t('fieldsubmission.reason.heading')}</h5>
                         <div class="question reason-for-change__header__apply-to-all">
-                            <input class="ignore" type="text" name="common-rfc" placeholder="${t(
+                            <input autocomplete="off" class="ignore" type="text" name="common-rfc" placeholder="${t(
                                 'fieldsubmission.reason.placeholder1'
                             )}"/>
                             <div class="option-wrapper">
@@ -81,7 +81,7 @@ export default {
             const fieldFragment = range.createContextualFragment(
                 `<div class="reason-for-change__item">
                     <span class="reason-for-change__item__label">${labelText}</span>${repeatNumberHtml}
-                    <input class="ignore" type="text" placeholder="${t(
+                    <input autocomplete="off" class="ignore" type="text" placeholder="${t(
                         'fieldsubmission.reason.placeholder2'
                     )}"/>
                 </div>`
