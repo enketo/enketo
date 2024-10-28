@@ -68,17 +68,18 @@ app.i18next = i18next;
 
 app.use(requestContextMiddleware);
 app.use(compression());
-app.use(
-    bodyParser.json({
-        limit: config.server['payload limit'],
-    })
-);
-app.use(
-    bodyParser.urlencoded({
-        limit: config.server['payload limit'],
-        extended: true,
-    })
-);
+
+const jsonBodyParser = bodyParser.json({
+    limit: config.server['payload limit'],
+});
+app.post('/*', jsonBodyParser);
+app.put('/*', jsonBodyParser);
+const urlencodedBodyParser = bodyParser.urlencoded({
+    limit: config.server['payload limit'],
+    extended: true,
+});
+app.post('/*', urlencodedBodyParser);
+app.put('/*', urlencodedBodyParser);
 app.use(cookieParser(app.get('encryption key')));
 app.use(
     i18nextMiddleware.handle(i18next, {
