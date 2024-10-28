@@ -7,6 +7,7 @@ const express = require('express');
 const surveyModel = require('../models/survey-model');
 const instanceModel = require('../models/instance-model');
 const account = require('../models/account-model');
+const utils = require('../lib/utils');
 
 const router = express.Router();
 const quotaErrorMessage = 'Forbidden. No quota left';
@@ -72,7 +73,7 @@ function authCheck(req, res, next) {
     let error;
     const creds = auth(req);
     const key = creds ? creds.name : undefined;
-    const server = req.body.server_url || req.query.server_url;
+    const server = utils.getServerUrl(req);
 
     // set content-type to json to provide appropriate json Error responses
     res.set('Content-Type', 'application/json');
@@ -108,8 +109,8 @@ function getExistingSurvey(req, res, next) {
 
     return surveyModel
         .getId({
-            openRosaServer: req.query.server_url,
-            openRosaId: req.query.form_id,
+            openRosaServer: utils.getServerUrl(req),
+            openRosaId: utils.getFormId(req),
         })
         .then((id) => {
             if (id) {
@@ -128,8 +129,8 @@ function getExistingSurvey(req, res, next) {
  */
 function getNewOrExistingSurvey(req, res, next) {
     const survey = {
-        openRosaServer: req.body.server_url || req.query.server_url,
-        openRosaId: req.body.form_id || req.query.form_id,
+        openRosaServer: utils.getServerUrl(req),
+        openRosaId: utils.getFormId(req),
     };
 
     if (req.account.quota < req.account.quotaUsed) {
@@ -174,8 +175,8 @@ function getNewOrExistingSurvey(req, res, next) {
 function deactivateSurvey(req, res, next) {
     return surveyModel
         .update({
-            openRosaServer: req.body.server_url,
-            openRosaId: req.body.form_id,
+            openRosaServer: utils.getServerUrl(req),
+            openRosaId: utils.getFormId(req),
             active: false,
         })
         .then((id) => {
@@ -195,7 +196,7 @@ function deactivateSurvey(req, res, next) {
  */
 function getNumber(req, res, next) {
     return surveyModel
-        .getNumber(req.body.server_url || req.query.server_url)
+        .getNumber(utils.getServerUrl(req))
         .then((number) => {
             if (number) {
                 _render(
@@ -223,7 +224,7 @@ function getList(req, res, next) {
     let obj;
 
     return surveyModel
-        .getList(req.body.server_url || req.query.server_url)
+        .getList(utils.getServerUrl(req))
         .then((list) => {
             list = list.map((survey) => {
                 obj = _generateWebformUrls(survey.enketoId, req);
@@ -258,8 +259,8 @@ function cacheInstance(req, res, next) {
     }
 
     survey = {
-        openRosaServer: req.body.server_url,
-        openRosaId: req.body.form_id,
+        openRosaServer: utils.getServerUrl(req),
+        openRosaId: utils.getFormId(req),
         instance: req.body.instance,
         instanceId: req.body.instance_id,
         returnUrl: req.body.return_url,
@@ -309,8 +310,8 @@ function cacheInstance(req, res, next) {
 function removeInstance(req, res, next) {
     return instanceModel
         .remove({
-            openRosaServer: req.body.server_url,
-            openRosaId: req.body.form_id,
+            openRosaServer: utils.getServerUrl(req),
+            openRosaId: utils.getFormId(req),
             instanceId: req.body.instance_id,
         })
         .then((instanceId) => {
