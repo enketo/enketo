@@ -11,6 +11,7 @@ const I18nextBackend = require('i18next-fs-backend');
 const i18nextMiddleware = require('i18next-http-middleware');
 const compression = require('compression');
 const errorHandler = require('../app/controllers/error-handler');
+const { preserveURLParser } = require('../app/lib/utils');
 
 const controllersPath = path.join(__dirname, '../app/controllers');
 const app = express();
@@ -77,8 +78,19 @@ app.use(
     bodyParser.urlencoded({
         limit: config.server['payload limit'],
         extended: true,
+        verify: (req, res, buf, encoding) => {
+            if (buf && buf.length) {
+                req.rawBody = buf.toString(encoding || 'utf8');
+            }
+        },
     })
 );
+app.use((req, res, next) => {
+    if (req.rawBody) {
+        req.body = preserveURLParser(req.rawBody);
+    }
+    next();
+});
 app.use(cookieParser(app.get('encryption key')));
 app.use(
     i18nextMiddleware.handle(i18next, {
