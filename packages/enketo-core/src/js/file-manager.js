@@ -141,18 +141,16 @@ fileManager.getCurrentFiles = () => {
         .each(function () {
             let newFilename;
             let file = null;
-            let canvas = null;
             if (this.type === 'file') {
                 file = this.files[0]; // Why doesn't this fail for empty file inputs?
-            } else if (this.value) {
-                canvas = $(this)
-                    .closest('.question')[0]
-                    .querySelector('.draw-widget canvas');
-                if (canvas && !URL_RE.test(this.value)) {
-                    // TODO: In the future, we could simply do canvas.toBlob() instead
-                    file = dataUriToBlobSync(canvas.toDataURL());
-                    file.name = this.value;
-                }
+            } else if (
+                this.value &&
+                !URL_RE.test(this.value) &&
+                this.dataset?.cache
+            ) {
+                // Load drawing from cache
+                file = dataUriToBlobSync(this.dataset.cache);
+                file.name = this.value;
             }
             if (file && file.name) {
                 // Correct file names by adding a unique-ish postfix

@@ -184,21 +184,19 @@ function getCurrentFiles() {
                     Promise.resolve(_processNameAndSize(input, input.files[0]))
                 );
             }
-        } else if (input.value) {
-            // then from canvases
-            const canvas = input
-                .closest('.question')
-                .querySelector('.draw-widget canvas');
-            if (canvas && !URL_RE.test(input.value)) {
-                fileTasks.push(
-                    new Promise((resolve) =>
-                        canvas.toBlob((blob) => {
-                            blob.name = input.value;
-                            resolve(_processNameAndSize(input, blob));
-                        })
-                    )
-                );
-            }
+        } else if (
+            input.value &&
+            !URL_RE.test(input.value) &&
+            input.dataset?.cache
+        ) {
+            // Load drawing from cache
+            const blob = utils.dataUriToBlobSync(input.dataset.cache);
+            blob.name = input.value;
+            fileTasks.push(
+                new Promise((resolve) =>
+                    resolve(_processNameAndSize(input, blob))
+                )
+            );
         }
     });
 
