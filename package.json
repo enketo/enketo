@@ -18,7 +18,7 @@
     },
     "scripts": {
         "build": "yarn workspaces run build",
-        "lint": "eslint .",
+        "lint": "eslint --quiet .",
         "test": "yarn workspaces run test",
         "postinstall": "yarn build"
     },
