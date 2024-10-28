@@ -1,6 +1,10 @@
 name: GHCR
 
-on: push
+on:
+  workflow_dispatch:
+  push:
+    branches: [master]
+    tags:
 
 env:
     REGISTRY: ghcr.io
