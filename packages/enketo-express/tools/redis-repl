@@ -3,7 +3,7 @@
 process.env.NODE_ENV = 'development';
 
 const { REPLServer } = require('repl');
-const redisVersion = require('../node_modules/redis/package.json').version;
+const redisVersion = require('redis/package.json').version;
 const { cacheClient, mainClient } = require('../app/lib/db');
 
 const log = (...args) => console.error('[redis-repl]', ...args);
