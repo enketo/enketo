@@ -72,12 +72,14 @@ app.use(compression());
 const jsonBodyParser = bodyParser.json({
     limit: config.server['payload limit'],
 });
+app.delete('/*', jsonBodyParser);
 app.post('/*', jsonBodyParser);
 app.put('/*', jsonBodyParser);
 const urlencodedBodyParser = bodyParser.urlencoded({
     limit: config.server['payload limit'],
     extended: true,
 });
+app.delete('/*', urlencodedBodyParser);
 app.post('/*', urlencodedBodyParser);
 app.put('/*', urlencodedBodyParser);
 app.use((req, res, next) => {
