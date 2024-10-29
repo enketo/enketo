@@ -224,10 +224,20 @@ function areOwnPropertiesEqual(a, b) {
     return true;
 }
 
+function getFormId(req) {
+    return req.body.form_id || req.query.form_id;
+}
+
+function getServerUrl(req) {
+    return req.body.server_url || req.query.server_url;
+}
+
 module.exports = {
     getOpenRosaKey,
     getXformsManifestHash,
     cleanUrl,
+    getFormId,
+    getServerUrl,
     isValidUrl,
     md5,
     randomString,

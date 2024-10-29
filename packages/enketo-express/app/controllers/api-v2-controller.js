@@ -145,7 +145,7 @@ function authCheck(req, res, next) {
     // check authentication and account
     const creds = auth(req);
     const key = creds ? creds.name : undefined;
-    const server = req.body.server_url || req.query.server_url;
+    const server = utils.getServerUrl(req);
 
     // set content-type to json to provide appropriate json Error responses
     res.set('Content-Type', 'application/json');
@@ -181,8 +181,8 @@ function getExistingSurvey(req, res, next) {
 
     return surveyModel
         .getId({
-            openRosaServer: req.query.server_url,
-            openRosaId: req.query.form_id,
+            openRosaServer: utils.getServerUrl(req),
+            openRosaId: utils.getFormId(req),
         })
         .then((id) => {
             if (id) {
@@ -206,8 +206,8 @@ function getExistingSurvey(req, res, next) {
  */
 function getNewOrExistingSurvey(req, res, next) {
     const survey = {
-        openRosaServer: req.body.server_url || req.query.server_url,
-        openRosaId: req.body.form_id || req.query.form_id,
+        openRosaServer: utils.getServerUrl(req),
+        openRosaId: utils.getFormId(req),
         theme: req.body.theme || req.query.theme,
     };
 
@@ -257,8 +257,8 @@ function getNewOrExistingSurvey(req, res, next) {
 function deactivateSurvey(req, res, next) {
     return surveyModel
         .update({
-            openRosaServer: req.body.server_url,
-            openRosaId: req.body.form_id,
+            openRosaServer: utils.getServerUrl(req),
+            openRosaId: utils.getFormId(req),
             active: false,
         })
         .then((id) => {
@@ -279,8 +279,8 @@ function deactivateSurvey(req, res, next) {
 function emptySurveyCache(req, res, next) {
     return cacheModel
         .flush({
-            openRosaServer: req.body.server_url,
-            openRosaId: req.body.form_id,
+            openRosaServer: utils.getServerUrl(req),
+            openRosaId: utils.getFormId(req),
         })
         .then(() => {
             _render(204, null, res);
@@ -295,7 +295,7 @@ function emptySurveyCache(req, res, next) {
  */
 function getNumber(req, res, next) {
     return surveyModel
-        .getNumber(req.body.server_url || req.query.server_url)
+        .getNumber(utils.getServerUrl(req))
         .then((number) => {
             if (number) {
                 _render(
@@ -323,7 +323,7 @@ function getList(req, res, next) {
     let obj;
 
     return surveyModel
-        .getList(req.body.server_url || req.query.server_url)
+        .getList(utils.getServerUrl(req))
         .then((list) => {
             list = list.map((survey) => {
                 obj = _generateWebformUrls(survey.enketoId, req);
@@ -357,8 +357,8 @@ function cacheInstance(req, res, next) {
     }
 
     const survey = {
-        openRosaServer: req.body.server_url,
-        openRosaId: req.body.form_id,
+        openRosaServer: utils.getServerUrl(req),
+        openRosaId: utils.getFormId(req),
         instance: req.body.instance,
         instanceId: req.body.instance_id,
         returnUrl: req.body.return_url,
@@ -418,8 +418,8 @@ function cacheInstance(req, res, next) {
 function removeInstance(req, res, next) {
     return instanceModel
         .remove({
-            openRosaServer: req.body.server_url,
-            openRosaId: req.body.form_id,
+            openRosaServer: utils.getServerUrl(req),
+            openRosaId: utils.getFormId(req),
             instanceId: req.body.instance_id,
         })
         .then((instanceId) => {
@@ -737,7 +737,7 @@ function _renderPdf(status, id, req, res) {
     return pdf
         .get(url, req.page)
         .then((pdfBuffer) => {
-            const filename = `${req.body.form_id || req.query.form_id}${
+            const filename = `${utils.getFormId(req)}${
                 req.body.instance_id ? `-${req.body.instance_id}` : ''
             }.pdf`;
             // TODO: We've already set to json content-type in authCheck. This may be bad.
