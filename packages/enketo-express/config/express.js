@@ -80,6 +80,10 @@ const urlencodedBodyParser = bodyParser.urlencoded({
 });
 app.post('/*', urlencodedBodyParser);
 app.put('/*', urlencodedBodyParser);
+app.use((req, res, next) => {
+    if(req.body === undefined) req.body = {};
+    next();
+});
 app.use(cookieParser(app.get('encryption key')));
 app.use(
     i18nextMiddleware.handle(i18next, {
