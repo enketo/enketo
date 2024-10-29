@@ -81,7 +81,7 @@ const urlencodedBodyParser = bodyParser.urlencoded({
 app.post('/*', urlencodedBodyParser);
 app.put('/*', urlencodedBodyParser);
 app.use((req, res, next) => {
-    if(req.body === undefined) req.body = {};
+    if (req.body === undefined) req.body = {};
     next();
 });
 app.use(cookieParser(app.get('encryption key')));
