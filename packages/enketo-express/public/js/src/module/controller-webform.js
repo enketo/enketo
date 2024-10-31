@@ -21,7 +21,7 @@ import encryptor from './encryptor';
 import formCache from './form-cache';
 import { getLastSavedRecord, populateLastSavedInstances } from './last-saved';
 import { replaceMediaSources, replaceModelMediaSources } from './media';
-
+import jstransformer from 'jstransformer-markdown-it';
 /**
  * @typedef {import('../../../../app/models/survey-model').SurveyObject} Survey
  */
@@ -146,7 +146,7 @@ function init(formEl, data, loadErrors = []) {
 
             formprogress = document.querySelector('.form-progress');
 
-            _setEventHandlers(data.survey);
+            _setEventHandlers(data);
             setLogoutLinkVisibility();
 
             if (loadErrors.length > 0) {
@@ -340,9 +340,9 @@ function _loadRecord(survey, instanceId, confirmed) {
  * This function does not save the record in the browser storage
  * and is not used in offline-capable views.
  *
- * @param {Survey} survey
+ * @param {Data} data
  */
-function _submitRecord(survey) {
+function _submitRecord(data) {
     const redirect =
         settings.type === 'single' ||
         settings.type === 'edit' ||
@@ -388,7 +388,7 @@ function _submitRecord(survey) {
             }
             return record;
         })
-        .then((record) => connection.uploadRecord(survey, record))
+        .then((record) => connection.uploadRecord(data.survey, record))
         .then((result) => {
             result = result || {};
             level = 'success';
@@ -400,8 +400,9 @@ function _submitRecord(survey) {
                 })}<br/>`;
                 level = 'warning';
             }
+            return result;
         })
-        .then(() => {
+        .then((result) => {
             // this event is used in communicating back to iframe parent window
             document.dispatchEvent(events.SubmissionSuccess());
 
@@ -443,9 +444,22 @@ function _submitRecord(survey) {
                     );
                 }, 1200);
             } else {
-                msg = msg.length > 0 ? msg : t('alert.submissionsuccess.msg');
+                const parser = new DOMParser();
+                const xmlForm = parser.parseFromString(
+                    data.modelStr,
+                    'text/xml'
+                );
+                const maybeSubmitMessage =
+                    xmlForm.querySelector('submitMessage');
+                msg = maybeSubmitMessage
+                    ? result.message.length > 0
+                        ? jstransformer.render(result.message)
+                        : msg.length > 0
+                        ? msg
+                        : t('alert.submissionsuccess.msg')
+                    : t('alert.submissionsuccess.msg');
                 gui.alert(msg, t('alert.submissionsuccess.heading'), level);
-                _resetForm(survey);
+                _resetForm(data.survey);
             }
         })
         .catch((result) => {
@@ -671,9 +685,9 @@ function _autoSaveRecord() {
 }
 
 /**
- * @param {Survey} survey
+ * @param {Data} data
  */
-function _setEventHandlers(survey) {
+function _setEventHandlers(data) {
     const $doc = $(document);
 
     $('button#submit-form').click(function () {
@@ -684,9 +698,9 @@ function _setEventHandlers(survey) {
                 .then((valid) => {
                     if (valid) {
                         if (settings.offline) {
-                            return _saveRecord(survey, false);
+                            return _saveRecord(data.survey, false);
                         }
-                        return _submitRecord(survey);
+                        return _submitRecord(data);
                     }
                     gui.alert(t('alert.validationerror.msg'));
                 })
@@ -708,7 +722,7 @@ function _setEventHandlers(survey) {
                 const $button = $(draftButton);
                 $button.btnBusyState(true);
                 setTimeout(() => {
-                    _saveRecord(survey, true)
+                    _saveRecord(data.survey, true)
                         .then(() => {
                             $button.btnBusyState(false);
                         })
@@ -811,7 +825,7 @@ function _setEventHandlers(survey) {
         'click',
         '.record-list__records__record[data-draft="true"]',
         function () {
-            _loadRecord(survey, $(this).attr('data-id'), false);
+            _loadRecord(data.survey, $(this).attr('data-id'), false);
         }
     );
 
