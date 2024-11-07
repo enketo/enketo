@@ -206,11 +206,13 @@ function feedback(message, duration, heading = t('feedback.header')) {
  * @param {string=} heading - heading to show
  * @param {string=} level - css class or normal (no styling) ('alert', 'info', 'warning', 'error', 'success')
  * @param {number=} duration - duration in secondsafter which dialog should self-destruct
+ * @param {title=} title - whether or not to render the title visually
  */
-function alert(message, heading, level, duration) {
+function alert(message, heading, level, duration, title = true) {
     level = level || 'error';
     vex.closeAll();
     vex.dialog.alert({
+        className: title ? 'vex-theme-plain' : 'vex-theme-plain hide-title',
         unsafeMessage: `<span>${message}</span>`,
         title: heading || t('alert.default.heading'),
         messageClassName: level === 'normal' ? '' : `alert-box ${level}`,
