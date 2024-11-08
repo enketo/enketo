@@ -181,5 +181,13 @@
     },
     "submission": {
         "http500": "Es ist ein Problem mit Ihrer Übermittlung aufgetreten. Versuchen Sie es erneut oder wenden Sie sich an __supportEmail__, wenn das Problem weiterhin besteht."
+    },
+    "repeat": {
+        "addanother": {
+            "btn": "Ein Weiteres Hinzufügen"
+        },
+        "remove": {
+            "btn": "Entfernen"
+        }
     }
 }
