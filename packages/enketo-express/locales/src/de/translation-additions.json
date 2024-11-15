@@ -125,6 +125,14 @@
             "questionmsg": "Geben Sie einen Grund für die Änderung unten auf der Seite ein."
         }
     },
+    "formfooter": {
+        "exit": {
+            "btn": "Später beenden"
+        },
+        "done": {
+            "btn": "Ich bin fertig"
+        }
+    },
     "confirm": {
         "deleteall": {
             "heading": "WARNUNG",
