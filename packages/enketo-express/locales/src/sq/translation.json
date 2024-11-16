@@ -210,13 +210,10 @@
         "instancenotfound": "Regjistri nuk ekziston. Ndoshta ka skaduar.",
         "invalidediturl": "URL për redaktim e pavlefshme ",
         "loadfailed": "Nuk mund të ngarkoj __resource__",
-        "notfoundinformlist": [
-            "Ky formular (më) nuk ekziston. Ka gjasa që pronari i formularit e ka fshirë, arkivuar ose çaktivizuar atë. Ju lutemi kontaktoni pronarin e formularit për të konfirmuar.",
-            "Detalet e gabimit: Formulari me ID __formId__ nuk gjendet në /formList."
-        ],
+        "notfoundinformlist": "This form is no longer available.",
         "pagenotfound": "Faqja nuk gjet",
         "surveyidnotactive": "Sondazhi me këtë ID nuk është më aktiv",
-        "surveyidnotfound": "Sondazhi me këtë ID nuk u gjet",
+        "surveyidnotfound": "No form found with this URL, please double check.",
         "unknown": "Ka ndodhur gabim i panjohur"
     },
     "feedback": {

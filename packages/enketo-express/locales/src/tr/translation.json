@@ -220,13 +220,10 @@
         "instancenotfound": "Kayıt mevcut değil. Süresi dolmuş olabilir.",
         "invalidediturl": "Geçerli bir düzenleme URL'si değil",
         "loadfailed": "__resource__ yüklenemedi",
-        "notfoundinformlist": [
-            "Maalesef bu form (artık) mevcut değil. Büyük olasılıkla formun sahibi onu silmiş, arşivlemiş veya devre dışı bırakmıştır. Lütfen onaylamak için formun sahibiyle iletişime geçin.",
-            "Ayrıntılı hata: __formId__ kimliğine sahip form / formList içinde bulunamadı."
-        ],
+        "notfoundinformlist": "This form is no longer available.",
         "pagenotfound": "Sayfa Bulunamadı",
         "surveyidnotactive": "Bu kimliğe sahip anket artık aktif değil",
-        "surveyidnotfound": "Bu kimliğe sahip anket bulunamadı",
+        "surveyidnotfound": "No form found with this URL, please double check.",
         "unknown": "Bilinmeyen bir hata oluştu"
     },
     "feedback": {

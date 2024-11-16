@@ -205,13 +205,10 @@
         "instancenotfound": "ຂໍ້ມູນບໍພົບເຫັນ. ອາດໄດ້ໝົດອາຍຸໄປແລ້ວ",
         "invalidediturl": "URL ບໍ່ສາມາດແກ້ໄຂໄດ້",
         "loadfailed": "ຜິດພາດໃນການໂຫລດ __resource__",
-        "notfoundinformlist": [
-            "ຂໍອະໄພ! ຟອມນີ້ບໍ່ມີແລ້ວ (ບໍ່ພົບເຫັນໃນລະບົບ). ອາດຈະເປັນຍ້ອນເຈົ້າຂອງຟອມໄດ້ລົບອອກຫລືປິດການໃຊ້ງານ. ກະລຸນາຕິດຕໍ່ເຈົ້າຂອງຟອມເພື່ອສອບຖາມຂໍ້ມູນເພີ່ມເຕີມ.",
-            "ຂໍ້ມູນຜິດພາດ: ຟອມ ID __formId__ ບໍ່ພົບເຫັນໃນ /formList."
-        ],
+        "notfoundinformlist": "This form is no longer available.",
         "pagenotfound": "ຫນ້າເວັບບໍ່ພົບເຫັນ",
         "surveyidnotactive": "ຟອມທີ່ມີ ID ນີ້ບໍ່ສາມາດໃຊ້ງານໄດ້",
-        "surveyidnotfound": "ຟອມທີ່ມີ ID ນີ້ບໍ່ພົບເຫັນ",
+        "surveyidnotfound": "No form found with this URL, please double check.",
         "unknown": "ຂໍ້ຜິດພາດທີ່ບໍ່ໄດ້ຮູ້ຈັດເກີດຂຶ້ນ"
     },
     "feedback": {

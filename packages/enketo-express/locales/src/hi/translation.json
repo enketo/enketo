@@ -220,13 +220,10 @@
         "instancenotfound": "रिकार्ड मौजूद नहीं है।हो सकता है कि उसकी अवधि समाप्त हो गयी हो।",
         "invalidediturl": "यह एक  मान्य संपादित यूआरएल नही है ",
         "loadfailed": "__resource__ लोड करने में असफल",
-        "notfoundinformlist": [
-            "Oops, this form doesn't exist (anymore). Most likely the owner of the form has deleted it, archived it, or disabled it. Please contact the form's owner to confirm.",
-            "आईडी __formId__ वाल फ़ॉर्म /formList में नहीं मिला।"
-        ],
+        "notfoundinformlist": "This form is no longer available.",
         "pagenotfound": "पृष्ठ नहीं मिला",
         "surveyidnotactive": "इस आईडी के साथ सर्वेक्षण अब सक्रिय नहीं है",
-        "surveyidnotfound": "इस आईडी के साथ सर्वेक्षण नहीं मिला",
+        "surveyidnotfound": "No form found with this URL, please double check.",
         "unknown": "एक अज्ञात त्रुटि हुई"
     },
     "feedback": {

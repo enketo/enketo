@@ -195,10 +195,10 @@
         "instancenotfound": "记录不能呈现。它可能已过期。",
         "invalidediturl": "不是一个有效的、可编辑网络地址",
         "loadfailed": "上载  _资源_  失败",
-        "notfoundinformlist": "代号为 _表格代号_ 的表格 未能在 /formList 中找到",
+        "notfoundinformlist": "This form is no longer available.",
         "pagenotfound": "页面未找到",
         "surveyidnotactive": "此代号的问卷调查不再是激活状态",
-        "surveyidnotfound": "未发现此代号的问卷调查",
+        "surveyidnotfound": "No form found with this URL, please double check.",
         "unknown": "出现一个未知的错误"
     },
     "feedback": {

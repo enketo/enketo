@@ -211,13 +211,10 @@
         "instancenotfound": "Záznam není k dispozici. To může být způsobené tím, že vypršel.",
         "invalidediturl": "Neplatná URL pro úpravu",
         "loadfailed": "Nepodařilo se načíst __resource__",
-        "notfoundinformlist": [
-            "Oops, tento formulář již neexistuje. Vlastník formuláře jej pravděpodobně odstranil, archivoval nebo deaktivoval. Kontaktujte majitele ve formuláři pro potvrzení.",
-            "Detail chyby: Formulář s ID __formId__ nebyl nalezen v / formList"
-        ],
+        "notfoundinformlist": "This form is no longer available.",
         "pagenotfound": "Stránka nebyla Nenalezena",
         "surveyidnotactive": "Průzkum s tímto ID již není aktivní",
-        "surveyidnotfound": "Průzkum s tímto ID nebyl nalezen",
+        "surveyidnotfound": "No form found with this URL, please double check.",
         "unknown": "Nastala neznámá chyba"
     },
     "feedback": {

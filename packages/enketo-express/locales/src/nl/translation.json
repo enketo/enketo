@@ -221,13 +221,10 @@
         "instancenotfound": "Record niet gevonden. Het kan verlopen zijn.",
         "invalidediturl": "Niet een geldig edit URL",
         "loadfailed": "Kon __resource__ niet laden",
-        "notfoundinformlist": [
-            "Oeps, deze vorm bestaat niet (meer). Waarschijnlijk heeft de eigenaar van het formulier het verwijderd, gearchiveerd of uitgeschakeld. Neem contact op met de eigenaar van het formulier om te bevestigen.",
-            "Gedetailleerde error: Formulier met ID __formId__ niet gevonden in / formList."
-        ],
+        "notfoundinformlist": "This form is no longer available.",
         "pagenotfound": "Pagina niet gevonden",
         "surveyidnotactive": "Enquete met dit ID is niet langer aktief",
-        "surveyidnotfound": "Enquete met dit ID niet gevonden",
+        "surveyidnotfound": "No form found with this URL, please double check.",
         "unknown": "Een onbekende fout is opgetreden"
     },
     "feedback": {

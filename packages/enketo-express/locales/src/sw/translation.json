@@ -200,10 +200,10 @@
         "instancenotfound": "Rekodi hii haipatikani. Inaweza kuwa imetolewa kwenye hifadhi kwa sababu imekaa hapo kwa muda mrefu.",
         "invalidediturl": "Anwani ya wavuti uliyopeana sio halali",
         "loadfailed": "Failed to load __resource__",
-        "notfoundinformlist": "Fomu lenye kitambulisho nambari __formId__ halikupatikana kwenye /orodha la fomu zote",
+        "notfoundinformlist": "This form is no longer available.",
         "pagenotfound": "Ukurasa haukupatikana",
         "surveyidnotactive": "Tafiti lililoko na kitambulisho hiki haliko amilifu tena",
-        "surveyidnotfound": "Tafiti lililo na kitambulisho hiki halijapatikana",
+        "surveyidnotfound": "No form found with this URL, please double check.",
         "unknown": "Kosa tusilolifahamu limetendeka"
     },
     "feedback": {

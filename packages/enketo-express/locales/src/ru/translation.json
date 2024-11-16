@@ -220,13 +220,10 @@
         "instancenotfound": "Запись отсутствует. Возможно срок истек.",
         "invalidediturl": "Недействительный адрес для редактирования",
         "loadfailed": "Ошибка загрузки __resource__",
-        "notfoundinformlist": [
-            "Ой, эта форма не существует (больше). Скорее всего владелец формы удалил её, архивировал или отключил. Для подтверждения свяжитесь с владельцем формы.",
-            "Детали ошибки: Форма с идентификатором __formId__ не найдена в / formList."
-        ],
+        "notfoundinformlist": "This form is no longer available.",
         "pagenotfound": "Страница не найдена",
         "surveyidnotactive": "Опрос с этим идентификатором больше не активен",
-        "surveyidnotfound": "Запрос с этим ID не найден",
+        "surveyidnotfound": "No form found with this URL, please double check.",
         "unknown": "Произошла неизвестная ошибка"
     },
     "feedback": {

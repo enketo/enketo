@@ -195,10 +195,10 @@
         "instancenotfound": "Bản ghi không tồn tại. Có thể đã quá hạn.",
         "invalidediturl": "URL không hợp lệ",
         "loadfailed": "Lỗi tải __resource__",
-        "notfoundinformlist": "Form với ID __formid__ không có trong /formList",
+        "notfoundinformlist": "This form is no longer available.",
         "pagenotfound": "Trang không tìm thấy",
         "surveyidnotactive": "Khảo sát với ID vừa được kích hoạt",
-        "surveyidnotfound": "Khảo sát với ID không được tìm thấy",
+        "surveyidnotfound": "No form found with this URL, please double check.",
         "unknown": "Một lỗi không xác định đã xảy ra"
     },
     "feedback": {
