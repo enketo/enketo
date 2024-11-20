@@ -97,7 +97,9 @@ export default class DecimalInput extends NumberInput {
         super.globalReset(form, rootElement);
     }
 
-    static selector = '.question input[type="number"][data-type-xml="decimal"]';
+    static get selector() {
+        return '.question input[type="number"][data-type-xml="decimal"]';
+    }
 
     static get decimalCharacters() {
         return getDecimalCharacters(this.languages);
