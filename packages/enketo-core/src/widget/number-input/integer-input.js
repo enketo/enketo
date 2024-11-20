@@ -43,13 +43,17 @@ export default class IntegerInput extends NumberInput {
         super.globalReset(form, rootElement);
     }
 
-    static selector = '.question input[type="number"][data-type-xml="int"]';
+    static get selector() {
+        return '.question input[type="number"][data-type-xml="int"]';
+    }
 
     static get validCharacters() {
         return getValidCharacters(this.languages);
     }
 
-    static pattern = /^-?[0-9]+$/;
+    static get pattern() {
+        return /^-?[0-9]+$/;
+    }
 
     get value() {
         return super.value;
