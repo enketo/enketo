@@ -9,8 +9,9 @@ Object.entries(config).forEach(([key, value]) => {
     app.set(key, value);
 });
 
-app.use(bodyParser.json());
-app.use(
+app.post('/', bodyParser.json());
+app.post(
+    '/',
     bodyParser.urlencoded({
         extended: true,
     })
