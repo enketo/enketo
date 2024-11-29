@@ -366,7 +366,7 @@
         "export": "Exportar",
         "msg1": "Los registros se almacenan en su navegador hasta que éstos han sido enviados al servidor (incluso aunque apague el ordenador o pierda la conexión).",
         "msg2": "Los registros que están en la cola, excepto aquellos marcados como draft __icon__, se envían al servidor automáticamente en segundo plano, cada 5 minutos cuando la página Web está abierta y hay conexión a Internet.",
-        "msg2-nodraft": "Los registros que están en la cola, excepto aquellos marcados como draft __icon__, se envían al servidor automáticamente en segundo plano, cada 5 minutos cuando la página Web está abierta y hay conexión a Internet.",
+        "msg2-nodraft": "Los registros que están en la cola, se envían al servidor automáticamente en segundo plano, cada 5 minutos cuando la página Web está abierta y hay conexión a Internet.",
         "msg3": "Para forzar un envío entre intentos automáticos haga clic en Enviar datos.",
         "norecords": "No quedan registros en la cola",
         "title": "Enviar a la cola",
