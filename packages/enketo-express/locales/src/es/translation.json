@@ -100,7 +100,7 @@
             "redirectmsg": "Será automáticamente redirigido después del envío"
         },
         "submissionerror": {
-            "authrequiredmsg": "Es necesaria la autenticación. Por favor autentifíquese __aquí__ en una pestaña diferente del navegador y pruebe de nuevo.",
+            "authrequiredmsg": "Es necesaria la autenticación. Por favor autentifíquese __here__ en una pestaña diferente del navegador y pruebe de nuevo.",
             "fnfmsg": [
                 "No hemos podido recuperar los siguientes archivos de tipo multimedia __failedFiles__ . El envío siguió su curso sin estos archivos y fue un éxito.",
                 "Por favor contáctese con __supportEmail__ para reportar un fallo (bug) y si es posible explicar como se produjo dicho fallo para que sea reproducido y nos permita corregirlo."
@@ -125,7 +125,7 @@
             "msg": "Formulario correcto!"
         },
         "valuehasspaces": {
-            "multiple": "Pregunta de Selección múltiple contiene un valor ilegal \"__valor__\" que contiene un espacio."
+            "multiple": "Pregunta de Selección múltiple contiene un valor ilegal \"__value__\" que contiene un espacio."
         },
         "xpatherror": {
             "heading": "Error en la fórmula",
