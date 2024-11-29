@@ -185,6 +185,9 @@ module.exports = (grunt) => {
                 // Does not work correctly yet for TError() calls and probably not for pug files either.
                 // npx i18next -c ./i18next-parser.config.js
             },
+            'translation-test': {
+                command: 'node ./scripts/translations-test.js',
+            },
             build: {
                 command: 'node ./scripts/build.js',
             },
@@ -393,6 +396,7 @@ module.exports = (grunt) => {
         'env:test',
         'js',
         'sass',
+        'shell:translation-test',
         'shell:nyc',
         'karma:headless',
     ]);
