@@ -41,36 +41,39 @@ function get(survey) {
 
         return Promise.reject(error);
     }
-    if (/https?:\/\/testserver.com\/bob/.test(server)) {
-        return Promise.resolve({
-            linkedServer: server,
-            key: 'abc',
-            quota: 100,
-        });
-    }
-    if (/https?:\/\/testserver.com\/noquota/.test(server)) {
-        error = new Error('Forbidden. No quota left.');
-        error.status = 403;
 
-        return Promise.reject(error);
-    }
-    if (/https?:\/\/testserver.com\/noapi/.test(server)) {
-        error = new Error('Forbidden. No API access granted.');
-        error.status = 405;
+    if (process.env.NODE_ENV === 'test') {
+        if (/https?:\/\/testserver.com\/bob/.test(server)) {
+            return Promise.resolve({
+                linkedServer: server,
+                key: 'abc',
+                quota: 100,
+            });
+        }
+        if (/https?:\/\/testserver.com\/noquota/.test(server)) {
+            error = new Error('Forbidden. No quota left.');
+            error.status = 403;
 
-        return Promise.reject(error);
-    }
-    if (/https?:\/\/testserver.com\/noquotanoapi/.test(server)) {
-        error = new Error('Forbidden. No API access granted.');
-        error.status = 405;
+            return Promise.reject(error);
+        }
+        if (/https?:\/\/testserver.com\/noapi/.test(server)) {
+            error = new Error('Forbidden. No API access granted.');
+            error.status = 405;
 
-        return Promise.reject(error);
-    }
-    if (/https?:\/\/testserver.com\/notpaid/.test(server)) {
-        error = new Error('Forbidden. The account is not active.');
-        error.status = 403;
+            return Promise.reject(error);
+        }
+        if (/https?:\/\/testserver.com\/noquotanoapi/.test(server)) {
+            error = new Error('Forbidden. No API access granted.');
+            error.status = 405;
 
-        return Promise.reject(error);
+            return Promise.reject(error);
+        }
+        if (/https?:\/\/testserver.com\/notpaid/.test(server)) {
+            error = new Error('Forbidden. The account is not active.');
+            error.status = 403;
+
+            return Promise.reject(error);
+        }
     }
 
     return _getAccount(server);
