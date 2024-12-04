@@ -68,7 +68,7 @@ progress {
     word-break: break-all;
 }
 
-.hide-title .vex-dialog-title {
+.custom-message .vex-dialog-title {
     position: absolute;
     width: 1px;
     height: 1px;
@@ -80,6 +80,16 @@ progress {
     border-width: 0;
 }
 
-.hide-title.vex.vex-theme-plain .vex-content {
+.custom-message .vex.vex-theme-plain .vex-content {
     padding: 2em;
+}
+
+.custom-message .alert-box.success {
+    background-color: transparent;
+    border: none;
+    color: black;
+}
+
+.custom-message .vex-dialog-message {
+    overflow: scroll;
 }

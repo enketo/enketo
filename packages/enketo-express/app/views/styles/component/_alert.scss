@@ -1,7 +1,6 @@
 .alert-box {
     width: 100%;
     padding: 10px;
-    overflow: scroll;
     &.error {
         background-color: $state-danger-bg;
         color: $state-danger-text;

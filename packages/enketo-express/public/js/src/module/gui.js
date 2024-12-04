@@ -212,7 +212,7 @@ function alert(message, heading, level, duration, title = true) {
     level = level || 'error';
     vex.closeAll();
     vex.dialog.alert({
-        className: title ? 'vex-theme-plain' : 'vex-theme-plain hide-title',
+        className: title ? 'vex-theme-plain' : 'vex-theme-plain custom-message',
         unsafeMessage: `<span>${message}</span>`,
         title: heading || t('alert.default.heading'),
         messageClassName: level === 'normal' ? '' : `alert-box ${level}`,
