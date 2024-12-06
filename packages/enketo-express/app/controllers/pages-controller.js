@@ -33,6 +33,7 @@ router
         });
     })
     .get('/thanks', (req, res) => {
+        console.log(req.body)
         res.render('surveys/thanks', {
             title: 'Thanks',
             taken: req.query.taken,

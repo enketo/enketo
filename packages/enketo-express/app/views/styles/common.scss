@@ -68,6 +68,10 @@ progress {
     word-break: break-all;
 }
 
+.vex.vex-theme-plain.custom-message {
+    padding: 0;
+}
+
 .custom-message .vex-dialog-title {
     position: absolute;
     width: 1px;
@@ -86,10 +90,37 @@ progress {
 
 .custom-message .alert-box.success {
     background-color: transparent;
-    border: none;
+    border-radius: 7px;
+    border: 7px solid #ddd;
+    padding: 1em 3em;
     color: black;
 }
 
+@media (max-width: 600px) {
+    .custom-message.vex.vex-theme-plain .vex-content {
+        padding: 0px;
+    }    
+    .custom-message .alert-box.success {
+        padding: 1em;
+        margin: 0;
+        border-radius: 0px;
+    }
+    .vex.vex-theme-plain.custom-message .vex-dialog-form .vex-dialog-message {
+        margin: 0px;
+    }
+    .custom-message .vex-dialog-input {
+        display: none;
+    }
+}
 .custom-message .vex-dialog-message {
     overflow: auto;
+    max-width: 720px;
+    margin: 0 auto;
+}
+
+.vex.vex-theme-plain.custom-message .vex-content {
+    width: 100dvw;
+    min-height: 100dvh;
+    border: none;
+    border-radius: 0px;
 }

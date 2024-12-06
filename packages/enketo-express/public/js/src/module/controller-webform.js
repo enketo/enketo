@@ -361,11 +361,21 @@ function _submitRecord(survey, modelStr) {
         'here'
     )}</a>`;
 
-    gui.alert(
-        `${beforeMsg}<div class="loader-animation-small" style="margin: 40px auto 0 auto;"/>`,
-        t('alert.submission.msg'),
-        'bare'
+    const parser = new DOMParser();
+    const xmlForm = parser.parseFromString(
+        modelStr,
+        'text/xml'
     );
+    const maybeSubmitMessage =
+        xmlForm.querySelector('submitMessage');
+
+    if(!maybeSubmitMessage) {
+        gui.alert(
+            `${beforeMsg}<div class="loader-animation-small" style="margin: 40px auto 0 auto;"/>`,
+            t('alert.submission.msg'),
+            'bare'
+        );
+    }
 
     return fileManager
         .getCurrentFiles()
@@ -406,16 +416,26 @@ function _submitRecord(survey, modelStr) {
         .then((result) => {
             // this event is used in communicating back to iframe parent window
             document.dispatchEvent(events.SubmissionSuccess());
+            
+            if(settings.type === 'single' && maybeSubmitMessage && result.message.length > 0) {
+                gui.alert(
+                    jstransformer.render(result.message),
+                    t('alert.submissionsuccess.heading'),
+                    level,
+                    undefined,
+                    !maybeSubmitMessage,
+                    "",
+                    false,
+                    false,
+                );
+                _resetForm(survey);
+                if (redirect) {
+                    console.log(redirect)
+                } 
+                return;
+            }
 
-            const parser = new DOMParser();
-            const xmlForm = parser.parseFromString(
-                modelStr,
-                'text/xml'
-            );
-            const maybeSubmitMessage =
-                xmlForm.querySelector('submitMessage');
-
-            if (!redirect) {
+            if (redirect) {
                 if (!settings.multipleAllowed) {
                     const now = new Date();
                     const age = 31536000;
@@ -445,45 +465,16 @@ function _submitRecord(survey, modelStr) {
                         settings.basePath
                     }/single;max-age=${age};expires=${d.toGMTString()};`;
                 }
-
-                msg = maybeSubmitMessage
-                ? result.message.length > 0
-                    ? jstransformer.render(result.message)
-                    : msg.length > 0
-                    ? msg
-                    : t('alert.submissionsuccess.redirectmsg')
-                : t('alert.submissionsuccess.redirectmsg');
-
-                gui.alert(
-                    msg,
-                    t('alert.submissionsuccess.heading'),
-                    level,
-                    undefined,
-                    !maybeSubmitMessage
-                );
-
+                msg += t('alert.submissionsuccess.redirectmsg');
+                gui.alert(msg, t('alert.submissionsuccess.heading'), level);
                 setTimeout(() => {
                     location.href = decodeURIComponent(
                         settings.returnUrl || settings.defaultReturnUrl
                     );
                 }, 1200);
             } else {
-                msg = maybeSubmitMessage
-                ? result.message.length > 0
-                    ? jstransformer.render(result.message)
-                    : msg.length > 0
-                    ? msg
-                    :  t('alert.submissionsuccess.msg')
-                :  t('alert.submissionsuccess.msg');
-
-                gui.alert(
-                    msg,
-                    t('alert.submissionsuccess.heading'),
-                    level,
-                    undefined,
-                    !maybeSubmitMessage
-                );
-
+                msg = msg.length > 0 ? msg : t('alert.submissionsuccess.msg');
+                gui.alert(msg, t('alert.submissionsuccess.heading'), level);
                 _resetForm(survey);
             }
         })

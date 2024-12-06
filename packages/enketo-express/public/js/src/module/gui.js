@@ -207,8 +207,9 @@ function feedback(message, duration, heading = t('feedback.header')) {
  * @param {string=} level - css class or normal (no styling) ('alert', 'info', 'warning', 'error', 'success')
  * @param {number=} duration - duration in secondsafter which dialog should self-destruct
  * @param {title=} title - whether or not to render the title visually
+ * @param {showCloseButton=} showCloseButton - whether or not to show the close button
  */
-function alert(message, heading, level, duration, title = true) {
+function alert(message, heading, level, duration, title = true, button = true, showCloseButton = true) {
     level = level || 'error';
     vex.closeAll();
     vex.dialog.alert({
@@ -216,15 +217,15 @@ function alert(message, heading, level, duration, title = true) {
         unsafeMessage: `<span>${message}</span>`,
         title: heading || t('alert.default.heading'),
         messageClassName: level === 'normal' ? '' : `alert-box ${level}`,
-        buttons: [
+        buttons: button ? [
             {
                 text: t('alert.validationsuccess.heading'),
                 type: 'submit',
                 className: 'btn btn-primary small',
             },
-        ],
+        ] : [],
         autoClose: duration,
-        showCloseButton: true,
+        showCloseButton,
     });
 
     return Promise.resolve();
