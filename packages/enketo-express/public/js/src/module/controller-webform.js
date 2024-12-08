@@ -416,12 +416,11 @@ function _submitRecord(survey, modelStr) {
         .then((result) => {
             // this event is used in communicating back to iframe parent window
             document.dispatchEvent(events.SubmissionSuccess());
-            
             if(
                 settings.type === 'single' 
                 && maybeSubmitMessage 
                 && result.message.length > 0 
-                && !settings.multipleAllowed
+                && settings.multipleAllowed
             ) {
                 gui.alert(
                     jstransformer.render(result.message),
@@ -434,9 +433,6 @@ function _submitRecord(survey, modelStr) {
                     false,
                 );
                 _resetForm(survey);
-                if (redirect) {
-                    console.log(redirect)
-                } 
                 return;
             }
 
