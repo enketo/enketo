@@ -152,10 +152,10 @@
         "encryptionnotsupported": "Αυτή η φόρμα απαιτεί τοπική κρυπτογράφηση εγγραφών. Δυστυχώς, αυτό δεν υποστηρίζεται ακόμα. Συνιστάται η χρήση του ODK Collect για την συλλογή δεδομένων με αυτό το έντυπο.",
         "instancenotfound": "Εγγραφή δεν υπάρχει. Μπορεί να έχει λήξει.",
         "invalidediturl": "Μη έγκυρη διεύθυνση URL Επεξεργασίας",
-        "notfoundinformlist": "Φόρμα με ID __formId__ δεν βρέθηκε στην / formList",
+        "notfoundinformlist": "This form is no longer available.",
         "pagenotfound": "Η σελίδα δεν βρέθηκε",
         "surveyidnotactive": "Έρευνα με αυτό το αναγνωριστικό δεν είναι πλέον ενεργή",
-        "surveyidnotfound": "Έρευνα με αυτό το αναγνωριστικό δεν βρέθηκε",
+        "surveyidnotfound": "No form found with this URL, please double check.",
         "unknown": "Προέκυψε ένα άγνωστο σφάλμα"
     },
     "feedback": {

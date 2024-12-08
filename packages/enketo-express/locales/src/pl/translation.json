@@ -205,13 +205,10 @@
         "instancenotfound": "Rekord nieobecny. Mógł się przedawnić.",
         "invalidediturl": "Niepoprawny adres URL",
         "loadfailed": "Nie udało się wczytać __resource__",
-        "notfoundinformlist": [
-            "Ups, ten formularz (już) nie istnieje. Najprawdopodobniej właściciel formularza go skasował, zarchiwizował lub dezaktywował. Skontaktuj się proszę z właścicielem formularza, aby to potwierdzić.",
-            "Szczegóły błędu: Formularz o identyfikatorze __formId__ nie został odnaleziony w /formList."
-        ],
+        "notfoundinformlist": "This form is no longer available.",
         "pagenotfound": "Strona nie została znaleziona",
         "surveyidnotactive": "Ankieta o takim identyfikatorze nie jest już aktywna",
-        "surveyidnotfound": "Nie znaleziono ankiety o tym identyfikatorze",
+        "surveyidnotfound": "No form found with this URL, please double check.",
         "unknown": "Wystąpił nieznany błąd"
     },
     "feedback": {

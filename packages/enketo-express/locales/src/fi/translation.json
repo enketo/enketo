@@ -200,10 +200,10 @@
         "instancenotfound": "Tietue ei ole saatavilla. Se on saattanut vanhentua. ",
         "invalidediturl": "Epäkelpo URL muoto",
         "loadfailed": "__resource__ lataus epäonnistui",
-        "notfoundinformlist": "Lomaketta numerolla __formId__ ei löytynyt /formList",
+        "notfoundinformlist": "This form is no longer available.",
         "pagenotfound": "Sivua ei löytynyt",
         "surveyidnotactive": "Tutkimusta tällä numerolla ei ole enää aktiivisena",
-        "surveyidnotfound": "Tutkimusta tällä numerolla ei löytynyt",
+        "surveyidnotfound": "No form found with this URL, please double check.",
         "unknown": "Tuntematon virhe esiintyi"
     },
     "feedback": {

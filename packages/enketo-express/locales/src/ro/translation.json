@@ -195,10 +195,10 @@
         "instancenotfound": "Înregistrarea nu poate fi găsită. Este posibil că a expirat.",
         "invalidediturl": "Nu este un URL valid",
         "loadfailed": "Failed to load __resource__",
-        "notfoundinformlist": "Formularul cu ID __formId__ nu a fost găsit în /formList",
+        "notfoundinformlist": "This form is no longer available.",
         "pagenotfound": "Pagina nu a fost găsită",
         "surveyidnotactive": "Sondajul cu acest ID nu mai este activ",
-        "surveyidnotfound": "Sondajul cu acest ID nu a fost găsit",
+        "surveyidnotfound": "No form found with this URL, please double check.",
         "unknown": "O eroare necunoscută s-a petrecut"
     },
     "feedback": {

@@ -80,8 +80,7 @@ async function getSurveyParts(req, res, next) {
     } catch (error) {
         if (error.status === 403) {
             const notFoundError = new TranslatedError(
-                'error.notfoundinformlist',
-                { formId }
+                'error.notfoundinformlist'
             );
 
             notFoundError.status = 404;

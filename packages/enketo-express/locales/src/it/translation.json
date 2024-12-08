@@ -195,10 +195,10 @@
         "instancenotfound": "Record non presente. Potrebbe essere scaduto.",
         "invalidediturl": "URL non valido",
         "loadfailed": "Failed to load __resource__",
-        "notfoundinformlist": "Il modulo con ID __formId__ non trovato nella lista form ",
+        "notfoundinformlist": "This form is no longer available.",
         "pagenotfound": "Pagina non trovata",
         "surveyidnotactive": "Il sondaggio con questo ID non &egrave; pi&ugrave; attivo.",
-        "surveyidnotfound": "Il sondaggio con questo ID non &egrave; stato trovato",
+        "surveyidnotfound": "No form found with this URL, please double check.",
         "unknown": "Si &egrave; verificato un 'errore"
     },
     "feedback": {

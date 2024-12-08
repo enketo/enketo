@@ -221,11 +221,10 @@
         "instancenotfound": "Záznam nie je k dispozícii. Môže to byť spôsobené tým že expiroval.",
         "invalidediturl": "Neplatná URL pre úpravu",
         "loadfailed": "Nepodarilo sa načítať __resource__",
-        "notfoundinformlist": "Tento formulár buď neexistuje alebo k nemu už nemáte prístup. Skontrolujte prosím či v adrese URL nechýbajú niektoré znaky.\n\nAk sa jedná o formulár ktorý bol dostupný v minulosti, je možné že bol archivovaný, zneprístupnený alebo zmazaný. V prípade že tento scenár nie je pravdepodobný, prosím kontaktujte osobu ktorá Vás požiadala o vyplnenie daného formulára.\n\n(Pokus o prístup k formuláru s ID: __formId__)",
-        "notfounddirectformurl": "Tento formulár buď neexistuje alebo k nemu už nemáte prístup. Skontrolujte prosím či v adrese URL nechýbajú niektoré znaky.\n\nAk sa jedná o formulár ktorý bol dostupný v minulosti, je možné že bol archivovaný, zneprístupnený alebo zmazaný. V prípade že tento scenár nie je pravdepodobný, prosím kontaktujte osobu ktorá Vás požiadala o vyplnenie daného formulára.\n\n(Pokus o prístup k formuláru: __notfounddirectformurl__)",
+        "notfoundinformlist": "This form is no longer available.",
         "pagenotfound": "Stránka nebola Nájdená",
         "surveyidnotactive": "Prieskum s týmto ID už nie je aktívny",
-        "surveyidnotfound": "Prieskum s týmto ID nebol nájdený",
+        "surveyidnotfound": "No form found with this URL, please double check.",
         "unknown": "Nastala neznáma chyba"
     },
     "feedback": {

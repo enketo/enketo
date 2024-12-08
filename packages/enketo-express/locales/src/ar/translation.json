@@ -219,13 +219,10 @@
         "instancenotfound": "التسجيل غير موجود. قد يكون منتهي الصلاحية.",
         "invalidediturl": "هذا URL غير صحيح للتعديل",
         "loadfailed": "Failed to load __resource__",
-        "notfoundinformlist": [
-            "Oops, this form doesn't exist (anymore). Most likely the owner of the form has deleted it, archived it, or disabled it. Please contact the form's owner to confirm.",
-            "Detailed error: Form with ID __formId__ not found in /formList."
-        ],
+        "notfoundinformlist": "This form is no longer available.",
         "pagenotfound": "الصفحة غير موجودة",
         "surveyidnotactive": "النموذج بهذا المعرف لم يعد فعالا",
-        "surveyidnotfound": "لا يوجد نموذج بهذا المعرف",
+        "surveyidnotfound": "No form found with this URL, please double check.",
         "unknown": "حدث خطأ غير معروف"
     },
     "feedback": {

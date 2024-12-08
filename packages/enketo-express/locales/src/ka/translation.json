@@ -220,13 +220,10 @@
         "instancenotfound": "ჩანაწერი აღარ არის. შესაძლებელია დრო გაუვიდა.",
         "invalidediturl": "არ არის შესაბამისი შესწორება URL",
         "loadfailed": "ჩატვირთვა ვერ მოხერხდა __resource__",
-        "notfoundinformlist": [
-            "უპს, ეს ფორმა აღარ არსებობს (მეტი). დიდი ალბათობით, ამ ფორმის მეპატრონემ წაშალა, დააარქივა ან გამორთო ის. გთხოვთ, დაუკავშირდეთ ფორმის მეპატრონეს.",
-            "დეტალური შეცდომა: ფორმა ID კოდით __formId__ ვერ მოიძებნა /formListში."
-        ],
+        "notfoundinformlist": "This form is no longer available.",
         "pagenotfound": "გვერდი არ არსებობს",
         "surveyidnotactive": "გამოკითხვა ამ ID კოდით აღარ იქნება აქტიური",
-        "surveyidnotfound": "გამოკითხვა აღნიშნული ID-ით არ მოიძებნა",
+        "surveyidnotfound": "No form found with this URL, please double check.",
         "unknown": "უცნობი შეცდომა დაფიქსირდა"
     },
     "feedback": {

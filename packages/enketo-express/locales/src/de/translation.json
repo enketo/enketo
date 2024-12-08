@@ -221,13 +221,10 @@
         "instancenotfound": "Datensatz nicht vorhanden. Er ist wahrscheinlich abgelaufen.",
         "invalidediturl": "Keine gültige Bearbeitungs-URL",
         "loadfailed": "Fehler beim laden von __resource__",
-        "notfoundinformlist": [
-            "Oops, dieses Formular existiert nicht (mehr). Wahrscheinlich wurde es von Besitzer gelöscht, archiviert, oder deaktiviert. Bitte kontaktieren sie zur Bestätigung den Besitzer des Formulars.",
-            "Fehlerdetails: Formular mit ID __formId__ wurde nicht in /formList gefunden."
-        ],
+        "notfoundinformlist": "This form is no longer available.",
         "pagenotfound": "Seite nicht gefunden",
         "surveyidnotactive": "Umfrage mit dieser ID ist nicht mehr aktiv",
-        "surveyidnotfound": "Umfrage mit dieser ID nicht gefunden",
+        "surveyidnotfound": "No form found with this URL, please double check.",
         "unknown": "Ein unbekannter Fehler ist aufgetreten"
     },
     "feedback": {

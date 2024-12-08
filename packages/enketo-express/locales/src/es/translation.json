@@ -225,11 +225,11 @@
         "instancenotfound": "Registro no hallado. Puede haber expirado.",
         "invalidediturl": "Esta URL no es válida",
         "loadfailed": "Error al cargar __resource__",
-        "notfoundinformlist": "This form does not exist or you no longer have access to it. Please check the URL for any missing characters.\n\nIf the form existed previously, it may have been archived, disabled or deleted. If this is unexpected, please contact the person who asked you to fill the form.\n\n(Attempted to access form with ID: __formId__)",
+        "notfoundinformlist": "This form is no longer available.",
         "notfounddirectformurl": "This form does not exist or you no longer have access to it. Please check the URL for any missing characters.\n\nIf the form existed previously, it may have been archived, disabled or deleted. If this is unexpected, please contact the person who asked you to fill the form.\n\n(Attempted to access form: __notfounddirectformurl__)",
         "pagenotfound": "No hemos encontrado la página",
         "surveyidnotactive": "No hay activa ninguna encuesta con este ID",
-        "surveyidnotfound": "No hemos encontrado ninguna encuesta con este ID",
+        "surveyidnotfound": "No form found with this URL, please double check.",
         "unknown": "Se ha producido un error desconocido"
     },
     "feedback": {

@@ -205,13 +205,10 @@
         "instancenotfound": "Registro não presente. Talvez tenha expirado.",
         "invalidediturl": "URL de edição inválido",
         "loadfailed": "Falha ao carregar __recurso__",
-        "notfoundinformlist": [
-            "Opa, este formulário não existe (mais). Muito provavelmente, o proprietário do formulário o excluiu, arquivou ou desativou. Por favor, entre em contato com o proprietário do formulário para verificar.",
-            "Erro detalhado: Formulário com ID __formId__ não encontrado em /formList."
-        ],
+        "notfoundinformlist": "This form is no longer available.",
         "pagenotfound": "Página não encontrada",
         "surveyidnotactive": "A pesquisa com este ID não está mais ativa",
-        "surveyidnotfound": "A pesquisa com este ID não foi encontrada",
+        "surveyidnotfound": "No form found with this URL, please double check.",
         "unknown": "Ocorreu um erro desconhecido"
     },
     "feedback": {

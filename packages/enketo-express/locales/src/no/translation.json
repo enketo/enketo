@@ -195,10 +195,10 @@
         "instancenotfound": "Oppføringen er ikke tilgjengelig. Den kan ha utløpt.",
         "invalidediturl": "Ikke en gyldig redigerings-adresse",
         "loadfailed": "Klarte ikke å laste inn __resource__",
-        "notfoundinformlist": "Skjemaet med ID __formId__ ble ikke funnet i /formList",
+        "notfoundinformlist": "This form is no longer available.",
         "pagenotfound": "Side ikke Funnet",
         "surveyidnotactive": "Skjemaet med denne IDen er ikke lengre aktivt",
-        "surveyidnotfound": "Skjema med denne IDen ble ikke funnet",
+        "surveyidnotfound": "No form found with this URL, please double check.",
         "unknown": "En ukjent feil har oppstått"
     },
     "feedback": {
