@@ -417,7 +417,12 @@ function _submitRecord(survey, modelStr) {
             // this event is used in communicating back to iframe parent window
             document.dispatchEvent(events.SubmissionSuccess());
             
-            if(settings.type === 'single' && maybeSubmitMessage && result.message.length > 0) {
+            if(
+                settings.type === 'single' 
+                && maybeSubmitMessage 
+                && result.message.length > 0 
+                && !settings.multipleAllowed
+            ) {
                 gui.alert(
                     jstransformer.render(result.message),
                     t('alert.submissionsuccess.heading'),
