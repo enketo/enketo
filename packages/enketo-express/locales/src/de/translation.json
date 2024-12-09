@@ -46,7 +46,7 @@
         },
         "loaderror": {
             "editadvice": "Wir empfehlen Ihnen, diesen Datensatz nicht zu bearbeiten, bis das Problem gelöst ist.",
-            "entryadvice": "Wir empfehlen Ihnen, diesen Datensatz nicht zu verwenden, bis das Problem gelöst ist.",
+            "entryadvice": "Wir empfehlen Ihnen, dieses Formular nicht für die Dateneingabe zu verwenden, bis das Problem gelöst ist.",
             "heading": "Ladefehler",
             "msg1": "Fehler beim Laden des Formulars aufgetreten.",
             "msg2": "Bitte senden Sie eine E-Mail mit der Adresse dieser Seite und die untenstehende Fehlermeldung an __emailLink__.",
@@ -63,7 +63,7 @@
             "msg": [
                 "Dieses Formular kann jetzt geladen und ohne Internetverbindung auf diesem Gerät verwendet werden. Speichern Sie es als Lesezeichen um es später einfach offline zu öffnen.",
                 "Datensätze werden automatisch gespeichert und in die Warteschlange gestellt bis in Ihrem Browser eine Internetverbindung verfügbar ist. Wenn Sie wieder online sind werden die Datensätze automatisch versandt - einer nach dem anderen.",
-                "Erst nachdem der Datensatz erfolgreich versandt wurde wird er aus der Warteschlange entfernt. Sie können Ihren Browser in der Zwischenzeit problemlos schließen oder Ihr Gerät ausschalten. Die Datensätze werden noch immer da sein wenn Sie das nächste Mal dieses Formular laden."
+                "Erst nachdem der Datensatz erfolgreich versandt wurde wird er aus der Warteschlange entfernt. Sie können Ihren Browser in der Zwischenzeit problemlos schließen oder Ihr Gerät ausschalten. Die Datensätze werden noch immer da sein wenn Sie dieses Formular das nächste Mal laden."
             ]
         },
         "offlineunsupported": {
@@ -163,6 +163,10 @@
         },
         "login": {
             "heading": "Anmeldung erforderlich",
+            "queuedMsg": [
+                "Datensatz zum Versenden vorbereitet. Sie müssen sich einloggen, um die vorbereiteten Daten zu versenden.",
+                "Möchten Sie sich jetzt oder später anmelden?"
+            ],
             "msg": [
                 "Um Ihre Daten in der Warteschlange einzureichen, müssen Sie sich anmelden. Wenn Sie dies jetzt tun wollen, werden Sie weitergeleitet und verlieren nicht gespeicherte Informationen.",
                 "Möchten Sie sich jetzt oder später anmelden?"
@@ -187,7 +191,7 @@
             "msg": "Diese Aktion ist irreversibel. Sind Sie sicher, dass Sie fortfahren möchten?"
         },
         "save": {
-            "existingerror": "This record name or ID already exists. Please change it.",
+            "existingerror": "Dieser Datensatz oder die ID sind bereits vorhanden. Bitte ändern.",
             "hint": "Dieser Name hilft Ihnen um später Ihren Entwurf dieses Datensatzes zu finden und fertigzustellen.",
             "msg": "Es gibt ungesicherte Änderungen. Möchten Sie ohne zu speichern fortfahren?",
             "name": "Datensatzname",
@@ -214,17 +218,15 @@
     },
     "error": {
         "code": "Fehlercode: __code__",
-        "dataloadfailed": "Failed to load __filename__.",
+        "dataloadfailed": "Fehler beim Laden von __filename__.",
         "econnrefused": "Verbindung zum Form-Server konnte nicht hergestellt werden",
         "encryptionnotsupported": "Dieses Formular erfordert eine lokale Verschlüsselung der Datensätze. Leider wird dies von Ihrem Browser nicht unterstützt. Wir empfehlen den Umstieg auf einen modernen Browser.",
-        "formloadfailed": "Failed to load form",
+        "formloadfailed": "Fehler beim Laden des Formulars",
         "instancenotfound": "Datensatz nicht vorhanden. Er ist wahrscheinlich abgelaufen.",
         "invalidediturl": "Keine gültige Bearbeitungs-URL",
-        "loadfailed": "Fehler beim laden von __resource__",
-        "notfoundinformlist": [
-            "Oops, dieses Formular existiert nicht (mehr). Wahrscheinlich wurde es von Besitzer gelöscht, archiviert, oder deaktiviert. Bitte kontaktieren sie zur Bestätigung den Besitzer des Formulars.",
-            "Fehlerdetails: Formular mit ID __formId__ wurde nicht in /formList gefunden."
-        ],
+        "loadfailed": "Fehler beim Laden von __resource__",
+        "notfoundinformlist": "Dieses Formular existiert nicht mehr oder Sie haben keiner Zugriff mehr darauf. Bitte überprüfen Sie die URL auf fehlende Zeichen.\n\nWenn das Formular bisher existierte, wurde es vielleicht archiviert, deaktiviert oder gelöscht. Falls dies unerwartet ist, kontaktieren Sie die Person, die Sie gebeten hat das Formular auszufüllen.\n\n(Versuchter Zugriff auf Formular mit ID: __formId__)",
+        "notfounddirectformurl": "Dieses Formular existiert nicht mehr oder Sie haben keiner Zugriff mehr darauf. Bitte überprüfen Sie die URL auf fehlende Zeichen.\n\nWenn das Formular bisher existierte, wurde es vielleicht archiviert, deaktiviert oder gelöscht. Falls dies unerwartet ist, kontaktieren Sie die Person, die Sie gebeten hat das Formular auszufüllen.\n\n(Versuchter Zugriff auf Formular mit ID: __notfounddirectformurl__)",
         "pagenotfound": "Seite nicht gefunden",
         "surveyidnotactive": "Umfrage mit dieser ID ist nicht mehr aktiv",
         "surveyidnotfound": "Umfrage mit dieser ID nicht gefunden",
@@ -270,7 +272,7 @@
     "geopicker": {
         "accuracy": "Präzision (m)",
         "altitude": "Höhe (m)",
-        "closepolygon": "geschlossener Polygon",
+        "closepolygon": "Polygon schließen",
         "kmlcoords": "KML Koordinaten",
         "kmlpaste": "Einfügen von KML Koordinaten",
         "latitude": "Breite (x.y °)",
@@ -322,6 +324,7 @@
         "sw": "Suaheli",
         "th": "Thailändisch",
         "tr": "Türkisch",
+        "uk": "Ukrainisch",
         "vi": "Vietnamesisch",
         "zh": "Chinesisch"
     },
@@ -382,7 +385,7 @@
         }
     },
     "submission": {
-        "http0": "The server is not available or you may not be connected to the Internet.",
+        "http0": "Der Server ist nicht verfügbar oder es besteht keine Internetverbindung.",
         "http2xx": "Unerwartete Antwort beim Datenversand.",
         "http400": "Der Datenserver hat keine Daten akzeptiert.",
         "http401": "Authentifizierung Problem mit Datenserver.",

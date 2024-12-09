@@ -163,6 +163,10 @@
         },
         "login": {
             "heading": "Inloggning krävs",
+            "queuedMsg": [
+                "Post i kö för inlämning. För att kunna skicka in din köade data måste du logga in.",
+                "Vill du logga in nu eller senare?"
+            ],
             "msg": [
                 "För att skicka in dina köade data måste du logga in. Om du vill göra detta nu kommer du att omdirigeras och förlorar information som inte har sparats.",
                 "Vill du logga in nu eller senare?"
@@ -320,6 +324,7 @@
         "sw": "Swahili",
         "th": "Thailändska",
         "tr": "turkiska",
+        "uk": "ukrainska",
         "vi": "Vietnamesiska",
         "zh": "Kinesiska"
     },

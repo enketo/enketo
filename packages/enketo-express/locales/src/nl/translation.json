@@ -163,6 +163,10 @@
         },
         "login": {
             "heading": "Login Noodzakelijk",
+            "queuedMsg": [
+                "Record in wachtrij geplaatst voor verzending. Om uw in de wachtrij geplaatste gegevens te verzenden, moet u inloggen.",
+                "Wilt u nu of later inloggen?"
+            ],
             "msg": [
                 "Om de records te kunnen verzenden dient ingelogd te worden. Als je dit nu wilt doen wordt je doorgestuurd en gaat de on-opgeslagen information verloren.",
                 "Wil je nu inloggen of later?"
@@ -221,10 +225,8 @@
         "instancenotfound": "Record niet gevonden. Het kan verlopen zijn.",
         "invalidediturl": "Niet een geldig edit URL",
         "loadfailed": "Kon __resource__ niet laden",
-        "notfoundinformlist": [
-            "Oeps, deze vorm bestaat niet (meer). Waarschijnlijk heeft de eigenaar van het formulier het verwijderd, gearchiveerd of uitgeschakeld. Neem contact op met de eigenaar van het formulier om te bevestigen.",
-            "Gedetailleerde error: Formulier met ID __formId__ niet gevonden in / formList."
-        ],
+        "notfoundinformlist": "Dit formulier bestaat niet of u heeft er geen toegang meer toe. Controleer het web address op ontbrekende tekens. Als het formulier eerder bestond, is het mogelijk gearchiveerd, uitgeschakeld of verwijderd. Als dit onverwachts is, neem dan contact op met de persoon die u heeft gevraagd het formulier in te vullen. (Geprobeerd toegang te krijgen tot formulier met ID: __formId__)",
+        "notfounddirectformurl": "Dit formulier bestaat niet of u heeft er geen toegang meer toe. Controleer het web address op ontbrekende tekens. Als het formulier eerder bestond, is het mogelijk gearchiveerd, uitgeschakeld of verwijderd. Als dit onverwachts is, neem dan contact op met de persoon die u heeft gevraagd het formulier in te vullen. (Geprobeerd toegang te krijgen tot formulier: __notfounddirectformurl__)",
         "pagenotfound": "Pagina niet gevonden",
         "surveyidnotactive": "Enquete met dit ID is niet langer aktief",
         "surveyidnotfound": "Enquete met dit ID niet gevonden",
@@ -322,6 +324,7 @@
         "sw": "Swahili",
         "th": "Thai",
         "tr": "Turks",
+        "uk": "Oekraïens",
         "vi": "Vietnamees",
         "zh": "Chinees"
     },

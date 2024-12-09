@@ -163,6 +163,10 @@
         },
         "login": {
             "heading": "Prihlásenie Nevyhnutné",
+            "queuedMsg": [
+                "Record queued for submission. In order to submit your queued data, you need to login.",
+                "Would you like to login now or later?"
+            ],
             "msg": [
                 "Pre odoslanie dát čakajúcich na odoslanie sa musíte prihlásiť. Ak tak chcete urobiť teraz, budete presmerovaní, a stratíte všetky neuložené dáta.",
                 "Chcete sa prihlásiť teraz alebo neskôr?"
@@ -320,6 +324,7 @@
         "sw": "Svahilčina",
         "th": "Thajčina",
         "tr": "Turečtina",
+        "uk": "Ukrainian",
         "vi": "Vietnamčina",
         "zh": "Čínština"
     },
