@@ -18,7 +18,7 @@
     },
     "scripts": {
         "build": "yarn workspaces run build",
-        "lint": "eslint --cache --quiet .",
+        "lint": "eslint .",
         "test": "yarn workspaces run test",
         "postinstall": "yarn build"
     },
@@ -82,7 +82,7 @@
         "lodash.includes": "^4.3.0",
         "markdown-eslint-parser": "^1.2.1",
         "mocha": "^9.2.2",
-        "nan": "^2.17.0",
+        "nan": "^2.22.0",
         "node-sass": "^9.0.0",
         "nyc": "^15.1.0",
         "playwright": "1.25.0",
@@ -100,18 +100,18 @@
         "webpack": "^5.94.0"
     },
     "resolutions": {
-        "nan": "^2.17.0",
-        "libxslt/nan": "^2.17.0",
-        "node1-libxmljsmt-myh/nan": "^2.17.0",
+        "nan": "^2.22.0",
+        "libxslt/nan": "^2.22.0",
+        "node1-libxmljsmt-myh/nan": "^2.22.0",
         "ws": "^8.18.0"
     },
     "engines": {
-        "node": ">=18 <21",
+        "node": ">=20 <23",
         "npm": "please-use-yarn",
         "yarn": ">= 1.22.22 <2"
     },
     "volta": {
-        "node": "20.17.0",
+        "node": "22.12.0",
         "yarn": "1.22.22"
     }
 }

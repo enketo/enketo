@@ -91,12 +91,12 @@
         "public/js/src/enketo-offline-fallback.js"
     ],
     "engines": {
-        "node": ">=18 <21",
+        "node": ">=20 <23",
         "npm": "please-use-yarn",
         "yarn": ">= 1.22.22 <2"
     },
     "volta": {
-        "node": "20.17.0",
+        "node": "22.12.0",
         "yarn": "1.22.22"
     }
 }
