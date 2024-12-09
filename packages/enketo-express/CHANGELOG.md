@@ -3,6 +3,15 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## 7.5.0 - 2024-12-09
+
+-   For signature, annotation and draw questions, don't scale image when canvas size changes
+-   Only parse request body for POST, PUT & DELETE endpoints
+-   Improve Spanish translations, update others from Transifex
+-   Remove test credentials from production
+-   Support Node 20 and 22, drop support for older versions
+-   Upgrade dependencies, particularly signature_pad used for signature, annotation and draw questions
+
 ## 7.4.0 - 2024-09-19
 
 -   Fixed translation cache of element with i18nNumber (#1336)
