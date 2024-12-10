@@ -44,7 +44,7 @@ The recommended way to run Enketo Express is using Docker. We publish a [minimal
 
 ### Prerequisites
 
--   **Node:** Enketo supports the current [Node LTS](https://nodejs.dev/en/about/releases/) environments (presently versions 18 and 20). Local development targets the latest LTS release (20).
+-   **Node:** Enketo supports the current [Node LTS](https://nodejs.dev/en/about/releases/) environments (presently versions 20 and 22). Local development targets the latest LTS release (22).
 -   **Yarn:** Package management and monorepo tasks use [Yarn 1 ("classic")](https://classic.yarnpkg.com/lang/en/).
 -   **Volta:** It is highly recommended to use [Volta](https://volta.sh/) to manage Node and Yarn versions automatically while working in Enketo.
 

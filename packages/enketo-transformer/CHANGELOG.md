@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## [4.2.0] - 2024-12-09
+
+-   Only parse request body for POST endpoint
+-   Support Node 20 and 22, drop support for older versions
+-   Update dependencies
+
 ## [4.1.1] - 2024-07-12
 
 -   Update dependencies

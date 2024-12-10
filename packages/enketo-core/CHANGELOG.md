@@ -3,6 +3,15 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## [9.0.0] - 2024-12-09
+
+⚠️ **BREAKING CHANGE**: if you use Enketo Core with a custom file manager implementation, you will need to read image data from cache. See [this example implementation](https://github.com/enketo/enketo/blob/1e8821e1d21e5c4730cbdc17d2ef49b8f172e42d/packages/enketo-core/src/js/file-manager.js#L146) and [this comment for context](https://github.com/enketo/enketo/pull/1335#issuecomment-2392168842).
+
+-   For signature, annotation and draw questions, don't scale image when canvas size changes
+-   Fix getter-only number-input properties to support JS strict mode
+-   Upgrade dependencies, particularly signature_pad used for signature, annotation and draw questions
+-   Support Node 20 and 22, drop support for older versions
+
 ## [8.3.1] - 2024-09-19
 
 -   Hide date widget fake input when rendering pdf (#1341)

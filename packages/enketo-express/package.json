@@ -2,7 +2,7 @@
     "name": "enketo-express",
     "description": "Webforms evolved.",
     "homepage": "https://enketo.org",
-    "version": "7.4.0",
+    "version": "7.5.0",
     "main": "./app.js",
     "repository": {
         "type": "git",
@@ -24,25 +24,25 @@
     "private": true,
     "license": "Apache-2.0",
     "dependencies": {
-        "@cypress/request": "^3.0.1",
+        "@cypress/request": "^3.0.7",
         "basic-auth": "^2.0.1",
         "body-parser": "^1.20.3",
         "bristol": "^0.4.0",
-        "compression": "^1.7.4",
-        "cookie-parser": "^1.4.6",
+        "compression": "^1.7.5",
+        "cookie-parser": "^1.4.7",
         "csurf": "^1.11.0",
         "db.js": "^0.15.0",
         "debug": "^4.3.4",
-        "enketo-core": "8.3.1",
-        "enketo-transformer": "4.1.1",
+        "enketo-core": "9.0.0",
+        "enketo-transformer": "4.2.0",
         "evp_bytestokey": "^1.0.3",
-        "express": "^4.21.0",
+        "express": "^4.21.2",
         "express-cls-hooked": "^0.3.8",
-        "i18next": "^20.6.1",
-        "i18next-browser-languagedetector": "^6.1.8",
-        "i18next-fs-backend": "^1.2.0",
-        "i18next-http-backend": "^1.4.5",
-        "i18next-http-middleware": "^3.3.2",
+        "i18next": "^24.0.5",
+        "i18next-browser-languagedetector": "^8.0.2",
+        "i18next-fs-backend": "^2.6.0",
+        "i18next-http-backend": "^3.0.1",
+        "i18next-http-middleware": "^3.7.0",
         "jquery": "3.6.3",
         "jstransformer-markdown-it": "^3.0.0",
         "jszip": "^3.10.1",
@@ -62,12 +62,11 @@
         "valid-url": "^1.0.9",
         "vex-dialog-enketo": "github:enketo/vex-dialog-enketo#b6e0f01",
         "vex-js": "^4.1.0",
-        "xml2js": "^0.5.0"
+        "xml2js": "^0.6.2"
     },
     "devDependencies": {
-        "@types/db.js": "^0.14.7",
-        "@types/geojson": "^7946.0.10",
-        "@types/redis": "^2.8.32",
+        "@types/db.js": "^0.14.12",
+        "@types/geojson": "^7946.0.15",
         "abortcontroller-polyfill": "^1.7.5",
         "nock": "^13.3.3",
         "node-sass": "^9.0.0",
@@ -92,12 +91,12 @@
         "public/js/src/enketo-offline-fallback.js"
     ],
     "engines": {
-        "node": ">=18 <21",
+        "node": ">=20 <23",
         "npm": "please-use-yarn",
         "yarn": ">= 1.22.22 <2"
     },
     "volta": {
-        "node": "20.17.0",
+        "node": "22.12.0",
         "yarn": "1.22.22"
     }
 }

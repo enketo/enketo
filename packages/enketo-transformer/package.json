@@ -1,6 +1,6 @@
 {
     "name": "enketo-transformer",
-    "version": "4.1.1",
+    "version": "4.2.0",
     "description": "Library that transforms ODK-compliant XForms into a format that Enketo can consume",
     "license": "Apache-2.0",
     "type": "module",
@@ -66,7 +66,7 @@
     "dependencies": {
         "body-parser": "^1.20.3",
         "css.escape": "^1.5.1",
-        "express": "^4.21.0",
+        "express": "^4.21.2",
         "language-tags": "1.0.5",
         "linkedom": "^0.14.26",
         "string-direction": "0.1.x",
@@ -93,17 +93,17 @@
         }
     },
     "resolutions": {
-        "nan": "^2.17.0",
-        "libxslt/nan": "^2.17.0",
-        "node1-libxmljsmt-myh/nan": "^2.17.0"
+        "nan": "^2.22.0",
+        "libxslt/nan": "^2.22.0",
+        "node1-libxmljsmt-myh/nan": "^2.22.0"
     },
     "engines": {
-        "node": ">=18 <21",
+        "node": ">=20 <23",
         "npm": "please-use-yarn",
         "yarn": ">= 1.22.22 <2"
     },
     "volta": {
-        "node": "20.17.0",
+        "node": "22.12.0",
         "yarn": "1.22.22"
     }
 }
