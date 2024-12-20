@@ -7,6 +7,7 @@
 import $ from 'jquery';
 import dialog from 'enketo/dialog';
 import { MutationsTracker } from './dom-utils';
+import { isGrid } from './utils';
 
 let dpi;
 let printStyleSheet;
@@ -103,18 +104,6 @@ function styleReset() {
             );
         });
     $('.back-to-screen-view').off('click').remove();
-}
-
-/**
- * Tests if the form element is set to use the Grid Theme.
- *
- * @static
- * @return {boolean} whether the form definition was defined to use the Grid theme
- */
-function isGrid() {
-    return /theme-.*grid.*/.test(
-        document.querySelector('form.or').getAttribute('class')
-    );
 }
 
 /**

@@ -112,6 +112,7 @@ import {
     getChildren,
     getSiblingElementsAndSelf,
 } from './dom-utils';
+import { isGrid } from './utils';
 import { isStaticItemsetFromSecondaryInstance } from './itemset';
 import { invalidateRepeatCaches } from './dom';
 
@@ -183,17 +184,29 @@ export default {
         $repeatInfos
             .filter('*:not([data-repeat-fixed]):not([data-repeat-count])')
             .append(
-                `<button type="button" class="btn btn-default add-repeat-btn" data-i18n="repeat.addanother.btn">${t(
-                    'repeat.addanother.btn'
-                )}</button>`
+                `<button type="button" class="btn btn-default add-repeat-btn" ${
+                    isGrid() ? '' : 'data-i18n="repeat.addanother.btn"'
+                }>
+                    ${
+                        isGrid()
+                            ? '<i class="icon icon-plus"> </i>'
+                            : t('repeat.addanother.btn')
+                    }
+                </button>`
             )
             .siblings('.or-repeat')
             .append(
                 `<div class="repeat-buttons"><button type="button" ${
                     disableFirstRepeatRemoval ? ' disabled ' : ' '
-                }class="btn btn-default remove" data-i18n="repeat.remove.btn">${t(
-                    'repeat.remove.btn'
-                )}</button></div>`
+                }class="btn btn-default remove" ${
+                    isGrid() ? '' : 'data-i18n="repeat.remove.btn"'
+                }>
+                    ${
+                        isGrid()
+                            ? '<i class="icon icon-minus"> </i>'
+                            : t('repeat.remove.btn')
+                    }
+                </button></div>`
             );
         /**
          * The model also requires storing repeat templates for repeats that do not have a jr:template.
