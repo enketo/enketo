@@ -260,6 +260,18 @@ function encodeHtmlEntities(text) {
         .replace(/"/g, '&quot;');
 }
 
+/**
+ * Tests if the form element is set to use the Grid Theme.
+ *
+ * @static
+ * @return {boolean} whether the form definition was defined to use the Grid theme
+ */
+function isGrid() {
+    return /theme-.*grid.*/.test(
+        document.querySelector('form.or').getAttribute('class')
+    );
+}
+
 export {
     parseFunctionFromExpression,
     stripQuotes,
@@ -272,4 +284,5 @@ export {
     joinPath,
     getScript,
     encodeHtmlEntities,
+    isGrid,
 };
