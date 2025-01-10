@@ -43,6 +43,9 @@
             "year_plural": "__count__ Jahre"
         }
     },
+    "enketo": {
+        "power": "Angetrieben von"
+    },
     "fieldsubmission": {
         "alert": {
             "close": {
