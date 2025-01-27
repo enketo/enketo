@@ -268,7 +268,7 @@ function encodeHtmlEntities(text) {
  */
 function isGrid() {
     return /theme-.*grid.*/.test(
-        document.querySelector('form.or').getAttribute('class')
+        document.querySelector('form.or')?.getAttribute('class')
     );
 }
 
