@@ -1,0 +1,201 @@
+{
+    "widget": {
+        "dn": {
+            "assignto": "Attribuer à :",
+            "assignedto": "__id__ attribué à __assignee__.",
+            "closequerytext": "Fermer cette requête",
+            "notifytext": "Courriel?",
+            "addquerybutton": "Ajouter une requête",
+            "addannotationbutton": "Ajouter une annotation",
+            "addnewtext": "Nouveau",
+            "emptyhistorytext": "Aucun historique",
+            "printhistoryheading": "Historique pour - __labelText__ (__questionName__)",
+            "me": "Moi",
+            "status": "Statut : __status__",
+            "reopen": "Rouvrir",
+            "reopenlabel": "Taper ici pour rouvrir",
+            "autoclosed": "Requête fermée par le système, car cet élément était caché",
+            "valuechange": "Valeur modifiée de __previous__ à __new__",
+            "autoconstraint": "Requête automatique pour : __errorMsg__",
+            "autonoreason": "Requête automatique pour : Valeur modifiée sans justification",
+            "closedmodified": "Données modifiées après la clôture de la requête",
+            "newfile": "Nouveau fichier téléversé",
+            "fileremoved": "Fichier supprimé",
+            "addnewquery": "Ajouter une nouvelle requête",
+            "addnewannotation": "Ajouter une nouvelle annotation",
+            "typeresponse": "Répondre à la requête",
+            "allhistory": "Afficher tout l’historique",
+            "queries": "Requêtes",
+            "annotations": "Annotations",
+            "showvaluechanges": "Afficher les modifications de valeur",
+            "now": "À l’instant",
+            "second": "__count__ seconde",
+            "second_plural": "__count__ secondes",
+            "minute": "__count__ minute",
+            "minute_plural": "__count__ minutes",
+            "hour": "__count__ heure",
+            "hour_plural": "__count__ heures",
+            "day": "__count__ jour",
+            "day_plural": "__count__ jours",
+            "month": "__count__ mois",
+            "month_plural": "__count__ mois",
+            "year": "__count__ an",
+            "year_plural": "__count__ ans"
+        }
+    },
+    "fieldsubmission": {
+        "alert": {
+            "close": {
+                "heading1": "Fermeture",
+                "heading2": "Avertissement",
+                "msg1": "Envoi des données non enregistrées...",
+                "msg2": "Toutes les données n’ont pas été envoyées. Si vous quittez cette page, vous perdrez toutes ces données."
+            },
+            "locked": {
+                "heading": "Verrouillé",
+                "msg": "Ce formulaire ou cet enregistrement est verrouillé et les envois ne peuvent pas être sauvegardés."
+            },
+            "complete": {
+                "msg": "Échec de l’envoi des données."
+            },
+            "validationerror": {
+                "msg": "Vous devez remédier à toutes les erreurs figurant sur ce formulaire avant qu’il ne puisse être considéré comme complet. Veuillez mettre à jour la valeur ou ajouter une requête pour chaque champ marqué en rouge."
+            },
+            "relevantvalidationerror": {
+                "msg": "La(les) réponse(s) dans certains champs rend(ent) certaines données de ce formulaire invalides. Vous devez corriger cette erreur pour que le formulaire soit considéré comme complet."
+            },
+            "reasonforchangevalidationerror": {
+                "msg": "Pour chaque champ modifié, un motif de modification doit être fourni. Veuillez ajouter les motifs manquants."
+            },
+            "stricterror": {
+                "heading": "Valeur invalide",
+                "msg": "Veuillez saisir une valeur appropriée pour mettre le champ à jour."
+            },
+            "participanterror": {
+                "msg": [ "Il semble que certains champs nécessitent votre attention", "Veuillez les vérifier avant de continuer." ]
+            },
+            "signatureservicenotavailable": {
+                "msg": "Le service Signature est actuellement indisponible. La question est restée sans réponse."
+            },
+            "signatureservicefailed":{
+                "msg": "La signature n’a pas été reçue. La question est restée sans réponse."
+            }
+        },
+        "confirm": {
+            "autoquery": {
+                "msg1": "Certaines valeurs de champs comportent des erreurs. Ces problèmes doivent être résolus avant la fermeture du formulaire.",
+                "msg2": [
+                    "Cliquez sur Annuler pour revenir au formulaire et mettre à jour manuellement la valeur ou ajouter une requête pour chaque champ marqué en rouge.",
+                    "Cliquez sur Continuer pour fermer le formulaire maintenant.  Une requête sera automatiquement ajoutée pour chaque champ marqué en rouge."
+                ],
+                "automatic": "Continuer",
+                "manual": "Annuler"
+            },
+            "complete": {
+                "msg": "Souhaitez-vous terminer cet enregistrement, puis quitter?",
+                "heading": "Confirmer l’achèvement"
+            },
+            "leaveanyway": {
+                "msg": "Souhaitez-vous ignorer les modifications et quitter de toute façon?",
+                "button": "Quitter de toute façon"
+            }
+        },
+        "prompt": {
+            "reason": {
+                "msg": "Si tel est le cas, veuillez indiquer le motif de la suppression du groupe."
+            }
+        },
+        "feedback": {
+            "ongoing": "Enregistrement...",
+            "success": "Toutes les modifications ont été enregistrées.",
+            "fail": "Échec de l’enregistrement des modifications.",
+            "disabled": "Enregistrement désactivé."
+        },
+        "readonly": {
+            "msg": "Vous êtes en mode lecture seule."
+        },
+        "noteonly": {
+            "msg": "Vous êtes en mode vérification uniquement."
+        },
+        "reason": {
+            "heading": "On dirait que vous avez fait quelques mises à jour. Veuillez nous expliquer votre choix :",
+            "placeholder1": "Veuillez indiquer le motif de vos modifications",
+            "placeholder2": "Veuillez indiquer la raison pour laquelle vous avez modifié cette valeur",
+            "applytoall": "Appliquer à tous",
+            "questionmsg": "Veuillez indiquer le motif de la modification au bas de la page."
+        }
+    },
+    "confirm": {
+        "deleteall": {
+            "heading": "AVERTISSEMENT",
+            "msg": [
+                "Cette opération supprimera toutes les données en attente et tous les formulaires de la mémoire du navigateur. Les données seront définitivement perdues et les formulaires ne seront plus utilisables jusqu’à ce que vous soyez de retour en ligne. Utilisez cette option uniquement si la mémoire de votre navigateur semble corrompue.",
+                "Avant de continuer, veuillez fermer tous les autres onglets de votre formulaire hors ligne. Cette page sera actualisée. En cas d’erreur, vous devrez peut-être répéter l’opération.",
+                "Souhaitez-vous continuer?"
+            ],
+            "posButton": "Tout supprimer"
+        },
+        "print": {
+            "queries": "Afficher l’historique",
+            "queryShow": "afficher",
+            "heading": "Options",
+            "msg": "Pour obtenir une impression optimisée, veuillez sélectionner les options suivantes"
+        },
+        "repeatremove": {
+            "msg": "Cette action est irréversible (elle sera enregistrée dans la piste d’audit). Êtes-vous sûr de vouloir continuer?"
+        }
+    },
+    "constraint": {
+        "relevant": "Une réponse a été modifiée pour une autre question, ce qui nécessite que cette question soit masquée. Mais, nous ne pouvons pas la masquer tant qu’elle contient des données. Veuillez effacer les données ou modifier les réponses dépendantes."
+    },
+    "home": {
+        "msg": "__appTitle__ est en cours d’exécution! Veuillez accéder aux formulaires OpenClinica à partir de votre installation __serverName__."
+    },
+    "alert": {
+        "appupdated": {
+            "heading": "Veuillez actualiser",
+            "msg": "Veuillez actualiser cette page Web pour pouvoir utiliser le formulaire hors ligne (réf. : utilisation)"
+        },
+        "formupdated": {
+            "heading": "Veuillez actualiser",
+            "msg": "Veuillez actualiser cette page Web pour pouvoir utiliser le formulaire hors ligne (réf. : définition)"
+        },
+        "goto": {
+            "irrelevant": "L’élément auquel vous essayez d’accéder est actuellement masqué.",
+            "invisible": "L’élément auquel vous essayez d’accéder n’est pas visible sur le formulaire.",
+            "notfound": "L’élément auquel vous essayez d’accéder a été supprimé du formulaire.",
+            "msg1": "Veuillez cliquer sur l’icône Voir la requête uniquement au lieu de l’icône Voir la requête dans l’enregistrement pour l’afficher.",
+            "msg2": "Veuillez accéder à __miniform__ pour l’afficher.",
+            "form": "ce formulaire"
+        },
+        "loaderror": {
+            "editadvice": "",
+            "entryadvice": "",
+            "heading": "Patientez une seconde...",
+            "msg1": "Si vous avez besoin d’une aide supplémentaire, veuillez contacter votre équipe d’assistance en cliquant sur le lien vers cette page et sur le message ci-dessous.",
+            "msg2": "",
+            "heading_plural": "Patientez une seconde...",
+            "msg1_plural": "Si vous avez besoin d’une aide supplémentaire, veuillez contacter votre équipe d’assistance en cliquant sur le lien vers cette page et sur les messages ci-dessous.",
+            "msg2_plural": ""
+        }
+    },
+    "submission": {
+        "http500": "Il y a eu un problème avec votre envoi. Veuillez réessayer ou contacter __supportEmail__ si le problème persiste."
+    },
+    "formfooter": {
+        "exit": {
+            "btn": "Terminer plus tard"
+        },
+        "done": {
+            "btn": "J’ai terminé"
+        }
+    },
+    "repeat": {
+        "addanother": {
+            "btn": "Ajouter un autre"
+        },
+        "remove": {
+            "btn": "Supprimer"
+        }
+    }
+}
