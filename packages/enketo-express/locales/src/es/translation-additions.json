@@ -1,0 +1,201 @@
+{
+    "widget": {
+        "dn": {
+            "assignto": "Asignar a:",
+            "assignedto": "__id__ asignado a __assignee__.",
+            "closequerytext": "Cerrar esta consulta",
+            "notifytext": "¿Correo electrónico?",
+            "addquerybutton": "Agregar consulta",
+            "addannotationbutton": "Agregar anotación",
+            "addnewtext": "Nuevo",
+            "emptyhistorytext": "Sin historial",
+            "printhistoryheading": "Historial de - __labelText__ (__questionName__)",
+            "me": "Yo",
+            "status": "Estado: __status__",
+            "reopen": "Reabrir",
+            "reopenlabel": "Escriba aquí para reabrir",
+            "autoclosed": "Consulta cerrada por el sistema porque este elemento estaba oculto",
+            "valuechange": "Valor cambiado de __previous__ a __new__",
+            "autoconstraint": "Consulta automática para: __errorMsg__",
+            "autonoreason": "Consulta automática para: Valor cambiado y no se proporcionó motivo del cambio",
+            "closedmodified": "Datos modificados después de cerrar la consulta",
+            "newfile": "Nuevo archivo cargado",
+            "fileremoved": "Archivo eliminado",
+            "addnewquery": "Agregar una nueva consulta",
+            "addnewannotation": "Agregar una anotación nueva",
+            "typeresponse": "Responder a la consulta",
+            "allhistory": "Ver todo el historial",
+            "queries": "Consultas",
+            "annotations": "Anotaciones",
+            "showvaluechanges": "Mostrar cambios de valores",
+            "now": "Justo ahora",
+            "second": "__count__ segundo",
+            "second_plural": "__count__ segundos",
+            "minute": "__count__ minuto",
+            "minute_plural": "__count__ minutos",
+            "hour": "__count__ hora",
+            "hour_plural": "__count__ horas",
+            "day": "__count__ día",
+            "day_plural": "__count__ días",
+            "month": "__count__ mes",
+            "month_plural": "__count__ meses",
+            "year": "__count__ año",
+            "year_plural": "__count__ años"
+        }
+    },
+    "fieldsubmission": {
+        "alert": {
+            "close": {
+                "heading1": "Cerrando",
+                "heading2": "Advertencia",
+                "msg1": "Enviando datos no guardados...",
+                "msg2": "No se han enviado todos los datos. Si sale de esta página, se perderán."
+            },
+            "locked": {
+                "heading": "Bloqueado",
+                "msg": "Este formulario o registro está bloqueado y no se pueden guardar los datos enviados."
+            },
+            "complete": {
+                "msg": "No se pudieron enviar los datos."
+            },
+            "validationerror": {
+                "msg": "Debe corregir todos los errores en este formulario antes de que pueda marcarse como completo. Actualice el valor o agregue una consulta para cada campo marcado en rojo."
+            },
+            "relevantvalidationerror": {
+                "msg": "Las respuestas en algunos campos hacen que algunos datos de este formulario no sean válidos. Esto debe corregirse para marcar el formulario como completo."
+            },
+            "reasonforchangevalidationerror": {
+                "msg": "Para cada campo modificado, se debe proporcionar un motivo del cambio. Agregue los motivos que falten."
+            },
+            "stricterror": {
+                "heading": "Valor no válido",
+                "msg": "Ingrese un valor adecuado para actualizar el campo."
+            },
+            "participanterror": {
+                "msg": [ "Parece que algunos campos necesitan atención", "Revíselos antes de continuar." ]
+            },
+            "signatureservicenotavailable": {
+                "msg": "El servicio de firma no está disponible actualmente. Se desmarcó la pregunta."
+            },
+            "signatureservicefailed":{
+                "msg": "Firma no recibida. Se desmarcó la pregunta."
+            }
+        },
+        "confirm": {
+            "autoquery": {
+                "msg1": "Algunos valores de campo tienen errores. Estos deben solucionarse antes de cerrar el formulario.",
+                "msg2": [
+                    "Haga clic en “Cancel” (Cancelar) para volver al formulario y actualizar manualmente el valor o agregar una consulta para cada campo marcado en rojo.",
+                    "Haga clic en “Proceed” (Continuar) para continuar cerrando el formulario ahora.  Se agregará automáticamente una consulta para cada campo marcado en rojo."
+                ],
+                "automatic": "Continuar",
+                "manual": "Cancelar"
+            },
+            "complete": {
+                "msg": "¿Desea completar este registro y salir?",
+                "heading": "Confirmar finalización"
+            },
+            "leaveanyway": {
+                "msg": "¿Desea descartar los cambios y salir de todos modos?",
+                "button": "Salir de todos modos"
+            }
+        },
+        "prompt": {
+            "reason": {
+                "msg": "En caso afirmativo, introduzca un motivo para eliminar el grupo."
+            }
+        },
+        "feedback": {
+            "ongoing": "Guardando...",
+            "success": "Se guardaron todos los cambios.",
+            "fail": "No se pudieron guardar los cambios.",
+            "disabled": "La función de guardar está deshabilitada."
+        },
+        "readonly": {
+            "msg": "Está en modo de solo lectura."
+        },
+        "noteonly": {
+            "msg": "Está en modo de solo revisión."
+        },
+        "reason": {
+            "heading": "Parece que ha realizado algunas actualizaciones. Indíquenos por qué:",
+            "placeholder1": "Introduzca un motivo para sus cambios",
+            "placeholder2": "Introduzca un motivo para cambiar este valor",
+            "applytoall": "Aplicar a todos",
+            "questionmsg": "Ingrese el motivo del cambio en la parte inferior de la página."
+        }
+    },
+    "confirm": {
+        "deleteall": {
+            "heading": "ADVERTENCIA",
+            "msg": [
+                "Esto eliminará todos los datos en cola y todos los formularios del almacenamiento del navegador. Los datos se perderán para siempre y los formularios no se podrán utilizar hasta que vuelva a estar en línea. Use esto solo si el almacenamiento de su navegador parece estar dañado.",
+                "Antes de continuar, cierre todas las demás pestañas de formularios sin conexión. Esta página se volverá a cargar. Si ve un error, es posible que deba repetir esta acción.",
+                "¿Desea continuar?"
+            ],
+            "posButton": "Eliminar todo"
+        },
+        "print": {
+            "queries": "Mostrar historial",
+            "queryShow": "mostrar",
+            "heading": "Opciones",
+            "msg": "Para preparar una impresión optimizada, seleccione las opciones a continuación"
+        },
+        "repeatremove": {
+            "msg": "Esta acción es irreversible (se registrará en el registro de auditoría). ¿Está seguro de que desea continuar?"
+        }
+    },
+    "constraint": {
+        "relevant": "Una respuesta ha cambiado a otra pregunta que requiere que esta pregunta esté oculta, pero no podemos ocultarla mientras tenga datos. Borre los datos o modifique las respuestas dependientes."
+    },
+    "home": {
+        "msg": "¡__appTitle__ se está ejecutando! Acceda a los formularios de OpenClinica desde su instalación de __serverName__."
+    },
+    "alert": {
+        "appupdated": {
+            "heading": "Actualice",
+            "msg": "Actualice esta página web para usar el formulario sin conexión (ref.: aplicación)"
+        },
+        "formupdated": {
+            "heading": "Actualice",
+            "msg": "Actualice esta página web para usar el formulario sin conexión (ref.: definición)"
+        },
+        "goto": {
+            "irrelevant": "El elemento al que intenta acceder está oculto actualmente.",
+            "invisible": "El elemento al que intenta acceder no está visible en el formulario.",
+            "notfound": "El elemento al que intenta acceder se eliminó de este formulario.",
+            "msg1": "Utilice el ícono “View Query Only” (Ver solo consulta) en lugar del ícono “View Query Within Record” (Ver consulta dentro del registro) dentro del registro para verlo.",
+            "msg2": "Visite __miniform__ para verlo.",
+            "form": "este formulario"
+        },
+        "loaderror": {
+            "editadvice": "",
+            "entryadvice": "",
+            "heading": "Espere un momento...",
+            "msg1": "Comuníquese con su equipo de soporte con el enlace a esta página y el mensaje a continuación si necesita más ayuda.",
+            "msg2": "",
+            "heading_plural": "Espere un momento...",
+            "msg1_plural": "Comuníquese con su equipo de soporte con el enlace a esta página y los mensajes a continuación si necesita más ayuda.",
+            "msg2_plural": ""
+        }
+    },
+    "submission": {
+        "http500": "Hubo un problema con su envío. Inténtelo de nuevo o comuníquese con __supportEmail__ si el problema persiste."
+    },
+    "formfooter": {
+        "exit": {
+            "btn": "Finalizar más tarde"
+        },
+        "done": {
+            "btn": "Terminé"
+        }
+    },
+    "repeat": {
+        "addanother": {
+            "btn": "Agregar otro"
+        },
+        "remove": {
+            "btn": "Eliminar"
+        }
+    }
+}
