@@ -35,7 +35,7 @@ const initialize = new Promise((resolve, reject) => {
         .use(htmlParagraphsPostProcessor)
         .init(
             {
-                whitelist: settings.languagesSupported,
+                supportedLngs: settings.languagesSupported,
                 fallbackLng: 'en',
                 joinArrays: '\n',
                 backend: {
