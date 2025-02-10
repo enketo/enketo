@@ -40,7 +40,7 @@ i18next
     .use(I18nextBackend)
     .init({
         // debug: true, // DEBUG
-        whitelist: app.get('languages supported'),
+        supportedLngs: app.get('languages supported'),
         fallbackLng: 'en',
         joinArrays: '\n',
         backend: {
