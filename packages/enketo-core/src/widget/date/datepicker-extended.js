@@ -87,48 +87,45 @@ class DatepickerExtended extends Widget {
     _setChangeHandler($fakeDateI) {
         const { settings } = this;
 
-        let changeEvent = 'change';
         if (!$fakeDateI.closest('label').hasClass('readonly')) {
-            changeEvent += ' paste';
-        }
+            $fakeDateI.on('change paste', (e) => {
+                let convertedValue = '';
+                let value =
+                    e.type === 'paste'
+                        ? getPasteData(e.originalEvent ?? e)
+                        : this.displayedValue;
 
-        $fakeDateI.on(changeEvent, (e) => {
-            let convertedValue = '';
-            let value =
-                e.type === 'paste'
-                    ? getPasteData(e.originalEvent ?? e)
-                    : this.displayedValue;
-
-            if (value.length > 0) {
-                // Note: types.date.convert considers numbers to be a number of days since the epoch
-                // as this is what the XPath evaluator may return.
-                // For user-entered input, we want to consider a Number value to be incorrect, except for year input.
-                if (isNumber(value) && settings.format !== 'yyyy') {
-                    convertedValue = '';
-                } else {
-                    value = this._toActualDate(value);
-                    convertedValue = types.date.convert(value);
+                if (value.length > 0) {
+                    // Note: types.date.convert considers numbers to be a number of days since the epoch
+                    // as this is what the XPath evaluator may return.
+                    // For user-entered input, we want to consider a Number value to be incorrect, except for year input.
+                    if (isNumber(value) && settings.format !== 'yyyy') {
+                        convertedValue = '';
+                    } else {
+                        value = this._toActualDate(value);
+                        convertedValue = types.date.convert(value);
+                    }
                 }
-            }
 
-            $fakeDateI
-                .val(this._toDisplayDate(convertedValue))
-                .datepicker('update');
+                $fakeDateI
+                    .val(this._toDisplayDate(convertedValue))
+                    .datepicker('update');
 
-            // Here we have to do something unusual to prevent native inputs from automatically
-            // changing 2012-12-32 into 2013-01-01
-            // convertedValue is '' for invalid 2012-12-32
-            if (convertedValue === '' && e.type === 'paste') {
-                e.stopImmediatePropagation();
-            }
+                // Here we have to do something unusual to prevent native inputs from automatically
+                // changing 2012-12-32 into 2013-01-01
+                // convertedValue is '' for invalid 2012-12-32
+                if (convertedValue === '' && e.type === 'paste') {
+                    e.stopImmediatePropagation();
+                }
 
-            // Avoid triggering unnecessary change events as they mess up sensitive custom applications (OC)
-            if (this.originalInputValue !== convertedValue) {
-                this.originalInputValue = convertedValue;
-            }
+                // Avoid triggering unnecessary change events as they mess up sensitive custom applications (OC)
+                if (this.originalInputValue !== convertedValue) {
+                    this.originalInputValue = convertedValue;
+                }
 
-            return false;
-        });
+                return false;
+            });
+        }
     }
 
     /**
