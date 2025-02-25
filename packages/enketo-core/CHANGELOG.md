@@ -3,6 +3,10 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## [9.0.1] - 2025-02-25
+
+-   Prevent pasting values in read-only date questions
+
 ## [9.0.0] - 2024-12-09
 
 ⚠️ **BREAKING CHANGE**: if you use Enketo Core with a custom file manager implementation, you will need to read image data from cache. See [this example implementation](https://github.com/enketo/enketo/blob/1e8821e1d21e5c4730cbdc17d2ef49b8f172e42d/packages/enketo-core/src/js/file-manager.js#L146) and [this comment for context](https://github.com/enketo/enketo/pull/1335#issuecomment-2392168842).
