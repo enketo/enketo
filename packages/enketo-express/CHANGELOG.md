@@ -3,6 +3,10 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## 7.5.1 - 2025-02-25
+
+-   Fix error when browser language doesn't have translations
+
 ## 7.5.0 - 2024-12-09
 
 -   For signature, annotation and draw questions, don't scale image when canvas size changes
