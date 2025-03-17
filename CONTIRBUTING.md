@@ -1,54 +1,65 @@
-## Development setup and local usage
+## Enketo Development
 
-### Prerequisites
+### Local environment
 
--   **Node:** Enketo supports the current [Node LTS](https://nodejs.dev/en/about/releases/) environments (presently versions 20 and 22). Local development targets the latest LTS release (22).
--   **Yarn:** Package management and monorepo tasks use [Yarn 1 ("classic")](https://classic.yarnpkg.com/lang/en/).
--   **Volta:** It is highly recommended to use [Volta](https://volta.sh/) to manage Node and Yarn versions automatically while working in Enketo.
+-   **[Node LTS](https://nodejs.dev/en/a2bout/releases/) (v22)**: Enketo targets current and active Node versions, development targets the current.
+-   **[Yarn v1 (classic)](https://classic.yarnpkg.com/lang/en/)**: Package management and monorepo tasks use [Yarn 1 ("classic")]().
+-   **docker**: Enketo is a docker container, but also Enketo uses redis that documentation provides examples from docker for convenience.
 
-For running Enketo Express:
+### Accounts
 
--   **redis**
--   An OpenRosa form server (ODK Central, Ona, Kobo, etc)
+To submit forms to Enketo Express you will need an account at an OpenRosa form server (ODK Central, Ona, Kobo, etc.).
 
 ### Install
 
+Run yarn on the first time and when external dependencies change:
+
 ```sh
 yarn install
+export export TEST_REDIS_MAIN_PORT=6379 # optional. If ommited, tests will dynamically get a free port and start `redis-server --port $PORT`.
 ```
 
-### Running development tasks
+### Launch and watch changes on everything at once:
 
-**Important:** While many tasks you'll use during development are still package-specific, all tasks should be run from the **project root** (not within individual packages).
+All monorepo packages are already symlinked into `node_modules` by `yarn` workspaces.
+The top entry point is Enketo Express that depends on all other packages.
 
-Current project-wide tasks:
+-   enketo-core source is used directly in develop and watched by enketo-express
+-   enketo-transformer dist is watched by enketo-express, so need another watch to rebuild it on changes
+-   openrosa-xpath-evaluator src and dist is the same, and watched by enketo-express
 
--   **Build** all packages
-
-    ```sh
-    yarn build
-    ```
-
--   **Lint** is performed project-wide, checking code quality of all top level and package files.
-
-    ```sh
-    yarn lint
-    ```
-
-Package-specific tasks are run with `yarn workspace [package-name] ...`, e.g.
+Here's how to watch every package and rebuild on it's own or dependency changes:
 
 ```sh
-yarn workspace enketo-core test
-yarn workspace enketo-express start
+## 1. Start docker redis. No action required if redis is installed on host.
+docker run --rm -dit --name enketo-redis --publish 6379:6379 --publish 6380:6379 redis
+export export TEST_REDIS_MAIN_PORT=6379
+
+## 2. Watch everything (from root)
+yarn watch # see http://localhost:8005/preview?xform=http://localhost:3000/all-widgets.xml
 ```
 
-You can see additional tasks in each respective package's README and/or `package.json`.
+### Other tasks
 
-If you're coming form one of Enketo's pre-monorepo packages, you can generally continue to use the same tasks you used previously, with the aforementioned `yarn worskpace [package-name]` prefix.
+See each `package.json` respectively. Current project-wide tasks:
 
-If you've previously used `grunt` commands, you can now use `yarn workspace [package-name] grunt ...`. This will use the local `grunt` dependency, rather than whatever version you may have installed globally.
+```sh
+yarn build # build all packages.
+yarn lint # lint all packages.
+```
 
-## Releases
+Package-specific tasks can be run either from package's folder or from root. If you're coming form one of Enketo's pre-monorepo packages, you can generally continue to use the same tasks you used previously, with the aforementioned `yarn worskpace [package-name]` prefix. For example, these two are equal:
+
+```sh
+cd packages/enketo-core
+yarn test
+# or
+yarn workspace enketo-core test
+```
+
+If you've previously used `grunt` commands, please use `yarn workspace [package-name] grunt ...`. This will use the local `grunt` dependency, rather than whatever version you may have installed globally.
+
+## Enketo Releases
 
 Some release preparation steps should be performed "bottom up", i.e. up the package dependency chain. This order is currently:
 

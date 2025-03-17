@@ -1,8 +1,10 @@
 # Enketo
 
-This is the Enketo web forms monorepo. Enketo is an open source project that produces web form software for the [ODK ecosystem](https://getodk.org).
+Enketo is an open source project that produces web form software for the [ODK ecosystem](https://getodk.org).
 
 ## Packages
+
+This is the Enketo web forms monorepo. See more details on each package in its corresponding README file:
 
 -   [Enketo Core](./packages/enketo-core): Enketo's web form engine, intended for embedding in a web application
 -   [Enketo Express](./packages/enketo-express): Enketo's integrated web application, embedding Enketo Core and providing integration with OpenRosa form servers
@@ -16,7 +18,7 @@ Enketo was initiated in 2009 by Martijn van de Rijdt as a web-based alternative 
 
 Since 2021, Enketo has been maintained by the [ODK team](https://getodk.org/about/team.html). The ODK team's goals have been to increase alignment with ODK Collect, improve error messages to help users get out of bad states and improve long-term maintainability by modernizing the code base, removing code duplication, and simplifying state mutation.
 
-> [!IMPORTANT]  
+> [!IMPORTANT]
 > The ODK team will transition out of being primary maintainers of Enketo by the end of 2024. Kobo will then take on primary maintainership.
 
 Please use the issues for discussion (but we will also continue to respond on the [ODK forum](https://forum.getodk.org/)).
@@ -39,7 +41,6 @@ The recommended way to run Enketo Express is using Docker. We publish a [minimal
 > -   Paths have changed. The working directory was previously the Enketo Express root so you would put your config at `config/config.json`. Now it is the Enketo monorepo root so your config must go to `packages/enketo-express/config/config.json`.
 > -   Previous versions generated and templated in secrets using a Python script. If you need a templated configuration, you need to manage that yourself in your deployment infrastructure.
 > -   Previous versions installed `pm2` and started Enketo Express with it.
-
 
 ## Development
 
