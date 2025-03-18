@@ -21,7 +21,7 @@
         "watch:express": "yarn workspace enketo-express develop",
         "watch:transformer:web": "yarn workspace enketo-transformer watch:web",
         "watch:transformer:node": "yarn workspace enketo-transformer watch:node",
-        "watch:forms": "serve packages/enketo-core/test/forms/",
+        "watch:forms": "serve --cors packages/enketo-core/test/forms/",
         "watch": "concurrently -k 'npm:watch:*'",
         "lint": "eslint --cache --quiet .",
         "test": "yarn workspaces run test",
