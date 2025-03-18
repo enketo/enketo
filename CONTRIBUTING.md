@@ -16,7 +16,7 @@ Run yarn on the first time and when external dependencies change:
 
 ```sh
 yarn install
-export export TEST_REDIS_MAIN_PORT=6379 # optional. If ommited, tests will dynamically get a free port and start `redis-server --port $PORT`.
+cp packages/enketo-express/config/default-config.json packages/enketo-express/config/config.json
 ```
 
 ### Launch and watch changes on everything at once:
@@ -33,7 +33,7 @@ Here's how to watch every package and rebuild on it's own or dependency changes:
 ```sh
 ## 1. Start docker redis. No action required if redis is installed on host.
 docker run --rm -dit --name enketo-redis --publish 6379:6379 --publish 6380:6379 redis
-export export TEST_REDIS_MAIN_PORT=6379
+export TEST_REDIS_MAIN_PORT=6379
 
 ## 2. Watch everything (from root)
 yarn watch # see http://localhost:8005/preview?xform=http://localhost:3000/all-widgets.xml
