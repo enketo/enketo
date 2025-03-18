@@ -153,20 +153,29 @@ module.exports = (grunt) => {
                 tasks: ['shell:clean-locales', 'shell:translation', 'i18next'],
             },
             js: {
-                files: ['public/js/src/**/*.js', 'widget/**/*.js'],
+                files: [
+                    '../enketo-core/src/**/*.js',
+                    '../enketo-core/widget/**/*.js',
+                    '../enketo-transformer/dist/**/*.js',
+                    '../enketo-transformer/dist/**/*.cjs',
+                    '../openrosa-xpath-evaluator/src/**/*.js',
+                    'public/js/src/**/*.js',
+                    'widget/**/*.js',
+                ],
                 tasks: ['shell:clean-js', 'js'],
                 options: {
                     spawn: false,
                     livereload: true,
                 },
             },
-            mochaTest: {
-                files: ['app/**/*.js', 'test/server/**/*.js'],
-                tasks: ['test-server:all'],
-                options: {
-                    atBegin: true,
-                },
-            },
+            // TODO
+            // mochaTest: {
+            //     files: ['app/**/*.js', 'test/server/**/*.js'],
+            //     tasks: ['test-server:all'],
+            //     options: {
+            //         atBegin: true,
+            //     },
+            // },
         },
         shell: {
             'clean-css': {
