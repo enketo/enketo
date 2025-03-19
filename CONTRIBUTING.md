@@ -3,8 +3,8 @@
 ### Local environment
 
 -   **[Node LTS](https://nodejs.dev/en/a2bout/releases/) (v22)**: Enketo targets current and active Node versions, development targets the current.
--   **[Yarn v1 (classic)](https://classic.yarnpkg.com/lang/en/)**: Package management and monorepo tasks use [Yarn 1 ("classic")]().
--   **docker**: Enketo is a docker container, but also Enketo uses redis that documentation provides examples from docker for convenience.
+-   **[Yarn v1 (classic)](https://classic.yarnpkg.com/lang/en/)**: Enketo uses Yarn Classic as dependency management instead of npm.
+-   **[docker](https://docs.docker.com/engine/install/)**: Enketo Express is a docker container, and documentation provides examples for redis from docker for convenience.
 
 ### Accounts
 
@@ -19,7 +19,7 @@ yarn install
 cp packages/enketo-express/config/default-config.json packages/enketo-express/config/config.json
 ```
 
-### Launch and watch changes on everything at once:
+### Launch
 
 All monorepo packages are already symlinked into `node_modules` by `yarn` workspaces.
 The top entry point is Enketo Express that depends on all other packages.
@@ -28,7 +28,7 @@ The top entry point is Enketo Express that depends on all other packages.
 -   enketo-transformer dist is watched by enketo-express, so need another watch to rebuild it on changes
 -   openrosa-xpath-evaluator src and dist is the same, and watched by enketo-express
 
-Here's how to watch every package and rebuild on it's own or dependency changes:
+##### Watch every package and rebuild on it's own or dependency changes:
 
 ```sh
 ## 1. Start docker redis. No action required if redis is installed on host.
@@ -36,8 +36,29 @@ docker run --rm -dit --name enketo-redis --publish 6379:6379 --publish 6380:6379
 export TEST_REDIS_MAIN_PORT=6379
 
 ## 2. Watch everything (from root)
-yarn watch # see http://localhost:8005/preview?xform=http://localhost:3000/all-widgets.xml
+yarn watch
 ```
+
+##### Preview a static XForm test file:
+
+-   list available test forms at http://localhost:3000
+-   open a form, e.g. http://localhost:8005/preview?xform=http://localhost:3000/all-widgets.xml
+
+##### Preview and submit survey with a server:
+
+1. create a form
+    - register at OpenRosa-compliant server (e.g. [Kobotoolbox](https://kf.kobotoolbox.org/))
+    - create and deploy a form
+2. create an enketo survey based on a form
+    - run `curl --user enketorules: -d "server_url=https://kf.kobotoolbox.org/$USER&form_id=$FORM_ID" http://localhost:8005/api/v2/survey`
+        - example uses Kobotoolbox url schema, other servers may have it different.
+        - replace `$USER` with a real user at the OpenRosa-compliant server, e.g. `johndeer`
+        - replace `$FORM_ID` with a real form id, e.g. `a8LNkuC8v3KCa2ntGuFREx`
+    - receive a `{ "url": "http://localhost:8005/$ENKETO_ID", "code": 201 }` response
+        - where `$ENKETO_ID` will be unique and generated on creation, e.g. `n3Y2TdJx`
+3. view the Enketo survey
+    - open the received `url` in browser
+    - fill the survey and submit it 🎉
 
 ### Other tasks
 
