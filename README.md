@@ -59,7 +59,10 @@ export TEST_REDIS_MAIN_PORT=6379
 yarn watch # see http://localhost:8005/preview?xform=http://localhost:3000/all-widgets.xml
 ```
 
-For more details, see [`./CONTRIBUTING.md`](./CONTRIBUTING.md) or correspnding package README's.
+For more details, see:
+
+-   [CONTRIBUTING.md](./CONTRIBUTING.md)
+-   README of [Enketo Core](./packages/enketo-core/README.md), [Enketo Express](./packages/enketo-express/README.md), [Enketo Transformer](./packages/enketo-transformer/README.md) and [Openrosa Xpath Evaluator](./packages/openrosa-xpath-evaluator/README.md)
 
 ## License
 
