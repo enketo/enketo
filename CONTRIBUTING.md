@@ -2,8 +2,8 @@
 
 ### Local environment
 
--   **[Node LTS](https://nodejs.dev/en/a2bout/releases/) (v22)**: Enketo targets current and active Node versions, development targets the current.
--   **[Yarn v1 (classic)](https://classic.yarnpkg.com/lang/en/)**: Enketo uses Yarn Classic as dependency management instead of npm.
+-   **Node LTS** (install via [volta](https://volta.sh/), [fnm](https://github.com/Schniz/fnm), etc.): Enketo targets current and active Node versions, development targets the current.
+-   **[Yarn v1 (classic)](https://classic.yarnpkg.com/lang/en/)** (install via `corepack enable yarn`): Enketo uses Yarn Classic as dependency management instead of npm.
 -   **[docker](https://docs.docker.com/engine/install/)**: Enketo Express is a docker container, and documentation provides examples for redis from docker for convenience.
 
 ### Accounts

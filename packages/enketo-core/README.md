@@ -154,20 +154,33 @@ new Form(formselector, data, {
 
 The `language` option overrides the default languages rules of the XForm itself. Pass any valid and present-in-the-form IANA subtag string, e.g. `ar`.
 
-## How to develop Enketo Core
+## Development
 
-1. install prerequisites:
+### Install
 
--   Volta (optional, but recommended)
--   Node.js 20 and Yarn 1 (Node.js 16 and 18 are also supported)
--   [grunt-cli](https://gruntjs.com/getting-started)
+See [CONTRIBUTING.md](../../CONTRIBUTING.md) for setting up local environment and accounts.
 
-2. install dependencies with `yarn install`
-3. build with `grunt` (`yarn grunt`, `npx grunt`)
-4. start built-in auto-reloading development server with `yarn start`
-5. browse to [http://localhost:8005](http://localhost:8005/) and load an XForm url with the `xform` queryparameter or load a local from the /tests/forms folder in this repo
-6. run tests with `yarn test` (headless chrome) and `yarn run test-browsers` (browsers); **note:** running tests updates the coverage badge in README.md, but these changes should not be committed except when preparing a release
-7. adding the querystring `touch=true` and reducing the window size allows you to simulate mobile touchscreens
+```sh
+yarn install
+```
+
+### Launch
+
+```sh
+yarn start # start built-in auto-reloading development server
+yarn build # make a production build
+```
+
+See forms at http://localhost:8005/?xform=nested_repeats.xml. Adding the querystring `touch=true` and reducing the window size allows you to simulate mobile touchscreens
+
+### Test
+
+```sh
+yarn test # run headless tests*
+yarn test-browsers # run browser tests*
+```
+
+Note: running tests updates the coverage badge in README.md, but these changes should not be committed except when preparing a release
 
 ### Notes for JavaScript Developers
 
