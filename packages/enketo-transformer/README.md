@@ -36,8 +36,7 @@ Neither project currently uses the following functionality:
 
 ## Prerequisites
 
--   Node.js 20 and Yarn 1 (Node.js 16 and 18 are also supported)
--   [Volta](https://volta.sh/) is recommended for development
+-   See [CONTRIBUTING.md](../../CONTRIBUTING.md)
 -   For Node/server-side transforms:
     -   Python (at least 3.7, but less than 3.11)
     -   An appropriate [C++ build toolchain for your machine](https://github.com/nodejs/node-gyp#on-unix)
@@ -114,7 +113,11 @@ const result = await transform({
 > [!NOTE]
 > If your project uses Webpack or another bundler, you may need to [tell it to ignore the `libxslt` package](https://github.com/enketo/enketo-transformer/issues/185#issuecomment-1802426670).
 
-## Development/local usage
+## Development
+
+See [CONTRIBUTING.md](../../CONTRIBUTING.md) for developing Enketo Transformer through Enketo Express.
+
+See below on how to develop Enketo Transformer separately.
 
 ### Install
 
