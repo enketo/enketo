@@ -44,9 +44,22 @@ The recommended way to run Enketo Express is using Docker. We publish a [minimal
 
 ## Development
 
-See [`./CONTRIBUTING.md`](./CONTRIBUTING.md) for developing everything at once, unified release process, etc.
+In short:
 
-See package-specific details in its corresponding README file.
+```sh
+## Install & copy config
+yarn install
+cp packages/enketo-express/config/default-config.json packages/enketo-express/config/config.json
+
+## Optionally, start docker redis. No action required if redis is installed on host.
+docker run --rm -dit --name enketo-redis --publish 6379:6379 --publish 6380:6379 redis
+export TEST_REDIS_MAIN_PORT=6379
+
+## Watch everything (from workspace's root)
+yarn watch # see http://localhost:8005/preview?xform=http://localhost:3000/all-widgets.xml
+```
+
+For more details, see [`./CONTRIBUTING.md`](./CONTRIBUTING.md) or correspnding package README's.
 
 ## License
 
