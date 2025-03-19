@@ -168,14 +168,13 @@ module.exports = (grunt) => {
                     livereload: true,
                 },
             },
-            // TODO
-            // mochaTest: {
-            //     files: ['app/**/*.js', 'test/server/**/*.js'],
-            //     tasks: ['test-server:all'],
-            //     options: {
-            //         atBegin: true,
-            //     },
-            // },
+            mochaTest: {
+                files: ['app/**/*.js', 'test/server/**/*.js'],
+                tasks: ['test-server:all'],
+                options: {
+                    atBegin: true,
+                },
+            },
         },
         shell: {
             'clean-css': {
