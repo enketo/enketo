@@ -46,11 +46,11 @@ for (var i = 0; i < result.snapshotLength; i++) {
 
 This library has no explicit dependencies, but expects various DOM & XPath-related values to be supplied by the browser (`Element`, `Node`, `XPathResult` etc.).
 
-To use the [ODK `digest()` function](https://getodk.github.io/xforms-spec/#fn:digest),
-you'll need to add [`node-forge`](https://www.npmjs.com/package/node-forge) to
-your project.
+To use the [ODK `digest()` function](https://getodk.github.io/xforms-spec/#fn:digest), you'll need to add [`node-forge`](https://www.npmjs.com/package/node-forge) to your project.
 
 # Development
+
+See [CONTRIBUTING.md](../../CONTRIBUTING.md) for developing Openrosa XPath Evaluator through Enketo Express.
 
 ## Useful resources
 

@@ -18,6 +18,11 @@
     },
     "scripts": {
         "build": "yarn workspaces run build",
+        "watch:express": "yarn workspace enketo-express develop",
+        "watch:transformer:web": "yarn workspace enketo-transformer watch:web",
+        "watch:transformer:node": "yarn workspace enketo-transformer watch:node",
+        "watch:forms": "serve --cors packages/enketo-core/test/forms/",
+        "watch": "concurrently -k 'npm:watch:*'",
         "lint": "eslint --cache --quiet .",
         "test": "yarn workspaces run test",
         "postinstall": "yarn build"
@@ -38,6 +43,7 @@
         "@vitest/utils": "^0.34.3",
         "chai": "^4.3.7",
         "chai-as-promised": "^7.1.1",
+        "concurrently": "^9.1.2",
         "cross-env": "^7.0.3",
         "esbuild": "^0.16.17",
         "eslint": "^8.57.1",
@@ -89,6 +95,7 @@
         "prettier": "^3.0.3",
         "puppeteer": "^24.3.0",
         "rimraf": "^3.0.2",
+        "serve": "^14.2.4",
         "sinon": "^15.2.0",
         "sinon-chai": "^3.7.0",
         "time-grunt": "^2.0.0",
@@ -113,5 +120,6 @@
     "volta": {
         "node": "22.12.0",
         "yarn": "1.22.22"
-    }
+    },
+    "packageManager": "yarn@1.22.22+sha512.a6b2f7906b721bba3d67d4aff083df04dad64c399707841b7acf00f6b133b7ac24255f2652fa22ae3534329dc6180534e98d17432037ff6fd140556e2bb3137e"
 }

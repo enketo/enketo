@@ -43,6 +43,8 @@
     "scripts": {
         "benchmarks": "vite-node ./test/benchmarks.ts",
         "build": "EMPTY_OUT_DIR=true vite build && ENV=web vite build && yarn tsc && echo 'enketo-transformer build complete'",
+        "watch:web": "ENV=web vite build -w",
+        "watch:node": "vite build -w",
         "prepare": "yarn build",
         "test": "vitest run --coverage && yarn tsc && node update-readme-with-shield-badge.cjs",
         "test:watch": "vitest",

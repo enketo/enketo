@@ -89,6 +89,10 @@ module.exports = (grunt) => {
                     livereload: true,
                 },
             },
+            html: {
+                files: ['src/index.html'],
+                tasks: ['shell:build'],
+            },
             transforms: {
                 files: 'test/forms/*.xml',
                 tasks: ['transforms'],
