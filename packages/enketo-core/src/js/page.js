@@ -182,8 +182,7 @@ export default {
             allowPageScroll: 'vertical',
             threshold: 250,
             preventDefaultEvents: false,
-            excludedElements:
-                $.fn.swipe.defaults.excludedElements + ', .map-canvas-wrapper',
+            excludedElements: `${$.fn.swipe.defaults.excludedElements}, .map-canvas-wrapper`,
             swipeLeft() {
                 that.$btnNext.click();
             },
