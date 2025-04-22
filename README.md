@@ -1,39 +1,23 @@
-# Enketo
+# Enketo Web Forms
 
-Enketo is an open source project that produces web form software for the [ODK ecosystem](https://getodk.org).
+_Web forms evolved. Deploy and conduct surveys that work without a connection, on any device._
 
-## Packages
-
-This is the Enketo web forms monorepo. See more details on each package in its corresponding README file:
-
--   [Enketo Core](./packages/enketo-core): Enketo's web form engine, intended for embedding in a web application
--   [Enketo Express](./packages/enketo-express): Enketo's integrated web application, embedding Enketo Core and providing integration with OpenRosa form servers
--   [Enketo Transformer](./packages/enketo-transformer): used by Enketo to transform [XForms](https://getodk.github.io/xforms-spec/) into the format consumed by Enketo Core
--   [OpenRosa XPath Evaluator](./packages/openrosa-xpath-evaluator): Enketo's implementation of the OpenRosa XPath extensions, used in Enketo Core
--   [Enketo Transformer Web (example)](./examples/enketo-transformer-web): example app demonstrating client-side usage of Enketo Transformer
-
-## Project status
-
-Enketo was initiated in 2009 by Martijn van de Rijdt as a web-based alternative or complement to [ODK Collect](https://docs.getodk.org/collect-intro/). It has become a core component of the ODK ecosystem and been adopted by several organizations beyond that ecosystem.
-
-Since 2021, Enketo has been maintained by the [ODK team](https://getodk.org/about/team.html). The ODK team's goals have been to increase alignment with ODK Collect, improve error messages to help users get out of bad states and improve long-term maintainability by modernizing the code base, removing code duplication, and simplifying state mutation.
-
-> [!IMPORTANT]
-> The ODK team will transition out of being primary maintainers of Enketo by the end of 2024. Kobo will then take on primary maintainership.
-
-Please use the issues for discussion (but we will also continue to respond on the [ODK forum](https://forum.getodk.org/)).
+Enketo is an open source project that produces web form software based on open-source standards. Used by [Get ODK](https://getodk.org), [KoboToolbox](https://kobotoolbox.org), [OpenClinica](https://www.openclinica.com/) and [others](https://enketo.org/about/adoption/).
 
 ## Using Enketo in your system
 
-There are two major ways to use Enketo: embedding the client-side [Enketo Core](./packages/enketo-core) library in a broader frontend or using the [Enketo Express](./packages/enketo-express) service through [its APIs](https://enketo.org/develop/api/). Which you choose depends on the functionality you what to implement in your host app (for example, Enketo Core doesn't provide offline caching of in-progress submissions, form transformation, or form URL management) and whether or not you already implement the OpenRosa APIs.
+There are two major ways to use Enketo:
 
-### Using Enketo Core
+-   embedding the client-side [Enketo Core](./packages/enketo-core) library in a broader frontend,
+-   using the [Enketo Express](./packages/enketo-express) service through [its APIs](https://enketo.org/develop/api/).
 
-To use Enketo Core, see [its README](./packages/enketo-core#usage-as-a-library).
+Which you choose depends on the functionality you what to implement in your host app (for example, Enketo Core doesn't provide offline caching of in-progress submissions, form transformation, or form URL management) and whether or not you already implement the OpenRosa APIs.
 
 ### Using Enketo Express
 
-The recommended way to run Enketo Express is using Docker. We publish a [minimal image](https://github.com/enketo/enketo/pkgs/container/enketo) which builds Enketo Express using the default configuration and then launches it. You will need to supply a configuration appropriate for your environment which must set at least the "linked form and data server", "api key", and secrets. You will also need to run `redis` and make sure that Enketo Express can talk to both the `redis` database(s) and a form server. See a simple example `docker-compose` file for running a full platform on a single host with [ODK Central](https://github.com/getodk/central/blob/master/docker-compose.yml). Another common configuration is to run Enketo Express on a separate host. Learn more about configuring Enketo Express [in its README](./packages/enketo-express).
+The recommended way to run Enketo Express is using Docker.
+
+We publish a [minimal docker image](https://github.com/enketo/enketo/pkgs/container/enketo) which builds Enketo Express using the default configuration and then launches it. You will need to supply a configuration appropriate for your environment which must set at least the "linked form and data server", "api key", and secrets. You will also need to run `redis` and make sure that Enketo Express can talk to both the `redis` database(s) and a form server. See a simple example `docker-compose` file for running a full platform on a single host with [ODK Central](https://github.com/getodk/central/blob/master/docker-compose.yml). Another common configuration is to run Enketo Express on a separate host. Learn more about configuring Enketo Express [in its README](./packages/enketo-express).
 
 > [!IMPORTANT]
 > If you used the Enketo Express Docker image [from before the monorepo migration](https://github.com/enketo/enketo-express/blob/master/Dockerfile), you will need to make adjustments:
@@ -42,9 +26,13 @@ The recommended way to run Enketo Express is using Docker. We publish a [minimal
 > -   Previous versions generated and templated in secrets using a Python script. If you need a templated configuration, you need to manage that yourself in your deployment infrastructure.
 > -   Previous versions installed `pm2` and started Enketo Express with it.
 
+### Using Enketo Core
+
+To use Enketo Core, see [its README](./packages/enketo-core#usage-as-a-library).
+
 ## Development
 
-In short:
+See [CONTRIBUTING.md](./CONTRIBUTING.md), but in short:
 
 ```sh
 ## Install & copy config
@@ -59,14 +47,24 @@ export TEST_REDIS_MAIN_PORT=6379
 yarn watch # see http://localhost:8005/preview?xform=http://localhost:3000/all-widgets.xml
 ```
 
-For more details, see:
+This is a monorepo, see for details on each package see their README:
 
--   [CONTRIBUTING.md](./CONTRIBUTING.md)
--   README of [Enketo Core](./packages/enketo-core/README.md), [Enketo Express](./packages/enketo-express/README.md), [Enketo Transformer](./packages/enketo-transformer/README.md) and [Openrosa Xpath Evaluator](./packages/openrosa-xpath-evaluator/README.md)
+-   [Enketo Express](./packages/enketo-express/README.md): Enketo's integrated web application, embedding Enketo Core and providing integration with OpenRosa form servers
+-   [Enketo Core](./packages/enketo-core/README.md): Enketo's web form engine, intended for embedding in a web application
+-   [Enketo Transformer](./packages/enketo-transformer/README.md): used by Enketo to transform [XForms](https://getodk.github.io/xforms-spec/README.md) into the format consumed by Enketo Core
+-   [OpenRosa XPath Evaluator](./packages/openrosa-xpath-evaluator/README.md): Enketo's implementation of the OpenRosa XPath extensions, used in Enketo Core
+
+And also an [Enketo Transformer Web (example)](./examples/enketo-transformer-web): example app demonstrating client-side usage of Enketo Transformer
+
+## History
+
+-   March 2025 - [Kobo team](https://www.kobotoolbox.org/about-us/meet-the-team/) takes over maintainership ([#1392](https://github.com/enketo/enketo/issues/1392)) in response to ODK's annoucement ([#1317](https://github.com/enketo/enketo/pull/1317/files)) about stepping away from maintainership in May 2024.
+-   c.a. 2021 - [ODK team](https://getodk.org/about/team.html) takes over maintainership. The ODK team's goals have been to increase alignment with ODK Collect, improve error messages to help users get out of bad states and improve long-term maintainability by modernizing the code base, removing code duplication, and simplifying state mutation.
+-   c.a. 2009 - Enketo was initiated by Martijn van de Rijdt as a web-based alternative or complement to [ODK Collect](https://docs.getodk.org/collect-intro/). It has become a core component of the ODK ecosystem and been adopted by several organizations beyond that ecosystem.
 
 ## License
 
-See each package for its licence.
+See each package for its Apache v2 licence.
 
 Additionally, any product that uses enketo-core is required to have a "Powered by Enketo" footer, according to the specifications below, on all screens in which enketo-core or parts thereof, are used, unless explicity exempted from this requirement by Enketo LLC in writing. Partners and sponsors of the Enketo Project, listed on [https://enketo.org/about/sponsors/](https://enketo.org/about/sponsors/) are exempted from this requirements and so are contributors listed in [package.json](https://github.com/enketo/enketo-core/blob/master/package.json).
 
