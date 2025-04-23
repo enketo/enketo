@@ -2,7 +2,7 @@
 
 _Web forms evolved. Deploy and conduct surveys that work without a connection, on any device._
 
-Enketo is an open source project that produces web form software based on open-source standards. Used by [Get ODK](https://getodk.org), [KoboToolbox](https://kobotoolbox.org), [OpenClinica](https://www.openclinica.com/) and [others](https://enketo.org/about/adoption/).
+Enketo is an open source project that produces web form software based on open-source standards. Used by [ODK](https://getodk.org), [KoboToolbox](https://kobotoolbox.org), [OpenClinica](https://www.openclinica.com/) and [others](https://enketo.org/about/adoption/).
 
 ## Using Enketo in your system
 
@@ -59,7 +59,7 @@ And also an [Enketo Transformer Web (example)](./examples/enketo-transformer-web
 ## History
 
 -   March 2025 - [Kobo team](https://www.kobotoolbox.org/about-us/meet-the-team/) takes over maintainership ([#1392](https://github.com/enketo/enketo/issues/1392)) in response to ODK's annoucement ([#1317](https://github.com/enketo/enketo/pull/1317/files)) about stepping away from maintainership in May 2024.
--   c.a. 2021 - [ODK team](https://getodk.org/about/team.html) takes over maintainership. The ODK team's goals have been to increase alignment with ODK Collect, improve error messages to help users get out of bad states and improve long-term maintainability by modernizing the code base, removing code duplication, and simplifying state mutation.
+-   c.a. 2021 - [ODK team](https://getodk.org/about/team) takes over maintainership. The ODK team's goals have been to increase alignment with ODK Collect, improve error messages to help users get out of bad states and improve long-term maintainability by modernizing the code base, removing code duplication, and simplifying state mutation.
 -   c.a. 2009 - Enketo was initiated by Martijn van de Rijdt as a web-based alternative or complement to [ODK Collect](https://docs.getodk.org/collect-intro/). It has become a core component of the ODK ecosystem and been adopted by several organizations beyond that ecosystem.
 
 ## License
