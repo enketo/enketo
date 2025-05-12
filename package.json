@@ -1,7 +1,6 @@
 {
     "name": "enketo",
     "description": "Enketo Web Forms",
-    "repository": "https://github.com/enketo/enketo",
     "private": true,
     "workspaces": {
         "packages": [
@@ -121,5 +120,24 @@
         "node": "22.12.0",
         "yarn": "1.22.22"
     },
+    "repository": "https://github.com/enketo/enketo",
+    "license": "Apache-2.0",
+    "author": {
+        "name": "KoboToolbox",
+        "email": "enketo@kobotoolbox.org",
+        "url": "https://www.kobotoolbox.org/about-us/meet-the-team"
+    },
+    "contributors": [
+        {
+            "name": "ODK",
+            "email": "support@getodk.org",
+            "url": "https://getodk.org/about/team"
+        },
+        {
+            "name": "Martijn van de Rijdt",
+            "email": "martijn@enketo.org",
+            "url": "https://github.com/MartijnR"
+        }
+    ],
     "packageManager": "yarn@1.22.22+sha512.a6b2f7906b721bba3d67d4aff083df04dad64c399707841b7acf00f6b133b7ac24255f2652fa22ae3534329dc6180534e98d17432037ff6fd140556e2bb3137e"
 }
