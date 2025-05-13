@@ -60,6 +60,18 @@ yarn watch
     - open the received `url` in browser
     - fill the survey and submit it 🎉
 
+### Manual Testing
+
+Although Enketo have quite a lot automated tests, it's prudent to manually test any changes as well. In fact, the PR template asks to do so. Here's an elaborate description of what each action entails exactly:
+
+- **Form preview** - see above "Preview a static XForm test file".
+- **Online form submission** - see above "Preview and submit survey with a server".
+- **Offline form submission** - TODO
+- **Saving offline drafts** - TODO
+- **Loading offline drafts** - TODO
+- **Editing submissions** - TODO
+
+
 ### Other tasks
 
 See each `package.json` respectively. Current project-wide tasks:
