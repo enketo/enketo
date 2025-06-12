@@ -60,16 +60,41 @@ yarn watch
     - open the received `url` in browser
     - fill the survey and submit it 🎉
 
+
+##### Edit a Submission
+
+When connected to a server, such as KoboToolbox, submission data can be retrieved for editing. Enketo will populate the form with the retrieved data, and upon submission, it will be marked as a replacement for the original entry.
+
+---
+
+#### Offline Capabilities
+
+Enketo is designed to support offline functionality by utilizing service workers that cache loaded forms and enable core features without an internet connection. This allows users to continue data collection in areas with poor or no connectivity. Submissions are stored locally and sent to the server once a connection is available.
+
+Some offline capabilities depend on form configuration. If a form is configured to be online-only, offline functionality will be disabled.
+
+Enketo's offline capabilities include:
+
+- **Open a loaded form**: Once a form is accessed via a URL, it is saved in the browser’s storage and can be opened without an internet connection.
+
+- **Send a submission**: Submissions can be completed and stored locally even when the server is unavailable. They are automatically sent once the device regains connectivity. The number of queued submissions is displayed in the top left corner of Enketo’s interface.
+
+- **Save a draft**: While completing a form, users may choose to save their progress as a draft if they don't have all the necessary information. Drafts are stored locally in the browser.
+
+- **Load a draft**: Saved drafts for a given form can be accessed via the `]` menu on the left side of the screen. All available drafts are listed and can be reopened by clicking on them. Once a draft is submitted (either online or offline) it is removed from the draft list.
+
+---
+
 ### Manual Testing
 
-Although Enketo have quite a lot automated tests, it's prudent to manually test any changes as well. In fact, the PR template asks to do so. Here's an elaborate description of what each action entails exactly:
+Although Enketo has a comprehensive suite of automated tests, it is still important to manually test any changes. In fact, the pull request template includes a checklist for this. Below is a detailed description of what each manual test action involves:
 
-- **Form preview** - see above "Preview a static XForm test file".
-- **Online form submission** - see above "Preview and submit survey with a server".
-- **Offline form submission** - TODO
-- **Saving offline drafts** - TODO
-- **Loading offline drafts** - TODO
-- **Editing submissions** - TODO
+- **Form preview** – See above: _“Preview a static XForm test file.”_
+- **Online form submission** – See above: _“Preview and submit survey with a server.”_
+- **Offline form submission** – See above: _“Offline capabilities – Send a submission.”_
+- **Saving offline drafts** – See above: _“Offline capabilities – Save a draft.”_
+- **Loading offline drafts** – See above: _“Offline capabilities – Load a draft.”_
+- **Editing submissions** – See above: _“Edit a Submission.”_
 
 
 ### Other tasks
