@@ -1,12 +1,13 @@
 ### 🗒️ Checklist
 
-1. [ ] update all related docs (README, inline, etc.), if any
-2. [ ] draft PR with a title `<type>(<scope>)<!>: <title> DEV-1234`
+1. [ ] draft PR with a title `<type>(<scope>)<!>: <title> DEV-1234`
+2. [ ] assign yourself
 3. [ ] fill in the template below and delete template comments
-4. [ ] review thyself: read the diff and repro the preview as written
-5. [ ] undraft PR & confirm that CI passes
-6. [ ] request reviewers & improve according to review
-7. [ ] delete this section before merging
+4. [ ] update all related docs (README, inline, etc.), if any
+5. [ ] review thyself: read the diff and repro the preview as written
+6. [ ] undraft PR & confirm that CI passes
+7. [ ] request reviewers & improve according to review
+8. [ ] delete this section before merging
 
 
 ### 📣 Summary
@@ -42,7 +43,7 @@
 - proactively answer likely questions,
 -->
 
-I have verified this PR works by manually testing:
+I have verified this PR works by manually testing (see CONTRIBUTING.md):
 
 - [ ] Online form submission
 - [ ] Offline form submission
