@@ -23,7 +23,7 @@ class Filepicker extends Widget {
      * @type {string}
      */
     static get selector() {
-        return '.question:not(.or-appearance-draw):not(.or-appearance-signature):not(.or-appearance-annotate) input[type="file"]:not([accept="audio/*."])';
+        return '.question:not(.or-appearance-draw):not(.or-appearance-signature):not(.or-appearance-annotate) input[type="file"]:not([accept="audio/*"])';
     }
 
     _init() {

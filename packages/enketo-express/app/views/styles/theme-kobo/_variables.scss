@@ -1,4 +1,12 @@
 $body-bg: #f0f0f0;
 $brand-primary-color: #3e75a6;
-$brand-secondary-color: lighten($brand-primary-color, 45%);
+$brand-secondary-color: lighten(#d2e9fc, 45%);
 $repeat-bg: lighten($brand-primary-color, 50%);
+$secondary-color: #d2e9fc;
+$secondary-button-bg-hover: darken($secondary-color, 5%);
+$secondary-button-border-color: $secondary-color;
+
+$button-font-color: white;
+$button-font-color-alt: #135991;
+
+$button-sml: 6px;
