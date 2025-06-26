@@ -1,0 +1,32 @@
+<?xml version="1.0"?>
+<h:html xmlns="http://www.w3.org/2002/xforms" xmlns:h="http://www.w3.org/1999/xhtml" xmlns:ev="http://www.w3.org/2001/xml-events" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:jr="http://openrosa.org/javarosa" xmlns:orx="http://openrosa.org/xforms" xmlns:odk="http://www.opendatakit.org/xforms">
+  <h:head>
+    <h:title>Audio test</h:title>
+    <model odk:xforms-version="1.0.0">
+      <instance>
+        <aBgeRqE4AxpXTnLWFy9Atx id="aBgeRqE4AxpXTnLWFy9Atx">
+          <start/>
+          <end/>
+          <audio_1/>
+          <Record_something/>
+          <meta>
+            <instanceID/>
+          </meta>
+        </aBgeRqE4AxpXTnLWFy9Atx>
+      </instance>
+      <bind nodeset="/aBgeRqE4AxpXTnLWFy9Atx/start" jr:preload="timestamp" type="dateTime" jr:preloadParams="start"/>
+      <bind nodeset="/aBgeRqE4AxpXTnLWFy9Atx/end" jr:preload="timestamp" type="dateTime" jr:preloadParams="end"/>
+      <bind nodeset="/aBgeRqE4AxpXTnLWFy9Atx/audio_1" type="binary" required="false()"/>
+      <bind nodeset="/aBgeRqE4AxpXTnLWFy9Atx/Record_something" type="binary" required="false()"/>
+      <bind nodeset="/aBgeRqE4AxpXTnLWFy9Atx/meta/instanceID" type="string" readonly="true()" jr:preload="uid"/>
+    </model>
+  </h:head>
+  <h:body>
+    <upload mediatype="audio/*" ref="/aBgeRqE4AxpXTnLWFy9Atx/audio_1">
+      <label>audio 123</label>
+    </upload>
+    <upload mediatype="audio/*" appearance="quality=normal" ref="/aBgeRqE4AxpXTnLWFy9Atx/Record_something">
+      <label>Record something</label>
+    </upload>
+  </h:body>
+</h:html>

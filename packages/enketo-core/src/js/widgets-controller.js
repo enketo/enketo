@@ -3,7 +3,7 @@
  */
 
 import $ from 'jquery';
-import _widgets from 'enketo/widgets';
+import _widgets from './widgets';
 import { elementDataStore as data } from './dom-utils';
 import events from './event';
 

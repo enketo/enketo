@@ -1,0 +1,144 @@
+.audio-widget {
+    width: 100%;
+    height: 54px;
+
+    .step-action-select .btn-group {
+        display: flex;
+        flex-direction: row;
+        gap: $padding-base-horizontal;
+        .btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 6px;
+            padding-left: 14px;
+            padding-right: 14px;
+
+            .icon-volume-down {
+                font-size: floor($font-size-base * 1.2);
+            }
+
+            .icon-upload {
+                font-size: $font-size-base;
+            }
+        }
+    }
+
+    .btn-icon-only {
+        margin: 0px;
+
+        .icon {
+            margin: 0px;
+            font-size: 16px;
+        }
+    }
+
+    .step-recording .recording-container,
+    .step-uploading .upload-container,
+    .step-preview .audio-preview {
+        width: 80%;
+        height: 54px;
+        display: flex;
+        gap: $padding-base-horizontal;
+        padding: 0 22px;
+        border-radius: 27px;
+        border: #edeef2 1px solid;
+        align-items: center;
+    }
+
+    .step-recording {
+        .recording-display {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            .status-dot {
+                width: 6px;
+                height: 6px;
+                background-color: #ff8080;
+                border-radius: 50%;
+            }
+
+            .recording-time {
+                font-size: 14px;
+                font-weight: normal;
+            }
+        }
+
+        .audio-waveform {
+            flex-grow: 1;
+            width: 100%;
+            height: 20px;
+        }
+
+        .recording-controls {
+            display: flex;
+            align-items: center;
+            gap: $padding-base-horizontal;
+
+            button {
+                margin: 0px;
+                width: 20px;
+                height: 20px;
+            }
+
+            .btn-pause {
+                color: #333847;
+            }
+
+            .btn-stop {
+                color: #9d0000;
+            }
+        }
+    }
+
+    .step-preview {
+        .preview-container,
+        .btn-group {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .audio-preview {
+            background: #f1f3f4;
+            border: #f1f3f4 1px solid;
+
+            button {
+                margin: 0px;
+                width: 20px;
+                height: 20px;
+                color: #333847;
+            }
+
+            .play-progress {
+                flex: 1;
+                width: 100%;
+                height: 4px;
+                background: #d9d9d9;
+                position: relative;
+                border-radius: 2px;
+                overflow: hidden;
+
+                .progress-bar {
+                    position: absolute;
+                    top: 0;
+                    left: 0;
+                    height: 100%;
+                    width: 30%;
+                    background: #3e75a6;
+                    border-radius: 2px;
+                }
+            }
+        }
+
+        .btn-group {
+            .icon {
+                font-size: 18px;
+            }
+
+            .btn-delete {
+                color: #9d0000;
+            }
+        }
+    }
+}

@@ -35,6 +35,7 @@ import ad from '../widget/text-print/text-print';
 import ae from '../widget/thousands-sep/thousands-sep';
 import af from '../widget/number-input/decimal-input';
 import ag from '../widget/number-input/integer-input';
+import ah from '../widget/audio/audio';
 // import zz from '../widget/example/my-widget';
 
 export default [
@@ -69,4 +70,5 @@ export default [
     ae,
     af,
     ag,
+    ah,
 ];
