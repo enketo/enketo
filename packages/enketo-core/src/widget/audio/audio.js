@@ -7,7 +7,6 @@ import Widget from '../../js/widget';
  * @augments Widget
  */
 
-const steps = ['action-select', 'recording', 'uploading', 'preview'];
 class AudioWidget extends Widget {
     /**
      * @type {string}
@@ -29,120 +28,190 @@ class AudioWidget extends Widget {
         // Disable the inner button click on label click
         this.question.setAttribute('for', '');
 
-        const fragment = document.createRange().createContextualFragment(
-            `<div class="widget audio-widget">
-                <div class="step-action-select">
-                    <div class="btn-group">
-                        <button class="btn-record btn btn-primary small">
-                            <i class="icon icon-volume-down"></i> Start Recording
+        const fragment = document
+            .createRange()
+            .createContextualFragment(
+                `<div class="widget audio-widget"></div>`
+            );
+
+        this.question.appendChild(fragment); // Append the new widget structure
+
+        this.showActionSelectStep();
+    }
+
+    setWidgetContent(fragment) {
+        const widget = this.question.querySelector('.widget');
+        if (!widget) {
+            console.error('Widget container not found.');
+            return;
+        }
+        widget.innerHTML = '';
+        widget.appendChild(fragment);
+    }
+
+    showActionSelectStep() {
+        const stepFragment = document.createRange().createContextualFragment(
+            `<div class="step-action-select">
+                <button class="btn-record btn btn-primary small">
+                    <i class="icon icon-volume-down"></i> Start Recording
+                </button>
+                <button class="btn-upload btn btn-default small">
+                    <i class="icon icon-upload"></i> Upload audio File
+                </button>
+            </div>`
+        );
+
+        const buttonRecord = stepFragment.querySelector('.btn-record');
+        const buttonUpload = stepFragment.querySelector('.btn-upload');
+
+        buttonRecord.addEventListener('click', () => {
+            this.showRecordStep();
+        });
+
+        buttonUpload.addEventListener('click', () => {
+            this.showUploadStep();
+        });
+
+        this.setWidgetContent(stepFragment);
+    }
+
+    showRecordStep() {
+        const stepFragment = document.createRange().createContextualFragment(
+            `<div class="step-recording">
+                <div class="recording-container">
+                    <div class="recording-display">
+                        <span class="status-dot recording"></span>
+                        <span class="recording-time">00:00</span>
+                    </div>
+                    <canvas class="audio-waveform"></canvas>
+                    <div class="recording-controls">
+                        <button class="btn-icon-only btn-pause">
+                            <i class="icon icon-pause"></i>
                         </button>
-                        <button class="btn-upload btn btn-default small">
-                            <i class="icon icon-upload"></i> Upload audio File
+                        <button class="btn-icon-only btn-play hidden">
+                            <i class="icon icon-play"></i>
                         </button>
-                    </div>
-                </div>
-                <div class="step-recording">
-                    <div class="recording-container">
-                        <div class="recording-display">
-                            <span class="status-dot"></span>
-                            <span class="recording-time">00:00</span>
-                        </div>
-                        <canvas class="audio-waveform"></canvas>
-                        <div class="recording-controls">
-                            <button class="btn btn-icon-only btn-pause">
-                                <i class="icon icon-pause"></i>
-                            </button>
-                            <button class="btn btn-icon-only btn-stop">
-                                <i class="icon icon-stop"></i>
-                            </button>
-                        </div>
-                    </div>
-                </div>
-                <div class="step-uploading">
-                    <div class="upload-container">
-                        <input type="file" accept="audio/*" class="file-input" />
-                    </div>
-                </div>
-                <div class="step-preview">
-                    <div class="preview-container">
-                        <div class="audio-preview">
-                            <button class="btn btn-icon-only btn-play">
-                                <i class="icon icon-play"></i>
-                            </button>
-                            <div class="time-display">
-                                <span class="time-progress">00:00 / 1:24</span>
-                            </div>
-                            <div class="play-progress">
-                                <div class="progress-bar">
-                                    <div class="progress"></div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="btn-group">
-                            <button class="btn btn-icon-only btn-download">
-                                <i class="icon icon-download"></i>
-                            </button>
-                            <button class="btn btn-icon-only btn-delete">
-                                <i class="icon icon-trash"></i>
-                            </button>
-                        </div>
+                        <button class="btn-icon-only btn-stop">
+                            <i class="icon icon-stop"></i>
+                        </button>
                     </div>
                 </div>
             </div>`
         );
 
-        this.question.appendChild(fragment); // Append the new widget structure
+        const statusDot = stepFragment.querySelector('.status-dot');
+        const buttonPause = stepFragment.querySelector('.btn-pause');
+        const buttonPlay = stepFragment.querySelector('.btn-play');
+        const buttonStop = stepFragment.querySelector('.btn-stop');
 
-        // Set up actions in steps
-        this.setupActionSelectStep();
-        this.setupRecordingStep();
-
-        this.setStep(2); // Ensure we start at the action select step
-    }
-
-    setStep(index) {
-        steps.forEach((step, i) => {
-            const stepElement = this.question.querySelector(`.step-${step}`);
-            if (stepElement) {
-                stepElement.style.display = i === index ? 'block' : 'none';
-            }
-        });
-    }
-
-    setupActionSelectStep() {
-        // This method sets up the action select step where the
-        // user can choose to record or upload audio.
-
-        const buttonRecord = this.question.querySelector(
-            '.step-action-select button.btn-record'
-        );
-        const buttonUpload = this.question.querySelector(
-            '.step-action-select button.btn-upload'
-        );
-
-        buttonRecord.addEventListener('click', () => {
-            this.setStep(1); // Show recording step
-            this.plotAudioForm(); // Draw the audio form
+        buttonPause.addEventListener('click', () => {
+            buttonPause.classList.add('hidden');
+            buttonPlay.classList.remove('hidden');
+            statusDot.classList.remove('recording');
         });
 
-        buttonUpload.addEventListener('click', () => {
-            this.setStep(2); // Show uploading step
+        buttonPlay.addEventListener('click', () => {
+            buttonPlay.classList.add('hidden');
+            buttonPause.classList.remove('hidden');
+            statusDot.classList.add('recording');
         });
-    }
-
-    setupRecordingStep() {
-        // This method sets up the recording step where the user can
-        // start, pause, and stop recording audio.
-        const buttonPause = this.question.querySelector(
-            '.step-recording button.btn-pause'
-        );
-        const buttonStop = this.question.querySelector(
-            '.step-recording button.btn-stop'
-        );
 
         buttonStop.addEventListener('click', () => {
-            this.setStep(3); // Show preview step
+            this.showPreviewStep(); // Show preview step after stopping the recording
         });
+
+        this.setWidgetContent(stepFragment);
+
+        this.plotAudioForm(); // Draw the audio waveform
+    }
+
+    showUploadStep() {
+        // This method sets up the uploading step where the user can
+        // upload an audio file from their device.
+        const stepFragment = document.createRange().createContextualFragment(
+            `<div class="step-uploading">
+                <div class="file-picker">
+                    <input type="file" accept="audio/*" class="file-input" />
+                </div>
+                <button class="btn-icon-only btn-back">
+                    <i class="icon icon-undo"></i>
+                </button>
+            </div>`
+        );
+
+        const buttonBack = stepFragment.querySelector('.btn-back');
+        const fileInput = stepFragment.querySelector('.file-input');
+
+        buttonBack.addEventListener('click', () => {
+            this.showActionSelectStep(); // Go back to action select step
+        });
+
+        fileInput.addEventListener('change', (event) => {
+            const file = event.target.files[0];
+            if (file) {
+                this.showPreviewStep(); // Show preview step after file selection
+            }
+        });
+
+        this.setWidgetContent(stepFragment);
+    }
+
+    showPreviewStep() {
+        // This method sets up the preview step where the user can
+        // play the recorded or uploaded audio, download it, or delete it.
+        const stepFragment = document.createRange().createContextualFragment(
+            `<div class="step-preview">
+                <div class="audio-preview">
+                    <button class="btn-icon-only btn-play">
+                        <i class="icon icon-play"></i>
+                    </button>
+                    <button class="btn-icon-only btn-pause hidden">
+                        <i class="icon icon-pause"></i>
+                    </button>
+                    <div class="time-display">
+                        <span class="time-progress">00:00 / 1:24</span>
+                    </div>
+                    <div class="play-progress">
+                        <div class="progress-bar">
+                            <div class="progress"></div>
+                        </div>
+                    </div>
+                </div>
+                <button class="btn-icon-only btn-download">
+                    <i class="icon icon-download"></i>
+                </button>
+                <button class="btn-icon-only btn-delete">
+                    <i class="icon icon-trash"></i>
+                </button>
+            </div>`
+        );
+
+        const buttonPlay = stepFragment.querySelector('.btn-play');
+        const buttonPause = stepFragment.querySelector('.btn-pause');
+        const buttonDownload = stepFragment.querySelector('.btn-download');
+        const buttonDelete = stepFragment.querySelector('.btn-delete');
+
+        buttonPlay.addEventListener('click', () => {
+            buttonPlay.classList.add('hidden');
+            buttonPause.classList.remove('hidden');
+            // Logic to play the audio
+        });
+
+        buttonPause.addEventListener('click', () => {
+            buttonPause.classList.add('hidden');
+            buttonPlay.classList.remove('hidden');
+            // Logic to pause the audio
+        });
+
+        buttonDownload.addEventListener('click', () => {
+            // Logic to download the audio
+        });
+
+        buttonDelete.addEventListener('click', () => {
+            this.showActionSelectStep(); // Go back to action select step
+        });
+
+        this.setWidgetContent(stepFragment);
     }
 
     plotAudioForm() {

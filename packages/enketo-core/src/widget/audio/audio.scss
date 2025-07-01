@@ -1,18 +1,47 @@
 .audio-widget {
     width: 100%;
-    height: 54px;
 
-    .step-action-select .btn-group {
+    .btn-icon-only {
+        width: 20px;
+        height: 20px;
+        margin: 0px;
+        display: grid;
+        place-items: center;
+        cursor: pointer;
+
+        .icon {
+            margin: 0px;
+            font-size: 16px;
+        }
+    }
+
+    @keyframes blinker {
+        50% {
+            opacity: 0;
+        }
+    }
+
+    .step-action-select,
+    .step-recording,
+    .step-uploading,
+    .step-preview {
+        width: 100%;
+        height: 54px;
         display: flex;
-        flex-direction: row;
+        align-items: center;
         gap: $padding-base-horizontal;
-        .btn {
+    }
+
+    .step-action-select {
+        button {
             display: flex;
             align-items: center;
             justify-content: center;
             border-radius: 6px;
             padding-left: 14px;
             padding-right: 14px;
+            margin: 0px;
+            height: 32px;
 
             .icon-volume-down {
                 font-size: floor($font-size-base * 1.2);
@@ -24,17 +53,8 @@
         }
     }
 
-    .btn-icon-only {
-        margin: 0px;
-
-        .icon {
-            margin: 0px;
-            font-size: 16px;
-        }
-    }
-
     .step-recording .recording-container,
-    .step-uploading .upload-container,
+    .step-uploading .file-picker,
     .step-preview .audio-preview {
         width: 80%;
         height: 54px;
@@ -42,7 +62,7 @@
         gap: $padding-base-horizontal;
         padding: 0 22px;
         border-radius: 27px;
-        border: #edeef2 1px solid;
+        border: $gray-lighter 1px solid;
         align-items: center;
     }
 
@@ -56,6 +76,12 @@
                 height: 6px;
                 background-color: #ff8080;
                 border-radius: 50%;
+                visibility: hidden;
+            }
+
+            .status-dot.recording {
+                visibility: visible;
+                animation: blinker 1s linear infinite;
             }
 
             .recording-time {
@@ -81,40 +107,37 @@
                 height: 20px;
             }
 
-            .btn-pause {
-                color: #333847;
-            }
-
             .btn-stop {
-                color: #9d0000;
+                color: $state-danger-text;
+            }
+        }
+    }
+
+    .step-uploading {
+        .upload-container {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+        .file-picker {
+            input.file-input {
+                width: 100%;
+                background: transparent;
+                border: none;
             }
         }
     }
 
     .step-preview {
-        .preview-container,
-        .btn-group {
-            display: flex;
-            align-items: center;
-            gap: 20px;
-        }
-
         .audio-preview {
-            background: #f1f3f4;
-            border: #f1f3f4 1px solid;
-
-            button {
-                margin: 0px;
-                width: 20px;
-                height: 20px;
-                color: #333847;
-            }
+            background: $gray-lighter;
+            border: $gray-lighter 1px solid;
 
             .play-progress {
                 flex: 1;
                 width: 100%;
                 height: 4px;
-                background: #d9d9d9;
+                background: rgba(0, 0, 0, 0.15);
                 position: relative;
                 border-radius: 2px;
                 overflow: hidden;
@@ -125,20 +148,18 @@
                     left: 0;
                     height: 100%;
                     width: 30%;
-                    background: #3e75a6;
+                    background: $brand-primary-color;
                     border-radius: 2px;
                 }
             }
         }
 
-        .btn-group {
-            .icon {
-                font-size: 18px;
-            }
+        button.icon {
+            font-size: 18px;
+        }
 
-            .btn-delete {
-                color: #9d0000;
-            }
+        button.btn-delete {
+            color: $state-danger-text;
         }
     }
 }
