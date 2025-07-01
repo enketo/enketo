@@ -12,17 +12,17 @@ class AudioWidget extends Widget {
      * @type {string}
      */
 
+    existingFileName = null;
+
     static get selector() {
         return '.question:not(.or-appearance-draw):not(.or-appearance-signature):not(.or-appearance-annotate) input[type="file"][accept="audio/*"]';
     }
 
     _init() {
-        const existingFileName = this.element.getAttribute(
+        this.existingFileName = this.element.getAttribute(
             'data-loaded-file-name'
         );
 
-        // this.question.classList.remove('contains-ref-target');
-        // this.question.dataset.containsRefTarget = 'false';
         this.element.remove();
 
         // Disable the inner button click on label click
