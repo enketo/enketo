@@ -29,5 +29,6 @@
     "text-print": "../../../node_modules/enketo-core/src/widget/text-print/text-print",
     "thousands-sep": "../../../node_modules/enketo-core/src/widget/thousands-sep/thousands-sep",
     "integer": "../../../node_modules/enketo-core/src/widget/number-input/decimal-input",
-    "decimal": "../../../node_modules/enketo-core/src/widget/number-input/integer-input"
+    "decimal": "../../../node_modules/enketo-core/src/widget/number-input/integer-input",
+    "audio": "../../../node_modules/enketo-core/src/widget/audio/audio"
 }
