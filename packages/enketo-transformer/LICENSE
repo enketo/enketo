@@ -186,7 +186,9 @@ Apache License
       same "printed page" as the copyright notice for easier
       identification within third-party archives.
 
-   Copyright {yyyy} {name of copyright owner}
+   Copyright 2013-2023 Martijn van de Rijdt
+   Copyright 2023-2025 Get ODK, Inc.
+   Copyright 2025 Kobo, Inc.
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
