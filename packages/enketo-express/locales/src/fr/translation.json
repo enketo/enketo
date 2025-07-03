@@ -132,6 +132,10 @@
             "msg": "Une erreur d'évaluation de formule s'est produite. Merci de contacter __emailLink__ avec cette erreur :"
         }
     },
+    "audioRecording": {
+        "startRecording": "Démarrer l'enregistrement",
+        "uploadAudioFile": "Téléverser le fichier"
+    },
     "changelog": "Journal des modifications",
     "confirm": {
         "autosaveload": {

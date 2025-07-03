@@ -132,6 +132,10 @@
             "msg": "Error al validar una fórmula. Por favor contacte __emailLink__ indicando el error:"
         }
     },
+    "audioRecording": {
+        "startRecording": "Iniciar grabación",
+        "uploadAudioFile": "Subir archivo"
+    },
     "changelog": "Registro de Cambios",
     "confirm": {
         "autosaveload": {

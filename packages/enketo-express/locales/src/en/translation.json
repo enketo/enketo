@@ -132,6 +132,10 @@
             "msg": "A formula evaluation error occurred. Please contact __emailLink__ with this error:"
         }
     },
+    "audioRecording": {
+        "startRecording": "Start Recording",
+        "uploadAudioFile": "Upload audio File"
+    },
     "changelog": "Change Log",
     "confirm": {
         "autosaveload": {
