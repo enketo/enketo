@@ -1,3 +1,4 @@
+import { t } from 'enketo/translator';
 import Widget from '../../js/widget';
 
 /**
@@ -53,10 +54,14 @@ class AudioWidget extends Widget {
         const stepFragment = document.createRange().createContextualFragment(
             `<div class="step-action-select">
                 <button class="btn-record btn btn-primary small">
-                    <i class="icon icon-volume-down"></i> Start Recording
+                    <i class="icon icon-volume-down"></i> ${t(
+                        'audioRecording.startRecording'
+                    )}
                 </button>
                 <button class="btn-upload btn btn-default small">
-                    <i class="icon icon-upload"></i> Upload audio File
+                    <i class="icon icon-upload"></i> ${t(
+                        'audioRecording.uploadAudioFile'
+                    )}
                 </button>
             </div>`
         );

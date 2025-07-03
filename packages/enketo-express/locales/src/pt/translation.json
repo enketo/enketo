@@ -122,6 +122,10 @@
             "msg": "Ocorreu um erro de avaliação de fórmula. Por favor, entre em contato com __emailLink__ com este erro:"
         }
     },
+    "audioRecording": {
+        "startRecording": "Iniciar gravação",
+        "uploadAudioFile": "Enviar arquivo"
+    },
     "confirm": {
         "autosaveload": {
             "heading": "Registro não salvo encontrado",
