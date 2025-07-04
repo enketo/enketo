@@ -133,6 +133,13 @@
             background: $gray-lighter;
             border: $gray-lighter 1px solid;
 
+            .time-display {
+                width: 100px;
+                text-align: center;
+                font-size: 14px;
+                color: $gray-dark;
+            }
+
             .play-progress {
                 flex: 1;
                 width: 100%;
