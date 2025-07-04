@@ -23,7 +23,7 @@
   </h:head>
   <h:body>
     <upload mediatype="audio/*" ref="/aBgeRqE4AxpXTnLWFy9Atx/audio_1">
-      <label>audio 123</label>
+      <label>Audio recording</label>
     </upload>
     <upload mediatype="audio/*" appearance="quality=normal" ref="/aBgeRqE4AxpXTnLWFy9Atx/Record_something">
       <label>Record something</label>
