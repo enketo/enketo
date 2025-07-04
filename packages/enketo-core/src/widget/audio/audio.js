@@ -1,5 +1,7 @@
 import { t } from 'enketo/translator';
 import Widget from '../../js/widget';
+import AudioRecorder from '../../js/audio-recorder';
+import { formatTimeMMSS } from '../../js/format';
 
 /**
  * AudioWidget that works both offline and online. It abstracts the file storage/cache away
@@ -14,6 +16,9 @@ class AudioWidget extends Widget {
      */
 
     existingFileName = null;
+    audioRecorder = new AudioRecorder();
+
+    offscreenCanvas = null;
 
     static get selector() {
         return '.question:not(.or-appearance-draw):not(.or-appearance-signature):not(.or-appearance-annotate) input[type="file"][accept="audio/*"]';
@@ -69,8 +74,15 @@ class AudioWidget extends Widget {
         const buttonRecord = stepFragment.querySelector('.btn-record');
         const buttonUpload = stepFragment.querySelector('.btn-upload');
 
-        buttonRecord.addEventListener('click', () => {
-            this.showRecordStep();
+        buttonRecord.addEventListener('click', async () => {
+            // Request permissions first
+            try {
+                await this.audioRecorder.requestPermissions();
+                console.log('Microphone access granted');
+                this.showRecordStep();
+            } catch (error) {
+                console.error('Permission denied:', error.message);
+            }
         });
 
         buttonUpload.addEventListener('click', () => {
@@ -108,6 +120,7 @@ class AudioWidget extends Widget {
         const buttonPause = stepFragment.querySelector('.btn-pause');
         const buttonPlay = stepFragment.querySelector('.btn-play');
         const buttonStop = stepFragment.querySelector('.btn-stop');
+        const timeDisplay = stepFragment.querySelector('.recording-time');
 
         buttonPause.addEventListener('click', () => {
             buttonPause.classList.add('hidden');
@@ -122,12 +135,21 @@ class AudioWidget extends Widget {
         });
 
         buttonStop.addEventListener('click', () => {
+            clearInterval(this.recStatusInterval); // Stop the recording status interval
+
+            this.audioRecorder.stopRecording();
+            this.audioRecorder.stopStream();
+
             this.showPreviewStep(); // Show preview step after stopping the recording
         });
 
         this.setWidgetContent(stepFragment);
 
-        this.plotAudioForm(); // Draw the audio waveform
+        this.audioRecorder.startRecording(); // Start recording audio
+
+        this.watchAudioRecording(timeDisplay); // Start watching the audio recording
+
+        // this.plotAudioForm(); // Draw the audio waveform
     }
 
     showUploadStep() {
@@ -177,9 +199,7 @@ class AudioWidget extends Widget {
                         <span class="time-progress">00:00 / 1:24</span>
                     </div>
                     <div class="play-progress">
-                        <div class="progress-bar">
-                            <div class="progress"></div>
-                        </div>
+                        <div class="progress-bar"></div>
                     </div>
                 </div>
                 <button class="btn-icon-only btn-download">
@@ -195,17 +215,53 @@ class AudioWidget extends Widget {
         const buttonPause = stepFragment.querySelector('.btn-pause');
         const buttonDownload = stepFragment.querySelector('.btn-download');
         const buttonDelete = stepFragment.querySelector('.btn-delete');
+        const timeDisplay = stepFragment.querySelector('.time-progress');
+        const progressBar = stepFragment.querySelector('.progress-bar');
+
+        const audioPlayer = new Audio();
+        audioPlayer.addEventListener('loadedmetadata', () => {
+            // Update the time display when metadata is loaded
+            console.log('Audio metadata loaded', audioPlayer);
+            updateAudioProgress();
+        });
+        audioPlayer.addEventListener('timeupdate', () => {
+            // Update the time display as the audio plays
+            updateAudioProgress();
+        });
+        audioPlayer.addEventListener('ended', () => {
+            // Reset the play/pause buttons when audio ends
+            updateAudioProgress();
+            buttonPlay.classList.remove('hidden');
+            buttonPause.classList.add('hidden');
+        });
+
+        const audioFile = this.audioRecorder.getRecordedFile();
+        if (audioFile) {
+            audioPlayer.src = URL.createObjectURL(audioFile);
+        }
+
+        const updateAudioProgress = () => {
+            const currentTime = audioPlayer.currentTime;
+            const duration = this.audioRecorder.getRecordingTime() / 1000; // Convert milliseconds to seconds
+            timeDisplay.textContent = `${formatTimeMMSS(
+                Math.floor(currentTime)
+            )} / ${formatTimeMMSS(Math.floor(duration))}`;
+            const progress = (currentTime / duration) * 100;
+            progressBar.style.width = `${progress}%`;
+        };
 
         buttonPlay.addEventListener('click', () => {
             buttonPlay.classList.add('hidden');
             buttonPause.classList.remove('hidden');
             // Logic to play the audio
+            audioPlayer.play();
         });
 
         buttonPause.addEventListener('click', () => {
             buttonPause.classList.add('hidden');
             buttonPlay.classList.remove('hidden');
             // Logic to pause the audio
+            audioPlayer.pause();
         });
 
         buttonDownload.addEventListener('click', () => {
@@ -219,7 +275,39 @@ class AudioWidget extends Widget {
         this.setWidgetContent(stepFragment);
     }
 
-    plotAudioForm() {
+    watchAudioRecording(timeDisplay) {
+        const ctx = new AudioContext();
+        const source = ctx.createMediaStreamSource(this.audioRecorder.stream);
+        const analyser = ctx.createAnalyser();
+
+        source.connect(analyser);
+
+        const data = new Uint8Array(analyser.frequencyBinCount);
+
+        const canvasData = this.prepareCanvasPreview();
+
+        let plotData = [];
+
+        const getAudioData = () => {
+            timeDisplay.textContent =
+                this.audioRecorder.getRecordingTimeFormatted();
+
+            analyser.getByteFrequencyData(data);
+            plotData.push(Math.max(...data));
+            if (plotData.length > canvasData.barWidth + canvasData.barGap) {
+                this.plotAudioData(canvasData, Math.max(...plotData));
+                plotData = [];
+            } else {
+                this.plotAudioData(canvasData, null);
+            }
+            if (this.audioRecorder.isRecording()) {
+                requestAnimationFrame(getAudioData);
+            }
+        };
+        getAudioData();
+    }
+
+    prepareCanvasPreview() {
         // This method will be used to plot the waveform as a
         // feedback while recording audio.
         // Currently, it is drawing a demo random audio form.
@@ -229,36 +317,44 @@ class AudioWidget extends Widget {
         canvas.width = canvas.clientWidth;
         canvas.height = canvas.clientHeight;
 
+        if (
+            this.offscreenCanvas?.width !== canvas.width ||
+            this.offscreenCanvas?.height !== canvas.height
+        ) {
+            this.offscreenCanvas = new OffscreenCanvas(
+                canvas.width,
+                canvas.height
+            );
+        }
+
         const ctx = canvas.getContext('2d');
-        const width = canvas.width;
-        const height = canvas.height;
+
+        const offCtx = this.offscreenCanvas.getContext('2d');
 
         const barWidth = 4;
-        const barGap = 3;
+        const barGap = 1;
 
         ctx.strokeStyle = '#2095F3';
         ctx.lineWidth = barWidth;
         ctx.lineCap = 'round';
 
-        let posX = 0;
-        while (posX < width) {
-            const volume = Math.random();
-            // barWidth is subtracted from the height to ensure the bars fit
-            // vertically within the canvas due to the line cap being round.
-            const barHeight = Math.max(1, volume * (height - barWidth * 2));
+        return { canvas, ctx, offCtx, barWidth, barGap };
+    }
+    plotAudioData(canvasData, value) {
+        const { ctx, canvas, offCtx, barWidth } = canvasData;
+        const { width, height } = canvas;
 
+        offCtx.clearRect(0, 0, width, height);
+        offCtx.drawImage(canvas, 0, 0);
+        ctx.clearRect(0, 0, width, height);
+        ctx.drawImage(this.offscreenCanvas, -1, 0);
+
+        if (value !== null) {
+            const val = (value / 255) * height * 0.8;
             ctx.beginPath();
-            ctx.moveTo(
-                posX + barGap + barWidth / 2,
-                height / 2 - barHeight / 2
-            );
-            ctx.lineTo(
-                posX + barGap + barWidth / 2,
-                height / 2 + barHeight / 2
-            );
+            ctx.moveTo(width - barWidth / 2, height / 2 - val / 2);
+            ctx.lineTo(width - barWidth / 2, height / 2 + val / 2);
             ctx.stroke();
-
-            posX += barWidth + barGap;
         }
     }
 }
