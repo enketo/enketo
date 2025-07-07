@@ -1,4 +1,6 @@
-import { formatTimeMMSS } from './format';
+import { MediaRecorder, register } from 'extendable-media-recorder';
+import { connect } from 'extendable-media-recorder-wav-encoder';
+import { formatTimeMMSS } from '../format';
 
 class AudioRecorder {
     constructor() {
@@ -8,6 +10,16 @@ class AudioRecorder {
         this.startTime = null;
         this.recordingDuration = 0;
         this.dataWatchers = [];
+        this.onRecordingStart = null;
+        this.onRecordingStop = null;
+        this.onRecordingPause = null;
+        this.onRecordingResume = null;
+        this.connectWavEncoder();
+    }
+
+    // Register the extendable-media-recorder-wav-encoder
+    async connectWavEncoder() {
+        await register(await connect());
     }
 
     async requestPermissions() {
@@ -44,7 +56,12 @@ class AudioRecorder {
             );
         }
 
-        this.mediaRecorder = new MediaRecorder(audioStream);
+        // this.mediaRecorder = new MediaRecorder(audioStream);
+        // Use the extended MediaRecorder library
+        this.mediaRecorder = new MediaRecorder(audioStream, {
+            mimeType: 'audio/wav',
+        });
+
         this.recordedChunks = [];
         this.startTime = Date.now();
 
@@ -52,18 +69,22 @@ class AudioRecorder {
             // Only push non-empty chunks to the recordedChunks
             if (event.data.size > 0) {
                 this.recordedChunks.push(event.data);
-                // Notify watchers with new data
-                this.notifyDataWatchers(event.data);
             }
         };
 
         this.mediaRecorder.onstart = () => {
             this.startTime = Date.now();
+            if (this.isPaused()) {
+                this.onRecordingResume?.();
+            } else {
+                this.onRecordingStart?.();
+            }
         };
 
         this.mediaRecorder.onstop = () => {
             if (this.startTime) {
                 this.recordingDuration = Date.now() - this.startTime;
+                this.onRecordingStop?.();
             }
         };
 
@@ -73,6 +94,7 @@ class AudioRecorder {
     pauseRecording() {
         if (this.mediaRecorder && this.mediaRecorder.state === 'recording') {
             this.mediaRecorder.pause();
+            this.onRecordingPause?.();
         } else {
             throw new Error(
                 'Cannot pause recording. MediaRecorder is not recording.'
@@ -101,8 +123,9 @@ class AudioRecorder {
             );
         }
 
-        const blob = new Blob(this.recordedChunks, { type: 'audio/webm' });
-        return blob;
+        const mimeType = this.mediaRecorder.mimeType;
+        const audioBlob = new Blob(this.recordedChunks, { type: mimeType });
+        return audioBlob;
     }
 
     stopStream() {
@@ -137,34 +160,6 @@ class AudioRecorder {
         const seconds = Math.floor(timeMs / 1000);
 
         return formatTimeMMSS(seconds);
-    }
-
-    addDataWatcher(callback) {
-        if (typeof callback === 'function') {
-            this.dataWatchers.push(callback);
-        }
-    }
-
-    removeDataWatcher(callback) {
-        const index = this.dataWatchers.indexOf(callback);
-        if (index > -1) {
-            this.dataWatchers.splice(index, 1);
-        }
-    }
-
-    notifyDataWatchers(data) {
-        this.dataWatchers.forEach((callback) => {
-            try {
-                callback(data, {
-                    chunks: this.recordedChunks.length,
-                    recordingTime: this.getRecordingTime(),
-                    isRecording: this.isRecording(),
-                    isPaused: this.isPaused(),
-                });
-            } catch (error) {
-                console.error('Error in data watcher callback:', error);
-            }
-        });
     }
 }
 

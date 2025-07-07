@@ -1,6 +1,6 @@
 import { t } from 'enketo/translator';
 import Widget from '../../js/widget';
-import AudioRecorder from '../../js/audio-recorder';
+import AudioRecorder from '../../js/audio-recorder/audio-recorder';
 import { formatTimeMMSS } from '../../js/format';
 
 /**
@@ -139,8 +139,10 @@ class AudioWidget extends Widget {
 
             this.audioRecorder.stopRecording();
             this.audioRecorder.stopStream();
-
-            this.showPreviewStep(); // Show preview step after stopping the recording
+            this.audioRecorder.onRecordingStop = () => {
+                console.log('Audio recording stopped');
+                this.showPreviewStep(); // Show preview step after stopping the recording
+            };
         });
 
         this.setWidgetContent(stepFragment);
@@ -183,7 +185,7 @@ class AudioWidget extends Widget {
         this.setWidgetContent(stepFragment);
     }
 
-    showPreviewStep() {
+    async showPreviewStep() {
         // This method sets up the preview step where the user can
         // play the recorded or uploaded audio, download it, or delete it.
         const stepFragment = document.createRange().createContextualFragment(
@@ -219,6 +221,7 @@ class AudioWidget extends Widget {
         const progressBar = stepFragment.querySelector('.progress-bar');
 
         const audioPlayer = new Audio();
+
         audioPlayer.addEventListener('loadedmetadata', () => {
             // Update the time display when metadata is loaded
             console.log('Audio metadata loaded', audioPlayer);
@@ -235,14 +238,15 @@ class AudioWidget extends Widget {
             buttonPause.classList.add('hidden');
         });
 
-        const audioFile = this.audioRecorder.getRecordedFile();
+        // const audioFile = await this.audioRecorder.convertFile(); // Convert the recorded audio to a file
+        const audioFile = await this.audioRecorder.getRecordedFile(); // Convert the recorded audio to a file
         if (audioFile) {
             audioPlayer.src = URL.createObjectURL(audioFile);
         }
 
         const updateAudioProgress = () => {
             const currentTime = audioPlayer.currentTime;
-            const duration = this.audioRecorder.getRecordingTime() / 1000; // Convert milliseconds to seconds
+            const duration = audioPlayer.duration; // Convert milliseconds to seconds
             timeDisplay.textContent = `${formatTimeMMSS(
                 Math.floor(currentTime)
             )} / ${formatTimeMMSS(Math.floor(duration))}`;
@@ -265,7 +269,14 @@ class AudioWidget extends Widget {
         });
 
         buttonDownload.addEventListener('click', () => {
-            // Logic to download the audio
+            // Create a link to download the audio file
+            const downloadLink = document.createElement('a');
+            downloadLink.href = audioPlayer.src;
+            downloadLink.download =
+                this.existingFileName || 'audio-recording.webm';
+            document.body.appendChild(downloadLink);
+            downloadLink.click();
+            document.body.removeChild(downloadLink);
         });
 
         buttonDelete.addEventListener('click', () => {
