@@ -16,6 +16,7 @@ class AudioWidget extends Widget {
      */
 
     existingFileName = null;
+
     audioRecorder = new AudioRecorder();
 
     audioBlob = null;
@@ -255,7 +256,6 @@ class AudioWidget extends Widget {
         const buttonDelete = stepFragment.querySelector('.btn-delete');
         const timeDisplay = stepFragment.querySelector('.time-progress');
         const seekBar = stepFragment.querySelector('.seek-bar');
-        const seekHandle = stepFragment.querySelector('.seek-handle');
         const progressBar = stepFragment.querySelector('.progress-bar');
 
         const audioPlayer = new Audio();
@@ -345,20 +345,26 @@ class AudioWidget extends Widget {
     }
 
     watchAudioRecording(timeDisplay) {
+        // This method watches the audio recording and updates the time display
+        // and the waveform preview while recording.
         const ctx = new AudioContext();
         const source = ctx.createMediaStreamSource(this.audioRecorder.stream);
         const analyser = ctx.createAnalyser();
 
         source.connect(analyser);
 
+        // Set up the analyser to get frequency data
         const data = new Uint8Array(analyser.frequencyBinCount);
 
+        // Prepare the canvas for waveform preview
         const canvasData = this.prepareCanvasPreview();
 
         let plotData = [];
 
         const updateRecordingInfo = () => {
+            // This function updates the recording time and plots the audio data
             if (this.audioRecorder.isPaused()) {
+                // No update is needed if recording is paused
                 requestAnimationFrame(updateRecordingInfo);
                 return;
             }
@@ -366,13 +372,20 @@ class AudioWidget extends Widget {
                 this.audioRecorder.getRecordingTimeFormatted();
 
             analyser.getByteFrequencyData(data);
+
+            // We store the data for certain frames to plot a single line
+            // for each [canvasData.barWidth + canvasData.barGap] frames.
+            // This is for visual styling purposes only.
             plotData.push(Math.max(...data));
-            if (plotData.length > canvasData.barWidth + canvasData.barGap) {
+            if (plotData.length >= canvasData.barWidth + canvasData.barGap) {
                 this.plotAudioData(canvasData, Math.max(...plotData));
                 plotData = [];
             } else {
                 this.plotAudioData(canvasData, null);
             }
+
+            // Request the next animation frame to keep updating
+            // while recording is active.
             if (this.audioRecorder.isRecording()) {
                 requestAnimationFrame(updateRecordingInfo);
             }
@@ -389,7 +402,6 @@ class AudioWidget extends Widget {
         // Fix the canvas's element size and inner drawing size
         canvas.width = canvas.clientWidth;
         canvas.height = canvas.clientHeight;
-
         if (
             this.offscreenCanvas?.width !== canvas.width ||
             this.offscreenCanvas?.height !== canvas.height
@@ -401,9 +413,9 @@ class AudioWidget extends Widget {
         }
 
         const ctx = canvas.getContext('2d');
-
         const offCtx = this.offscreenCanvas.getContext('2d');
 
+        // Setup visual size for the waveform
         const barWidth = 4;
         const barGap = 1;
 
@@ -413,15 +425,24 @@ class AudioWidget extends Widget {
 
         return { canvas, ctx, offCtx, barWidth, barGap };
     }
+
     plotAudioData(canvasData, value) {
+        // This method plots the audio data on the canvas.
+        // It draws a vertical line for the current audio level.
+        // If the given value is null, it only scrolls the image left.
+
         const { ctx, canvas, offCtx, barWidth } = canvasData;
         const { width, height } = canvas;
 
+        // Scrolls canvas image left by 1 pixel
+        // to create a moving effect.
         offCtx.clearRect(0, 0, width, height);
         offCtx.drawImage(canvas, 0, 0);
         ctx.clearRect(0, 0, width, height);
         ctx.drawImage(this.offscreenCanvas, -1, 0);
 
+        // Draws the vertical line for the current audio level.
+        // If the value is null, it does not draw anything.
         if (value !== null) {
             const val = (value / 255) * height * 0.8;
             ctx.beginPath();
