@@ -125,7 +125,8 @@
     "audioRecording": {
         "startRecording": "Iniciar gravação",
         "uploadAudioFile": "Enviar arquivo",
-        "browseAudioFile": "Selecionar arquivo"
+        "browseAudioFile": "Selecionar arquivo",
+        "deleteWarning": "O áudio será excluído. Tem certeza de que quer fazer isso?"
     },
     "confirm": {
         "autosaveload": {

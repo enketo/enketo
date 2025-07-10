@@ -2,6 +2,7 @@ import { t } from 'enketo/translator';
 import Widget from '../../js/widget';
 import AudioRecorder from '../../js/audio-recorder/audio-recorder';
 import { formatTimeMMSS } from '../../js/format';
+import dialog from 'enketo/dialog';
 
 /**
  * AudioWidget that works both offline and online. It abstracts the file storage/cache away
@@ -335,10 +336,18 @@ class AudioWidget extends Widget {
         });
 
         buttonDelete.addEventListener('click', () => {
-            audioPlayer.pause(); // Pause the audio if it's playing
-            audioPlayer.src = ''; // Clear the audio source
-            this.audioBlob = null; // Clear the audio blob
-            this.showActionSelectStep(); // Go back to action select step
+            dialog
+                .confirm(t('audioRecording.deleteWarning'))
+                .then((confirmed) => {
+                    if (confirmed) {
+                        audioPlayer.pause(); // Pause the audio if it's playing
+                        URL.revokeObjectURL(audioPlayer.src); // Revoke the object URL
+                        audioPlayer.removeAttribute('src'); // Remove the source attribute
+                        audioPlayer.load(); // Release resources
+                        this.audioBlob = null; // Clear the audio blob
+                        this.showActionSelectStep(); // Go back to action select step
+                    }
+                });
         });
 
         this.setWidgetContent(stepFragment);
