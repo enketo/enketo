@@ -1,5 +1,4 @@
-import { MediaRecorder, register } from 'extendable-media-recorder';
-import { connect } from 'extendable-media-recorder-wav-encoder';
+import fixWebmDuration from 'fix-webm-duration';
 import { formatTimeMMSS } from '../format';
 
 class AudioRecorder {
@@ -14,12 +13,6 @@ class AudioRecorder {
         this.onRecordingStop = null;
         this.onRecordingPause = null;
         this.onRecordingResume = null;
-        this.connectWavEncoder();
-    }
-
-    // Register the extendable-media-recorder-wav-encoder
-    async connectWavEncoder() {
-        await register(await connect());
     }
 
     async requestPermissions() {
@@ -56,10 +49,9 @@ class AudioRecorder {
             );
         }
 
-        // this.mediaRecorder = new MediaRecorder(audioStream);
-        // Use the extended MediaRecorder library
         this.mediaRecorder = new MediaRecorder(audioStream, {
-            mimeType: 'audio/wav',
+            mimeType: 'audio/webm',
+            audioBitsPerSecond: 19000,
         });
 
         this.recordedChunks = [];
@@ -70,6 +62,7 @@ class AudioRecorder {
             if (event.data.size > 0) {
                 this.recordedChunks.push(event.data);
             }
+            console.log(this.recordedChunks.length, 'chunks recorded');
         };
 
         this.mediaRecorder.onstart = () => {
@@ -88,16 +81,30 @@ class AudioRecorder {
             }
         };
 
-        this.mediaRecorder.start(1000); // Start recording with a timeslice of 1000ms
+        this.mediaRecorder.start();
     }
 
     pauseRecording() {
         if (this.mediaRecorder && this.mediaRecorder.state === 'recording') {
             this.mediaRecorder.pause();
+            this.recordingDuration = Date.now() - this.startTime; // Store the duration before pausing
+            this.startTime = null; // Reset start time to avoid confusion
             this.onRecordingPause?.();
         } else {
             throw new Error(
                 'Cannot pause recording. MediaRecorder is not recording.'
+            );
+        }
+    }
+
+    resumeRecording() {
+        if (this.mediaRecorder && this.mediaRecorder.state === 'paused') {
+            this.mediaRecorder.resume();
+            this.startTime = Date.now() - this.recordingDuration; // Adjust start time to maintain correct duration
+            this.onRecordingResume?.();
+        } else {
+            throw new Error(
+                'Cannot resume recording. MediaRecorder is not paused.'
             );
         }
     }
@@ -116,7 +123,7 @@ class AudioRecorder {
         }
     }
 
-    getRecordedFile() {
+    async getRecordedFile() {
         if (this.recordedChunks.length === 0) {
             throw new Error(
                 'No audio data available. Please record something first.'
@@ -124,8 +131,12 @@ class AudioRecorder {
         }
 
         const mimeType = this.mediaRecorder.mimeType;
+
         const audioBlob = new Blob(this.recordedChunks, { type: mimeType });
-        return audioBlob;
+
+        // fixWebMDuration is used to ensure the duration metadata is correct
+        // Without this, the generated webm file won't have the duration metadata
+        return fixWebmDuration(audioBlob, this.recordingDuration);
     }
 
     stopStream() {

@@ -124,7 +124,8 @@
     },
     "audioRecording": {
         "startRecording": "Iniciar gravação",
-        "uploadAudioFile": "Enviar arquivo"
+        "uploadAudioFile": "Enviar arquivo",
+        "browseAudioFile": "Selecionar arquivo"
     },
     "confirm": {
         "autosaveload": {

@@ -134,7 +134,8 @@
     },
     "audioRecording": {
         "startRecording": "Start Recording",
-        "uploadAudioFile": "Upload audio File"
+        "uploadAudioFile": "Upload audio File",
+        "browseAudioFile": "Select file"
     },
     "changelog": "Change Log",
     "confirm": {

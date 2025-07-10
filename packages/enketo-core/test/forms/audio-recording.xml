@@ -17,7 +17,7 @@
       <bind nodeset="/aBgeRqE4AxpXTnLWFy9Atx/start" jr:preload="timestamp" type="dateTime" jr:preloadParams="start"/>
       <bind nodeset="/aBgeRqE4AxpXTnLWFy9Atx/end" jr:preload="timestamp" type="dateTime" jr:preloadParams="end"/>
       <bind nodeset="/aBgeRqE4AxpXTnLWFy9Atx/audio_1" type="binary" required="false()"/>
-      <bind nodeset="/aBgeRqE4AxpXTnLWFy9Atx/Record_something" type="binary" required="false()"/>
+      <bind nodeset="/aBgeRqE4AxpXTnLWFy9Atx/Record_something" type="binary" required="true()"/>
       <bind nodeset="/aBgeRqE4AxpXTnLWFy9Atx/meta/instanceID" type="string" readonly="true()" jr:preload="uid"/>
     </model>
   </h:head>

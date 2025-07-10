@@ -18,7 +18,11 @@ class AudioWidget extends Widget {
     existingFileName = null;
     audioRecorder = new AudioRecorder();
 
+    audioBlob = null;
+
     offscreenCanvas = null;
+
+    onLeaveStep = null;
 
     static get selector() {
         return '.question:not(.or-appearance-draw):not(.or-appearance-signature):not(.or-appearance-annotate) input[type="file"][accept="audio/*"]';
@@ -29,10 +33,10 @@ class AudioWidget extends Widget {
             'data-loaded-file-name'
         );
 
-        this.element.remove();
+        this.element.classList.add('hidden');
 
         // Disable the inner button click on label click
-        this.question.setAttribute('for', '');
+        this.question.htmlFor = '';
 
         const fragment = document
             .createRange()
@@ -52,10 +56,19 @@ class AudioWidget extends Widget {
             return;
         }
         widget.innerHTML = '';
-        widget.appendChild(fragment);
+        if (fragment) widget.appendChild(fragment);
+    }
+
+    cleanupPreviousSteps() {
+        // This method cleans up the previous steps when navigating back.
+        this.onLeaveStep?.(); // Call the onLeaveStep callback if it exists
+        this.onLeaveStep = null; // Reset the callback to avoid memory leaks
+        this.setWidgetContent(null); // Clear the widget content
     }
 
     showActionSelectStep() {
+        this.cleanupPreviousSteps(); // Clean up previous steps
+
         const stepFragment = document.createRange().createContextualFragment(
             `<div class="step-action-select">
                 <button class="btn-record btn btn-primary small">
@@ -93,6 +106,8 @@ class AudioWidget extends Widget {
     }
 
     showRecordStep() {
+        this.cleanupPreviousSteps(); // Clean up previous steps
+
         const stepFragment = document.createRange().createContextualFragment(
             `<div class="step-recording">
                 <div class="recording-container">
@@ -105,8 +120,8 @@ class AudioWidget extends Widget {
                         <button class="btn-icon-only btn-pause">
                             <i class="icon icon-pause"></i>
                         </button>
-                        <button class="btn-icon-only btn-play hidden">
-                            <i class="icon icon-play"></i>
+                        <button class="btn-icon-only btn-resume hidden">
+                            <i class="icon icon-microphone"></i>
                         </button>
                         <button class="btn-icon-only btn-stop">
                             <i class="icon icon-stop"></i>
@@ -118,20 +133,23 @@ class AudioWidget extends Widget {
 
         const statusDot = stepFragment.querySelector('.status-dot');
         const buttonPause = stepFragment.querySelector('.btn-pause');
-        const buttonPlay = stepFragment.querySelector('.btn-play');
+        const buttonResume = stepFragment.querySelector('.btn-resume');
         const buttonStop = stepFragment.querySelector('.btn-stop');
         const timeDisplay = stepFragment.querySelector('.recording-time');
 
         buttonPause.addEventListener('click', () => {
             buttonPause.classList.add('hidden');
-            buttonPlay.classList.remove('hidden');
+            buttonResume.classList.remove('hidden');
             statusDot.classList.remove('recording');
+
+            this.audioRecorder.pauseRecording();
         });
 
-        buttonPlay.addEventListener('click', () => {
-            buttonPlay.classList.add('hidden');
+        buttonResume.addEventListener('click', () => {
+            buttonResume.classList.add('hidden');
             buttonPause.classList.remove('hidden');
             statusDot.classList.add('recording');
+            this.audioRecorder.resumeRecording();
         });
 
         buttonStop.addEventListener('click', () => {
@@ -139,9 +157,9 @@ class AudioWidget extends Widget {
 
             this.audioRecorder.stopRecording();
             this.audioRecorder.stopStream();
-            this.audioRecorder.onRecordingStop = () => {
-                console.log('Audio recording stopped');
-                this.showPreviewStep(); // Show preview step after stopping the recording
+            this.audioRecorder.onRecordingStop = async () => {
+                this.audioBlob = await this.audioRecorder.getRecordedFile(); // Store the recorded audio file
+                this.showPlaybackStep(); // Show preview step after stopping the recording
             };
         });
 
@@ -150,17 +168,18 @@ class AudioWidget extends Widget {
         this.audioRecorder.startRecording(); // Start recording audio
 
         this.watchAudioRecording(timeDisplay); // Start watching the audio recording
-
-        // this.plotAudioForm(); // Draw the audio waveform
     }
 
     showUploadStep() {
+        this.cleanupPreviousSteps(); // Clean up previous steps
+
         // This method sets up the uploading step where the user can
         // upload an audio file from their device.
         const stepFragment = document.createRange().createContextualFragment(
             `<div class="step-uploading">
                 <div class="file-picker">
-                    <input type="file" accept="audio/*" class="file-input" />
+                    <i class="icon icon-upload"></i>
+                    ${t('audioRecording.browseAudioFile')}...
                 </div>
                 <button class="btn-icon-only btn-back">
                     <i class="icon icon-undo"></i>
@@ -168,25 +187,40 @@ class AudioWidget extends Widget {
             </div>`
         );
 
+        const filePicker = stepFragment.querySelector('.file-picker');
         const buttonBack = stepFragment.querySelector('.btn-back');
-        const fileInput = stepFragment.querySelector('.file-input');
+
+        filePicker.addEventListener('click', () => {
+            // Trigger the file input click to open the file dialog
+            this.element.click();
+        });
 
         buttonBack.addEventListener('click', () => {
             this.showActionSelectStep(); // Go back to action select step
         });
 
-        fileInput.addEventListener('change', (event) => {
+        const onFileInputChange = (event) => {
             const file = event.target.files[0];
             if (file) {
-                this.showPreviewStep(); // Show preview step after file selection
+                this.audioBlob = new Blob([file], { type: file.type });
+                this.showPlaybackStep(); // Show playback step after file selection
             }
-        });
+        };
+
+        this.element.addEventListener('change', onFileInputChange);
+
+        this.onLeaveStep = () => {
+            // Clean up the file input change listener when leaving this step
+            this.element.removeEventListener('change', onFileInputChange);
+        };
 
         this.setWidgetContent(stepFragment);
     }
 
-    async showPreviewStep() {
-        // This method sets up the preview step where the user can
+    async showPlaybackStep() {
+        this.cleanupPreviousSteps(); // Clean up previous steps
+
+        // This method sets up the playback step where the user can
         // play the recorded or uploaded audio, download it, or delete it.
         const stepFragment = document.createRange().createContextualFragment(
             `<div class="step-preview">
@@ -200,8 +234,10 @@ class AudioWidget extends Widget {
                     <div class="time-display">
                         <span class="time-progress">00:00 / 1:24</span>
                     </div>
-                    <div class="play-progress">
-                        <div class="progress-bar"></div>
+                    <div class="seek-bar">
+                        <div class="play-progress">
+                            <div class="progress-bar"></div>
+                        </div>
                     </div>
                 </div>
                 <button class="btn-icon-only btn-download">
@@ -218,6 +254,8 @@ class AudioWidget extends Widget {
         const buttonDownload = stepFragment.querySelector('.btn-download');
         const buttonDelete = stepFragment.querySelector('.btn-delete');
         const timeDisplay = stepFragment.querySelector('.time-progress');
+        const seekBar = stepFragment.querySelector('.seek-bar');
+        const seekHandle = stepFragment.querySelector('.seek-handle');
         const progressBar = stepFragment.querySelector('.progress-bar');
 
         const audioPlayer = new Audio();
@@ -238,10 +276,8 @@ class AudioWidget extends Widget {
             buttonPause.classList.add('hidden');
         });
 
-        // const audioFile = await this.audioRecorder.convertFile(); // Convert the recorded audio to a file
-        const audioFile = await this.audioRecorder.getRecordedFile(); // Convert the recorded audio to a file
-        if (audioFile) {
-            audioPlayer.src = URL.createObjectURL(audioFile);
+        if (this.audioBlob) {
+            audioPlayer.src = URL.createObjectURL(this.audioBlob);
         }
 
         const updateAudioProgress = () => {
@@ -253,6 +289,25 @@ class AudioWidget extends Widget {
             const progress = (currentTime / duration) * 100;
             progressBar.style.width = `${progress}%`;
         };
+
+        const updateAudioPosition = (event) => {
+            if (event.buttons !== 1 || event.touches?.length === 1) return; // Only update if the mouse is pressed
+            const rect = seekBar.getBoundingClientRect();
+            const clientX = event.touches
+                ? event.touches[0].clientX
+                : event.clientX; // Handle touch events
+            const offsetX = clientX - rect.left; // Get the mouse position relative to the seek bar
+            const width = rect.width;
+            const percentage = Math.min(Math.max(offsetX / width, 0), 1);
+            const newTime = percentage * audioPlayer.duration;
+            audioPlayer.currentTime = newTime; // Update the audio current time
+            updateAudioProgress(); // Update the time display
+        };
+
+        seekBar.addEventListener('mousemove', updateAudioPosition);
+        seekBar.addEventListener('mousedown', updateAudioPosition);
+        seekBar.addEventListener('touchmove', updateAudioPosition);
+        seekBar.addEventListener('touchstart', updateAudioPosition);
 
         buttonPlay.addEventListener('click', () => {
             buttonPlay.classList.add('hidden');
@@ -280,6 +335,9 @@ class AudioWidget extends Widget {
         });
 
         buttonDelete.addEventListener('click', () => {
+            audioPlayer.pause(); // Pause the audio if it's playing
+            audioPlayer.src = ''; // Clear the audio source
+            this.audioBlob = null; // Clear the audio blob
             this.showActionSelectStep(); // Go back to action select step
         });
 
@@ -299,7 +357,11 @@ class AudioWidget extends Widget {
 
         let plotData = [];
 
-        const getAudioData = () => {
+        const updateRecordingInfo = () => {
+            if (this.audioRecorder.isPaused()) {
+                requestAnimationFrame(updateRecordingInfo);
+                return;
+            }
             timeDisplay.textContent =
                 this.audioRecorder.getRecordingTimeFormatted();
 
@@ -312,10 +374,10 @@ class AudioWidget extends Widget {
                 this.plotAudioData(canvasData, null);
             }
             if (this.audioRecorder.isRecording()) {
-                requestAnimationFrame(getAudioData);
+                requestAnimationFrame(updateRecordingInfo);
             }
         };
-        getAudioData();
+        updateRecordingInfo();
     }
 
     prepareCanvasPreview() {

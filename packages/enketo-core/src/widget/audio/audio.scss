@@ -120,10 +120,17 @@
             gap: 20px;
         }
         .file-picker {
-            input.file-input {
-                width: 100%;
-                background: transparent;
-                border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: $padding-base-horizontal;
+            height: 100%;
+            padding: 0 24px;
+            font-weight: normal;
+
+            &:hover {
+                color: $brand-primary-color;
+                box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.03);
             }
         }
     }
@@ -140,23 +147,56 @@
                 color: $gray-dark;
             }
 
-            .play-progress {
+            .seek-bar {
                 flex: 1;
-                width: 100%;
-                height: 4px;
-                background: rgba(0, 0, 0, 0.15);
-                position: relative;
-                border-radius: 2px;
-                overflow: hidden;
+                height: 50%;
+                display: flex;
+                align-items: center;
+                cursor: pointer;
 
-                .progress-bar {
-                    position: absolute;
-                    top: 0;
-                    left: 0;
-                    height: 100%;
-                    width: 30%;
-                    background: $brand-primary-color;
+                .play-progress {
+                    width: 100%;
+                    height: 4px;
+                    background: rgba(0, 0, 0, 0.15);
+                    position: relative;
                     border-radius: 2px;
+                    pointer-events: none;
+
+                    .progress-bar {
+                        position: absolute;
+                        top: 0;
+                        left: 0;
+                        height: 100%;
+                        width: 0%;
+                        background: $brand-primary-color;
+                        border-radius: 2px;
+                    }
+
+                    //seek handle
+                    .progress-bar::after {
+                        content: '';
+                        position: absolute;
+                        top: -4px;
+                        right: -6px;
+                        width: 12px;
+                        height: 12px;
+                        background: $brand-primary-color;
+                        border-radius: 50%;
+                        box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+                        opacity: 0;
+                        transition: opacity 0.2s ease;
+                    }
+
+                    @media (max-width: 768px) {
+                        // handle always visible on mobile
+                        .progress-bar::after {
+                            opacity: 1;
+                        }
+                    }
+                }
+
+                &:hover .progress-bar::after {
+                    opacity: 1;
                 }
             }
         }
