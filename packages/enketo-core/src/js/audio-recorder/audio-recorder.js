@@ -5,6 +5,25 @@ import { formatTimeMMSS } from '../format';
 /**
  * AudioRecorder class for recording audio using the MediaRecorder API
  */
+
+/** * Quality parameters for audio recording based on the documentation at
+ * https://docs.getodk.org/form-question-types/#audio-widgets
+ */
+const QualityParameters = {
+    low: {
+        audioBitsPerSecond: 24 * 1024, // 24 kbps
+        sampleRate: 32000,
+    },
+    normal: {
+        audioBitsPerSecond: 64 * 1024, // 64 kbps
+        sampleRate: 32000,
+    },
+    'voice-only': {
+        audioBitsPerSecond: 12.2 * 1024, // 12.2 kbps
+        sampleRate: 8000,
+    },
+};
+
 class AudioRecorder {
     constructor() {
         this.mediaRecorder = null;
@@ -19,11 +38,17 @@ class AudioRecorder {
      * @returns {MediaStream} The audio stream if permission is granted
      * @throws {Error} When microphone access is denied, not found, not supported, or unknown error occurs
      */
-    async requestPermissions() {
+    async requestPermissions(quality) {
+        // Set the sample rate based on the quality parameter
+        const qualityParams =
+            QualityParameters[quality] || QualityParameters.normal;
+
         try {
             // Request microphone access
             this.stream = await navigator.mediaDevices.getUserMedia({
-                audio: true,
+                audio: {
+                    sampleRate: qualityParams.sampleRate,
+                },
             });
             return this.stream;
         } catch (error) {
@@ -45,12 +70,17 @@ class AudioRecorder {
 
     /**
      * Starts audio recording
+     * @param {string} quality - The quality of the recording ('low', 'normal', 'voice-only')
      * @throws {Error} When no valid MediaStream is available
      */
-    async startRecording() {
+    async startRecording(quality) {
+        // Set the quality parameters based on the provided quality
+        const qualityParams =
+            QualityParameters[quality] || QualityParameters.normal;
+
         if (!this.stream) {
             // If no stream provided, use the one from permissions request
-            await this.requestPermissions();
+            await this.requestPermissions(quality);
         }
 
         const audioStream = this.stream;
@@ -63,7 +93,7 @@ class AudioRecorder {
 
         this.mediaRecorder = new MediaRecorder(audioStream, {
             mimeType: 'audio/webm',
-            audioBitsPerSecond: 19000, // TODO - Adjust based on form settings
+            audioBitsPerSecond: qualityParams.audioBitsPerSecond,
         });
 
         this.recordedChunks = [];

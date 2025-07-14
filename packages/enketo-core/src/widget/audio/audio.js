@@ -13,20 +13,15 @@ import dialog from 'enketo/dialog';
  */
 
 class AudioWidget extends Widget {
-    existingFileName = null;
-
-    audioRecorder = new AudioRecorder();
-
-    audioBlob = null;
-
     static get selector() {
         return '.question:not(.or-appearance-draw):not(.or-appearance-signature):not(.or-appearance-annotate) input[type="file"][accept="audio/*"]';
     }
+    constructor(element, options) {
+        super(element, options);
 
-    _init() {
-        this.existingFileName = this.element.getAttribute(
-            'data-loaded-file-name'
-        );
+        this.audioRecorder = new AudioRecorder();
+        this.audioQuality = this.element.dataset.quality || 'normal'; // Get audio quality from data attribute
+        this.audioBlob = null; // To store the recorded audio blob
 
         this.element.classList.add('hidden');
 
@@ -101,7 +96,7 @@ class AudioWidget extends Widget {
         buttonRecord.addEventListener('click', async () => {
             // Request permissions first
             try {
-                await this.audioRecorder.requestPermissions();
+                await this.audioRecorder.requestPermissions(this.audioQuality);
                 errorMessage.classList.add('hidden');
                 this.showRecordStep();
             } catch (error) {
@@ -181,7 +176,7 @@ class AudioWidget extends Widget {
 
         this.setWidgetContent(stepFragment);
 
-        this.audioRecorder.startRecording(); // Start recording audio
+        this.audioRecorder.startRecording(this.audioQuality); // Start recording audio
 
         this.watchAudioRecording(timeDisplay); // Start watching the audio recording
     }
@@ -296,8 +291,10 @@ class AudioWidget extends Widget {
             // Create a link to download the audio file
             const downloadLink = document.createElement('a');
             downloadLink.href = audioPlayer.src;
-            downloadLink.download =
-                this.existingFileName || 'audio-recording.webm';
+            const fileName = this.element.name.slice(
+                this.element.name.lastIndexOf('/') + 1
+            );
+            downloadLink.download = `${fileName || 'audio-recording'}.webm`;
             document.body.appendChild(downloadLink);
             downloadLink.click();
             document.body.removeChild(downloadLink);
