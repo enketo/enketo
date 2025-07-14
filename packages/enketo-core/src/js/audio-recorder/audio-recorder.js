@@ -149,11 +149,9 @@ class AudioRecorder {
                 }; // Set the onstop handler
                 this.mediaRecorder.stop();
             });
-        } else {
-            throw new Error(
-                'Cannot stop recording. MediaRecorder is not active.'
-            );
         }
+
+        throw new Error('Cannot stop recording. MediaRecorder is not active.');
     }
 
     /**
@@ -209,12 +207,8 @@ class AudioRecorder {
         // Calculate the recording time based on the current state
         if (this.isRecording()) {
             return Date.now() - this.startTime;
-        } else if (this.isPaused()) {
-            return this.recordingDuration;
-        } else {
-            // If recording was stopped, return the duration until it was stopped
-            return Date.now() - this.startTime;
         }
+        return this.recordingDuration;
     }
 
     /**

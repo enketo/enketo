@@ -389,8 +389,10 @@ class AudioWidget extends Widget {
         const canvas = this.question.querySelector('canvas.audio-waveform');
 
         // Fix the canvas's element size and inner drawing size
-        canvas.width = offscreenCanvas.width = canvas.clientWidth;
-        canvas.height = offscreenCanvas.height = canvas.clientHeight;
+        canvas.width = canvas.clientWidth;
+        canvas.height = canvas.clientHeight;
+        offscreenCanvas.width = canvas.clientWidth;
+        offscreenCanvas.height = canvas.clientHeight;
 
         const ctx = canvas.getContext('2d');
         const offCtx = offscreenCanvas.getContext('2d');
