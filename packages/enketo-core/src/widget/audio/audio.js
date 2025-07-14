@@ -16,6 +16,7 @@ class AudioWidget extends Widget {
     static get selector() {
         return '.question:not(.or-appearance-draw):not(.or-appearance-signature):not(.or-appearance-annotate) input[type="file"][accept="audio/*"]';
     }
+
     constructor(element, options) {
         super(element, options);
 
