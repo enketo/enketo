@@ -1,6 +1,10 @@
+import { t } from 'enketo/translator';
 import fixWebmDuration from 'fix-webm-duration';
 import { formatTimeMMSS } from '../format';
 
+/**
+ * AudioRecorder class for recording audio using the MediaRecorder API
+ */
 class AudioRecorder {
     constructor() {
         this.mediaRecorder = null;
@@ -8,13 +12,13 @@ class AudioRecorder {
         this.stream = null;
         this.startTime = null;
         this.recordingDuration = 0;
-        this.dataWatchers = [];
-        this.onRecordingStart = null;
-        this.onRecordingStop = null;
-        this.onRecordingPause = null;
-        this.onRecordingResume = null;
     }
 
+    /**
+     * Requests microphone permissions from the user
+     * @returns {MediaStream} The audio stream if permission is granted
+     * @throws {Error} When microphone access is denied, not found, not supported, or unknown error occurs
+     */
     async requestPermissions() {
         try {
             // Request microphone access
@@ -24,24 +28,32 @@ class AudioRecorder {
             return this.stream;
         } catch (error) {
             if (error.name === 'NotAllowedError') {
-                throw new Error('Microphone access denied by user.');
+                throw new Error(t('audioRecording.error.accessDenied'));
             } else if (error.name === 'NotFoundError') {
-                throw new Error('No microphone found on this device.');
+                throw new Error(t('audioRecording.error.noMicrophone'));
             } else if (error.name === 'NotSupportedError') {
-                throw new Error(
-                    'Audio recording is not supported in this browser.'
-                );
+                throw new Error(t('audioRecording.error.notSupported'));
             } else {
                 throw new Error(
-                    `Failed to access microphone: ${error.message}`
+                    t('audioRecording.error.unknownError', {
+                        errorMessage: error.message,
+                    })
                 );
             }
         }
     }
 
-    async startRecording(stream = null) {
-        // If no stream provided, use the one from permissions request
-        const audioStream = stream || this.stream;
+    /**
+     * Starts audio recording
+     * @throws {Error} When no valid MediaStream is available
+     */
+    async startRecording() {
+        if (!this.stream) {
+            // If no stream provided, use the one from permissions request
+            await this.requestPermissions();
+        }
+
+        const audioStream = this.stream;
 
         if (!audioStream) {
             throw new Error(
@@ -51,7 +63,7 @@ class AudioRecorder {
 
         this.mediaRecorder = new MediaRecorder(audioStream, {
             mimeType: 'audio/webm',
-            audioBitsPerSecond: 19000,
+            audioBitsPerSecond: 19000, // TODO - Adjust based on form settings
         });
 
         this.recordedChunks = [];
@@ -62,34 +74,24 @@ class AudioRecorder {
             if (event.data.size > 0) {
                 this.recordedChunks.push(event.data);
             }
-            console.log(this.recordedChunks.length, 'chunks recorded');
         };
 
         this.mediaRecorder.onstart = () => {
             this.startTime = Date.now();
-            if (this.isPaused()) {
-                this.onRecordingResume?.();
-            } else {
-                this.onRecordingStart?.();
-            }
-        };
-
-        this.mediaRecorder.onstop = () => {
-            if (this.startTime) {
-                this.recordingDuration = Date.now() - this.startTime;
-                this.onRecordingStop?.();
-            }
         };
 
         this.mediaRecorder.start();
     }
 
+    /**
+     * Pauses the current recording
+     * @throws {Error} When MediaRecorder is not currently recording
+     */
     pauseRecording() {
         if (this.mediaRecorder && this.mediaRecorder.state === 'recording') {
             this.mediaRecorder.pause();
             this.recordingDuration = Date.now() - this.startTime; // Store the duration before pausing
             this.startTime = null; // Reset start time to avoid confusion
-            this.onRecordingPause?.();
         } else {
             throw new Error(
                 'Cannot pause recording. MediaRecorder is not recording.'
@@ -97,11 +99,14 @@ class AudioRecorder {
         }
     }
 
+    /**
+     * Resumes a paused recording
+     * @throws {Error} When MediaRecorder is not currently paused
+     */
     resumeRecording() {
         if (this.mediaRecorder && this.mediaRecorder.state === 'paused') {
             this.mediaRecorder.resume();
             this.startTime = Date.now() - this.recordingDuration; // Adjust start time to maintain correct duration
-            this.onRecordingResume?.();
         } else {
             throw new Error(
                 'Cannot resume recording. MediaRecorder is not paused.'
@@ -109,13 +114,41 @@ class AudioRecorder {
         }
     }
 
-    stopRecording() {
+    /**
+     * Stops the current recording and releases the microphone
+     * @returns {Promise<void>} Promise that resolves when recording is stopped
+     * @throws {Error} When MediaRecorder is not active
+     */
+    async stopRecording() {
         if (
             this.mediaRecorder &&
             (this.mediaRecorder.state === 'recording' ||
                 this.mediaRecorder.state === 'paused')
         ) {
-            this.mediaRecorder.stop();
+            return new Promise((resolve) => {
+                // Store the paused state before stopping
+                const wasPausedWhenStopped = this.isPaused();
+
+                this.mediaRecorder.onstop = () => {
+                    this.mediaRecorder.onstop = null; // Clear the onstop handler
+
+                    // If it was paused, we don't need to adjust the duration
+                    if (!wasPausedWhenStopped) {
+                        this.recordingDuration = Date.now() - this.startTime;
+                    }
+
+                    // Stop the stream tracks to release the microphone
+                    if (this.stream) {
+                        this.stream
+                            .getTracks()
+                            .forEach((track) => track.stop());
+                        this.stream = null;
+                    }
+
+                    resolve();
+                }; // Set the onstop handler
+                this.mediaRecorder.stop();
+            });
         } else {
             throw new Error(
                 'Cannot stop recording. MediaRecorder is not active.'
@@ -123,6 +156,11 @@ class AudioRecorder {
         }
     }
 
+    /**
+     * Gets the recorded audio as a Blob with corrected duration metadata
+     * @returns {Promise<Blob>} The recorded audio blob with fixed WebM duration
+     * @throws {Error} When no audio data is available
+     */
     async getRecordedFile() {
         if (this.recordedChunks.length === 0) {
             throw new Error(
@@ -139,38 +177,52 @@ class AudioRecorder {
         return fixWebmDuration(audioBlob, this.recordingDuration);
     }
 
-    stopStream() {
-        if (this.stream) {
-            console.log('Stopping audio stream');
-            this.stream.getTracks().forEach((track) => track.stop());
-            this.stream = null;
-        }
-    }
-
+    /**
+     * Checks if the recorder is currently recording
+     * @returns {boolean} True if recording is in progress
+     */
     isRecording() {
         return this.mediaRecorder && this.mediaRecorder.state === 'recording';
     }
 
+    /**
+     * Checks if the recorder is currently paused
+     * @returns {boolean} True if recording is paused
+     */
     isPaused() {
         return this.mediaRecorder && this.mediaRecorder.state === 'paused';
     }
 
+    /**
+     * Checks if microphone permissions have been granted
+     * @returns {boolean} True if permissions are available
+     */
     hasPermissions() {
         return this.stream !== null;
     }
 
+    /**
+     * Gets the current recording time in milliseconds
+     * @returns {number} Recording time in milliseconds
+     */
     getRecordingTime() {
-        if (this.isRecording() && this.startTime) {
+        // Calculate the recording time based on the current state
+        if (this.isRecording()) {
+            return Date.now() - this.startTime;
+        } else if (this.isPaused()) {
+            return this.recordingDuration;
+        } else {
+            // If recording was stopped, return the duration until it was stopped
             return Date.now() - this.startTime;
         }
-        return this.recordingDuration;
     }
 
+    /**
+     * Gets the current recording time formatted as MM:SS
+     * @returns {string} Recording time formatted as MM:SS
+     */
     getRecordingTimeFormatted() {
-        const timeMs = this.getRecordingTime();
-        const seconds = Math.floor(timeMs / 1000);
-
-        return formatTimeMMSS(seconds);
+        return formatTimeMMSS(Math.floor(this.getRecordingTime() / 1000));
     }
 }
 

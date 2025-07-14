@@ -133,8 +133,16 @@
         }
     },
     "audioRecording": {
+        "error": {
+            "accessDenied": "Acceso al micrófono denegado por el usuario.",
+            "noMicrophone": "No se encontró ningún micrófono en este dispositivo.",
+            "notSupported": "La grabación de audio no es compatible con este navegador.",
+            "unknownError": "Error al acceder al micrófono: __errorMessage__",
+            "recordingError": "Ocurrió un error al intentar grabar audio."
+        },
         "startRecording": "Iniciar grabación",
-        "uploadAudioFile": "Subir archivo"
+        "uploadAudioFile": "Subir archivo",
+        "deleteWarning": "El audio será excluido. ¿Está seguro de que desea hacer esto?"
     },
     "changelog": "Registro de Cambios",
     "confirm": {

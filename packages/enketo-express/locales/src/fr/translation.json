@@ -133,8 +133,16 @@
         }
     },
     "audioRecording": {
+        "error": {
+            "accessDenied": "Accès au micro dénié par l'utilisateur.",
+            "noMicrophone": "Aucun micro trouvé sur cet appareil.",
+            "notSupported": "L'enregistrement audio n'est pas pris en charge par ce navigateur.",
+            "unknownError": "Erreur lors de l'accès au micro : __errorMessage__",
+            "recordingError": "Une erreur s'est produite lors de la tentative d'enregistrement audio."
+        },
         "startRecording": "Démarrer l'enregistrement",
-        "uploadAudioFile": "Téléverser le fichier"
+        "uploadAudioFile": "Téléverser le fichier",
+        "deleteWarning": "L'audio sera supprimé. Êtes-vous sûr de vouloir faire cela ?"
     },
     "changelog": "Journal des modifications",
     "confirm": {
