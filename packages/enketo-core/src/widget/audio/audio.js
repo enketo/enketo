@@ -378,7 +378,6 @@ class AudioWidget extends Widget {
     /**
      * This method will be used to plot the waveform as a
      * feedback while recording audio.
-     * Currently, it is drawing a demo random audio form.
      *
      * @param {OffscreenCanvas} offscreenCanvas - The canvas to draw the waveform on.
      * @returns {Object} - An object containing the canvas, context, and other drawing parameters.
