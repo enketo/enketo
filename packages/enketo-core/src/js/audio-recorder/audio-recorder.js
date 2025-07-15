@@ -35,7 +35,8 @@ class AudioRecorder {
 
     /**
      * Requests microphone permissions from the user
-     * @returns {MediaStream} The audio stream if permission is granted
+     * @param {'low'|'normal'|'voice-only'} [quality] - The quality of the recording
+     * @returns {Promise<MediaStream>} The audio stream if permission is granted
      * @throws {Error} When microphone access is denied, not found, not supported, or unknown error occurs
      */
     async requestPermissions(quality) {
@@ -70,7 +71,8 @@ class AudioRecorder {
 
     /**
      * Starts audio recording
-     * @param {string} quality - The quality of the recording ('low', 'normal', 'voice-only')
+     * @param {'low'|'normal'|'voice-only'} [quality] - The quality of the recording
+     * @returns {Promise<void>}
      * @throws {Error} When no valid MediaStream is available
      */
     async startRecording(quality) {
@@ -134,14 +136,15 @@ class AudioRecorder {
      * @throws {Error} When MediaRecorder is not currently paused
      */
     resumeRecording() {
-        if (this.mediaRecorder && this.mediaRecorder.state === 'paused') {
-            this.mediaRecorder.resume();
-            this.startTime = Date.now() - this.recordingDuration; // Adjust start time to maintain correct duration
-        } else {
+        const state = this.mediaRecorder && this.mediaRecorder.state;
+        if (state !== 'paused') {
             throw new Error(
-                'Cannot resume recording. MediaRecorder is not paused.'
+                'Cannot stop recording. MediaRecorder is not paused.'
             );
         }
+
+        this.mediaRecorder.resume();
+        this.startTime = Date.now() - this.recordingDuration; // Adjust start time to maintain correct duration
     }
 
     /**
@@ -150,38 +153,35 @@ class AudioRecorder {
      * @throws {Error} When MediaRecorder is not active
      */
     async stopRecording() {
-        if (
-            this.mediaRecorder &&
-            (this.mediaRecorder.state === 'recording' ||
-                this.mediaRecorder.state === 'paused')
-        ) {
-            return new Promise((resolve) => {
-                // Store the paused state before stopping
-                const wasPausedWhenStopped = this.isPaused();
-
-                this.mediaRecorder.onstop = () => {
-                    this.mediaRecorder.onstop = null; // Clear the onstop handler
-
-                    // If it was paused, we don't need to adjust the duration
-                    if (!wasPausedWhenStopped) {
-                        this.recordingDuration = Date.now() - this.startTime;
-                    }
-
-                    // Stop the stream tracks to release the microphone
-                    if (this.stream) {
-                        this.stream
-                            .getTracks()
-                            .forEach((track) => track.stop());
-                        this.stream = null;
-                    }
-
-                    resolve();
-                }; // Set the onstop handler
-                this.mediaRecorder.stop();
-            });
+        const state = this.mediaRecorder && this.mediaRecorder.state;
+        if (state !== 'recording' || state !== 'paused') {
+            throw new Error(
+                'Cannot stop recording. MediaRecorder is not active.'
+            );
         }
 
-        throw new Error('Cannot stop recording. MediaRecorder is not active.');
+        return new Promise((resolve) => {
+            // Store the paused state before stopping
+            const wasPausedWhenStopped = this.isPaused();
+
+            this.mediaRecorder.onstop = () => {
+                this.mediaRecorder.onstop = null; // Clear the onstop handler
+
+                // If it was paused, we don't need to adjust the duration
+                if (!wasPausedWhenStopped) {
+                    this.recordingDuration = Date.now() - this.startTime;
+                }
+
+                // Stop the stream tracks to release the microphone
+                if (this.stream) {
+                    this.stream.getTracks().forEach((track) => track.stop());
+                    this.stream = null;
+                }
+
+                resolve();
+            }; // Set the onstop handler
+            this.mediaRecorder.stop();
+        });
     }
 
     /**
