@@ -54,6 +54,20 @@ const initTimeLocalization = (rootElement) => {
 };
 
 /**
+ * Formats a time duration in seconds to a string in MM:SS format.
+ * @param {number} seconds - The time duration in seconds.
+ * @returns {string} The formatted time string in MM:SS format.
+ */
+const formatTimeMMSS = (seconds) => {
+    const minutes = Math.floor(seconds / 60);
+    const remainingSeconds = Math.floor(seconds % 60);
+
+    return `${String(minutes).padStart(2, '0')}:${String(
+        remainingSeconds
+    ).padStart(2, '0')}`;
+};
+
+/**
  * @namespace time
  */
 const time = {
@@ -105,4 +119,4 @@ const time = {
     },
 };
 
-export { initTimeLocalization, time };
+export { initTimeLocalization, time, formatTimeMMSS };

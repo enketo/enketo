@@ -541,6 +541,11 @@ XSLT Stylesheet that transforms OpenRosa style (X)Forms into valid HTMl5 forms
                                     </xsl:call-template>
                                 </xsl:otherwise>
                             </xsl:choose>
+                            <xsl:if test="$binding/@odk:quality">
+                                <xsl:attribute name="data-quality">
+                                    <xsl:value-of select="$binding/@odk:quality" />
+                                </xsl:attribute>
+                            </xsl:if>
                         </xsl:element>
                         <xsl:if test="local-name() = 'item'">
                             <xsl:apply-templates select="xf:label" />

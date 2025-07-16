@@ -132,6 +132,18 @@
             "msg": "A formula evaluation error occurred. Please contact __emailLink__ with this error:"
         }
     },
+    "audioRecording": {
+        "error": {
+            "accessDenied": "Microphone access denied by user.",
+            "noMicrophone": "No microphone found on this device.",
+            "notSupported": "Audio recording is not supported in this browser.",
+            "unknownError": "Failed to access microphone: __errorMessage__",
+            "recordingError": "An error occurred while trying to record audio."
+        },
+        "startRecording": "Start Recording",
+        "uploadAudioFile": "Upload audio File",
+        "deleteWarning": "The audio will be deleted. Are you sure you want to do this?"
+    },
     "changelog": "Change Log",
     "confirm": {
         "autosaveload": {
