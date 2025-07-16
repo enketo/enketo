@@ -153,8 +153,7 @@ class AudioRecorder {
      * @throws {Error} When MediaRecorder is not active
      */
     async stopRecording() {
-        const state = this.mediaRecorder && this.mediaRecorder.state;
-        if (state !== 'recording' || state !== 'paused') {
+        if (!this.mediaRecorder || this.mediaRecorder.state === 'inactive') {
             throw new Error(
                 'Cannot stop recording. MediaRecorder is not active.'
             );
