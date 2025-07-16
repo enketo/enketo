@@ -139,7 +139,7 @@ class AudioRecorder {
         const state = this.mediaRecorder && this.mediaRecorder.state;
         if (state !== 'paused') {
             throw new Error(
-                'Cannot stop recording. MediaRecorder is not paused.'
+                'Cannot resume recording. MediaRecorder is not paused.'
             );
         }
 
