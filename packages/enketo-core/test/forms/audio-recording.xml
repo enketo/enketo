@@ -7,8 +7,10 @@
         <aBgeRqE4AxpXTnLWFy9Atx id="aBgeRqE4AxpXTnLWFy9Atx">
           <start/>
           <end/>
-          <audio_1/>
-          <Record_something/>
+          <audio_normal/>
+          <audio_low/>
+          <audio_voice_only/>
+          <audio_required/>
           <meta>
             <instanceID/>
           </meta>
@@ -16,17 +18,25 @@
       </instance>
       <bind nodeset="/aBgeRqE4AxpXTnLWFy9Atx/start" jr:preload="timestamp" type="dateTime" jr:preloadParams="start"/>
       <bind nodeset="/aBgeRqE4AxpXTnLWFy9Atx/end" jr:preload="timestamp" type="dateTime" jr:preloadParams="end"/>
-      <bind nodeset="/aBgeRqE4AxpXTnLWFy9Atx/audio_1" type="binary" required="false()"/>
-      <bind nodeset="/aBgeRqE4AxpXTnLWFy9Atx/Record_something" type="binary" required="false()"/>
+      <bind nodeset="/aBgeRqE4AxpXTnLWFy9Atx/audio_normal" type="binary" required="false()" odk:quality="normal"/>
+      <bind nodeset="/aBgeRqE4AxpXTnLWFy9Atx/audio_low" type="binary" required="false()" odk:quality="low"/>
+      <bind nodeset="/aBgeRqE4AxpXTnLWFy9Atx/audio_voice_only" type="binary" required="false()" odk:quality="voice-only"/>
+      <bind nodeset="/aBgeRqE4AxpXTnLWFy9Atx/audio_required" type="binary" required="true()"/>
       <bind nodeset="/aBgeRqE4AxpXTnLWFy9Atx/meta/instanceID" type="string" readonly="true()" jr:preload="uid"/>
     </model>
   </h:head>
   <h:body>
-    <upload mediatype="audio/*" ref="/aBgeRqE4AxpXTnLWFy9Atx/audio_1">
-      <label>audio 123</label>
+    <upload mediatype="audio/*" ref="/aBgeRqE4AxpXTnLWFy9Atx/audio_normal">
+      <label>Audio Normal</label>
     </upload>
-    <upload mediatype="audio/*" appearance="quality=normal" ref="/aBgeRqE4AxpXTnLWFy9Atx/Record_something">
-      <label>Record something</label>
+    <upload mediatype="audio/*" ref="/aBgeRqE4AxpXTnLWFy9Atx/audio_low">
+      <label>Audio Low</label>
+    </upload>
+    <upload mediatype="audio/*" ref="/aBgeRqE4AxpXTnLWFy9Atx/audio_voice_only">
+      <label>Audio Voice Only</label>
+    </upload>
+    <upload mediatype="audio/*" ref="/aBgeRqE4AxpXTnLWFy9Atx/audio_required">
+      <label>Required</label>
     </upload>
   </h:body>
 </h:html>

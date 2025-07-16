@@ -21,9 +21,8 @@
         }
     }
 
-    .step-action-select,
+    .step-action-select .button-group,
     .step-recording,
-    .step-uploading,
     .step-preview {
         width: 100%;
         height: 54px;
@@ -33,28 +32,38 @@
     }
 
     .step-action-select {
-        button {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: 6px;
-            padding-left: 14px;
-            padding-right: 14px;
-            margin: 0px;
-            height: 32px;
+        .button-group {
+            button {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                border-radius: 6px;
+                padding-left: 14px;
+                padding-right: 14px;
+                margin: 0px;
+                height: 32px;
 
-            .icon-volume-down {
-                font-size: floor($font-size-base * 1.2);
-            }
+                .icon-volume-down {
+                    font-size: floor($font-size-base * 1.2);
+                }
 
-            .icon-upload {
-                font-size: $font-size-base;
+                .icon-upload {
+                    font-size: $font-size-base;
+                }
+
+                &:disabled {
+                    opacity: 0.5;
+                }
             }
+        }
+
+        .error-message {
+            color: $state-danger-text;
+            font-size: 14px;
         }
     }
 
     .step-recording .recording-container,
-    .step-uploading .file-picker,
     .step-preview .audio-preview {
         width: 80%;
         height: 54px;
@@ -67,6 +76,10 @@
     }
 
     .step-recording {
+        .color-reference {
+            color: $brand-primary-color;
+        }
+
         .recording-display {
             display: flex;
             align-items: center;
@@ -113,43 +126,68 @@
         }
     }
 
-    .step-uploading {
-        .upload-container {
-            display: flex;
-            align-items: center;
-            gap: 20px;
-        }
-        .file-picker {
-            input.file-input {
-                width: 100%;
-                background: transparent;
-                border: none;
-            }
-        }
-    }
-
     .step-preview {
         .audio-preview {
             background: $gray-lighter;
             border: $gray-lighter 1px solid;
 
-            .play-progress {
-                flex: 1;
-                width: 100%;
-                height: 4px;
-                background: rgba(0, 0, 0, 0.15);
-                position: relative;
-                border-radius: 2px;
-                overflow: hidden;
+            .time-display {
+                width: 100px;
+                text-align: center;
+                font-size: 14px;
+                color: $gray-dark;
+            }
 
-                .progress-bar {
-                    position: absolute;
-                    top: 0;
-                    left: 0;
-                    height: 100%;
-                    width: 30%;
-                    background: $brand-primary-color;
+            .seek-bar {
+                flex: 1;
+                height: 50%;
+                display: flex;
+                align-items: center;
+                cursor: pointer;
+
+                .play-progress {
+                    width: 100%;
+                    height: 4px;
+                    background: rgba(0, 0, 0, 0.15);
+                    position: relative;
                     border-radius: 2px;
+                    pointer-events: none;
+
+                    .progress-bar {
+                        position: absolute;
+                        top: 0;
+                        left: 0;
+                        height: 100%;
+                        width: 0%;
+                        background: $brand-primary-color;
+                        border-radius: 2px;
+                    }
+
+                    //seek handle
+                    .progress-bar::after {
+                        content: '';
+                        position: absolute;
+                        top: -4px;
+                        right: -6px;
+                        width: 12px;
+                        height: 12px;
+                        background: $brand-primary-color;
+                        border-radius: 50%;
+                        box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+                        opacity: 0;
+                        transition: opacity 0.2s ease;
+                    }
+
+                    @media (max-width: 768px) {
+                        // handle always visible on mobile
+                        .progress-bar::after {
+                            opacity: 1;
+                        }
+                    }
+                }
+
+                &:hover .progress-bar::after {
+                    opacity: 1;
                 }
             }
         }

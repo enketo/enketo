@@ -1,32 +1,33 @@
+import { t } from 'enketo/translator';
 import Widget from '../../js/widget';
+import AudioRecorder from '../../js/audio-recorder/audio-recorder';
+import { formatTimeMMSS } from '../../js/format';
+import dialog from 'enketo/dialog';
 
 /**
- * AudioWidget that works both offline and online. It abstracts the file storage/cache away
- * with the injected fileManager.
+ * AudioWidget that extends the Widget class to handle audio recording and playback.
+ * It provides functionality to start recording, pause, resume, stop, and play audio.
+ * It also allows users to upload existing audio files.
  *
  * @augments Widget
  */
 
 class AudioWidget extends Widget {
-    /**
-     * @type {string}
-     */
-
-    existingFileName = null;
-
     static get selector() {
         return '.question:not(.or-appearance-draw):not(.or-appearance-signature):not(.or-appearance-annotate) input[type="file"][accept="audio/*"]';
     }
 
-    _init() {
-        this.existingFileName = this.element.getAttribute(
-            'data-loaded-file-name'
-        );
+    constructor(element, options) {
+        super(element, options);
 
-        this.element.remove();
+        this.audioRecorder = new AudioRecorder();
+        this.audioQuality = this.element.dataset.quality || 'normal'; // Get audio quality from data attribute
+        this.audioBlob = null; // To store the recorded audio blob
+
+        this.element.classList.add('hidden');
 
         // Disable the inner button click on label click
-        this.question.setAttribute('for', '');
+        this.question.htmlFor = '';
 
         const fragment = document
             .createRange()
@@ -36,9 +37,24 @@ class AudioWidget extends Widget {
 
         this.question.appendChild(fragment); // Append the new widget structure
 
+        this.element.addEventListener('change', (event) => {
+            const file = event.target.files[0];
+            if (file) {
+                this.audioBlob = new Blob([file], { type: file.type });
+                this.showPlaybackStep(); // Show playback step after file selection
+            }
+        });
+
         this.showActionSelectStep();
     }
 
+    /**
+     * Sets the content of the audio widget.
+     * This is used to update the widget's inner HTML with the provided fragment.
+     *
+     * @param {*} fragment
+     * @returns {void}
+     */
     setWidgetContent(fragment) {
         const widget = this.question.querySelector('.widget');
         if (!widget) {
@@ -46,38 +62,69 @@ class AudioWidget extends Widget {
             return;
         }
         widget.innerHTML = '';
-        widget.appendChild(fragment);
+        if (fragment) widget.appendChild(fragment);
     }
 
+    /**
+     * This method shows the action select step where the user can
+     * choose to start recording audio or upload an existing audio file.
+     * It creates the necessary UI elements and event listeners
+     * for both actions.
+     */
     showActionSelectStep() {
         const stepFragment = document.createRange().createContextualFragment(
             `<div class="step-action-select">
-                <button class="btn-record btn btn-primary small">
-                    <i class="icon icon-volume-down"></i> Start Recording
-                </button>
-                <button class="btn-upload btn btn-default small">
-                    <i class="icon icon-upload"></i> Upload audio File
-                </button>
+                <div class="button-group">
+                    <button class="btn-record btn btn-primary small">
+                    <i class="icon icon-volume-down"></i> ${t(
+                        'audioRecording.startRecording'
+                    )}
+                    </button>
+                    <button class="btn-upload btn btn-default small">
+                    <i class="icon icon-upload"></i> ${t(
+                        'audioRecording.uploadAudioFile'
+                    )}
+                    </button>
+                </div>
+                <div class="error-message hidden"></div>
             </div>`
         );
 
         const buttonRecord = stepFragment.querySelector('.btn-record');
         const buttonUpload = stepFragment.querySelector('.btn-upload');
+        const errorMessage = stepFragment.querySelector('.error-message');
 
-        buttonRecord.addEventListener('click', () => {
-            this.showRecordStep();
+        buttonRecord.addEventListener('click', async () => {
+            // Request permissions first
+            try {
+                await this.audioRecorder.requestPermissions(this.audioQuality);
+                errorMessage.classList.add('hidden');
+                this.showRecordStep();
+            } catch (error) {
+                buttonRecord.disabled = true; // Disable the record button if permissions are denied
+                errorMessage.textContent = error.message; // Show the error message
+                errorMessage.classList.remove('hidden');
+            }
         });
 
         buttonUpload.addEventListener('click', () => {
-            this.showUploadStep();
+            // Trigger the file input click to open the file dialog
+            this.element.click();
         });
 
         this.setWidgetContent(stepFragment);
     }
 
+    /**
+     * This method shows the recording step UI where the user can
+     * start, pause, resume, and stop audio recording.
+     * It creates the necessary UI elements and event listeners
+     * for controlling the recording process.
+     */
     showRecordStep() {
         const stepFragment = document.createRange().createContextualFragment(
             `<div class="step-recording">
+                <div class="color-reference hidden"></div>
                 <div class="recording-container">
                     <div class="recording-display">
                         <span class="status-dot recording"></span>
@@ -88,8 +135,8 @@ class AudioWidget extends Widget {
                         <button class="btn-icon-only btn-pause">
                             <i class="icon icon-pause"></i>
                         </button>
-                        <button class="btn-icon-only btn-play hidden">
-                            <i class="icon icon-play"></i>
+                        <button class="btn-icon-only btn-resume hidden">
+                            <i class="icon icon-microphone"></i>
                         </button>
                         <button class="btn-icon-only btn-stop">
                             <i class="icon icon-stop"></i>
@@ -101,64 +148,47 @@ class AudioWidget extends Widget {
 
         const statusDot = stepFragment.querySelector('.status-dot');
         const buttonPause = stepFragment.querySelector('.btn-pause');
-        const buttonPlay = stepFragment.querySelector('.btn-play');
+        const buttonResume = stepFragment.querySelector('.btn-resume');
         const buttonStop = stepFragment.querySelector('.btn-stop');
+        const timeDisplay = stepFragment.querySelector('.recording-time');
 
         buttonPause.addEventListener('click', () => {
             buttonPause.classList.add('hidden');
-            buttonPlay.classList.remove('hidden');
+            buttonResume.classList.remove('hidden');
             statusDot.classList.remove('recording');
+
+            this.audioRecorder.pauseRecording();
         });
 
-        buttonPlay.addEventListener('click', () => {
-            buttonPlay.classList.add('hidden');
+        buttonResume.addEventListener('click', () => {
+            buttonResume.classList.add('hidden');
             buttonPause.classList.remove('hidden');
             statusDot.classList.add('recording');
+            this.audioRecorder.resumeRecording();
         });
 
-        buttonStop.addEventListener('click', () => {
-            this.showPreviewStep(); // Show preview step after stopping the recording
-        });
+        buttonStop.addEventListener('click', async () => {
+            await this.audioRecorder.stopRecording();
 
-        this.setWidgetContent(stepFragment);
+            this.audioBlob = await this.audioRecorder.getRecordedFile(); // Store the recorded audio file
 
-        this.plotAudioForm(); // Draw the audio waveform
-    }
-
-    showUploadStep() {
-        // This method sets up the uploading step where the user can
-        // upload an audio file from their device.
-        const stepFragment = document.createRange().createContextualFragment(
-            `<div class="step-uploading">
-                <div class="file-picker">
-                    <input type="file" accept="audio/*" class="file-input" />
-                </div>
-                <button class="btn-icon-only btn-back">
-                    <i class="icon icon-undo"></i>
-                </button>
-            </div>`
-        );
-
-        const buttonBack = stepFragment.querySelector('.btn-back');
-        const fileInput = stepFragment.querySelector('.file-input');
-
-        buttonBack.addEventListener('click', () => {
-            this.showActionSelectStep(); // Go back to action select step
-        });
-
-        fileInput.addEventListener('change', (event) => {
-            const file = event.target.files[0];
-            if (file) {
-                this.showPreviewStep(); // Show preview step after file selection
-            }
+            this.showPlaybackStep(); // Show preview step after stopping the recording
         });
 
         this.setWidgetContent(stepFragment);
+
+        this.audioRecorder.startRecording(this.audioQuality); // Start recording audio
+
+        this.watchAudioRecording(timeDisplay); // Start watching the audio recording
     }
 
-    showPreviewStep() {
-        // This method sets up the preview step where the user can
-        // play the recorded or uploaded audio, download it, or delete it.
+    /**
+     * This method sets up the playback step where the user can
+     * play the recorded or uploaded audio, download it, or delete it.
+     * It creates the necessary UI elements and event listeners
+     * for playback controls, download functionality, and deletion.
+     */
+    async showPlaybackStep() {
         const stepFragment = document.createRange().createContextualFragment(
             `<div class="step-preview">
                 <div class="audio-preview">
@@ -171,9 +201,9 @@ class AudioWidget extends Widget {
                     <div class="time-display">
                         <span class="time-progress">00:00 / 1:24</span>
                     </div>
-                    <div class="play-progress">
-                        <div class="progress-bar">
-                            <div class="progress"></div>
+                    <div class="seek-bar">
+                        <div class="play-progress">
+                            <div class="progress-bar"></div>
                         </div>
                     </div>
                 </div>
@@ -190,70 +220,223 @@ class AudioWidget extends Widget {
         const buttonPause = stepFragment.querySelector('.btn-pause');
         const buttonDownload = stepFragment.querySelector('.btn-download');
         const buttonDelete = stepFragment.querySelector('.btn-delete');
+        const timeDisplay = stepFragment.querySelector('.time-progress');
+        const seekBar = stepFragment.querySelector('.seek-bar');
+        const progressBar = stepFragment.querySelector('.progress-bar');
+
+        const audioPlayer = new Audio();
+
+        audioPlayer.addEventListener('loadedmetadata', () => {
+            // Update the time display when metadata is loaded
+            updateAudioProgress();
+        });
+        audioPlayer.addEventListener('timeupdate', () => {
+            // Update the time display as the audio plays
+            updateAudioProgress();
+        });
+        audioPlayer.addEventListener('ended', () => {
+            // Reset the play/pause buttons when audio ends
+            updateAudioProgress();
+            buttonPlay.classList.remove('hidden');
+            buttonPause.classList.add('hidden');
+        });
+
+        if (this.audioBlob) {
+            audioPlayer.src = URL.createObjectURL(this.audioBlob);
+        }
+
+        const updateAudioProgress = () => {
+            const currentTime = audioPlayer.currentTime;
+            const duration = audioPlayer.duration; // Convert milliseconds to seconds
+            timeDisplay.textContent = `${formatTimeMMSS(
+                Math.floor(currentTime)
+            )} / ${formatTimeMMSS(duration)}`;
+            const progress = (currentTime / duration) * 100;
+            progressBar.style.width = `${progress}%`;
+        };
+
+        const updateAudioPosition = (event) => {
+            if (event.buttons !== 1 || event.touches?.length === 1) return; // Only update if the mouse is pressed
+            const rect = seekBar.getBoundingClientRect();
+            const clientX = event.touches
+                ? event.touches[0].clientX
+                : event.clientX; // Handle touch events
+            const offsetX = clientX - rect.left; // Get the mouse position relative to the seek bar
+            const width = rect.width;
+            const percentage = Math.min(Math.max(offsetX / width, 0), 1);
+            const newTime = percentage * audioPlayer.duration;
+            audioPlayer.currentTime = newTime; // Update the audio current time
+            updateAudioProgress(); // Update the time display
+        };
+
+        seekBar.addEventListener('mousemove', updateAudioPosition);
+        seekBar.addEventListener('mousedown', updateAudioPosition);
+        seekBar.addEventListener('touchmove', updateAudioPosition);
+        seekBar.addEventListener('touchstart', updateAudioPosition);
 
         buttonPlay.addEventListener('click', () => {
             buttonPlay.classList.add('hidden');
             buttonPause.classList.remove('hidden');
             // Logic to play the audio
+            audioPlayer.play();
         });
 
         buttonPause.addEventListener('click', () => {
             buttonPause.classList.add('hidden');
             buttonPlay.classList.remove('hidden');
             // Logic to pause the audio
+            audioPlayer.pause();
         });
 
         buttonDownload.addEventListener('click', () => {
-            // Logic to download the audio
+            // Create a link to download the audio file
+            const downloadLink = document.createElement('a');
+            downloadLink.href = audioPlayer.src;
+            const fileName = this.element.name.slice(
+                this.element.name.lastIndexOf('/') + 1
+            );
+            downloadLink.download = `${fileName || 'audio-recording'}.webm`;
+            document.body.appendChild(downloadLink);
+            downloadLink.click();
+            document.body.removeChild(downloadLink);
         });
 
         buttonDelete.addEventListener('click', () => {
-            this.showActionSelectStep(); // Go back to action select step
+            dialog
+                .confirm(t('audioRecording.deleteWarning'))
+                .then((confirmed) => {
+                    if (confirmed) {
+                        audioPlayer.pause(); // Pause the audio if it's playing
+                        URL.revokeObjectURL(audioPlayer.src); // Revoke the object URL
+                        audioPlayer.removeAttribute('src'); // Remove the source attribute
+                        audioPlayer.load(); // Release resources
+                        this.audioBlob = null; // Clear the audio blob
+                        this.element.value = ''; // Reset the file input value
+                        this.showActionSelectStep(); // Go back to action select step
+                    }
+                });
         });
 
         this.setWidgetContent(stepFragment);
     }
 
-    plotAudioForm() {
-        // This method will be used to plot the waveform as a
-        // feedback while recording audio.
-        // Currently, it is drawing a demo random audio form.
+    /**
+     * This method watches the audio recording and updates the time display
+     * and the waveform preview while recording.
+     *
+     * @param {HTMLElement} timeDisplay - The element to display the recording time.
+     */
+    watchAudioRecording(timeDisplay) {
+        const ctx = new AudioContext();
+        const source = ctx.createMediaStreamSource(this.audioRecorder.stream);
+        const analyser = ctx.createAnalyser();
+
+        source.connect(analyser);
+
+        // Set up the analyser to get frequency data
+        const data = new Uint8Array(analyser.frequencyBinCount);
+
+        const offscreenCanvas = new OffscreenCanvas(1, 1);
+
+        // Prepare the canvas for waveform preview
+        const canvasData = this.prepareCanvasPreview(offscreenCanvas);
+
+        let plotData = [];
+
+        const updateRecordingInfo = () => {
+            // This function updates the recording time and plots the audio data
+            if (this.audioRecorder.isPaused()) {
+                // No update is needed if recording is paused
+                requestAnimationFrame(updateRecordingInfo);
+                return;
+            }
+            timeDisplay.textContent =
+                this.audioRecorder.getRecordingTimeFormatted();
+
+            analyser.getByteFrequencyData(data);
+
+            // We store the data for certain frames to plot a single line
+            // for each [canvasData.barWidth + canvasData.barGap] frames.
+            // This is for visual styling purposes only.
+            plotData.push(Math.max(...data));
+            if (plotData.length >= canvasData.barWidth + canvasData.barGap) {
+                this.plotAudioData(canvasData, Math.max(...plotData));
+                plotData = [];
+            } else {
+                this.plotAudioData(canvasData, null);
+            }
+
+            // Request the next animation frame to keep updating
+            // while recording is active.
+            if (this.audioRecorder.isRecording()) {
+                requestAnimationFrame(updateRecordingInfo);
+            }
+        };
+        updateRecordingInfo();
+    }
+
+    /**
+     * This method will be used to plot the waveform as a
+     * feedback while recording audio.
+     *
+     * @param {OffscreenCanvas} offscreenCanvas - The canvas to draw the waveform on.
+     * @returns {Object} - An object containing the canvas, context, and other drawing parameters.
+     */
+    prepareCanvasPreview(offscreenCanvas) {
         const canvas = this.question.querySelector('canvas.audio-waveform');
 
         // Fix the canvas's element size and inner drawing size
         canvas.width = canvas.clientWidth;
         canvas.height = canvas.clientHeight;
+        offscreenCanvas.width = canvas.clientWidth;
+        offscreenCanvas.height = canvas.clientHeight;
 
         const ctx = canvas.getContext('2d');
-        const width = canvas.width;
-        const height = canvas.height;
+        const offCtx = offscreenCanvas.getContext('2d');
 
+        // Setup visual size for the waveform
         const barWidth = 4;
-        const barGap = 3;
+        const barGap = 1;
 
-        ctx.strokeStyle = '#2095F3';
+        const brandColor = getComputedStyle(
+            this.question.querySelector('.color-reference')
+        ).color; // Set the color reference to match the question's color
+
+        ctx.strokeStyle = brandColor;
         ctx.lineWidth = barWidth;
         ctx.lineCap = 'round';
 
-        let posX = 0;
-        while (posX < width) {
-            const volume = Math.random();
-            // barWidth is subtracted from the height to ensure the bars fit
-            // vertically within the canvas due to the line cap being round.
-            const barHeight = Math.max(1, volume * (height - barWidth * 2));
+        return { canvas, ctx, offCtx, barWidth, barGap, offscreenCanvas };
+    }
 
+    /**
+     * This method plots the audio data on the canvas.
+     * It draws a vertical line for the current audio level.
+     * If the given value is null, it only scrolls the image left.
+     *
+     * @param {Object} canvasData - The canvas data containing context and dimensions.
+     * @param {number|null} value - The current audio level value (0-255) or null.
+     * @returns {void}
+     */
+    plotAudioData(canvasData, value) {
+        const { ctx, canvas, offCtx, barWidth, offscreenCanvas } = canvasData;
+        const { width, height } = canvas;
+
+        // Scrolls canvas image left by 1 pixel
+        // to create a moving effect.
+        offCtx.clearRect(0, 0, width, height);
+        offCtx.drawImage(canvas, 0, 0);
+        ctx.clearRect(0, 0, width, height);
+        ctx.drawImage(offscreenCanvas, -1, 0);
+
+        // Draws the vertical line for the current audio level.
+        // If the value is null, it does not draw anything.
+        if (value !== null) {
+            const val = (value / 255) * height * 0.8;
             ctx.beginPath();
-            ctx.moveTo(
-                posX + barGap + barWidth / 2,
-                height / 2 - barHeight / 2
-            );
-            ctx.lineTo(
-                posX + barGap + barWidth / 2,
-                height / 2 + barHeight / 2
-            );
+            ctx.moveTo(width - barWidth / 2, height / 2 - val / 2);
+            ctx.lineTo(width - barWidth / 2, height / 2 + val / 2);
             ctx.stroke();
-
-            posX += barWidth + barGap;
         }
     }
 }
