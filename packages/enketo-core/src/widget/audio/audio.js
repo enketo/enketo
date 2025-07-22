@@ -20,15 +20,11 @@ class AudioWidget extends Widget {
     constructor(element, options) {
         super(element, options);
 
-        const existingFilename = this.element.dataset.loadedFileName;
-
         this.audioRecorder = new AudioRecorder();
         this.audioQuality = this.element.dataset.quality || 'normal'; // Get audio quality from data attribute
-        this.fileName = existingFilename || ''; // A filename to be used for data validation purposes
         this.audioBlob = null; // To store the recorded audio blob
 
         this.element.classList.add('hidden');
-        this.element.dataset.audio = 'true'; // Indicate that this is an audio recording widget
 
         // Disable the inner button click on label click
         this.question.htmlFor = '';
@@ -41,41 +37,15 @@ class AudioWidget extends Widget {
 
         this.question.appendChild(fragment); // Append the new widget structure
 
-        this.element.addEventListener('change', async (event) => {
-            // If the input type is not 'file', do nothing
-            if (event.target.type !== 'file') return;
-
-            // Handle file input change event for uploading audio files
+        this.element.addEventListener('change', (event) => {
             const file = event.target.files[0];
             if (file) {
-                this.updateValue(file); // Update the widget with the uploaded file
-                this.fileName = file.name; // Update the filename from the uploaded file
-                this.showPlaybackStep();
+                this.audioBlob = new Blob([file], { type: file.type });
+                this.showPlaybackStep(); // Show playback step after file selection
             }
         });
 
         this.showActionSelectStep();
-    }
-
-    async updateValue(audioBlob) {
-        this.audioBlob = audioBlob; // Update the audio blob
-        this.value = await this.getDataURL();
-    }
-
-    /**
-     * Gets the current value of the audio widget.
-     */
-    get value() {
-        return this.element.dataset.cache || '';
-    }
-
-    /**
-     * Sets the value of the audio widget.
-     * @param {string} dataUrl - The data URL of the audio file.
-     */
-    set value(dataUrl) {
-        // dataset-cache is used by the filemanager to extract the file data
-        this.element.dataset.cache = dataUrl || '';
     }
 
     /**
@@ -102,9 +72,6 @@ class AudioWidget extends Widget {
      * for both actions.
      */
     showActionSelectStep() {
-        this.updateValue(null);
-        this.element.type = 'hidden'; // Will consider the input as a text for validation purposes
-
         const stepFragment = document.createRange().createContextualFragment(
             `<div class="step-action-select">
                 <div class="button-group">
@@ -142,7 +109,6 @@ class AudioWidget extends Widget {
 
         buttonUpload.addEventListener('click', () => {
             // Trigger the file input click to open the file dialog
-            this.element.type = 'file'; // Change type to file to allow file selection
             this.element.click();
         });
 
@@ -204,15 +170,9 @@ class AudioWidget extends Widget {
         buttonStop.addEventListener('click', async () => {
             await this.audioRecorder.stopRecording();
 
-            const blob = await this.audioRecorder.getRecordedFile(); // Store the recorded audio file
+            this.audioBlob = await this.audioRecorder.getRecordedFile(); // Store the recorded audio file
 
-            this.fileName = this.getFileName(); // Get the filename for the recording
-            this.originalInputValue = this.fileName; // Update the original input value with the filename
-
-            this.updateValue(blob); // Update the widget with the recorded audio blob
-
-            // When value is set, it will trigger the playback step
-            this.showPlaybackStep();
+            this.showPlaybackStep(); // Show preview step after stopping the recording
         });
 
         this.setWidgetContent(stepFragment);
@@ -335,7 +295,7 @@ class AudioWidget extends Widget {
             const fileName = this.element.name.slice(
                 this.element.name.lastIndexOf('/') + 1
             );
-            downloadLink.download = this.fileName;
+            downloadLink.download = `${fileName || 'audio-recording'}.webm`;
             document.body.appendChild(downloadLink);
             downloadLink.click();
             document.body.removeChild(downloadLink);
@@ -358,44 +318,6 @@ class AudioWidget extends Widget {
         });
 
         this.setWidgetContent(stepFragment);
-    }
-
-    /**
-     * Get a filename for the recording.
-     * The file is named after the field name and a postfix in the format: `YYYYMMDD_HHMMSS`.
-     * This method is used for both user download and upload.
-     * @returns {string} - The filename for the audio recording.
-     */
-    getFileName() {
-        const fileName = this.element.name.slice(
-            this.element.name.lastIndexOf('/') + 1
-        );
-        const baseFileName = `${fileName || 'audio-recording'}`;
-        const timestamp = new Date()
-            .toISOString()
-            .replace(/\D/g, '')
-            .slice(0, 14);
-        const postfix = `-${timestamp.slice(0, 8)}_${timestamp.slice(8)}`;
-        return `${baseFileName}${postfix}.webm`;
-    }
-
-    /**
-     * This method retrieves the data URL of the recorded audio blob.
-     * It reads the blob as a data URL using FileReader.
-     * @returns {Promise<string|null>} - A promise that resolves to the data URL of the audio blob,
-     * or null if no audio blob is available.
-     */
-    async getDataURL() {
-        if (this.audioBlob) {
-            return new Promise((resolve) => {
-                const reader = new FileReader();
-                reader.onload = (event) => {
-                    resolve(event.target.result);
-                };
-                reader.readAsDataURL(this.audioBlob);
-            });
-        }
-        return Promise.resolve(null);
     }
 
     /**
