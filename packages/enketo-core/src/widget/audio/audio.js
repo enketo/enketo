@@ -332,9 +332,6 @@ class AudioWidget extends Widget {
             // Create a link to download the audio file
             const downloadLink = document.createElement('a');
             downloadLink.href = audioPlayer.src;
-            const fileName = this.element.name.slice(
-                this.element.name.lastIndexOf('/') + 1
-            );
             downloadLink.download = this.fileName;
             document.body.appendChild(downloadLink);
             downloadLink.click();
