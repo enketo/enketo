@@ -48,13 +48,21 @@ class AudioWidget extends Widget {
             // Handle file input change event for uploading audio files
             const file = event.target.files[0];
             if (file) {
-                this.updateValue(file); // Update the widget with the uploaded file
+                await this.updateValue(file); // Update the widget with the uploaded file
                 this.fileName = file.name; // Update the filename from the uploaded file
                 this.showPlaybackStep();
             }
         });
 
-        this.showActionSelectStep();
+        if(existingFilename) {
+            // If an existing filename is provided, set the value to the existing audio file
+            this.element.type='text';
+            this.originalInputValue = existingFilename; // Set the value to the existing audio file
+            this.showPlaybackStep();
+        } else {
+            // If no existing filename, show the action select step
+            this.showActionSelectStep();
+        }
     }
 
     async updateValue(audioBlob) {
@@ -207,9 +215,11 @@ class AudioWidget extends Widget {
             const blob = await this.audioRecorder.getRecordedFile(); // Store the recorded audio file
 
             this.fileName = this.getFileName(); // Get the filename for the recording
-            this.originalInputValue = this.fileName; // Update the original input value with the filename
+            await this.updateValue(blob); // Update the widget with the recorded audio blob
 
-            this.updateValue(blob); // Update the widget with the recorded audio blob
+            // originalInputValue needs to be set AFTER setting widget value (updateValue())
+            // because it triggers enketo's record autosave
+            this.originalInputValue = this.fileName; // Update the original input value with the filename
 
             // When value is set, it will trigger the playback step
             this.showPlaybackStep();
