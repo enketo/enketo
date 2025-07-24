@@ -292,6 +292,9 @@ function _loadRecord(survey, instanceId, confirmed) {
                 if (!record || !record.xml) {
                     return gui.alert(t('alert.recordnotfound.msg'));
                 }
+                
+                // Set the active record before initializing the form
+                records.setActive(record.instanceId);
 
                 // Set the active record before initializing the form
                 records.setActive(record.instanceId);
