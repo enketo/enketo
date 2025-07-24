@@ -3,6 +3,7 @@ import Widget from '../../js/widget';
 import AudioRecorder from '../../js/audio-recorder/audio-recorder';
 import { formatTimeMMSS } from '../../js/format';
 import dialog from 'enketo/dialog';
+import fileManager from 'enketo/file-manager';
 
 /**
  * AudioWidget that extends the Widget class to handle audio recording and playback.
@@ -17,9 +18,8 @@ class AudioWidget extends Widget {
         return '.question:not(.or-appearance-draw):not(.or-appearance-signature):not(.or-appearance-annotate) input[type="file"][accept="audio/*"]';
     }
 
-    constructor(element, options) {
-        super(element, options);
 
+    _init() {
         const existingFilename = this.element.dataset.loadedFileName;
 
         this.audioRecorder = new AudioRecorder();
@@ -53,14 +53,32 @@ class AudioWidget extends Widget {
                 this.showPlaybackStep();
             }
         });
-
+        
         if(existingFilename) {
-            // If an existing filename is provided, set the value to the existing audio file
-            this.element.type='text';
-            this.originalInputValue = existingFilename; // Set the value to the existing audio file
-            this.showPlaybackStep();
+            // If an existing filename is provided load file contents
+            this.loadExistingFile(existingFilename);
         } else {
             // If no existing filename, show the action select step
+            this.showActionSelectStep();
+        }
+    }
+
+    async loadExistingFile(existingFileName) {
+        try {
+            const fileBlob = await fileManager.getFileBlob(existingFileName);
+            if (fileBlob) {
+                await this.updateValue(fileBlob); // Update the widget with the existing file blob
+                
+                this.element.type = 'text'; // Set type to text for validation purposes
+                this.originalInputValue = existingFileName;
+
+                this.showPlaybackStep();
+            } else {
+                this.showActionSelectStep();
+            }
+
+        } catch (error) {
+            console.error("Error loading existing file:", error);
             this.showActionSelectStep();
         }
     }
@@ -111,7 +129,7 @@ class AudioWidget extends Widget {
      */
     showActionSelectStep() {
         this.updateValue(null);
-        this.element.type = 'hidden'; // Will consider the input as a text for validation purposes
+        this.element.type = 'text'; // Will consider the input as a text for validation purposes
 
         const stepFragment = document.createRange().createContextualFragment(
             `<div class="step-action-select">

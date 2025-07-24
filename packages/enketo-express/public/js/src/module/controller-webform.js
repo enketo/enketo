@@ -292,6 +292,9 @@ function _loadRecord(survey, instanceId, confirmed) {
                 if (!record || !record.xml) {
                     return gui.alert(t('alert.recordnotfound.msg'));
                 }
+                
+                // Set the active record before initializing the form
+                records.setActive(record.instanceId);
 
                 const formEl = form.resetView();
                 form = new Form(
@@ -311,7 +314,6 @@ function _loadRecord(survey, instanceId, confirmed) {
                 formCache.updateMedia(survey);
 
                 form.recordName = record.name;
-                records.setActive(record.instanceId);
 
                 if (loadErrors.length > 0) {
                     throw loadErrors;
