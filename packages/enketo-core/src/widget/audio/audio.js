@@ -18,9 +18,9 @@ class AudioWidget extends Widget {
         return '.question:not(.or-appearance-draw):not(.or-appearance-signature):not(.or-appearance-annotate) input[type="file"][accept="audio/*"]';
     }
 
-
     _init() {
         const existingFilename = this.element.dataset.loadedFileName;
+        this.existingFileUrl = null;
 
         this.audioRecorder = new AudioRecorder();
         this.audioQuality = this.element.dataset.quality || 'normal'; // Get audio quality from data attribute
@@ -29,6 +29,7 @@ class AudioWidget extends Widget {
 
         this.element.classList.add('hidden');
         this.element.dataset.audio = 'true'; // Indicate that this is an audio recording widget
+        this.element.type = 'text'; // Set input type to text so we can set its value
 
         // Disable the inner button click on label click
         this.question.htmlFor = '';
@@ -53,32 +54,31 @@ class AudioWidget extends Widget {
                 this.showPlaybackStep();
             }
         });
-        
-        if(existingFilename) {
+
+        if (existingFilename) {
             // If an existing filename is provided load file contents
-            this.loadExistingFile(existingFilename);
+            this.useExistingFile(existingFilename);
         } else {
             // If no existing filename, show the action select step
             this.showActionSelectStep();
         }
     }
 
-    async loadExistingFile(existingFileName) {
+    async useExistingFile(existingFileName) {
+        this.originalInputValue = existingFileName; // Store the original input value for validation
         try {
-            const fileBlob = await fileManager.getFileBlob(existingFileName);
-            if (fileBlob) {
-                await this.updateValue(fileBlob); // Update the widget with the existing file blob
-                
-                this.element.type = 'text'; // Set type to text for validation purposes
-                this.originalInputValue = existingFileName;
-
-                this.showPlaybackStep();
-            } else {
+            const file = await fileManager.getFileUrl(existingFileName);
+            if (typeof file !== 'string') {
                 this.showActionSelectStep();
+                return;
             }
 
+            this.updateValue(null); // Clear the current value
+            this.existingFileUrl = file; // Store the URL for playback
+            this.originalInputValue = existingFileName;
+            this.showPlaybackStep();
         } catch (error) {
-            console.error("Error loading existing file:", error);
+            console.error('Error loading existing file:', error);
             this.showActionSelectStep();
         }
     }
@@ -130,6 +130,7 @@ class AudioWidget extends Widget {
     showActionSelectStep() {
         this.updateValue(null);
         this.element.type = 'text'; // Will consider the input as a text for validation purposes
+        this.existingFileUrl = null; // Reset existing file URL
 
         const stepFragment = document.createRange().createContextualFragment(
             `<div class="step-action-select">
@@ -257,6 +258,12 @@ class AudioWidget extends Widget {
      * for playback controls, download functionality, and deletion.
      */
     async showPlaybackStep() {
+        if (!this.existingFileUrl && !this.audioBlob) {
+            console.error('No audio available for playback.');
+            this.showActionSelectStep();
+            return; // If no audio is available, show the action select step.
+        }
+
         const stepFragment = document.createRange().createContextualFragment(
             `<div class="step-preview">
                 <div class="audio-preview">
@@ -308,10 +315,6 @@ class AudioWidget extends Widget {
             buttonPlay.classList.remove('hidden');
             buttonPause.classList.add('hidden');
         });
-
-        if (this.audioBlob) {
-            audioPlayer.src = URL.createObjectURL(this.audioBlob);
-        }
 
         const updateAudioProgress = () => {
             const currentTime = audioPlayer.currentTime;
@@ -376,11 +379,14 @@ class AudioWidget extends Widget {
                         audioPlayer.removeAttribute('src'); // Remove the source attribute
                         audioPlayer.load(); // Release resources
                         this.audioBlob = null; // Clear the audio blob
-                        this.element.value = ''; // Reset the file input value
+                        this.originalInputValue = ''; // Clear the original input value
                         this.showActionSelectStep(); // Go back to action select step
                     }
                 });
         });
+
+        audioPlayer.src =
+            this.existingFileUrl || URL.createObjectURL(this.audioBlob);
 
         this.setWidgetContent(stepFragment);
     }

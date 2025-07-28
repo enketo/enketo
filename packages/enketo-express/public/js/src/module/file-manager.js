@@ -141,24 +141,6 @@ function getObjectUrl(subject) {
 }
 
 /**
- * Similar to getFileURL, except that this function returns a Blob
- * 
- * @param  {?string|object} subject - File or filename in local storage
- * @return {Promise<Blob|string>} promise that resolves to a Blob or url string, or rejects with Error
- */
-function getFileBlob(subject) {
-    return getFileUrl(subject).then((url) => {
-        if (/https?:\/\//.test(url)) {
-            return connection
-                .getMediaFile(url)
-                .then((file) => file.item);
-        }
-
-        return url;
-    });
-}
-
-/**
  * Obtain files currently stored in file input elements of open record
  *
  * @return { Promise } A promise that resolves with an array of files
@@ -289,7 +271,6 @@ export default {
     setInstanceAttachments,
     getFileUrl,
     getObjectUrl,
-    getFileBlob,
     getCurrentFiles,
     getCurrentFile,
     isTooLarge,
