@@ -18,19 +18,13 @@ This environment leverages the existing setup of `kobo-install` with its configu
 
 ## Step 2: Setup Enketo Development Environment
 
-1. Clone Enketo's repository:
-
-    ```bash
-    git clone https://github.com/enketo/enketo.git
-    cd enketo
-    ```
-
-2. Verify Node.js and Yarn versions match those specified in `package.json`
-
-3. Install dependencies:
-    ```bash
-    yarn install
-    ```
+```bash
+git clone https://github.com/enketo/enketo.git
+cd enketo
+node -v # should be 20.x.x or 22.x.x, see package.json
+yarn -v # should be >= 1.22.22 but not 2.x.x, see package.json
+yarn install
+```
 
 ## Step 3: Configure Enketo
 
@@ -41,89 +35,99 @@ This environment leverages the existing setup of `kobo-install` with its configu
     ```
 
 2. Edit `./packages/enketo-express/config/config.json` and update the following sections:
-
-    **App Name:**
-
-    ```json
-    {
-        "app name": "Enketo KoboToolbox Development Environment"
-    }
-    ```
-
-    > **Note:** The specified name will be displayed in Enketo's homepage and is useful to verify if the running version accessible through `ee.kobo.local` is the correct one.
-
-    **Server Configuration:**
-
-    ```json
-    {
-        "linked form and data server": {
-            "name": "KoboToolbox",
-            "api key": "enketorules",
-            "server url": "",
-            "legacy formhub": false,
-            "authentication": {
-                "type": "basic",
-                "allow insecure transport": "false"
-            }
+    - `app name`: will be displayed in Enketo's homepage and is useful to verify if the running version accessible through `ee.kobo.local` is the correct one.
+    - `server url`: empty value allows Enketo to connect to the local server without specifying a URL.
+    - example:
+        ```json
+        {
+            "app name": "Enketo KoboToolbox Development Environment",
+            ...
+            "linked form and data server": {
+                "name": "KoboToolbox",
+                "api key": "enketorules",
+                "server url": "",
+                "legacy formhub": false,
+                "authentication": {
+                    "type": "basic",
+                    "allow insecure transport": "false"
+                }
+            },
+            ...
         }
-    }
-    ```
-
-    > **Note:** The empty `server url` allows Enketo to connect to the local server without specifying a URL.
+        ```
 
 ## Step 4: Configure KoboToolbox
 
-1. Navigate to your KoboToolbox installation directory:
+1.  Navigate to your KoboToolbox installation directory:
 
     ```bash
-    cd kobo-install
+    cd kobo-docker
     ```
 
-2. Create or edit `docker-compose.frontend.custom.yml`:
+2.  Create or edit `docker-compose.frontend.custom.yml`:
 
-    ```yml
-    services:
-        kpi:
-            environment:
-                - ENKETO_API_KEY=enketorules
+    > _Note:_ This file is prefered over `docker-compose.frontend.override.yml` since the latter is managed by `kobo-install` and will be overwritten. Using the former allows you to customize the frontend configuration without losing changes during updates.
 
-        nginx:
-            extra_hosts:
-                - enketo_express:<YOUR_LOCAL_IP_ADDRESS>
-    ```
+        ```yml
+        services:
+            kpi:
+                environment:
+                    - ENKETO_API_KEY=enketorules
 
-    > **Note:** This configuration remaps `ee.kobo.local` from the Enketo instance setup by kobo-install to your local Enketo development instance.
+            nginx:
+                extra_hosts:
+                    - enketo_express:<YOUR_LOCAL_IP_ADDRESS>
+        ```
 
-3. Replace `<YOUR_LOCAL_IP_ADDRESS>` with your actual local IP address:
+        > **Note:** This configuration remaps `ee.kobo.local` from the Enketo instance setup by kobo-install to your local Enketo development instance.
 
-    - **Linux/macOS:** `ip addr show` or `ifconfig`
-    - **Windows:** `ipconfig`
+3.  Replace `<YOUR_LOCAL_IP_ADDRESS>` with your actual local IP address:
+
+    -   **Linux/macOS:** `ip addr` or `ifconfig`
+    -   **Windows:** `ipconfig`
 
     > **Important:** Use your local IP address instead of `localhost` to ensure proper communication between KoboToolbox containers and your Enketo running locally.
 
-4. Ensure the `ENKETO_API_KEY` matches the API key in your Enketo configuration (`enketorules`).
+4.  Ensure the `ENKETO_API_KEY` matches the API key in your Enketo configuration (`enketorules`).
 
-5. Recreate the nginx container:
+5.  Recreate the nginx container:
     ```bash
     ./run.py -cf up -d --force-recreate nginx
     ```
 
 ## Step 5: Start the Development Environment
 
-### Start KoboToolbox:
+The order of starting the services is important to ensure that services are available before connections are made.
+
+1.  Start KoboToolbox Backend:
+
+    ```bash
+    cd kobo-install
+    ./run.py -cb up -d
+    ```
+
+    > Note: This will start the _redis_ service as well, which is needed by Enketo.
+
+2.  Start Enketo development environment :
+
+    ```bash
+    cd enketo
+    yarn watch
+    ```
+
+    > Note: This will make Enketo server available, which is needed when getting Kobotoolbox frontend up.
+
+3.  Start KoboToolbox Frontend:
+
+        ```bash
+        cd kobo-install
+        ./run.py -cf up -d
+        ```
+
+Optionally, you can follow the logs for Kobotoolbox:
 
 ```bash
-cd kobo-install
-./run.py
-```
-
-### Start Enketo (in development mode):
-
-```bash
-cd enketo
-yarn workspace enketo-express start
-# or for watch mode with auto-reload:
-yarn workspace enketo-express watch
+./run.py -cf logs -f
 ```
 
 ## Step 6: Access and Test
@@ -135,11 +139,12 @@ yarn workspace enketo-express watch
 
 ### Testing the Integration:
 
-1. **Login to KoboToolbox** and create a user account
-2. **Create a new project** with a form
+1. **Login to KoboToolbox** (Create a user account if needed. Refer to KoboToolbox documentation for details)
+2. **Create a new project**
 3. **Deploy your project**
 4. **Navigate to:** Project → Form section
-5. **Click "Open"** to launch the form in your local Enketo instance
+5. **Click "Preview" (the eye icon)** To open a preview of the form inside of KoboToolbox
+6. **Click "Open"** to launch the form in your local Enketo instance ready to send submissions
 
 The form should now be displayed by your local Enketo instance, allowing you to test and develop features.
 
@@ -151,5 +156,7 @@ The form should now be displayed by your local Enketo instance, allowing you to 
 -   **Connection refused:** Verify that both services are running and the IP address is correct
 -   **API key mismatch:** Ensure the `ENKETO_API_KEY` matches in both configurations
 -   **Port conflicts:** Check that port 8005 is available for Enketo
+-   **Enketo not starting:** Ensure that Kobotoolbox backend is running and that the `docker-compose.frontend.custom.yml` is correctly configured
+-   **KoboToolbox not starting:** Verify that Enketo is running and the sequence of starting services is followed correctly
 
 **Happy developing!**
