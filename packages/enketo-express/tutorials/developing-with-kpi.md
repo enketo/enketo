@@ -14,7 +14,10 @@ This environment leverages the existing setup of `kobo-install` with its configu
 ## Step 1: Setup KoboToolbox Development Environment
 
 1. Follow the [kobo-install documentation](https://github.com/kobotoolbox/kobo-install) to set up a local instance of KoboToolbox
-2. Ensure KoboToolbox is running and accessible
+    > :warning: Be sure to select `yes` when asked `Do you want to expose back-end container ports`, or else the local Enketo instance won't be able to access the Redis server.
+    > :warning: Be sure to select `yes` when asked `Do you want to add additional settings to the front-end`, or else you won't be able to add the needed custom settings to the KoboToolbox frontend.
+2. Take note of the Redis password set during the KoboToolbox installation, as it will be needed for Enketo configuration.
+3. Ensure KoboToolbox is running and accessible
 
 ## Step 2: Setup Enketo Development Environment
 
@@ -37,6 +40,10 @@ yarn install
 2. Edit `./packages/enketo-express/config/config.json` and update the following sections:
     - `app name`: will be displayed in Enketo's homepage and is useful to verify if the running version accessible through `ee.kobo.local` is the correct one.
     - `server url`: empty value allows Enketo to connect to the local server without specifying a URL.
+    - set redis `password` to match your KoboToolbox Redis settings. You can find the password set during KoboToolbox setup by running in `kobo-install` folder:
+    ```bash
+        cat .run.conf | grep redis_password
+    ```
     - example:
         ```json
         {
@@ -53,12 +60,25 @@ yarn install
                 }
             },
             ...
+            "redis": {
+                "main": {
+                    "host": "127.0.0.1",
+                    "port": "6379",
+                    "password": "<REDIS_PASSWORD>",
+                },
+                "cache": {
+                    "host": "127.0.0.1",
+                    "port": "6380",
+                    "password": "<REDIS_PASSWORD>",
+                }
+            },
+            ...
         }
         ```
 
 ## Step 4: Configure KoboToolbox
 
-1.  Navigate to your KoboToolbox installation directory:
+1.  Navigate to your KoboToolbox's docker setup directory:
 
     ```bash
     cd kobo-docker
@@ -66,7 +86,7 @@ yarn install
 
 2.  Create or edit `docker-compose.frontend.custom.yml`:
 
-    > _Note:_ This file is prefered over `docker-compose.frontend.override.yml` since the latter is managed by `kobo-install` and will be overwritten. Using the former allows you to customize the frontend configuration without losing changes during updates.
+    > _Note:_ This file is preferred over `docker-compose.frontend.override.yml` since the latter is managed by `kobo-install` and will be overwritten. Using the former allows you to customize the frontend configuration without losing changes during updates.
 
         ```yml
         services:
@@ -108,23 +128,23 @@ The order of starting the services is important to ensure that services are avai
 
     > Note: This will start the _redis_ service as well, which is needed by Enketo.
 
-2.  Start Enketo development environment :
+2.  Start Enketo development environment:
 
     ```bash
     cd enketo
     yarn watch
     ```
 
-    > Note: This will make Enketo server available, which is needed when getting Kobotoolbox frontend up.
+    > Note: This will make Enketo server available, which is needed when getting KoboToolbox frontend up.
 
 3.  Start KoboToolbox Frontend:
 
-        ```bash
-        cd kobo-install
-        ./run.py -cf up -d
-        ```
+    ```bash
+    cd kobo-install
+    ./run.py -cf up -d
+    ```
 
-Optionally, you can follow the logs for Kobotoolbox:
+Optionally, you can follow the logs for KoboToolbox:
 
 ```bash
 ./run.py -cf logs -f
@@ -152,11 +172,13 @@ The form should now be displayed by your local Enketo instance, allowing you to 
 
 ### Common Issues:
 
--   **Access denied for audio/video:** For local development, you may need to set specific permissions on Chrome (or your browser of choice) to allow access to audio/video from the unsafe development source. You can do that on Chrome by navigating to (`chrome://flags/#unsafely-treat-insecure-origin-as-secure`) and adding your local Enketo URL (e.g., `http://ee.kobo.local`).
+-   **Access denied for audio/video:** For local development, you may need to set specific permissions on Chrome (or your browser of choice) to allow access to audio/video from the unsafe development source. You can do that on Chrome by navigating to `chrome://flags/#unsafely-treat-insecure-origin-as-secure` and adding your local Enketo URL (e.g., `http://ee.kobo.local`).
 -   **Connection refused:** Verify that both services are running and the IP address is correct
 -   **API key mismatch:** Ensure the `ENKETO_API_KEY` matches in both configurations
 -   **Port conflicts:** Check that port 8005 is available for Enketo
--   **Enketo not starting:** Ensure that Kobotoolbox backend is running and that the `docker-compose.frontend.custom.yml` is correctly configured
+-   **Enketo not starting:** Ensure that KoboToolbox backend is running and that the `docker-compose.frontend.custom.yml` is correctly configured
 -   **KoboToolbox not starting:** Verify that Enketo is running and the sequence of starting services is followed correctly
+-   **Redis connection issues:** Ensure the Redis password in Enketo matches the one set during KoboToolbox installation. See the command to retrieve it in Step 3.
+-   **Local Enketo not loading on KoboToolbox:** If you see the default Enketo instance instead of your local one, ensure that the `extra_hosts` in `docker-compose.frontend.custom.yml` is correctly set to map `ee.kobo.local` to your **current** local IP address, you may need to set the IP again if you change networks. Also ensure that you selected `yes` when asked about adding additional settings to the front-end during KoboToolbox setup. See the questions and answers in Step 1.
 
 **Happy developing!**
