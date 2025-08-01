@@ -88,25 +88,25 @@ yarn install
 
     > _Note:_ This file is preferred over `docker-compose.frontend.override.yml` since the latter is managed by `kobo-install` and will be overwritten. Using the former allows you to customize the frontend configuration without losing changes during updates.
 
-        ```yml
-        services:
-            kpi:
-                environment:
-                    - ENKETO_API_KEY=enketorules
+    ```yml
+    services:
+        kpi:
+            environment:
+                - ENKETO_API_KEY=enketorules
 
-            nginx:
-                extra_hosts:
-                    - enketo_express:<YOUR_LOCAL_IP_ADDRESS>
-        ```
+        nginx:
+            extra_hosts:
+                - enketo_express:<YOUR_LOCAL_IP_ADDRESS>
+    ```
 
-        > **Note:** This configuration remaps `ee.kobo.local` from the Enketo instance setup by kobo-install to your local Enketo development instance.
+    > **Note:** This configuration remaps `ee.kobo.local` from the Enketo instance setup by kobo-install to your local Enketo development instance.
 
 3.  Replace `<YOUR_LOCAL_IP_ADDRESS>` with your actual local IP address:
 
     -   **Linux/macOS:** `ip addr` or `ifconfig`
     -   **Windows:** `ipconfig`
 
-    > **Important:** Use your local IP address instead of `localhost` to ensure proper communication between KoboToolbox containers and your Enketo running locally.
+    > **Important:** Use your local IP address instead of `localhost` to ensure proper communication between KoboToolbox containers and your Enketo running locally. If you change your network and your IP changes, you'll need to update this configuration.
 
 4.  Ensure the `ENKETO_API_KEY` matches the API key in your Enketo configuration (`enketorules`).
 
@@ -178,7 +178,7 @@ The form should now be displayed by your local Enketo instance, allowing you to 
 -   **Port conflicts:** Check that port 8005 is available for Enketo
 -   **Enketo not starting:** Ensure that KoboToolbox backend is running and that the `docker-compose.frontend.custom.yml` is correctly configured
 -   **KoboToolbox not starting:** Verify that Enketo is running and the sequence of starting services is followed correctly
--   **Redis connection issues:** Ensure the Redis password in Enketo matches the one set during KoboToolbox installation. See the command to retrieve it in Step 3.
--   **Local Enketo not loading on KoboToolbox:** If you see the default Enketo instance instead of your local one, ensure that the `extra_hosts` in `docker-compose.frontend.custom.yml` is correctly set to map `ee.kobo.local` to your **current** local IP address, you may need to set the IP again if you change networks. Also ensure that you selected `yes` when asked about adding additional settings to the front-end during KoboToolbox setup. See the questions and answers in Step 1.
+-   **Redis connection issues:** Ensure the Redis password in Enketo matches the one set during KoboToolbox installation. See the command to retrieve it in [Step 3](#step-3-configure-enketo).
+-   **Local Enketo not loading on KoboToolbox:** If you see the default Enketo instance instead of your local one, ensure that the `extra_hosts` in `docker-compose.frontend.custom.yml` is correctly set to map `ee.kobo.local` to your **current** local IP address, you may need to set the IP again if you change networks. Also ensure that you selected `yes` when asked about adding additional settings to the front-end during KoboToolbox setup. See the questions and answers in [Step 1](#step-1-setup-kobotoolbox-development-environment).
 
 **Happy developing!**
