@@ -14,8 +14,8 @@ This environment leverages the existing setup of `kobo-install` with its configu
 ## Step 1: Setup KoboToolbox Development Environment
 
 1. Follow the [kobo-install documentation](https://github.com/kobotoolbox/kobo-install) to set up a local instance of KoboToolbox
-    > :warning: Be sure to select `yes` when asked `Do you want to expose back-end container ports`, or else the local Enketo instance won't be able to access the Redis server.
-    > :warning: Be sure to select `yes` when asked `Do you want to add additional settings to the front-end`, or else you won't be able to add the needed custom settings to the KoboToolbox frontend.
+    - :warning: Be sure to select `yes` when asked `Do you want to expose back-end container ports`, or else the local Enketo instance won't be able to access the Redis server.
+    - :warning: Be sure to select `yes` when asked `Do you want to add additional settings to the front-end`, or else you won't be able to add the needed custom settings to the KoboToolbox frontend.
 2. Take note of the Redis password set during the KoboToolbox installation, as it will be needed for Enketo configuration.
 3. Ensure KoboToolbox is running and accessible
 
