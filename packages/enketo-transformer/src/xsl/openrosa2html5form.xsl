@@ -213,6 +213,9 @@ XSLT Stylesheet that transforms OpenRosa style (X)Forms into valid HTMl5 forms
                         </select>
                     </xsl:if>
 
+                    <!-- Create input element for the background audio when needed -->
+                    <xsl:apply-templates select="h:html/h:head/xf:model/odk:recordaudio" />
+
                     <xsl:apply-templates />
 
                     <!-- Create hidden input fields for preload items that do not have a form control. -->
@@ -254,9 +257,12 @@ XSLT Stylesheet that transforms OpenRosa style (X)Forms into valid HTMl5 forms
                     <xsl:if test="//xf:submission">
                         <xsl:message>ERROR: Submissions element(s) not supported.</xsl:message>
                     </xsl:if>
+                    <xsl:comment>End of form</xsl:comment>
                 </form>
             </root>
-        </xsl:template>
+        <!-- </html> -->
+    </xsl:template>
+    
     <xsl:template match="h:head"/> <!--[not(self::xf:model/xf:bind[@jr:preload])]" />-->
 
     <xsl:template match="xf:group">
@@ -1796,4 +1802,26 @@ XSLT Stylesheet that transforms OpenRosa style (X)Forms into valid HTMl5 forms
             </xsl:otherwise>
         </xsl:choose>
     </xsl:template>
+
+    <xsl:template match="/h:html/h:head/xf:model/odk:recordaudio">
+        <xsl:variable name="nodeset">
+            <xsl:value-of select="@ref"/>
+        </xsl:variable>
+        <xsl:element name="input">
+            <xsl:attribute name="data-quality">
+                <xsl:choose>
+                    <xsl:when test="@odk:quality">
+                        <xsl:value-of select="@odk:quality" />
+                    </xsl:when>
+                    <xsl:otherwise>voice-only</xsl:otherwise>
+                </xsl:choose>
+            </xsl:attribute>
+            <xsl:attribute name="name">
+                <xsl:value-of select="@ref"/>
+            </xsl:attribute>
+            <xsl:attribute name="type">text</xsl:attribute>
+            <xsl:attribute name="data-type-xml">binary</xsl:attribute>
+        </xsl:element>
+    </xsl:template>
+
 </xsl:stylesheet>
