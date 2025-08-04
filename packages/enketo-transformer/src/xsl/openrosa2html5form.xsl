@@ -257,9 +257,12 @@ XSLT Stylesheet that transforms OpenRosa style (X)Forms into valid HTMl5 forms
                     <xsl:if test="//xf:submission">
                         <xsl:message>ERROR: Submissions element(s) not supported.</xsl:message>
                     </xsl:if>
+                    <xsl:comment>End of form</xsl:comment>
                 </form>
             </root>
-        </xsl:template>
+        <!-- </html> -->
+    </xsl:template>
+    
     <xsl:template match="h:head"/> <!--[not(self::xf:model/xf:bind[@jr:preload])]" />-->
 
     <xsl:template match="xf:group">
