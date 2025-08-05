@@ -1,5 +1,7 @@
+import { t } from 'enketo/translator';
 import Widget from '../../js/widget';
 import AudioRecorder from '../../js/audio-recorder/audio-recorder';
+import dialog from 'enketo/dialog';
 
 /**
  * BackgroundAudioWidget that extends the Widget class to handle background audio recording.
@@ -143,18 +145,36 @@ class BackgroundAudioWidget extends Widget {
                     <div class="color-reference hidden"></div>
                     <span class="status-dot recording"></span>
                     <i class="icon icon-microphone"></i>
-                    <canvas class="audio-waveform"></canvas>
                     <span class="recording-time">00:00</span>
+                    <canvas class="audio-waveform"></canvas>
+                    <i class="helper-tip icon icon-question-circle"></i>
                 </div>
             `);
 
         const timeDisplay = fragment.querySelector('.recording-time');
+        const helperTip = fragment.querySelector('.helper-tip');
+
+        // Add tooltip to the helper icon
+        helperTip.addEventListener('click', () => {
+            dialog.alert(
+                t('audioRecording.backgroundDisclaimer.msg'),
+                t('audioRecording.backgroundDisclaimer.heading'),
+                'normal'
+            );
+        });
 
         this.setWidgetContent(fragment);
 
-        this.audioRecorder.startRecording(this.audioQuality);
-
-        this.watchAudioRecording(timeDisplay);
+        dialog
+            .alert(
+                t('audioRecording.backgroundDisclaimer.msg'),
+                t('audioRecording.backgroundDisclaimer.heading'),
+                'normal'
+            )
+            .then(() => {
+                this.audioRecorder.startRecording(this.audioQuality);
+                this.watchAudioRecording(timeDisplay);
+            });
     }
 
     /**
@@ -218,8 +238,8 @@ class BackgroundAudioWidget extends Widget {
         );
 
         // Setup visual size for the waveform
-        const barWidth = 4;
-        const barGap = 1;
+        const barWidth = 3;
+        const barGap = 2;
 
         // Fix the canvas's element size and inner drawing size
         canvas.width = canvas.clientWidth;
