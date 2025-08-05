@@ -7,6 +7,9 @@ import AudioRecorder from '../../js/audio-recorder/audio-recorder';
  * with a visual waveform display and recording time indicator. The widget is designed
  * to be unobtrusive and display recording status while the user interacts with the form.
  *
+ * This widget creates an element at top level to hold the audio recording UI, so it differs
+ * from other widgets by not having a direct parent-child relationship with the question element.
+ *
  * @augments Widget
  */
 
@@ -29,9 +32,7 @@ class BackgroundAudioWidget extends Widget {
         this.audioQuality = this.element.dataset.quality || 'normal'; // Get audio quality from data attribute
         this.audioBlob = null; // To store the recorded audio blob
 
-        // Debug logging removed for production
-
-        this.element.type = 'text';
+        this.question.classList.add('hidden'); // Hide the question element
 
         const mainContainer = document.body;
         if (!mainContainer) {
@@ -54,6 +55,21 @@ class BackgroundAudioWidget extends Widget {
         );
 
         this.initRecording();
+    }
+
+    /**
+     * Gets the current value of the audio widget.
+     */
+    get value() {
+        console.log('Getting value');
+    }
+
+    /**
+     * Sets the value of the audio widget.
+     * @param {string} dataUrl - The data URL of the audio file.
+     */
+    set value(dataUrl) {
+        console.log('Setting value');
     }
 
     /**
@@ -232,19 +248,17 @@ class BackgroundAudioWidget extends Widget {
      * @returns {void}
      */
     plotAudioData(canvasData, data) {
-        const { ctx, canvas, barWidth } = canvasData;
+        const { ctx, canvas, barWidth, barGap } = canvasData;
         const { width, height } = canvas;
 
         // Clear the canvas
         ctx.clearRect(0, 0, width, height);
 
-        const step = Math.floor(data.length / (width / barWidth));
-
-        // console.log(data.length, width, step);
+        const step = Math.floor(data.length / (width / (barWidth + barGap)));
 
         for (let i = 0; i < data.length; i += step) {
             const value = data[i];
-            const x = (i / step) * (barWidth + 1); // Calculate the x position for the bar
+            const x = (i / step) * (barWidth + barGap); // Calculate the x position for the bar
 
             if (x + barWidth > width) continue;
 
