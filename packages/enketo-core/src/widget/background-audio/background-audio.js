@@ -156,8 +156,6 @@ class BackgroundAudioWidget extends Widget {
         // Prepare the canvas for waveform preview
         const canvasData = this.prepareCanvasPreview();
 
-        let plotData = [];
-
         const updateRecordingInfo = () => {
             // This function updates the recording time and plots the audio data
             if (this.audioRecorder.isPaused()) {
