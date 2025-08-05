@@ -116,9 +116,7 @@ class BackgroundAudioWidget extends Widget {
      * Shows the initial loading view while the audio recorder is being initialized.
      */
     showInitView() {
-        const fragment = document.createRange().createContextualFragment(`...`);
-
-        this.setWidgetContent(fragment);
+        this.setWidgetContent(null); // Clear the widget content
     }
 
     /**
@@ -127,9 +125,11 @@ class BackgroundAudioWidget extends Widget {
      * @param {string} error - The error message to display.
      */
     showErrorView(error) {
-        const fragment = document
-            .createRange()
-            .createContextualFragment(`${error}`);
+        const fragment = document.createRange()
+            .createContextualFragment(`<div class="error">
+                                        <i class="icon icon-microphone"></i>
+                                        ${error}
+                                       </div>`);
 
         this.setWidgetContent(fragment);
     }

@@ -23,6 +23,11 @@ body.background-audio-widget-offset {
         }
     }
 
+    .error {
+        color: $state-danger-text;
+        font-size: 12px;
+    }
+
     .recording-view {
         display: flex;
         align-items: center;
