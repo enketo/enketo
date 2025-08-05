@@ -27,6 +27,8 @@ class AudioWidget extends Widget {
         this.fileName = existingFilename || ''; // A filename to be used for data validation purposes
         this.audioBlob = null; // To store the recorded audio blob
 
+        this.overlay = null;
+
         this.element.classList.add('hidden');
         this.element.dataset.audio = 'true'; // Indicate that this is an audio recording widget
         this.element.type = 'text'; // Set input type to text so we can set its value
@@ -119,6 +121,48 @@ class AudioWidget extends Widget {
         }
         widget.innerHTML = '';
         if (fragment) widget.appendChild(fragment);
+    }
+
+    /*
+     * This method shows an overlay on top of the question element
+     * to prevent user interaction while recording audio.
+     */
+    showOverlay() {
+        if (this.overlay) {
+            this.overlay.remove(); // Remove existing overlay if it exists
+        }
+        // Create a new overlay element and insert it at the beginning of the question
+        // This is used to prevent user interaction while recording audio
+        const fragment = document
+            .createRange()
+            .createContextualFragment(
+                `<div class="audio-widget-overlay fade-in"> </div>`
+            );
+        this.overlay = fragment.firstChild;
+        this.overlay.style.zIndex = 1000; // Ensure the overlay is on top
+        this.question.style.zIndex = 1010; // Set the question's z-index to be above the overlay
+        this.question.before(fragment);
+    }
+
+    /*
+     * This method hides the overlay that was shown during audio recording.
+     * It removes the overlay element after a fade-out animation.
+     */
+    hideOverlay() {
+        if (this.overlay) {
+            this.overlay.classList.remove('fade-in');
+
+            requestAnimationFrame(() => {
+                // Needed to ensure the fade-out animation is applied
+                this.overlay.classList.add('fade-out'); // Add fade-out class for animation
+
+                setTimeout(() => {
+                    this.overlay.remove(); // Remove the overlay element
+                    this.overlay = null;
+                    this.question.style.removeProperty('z-index'); // Reset the z-index of the question
+                }, 300); // Delay to allow any animations to complete
+            });
+        }
     }
 
     /**
@@ -238,6 +282,8 @@ class AudioWidget extends Widget {
 
             // When value is set, it will trigger the playback step
             this.showPlaybackStep();
+
+            this.hideOverlay();
         });
 
         this.setWidgetContent(stepFragment);
@@ -245,6 +291,8 @@ class AudioWidget extends Widget {
         this.audioRecorder.startRecording(this.audioQuality); // Start recording audio
 
         this.watchAudioRecording(timeDisplay); // Start watching the audio recording
+
+        this.showOverlay(); // Show the overlay to prevent interaction to other elements during recording
     }
 
     /**
