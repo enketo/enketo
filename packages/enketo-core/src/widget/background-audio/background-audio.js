@@ -56,7 +56,7 @@ class BackgroundAudioWidget extends Widget {
             'div.background-audio-widget'
         );
 
-        this.initRecording();
+        this.showRecordingView(); // Show the recording view initially
     }
 
     /**
@@ -86,37 +86,6 @@ class BackgroundAudioWidget extends Widget {
         }
         this.widgetElement.innerHTML = '';
         if (fragment) this.widgetElement.appendChild(fragment);
-    }
-
-    /**
-     * Initializes the audio recording functionality.
-     * Requests permissions and transitions to the appropriate view based on the result.
-     *
-     * @async
-     * @returns {Promise<void>}
-     */
-    async initRecording() {
-        this.showInitView();
-
-        // console.log(
-        //     'Initializing audio recorder with quality:',
-        //     this.audioQuality
-        // );
-
-        // Request permissions first
-        try {
-            await this.audioRecorder.requestPermissions(this.audioQuality);
-            this.showRecordingView();
-        } catch (error) {
-            this.showErrorView(error.message);
-        }
-    }
-
-    /**
-     * Shows the initial loading view while the audio recorder is being initialized.
-     */
-    showInitView() {
-        this.setWidgetContent(null); // Clear the widget content
     }
 
     /**
@@ -171,9 +140,15 @@ class BackgroundAudioWidget extends Widget {
                 t('audioRecording.backgroundDisclaimer.heading'),
                 'normal'
             )
+            .then(() =>
+                this.audioRecorder.requestPermissions(this.audioQuality)
+            )
             .then(() => {
                 this.audioRecorder.startRecording(this.audioQuality);
                 this.watchAudioRecording(timeDisplay);
+            })
+            .catch((error) => {
+                this.showErrorView(error.message);
             });
     }
 
