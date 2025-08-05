@@ -188,7 +188,6 @@ class AudioWidget extends Widget {
                 <div class="color-reference hidden"></div>
                 <div class="recording-container">
                     <div class="recording-display">
-                        <span class="status-dot recording"></span>
                         <span class="recording-time">00:00</span>
                     </div>
                     <canvas class="audio-waveform"></canvas>
@@ -207,7 +206,6 @@ class AudioWidget extends Widget {
             </div>`
         );
 
-        const statusDot = stepFragment.querySelector('.status-dot');
         const buttonPause = stepFragment.querySelector('.btn-pause');
         const buttonResume = stepFragment.querySelector('.btn-resume');
         const buttonStop = stepFragment.querySelector('.btn-stop');
@@ -216,7 +214,6 @@ class AudioWidget extends Widget {
         buttonPause.addEventListener('click', () => {
             buttonPause.classList.add('hidden');
             buttonResume.classList.remove('hidden');
-            statusDot.classList.remove('recording');
 
             this.audioRecorder.pauseRecording();
         });
@@ -224,7 +221,6 @@ class AudioWidget extends Widget {
         buttonResume.addEventListener('click', () => {
             buttonResume.classList.add('hidden');
             buttonPause.classList.remove('hidden');
-            statusDot.classList.add('recording');
             this.audioRecorder.resumeRecording();
         });
 
@@ -273,9 +269,7 @@ class AudioWidget extends Widget {
                     <button class="btn-icon-only btn-pause hidden">
                         <i class="icon icon-pause"></i>
                     </button>
-                    <div class="time-display">
-                        <span class="time-progress">00:00 / 1:24</span>
-                    </div>
+                    <span class="time-progress">00:00 / 1:24</span>
                     <div class="seek-bar">
                         <div class="play-progress">
                             <div class="progress-bar"></div>
@@ -504,8 +498,8 @@ class AudioWidget extends Widget {
         const offCtx = offscreenCanvas.getContext('2d');
 
         // Setup visual size for the waveform
-        const barWidth = 4;
-        const barGap = 1;
+        const barWidth = 3;
+        const barGap = 2;
 
         const brandColor = getComputedStyle(
             this.question.querySelector('.color-reference')
