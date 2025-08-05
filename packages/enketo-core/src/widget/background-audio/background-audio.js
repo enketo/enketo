@@ -60,21 +60,6 @@ class BackgroundAudioWidget extends Widget {
     }
 
     /**
-     * Gets the current value of the audio widget.
-     */
-    get value() {
-        console.log('Getting value');
-    }
-
-    /**
-     * Sets the value of the audio widget.
-     * @param {string} dataUrl - The data URL of the audio file.
-     */
-    set value(dataUrl) {
-        console.log('Setting value');
-    }
-
-    /**
      * Sets the content of the widget container.
      *
      * @param {DocumentFragment} fragment - The HTML fragment to set as widget content.
