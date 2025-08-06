@@ -133,10 +133,10 @@ fileManager.urlToBlob = (url) => {
 fileManager.getCurrentFiles = () => {
     const files = [];
 
-    // Get any files inside file input elements or text input elements for drawings.
+    // Get any files inside file input elements or text input elements for drawings or audio.
     $('form.or')
         .find(
-            'input[type="file"]:not(.ignore), input[type="text"][data-drawing="true"]'
+            'input[type="file"]:not(.ignore), input[type="text"][data-drawing="true"], input[data-audio="true"]'
         )
         .each(function () {
             let newFilename;
