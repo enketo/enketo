@@ -296,9 +296,6 @@ function _loadRecord(survey, instanceId, confirmed) {
                 // Set the active record before initializing the form
                 records.setActive(record.instanceId);
 
-                // Set the active record before initializing the form
-                records.setActive(record.instanceId);
-
                 const formEl = form.resetView();
                 form = new Form(
                     formEl,
