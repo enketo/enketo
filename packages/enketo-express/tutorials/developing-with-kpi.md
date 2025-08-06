@@ -172,7 +172,7 @@ The form should now be displayed by your local Enketo instance, allowing you to 
 
 ### Common Issues:
 
--   **Access denied for audio/video:** For local development, you may need to set specific permissions on Chrome (or your browser of choice) to allow access to audio/video from the unsafe development source. You can do that on Chrome by navigating to [`chrome://flags/#unsafely-treat-insecure-origin-as-secure`] and adding your local KoboToolbox and Enketo URL (e.g., `http://kf.kobo.local, http://ee.kobo.local`).
+-   **Access denied for audio/video:** For local development, you may need to set specific permissions on Chrome (or your browser of choice) to allow access to audio/video from the unsafe development source. You can do that on Chrome by navigating to [`chrome://flags/#unsafely-treat-insecure-origin-as-secure`](chrome://flags/#unsafely-treat-insecure-origin-as-secure) and adding your local KoboToolbox and Enketo URL (e.g., `http://kf.kobo.local, http://ee.kobo.local`).
 -   **Connection refused:** Verify that both services are running and the IP address is correct
 -   **API key mismatch:** Ensure the `ENKETO_API_KEY` matches in both configurations
 -   **Port conflicts:** Check that port 8005 is available for Enketo
