@@ -645,7 +645,6 @@ function _autoSaveRecord() {
     }
 
     autoSavePromise = autoSavePromise
-        .then(() => form.prepareData())
         .then(() => fileManager.getCurrentFiles())
         .then((files) => {
             // build the variable portions of the record object

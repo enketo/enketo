@@ -99,6 +99,13 @@ class Widget {
     }
 
     /**
+     * Cleans up the widget instance. This is called when the form is reset.
+     */
+    cleanup() {
+        // Part of interface, to be overridden
+    }
+
+    /**
      * Returns widget properties. May need to be extended.
      *
      * @readonly

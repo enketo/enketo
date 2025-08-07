@@ -179,7 +179,20 @@ async function prepareData() {
     }
 }
 
+/**
+ * Call cleanup on all widgets and global reset.
+ *
+ * @return {Promise<void>}
+ */
 const reset = () => {
+    for (const Widget of widgets) {
+        const elements = _getElements(formElement, Widget.selector);
+        for (const element of elements) {
+            const widgetInstance = data.get(element, Widget.name);
+            widgetInstance.cleanup?.();
+        }
+    }
+
     widgets.forEach((Widget) => {
         Widget.globalReset?.();
     });

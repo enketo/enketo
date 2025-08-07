@@ -61,7 +61,12 @@ function set(record) {
         // A more intelligent way to do is to maintain and check a recovered flag
         // first, and only then replace the files.
         if (autoSavedRecord) {
-            record.files = autoSavedRecord.files;
+            record.files = record.files.map(
+                (fileItem) =>
+                    autoSavedRecord.files.find(
+                        (autoFileItem) => autoFileItem.name === fileItem.name
+                    ) || fileItem
+            );
         }
 
         return store.record.set(record);

@@ -28,6 +28,11 @@ body.background-audio-widget-offset {
         font-size: 12px;
     }
 
+    .message {
+        color: $brand-primary-color;
+        font-size: 14px;
+    }
+
     .recording-view {
         display: flex;
         align-items: center;

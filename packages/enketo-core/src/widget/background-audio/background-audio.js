@@ -2,6 +2,7 @@ import { t } from 'enketo/translator';
 import Widget from '../../js/widget';
 import AudioRecorder from '../../js/audio-recorder/audio-recorder';
 import dialog from 'enketo/dialog';
+import fileManager from 'enketo/file-manager';
 
 /**
  * BackgroundAudioWidget that extends the Widget class to handle background audio recording.
@@ -30,10 +31,13 @@ class BackgroundAudioWidget extends Widget {
     constructor(element, options) {
         super(element, options);
 
+        this.existingFilename = this.element.dataset.loadedFileName;
+
         this.audioRecorder = new AudioRecorder();
         this.audioQuality = this.element.dataset.quality || 'normal'; // Get audio quality from data attribute
 
         this.question.classList.add('hidden'); // Hide the question element
+        this.element.type = 'hidden'; // Change from type file to hidden so we can manipulate the value
 
         const mainContainer = document.body;
         if (!mainContainer) {
@@ -41,6 +45,10 @@ class BackgroundAudioWidget extends Widget {
                 'Main container not found for BackgroundAudioWidget'
             );
         }
+
+        // We need to remove existing elements that could be duplicated
+        // when loading saved drafts.
+        mainContainer.querySelector('div.background-audio-widget')?.remove();
 
         const fragment = document
             .createRange()
@@ -55,7 +63,18 @@ class BackgroundAudioWidget extends Widget {
             'div.background-audio-widget'
         );
 
-        this.showRecordingView(); // Show the recording view initially
+        // If a file is already loaded, then it's a submission edit and we don't show the recording view.
+        if (this.existingFilename) {
+            this.useExistingFile();
+        } else {
+            this.showRecordingView(); // Show the recording view initially
+        }
+    }
+
+    async useExistingFile() {
+        this.originalInputValue = this.existingFilename;
+        this.value = '';
+        this.showHasRecordedAudioView(); // Show a message indicating that there's a recorded audio
     }
 
     /**
@@ -64,7 +83,8 @@ class BackgroundAudioWidget extends Widget {
      * @returns {Promise<void>}
      */
     async prepareData() {
-        this.widgetElement.remove(); // Remove the UI from the document
+        // Preparing audio data for submission...
+        if (this.existingFilename) return; // If it's an edit, we don't record again.
 
         try {
             await this.audioRecorder.stopRecording();
@@ -95,6 +115,16 @@ class BackgroundAudioWidget extends Widget {
     }
 
     /**
+     * Cleans up the widget instance. This is called when the form is reset.
+     */
+    cleanup() {
+        this.widgetElement.remove(); // Remove the widget element from the DOM
+        if (this.audioRecorder.isRecording()) {
+            this.audioRecorder.stopRecording(); // Stop recording if it's still active
+        }
+    }
+
+    /**
      * Sets the content of the widget container.
      *
      * @param {DocumentFragment} fragment - The HTML fragment to set as widget content.
@@ -118,6 +148,21 @@ class BackgroundAudioWidget extends Widget {
             .createContextualFragment(`<div class="error">
                                         <i class="icon icon-microphone"></i>
                                         ${error}
+                                       </div>`);
+
+        this.setWidgetContent(fragment);
+    }
+
+    /**
+     * Shows an error view when audio recording initialization fails.
+     *
+     * @param {string} error - The error message to display.
+     */
+    showHasRecordedAudioView() {
+        const fragment = document.createRange()
+            .createContextualFragment(`<div class="message">
+                                        <i class="icon icon-microphone"></i>
+                                        ${t('audioRecording.hasRecordedAudio')}
                                        </div>`);
 
         this.setWidgetContent(fragment);

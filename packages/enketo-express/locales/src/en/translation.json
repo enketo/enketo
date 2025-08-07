@@ -151,7 +151,8 @@
                 "To stop the recording please exit this form.",
                 "For more information please contact the person who asked you to collect data."
             ]
-        }
+        },
+        "hasRecordedAudio": "This submission has a background audio recording."
     },
     "changelog": "Change Log",
     "confirm": {
