@@ -148,7 +148,7 @@ function getObjectUrl(subject) {
 function getCurrentFiles() {
     const fileInputs = [
         ...document.querySelectorAll(
-            'form.or input[type="file"], form.or input[type="text"][data-drawing="true"], input[data-audio="true"]'
+            'form.or input[type="file"], form.or input[type="text"][data-drawing="true"], input[data-audio="true"], input[data-background-audio="true"]'
         ),
     ];
     const fileTasks = [];

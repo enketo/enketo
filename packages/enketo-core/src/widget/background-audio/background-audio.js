@@ -32,7 +32,6 @@ class BackgroundAudioWidget extends Widget {
 
         this.audioRecorder = new AudioRecorder();
         this.audioQuality = this.element.dataset.quality || 'normal'; // Get audio quality from data attribute
-        this.audioBlob = null; // To store the recorded audio blob
 
         this.question.classList.add('hidden'); // Hide the question element
 
@@ -57,6 +56,42 @@ class BackgroundAudioWidget extends Widget {
         );
 
         this.showRecordingView(); // Show the recording view initially
+    }
+
+    /**
+     * This is called just before the form is submitted.
+     * It stops the audio recording and prepares the data for submission by ensuring the audio is ready.
+     * @returns {Promise<void>}
+     */
+    async prepareData() {
+        this.widgetElement.remove(); // Remove the UI from the document
+
+        try {
+            await this.audioRecorder.stopRecording();
+            const blob = await this.audioRecorder.getRecordedFile();
+            const dataUrl = await this.getDataURL(blob);
+            this.originalInputValue = this.getFileName();
+            this.value = dataUrl;
+        } catch (error) {
+            console.error('Error preparing audio data:', error);
+            throw error;
+        }
+    }
+
+    /**
+     * Gets the current value of the audio widget.
+     */
+    get value() {
+        return this.element.dataset.cache || '';
+    }
+
+    /**
+     * Sets the value of the audio widget.
+     * @param {string} dataUrl - The data URL of the audio file.
+     */
+    set value(dataUrl) {
+        // dataset-cache is used by the filemanager to extract the file data
+        this.element.dataset.cache = dataUrl || '';
     }
 
     /**
@@ -135,6 +170,41 @@ class BackgroundAudioWidget extends Widget {
             .catch((error) => {
                 this.showErrorView(error.message);
             });
+    }
+
+    /**
+     * Get a filename for the recording.
+     * The file is named after the field name and a postfix in the format: `YYYYMMDD_HHMMSS`.
+     * This method is used for both user download and upload.
+     * @returns {string} - The filename for the audio recording.
+     */
+    getFileName() {
+        const fileName = this.element.name.slice(
+            this.element.name.lastIndexOf('/') + 1
+        );
+        const baseFileName = `${fileName || 'background-audio'}`;
+        const timestamp = new Date()
+            .toISOString()
+            .replace(/\D/g, '')
+            .slice(0, 14);
+        const postfix = `-${timestamp.slice(0, 8)}_${timestamp.slice(8)}`;
+        return `${baseFileName}${postfix}.webm`;
+    }
+
+    /**
+     * This method retrieves the data URL of the recorded audio blob.
+     * It reads the blob as a data URL using FileReader.
+     * @returns {Promise<string|null>} - A promise that resolves to the data URL of the audio blob,
+     * or null if no audio blob is available.
+     */
+    getDataURL(blob) {
+        return new Promise((resolve) => {
+            const reader = new FileReader();
+            reader.onload = (event) => {
+                resolve(event.target.result);
+            };
+            reader.readAsDataURL(blob);
+        });
     }
 
     /**

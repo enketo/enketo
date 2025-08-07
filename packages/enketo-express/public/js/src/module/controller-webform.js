@@ -368,8 +368,9 @@ function _submitRecord(survey) {
         'bare'
     );
 
-    return fileManager
-        .getCurrentFiles()
+    return form
+        .prepareData()
+        .then(() => fileManager.getCurrentFiles())
         .then((files) => {
             const record = {
                 enketoId: settings.enketoId,
@@ -547,6 +548,7 @@ function _saveRecord(survey, draft, recordName, confirmed) {
     }
 
     return autoSavePromise
+        .then(() => form.prepareData())
         .then(() => fileManager.getCurrentFiles())
         .then((files) => {
             // build the record object
@@ -643,6 +645,7 @@ function _autoSaveRecord() {
     }
 
     autoSavePromise = autoSavePromise
+        .then(() => form.prepareData())
         .then(() => fileManager.getCurrentFiles())
         .then((files) => {
             // build the variable portions of the record object

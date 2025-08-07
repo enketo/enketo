@@ -548,6 +548,15 @@ Form.prototype.goTo = function (xpath) {
 };
 
 /**
+ * Prepares async data for submitting
+ *
+ * @return {Promise<void>}
+ */
+Form.prototype.prepareData = async function () {
+    await this.widgets.prepareData();
+};
+
+/**
  * Obtains a string of primary instance.
  *
  * @param {{include: boolean}} [include] - Optional object items to exclude if false

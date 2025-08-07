@@ -187,6 +187,10 @@ class Widget {
         this.element.dispatchEvent(event.Change());
     }
 
+    async prepareData() {
+        return Promise.resolve();
+    }
+
     /**
      * Returns its own name.
      *

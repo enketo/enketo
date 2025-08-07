@@ -164,6 +164,21 @@ function _instantiate(Widget, group) {
     _setValChangeListener(Widget, elements);
 }
 
+/**
+ * Prepares data for submission by calling `prepareData` on each widget instance.
+ *
+ * @return {Promise<void>} A promise that resolves when all widgets have prepared their data.
+ */
+async function prepareData() {
+    for (const Widget of widgets) {
+        const elements = _getElements(formElement, Widget.selector);
+        for (const element of elements) {
+            const widgetInstance = data.get(element, Widget.name);
+            await widgetInstance.prepareData?.();
+        }
+    }
+}
+
 const reset = () => {
     widgets.forEach((Widget) => {
         Widget.globalReset?.();
@@ -329,4 +344,5 @@ export default {
     enable,
     disable,
     reset,
+    prepareData,
 };
