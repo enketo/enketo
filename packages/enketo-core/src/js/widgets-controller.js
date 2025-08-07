@@ -170,13 +170,16 @@ function _instantiate(Widget, group) {
  * @return {Promise<void>} A promise that resolves when all widgets have prepared their data.
  */
 async function prepareData() {
+    const widgetInstances = [];
     for (const Widget of widgets) {
         const elements = _getElements(formElement, Widget.selector);
         for (const element of elements) {
-            const widgetInstance = data.get(element, Widget.name);
-            await widgetInstance.prepareData?.();
+            widgetInstances.push(data.get(element, Widget.name));
         }
     }
+    return Promise.all(
+        widgetInstances.map((widgetInstance) => widgetInstance.prepareData())
+    );
 }
 
 /**

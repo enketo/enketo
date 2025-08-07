@@ -2,7 +2,6 @@ import { t } from 'enketo/translator';
 import Widget from '../../js/widget';
 import AudioRecorder from '../../js/audio-recorder/audio-recorder';
 import dialog from 'enketo/dialog';
-import fileManager from 'enketo/file-manager';
 
 /**
  * BackgroundAudioWidget that extends the Widget class to handle background audio recording.
