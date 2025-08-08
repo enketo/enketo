@@ -1,3 +1,32 @@
+@keyframes audio-widget-overlay-fade-in {
+    0% {
+        opacity: 0; /* Start fully transparent */
+    }
+    100% {
+        opacity: 0.5; /* End fully opaque */
+    }
+}
+
+.audio-widget-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: $body-bg;
+    opacity: 0;
+    cursor: not-allowed;
+    z-index: 1000;
+}
+
+.audio-widget-overlay.fade-in {
+    animation: audio-widget-overlay-fade-in 1s forwards; /* Fade-in effect */
+}
+
+.audio-widget-overlay.fade-out {
+    animation: audio-widget-overlay-fade-in 0.3s reverse forwards; /* Fade-out effect */
+}
+
 .audio-widget {
     width: 100%;
 
@@ -34,21 +63,23 @@
     .step-action-select {
         .button-group {
             button {
+                border: 0;
                 display: flex;
                 align-items: center;
                 justify-content: center;
                 border-radius: 6px;
-                padding-left: 14px;
-                padding-right: 14px;
+                padding: 6px 12px 7px 12px;
                 margin: 0px;
                 height: 32px;
 
                 .icon-volume-down {
                     font-size: floor($font-size-base * 1.2);
+                    margin-top: 2px;
                 }
 
                 .icon-upload {
                     font-size: $font-size-base;
+                    margin-top: 1px;
                 }
 
                 &:disabled {
@@ -69,9 +100,9 @@
         height: 54px;
         display: flex;
         gap: $padding-base-horizontal;
-        padding: 0 22px;
+        padding: 0 16px 0 18px;
         border-radius: 27px;
-        border: $gray-lighter 1px solid;
+        border: $input-border 1px solid;
         align-items: center;
     }
 
@@ -106,7 +137,7 @@
         .audio-waveform {
             flex-grow: 1;
             width: 100%;
-            height: 20px;
+            height: 30px;
         }
 
         .recording-controls {
@@ -128,6 +159,7 @@
 
     .step-preview {
         .audio-preview {
+            padding-right: 20px;
             background: $gray-lighter;
             border: $gray-lighter 1px solid;
 
@@ -194,6 +226,10 @@
 
         button.icon {
             font-size: 18px;
+        }
+
+        .icon-download {
+            margin-top: 2px;
         }
 
         button.btn-delete {
