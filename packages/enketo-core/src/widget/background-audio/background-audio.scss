@@ -1,0 +1,78 @@
+body.background-audio-widget-offset {
+    // 3 extra pixels to account for the existing form progress bar
+    margin-top: 33px;
+}
+
+.background-audio-widget {
+    margin: 0 auto;
+    height: 33px;
+    padding-top: 3px; // space for the form progress bar
+    position: fixed;
+    top: 0px;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    background-color: white;
+    border-bottom: 1px solid $gray-lighter;
+
+    @keyframes blinker {
+        50% {
+            opacity: 0;
+        }
+    }
+
+    .error {
+        color: $state-danger-text;
+        font-size: 12px;
+    }
+
+    .recording-view {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        width: 50%;
+        max-width: 200px;
+
+        .color-reference {
+            color: $brand-primary-color;
+        }
+
+        .status-dot {
+            width: 6px;
+            height: 6px;
+            aspect-ratio: 1;
+            background-color: #ff8080;
+            border-radius: 50%;
+            visibility: hidden;
+        }
+
+        .status-dot.recording {
+            visibility: visible;
+            animation: blinker 1s linear infinite;
+        }
+
+        .icon-microphone {
+            font-size: 15px;
+            color: $gray;
+        }
+
+        .recording-time {
+            font-size: 14px;
+            font-weight: normal;
+        }
+
+        .audio-waveform {
+            flex-grow: 1;
+            width: 100%;
+            height: 20px;
+        }
+
+        .helper-tip {
+            font-size: 16px;
+            color: $gray;
+            cursor: pointer;
+        }
+    }
+}

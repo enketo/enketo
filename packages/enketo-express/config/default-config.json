@@ -59,7 +59,8 @@
         "thousands-sep",
         "integer",
         "decimal",
-        "audio"
+        "audio",
+        "background-audio"
     ],
     "analytics": "google",
     "google": {
