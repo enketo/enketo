@@ -142,7 +142,16 @@
         },
         "startRecording": "Start Recording",
         "uploadAudioFile": "Upload audio File",
-        "deleteWarning": "The audio will be deleted. Are you sure you want to do this?"
+        "deleteWarning": "The audio will be deleted. Are you sure you want to do this?",
+        "backgroundDisclaimer": {
+            "heading": "Background Audio Recording",
+            "msg": [
+                "This form records the audio from your device's microphone.",
+                "You can use the volume indicator to make sure the microphone is close enough to the sound you need to record.",
+                "To stop the recording please exit this form.",
+                "For more information please contact the person who asked you to collect data."
+            ]
+        }
     },
     "changelog": "Change Log",
     "confirm": {
