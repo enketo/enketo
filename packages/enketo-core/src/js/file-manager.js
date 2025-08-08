@@ -136,7 +136,7 @@ fileManager.getCurrentFiles = () => {
     // Get any files inside file input elements or text input elements for drawings or audio.
     $('form.or')
         .find(
-            'input[type="file"]:not(.ignore), input[type="text"][data-drawing="true"], input[data-audio="true"]'
+            'input[type="file"]:not(.ignore), input[type="text"][data-drawing="true"], input[data-audio="true"], input[data-background-audio="true"]'
         )
         .each(function () {
             let newFilename;

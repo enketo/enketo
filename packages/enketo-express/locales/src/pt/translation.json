@@ -141,7 +141,8 @@
                 "Para parar a gravação, por favor, saia deste formulário.",
                 "Para mais informações, entre em contato com a pessoa que pediu para você coletar dados."
             ]
-        }
+        },
+        "hasRecordedAudio": "Este envio tem uma gravação de áudio em segundo plano."
     },
     "confirm": {
         "autosaveload": {

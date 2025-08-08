@@ -99,6 +99,13 @@ class Widget {
     }
 
     /**
+     * Cleans up the widget instance. This is called when the form is reset.
+     */
+    cleanup() {
+        // Part of interface, to be overridden
+    }
+
+    /**
      * Returns widget properties. May need to be extended.
      *
      * @readonly
@@ -185,6 +192,10 @@ class Widget {
         // so we rely on widget code to only use this setter when the value changes.
         input.setVal(this.element, value, null);
         this.element.dispatchEvent(event.Change());
+    }
+
+    async prepareData() {
+        return Promise.resolve();
     }
 
     /**
