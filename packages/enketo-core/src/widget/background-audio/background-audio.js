@@ -153,7 +153,7 @@ class BackgroundAudioWidget extends Widget {
     }
 
     /**
-     * Shows an error view when audio recording initialization fails.
+     * Shows a message indicating that the loaded submission has a recorded audio.
      *
      * @param {string} error - The error message to display.
      */
@@ -217,9 +217,9 @@ class BackgroundAudioWidget extends Widget {
     }
 
     /**
-     * Get a filename for the recording.
+     * Get a filename for the recording based on question name.
      * The file is named after the field name and a postfix in the format: `YYYYMMDD_HHMMSS`.
-     * This method is used for both user download and upload.
+     *
      * @returns {string} - The filename for the audio recording.
      */
     getFileName() {
