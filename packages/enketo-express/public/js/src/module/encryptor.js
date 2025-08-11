@@ -276,8 +276,10 @@ function _encryptContent(content, symmetricKey, seed) {
 
 function Seed(instanceId, symmetricKey) {
     // iv is the 16-byte md5 hash of the instanceID and the symmetric key
-    const byteString = forge.util.encodeUtf8(instanceId) + symmetricKey;
-    const messageDigest = _md5Digest(byteString).getBytes();
+    const md = forge.md.md5.create();
+    md.update(forge.util.encodeUtf8(instanceId));
+    md.update(symmetricKey);
+    const messageDigest = md.digest().getBytes();
     const ivSeedArray = messageDigest
         .split('')
         .map((item) => item.charCodeAt(0));
