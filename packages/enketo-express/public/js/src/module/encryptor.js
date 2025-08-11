@@ -173,15 +173,21 @@ function _rsaEncrypt(byteString, publicKey) {
 
 function _md5Digest(byteString) {
     const md = forge.md.md5.create();
-    md.update(byteString, 'utf8');
+    md.update(byteString);
 
+    return md.digest();
+}
+
+function _md5DigestUtf8(text) {
+    const md = forge.md.md5.create();
+    md.update(forge.util.encodeUtf8(text));
     return md.digest();
 }
 
 function _getBase64EncryptedElementSignature(elements, publicKey) {
     // ODK Collect code also adds a newline character **at the end**!
     const elementsStr = `${elements.join('\n')}\n`;
-    const messageDigest = _md5Digest(elementsStr).getBytes();
+    const messageDigest = _md5DigestUtf8(elementsStr).getBytes();
 
     return _rsaEncrypt(messageDigest, publicKey);
 }
@@ -233,7 +239,7 @@ function _encryptSubmissionXml(xmlStr, symmetricKey, seed) {
         seed
     );
     submissionXmlEnc.name = 'submission.xml.enc';
-    submissionXmlEnc.md5 = _md5Digest(xmlStr).toHex();
+    submissionXmlEnc.md5 = _md5DigestUtf8(xmlStr).toHex();
 
     return submissionXmlEnc;
 }
