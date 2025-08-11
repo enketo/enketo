@@ -173,7 +173,7 @@ function _rsaEncrypt(byteString, publicKey) {
 
 function _md5Digest(byteString) {
     const md = forge.md.md5.create();
-    md.update(byteString);
+    md.update(byteString, 'utf8');
 
     return md.digest();
 }
