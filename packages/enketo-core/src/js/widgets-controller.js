@@ -192,7 +192,7 @@ const reset = () => {
         const elements = _getElements(formElement, Widget.selector);
         for (const element of elements) {
             const widgetInstance = data.get(element, Widget.name);
-            widgetInstance.cleanup?.();
+            widgetInstance?.cleanup?.();
         }
     }
 
