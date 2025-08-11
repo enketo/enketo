@@ -171,9 +171,12 @@ function _rsaEncrypt(byteString, publicKey) {
     return forge.util.encode64(encrypted);
 }
 
-function _md5Digest(byteString) {
+function _md5Digest(...byteString) {
     const md = forge.md.md5.create();
-    md.update(byteString);
+
+    byteString.forEach((byte) => {
+        md.update(byte);
+    });
 
     return md.digest();
 }
@@ -276,10 +279,7 @@ function _encryptContent(content, symmetricKey, seed) {
 
 function Seed(instanceId, symmetricKey) {
     // iv is the 16-byte md5 hash of the instanceID and the symmetric key
-    const md = forge.md.md5.create();
-    md.update(forge.util.encodeUtf8(instanceId));
-    md.update(symmetricKey);
-    const messageDigest = md.digest().getBytes();
+    const messageDigest = _md5Digest(forge.util.encodeUtf8(instanceId), symmetricKey).getBytes();
     const ivSeedArray = messageDigest
         .split('')
         .map((item) => item.charCodeAt(0));
