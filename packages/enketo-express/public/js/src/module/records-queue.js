@@ -58,16 +58,22 @@ function get(instanceId) {
 function set(record) {
     return getAutoSavedRecord().then((autoSavedRecord) => {
         // Add files from autoSavedRecord in case this record was recovered.
-        // A more intelligent way to do is to maintain and check a recovered flag
-        // first, and only then replace the files.
+        // Merge files from the autosave and the record, since in some
+        // situations (e.g. background audio recording) the autosave may not
+        // have the generated file. Priority goes to files in autoSavedRecord.
+
+        const filesMap = new Map();
+
         if (autoSavedRecord) {
-            record.files = record.files.map(
-                (fileItem) =>
-                    autoSavedRecord.files.find(
-                        (autoFileItem) => autoFileItem.name === fileItem.name
-                    ) || fileItem
-            );
+            for (let file of [
+                ...(record.files || []),
+                ...(autoSavedRecord.files || []),
+            ]) {
+                filesMap.set(file.name, file);
+            }
         }
+
+        record.files = [...filesMap.values()];
 
         return store.record.set(record);
     });
