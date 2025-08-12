@@ -98,6 +98,22 @@ describe('Encryptor', () => {
                 193, 231,
             ]);
         });
+
+        it('correctly generates seed for instanceId with non-ASCII characters', () => {
+            const seed = new encryptor.Seed(
+                'abcdefgé',
+                'ÛdGÆF§Dq3V*px!>XRÿ÷ëp7§'
+            );
+            const first = seed
+                .getIncrementedSeedByteString()
+                .split('')
+                .map((item) => item.charCodeAt(0));
+            const firstExpected = [
+                15, 216, 88, 212, 194, 59, 29, 40, 180, 63, 87, 57, 130, 116,
+                247, 175,
+            ];
+            expect(first).to.deep.equal(firstExpected);
+        });
     });
 
     describe('submission encryption', () => {
