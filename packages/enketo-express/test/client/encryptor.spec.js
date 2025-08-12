@@ -99,7 +99,7 @@ describe('Encryptor', () => {
             ]);
         });
 
-        it('correctly generates seed for instanceId with non-ASCII characters', () => {
+        it('encodes instanceId with non-ASCII characters into UTF-8 before MD5 hashing', () => {
             const seed = new encryptor.Seed(
                 'abcdefgé',
                 'ÛdGÆF§Dq3V*px!>XRÿ÷ëp7§'
@@ -259,7 +259,7 @@ describe('Encryptor', () => {
                 .catch(done);
         });
 
-        it('generates a correct MD5 hash for a submission with non-ASCII characters', (done) => {
+        it('converts submission XML with non-ASCII characters into UTF-8 encoding before MD5 hashing', (done) => {
             const record = {
                 xml: '<root>café résumé naïve</root>',
                 instanceId: '1a2b',
@@ -271,7 +271,6 @@ describe('Encryptor', () => {
                     expect(encryptedRecord.files[0].md5).to.equal(
                         '2ba225a35204382b2195ac4fcd60a3f9'
                     );
-
                     done();
                 })
                 .catch(done);
