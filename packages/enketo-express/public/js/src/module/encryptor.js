@@ -184,7 +184,9 @@ function _md5Digest(...byteString) {
 function _getBase64EncryptedElementSignature(elements, publicKey) {
     // ODK Collect code also adds a newline character **at the end**!
     const elementsStr = `${elements.join('\n')}\n`;
-    const messageDigest = _md5Digest(forge.util.encodeUtf8(elementsStr)).getBytes();
+    const messageDigest = _md5Digest(
+        forge.util.encodeUtf8(elementsStr)
+    ).getBytes();
 
     return _rsaEncrypt(messageDigest, publicKey);
 }
@@ -279,7 +281,10 @@ function _encryptContent(content, symmetricKey, seed) {
 
 function Seed(instanceId, symmetricKey) {
     // iv is the 16-byte md5 hash of the instanceID and the symmetric key
-    const messageDigest = _md5Digest(forge.util.encodeUtf8(instanceId), symmetricKey).getBytes();
+    const messageDigest = _md5Digest(
+        forge.util.encodeUtf8(instanceId),
+        symmetricKey
+    ).getBytes();
     const ivSeedArray = messageDigest
         .split('')
         .map((item) => item.charCodeAt(0));

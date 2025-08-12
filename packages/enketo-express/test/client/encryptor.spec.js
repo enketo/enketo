@@ -243,7 +243,7 @@ describe('Encryptor', () => {
                 .catch(done);
         });
 
-        it('generates a correct submission manifest for a submission with non-ASCII characters', (done) => {
+        it('generates a correct MD5 hash for a submission with non-ASCII characters', (done) => {
             const record = {
                 xml: '<root>café résumé naïve</root>',
                 instanceId: '1a2b',
@@ -252,78 +252,9 @@ describe('Encryptor', () => {
             encryptor
                 .encryptRecord(form, record)
                 .then((encryptedRecord) => {
-                    const doc = new DOMParser().parseFromString(
-                        encryptedRecord.xml,
-                        'text/xml'
+                    expect(encryptedRecord.files[0].md5).to.equal(
+                        '2ba225a35204382b2195ac4fcd60a3f9'
                     );
-                    expect(doc.querySelectorAll('data').length).to.equal(1);
-                    expect(doc.querySelector('data').namespaceURI).to.equal(
-                        SUBMISSION_NS
-                    );
-                    expect(
-                        doc.querySelector('data').getAttribute('id')
-                    ).to.equal('abc');
-                    expect(
-                        doc.querySelector('data').getAttribute('version')
-                    ).to.equal('2');
-                    expect(
-                        doc.querySelector('data').getAttribute('encrypted')
-                    ).to.equal('yes');
-                    expect(
-                        doc.querySelectorAll('data > base64EncryptedKey').length
-                    ).to.equal(1);
-                    expect(
-                        doc.querySelector('data > base64EncryptedKey')
-                            .textContent
-                    ).to.match(/.+==$/);
-                    expect(
-                        doc.querySelector('data > base64EncryptedKey')
-                            .namespaceURI
-                    ).to.equal(SUBMISSION_NS);
-                    expect(doc.querySelectorAll('data > meta').length).to.equal(
-                        1
-                    );
-                    expect(
-                        doc.querySelector('data > meta').namespaceURI
-                    ).to.equal(XFORMS_NS);
-                    expect(
-                        doc.querySelectorAll('data > meta > instanceID').length
-                    ).to.equal(1);
-                    expect(
-                        doc.querySelector('data > meta > instanceID')
-                            .textContent
-                    ).to.equal('1a2b');
-                    expect(
-                        doc.querySelector('data > meta > instanceID')
-                            .namespaceURI
-                    ).to.equal(XFORMS_NS);
-                    expect(
-                        doc.querySelectorAll(
-                            'data > base64EncryptedElementSignature'
-                        ).length
-                    ).to.equal(1);
-                    expect(
-                        doc.querySelector(
-                            'data > base64EncryptedElementSignature'
-                        ).textContent
-                    ).to.match(/.+==$/);
-                    expect(
-                        doc.querySelector(
-                            'data > base64EncryptedElementSignature'
-                        ).namespaceURI
-                    ).to.equal(SUBMISSION_NS);
-                    expect(
-                        doc.querySelector('data > encryptedXmlFile').textContent
-                    ).to.equal('submission.xml.enc');
-                    expect(
-                        doc.querySelector('data >encryptedXmlFile').namespaceURI
-                    ).to.equal(SUBMISSION_NS);
-                    // only used by Enketo temporarily and then removed:
-                    expect(
-                        doc
-                            .querySelector('data >encryptedXmlFile')
-                            .getAttribute('type')
-                    ).to.equal('file');
 
                     done();
                 })
