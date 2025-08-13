@@ -174,8 +174,8 @@ function _rsaEncrypt(byteString, publicKey) {
 function _md5Digest(...byteString) {
     const md = forge.md.md5.create();
 
-    byteString.forEach((byte) => {
-        md.update(byte);
+    byteString.forEach((string) => {
+        md.update(string);
     });
 
     return md.digest();

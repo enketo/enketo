@@ -259,7 +259,7 @@ describe('Encryptor', () => {
                 .catch(done);
         });
 
-        it('converts submission XML with non-ASCII characters into UTF-8 encoding before MD5 hashing', (done) => {
+        it('encodes submission XML with non-ASCII characters into UTF-8 before MD5 hashing', (done) => {
             const record = {
                 xml: '<root>café résumé naïve</root>',
                 instanceId: '1a2b',
