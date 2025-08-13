@@ -548,12 +548,15 @@ Form.prototype.goTo = function (xpath) {
 };
 
 /**
- * Prepares async data for submitting
+ * Do preparations before submitting or saving the form
  *
  * @return {Promise<void>}
  */
-Form.prototype.prepareData = async function () {
-    await this.widgets.prepareData();
+Form.prototype.beforeSubmit = async function () {
+    // Prepare the form for submission by ensuring all widgets have processed
+    // their beforeSubmit logic, which may include finalizing data or fetching
+    // additional information.
+    await this.widgets.beforeSubmit();
 };
 
 /**

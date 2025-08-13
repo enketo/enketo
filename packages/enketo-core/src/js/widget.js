@@ -195,12 +195,13 @@ class Widget {
     }
 
     /**
-     * Prepares data for the widget. This is called before the form is submitted.
-     * It is meant to be overridden.
+     * Give the widget a chance to prepare data asynchronously before submitting the form.
+     * This is useful for widgets that need to fetch or compute data before the form is submitted
+     * (e.g., wrapping up an audio recording, fetching data from an API, computing a value based on user input).
      *
      * @return {Promise} promise that resolves when the data is prepared
      */
-    async prepareData() {
+    async beforeSubmit() {
         return Promise.resolve();
     }
 

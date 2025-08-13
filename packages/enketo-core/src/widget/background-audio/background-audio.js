@@ -81,7 +81,7 @@ class BackgroundAudioWidget extends Widget {
      * It stops the audio recording and prepares the data for submission by ensuring the audio is ready.
      * @returns {Promise<void>}
      */
-    async prepareData() {
+    async beforeSubmit() {
         // Preparing audio data for submission...
         if (this.existingFilename) return; // If it's an edit, we don't record again.
 

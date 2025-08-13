@@ -165,11 +165,12 @@ function _instantiate(Widget, group) {
 }
 
 /**
- * Prepares data for submission by calling `prepareData` on each widget instance.
+ * Gives widgets a chance to prepare data asynchronously before submitting the form.
  *
  * @return {Promise<void>} A promise that resolves when all widgets have prepared their data.
  */
-async function prepareData() {
+async function beforeSubmit() {
+    // Grab all the widget instances from the form elements
     const widgetInstances = [];
     for (const Widget of widgets) {
         const elements = _getElements(formElement, Widget.selector);
@@ -177,8 +178,10 @@ async function prepareData() {
             widgetInstances.push(data.get(element, Widget.name));
         }
     }
+
+    // Wait for all widgets to process their beforeSubmit logic
     return Promise.all(
-        widgetInstances.map((widgetInstance) => widgetInstance.prepareData())
+        widgetInstances.map((widgetInstance) => widgetInstance.beforeSubmit())
     );
 }
 
@@ -360,5 +363,5 @@ export default {
     enable,
     disable,
     reset,
-    prepareData,
+    beforeSubmit,
 };
