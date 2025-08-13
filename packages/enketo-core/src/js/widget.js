@@ -194,6 +194,12 @@ class Widget {
         this.element.dispatchEvent(event.Change());
     }
 
+    /**
+     * Prepares data for the widget. This is called before the form is submitted.
+     * It is meant to be overridden.
+     *
+     * @return {Promise} promise that resolves when the data is prepared
+     */
     async prepareData() {
         return Promise.resolve();
     }
