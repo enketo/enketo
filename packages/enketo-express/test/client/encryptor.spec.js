@@ -8,9 +8,21 @@
  * @typedef {import('./feature/survey-encryption.spec.js')} SurveyEncryptionSpec
  */
 
+import forge from 'node-forge';
 import encryptor from '../../public/js/src/module/encryptor';
 
 describe('Encryptor', () => {
+    /** @type {import('sinon').SinonSandbox} */
+    let sandbox;
+
+    beforeEach(() => {
+        sandbox = sinon.createSandbox();
+    });
+
+    afterEach(() => {
+        sandbox.restore();
+    });
+
     describe('Seed generation', () => {
         it('generates correct seed length', () => {
             const seed = new encryptor.Seed(
@@ -271,6 +283,68 @@ describe('Encryptor', () => {
                     expect(encryptedRecord.files[0].md5).to.equal(
                         '2ba225a35204382b2195ac4fcd60a3f9'
                     );
+                    done();
+                })
+                .catch(done);
+        });
+
+        it('encodes the raw signature with non-ASCII characters into UTF-8 before MD5 hashing', (done) => {
+            form.id = 'form-测试-тест'; // A form ID with non-ASCII characters
+
+            const record = {
+                xml: '<root>this is a record</root>',
+                instanceId: '1a2b',
+            };
+            const mockBytes = forge.util.createBuffer(
+                new Uint8Array(32).fill(65),
+                'raw'
+            );
+            const mockPublicKey = {
+                encrypt: (byteString) => {
+                    const md = forge.md.md5.create();
+                    md.update(byteString);
+                    const hash = md.digest().getBytes();
+                    return String.fromCharCode(
+                        ...hash.split('').map((c) => c.charCodeAt(0) + 66)
+                    );
+                },
+            };
+
+            sandbox.stub(forge.random, 'getBytesSync').returns(mockBytes);
+            sandbox.stub(forge.pki, 'publicKeyFromPem').returns(mockPublicKey);
+
+            const encryptedSymmetricKey = mockPublicKey.encrypt(mockBytes);
+            const expectedElements = [
+                form.id,
+                form.version,
+                forge.util.encode64(encryptedSymmetricKey),
+                record.instanceId,
+                'submission.xml::' +
+                    forge.md.md5
+                        .create()
+                        .update(forge.util.encodeUtf8(record.xml))
+                        .digest()
+                        .toHex(),
+            ];
+            const elementsStr = `${expectedElements.join('\n')}\n`;
+            const md = forge.md.md5.create();
+            md.update(forge.util.encodeUtf8(elementsStr));
+            const messageDigest = md.digest().getBytes();
+            const encryptedDigest = mockPublicKey.encrypt(messageDigest);
+            const expectedSignature = forge.util.encode64(encryptedDigest);
+
+            encryptor
+                .encryptRecord(form, record)
+                .then((encryptedRecord) => {
+                    const doc = new DOMParser().parseFromString(
+                        encryptedRecord.xml,
+                        'text/xml'
+                    );
+                    expect(
+                        doc.querySelector(
+                            'data > base64EncryptedElementSignature'
+                        ).textContent
+                    ).to.equal(expectedSignature);
                     done();
                 })
                 .catch(done);
