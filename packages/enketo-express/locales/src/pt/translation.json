@@ -127,7 +127,7 @@
             "accessDenied": "Acesso ao microfone negado pelo usuário.",
             "noMicrophone": "Nenhum microfone encontrado neste dispositivo.",
             "notSupported": "Gravação de áudio não é suportada neste navegador.",
-            "unknownError": "Falha ao acessar o microfone: __errorMessage__",
+            "unknownError": "Falha ao acessar o microfone. Verifique as configurações e permissões do seu navegador.",
             "recordingError": "Ocorreu um erro ao tentar gravar áudio."
         },
         "startRecording": "Iniciar gravação",
