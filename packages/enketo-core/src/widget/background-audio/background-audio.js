@@ -30,11 +30,13 @@ class BackgroundAudioWidget extends Widget {
     constructor(element, options) {
         super(element, options);
 
+        this.existingFilename = this.element.dataset.loadedFileName;
+
         this.audioRecorder = new AudioRecorder();
         this.audioQuality = this.element.dataset.quality || 'normal'; // Get audio quality from data attribute
-        this.audioBlob = null; // To store the recorded audio blob
 
         this.question.classList.add('hidden'); // Hide the question element
+        this.element.type = 'hidden'; // Change from type file to hidden so we can manipulate the value
 
         const mainContainer = document.body;
         if (!mainContainer) {
@@ -42,6 +44,10 @@ class BackgroundAudioWidget extends Widget {
                 'Main container not found for BackgroundAudioWidget'
             );
         }
+
+        // We need to remove existing elements that could be duplicated
+        // when loading saved drafts.
+        mainContainer.querySelector('div.background-audio-widget')?.remove();
 
         const fragment = document
             .createRange()
@@ -56,7 +62,65 @@ class BackgroundAudioWidget extends Widget {
             'div.background-audio-widget'
         );
 
-        this.showRecordingView(); // Show the recording view initially
+        // If a file is already loaded, then it's a submission edit and we don't show the recording view.
+        if (this.existingFilename) {
+            this.useExistingFile();
+        } else {
+            this.showRecordingView(); // Show the recording view initially
+        }
+    }
+
+    async useExistingFile() {
+        this.originalInputValue = this.existingFilename;
+        this.value = '';
+        this.showHasRecordedAudioView(); // Show a message indicating that there's a recorded audio
+    }
+
+    /**
+     * This is called just before the form is submitted.
+     * It stops the audio recording and prepares the data for submission by ensuring the audio is ready.
+     * @returns {Promise<void>}
+     */
+    async beforeSubmit() {
+        // Preparing audio data for submission...
+        if (this.existingFilename) return; // If it's an edit, we don't record again.
+
+        try {
+            await this.audioRecorder.stopRecording();
+            const blob = await this.audioRecorder.getRecordedFile();
+            const dataUrl = await this.getDataURL(blob);
+            this.originalInputValue = this.getFileName();
+            this.value = dataUrl;
+        } catch (error) {
+            console.error('Error preparing audio data:', error);
+            throw error;
+        }
+    }
+
+    /**
+     * Gets the current value of the audio widget.
+     */
+    get value() {
+        return this.element.dataset.cache || '';
+    }
+
+    /**
+     * Sets the value of the audio widget.
+     * @param {string} dataUrl - The data URL of the audio file.
+     */
+    set value(dataUrl) {
+        // dataset-cache is used by the filemanager to extract the file data
+        this.element.dataset.cache = dataUrl || '';
+    }
+
+    /**
+     * Cleans up the widget instance. This is called when the form is reset.
+     */
+    cleanup() {
+        this.widgetElement.remove(); // Remove the widget element from the DOM
+        if (this.audioRecorder.isRecording()) {
+            this.audioRecorder.stopRecording(); // Stop recording if it's still active
+        }
     }
 
     /**
@@ -83,6 +147,21 @@ class BackgroundAudioWidget extends Widget {
             .createContextualFragment(`<div class="error">
                                         <i class="icon icon-microphone"></i>
                                         ${error}
+                                       </div>`);
+
+        this.setWidgetContent(fragment);
+    }
+
+    /**
+     * Shows a message indicating that the loaded submission has a recorded audio.
+     *
+     * @param {string} error - The error message to display.
+     */
+    showHasRecordedAudioView() {
+        const fragment = document.createRange()
+            .createContextualFragment(`<div class="message">
+                                        <i class="icon icon-microphone"></i>
+                                        ${t('audioRecording.hasRecordedAudio')}
                                        </div>`);
 
         this.setWidgetContent(fragment);
@@ -135,6 +214,41 @@ class BackgroundAudioWidget extends Widget {
             .catch((error) => {
                 this.showErrorView(error.message);
             });
+    }
+
+    /**
+     * Get a filename for the recording based on question name.
+     * The file is named after the field name and a postfix in the format: `YYYYMMDD_HHMMSS`.
+     *
+     * @returns {string} - The filename for the audio recording.
+     */
+    getFileName() {
+        const fileName = this.element.name.slice(
+            this.element.name.lastIndexOf('/') + 1
+        );
+        const baseFileName = `${fileName || 'background-audio'}`;
+        const timestamp = new Date()
+            .toISOString()
+            .replace(/\D/g, '')
+            .slice(0, 14);
+        const postfix = `-${timestamp.slice(0, 8)}_${timestamp.slice(8)}`;
+        return `${baseFileName}${postfix}.webm`;
+    }
+
+    /**
+     * This method retrieves the data URL of the recorded audio blob.
+     * It reads the blob as a data URL using FileReader.
+     * @returns {Promise<string|null>} - A promise that resolves to the data URL of the audio blob,
+     * or null if no audio blob is available.
+     */
+    getDataURL(blob) {
+        return new Promise((resolve) => {
+            const reader = new FileReader();
+            reader.onload = (event) => {
+                resolve(event.target.result);
+            };
+            reader.readAsDataURL(blob);
+        });
     }
 
     /**
