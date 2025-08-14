@@ -1817,7 +1817,7 @@ XSLT Stylesheet that transforms OpenRosa style (X)Forms into valid HTMl5 forms
                 <xsl:attribute name="name">
                     <xsl:value-of select="@ref"/>
                 </xsl:attribute>
-                <xsl:attribute name="type">hidden</xsl:attribute>
+                <xsl:attribute name="type">file</xsl:attribute>
                 <xsl:attribute name="data-type-xml">binary</xsl:attribute>
                 <xsl:attribute name="data-background-audio">true</xsl:attribute>
             </xsl:element>

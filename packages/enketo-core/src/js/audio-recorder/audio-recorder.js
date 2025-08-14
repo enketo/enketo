@@ -60,11 +60,10 @@ class AudioRecorder {
             } else if (error.name === 'NotSupportedError') {
                 throw new Error(t('audioRecording.error.notSupported'));
             } else {
-                throw new Error(
-                    t('audioRecording.error.unknownError', {
-                        errorMessage: error.message,
-                    })
+                console.error(
+                    `Failed to acess microphone. Check if you're under HTTPS or localhost: ${error.message}`
                 );
+                throw new Error(t('audioRecording.error.unknownError'));
             }
         }
     }

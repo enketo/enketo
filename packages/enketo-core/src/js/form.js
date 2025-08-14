@@ -548,6 +548,18 @@ Form.prototype.goTo = function (xpath) {
 };
 
 /**
+ * Do preparations before submitting or saving the form
+ *
+ * @return {Promise<void>}
+ */
+Form.prototype.beforeSubmit = async function () {
+    // Prepare the form for submission by ensuring all widgets have processed
+    // their beforeSubmit logic, which may include finalizing data or fetching
+    // additional information.
+    await this.widgets.beforeSubmit();
+};
+
+/**
  * Obtains a string of primary instance.
  *
  * @param {{include: boolean}} [include] - Optional object items to exclude if false
