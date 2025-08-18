@@ -1,0 +1,47 @@
+version: 2
+updates:
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      # dependabot doesn't support cron
+      interval: "weekly"
+    labels:
+      - "dependencies"
+      - "github actions"
+    groups:
+      actions-deps:
+        patterns:
+          - "*"
+    open-pull-requests-limit: 5
+
+  - package-ecosystem: "npm"
+    directory: "/"
+    schedule:
+      # dependabot doesn't support cron
+      interval: "daily"
+    labels:
+      - "dependencies"
+      - "frontend"
+    groups:
+      minor-and-patch:
+        patterns:
+          - "*"
+        update-types:
+          - "minor"
+          - "patch"
+    open-pull-requests-limit: 10
+    # ignore:
+      ##########################################################################
+      # Deps that we do not plan to update
+      ##########################################################################
+
+      # - dependency-name: "some dep"
+      #   versions: [ ">=?.0.0" ]
+
+      ##########################################################################
+      # Deps that require refactor and work before updating
+      ##########################################################################
+
+      # # https://linear.app/kobotoolbox/issue/DEV-…
+      # - dependency-name: "some dep"
+      #   versions: [ ">=?.0.0" ]
