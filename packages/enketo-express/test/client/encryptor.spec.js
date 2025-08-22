@@ -314,17 +314,17 @@ describe('Encryptor', () => {
             sandbox.stub(forge.pki, 'publicKeyFromPem').returns(mockPublicKey);
 
             const encryptedSymmetricKey = mockPublicKey.encrypt(mockBytes);
+            const submissionXMLMD5 = forge.md.md5
+                .create()
+                .update(forge.util.encodeUtf8(record.xml))
+                .digest()
+                .toHex();
             const expectedElements = [
                 form.id,
                 form.version,
                 forge.util.encode64(encryptedSymmetricKey),
                 record.instanceId,
-                'submission.xml::' +
-                    forge.md.md5
-                        .create()
-                        .update(forge.util.encodeUtf8(record.xml))
-                        .digest()
-                        .toHex(),
+                `submission.xml::${submissionXMLMD5}`,
             ];
             const elementsStr = `${expectedElements.join('\n')}\n`;
             const md = forge.md.md5.create();
