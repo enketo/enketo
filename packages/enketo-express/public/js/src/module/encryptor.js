@@ -171,9 +171,12 @@ function _rsaEncrypt(byteString, publicKey) {
     return forge.util.encode64(encrypted);
 }
 
-function _md5Digest(byteString) {
+function _md5Digest(...byteString) {
     const md = forge.md.md5.create();
-    md.update(byteString);
+
+    byteString.forEach((string) => {
+        md.update(string);
+    });
 
     return md.digest();
 }
@@ -181,7 +184,9 @@ function _md5Digest(byteString) {
 function _getBase64EncryptedElementSignature(elements, publicKey) {
     // ODK Collect code also adds a newline character **at the end**!
     const elementsStr = `${elements.join('\n')}\n`;
-    const messageDigest = _md5Digest(elementsStr).getBytes();
+    const messageDigest = _md5Digest(
+        forge.util.encodeUtf8(elementsStr)
+    ).getBytes();
 
     return _rsaEncrypt(messageDigest, publicKey);
 }
@@ -233,7 +238,7 @@ function _encryptSubmissionXml(xmlStr, symmetricKey, seed) {
         seed
     );
     submissionXmlEnc.name = 'submission.xml.enc';
-    submissionXmlEnc.md5 = _md5Digest(xmlStr).toHex();
+    submissionXmlEnc.md5 = _md5Digest(forge.util.encodeUtf8(xmlStr)).toHex();
 
     return submissionXmlEnc;
 }
@@ -276,7 +281,10 @@ function _encryptContent(content, symmetricKey, seed) {
 
 function Seed(instanceId, symmetricKey) {
     // iv is the 16-byte md5 hash of the instanceID and the symmetric key
-    const messageDigest = _md5Digest(instanceId + symmetricKey).getBytes();
+    const messageDigest = _md5Digest(
+        forge.util.encodeUtf8(instanceId),
+        symmetricKey
+    ).getBytes();
     const ivSeedArray = messageDigest
         .split('')
         .map((item) => item.charCodeAt(0));
