@@ -389,6 +389,9 @@ FormModel.prototype.mergeXml = function (recordStr) {
         templateEls[i].remove();
     }
 
+    // Fix missing repeat nodes that may break editing
+    this.fixRecordRepeatData(record);
+
     /**
      * To comply with quirky behaviour of repeats in XForms, we manually create the correct number of repeat instances
      * before merging. This resolves these two issues:
@@ -1552,6 +1555,71 @@ FormModel.prototype.evaluate = function (
 
         return response;
     }
+};
+
+/**
+ * This function checks the existence of a template node and
+ * when non existent, creates an empty node.
+ * This fixes some situations where, when loading editing data,
+ * repeat nodes aren't properly returned, crashing editing.
+ *
+ * @param {XMLDocument} recordDoc
+ */
+FormModel.prototype.fixRecordRepeatData = function (recordDoc) {
+    // Need to use the raw model without transformations
+    const modelDoc = new DOMParser().parseFromString(
+        this.data.modelStr,
+        'text/xml'
+    );
+
+    const modelInstance = modelDoc.querySelector('model > instance');
+
+    // Check for a missing template node and if so
+    // creates an empty node. This fixes some situations
+    // in editing where accessing nodes data crashes editing
+    // (not the best practice to create a function inside of another
+    // function, but it's a recursive and very contextual function only
+    // used in this function)
+    const fixNode = (node, modelNode) => {
+        // get the model element for the current instance node
+        const modelEl = Array.from(modelNode.children).find(
+            (child) => child.nodeName === node.nodeName
+        );
+
+        // If no model element is found, there's nothing to check
+        if (!modelEl) return;
+
+        const isTemplate =
+            modelEl.hasAttribute('jr:template') ||
+            modelEl.hasAttribute('template');
+        Array.from(node.children).forEach((childNode) => {
+            fixNode(childNode, modelEl);
+        });
+
+        if (isTemplate) {
+            const templateChildren = Array.from(modelEl.children).filter(
+                (child) =>
+                    child.hasAttribute('jr:template') ||
+                    child.hasAttribute('template')
+            );
+            templateChildren.forEach((templateChild) => {
+                const templateName = templateChild.nodeName;
+                const existingInstances = Array.from(node.children).filter(
+                    (child) => child.nodeName === templateName
+                );
+                if (existingInstances.length === 0) {
+                    // No instances exist, create an empty one
+                    const newInstance = document.createElementNS(
+                        null,
+                        templateName
+                    );
+                    node.appendChild(newInstance);
+                }
+            });
+        }
+    };
+
+    fixNode(recordDoc.documentElement, modelInstance);
 };
 
 /**
