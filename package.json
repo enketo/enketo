@@ -86,7 +86,7 @@
         "load-grunt-tasks": "^5.1.0",
         "lodash.includes": "^4.3.0",
         "markdown-eslint-parser": "^1.2.1",
-        "mocha": "^9.2.2",
+        "mocha": "^11.7.1",
         "nan": "^2.22.0",
         "node-sass": "^9.0.0",
         "nyc": "^15.1.0",
