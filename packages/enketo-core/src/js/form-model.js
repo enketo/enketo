@@ -339,6 +339,16 @@ FormModel.prototype.node = function (selector, index, filter) {
 };
 
 /**
+ * Check if the model node is a template
+ */
+function isModelTemplate(node) {
+    return (
+        node &&
+        (node.hasAttribute('jr:template') || node.hasAttribute('template'))
+    );
+}
+
+/**
  * Merges an XML instance string into the XML Model
  *
  * @param {string} recordStr - The XML record as string
@@ -388,6 +398,57 @@ FormModel.prototype.mergeXml = function (recordStr) {
     for (let i = 0; i < templateEls.length; i++) {
         templateEls[i].remove();
     }
+
+    /**
+     * Fix missing repeat nodes that may break editing
+     * by checks the existence of a template node and
+     * when non existent, creates an empty node.
+     * This fixes some situations where, when loading editing data,
+     * repeat nodes aren't properly returned, crashing editing.
+     */
+
+    // Need to use the raw model without transformations
+    const modelDoc = new DOMParser().parseFromString(
+        this.data.modelStr,
+        'text/xml'
+    );
+    const modelInstance = modelDoc.querySelector('model > instance');
+
+    // Recursive contextual function to apply the fix:
+    const fixNode = (node, modelNode) => {
+        // get the model element for the current instance node
+        const modelEl = Array.from(modelNode.children).find(
+            (child) => child.nodeName === node.nodeName
+        );
+
+        // If no model element is found, there's nothing to check
+        if (!modelEl) return;
+
+        Array.from(node.children).forEach((childNode) => {
+            fixNode(childNode, modelEl);
+        });
+
+        if (isModelTemplate(modelEl)) {
+            const templateChildren = Array.from(modelEl.children).filter(
+                (child) => isModelTemplate(child)
+            );
+            templateChildren.forEach((templateChild) => {
+                const existingInstances = Array.from(node.children).filter(
+                    (child) => child.nodeName === templateChild.nodeName
+                );
+                if (existingInstances.length === 0) {
+                    // No instances exist, create an empty one
+                    const newInstance = document.createElementNS(
+                        null,
+                        templateChild.nodeName
+                    );
+                    node.appendChild(newInstance);
+                }
+            });
+        }
+    };
+
+    fixNode(record.documentElement, modelInstance);
 
     /**
      * To comply with quirky behaviour of repeats in XForms, we manually create the correct number of repeat instances
