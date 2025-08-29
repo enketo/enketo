@@ -1,0 +1,42 @@
+<?xml version="1.0"?>
+<h:html xmlns="http://www.w3.org/2002/xforms" xmlns:h="http://www.w3.org/1999/xhtml" xmlns:ev="http://www.w3.org/2001/xml-events" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:jr="http://openrosa.org/javarosa" xmlns:orx="http://openrosa.org/xforms" xmlns:odk="http://www.opendatakit.org/xforms">
+  <h:head>
+    <h:title>Audio test</h:title>
+    <model odk:xforms-version="1.0.0">
+      <instance>
+        <aBgeRqE4AxpXTnLWFy9Atx id="aBgeRqE4AxpXTnLWFy9Atx">
+          <start/>
+          <end/>
+          <audio_normal/>
+          <audio_low/>
+          <audio_voice_only/>
+          <audio_required/>
+          <meta>
+            <instanceID/>
+          </meta>
+        </aBgeRqE4AxpXTnLWFy9Atx>
+      </instance>
+      <bind nodeset="/aBgeRqE4AxpXTnLWFy9Atx/start" jr:preload="timestamp" type="dateTime" jr:preloadParams="start"/>
+      <bind nodeset="/aBgeRqE4AxpXTnLWFy9Atx/end" jr:preload="timestamp" type="dateTime" jr:preloadParams="end"/>
+      <bind nodeset="/aBgeRqE4AxpXTnLWFy9Atx/audio_normal" type="binary" required="false()" odk:quality="normal"/>
+      <bind nodeset="/aBgeRqE4AxpXTnLWFy9Atx/audio_low" type="binary" required="false()" odk:quality="low"/>
+      <bind nodeset="/aBgeRqE4AxpXTnLWFy9Atx/audio_voice_only" type="binary" required="false()" odk:quality="voice-only"/>
+      <bind nodeset="/aBgeRqE4AxpXTnLWFy9Atx/audio_required" type="binary" required="true()"/>
+      <bind nodeset="/aBgeRqE4AxpXTnLWFy9Atx/meta/instanceID" type="string" readonly="true()" jr:preload="uid"/>
+    </model>
+  </h:head>
+  <h:body>
+    <upload mediatype="audio/*" ref="/aBgeRqE4AxpXTnLWFy9Atx/audio_normal">
+      <label>Audio Normal</label>
+    </upload>
+    <upload mediatype="audio/*" ref="/aBgeRqE4AxpXTnLWFy9Atx/audio_low">
+      <label>Audio Low</label>
+    </upload>
+    <upload mediatype="audio/*" ref="/aBgeRqE4AxpXTnLWFy9Atx/audio_voice_only">
+      <label>Audio Voice Only</label>
+    </upload>
+    <upload mediatype="audio/*" ref="/aBgeRqE4AxpXTnLWFy9Atx/audio_required">
+      <label>Required</label>
+    </upload>
+  </h:body>
+</h:html>

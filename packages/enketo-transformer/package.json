@@ -47,6 +47,7 @@
         "watch:node": "vite build -w",
         "prepare": "yarn build",
         "test": "vitest run --coverage && yarn tsc && node update-readme-with-shield-badge.cjs",
+        "test:update-snapshots": "vitest -u",
         "test:watch": "vitest",
         "test:watch:web": "ENV=web vitest",
         "test:web": "ENV=web vitest run",

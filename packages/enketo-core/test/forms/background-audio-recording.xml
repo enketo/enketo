@@ -1,0 +1,64 @@
+<?xml version="1.0"?>
+<h:html xmlns="http://www.w3.org/2002/xforms" xmlns:h="http://www.w3.org/1999/xhtml" xmlns:ev="http://www.w3.org/2001/xml-events" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:jr="http://openrosa.org/javarosa" xmlns:orx="http://openrosa.org/xforms" xmlns:odk="http://www.opendatakit.org/xforms">
+  <h:head>
+    <h:title>BG Audio</h:title>
+    <model odk:xforms-version="1.0.0">
+      <instance>
+        <aJnH8oDGpMrg7nmU6fvm77 id="aJnH8oDGpMrg7nmU6fvm77">
+          <start/>
+          <end/>
+          <Pick_one/>
+          <Type_something/>
+          <Enter_a_number/>
+          <background-audio/>
+          <meta>
+            <instanceID/>
+          </meta>
+        </aJnH8oDGpMrg7nmU6fvm77>
+      </instance>
+      <instance id="ud2zp86">
+        <root>
+          <item>
+            <name>option_1</name>
+            <label>Option 1</label>
+          </item>
+          <item>
+            <name>option_2</name>
+            <label>Option 2</label>
+          </item>
+          <item>
+            <name>option_3</name>
+            <label>Option 3</label>
+          </item>
+          <item>
+            <name>option_4</name>
+            <label>Option 4</label>
+          </item>
+        </root>
+      </instance>
+      <bind nodeset="/aJnH8oDGpMrg7nmU6fvm77/start" jr:preload="timestamp" type="dateTime" jr:preloadParams="start"/>
+      <bind nodeset="/aJnH8oDGpMrg7nmU6fvm77/end" jr:preload="timestamp" type="dateTime" jr:preloadParams="end"/>
+      <bind nodeset="/aJnH8oDGpMrg7nmU6fvm77/Pick_one" type="string" required="false()"/>
+      <bind nodeset="/aJnH8oDGpMrg7nmU6fvm77/Type_something" type="string" required="false()"/>
+      <bind nodeset="/aJnH8oDGpMrg7nmU6fvm77/Enter_a_number" type="int" required="false()"/>
+      <bind nodeset="/aJnH8oDGpMrg7nmU6fvm77/background-audio" type="binary"/>
+      <bind nodeset="/aJnH8oDGpMrg7nmU6fvm77/meta/instanceID" type="string" readonly="true()" jr:preload="uid"/>
+      <odk:recordaudio ref="/aJnH8oDGpMrg7nmU6fvm77/background-audio" event="odk-instance-load" odk:quality="voice-only"/>
+    </model>
+  </h:head>
+  <h:body>
+    <select1 ref="/aJnH8oDGpMrg7nmU6fvm77/Pick_one">
+      <label>Pick one</label>
+      <itemset nodeset="instance('ud2zp86')/root/item">
+        <value ref="name"/>
+        <label ref="label"/>
+      </itemset>
+    </select1>
+    <input ref="/aJnH8oDGpMrg7nmU6fvm77/Type_something">
+      <label>Type something</label>
+    </input>
+    <input ref="/aJnH8oDGpMrg7nmU6fvm77/Enter_a_number">
+      <label>Enter a number</label>
+    </input>
+  </h:body>
+</h:html>

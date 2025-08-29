@@ -293,6 +293,9 @@ function _loadRecord(survey, instanceId, confirmed) {
                     return gui.alert(t('alert.recordnotfound.msg'));
                 }
 
+                // Set the active record before initializing the form
+                records.setActive(record.instanceId);
+
                 const formEl = form.resetView();
                 form = new Form(
                     formEl,
@@ -311,7 +314,6 @@ function _loadRecord(survey, instanceId, confirmed) {
                 formCache.updateMedia(survey);
 
                 form.recordName = record.name;
-                records.setActive(record.instanceId);
 
                 if (loadErrors.length > 0) {
                     throw loadErrors;
@@ -366,8 +368,9 @@ function _submitRecord(survey) {
         'bare'
     );
 
-    return fileManager
-        .getCurrentFiles()
+    return form
+        .beforeSubmit()
+        .then(() => fileManager.getCurrentFiles())
         .then((files) => {
             const record = {
                 enketoId: settings.enketoId,
@@ -545,6 +548,7 @@ function _saveRecord(survey, draft, recordName, confirmed) {
     }
 
     return autoSavePromise
+        .then(() => form.beforeSubmit())
         .then(() => fileManager.getCurrentFiles())
         .then((files) => {
             // build the record object

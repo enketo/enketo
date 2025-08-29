@@ -208,24 +208,25 @@ function feedback(message, duration, heading = t('feedback.header')) {
  * @param {number=} duration - duration in secondsafter which dialog should self-destruct
  */
 function alert(message, heading, level, duration) {
-    level = level || 'error';
-    vex.closeAll();
-    vex.dialog.alert({
-        unsafeMessage: `<span>${message}</span>`,
-        title: heading || t('alert.default.heading'),
-        messageClassName: level === 'normal' ? '' : `alert-box ${level}`,
-        buttons: [
-            {
-                text: t('alert.validationsuccess.heading'),
-                type: 'submit',
-                className: 'btn btn-primary small',
-            },
-        ],
-        autoClose: duration,
-        showCloseButton: true,
+    return new Promise((resolve) => {
+        level = level || 'error';
+        vex.closeAll();
+        vex.dialog.alert({
+            unsafeMessage: `<span>${message}</span>`,
+            title: heading || t('alert.default.heading'),
+            messageClassName: level === 'normal' ? '' : `alert-box ${level}`,
+            buttons: [
+                {
+                    text: t('alert.validationsuccess.heading'),
+                    type: 'submit',
+                    className: 'btn btn-primary small',
+                },
+            ],
+            autoClose: duration,
+            showCloseButton: true,
+            afterClose: resolve,
+        });
     });
-
-    return Promise.resolve();
 }
 
 /**

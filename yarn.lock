@@ -4613,6 +4613,11 @@ fined@^1.2.0:
     object.pick "^1.2.0"
     parse-filepath "^1.0.1"
 
+fix-webm-duration@^1.0.6:
+  version "1.0.6"
+  resolved "https://registry.yarnpkg.com/fix-webm-duration/-/fix-webm-duration-1.0.6.tgz#c2de812c5207ba01e0f0b3ae497e64edc45e6c1e"
+  integrity sha512-zVAqi4gE+8ywxJuAyV/rlJVX6CMtvyapEbQx6jyoeX9TMjdqAlt/FdG5d7rXSSkDVzTvS0H7CtwzHcH/vh4FPA==
+
 flagged-respawn@^1.0.1:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/flagged-respawn/-/flagged-respawn-1.0.1.tgz#e7de6f1279ddd9ca9aac8a5971d618606b3aab41"

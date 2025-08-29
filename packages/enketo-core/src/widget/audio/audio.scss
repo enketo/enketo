@@ -1,0 +1,239 @@
+@keyframes audio-widget-overlay-fade-in {
+    0% {
+        opacity: 0; /* Start fully transparent */
+    }
+    100% {
+        opacity: 0.5; /* End fully opaque */
+    }
+}
+
+.audio-widget-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: $body-bg;
+    opacity: 0;
+    cursor: not-allowed;
+    z-index: 1000;
+}
+
+.audio-widget-overlay.fade-in {
+    animation: audio-widget-overlay-fade-in 1s forwards; /* Fade-in effect */
+}
+
+.audio-widget-overlay.fade-out {
+    animation: audio-widget-overlay-fade-in 0.3s reverse forwards; /* Fade-out effect */
+}
+
+.audio-widget {
+    width: 100%;
+
+    .btn-icon-only {
+        width: 20px;
+        height: 20px;
+        margin: 0px;
+        display: grid;
+        place-items: center;
+        cursor: pointer;
+
+        .icon {
+            margin: 0px;
+            font-size: 16px;
+        }
+    }
+
+    @keyframes blinker {
+        50% {
+            opacity: 0;
+        }
+    }
+
+    .step-action-select .button-group,
+    .step-recording,
+    .step-preview {
+        width: 100%;
+        height: 54px;
+        display: flex;
+        align-items: center;
+        gap: $padding-base-horizontal;
+    }
+
+    .step-action-select {
+        .button-group {
+            button {
+                border: 0;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                border-radius: 6px;
+                padding: 6px 12px 7px 12px;
+                margin: 0px;
+                height: 32px;
+
+                .icon-volume-down {
+                    font-size: floor($font-size-base * 1.2);
+                    margin-top: 2px;
+                }
+
+                .icon-upload {
+                    font-size: $font-size-base;
+                    margin-top: 1px;
+                }
+
+                &:disabled {
+                    opacity: 0.5;
+                }
+            }
+        }
+
+        .error-message {
+            color: $state-danger-text;
+            font-size: 14px;
+        }
+    }
+
+    .step-recording .recording-container,
+    .step-preview .audio-preview {
+        width: 80%;
+        height: 54px;
+        display: flex;
+        gap: $padding-base-horizontal;
+        padding: 0 16px 0 18px;
+        border-radius: 27px;
+        border: $input-border 1px solid;
+        align-items: center;
+    }
+
+    .step-recording {
+        .color-reference {
+            color: $brand-primary-color;
+        }
+
+        .recording-display {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            .status-dot {
+                width: 6px;
+                height: 6px;
+                background-color: #ff8080;
+                border-radius: 50%;
+                visibility: hidden;
+            }
+
+            .status-dot.recording {
+                visibility: visible;
+                animation: blinker 1s linear infinite;
+            }
+
+            .recording-time {
+                font-size: 14px;
+                font-weight: normal;
+            }
+        }
+
+        .audio-waveform {
+            flex-grow: 1;
+            width: 100%;
+            height: 30px;
+        }
+
+        .recording-controls {
+            display: flex;
+            align-items: center;
+            gap: $padding-base-horizontal;
+
+            button {
+                margin: 0px;
+                width: 20px;
+                height: 20px;
+            }
+
+            .btn-stop {
+                color: $state-danger-text;
+            }
+        }
+    }
+
+    .step-preview {
+        .audio-preview {
+            padding-right: 20px;
+            background: $gray-lighter;
+            border: $gray-lighter 1px solid;
+
+            .time-display {
+                width: 100px;
+                text-align: center;
+                font-size: 14px;
+                color: $gray-dark;
+            }
+
+            .seek-bar {
+                flex: 1;
+                height: 50%;
+                display: flex;
+                align-items: center;
+                cursor: pointer;
+
+                .play-progress {
+                    width: 100%;
+                    height: 4px;
+                    background: rgba(0, 0, 0, 0.15);
+                    position: relative;
+                    border-radius: 2px;
+                    pointer-events: none;
+
+                    .progress-bar {
+                        position: absolute;
+                        top: 0;
+                        left: 0;
+                        height: 100%;
+                        width: 0%;
+                        background: $brand-primary-color;
+                        border-radius: 2px;
+                    }
+
+                    //seek handle
+                    .progress-bar::after {
+                        content: '';
+                        position: absolute;
+                        top: -4px;
+                        right: -6px;
+                        width: 12px;
+                        height: 12px;
+                        background: $brand-primary-color;
+                        border-radius: 50%;
+                        box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+                        opacity: 0;
+                        transition: opacity 0.2s ease;
+                    }
+
+                    @media (max-width: 768px) {
+                        // handle always visible on mobile
+                        .progress-bar::after {
+                            opacity: 1;
+                        }
+                    }
+                }
+
+                &:hover .progress-bar::after {
+                    opacity: 1;
+                }
+            }
+        }
+
+        button.icon {
+            font-size: 18px;
+        }
+
+        .icon-download {
+            margin-top: 2px;
+        }
+
+        button.btn-delete {
+            color: $state-danger-text;
+        }
+    }
+}

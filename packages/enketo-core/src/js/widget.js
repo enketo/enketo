@@ -99,6 +99,13 @@ class Widget {
     }
 
     /**
+     * Cleans up the widget instance. This is called when the form is reset.
+     */
+    cleanup() {
+        // Part of interface, to be overridden
+    }
+
+    /**
      * Returns widget properties. May need to be extended.
      *
      * @readonly
@@ -185,6 +192,17 @@ class Widget {
         // so we rely on widget code to only use this setter when the value changes.
         input.setVal(this.element, value, null);
         this.element.dispatchEvent(event.Change());
+    }
+
+    /**
+     * Give the widget a chance to prepare data asynchronously before submitting the form.
+     * This is useful for widgets that need to fetch or compute data before the form is submitted
+     * (e.g., wrapping up an audio recording, fetching data from an API, computing a value based on user input).
+     *
+     * @return {Promise} promise that resolves when the data is prepared
+     */
+    async beforeSubmit() {
+        return Promise.resolve();
     }
 
     /**

@@ -122,6 +122,28 @@
             "msg": "Ocorreu um erro de avaliação de fórmula. Por favor, entre em contato com __emailLink__ com este erro:"
         }
     },
+    "audioRecording": {
+        "error": {
+            "accessDenied": "Acesso ao microfone negado pelo usuário.",
+            "noMicrophone": "Nenhum microfone encontrado neste dispositivo.",
+            "notSupported": "Gravação de áudio não é suportada neste navegador.",
+            "unknownError": "Falha ao acessar o microfone. Verifique as configurações e permissões do seu navegador.",
+            "recordingError": "Ocorreu um erro ao tentar gravar áudio."
+        },
+        "startRecording": "Iniciar gravação",
+        "uploadAudioFile": "Enviar arquivo",
+        "deleteWarning": "O áudio será excluído. Tem certeza de que quer fazer isso?",
+        "backgroundDisclaimer": {
+            "heading": "Gravação de Áudio em Segundo Plano",
+            "msg": [
+                "Este formulário grava o áudio do microfone do seu dispositivo.",
+                "Você pode usar o indicador de nível de áudio para garantir que o microfone esteja perto o suficiente do som que precisa ser gravado.",
+                "Para parar a gravação, por favor, saia deste formulário.",
+                "Para mais informações, entre em contato com a pessoa que pediu para você coletar dados."
+            ]
+        },
+        "hasRecordedAudio": "Este envio tem uma gravação de áudio em segundo plano."
+    },
     "confirm": {
         "autosaveload": {
             "heading": "Registro não salvo encontrado",

@@ -58,7 +58,9 @@
         "rating",
         "thousands-sep",
         "integer",
-        "decimal"
+        "decimal",
+        "audio",
+        "background-audio"
     ],
     "analytics": "google",
     "google": {

@@ -213,6 +213,9 @@ XSLT Stylesheet that transforms OpenRosa style (X)Forms into valid HTMl5 forms
                         </select>
                     </xsl:if>
 
+                    <!-- Create input element for the background audio when needed -->
+                    <xsl:apply-templates select="h:html/h:head/xf:model/odk:recordaudio" />
+
                     <xsl:apply-templates />
 
                     <!-- Create hidden input fields for preload items that do not have a form control. -->
@@ -541,6 +544,11 @@ XSLT Stylesheet that transforms OpenRosa style (X)Forms into valid HTMl5 forms
                                     </xsl:call-template>
                                 </xsl:otherwise>
                             </xsl:choose>
+                            <xsl:if test="$binding/@odk:quality">
+                                <xsl:attribute name="data-quality">
+                                    <xsl:value-of select="$binding/@odk:quality" />
+                                </xsl:attribute>
+                            </xsl:if>
                         </xsl:element>
                         <xsl:if test="local-name() = 'item'">
                             <xsl:apply-templates select="xf:label" />
@@ -1791,4 +1799,29 @@ XSLT Stylesheet that transforms OpenRosa style (X)Forms into valid HTMl5 forms
             </xsl:otherwise>
         </xsl:choose>
     </xsl:template>
+
+    <xsl:template match="/h:html/h:head/xf:model/odk:recordaudio">
+        <xsl:variable name="nodeset">
+            <xsl:value-of select="@ref"/>
+        </xsl:variable>
+        <div class="question">
+            <xsl:element name="input">
+                <xsl:attribute name="data-quality">
+                    <xsl:choose>
+                        <xsl:when test="@odk:quality">
+                            <xsl:value-of select="@odk:quality" />
+                        </xsl:when>
+                        <xsl:otherwise>voice-only</xsl:otherwise>
+                    </xsl:choose>
+                </xsl:attribute>
+                <xsl:attribute name="name">
+                    <xsl:value-of select="@ref"/>
+                </xsl:attribute>
+                <xsl:attribute name="type">file</xsl:attribute>
+                <xsl:attribute name="data-type-xml">binary</xsl:attribute>
+                <xsl:attribute name="data-background-audio">true</xsl:attribute>
+            </xsl:element>
+        </div>
+    </xsl:template>
+
 </xsl:stylesheet>

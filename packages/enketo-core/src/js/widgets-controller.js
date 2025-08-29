@@ -3,7 +3,7 @@
  */
 
 import $ from 'jquery';
-import _widgets from 'enketo/widgets';
+import _widgets from './widgets';
 import { elementDataStore as data } from './dom-utils';
 import events from './event';
 
@@ -164,7 +164,41 @@ function _instantiate(Widget, group) {
     _setValChangeListener(Widget, elements);
 }
 
+/**
+ * Gives widgets a chance to prepare data asynchronously before submitting the form.
+ *
+ * @return {Promise<void>} A promise that resolves when all widgets have prepared their data.
+ */
+async function beforeSubmit() {
+    // Grab all the widget instances from the form elements
+    const widgetInstances = [];
+    for (const Widget of widgets) {
+        const elements = _getElements(formElement, Widget.selector);
+        for (const element of elements) {
+            widgetInstances.push(data.get(element, Widget.name));
+        }
+    }
+
+    // Wait for all widgets to process their beforeSubmit logic
+    return Promise.all(
+        widgetInstances.map((widgetInstance) => widgetInstance.beforeSubmit())
+    );
+}
+
+/**
+ * Call cleanup on all widgets and global reset.
+ *
+ * @return {Promise<void>}
+ */
 const reset = () => {
+    for (const Widget of widgets) {
+        const elements = _getElements(formElement, Widget.selector);
+        for (const element of elements) {
+            const widgetInstance = data.get(element, Widget.name);
+            widgetInstance?.cleanup?.();
+        }
+    }
+
     widgets.forEach((Widget) => {
         Widget.globalReset?.();
     });
@@ -329,4 +363,5 @@ export default {
     enable,
     disable,
     reset,
+    beforeSubmit,
 };
