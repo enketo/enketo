@@ -405,7 +405,7 @@ FormModel.prototype.mergeXml = function (recordStr) {
      * when non existent, creates an empty node.
      * This fixes some situations where, when loading editing data,
      * repeat nodes aren't properly returned, crashing editing.
-     **/
+     */
 
     // Need to use the raw model without transformations
     const modelDoc = new DOMParser().parseFromString(
