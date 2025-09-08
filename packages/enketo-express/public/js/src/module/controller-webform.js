@@ -447,8 +447,13 @@ function _submitRecord(survey) {
                 }, 1200);
             } else {
                 msg = msg.length > 0 ? msg : t('alert.submissionsuccess.msg');
-                gui.alert(msg, t('alert.submissionsuccess.heading'), level);
-                _resetForm(survey);
+                gui.alert(
+                    msg,
+                    t('alert.submissionsuccess.heading'),
+                    level
+                ).then(() => {
+                    _resetForm(survey);
+                });
             }
         })
         .catch((result) => {
