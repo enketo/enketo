@@ -162,6 +162,7 @@ function _uploadBatch(recordBatch) {
                 failedFiles: recordBatch.failedFiles
                     ? recordBatch.failedFiles
                     : undefined,
+                response,
             };
 
             if (response.status === 400) {

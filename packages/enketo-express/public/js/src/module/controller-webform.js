@@ -456,7 +456,7 @@ function _submitRecord(survey) {
                 });
             }
         })
-        .catch((result) => {
+        .catch(async (result) => {
             let message;
             result = result || {};
             console.error('submission failed', result);
@@ -470,7 +470,7 @@ function _submitRecord(survey) {
                 });
             } else {
                 message =
-                    result.message || gui.getErrorResponseMsg(result.status);
+                    result.message || (await gui.getErrorResponseMsg(result));
             }
             gui.alert(message, t('alert.submissionerror.heading'));
         });

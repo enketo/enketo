@@ -607,7 +607,8 @@ updateStatus = {
     },
 };
 
-function getErrorResponseMsg(statusCode) {
+async function getErrorResponseMsg(result) {
+    let { status: statusCode, response } = result;
     let msg;
     const supportEmailObj = {
         supportEmail: settings.supportEmail,
@@ -637,14 +638,38 @@ function getErrorResponseMsg(statusCode) {
     if (statusMap[statusCode]) {
         msg = `${statusMap[statusCode]} (${statusCode})`;
     } else if (statusMap[statusCode.replace(statusCode.substring(1), 'xx')]) {
-        msg = `${
-            statusMap[statusCode.replace(statusCode.substring(1), 'xx')]
-        } (${statusCode})`;
+        const parsedMessage = await parseMessageFromResponse(response);
+        if (parsedMessage) {
+            msg = `${parsedMessage} (${statusCode})`;
+        } else {
+            msg = `${
+                statusMap[statusCode.replace(statusCode.substring(1), 'xx')]
+            } (${statusCode})`;
+        }
     } else {
         msg = `${t('error.unknown')} (${statusCode})`;
     }
 
     return msg;
+}
+
+async function parseMessageFromResponse(response) {
+    const text = await response.text();
+    const xml = new DOMParser().parseFromString(text, 'text/xml');
+
+    if (xml.querySelector('parseerror')) {
+        // response is not a valid XML
+        return null;
+    }
+
+    const messageEl = xml.querySelector('OpenRosaResponse > message');
+
+    if (!messageEl) {
+        // response does not contain the expected structure
+        return null;
+    }
+
+    return messageEl.textContent;
 }
 
 $(document).ready(() => {

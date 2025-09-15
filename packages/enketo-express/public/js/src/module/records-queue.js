@@ -324,7 +324,7 @@ const uploadQueue = async (
             }
 
             // if any non HTTP error occurs, output the error.message
-            errorMsg = error.message || gui.getErrorResponseMsg(error.status);
+            errorMsg = error.message || (await gui.getErrorResponseMsg(error));
             uploadProgress.update(record.instanceId, 'error', errorMsg);
         }
     }
