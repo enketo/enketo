@@ -336,7 +336,10 @@ describe('Records queue', () => {
             const result = await records.uploadQueue({ isUserTriggered: true });
 
             expect(guiAlertStub).to.have.been.calledWith(
-                `${t('record-list.msg2')}`,
+                t('record-list.msg2', {
+                    icon: `<span class="icon icon-pencil"> </span>`,
+                    interpolation: { escapeValue: false },
+                }),
                 t('alert.recordsavesuccess.finalmsg'),
                 'info',
                 10
