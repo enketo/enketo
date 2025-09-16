@@ -607,8 +607,9 @@ updateStatus = {
     },
 };
 
-async function getErrorResponseMsg(result) {
-    let { status: statusCode, response } = result;
+function getErrorResponseMsg(result) {
+    // message is parsed from the server response in connection.js
+    let { status: statusCode, message } = result;
     let msg;
     const supportEmailObj = {
         supportEmail: settings.supportEmail,
@@ -619,7 +620,6 @@ async function getErrorResponseMsg(result) {
         0: t('submission.http0'),
         200: `${t('submission.http2xx')}<br/>${contactSupport}`,
         '2xx': `${t('submission.http2xx')}<br/>${contactSupport}`,
-        400: `${t('submission.http400')}<br/>${contactAdmin}`,
         401: t('submission.http401'),
         403: `${t('submission.http403')}<br/>${contactAdmin}`,
         404: t('submission.http404'),
@@ -638,9 +638,8 @@ async function getErrorResponseMsg(result) {
     if (statusMap[statusCode]) {
         msg = `${statusMap[statusCode]} (${statusCode})`;
     } else if (statusMap[statusCode.replace(statusCode.substring(1), 'xx')]) {
-        const parsedMessage = await parseMessageFromResponse(response);
-        if (parsedMessage) {
-            msg = `${parsedMessage} (${statusCode})`;
+        if (message) {
+            msg = `${message} (${statusCode})`;
         } else {
             msg = `${
                 statusMap[statusCode.replace(statusCode.substring(1), 'xx')]
@@ -651,25 +650,6 @@ async function getErrorResponseMsg(result) {
     }
 
     return msg;
-}
-
-async function parseMessageFromResponse(response) {
-    const text = await response.text();
-    const xml = new DOMParser().parseFromString(text, 'text/xml');
-
-    if (xml.querySelector('parseerror')) {
-        // response is not a valid XML
-        return null;
-    }
-
-    const messageEl = xml.querySelector('OpenRosaResponse > message');
-
-    if (!messageEl) {
-        // response does not contain the expected structure
-        return null;
-    }
-
-    return messageEl.textContent;
 }
 
 $(document).ready(() => {
