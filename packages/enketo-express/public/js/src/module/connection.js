@@ -186,9 +186,8 @@ function _uploadBatch(recordBatch) {
                     }
                     throw result;
                 });
-            } else {
-                return result;
             }
+            return result;
         })
         .catch((error) => {
             if (
