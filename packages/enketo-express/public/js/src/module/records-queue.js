@@ -247,7 +247,10 @@ const uploadQueue = async (
 
         if (isUserTriggered) {
             gui.alert(
-                `${t('record-list.msg2')}`,
+                t('record-list.msg2', {
+                    icon: `<span class="icon icon-pencil"> </span>`,
+                    interpolation: { escapeValue: false },
+                }),
                 t('alert.recordsavesuccess.finalmsg'),
                 'info',
                 10
@@ -353,7 +356,10 @@ const uploadQueue = async (
 
         if (isUserTriggered) {
             gui.alert(
-                `${t('record-list.msg2')}`,
+                t('record-list.msg2', {
+                    icon: `<span class="icon icon-pencil"> </span>`,
+                    interpolation: { escapeValue: false },
+                }),
                 t('alert.recordsavesuccess.finalmsg'),
                 'info',
                 10
