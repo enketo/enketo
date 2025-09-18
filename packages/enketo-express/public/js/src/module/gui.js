@@ -607,7 +607,9 @@ updateStatus = {
     },
 };
 
-function getErrorResponseMsg(statusCode) {
+function getErrorResponseMsg(result) {
+    // message is parsed from the server response in connection.js
+    let { status: statusCode, message } = result;
     let msg;
     const supportEmailObj = {
         supportEmail: settings.supportEmail,
@@ -618,7 +620,6 @@ function getErrorResponseMsg(statusCode) {
         0: t('submission.http0'),
         200: `${t('submission.http2xx')}<br/>${contactSupport}`,
         '2xx': `${t('submission.http2xx')}<br/>${contactSupport}`,
-        400: `${t('submission.http400')}<br/>${contactAdmin}`,
         401: t('submission.http401'),
         403: `${t('submission.http403')}<br/>${contactAdmin}`,
         404: t('submission.http404'),
@@ -637,9 +638,13 @@ function getErrorResponseMsg(statusCode) {
     if (statusMap[statusCode]) {
         msg = `${statusMap[statusCode]} (${statusCode})`;
     } else if (statusMap[statusCode.replace(statusCode.substring(1), 'xx')]) {
-        msg = `${
-            statusMap[statusCode.replace(statusCode.substring(1), 'xx')]
-        } (${statusCode})`;
+        if (message) {
+            msg = `${message} (${statusCode})`;
+        } else {
+            msg = `${
+                statusMap[statusCode.replace(statusCode.substring(1), 'xx')]
+            } (${statusCode})`;
+        }
     } else {
         msg = `${t('error.unknown')} (${statusCode})`;
     }

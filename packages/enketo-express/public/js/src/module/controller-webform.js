@@ -469,8 +469,7 @@ function _submitRecord(survey) {
                     },
                 });
             } else {
-                message =
-                    result.message || gui.getErrorResponseMsg(result.status);
+                message = gui.getErrorResponseMsg(result);
             }
             gui.alert(message, t('alert.submissionerror.heading'));
         });

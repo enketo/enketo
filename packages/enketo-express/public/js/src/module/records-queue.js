@@ -320,14 +320,14 @@ const uploadQueue = async (
 
             await store.record.remove(record.instanceId);
             await store.property.addSubmittedInstanceId(record);
-        } catch (error) {
+        } catch (result) {
             // catch 401 responses (1 of them)
-            if (error.status === 401) {
-                authError = error;
+            if (result.status === 401) {
+                authError = result;
             }
 
             // if any non HTTP error occurs, output the error.message
-            errorMsg = error.message || gui.getErrorResponseMsg(error.status);
+            errorMsg = gui.getErrorResponseMsg(result);
             uploadProgress.update(record.instanceId, 'error', errorMsg);
         }
     }

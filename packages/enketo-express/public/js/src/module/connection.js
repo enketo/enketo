@@ -162,11 +162,11 @@ function _uploadBatch(recordBatch) {
                 failedFiles: recordBatch.failedFiles
                     ? recordBatch.failedFiles
                     : undefined,
+                message: undefined,
             };
 
-            if (response.status === 400) {
-                // 400 is a generic error. Any message returned by the server is probably more useful.
-                // Other more specific statusCodes will get hardcoded and translated messages.
+            // Note: OpenRosa servers return 201 or 202 status codes upon successful submission.
+            if (response.status !== 201 && response.status !== 202) {
                 return response.text().then((text) => {
                     const xmlResponse = parser.parseFromString(
                         text,
@@ -178,16 +178,16 @@ function _uploadBatch(recordBatch) {
                         );
                         if (messageEl) {
                             result.message = messageEl.textContent;
+                        } else {
+                            result.message = text;
                         }
+                    } else {
+                        result.message = text;
                     }
                     throw result;
                 });
             }
-            if (response.status !== 201 && response.status !== 202) {
-                throw result;
-            } else {
-                return result;
-            }
+            return result;
         })
         .catch((error) => {
             if (
