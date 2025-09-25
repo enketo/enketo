@@ -214,7 +214,10 @@ class Widget {
      *
      * @return void
      */
-    validate() {}
+    validate() {
+        // Return is needed for linting purposes only
+        return undefined;
+    }
 
     /**
      * Sets a custom validation error message on the widget's element.
