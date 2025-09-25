@@ -653,6 +653,8 @@ function getErrorResponseMsg(result) {
                 statusMap[statusCode.replace(statusCode.substring(1), 'xx')]
             } (${statusCode})`;
         }
+    } else if (message) {
+        msg = `${message}`;
     } else {
         msg = `${t('error.unknown')} (${statusCode})`;
     }

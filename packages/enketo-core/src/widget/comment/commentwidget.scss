@@ -63,11 +63,13 @@ $padding: 30px;
     // should stay hidden.
     .or-required-msg.active,
     .or-constraint-msg.active,
+    .custom-error-msg.active,
     .invalid-value-msg.active {
         display: none;
     }
     .invalid-required > .or-required-msg,
     .invalid-constraint > .or-constraint-msg,
+    .invalid-custom > .custom-error-msg,
     .invalid-value > .invalid-value-msg {
         display: block;
     }

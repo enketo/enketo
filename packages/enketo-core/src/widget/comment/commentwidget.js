@@ -81,7 +81,8 @@ class Comment extends Widget {
     _commentHasError() {
         return (
             this.commentQuestion.classList.contains('invalid-required') ||
-            this.commentQuestion.classList.contains('invalid-constraint')
+            this.commentQuestion.classList.contains('invalid-constraint') ||
+            this.commentQuestion.classList.contains('invalid-custom')
         );
     }
 

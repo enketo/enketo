@@ -62,6 +62,7 @@ h4::before {
     button,
     .invalid-required .or-required-msg.active,
     .invalid-constraint .or-constraint-msg.active,
+    .invalid-custom .custom-error-msg.active,
     .invalid-value .invalid-value-msg.active {
         display: none;
     }
@@ -219,7 +220,8 @@ input[type='checkbox'] {
 }
 
 .invalid-constraint,
-.invalid-required {
+.invalid-required,
+.invalid-custom {
     background: none;
     border: 1px solid red;
 }
