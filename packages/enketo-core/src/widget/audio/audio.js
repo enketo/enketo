@@ -179,12 +179,28 @@ class AudioWidget extends Widget {
      * If a recording is in progress, it throws an error.
      * @returns {Promise<void>}
      */
-    async validate() {
+    validate() {
         if (this.audioRecorder.isRecording() || this.audioRecorder.isPaused()) {
             this.setValidationError(
                 t('audioRecording.error.recordingInProgress')
             );
         }
+    }
+
+    /**
+     * Before submitting the form, this method is called to check if an audio recording is in progress.
+     * If a recording is in progress, it throws an error.
+     * @param {*} isSavingDraft
+     * @returns
+     */
+    beforeSubmit() {
+        // This will only be called when saving drafts, since the validate() method
+        // will block submissions and page navigation when a recording is in progress.
+        if (this.audioRecorder.isRecording() || this.audioRecorder.isPaused()) {
+            // Throw an error if a recording is in progress
+            throw new Error(t('audioRecording.error.recordingInProgress'));
+        }
+        return Promise.resolve();
     }
 
     /**
