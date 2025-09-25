@@ -214,9 +214,7 @@ class Widget {
      *
      * @return void
      */
-    validate() {
-        return;
-    }
+    validate() {}
 
     /**
      * Sets a custom validation error message on the widget's element.
