@@ -13,6 +13,10 @@ import fileManager from 'enketo/file-manager';
  * @augments Widget
  */
 
+const elementsToBeDisabled = [
+    '.widget.audio-widget .step-action-select .btn-record',
+];
+
 class AudioWidget extends Widget {
     static get selector() {
         return '.question:not(.or-appearance-draw):not(.or-appearance-signature):not(.or-appearance-annotate) input[accept="audio/*"]';
@@ -27,8 +31,6 @@ class AudioWidget extends Widget {
         this.fileName = existingFilename || ''; // A filename to be used for data validation purposes
         this.audioBlob = null; // To store the recorded audio blob
 
-        this.overlay = null;
-
         this.element.classList.add('hidden');
         this.element.dataset.audio = 'true'; // Indicate that this is an audio recording widget
         this.element.type = 'text'; // Set input type to text so we can set its value
@@ -42,7 +44,7 @@ class AudioWidget extends Widget {
                 `<div class="widget audio-widget"></div>`
             );
 
-        this.question.appendChild(fragment); // Append the new widget structure
+        this.element.after(fragment); // Append the new widget structure
 
         this.element.addEventListener('change', async (event) => {
             // If the input type is not 'file', do nothing
@@ -123,54 +125,6 @@ class AudioWidget extends Widget {
         if (fragment) widget.appendChild(fragment);
     }
 
-    /*
-     * This method shows an overlay on top of the question element
-     * to prevent user interaction while recording audio.
-     */
-    showOverlay() {
-        if (this.overlay) {
-            this.overlay.remove(); // Remove existing overlay if it exists
-        }
-        // Create a new overlay element and insert it at the beginning of the question
-        // This is used to prevent user interaction while recording audio
-        const fragment = document
-            .createRange()
-            .createContextualFragment(
-                `<div class="audio-widget-overlay fade-in"> </div>`
-            );
-        this.overlay = fragment.firstChild;
-        this.overlay.style.zIndex = 1000; // Ensure the overlay is on top
-        this.question.style.zIndex = 1010; // Set the question's z-index to be above the overlay
-        this.question.before(fragment);
-    }
-
-    /*
-     * This method hides the overlay that was shown during audio recording.
-     * It removes the overlay element after a fade-out animation.
-     */
-    hideOverlay() {
-        if (this.overlay) {
-            this.overlay.classList.remove('fade-in');
-
-            requestAnimationFrame(() => {
-                // Needed to ensure the fade-out animation is applied
-                this.overlay.classList.add('fade-out'); // Add fade-out class for animation
-
-                setTimeout(() => {
-                    this.overlay.remove(); // Remove the overlay element
-                    this.overlay = null;
-                    this.question.style.removeProperty('z-index'); // Reset the z-index of the question
-                }, 300); // Delay to allow any animations to complete
-            });
-        }
-    }
-
-    /**
-     * This method shows the action select step where the user can
-     * choose to start recording audio or upload an existing audio file.
-     * It creates the necessary UI elements and event listeners
-     * for both actions.
-     */
     showActionSelectStep() {
         this.updateValue(null);
         this.element.type = 'text'; // Will consider the input as a text for validation purposes
@@ -218,6 +172,19 @@ class AudioWidget extends Widget {
         });
 
         this.setWidgetContent(stepFragment);
+    }
+
+    /**
+     * Before submitting the form, this method is called to check if an audio recording is in progress.
+     * If a recording is in progress, it throws an error.
+     * @returns {Promise<void>}
+     */
+    async validate() {
+        if (this.audioRecorder.isRecording() || this.audioRecorder.isPaused()) {
+            this.setValidationError(
+                t('audioRecording.error.recordingInProgress')
+            );
+        }
     }
 
     /**
@@ -271,6 +238,8 @@ class AudioWidget extends Widget {
         buttonStop.addEventListener('click', async () => {
             await this.audioRecorder.stopRecording();
 
+            this.setValidationError(null); // Clear previous validation error
+
             const blob = await this.audioRecorder.getRecordedFile(); // Store the recorded audio file
 
             this.fileName = this.getFileName(); // Get the filename for the recording
@@ -283,7 +252,7 @@ class AudioWidget extends Widget {
             // When value is set, it will trigger the playback step
             this.showPlaybackStep();
 
-            this.hideOverlay();
+            this.restoreElements();
         });
 
         this.setWidgetContent(stepFragment);
@@ -292,7 +261,25 @@ class AudioWidget extends Widget {
 
         this.watchAudioRecording(timeDisplay); // Start watching the audio recording
 
-        this.showOverlay(); // Show the overlay to prevent interaction to other elements during recording
+        this.disableElements();
+    }
+
+    disableElements() {
+        elementsToBeDisabled.forEach((selector) => {
+            document.querySelectorAll(selector).forEach((el) => {
+                el.dataset.previousDisabledState = el.disabled;
+                el.disabled = true;
+            });
+        });
+    }
+
+    restoreElements() {
+        elementsToBeDisabled.forEach((selector) => {
+            document.querySelectorAll(selector).forEach((el) => {
+                el.disabled = el.dataset.previousDisabledState === 'true';
+                el.removeAttribute('data-previous-disabled-state');
+            });
+        });
     }
 
     /**
