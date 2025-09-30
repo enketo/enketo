@@ -138,8 +138,7 @@
             "noMicrophone": "No microphone found on this device.",
             "notSupported": "Audio recording is not supported in this browser.",
             "unknownError": "Failed to access microphone. Check your browser settings and permissions.",
-            "recordingError": "An error occurred while trying to record audio.",
-            "recordingInProgress": "The current audio recording needs to be stopped before continuing."
+            "recordingError": "An error occurred while trying to record audio."
         },
         "startRecording": "Start Recording",
         "uploadAudioFile": "Upload audio File",
