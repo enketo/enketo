@@ -132,7 +132,7 @@ describe('Snapshots', () => {
                     parser: 'xml',
                     plugins: ['@prettier/plugin-xml'],
                     xmlSelfClosingSpace: true,
-                    xmlWhitespaceSensitivity: 'ignore',
+                    xmlWhitespaceSensitivity: 'preserve',
                 })
                 // Reverses a change released in `@prettier/plugin-xml` 3.0.0. In prior
                 // versions, self-closing tags spanning multiple lines would place their
