@@ -202,7 +202,9 @@ class BackgroundAudioWidget extends Widget {
             .alert(
                 t('audioRecording.backgroundDisclaimer.msg'),
                 t('audioRecording.backgroundDisclaimer.heading'),
-                'normal'
+                'normal',
+                null,
+                t('audioRecording.backgroundDisclaimer.buttonText')
             )
             .then(() =>
                 this.audioRecorder.requestPermissions(this.audioQuality)
