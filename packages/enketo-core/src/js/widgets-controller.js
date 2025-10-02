@@ -175,7 +175,8 @@ async function beforeSubmit() {
     for (const Widget of widgets) {
         const elements = _getElements(formElement, Widget.selector);
         for (const element of elements) {
-            widgetInstances.push(data.get(element, Widget.name));
+            const widgetInstance = data.get(element, Widget.name);
+            if (widgetInstance) widgetInstances.push(widgetInstance);
         }
     }
 
@@ -183,6 +184,23 @@ async function beforeSubmit() {
     return Promise.all(
         widgetInstances.map((widgetInstance) => widgetInstance.beforeSubmit())
     );
+}
+
+/**
+ * Gives the widgets the chance to apply a custom validation before submitting the form.
+ *
+ * @return {Promise<void>} A promise that resolves when all widgets have prepared their data.
+ */
+function validate() {
+    // Grab all the widget instances from the form elements
+    for (const Widget of widgets) {
+        const elements = _getElements(formElement, Widget.selector);
+        for (const element of elements) {
+            const widgetInstance = data.get(element, Widget.name);
+            widgetInstance?.setValidationError(null); // resets any previous error
+            widgetInstance?.validate(); // run custom validation if existing
+        }
+    }
 }
 
 /**
@@ -364,4 +382,5 @@ export default {
     disable,
     reset,
     beforeSubmit,
+    validate,
 };

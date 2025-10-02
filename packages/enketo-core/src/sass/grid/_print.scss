@@ -86,7 +86,9 @@ $printBaseFontSize: 10px;
     background: #ffffff;
 }
 
-.question:not(.or-appearance-label):not(.or-appearance-compact):not(.or-appearance-quickcompact) {
+.question:not(.or-appearance-label):not(.or-appearance-compact):not(
+        .or-appearance-quickcompact
+    ) {
     label {
         $line-h: 15px;
 
@@ -170,7 +172,7 @@ $printBaseFontSize: 10px;
     vertical-align: top; //padding: 5px 5px 12px 5px;
 
     // unfortunately we cannot target actual page-breaks to provide a top-border
-    &:not(.invalid-required):not(.invalid-constraint) {
+    &:not(.invalid-required):not(.invalid-constraint):not(.invalid-custom) {
         border-top: $grid-border;
     }
 }

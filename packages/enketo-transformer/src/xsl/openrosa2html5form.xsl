@@ -332,7 +332,7 @@ XSLT Stylesheet that transforms OpenRosa style (X)Forms into valid HTMl5 forms
                 </h4>
             </xsl:if>
             <xsl:apply-templates select="*[not(self::xf:label or self::xf:hint)]"/>
-            <xsl:call-template name="constraint-and-required-msg" >
+            <xsl:call-template name="error-messages" >
                 <xsl:with-param name="binding" select="$binding"/>
             </xsl:call-template>
             <xsl:text>
@@ -559,7 +559,7 @@ XSLT Stylesheet that transforms OpenRosa style (X)Forms into valid HTMl5 forms
                             <xsl:if test="./xf:setvalue[@event] or ./odk:setgeopoint[@event]">
                                 <xsl:apply-templates select="./xf:setvalue[@event] | ./odk:setgeopoint[@event]" />
                             </xsl:if>
-                            <xsl:call-template name="constraint-and-required-msg" >
+                            <xsl:call-template name="error-messages" >
                                  <xsl:with-param name="binding" select="$binding"/>
                             </xsl:call-template>
                         </xsl:if>
@@ -886,7 +886,7 @@ XSLT Stylesheet that transforms OpenRosa style (X)Forms into valid HTMl5 forms
             <xsl:if test="./xf:setvalue[@event] or ./odk:setgeopoint[@event]">
                 <xsl:apply-templates select="./xf:setvalue[@event] | ./odk:setgeopoint[@event]" />
             </xsl:if>
-            <xsl:call-template name="constraint-and-required-msg" >
+            <xsl:call-template name="error-messages" >
                 <xsl:with-param name="binding" select="$binding"/>
             </xsl:call-template>
         </label>
@@ -973,7 +973,7 @@ XSLT Stylesheet that transforms OpenRosa style (X)Forms into valid HTMl5 forms
             <xsl:if test="./xf:setvalue[@event] or ./odk:setgeopoint[@event]">
                 <xsl:apply-templates select="./xf:setvalue[@event] | ./odk:setgeopoint[@event]" />
             </xsl:if>
-            <xsl:call-template name="constraint-and-required-msg" >
+            <xsl:call-template name="error-messages" >
                 <xsl:with-param name="binding" select="$binding"/>
             </xsl:call-template>
         </fieldset>
@@ -1285,8 +1285,9 @@ XSLT Stylesheet that transforms OpenRosa style (X)Forms into valid HTMl5 forms
         </xsl:choose>
     </xsl:template>
 
-    <xsl:template name="constraint-and-required-msg">
+    <xsl:template name="error-messages">
         <xsl:param name="binding"/>
+        <span class="custom-error-msg active"></span>
         <xsl:if test="string-length($binding/@constraint) &gt; 0">
             <xsl:choose>
                 <xsl:when test="$binding/@jr:constraintMsg">

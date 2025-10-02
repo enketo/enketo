@@ -197,6 +197,13 @@ export default {
     },
     /**
      * @param {Element} control - form control HTML element
+     * @return {string|null} the error message from the element's dataset or null if none exists
+     */
+    getErrorMessage(control) {
+        return control.dataset.errorMessage || null;
+    },
+    /**
+     * @param {Element} control - form control HTML element
      * @return {string} element value
      */
     getVal(control) {

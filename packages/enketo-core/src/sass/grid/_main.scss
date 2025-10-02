@@ -172,7 +172,8 @@ h4 + .or-repeat {
     }
 
     &.invalid-constraint,
-    &.invalid-required {
+    &.invalid-required,
+    &.invalid-custom {
         border-radius: 0;
         margin: $question-margin;
         padding: $question-padding;
@@ -232,6 +233,7 @@ h4 + .or-repeat {
     .or-constraint-msg,
     .or-required-msg,
     .or-relevant-msg,
+    .custom-error-msg,
     .invalid-value-msg {
         order: 5;
     }

@@ -206,6 +206,39 @@ class Widget {
     }
 
     /**
+     * Gives the widget a chance to apply a custom validation before submitting the form.
+     * This is useful for widgets that need to block the submission based on some custom logic
+     * (e.g., if a recording is still in progress, if an image is still loading...)
+     *
+     * Widgets should use `setValidationError(message)` to set a custom validation error message
+     *
+     * @return void
+     */
+    validate() {
+        // Return is needed for linting purposes only
+        return undefined;
+    }
+
+    /**
+     * Sets a custom validation error message on the widget's element.
+     * If a message is provided, it sets the 'data-error-message' attribute on the element.
+     * If no message is provided, it clears any existing error message.
+     *
+     * @param {string} message - The custom validation error message to set. If null, clears the error message.
+     */
+    setValidationError(message) {
+        if (!this.question) return;
+        const errorMsgEl = this.question.querySelector('.custom-error-msg');
+        if (message) {
+            this.element.dataset.errorMessage = message;
+            errorMsgEl.innerText = message;
+        } else {
+            delete this.element.dataset.errorMessage;
+            errorMsgEl.innerText = '';
+        }
+    }
+
+    /**
      * Returns its own name.
      *
      * @static

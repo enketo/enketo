@@ -1217,18 +1217,21 @@ Form.prototype.setInvalid = function (control, type = 'constraint') {
  */
 Form.prototype.updateValidityInUi = function (control, result) {
     const passed =
-        result.requiredValid !== false && result.constraintValid !== false;
+        result.requiredValid !== false &&
+        result.constraintValid !== false &&
+        result.customValid !== false;
+
+    this.setValid(control, 'constraint');
+    this.setValid(control, 'required');
+    this.setValid(control, 'custom');
 
     // Update UI
-    if (result.requiredValid === false) {
-        this.setValid(control, 'constraint');
+    if (result.customValid === false) {
+        this.setInvalid(control, 'custom');
+    } else if (result.requiredValid === false) {
         this.setInvalid(control, 'required');
     } else if (result.constraintValid === false) {
-        this.setValid(control, 'required');
         this.setInvalid(control, 'constraint');
-    } else {
-        this.setValid(control, 'constraint');
-        this.setValid(control, 'required');
     }
 
     if (!passed) {
@@ -1259,6 +1262,7 @@ Form.prototype.isValid = function (node) {
     const invalidSelectors = [
         '.invalid-value,',
         '.invalid-required',
+        '.invalid-custom',
         '.invalid-relevant',
     ].concat(this.constraintClassesInvalid.map((cls) => `.${cls}`));
     if (node) {
@@ -1314,6 +1318,7 @@ Form.prototype.validateContent = function ($container) {
     const invalidSelector = [
         '.invalid-value',
         '.invalid-required',
+        '.invalid-custom',
         '.invalid-relevant',
     ]
         .concat(this.constraintClassesInvalid.map((cls) => `.${cls}`))
@@ -1328,6 +1333,11 @@ Form.prototype.validateContent = function ($container) {
         .each(function () {
             that.setValid(this);
         });
+
+    // Run custom validation on widgets.
+    // If any error is found, a data-error-message attribute is added to the input element
+    // That attribute will be checked in the next step when validateInput is called
+    this.widgets.validate();
 
     const validations = $container
         .find('.question')
@@ -1388,6 +1398,7 @@ Form.prototype.pathToAbsolute = function (targetPath, contextPath) {
  * @typedef ValidateInputResolution
  * @property {boolean} requiredValid
  * @property {boolean} constraintValid
+ * @property {boolean} [customValid]
  */
 
 /**
@@ -1413,6 +1424,7 @@ Form.prototype.validateInput = function (control) {
         constraint: this.input.getConstraint(control),
         calculation: this.input.getCalculation(control),
         required: this.input.getRequired(control),
+        errorMessage: this.input.getErrorMessage(control),
         readonly: this.input.getReadonly(control),
         val: this.input.getVal(control),
     };
@@ -1427,9 +1439,17 @@ Form.prototype.validateInput = function (control) {
         return Promise.resolve();
     }
 
-    // The enabled check serves a purpose only when an input field itself is marked as enabled but its parent fieldset is not.
-    // If an element is disabled mark it as valid (to undo a previously shown branch with fields marked as invalid).
-    if (n.enabled && n.inputType !== 'hidden') {
+    if (n.errorMessage) {
+        // Check first for custom error message set by widget validation
+        this.setInvalid(control, 'custom');
+        getValidationResult = Promise.resolve({
+            requiredValid: true,
+            constraintValid: true,
+            customValid: false,
+        });
+    } else if (n.enabled && n.inputType !== 'hidden') {
+        // The enabled check serves a purpose only when an input field itself is marked as enabled but its parent fieldset is not.
+        // If an element is disabled mark it as valid (to undo a previously shown branch with fields marked as invalid).
         // Only now, will we determine the index.
         n.ind = this.input.getIndex(control);
         getValidationResult = this.model
@@ -1439,6 +1459,7 @@ Form.prototype.validateInput = function (control) {
         getValidationResult = Promise.resolve({
             requiredValid: true,
             constraintValid: true,
+            customValid: true,
         });
     }
 

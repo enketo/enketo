@@ -15,7 +15,7 @@ import fileManager from 'enketo/file-manager';
 
 class AudioWidget extends Widget {
     static get selector() {
-        return '.question:not(.or-appearance-draw):not(.or-appearance-signature):not(.or-appearance-annotate) input[type="file"][accept="audio/*"]';
+        return '.question:not(.or-appearance-draw):not(.or-appearance-signature):not(.or-appearance-annotate) input[accept="audio/*"]';
     }
 
     _init() {
