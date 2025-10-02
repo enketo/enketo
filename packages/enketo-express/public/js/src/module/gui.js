@@ -206,10 +206,16 @@ function feedback(message, duration, heading = t('feedback.header')) {
  * @param {string=} heading - heading to show
  * @param {string=} level - css class or normal (no styling) ('alert', 'info', 'warning', 'error', 'success')
  * @param {number=} duration - duration in secondsafter which dialog should self-destruct
- * @param {string=} buttonText - text for the button (default: OK)
+ * @param {string=} buttonText - text for the button
  * @returns {Promise} resolves when the alert is closed
  */
-function alert(message, heading, level, duration, buttonText) {
+function alert(
+    message,
+    heading,
+    level,
+    duration,
+    buttonText = t('alert.validationsuccess.heading')
+) {
     return new Promise((resolve) => {
         level = level || 'error';
         vex.closeAll();
@@ -219,7 +225,7 @@ function alert(message, heading, level, duration, buttonText) {
             messageClassName: level === 'normal' ? '' : `alert-box ${level}`,
             buttons: [
                 {
-                    text: buttonText || t('alert.validationsuccess.heading'),
+                    text: buttonText,
                     type: 'submit',
                     className: 'btn btn-primary small',
                 },
