@@ -13,9 +13,8 @@ import fileManager from 'enketo/file-manager';
  * @augments Widget
  */
 
-const elementsToBeDisabled = [
-    '.widget.audio-widget .step-action-select .btn-record',
-];
+const startRecordingButtonSelector =
+    '.widget.audio-widget .step-action-select .btn-record';
 
 class AudioWidget extends Widget {
     static get selector() {
@@ -109,6 +108,38 @@ class AudioWidget extends Widget {
     }
 
     /**
+     * Custom validation method to check if an audio recording is in progress.
+     * This is called to block a submission or page navigation.
+     * If a recording is in progress, it sets a validation error.
+     * @returns {Promise<void>}
+     */
+    validate() {
+        if (this.audioRecorder.isRecording() || this.audioRecorder.isPaused()) {
+            this.setValidationError(
+                t('audioRecording.error.recordingInProgress')
+            );
+        }
+    }
+
+    /**
+     * Before submitting the form, this method is called to check if an audio recording is in progress.
+     * If a recording is in progress, it throws an error.
+     * This method will only be called when saving drafts, since the validate() method
+     * will block submissions and page navigation when a recording is in progress.
+     * @returns
+     */
+    beforeSubmit() {
+        if (this.audioRecorder.isRecording() || this.audioRecorder.isPaused()) {
+            // Throw an error if a recording is in progress
+            return Promise.reject(
+                new Error(t('audioRecording.error.recordingInProgress'))
+            );
+            // throw ;
+        }
+        return Promise.resolve();
+    }
+
+    /**
      * Sets the content of the audio widget.
      * This is used to update the widget's inner HTML with the provided fragment.
      *
@@ -172,35 +203,6 @@ class AudioWidget extends Widget {
         });
 
         this.setWidgetContent(stepFragment);
-    }
-
-    /**
-     * Before submitting the form, this method is called to check if an audio recording is in progress.
-     * If a recording is in progress, it throws an error.
-     * @returns {Promise<void>}
-     */
-    validate() {
-        if (this.audioRecorder.isRecording() || this.audioRecorder.isPaused()) {
-            this.setValidationError(
-                t('audioRecording.error.recordingInProgress')
-            );
-        }
-    }
-
-    /**
-     * Before submitting the form, this method is called to check if an audio recording is in progress.
-     * If a recording is in progress, it throws an error.
-     * @param {*} isSavingDraft
-     * @returns
-     */
-    beforeSubmit() {
-        // This will only be called when saving drafts, since the validate() method
-        // will block submissions and page navigation when a recording is in progress.
-        if (this.audioRecorder.isRecording() || this.audioRecorder.isPaused()) {
-            // Throw an error if a recording is in progress
-            throw new Error(t('audioRecording.error.recordingInProgress'));
-        }
-        return Promise.resolve();
     }
 
     /**
@@ -281,21 +283,19 @@ class AudioWidget extends Widget {
     }
 
     disableElements() {
-        elementsToBeDisabled.forEach((selector) => {
-            document.querySelectorAll(selector).forEach((el) => {
-                el.dataset.previousDisabledState = el.disabled;
+        document
+            .querySelectorAll(startRecordingButtonSelector)
+            .forEach((el) => {
                 el.disabled = true;
             });
-        });
     }
 
     restoreElements() {
-        elementsToBeDisabled.forEach((selector) => {
-            document.querySelectorAll(selector).forEach((el) => {
-                el.disabled = el.dataset.previousDisabledState === 'true';
-                el.removeAttribute('data-previous-disabled-state');
+        document
+            .querySelectorAll(startRecordingButtonSelector)
+            .forEach((el) => {
+                el.disabled = false;
             });
-        });
     }
 
     /**
