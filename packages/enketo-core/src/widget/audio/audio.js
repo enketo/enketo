@@ -270,7 +270,7 @@ class AudioWidget extends Widget {
             // When value is set, it will trigger the playback step
             this.showPlaybackStep();
 
-            this.restoreElements();
+            this.enableRecordingFromAudioWidgets();
         });
 
         this.setWidgetContent(stepFragment);
@@ -279,10 +279,10 @@ class AudioWidget extends Widget {
 
         this.watchAudioRecording(timeDisplay); // Start watching the audio recording
 
-        this.disableElements();
+        this.disableRecordingFromAudioWidgets();
     }
 
-    disableElements() {
+    disableRecordingFromAudioWidgets() {
         document
             .querySelectorAll(startRecordingButtonSelector)
             .forEach((el) => {
@@ -290,7 +290,7 @@ class AudioWidget extends Widget {
             });
     }
 
-    restoreElements() {
+    enableRecordingFromAudioWidgets() {
         document
             .querySelectorAll(startRecordingButtonSelector)
             .forEach((el) => {
