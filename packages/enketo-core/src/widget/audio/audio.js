@@ -282,6 +282,10 @@ class AudioWidget extends Widget {
         this.disableRecordingFromAudioWidgets();
     }
 
+    /**
+     * Disables the recording buttons on all audio widgets to prevent multiple recordings at the same time.
+     * @returns {void}
+     */
     disableRecordingFromAudioWidgets() {
         document
             .querySelectorAll(startRecordingButtonSelector)
@@ -290,6 +294,11 @@ class AudioWidget extends Widget {
             });
     }
 
+    /**
+     * Enables the recording buttons on all audio widgets.
+     * This is called after a recording is stopped to allow new recordings.
+     * @returns {void}
+     */
     enableRecordingFromAudioWidgets() {
         document
             .querySelectorAll(startRecordingButtonSelector)
