@@ -1,32 +1,3 @@
-@keyframes audio-widget-overlay-fade-in {
-    0% {
-        opacity: 0; /* Start fully transparent */
-    }
-    100% {
-        opacity: 0.5; /* End fully opaque */
-    }
-}
-
-.audio-widget-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: $body-bg;
-    opacity: 0;
-    cursor: not-allowed;
-    z-index: 1000;
-}
-
-.audio-widget-overlay.fade-in {
-    animation: audio-widget-overlay-fade-in 1s forwards; /* Fade-in effect */
-}
-
-.audio-widget-overlay.fade-out {
-    animation: audio-widget-overlay-fade-in 0.3s reverse forwards; /* Fade-out effect */
-}
-
 .audio-widget {
     width: 100%;
 
