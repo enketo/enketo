@@ -228,7 +228,10 @@ class Widget {
      */
     setValidationError(message) {
         if (!this.question) return;
+
         const errorMsgEl = this.question.querySelector('.custom-error-msg');
+        if (!errorMsgEl) return;
+
         if (message) {
             this.element.dataset.errorMessage = message;
             errorMsgEl.innerText = message;
