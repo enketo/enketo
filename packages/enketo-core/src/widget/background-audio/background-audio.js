@@ -106,9 +106,7 @@ class BackgroundAudioWidget extends Widget {
      *
      * @param {string} message - The custom validation error message to set. If null, clears the error message.
      */
-    setValidationError(_message) {
-        return; // No action for this widget
-    }
+    setValidationError(_message) {}
 
     /**
      * Gets the current value of the audio widget.
