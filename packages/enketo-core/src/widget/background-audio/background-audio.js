@@ -82,8 +82,11 @@ class BackgroundAudioWidget extends Widget {
      * @returns {Promise<void>}
      */
     async beforeSubmit() {
-        // Preparing audio data for submission...
-        if (this.existingFilename) return; // If it's an edit, we don't record again.
+        // If it's an edit, we don't record again.
+        if (this.existingFilename) return;
+
+        // If it's not recording, there's nothing to do.
+        if (!this.audioRecorder.isRecording()) return;
 
         try {
             await this.audioRecorder.stopRecording();
@@ -96,6 +99,15 @@ class BackgroundAudioWidget extends Widget {
             throw error;
         }
     }
+
+    /**
+     * Background audio widget does not take place visually and doesn't implement
+     * a custom validation which would display a message. Therefore, this method is a no-op.
+     *
+     * @param {string} message - The custom validation error message to set. If null, clears the error message.
+     */
+    // eslint-disable-next-line @typescript-eslint/no-empty-function
+    setValidationError(_message) {}
 
     /**
      * Gets the current value of the audio widget.
