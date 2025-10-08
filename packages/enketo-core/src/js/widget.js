@@ -220,7 +220,7 @@ class Widget {
     }
 
     /**
-     * Sets a custom validation error message on the widget's element if it exists.
+     * Sets a custom validation error message on the widget's element.
      * If a message is provided, it sets the 'data-error-message' attribute on the element.
      * If no message is provided, it clears any existing error message.
      *
