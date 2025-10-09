@@ -9,6 +9,7 @@ import config from 'enketo/config';
 import events from './event';
 import { getSiblingElement, getAncestors } from './dom-utils';
 import 'jquery-touchswipe';
+import BackgroundAudioWidget from '../widget/background-audio/background-audio';
 
 /**
  * @typedef {import('./form').Form} Form
@@ -70,9 +71,7 @@ export default {
                         // Exclude background-audio widgets from being treated as pages
                         !(
                             el.matches('.question') &&
-                            el.querySelector(
-                                'input[data-background-audio="true"]'
-                            )
+                            el.querySelector(BackgroundAudioWidget.selector)
                         )
                 )
                 .map((el) => {
