@@ -66,6 +66,13 @@ export default {
                         !(
                             el.matches('.question') &&
                             el.querySelector('[data-for]')
+                        ) &&
+                        // Exclude background-audio widgets from being treated as pages
+                        !(
+                            el.matches('.question') &&
+                            el.querySelector(
+                                'input[data-background-audio="true"]'
+                            )
                         )
                 )
                 .map((el) => {
