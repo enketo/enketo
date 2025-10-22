@@ -260,6 +260,68 @@ function encodeHtmlEntities(text) {
         .replace(/"/g, '&quot;');
 }
 
+// Dangerous SVG elements that should be removed for security
+const DANGEROUS_SVG_ELEMENTS = [
+    'script',
+    'foreignObject',
+    'iframe',
+    'object',
+    'embed',
+    'link',
+    'meta',
+    'style',
+];
+
+/**
+ * Sanitizes SVG content by removing potentially dangerous elements and attributes
+ * @param {Element} svgElement - The SVG element to sanitize
+ * @return {Element} The sanitized SVG element
+ */
+function sanitizeSvg(svgElement) {
+    if (!svgElement) {
+        return svgElement;
+    }
+
+    // Clone the element to avoid modifying the original
+    const sanitizedSvg = svgElement.cloneNode(true);
+
+    // Function to remove attributes that start with "on" (event handlers)
+    const removeEventHandlerAttributes = (element) => {
+        for (let attr of element.attributes) {
+            if (attr.name.toLowerCase().startsWith('on')) {
+                element.removeAttribute(attr.name);
+            }
+        }
+    };
+
+    // Remove dangerous elements
+    DANGEROUS_SVG_ELEMENTS.forEach((tagName) => {
+        const elements = sanitizedSvg.querySelectorAll(tagName);
+        elements.forEach((el) => el.remove());
+    });
+
+    // Remove event handler and javascript URL attributes from all elements
+    const allElements = sanitizedSvg.querySelectorAll('*');
+    allElements.forEach((element) => {
+        removeEventHandlerAttributes(element);
+
+        // Sanitize href and xlink:href attributes to prevent javascript: URLs
+        ['href', 'xlink:href'].forEach((attr) => {
+            if (element.hasAttribute(attr)) {
+                const href = element.getAttribute(attr);
+                if (href && href.toLowerCase().startsWith('javascript:')) {
+                    element.removeAttribute(attr);
+                }
+            }
+        });
+    });
+
+    // Also check the root SVG element
+    removeEventHandlerAttributes(sanitizedSvg.documentElement);
+
+    return sanitizedSvg;
+}
+
 export {
     parseFunctionFromExpression,
     stripQuotes,
@@ -272,4 +334,5 @@ export {
     joinPath,
     getScript,
     encodeHtmlEntities,
+    sanitizeSvg,
 };

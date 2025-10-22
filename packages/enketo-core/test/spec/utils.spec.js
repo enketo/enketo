@@ -92,3 +92,127 @@ describe('return postfixed filenames', () => {
         });
     });
 });
+
+describe('SVG Sanitization', () => {
+    let parser;
+
+    beforeEach(() => {
+        parser = new DOMParser();
+    });
+
+    it('should remove script elements from SVG', () => {
+        const maliciousSvg = parser
+            .parseFromString(
+                `
+            <svg xmlns="http://www.w3.org/2000/svg">
+                <script>alert('XSS')</script>
+                <path id="safe" d="M 10 10 L 20 20"/>
+            </svg>
+        `,
+                'text/xml'
+            )
+            .querySelector('svg');
+
+        const sanitized = utils.sanitizeSvg(maliciousSvg);
+
+        expect(sanitized.querySelector('script')).to.be.null;
+        expect(sanitized.querySelector('path')).to.not.be.null;
+    });
+
+    it('should remove event handler attributes', () => {
+        const maliciousSvg = parser
+            .parseFromString(
+                `
+            <svg xmlns="http://www.w3.org/2000/svg" onload="alert('XSS')">
+                <path id="test" onclick="alert('click')" d="M 10 10 L 20 20"/>
+            </svg>
+        `,
+                'text/xml'
+            )
+            .querySelector('svg');
+
+        const sanitized = utils.sanitizeSvg(maliciousSvg);
+
+        expect(sanitized.hasAttribute('onload')).to.be.false;
+        expect(sanitized.querySelector('path').hasAttribute('onclick')).to.be
+            .false;
+        expect(sanitized.querySelector('path').getAttribute('id')).to.equal(
+            'test'
+        );
+    });
+
+    it('should remove javascript: URLs from href attributes', () => {
+        const maliciousSvg = parser
+            .parseFromString(
+                `
+            <svg xmlns="http://www.w3.org/2000/svg">
+                <a href="javascript:alert('XSS')">
+                    <path id="link" d="M 10 10 L 20 20"/>
+                </a>
+            </svg>
+        `,
+                'text/xml'
+            )
+            .querySelector('svg');
+
+        const sanitized = utils.sanitizeSvg(maliciousSvg);
+
+        expect(sanitized.querySelector('a').hasAttribute('href')).to.be.false;
+        expect(sanitized.querySelector('path').getAttribute('id')).to.equal(
+            'link'
+        );
+    });
+
+    it('should remove dangerous elements like foreignObject', () => {
+        const maliciousSvg = parser
+            .parseFromString(
+                `
+            <svg xmlns="http://www.w3.org/2000/svg">
+                <foreignObject>
+                    <iframe src="javascript:alert('XSS')"></iframe>
+                </foreignObject>
+                <path id="safe" d="M 10 10 L 20 20"/>
+            </svg>
+        `,
+                'text/xml'
+            )
+            .querySelector('svg');
+
+        const sanitized = utils.sanitizeSvg(maliciousSvg);
+
+        expect(sanitized.querySelector('foreignObject')).to.be.null;
+        expect(sanitized.querySelector('iframe')).to.be.null;
+        expect(sanitized.querySelector('path')).to.not.be.null;
+    });
+
+    it('should preserve safe SVG content', () => {
+        const safeSvg = parser
+            .parseFromString(
+                `
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+                <g id="group">
+                    <path id="CO" fill="blue" d="M 10 10 L 20 20"/>
+                    <circle id="CA" cx="50" cy="50" r="10"/>
+                </g>
+            </svg>
+        `,
+                'text/xml'
+            )
+            .querySelector('svg');
+
+        const sanitized = utils.sanitizeSvg(safeSvg);
+
+        expect(sanitized.getAttribute('viewBox')).to.equal('0 0 100 100');
+        expect(sanitized.querySelector('#CO')).to.not.be.null;
+        expect(sanitized.querySelector('#CA')).to.not.be.null;
+        expect(sanitized.querySelector('g')).to.not.be.null;
+    });
+
+    it('should return null for null input', () => {
+        expect(utils.sanitizeSvg(null)).to.be.null;
+    });
+
+    it('should return undefined for undefined input', () => {
+        expect(utils.sanitizeSvg(undefined)).to.be.undefined;
+    });
+});
