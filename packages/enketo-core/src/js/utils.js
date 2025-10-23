@@ -309,7 +309,7 @@ function sanitizeSvg(svgElement) {
         ['href', 'xlink:href'].forEach((attr) => {
             if (element.hasAttribute(attr)) {
                 const href = element.getAttribute(attr);
-                // lint-disable-next-line no-script-url
+                // eslint-disable-next-line no-script-url
                 if (href && href.toLowerCase().startsWith('javascript:')) {
                     element.removeAttribute(attr);
                 }
