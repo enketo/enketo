@@ -4,8 +4,6 @@
  * @module utils
  */
 
-import { event } from 'jquery';
-
 let cookies;
 
 /**
