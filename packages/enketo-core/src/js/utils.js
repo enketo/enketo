@@ -4,6 +4,8 @@
  * @module utils
  */
 
+import { event } from 'jquery';
+
 let cookies;
 
 /**
@@ -287,6 +289,9 @@ function sanitizeSvg(svgElement) {
 
     // Function to remove attributes that start with "on" (event handlers)
     const removeEventHandlerAttributes = (element) => {
+        if (!element || !element.attributes) {
+            return;
+        }
         for (let attr of element.attributes) {
             if (attr.name.toLowerCase().startsWith('on')) {
                 element.removeAttribute(attr.name);
@@ -300,9 +305,16 @@ function sanitizeSvg(svgElement) {
         elements.forEach((el) => el.remove());
     });
 
-    // Remove event handler and javascript URL attributes from all elements
-    const allElements = sanitizedSvg.querySelectorAll('*');
+    // Process root and all child elements
+    const allElements = [
+        sanitizedSvg,
+        ...Array.from(sanitizedSvg.querySelectorAll('*')),
+    ];
+
     allElements.forEach((element) => {
+        // Make sure we're dealing with an actual Element node and not the Document root
+        if (!(element instanceof SVGElement)) return;
+
         removeEventHandlerAttributes(element);
 
         // Sanitize href and xlink:href attributes to prevent javascript: URLs
@@ -316,9 +328,6 @@ function sanitizeSvg(svgElement) {
             }
         });
     });
-
-    // Also check the root SVG element
-    removeEventHandlerAttributes(sanitizedSvg.documentElement);
 
     return sanitizedSvg;
 }
