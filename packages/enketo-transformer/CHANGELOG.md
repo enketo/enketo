@@ -6,6 +6,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 ## [4.3.0] - 2025-10-23
 
 ### Added
+
 -   Custom widget validation system for enhanced form validation
 -   Background audio recording transformation support
 -   Audio recording transformation support

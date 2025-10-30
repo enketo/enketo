@@ -6,6 +6,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 ## [9.0.2] - 2025-10-23
 
 ### Added
+
 -   Complete audio recording system with widget UI, playback functionality, and file upload capabilities
 -   Background audio recording functionality with submission support and editing capabilities
 -   Custom widget validation system for enhanced form validation before submission
@@ -14,6 +15,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 -   Widget cleanup system for proper resource management (`cleanup` function)
 
 ### Fixed
+
 -   **Security**: SVG sanitization for image-map widgets to prevent XSS attacks from malicious SVG files
 -   Edit submission crashes when using repeats with partial data in repeating groups
 
