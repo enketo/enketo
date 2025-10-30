@@ -3,6 +3,24 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## 7.6.0 - 2025-10-23
+
+### Added
+-   Complete audio recording system with widget UI, playback functionality, and file upload capabilities
+-   Background audio recording functionality with non-blocking UI and submission support
+-   Custom widget validation system for enhanced form validation before submission
+-   Server response message display on submission errors for better user feedback
+
+### Fixed
+-   Modal message icon replacement for submission queued notifications
+-   Form reset behavior to wait for success modal dismissal before triggering
+-   UTF-8 encoding for submission XML when creating MD5 hash for encrypted submissions
+-   Background audio modal button text for clearer user instructions
+-   Audio recording validation replacing blocking overlay with proper form validation
+
+### Changed
+-   Enhanced error messaging with server-provided responses
+
 ## 7.5.1 - 2025-02-25
 
 -   Fix error when browser language doesn't have translations
