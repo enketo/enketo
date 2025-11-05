@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## [3.2.1] - 2025-10-23
+
+### Changed
+
+-   Updated LICENSE documentation
+-   Improved README with clearer development instructions
+-   Updated test configuration for Ubuntu compatibility
+
 ## [3.2.0] - 2024-12-09
 
 -   Support Node 20 and 22, drop support for older versions
