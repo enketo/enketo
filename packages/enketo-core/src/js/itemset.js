@@ -208,7 +208,19 @@ export default {
                 template.closest('label, select, datalist'),
                 '.itemset-labels'
             );
+
+            // Check if template exists before accessing its dataset
+            if (!template) {
+                return;
+            }
+
             const itemsXpath = template.dataset.itemsPath;
+
+            // Check if labelsContainer exists before accessing its dataset
+            if (!labelsContainer) {
+                return;
+            }
+
             let { labelType } = labelsContainer.dataset;
             let { labelRef } = labelsContainer.dataset;
             // TODO: if translate() becomes official, move determination of labelType to enketo-xslt
@@ -228,14 +240,14 @@ export default {
                 return;
             }
 
-            // For non-shared itemsets, we need the input element
             const context = input ? that.form.input.getName(input) : '';
 
             /*
              * Determining the index is expensive, so we only do this when the itemset is inside a cloned repeat and not shared.
              * It can be safely set to 0 for other branches.
              */
-            const index = !isShared ? that.form.input.getIndex(input) : 0;
+            const index =
+                !isShared && input ? that.form.input.getIndex(input) : 0;
             const safeToTryNative = true;
             // Caching has no advantage here. This is a very quick query
             // (natively).
@@ -432,6 +444,7 @@ export default {
                 // Do not cache radio button questions inside a repeat because each set (in each repeat) should maintain unique name attribute
                 if (
                     isStaticItemsetFromSecondaryInstance(itemsXpath) &&
+                    input &&
                     !(input.type === 'radio' && input.closest('.or-repeat'))
                 ) {
                     fragmentsCache[cacheKey] = {
@@ -456,14 +469,14 @@ export default {
             // It is not necessary to do this for default values in static itemsets because setAllVals takes care of this.
 
             let currentValue = that.form.model.node(context, index).getVal();
-            if (currentValue !== '') {
+            if (currentValue !== '' && input) {
                 if (input.classList.contains('rank')) {
                     currentValue = '';
                 }
                 that.form.input.setVal(input, currentValue, events.Change());
             }
 
-            if (list || input.classList.contains('rank')) {
+            if (input && (list || input.classList.contains('rank'))) {
                 input.dispatchEvent(events.ChangeOption());
             }
         });
