@@ -222,16 +222,15 @@ export default {
             const { valueRef } = labelsContainer.dataset;
 
             // Shared datalists are under .or-repeat-info. Context is not relevant as these are static lists (without relative nodes).
-            if (!input) {
+            if (!input && !isShared) {
                 // No input element found, likely because repeat instances haven't been created yet
                 // This can happen with shared datalists in repeats during form initialization
-                if (!isShared) {
-                    // For non-shared itemsets, we need the input element
-                    return;
-                }
-                // For shared datalists, we can proceed without an input as context is not relevant
+                return;
             }
+
+            // For non-shared itemsets, we need the input element
             const context = input ? that.form.input.getName(input) : '';
+
             /*
              * Determining the index is expensive, so we only do this when the itemset is inside a cloned repeat and not shared.
              * It can be safely set to 0 for other branches.
