@@ -35,10 +35,24 @@ const matchMediaURLSegments = (requestPath) => {
     if (matches != null) {
         const [, resourceType, resourceId, hash, fileName] = matches;
 
+        // Sanitize fileName to prevent path traversal attacks
+        // Use path.normalize and path.basename to ensure only the filename is used
+        const sanitizedFileName = path.basename(path.normalize(fileName));
+
+        // Reject if the normalized path differs significantly from the original
+        // This catches path separators or path traversal (.., ../, ..%, etc.)
+        if (
+            !sanitizedFileName ||
+            sanitizedFileName !== fileName ||
+            /[/\\]|\.\.([/\\%]|%2F|%5C)/i.test(fileName)
+        ) {
+            return;
+        }
+
         return {
             resourceType,
             resourceId,
-            fileName,
+            fileName: sanitizedFileName,
             hash,
         };
     }
