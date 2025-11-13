@@ -209,14 +209,12 @@ export default {
                 '.itemset-labels'
             );
 
-            // Check if template exists before accessing its dataset
             if (!template) {
                 return;
             }
 
             const itemsXpath = template.dataset.itemsPath;
 
-            // Check if labelsContainer exists before accessing its dataset
             if (!labelsContainer) {
                 return;
             }
@@ -233,7 +231,6 @@ export default {
 
             const { valueRef } = labelsContainer.dataset;
 
-            // Shared datalists are under .or-repeat-info. Context is not relevant as these are static lists (without relative nodes).
             if (!input && !isShared) {
                 // No input element found, likely because repeat instances haven't been created yet
                 // This can happen with shared datalists in repeats during form initialization
