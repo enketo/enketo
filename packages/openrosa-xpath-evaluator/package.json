@@ -25,7 +25,8 @@
     "bugs": "https://github.com/enketo/enketo/issues",
     "devDependencies": {
         "lodash": "^4.17.21",
-        "node-forge": "^1.2.1"
+        "node-forge": "^1.2.1",
+        "puppeteer": "^24.3.0"
     },
     "peerDependencies": {
         "node-forge": "^1.2.1"
