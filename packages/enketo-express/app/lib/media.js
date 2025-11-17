@@ -35,10 +35,24 @@ const matchMediaURLSegments = (requestPath) => {
     if (matches != null) {
         const [, resourceType, resourceId, hash, fileName] = matches;
 
+        // Note: express is already normalizing URL's.
+        // Let's normalize them again for the sake of defense in depth.
+        const sanitizedFileName = path.basename(path.normalize(fileName));
+
+        // Reject if the normalized path differs significantly from the original
+        // This catches path separators or path traversal (.., ../, ..%, etc.)
+        if (
+            !sanitizedFileName ||
+            sanitizedFileName !== fileName ||
+            /[/\\]|\.\.([/\\%]|%2F|%5C)/i.test(fileName)
+        ) {
+            throw new Error('Invalid file name in media URL');
+        }
+
         return {
             resourceType,
             resourceId,
-            fileName,
+            fileName: sanitizedFileName,
             hash,
         };
     }
