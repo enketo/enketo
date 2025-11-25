@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+<h:html xmlns="http://www.w3.org/2002/xforms"
+        xmlns:h="http://www.w3.org/1999/xhtml"
+        xmlns:ev="http://www.w3.org/2001/xml-events"
+        xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+        xmlns:jr="http://openrosa.org/javarosa"
+        xmlns:orx="http://openrosa.org/xforms"
+        xmlns:odk="http://www.opendatakit.org/xforms">
+  <h:head>
+    <h:title>test_title2</h:title>
+    <model odk:xforms-version="1.0.0">
+      <instance>
+        <data id="test_form_id222">
+          <fname>
+            <![CDATA[<img src=x onerror=alert(window.origin)>]]>
+          </fname>
+          <meta>
+            <instanceID />
+            <instanceName />
+          </meta>
+        </data>
+      </instance>
+      <bind nodeset="/data/fname" type="string" required="true()" />
+      <bind nodeset="/data/meta/instanceID" type="string" readonly="true()" jr:preload="uid" />
+      <bind nodeset="/data/meta/instanceName" type="string" calculate="concat('fname_', uuid())" />
+    </model>
+  </h:head>
+  <h:body>
+    <input ref="/data/fname">
+      <label>What is the first name?</label>
+    </input>
+  </h:body>
+</h:html>
