@@ -1,5 +1,6 @@
 import Widget from '../../js/widget';
 import events from '../../js/event';
+import { encodeHtmlEntities } from '../../js/utils';
 
 /**
  * Clone text input fields value into new print-only element.
@@ -48,7 +49,10 @@ class TextPrintWidget extends Widget {
             this.widget = this.element.parentElement.querySelector(
                 `.${className}`
             );
-            this.widget.innerHTML = this.element.value.replace(/\n/g, '<br>');
+
+            // Sanitize the value to prevent XSS attacks
+            const sanitizedValue = encodeHtmlEntities(this.element.value);
+            this.widget.innerHTML = sanitizedValue.replace(/\n/g, '<br>');
         }
     }
 
