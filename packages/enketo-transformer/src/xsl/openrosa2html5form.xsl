@@ -1150,6 +1150,11 @@ XSLT Stylesheet that transforms OpenRosa style (X)Forms into valid HTMl5 forms
             -->
             <xsl:attribute name="readonly">readonly</xsl:attribute>
         </xsl:if>
+        <xsl:if test="(string-length($binding/@readonly) &gt; 0) and not($binding/@readonly = 'false()') and not($html-input-type = 'hidden') and not(local-name() = 'bind')">
+            <xsl:attribute name="data-readonly">
+                <xsl:value-of select="$binding/@readonly" />
+            </xsl:attribute>
+        </xsl:if>
         <xsl:if test="local-name() = 'range'">
         <!-- note that due to the unhelpful default value behavior of input type=range in HTML, we use type=number -->
             <xsl:if test="@start">
