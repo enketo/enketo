@@ -256,9 +256,7 @@ describe('Records queue', () => {
         describe('file handling when no auto-saved record exists', () => {
             beforeEach((done) => {
                 // Remove any existing auto-saved record
-                records
-                    .removeAutoSavedRecord()
-                    .then(() => done(), done);
+                records.removeAutoSavedRecord().then(() => done(), done);
             });
 
             it('preserves files when no auto-saved record exists (e.g. encrypted submissions)', (done) => {
@@ -338,9 +336,10 @@ describe('Records queue', () => {
                     .then(() => store.record.get(instanceIdA))
                     .then((record) => {
                         // Should not throw error, files should be undefined or empty array
-                        expect(record.files === undefined || Array.isArray(record.files)).to.equal(
-                            true
-                        );
+                        expect(
+                            record.files === undefined ||
+                                Array.isArray(record.files)
+                        ).to.equal(true);
                     })
                     .then(done, done);
             });
@@ -392,9 +391,12 @@ describe('Records queue', () => {
 
             it('handles duplicate file names, with auto-saved record files taking priority', (done) => {
                 const duplicateFileName = 'duplicate.xml';
-                const autoSavedBlob = new Blob(['<html>autosaved-content</html>'], {
-                    type: 'text/xml',
-                });
+                const autoSavedBlob = new Blob(
+                    ['<html>autosaved-content</html>'],
+                    {
+                        type: 'text/xml',
+                    }
+                );
                 const recordBlob = new Blob(['<html>record-content</html>'], {
                     type: 'text/xml',
                 });
@@ -426,11 +428,15 @@ describe('Records queue', () => {
                     .then((record) => {
                         // Should have only one file (auto-saved takes priority)
                         expect(record.files.length).to.equal(1);
-                        expect(record.files[0].name).to.equal(duplicateFileName);
+                        expect(record.files[0].name).to.equal(
+                            duplicateFileName
+                        );
 
                         // Verify it's the auto-saved content (by checking blob size)
                         // Auto-saved content is longer: 'autosaved-content' vs 'record-content'
-                        expect(record.files[0].item.size).to.equal(autoSavedBlob.size);
+                        expect(record.files[0].item.size).to.equal(
+                            autoSavedBlob.size
+                        );
                         expect(record.files[0].item.size).to.be.greaterThan(
                             recordBlob.size
                         );

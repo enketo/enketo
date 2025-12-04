@@ -73,7 +73,7 @@ function set(record) {
             }
             record.files = [...filesMap.values()];
         }
-       
+        
         return store.record.set(record);
     });
 }
