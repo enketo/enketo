@@ -131,7 +131,7 @@ function setToken(req, res) {
     // store the token in a cookie on the client
     res.cookie(req.app.get('authentication cookie name'), token, authOptions)
         .cookie('__enketo_logout', true, {
-            secure: true,
+            secure,
             httpOnly: true,
             sameSite: 'lax',
             path: '/',
