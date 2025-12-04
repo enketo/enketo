@@ -193,6 +193,9 @@ function _renderWebform(req, res, next, options) {
     const cookieOptions = {
         signed: true,
         maxAge: 10 * 365 * 24 * 60 * 60 * 1000,
+        secure: true,
+        httpOnly: true,
+        sameSite: 'lax',
     };
 
     res.cookie('__enketo_meta_deviceid', deviceId, cookieOptions).render(

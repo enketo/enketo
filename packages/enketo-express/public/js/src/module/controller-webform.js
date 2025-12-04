@@ -436,7 +436,7 @@ function _submitRecord(survey) {
                         settings.enketoId
                     }=${now.getTime()};path=${
                         settings.basePath
-                    }/single;max-age=${age};expires=${d.toGMTString()};`;
+                    }/single;max-age=${age};expires=${d.toGMTString()};Secure;SameSite=Lax`;
                 }
                 msg += t('alert.submissionsuccess.redirectmsg');
                 gui.alert(msg, t('alert.submissionsuccess.heading'), level);
