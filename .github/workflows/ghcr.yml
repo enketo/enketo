@@ -3,7 +3,7 @@ name: Build Base Enketo in GCHR and Trigger Extra Widgets
 on:
   workflow_dispatch:
   push:
-    branches: [main]
+    branches: [main, cicd]
     tags: ['*']
 
 env:
