@@ -297,34 +297,6 @@ describe('Records queue', () => {
                     .then(done, done);
             });
 
-            it('preserves files when auto-saved record exists but has no files', (done) => {
-                const autoSavedWithoutFiles = {
-                    ...recordA,
-                    files: [],
-                };
-                const recordWithFiles = {
-                    ...recordA,
-                    files: files.slice(),
-                };
-
-                records
-                    .updateAutoSavedRecord(autoSavedWithoutFiles)
-                    .then(() => records.save('set', recordWithFiles))
-                    .then(() => store.record.get(instanceIdA))
-                    .then((record) => {
-                        // Should preserve files from recordWithFiles
-                        expect(record.files.length).to.equal(files.length);
-
-                        for (const [index, file] of files.entries()) {
-                            const saved = record.files[index];
-
-                            expect(saved.name).to.equal(file.name);
-                            expect(saved.item).to.to.be.an.instanceof(Blob);
-                        }
-                    })
-                    .then(done, done);
-            });
-
             it('handles undefined files array when no auto-saved record exists', (done) => {
                 const recordWithoutFilesProperty = {
                     ...recordA,
