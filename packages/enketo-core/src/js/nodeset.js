@@ -399,6 +399,22 @@ Nodeset.prototype.isRequired = function (expr) {
 };
 
 /**
+ * @param {string} [expr] - The XPath expression
+ * @return {boolean} Whether node is readonly
+ */
+Nodeset.prototype.isReadonly = function (expr) {
+    return !expr || expr.trim() === 'false()'
+        ? false
+        : expr.trim() === 'true()' ||
+              this.model.evaluate(
+                  expr,
+                  'boolean',
+                  this.originalSelector,
+                  this.index
+              );
+};
+
+/**
  * Validates if requiredness is fulfilled.
  *
  * @param {string} [expr] - The XPath expression
