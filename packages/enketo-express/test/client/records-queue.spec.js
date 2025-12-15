@@ -252,6 +252,170 @@ describe('Records queue', () => {
                 })
                 .then(done, done);
         });
+
+        describe('file handling when no auto-saved record exists', () => {
+            beforeEach((done) => {
+                // Remove any existing auto-saved record
+                records.removeAutoSavedRecord().then(() => done(), done);
+            });
+
+            it('preserves files when no auto-saved record exists (e.g. encrypted submissions)', (done) => {
+                const recordWithFiles = {
+                    ...recordA,
+                    files: files.slice(),
+                };
+
+                records
+                    .save('set', recordWithFiles)
+                    .then(() => store.record.get(instanceIdA))
+                    .then((record) => {
+                        expect(record.files.length).to.equal(files.length);
+
+                        for (const [index, file] of files.entries()) {
+                            const saved = record.files[index];
+
+                            expect(saved.name).to.equal(file.name);
+                            expect(saved.item).to.to.be.an.instanceof(Blob);
+                        }
+                    })
+                    .then(done, done);
+            });
+
+            it('preserves empty files array when no auto-saved record exists', (done) => {
+                const recordWithoutFiles = {
+                    ...recordA,
+                    files: [],
+                };
+
+                records
+                    .save('set', recordWithoutFiles)
+                    .then(() => store.record.get(instanceIdA))
+                    .then((record) => {
+                        expect(record.files).to.be.an('array');
+                        expect(record.files.length).to.equal(0);
+                    })
+                    .then(done, done);
+            });
+
+            it('handles undefined files array when no auto-saved record exists', (done) => {
+                const recordWithoutFilesProperty = {
+                    ...recordA,
+                };
+                delete recordWithoutFilesProperty.files;
+
+                records
+                    .save('set', recordWithoutFilesProperty)
+                    .then(() => store.record.get(instanceIdA))
+                    .then((record) => {
+                        // Should not throw error, files should be undefined or empty array
+                        expect(
+                            record.files === undefined ||
+                                Array.isArray(record.files)
+                        ).to.equal(true);
+                    })
+                    .then(done, done);
+            });
+        });
+
+        describe('file merging when auto-saved record exists', () => {
+            it('merges files from record and auto-saved record, with auto-saved taking priority', (done) => {
+                const autoSavedFiles = [
+                    {
+                        name: 'autosaved1.xml',
+                        item: new Blob(['<html>autosaved1</html>'], {
+                            type: 'text/xml',
+                        }),
+                    },
+                    {
+                        name: 'autosaved2.xml',
+                        item: new Blob(['<html>autosaved2</html>'], {
+                            type: 'text/xml',
+                        }),
+                    },
+                ];
+                const autoSavedUpdate = {
+                    ...recordA,
+                    files: autoSavedFiles,
+                };
+                const recordWithFiles = {
+                    ...recordA,
+                    files: files.slice(),
+                };
+
+                records
+                    .updateAutoSavedRecord(autoSavedUpdate)
+                    .then(() => records.save('set', recordWithFiles))
+                    .then(() => store.record.get(instanceIdA))
+                    .then((record) => {
+                        // Should have merged files, with auto-saved files taking priority
+                        // Files from record come first, then auto-saved files overwrite duplicates
+                        expect(record.files.length).to.equal(4);
+
+                        // Check that auto-saved files are present and take priority
+                        const fileNames = record.files.map((f) => f.name);
+                        expect(fileNames).to.include('autosaved1.xml');
+                        expect(fileNames).to.include('autosaved2.xml');
+                        expect(fileNames).to.include('something1.xml');
+                        expect(fileNames).to.include('something2.xml');
+                    })
+                    .then(done, done);
+            });
+
+            it('handles duplicate file names, with auto-saved record files taking priority', (done) => {
+                const duplicateFileName = 'duplicate.xml';
+                const autoSavedBlob = new Blob(
+                    ['<html>autosaved-content</html>'],
+                    {
+                        type: 'text/xml',
+                    }
+                );
+                const recordBlob = new Blob(['<html>record-content</html>'], {
+                    type: 'text/xml',
+                });
+                const autoSavedFiles = [
+                    {
+                        name: duplicateFileName,
+                        item: autoSavedBlob,
+                    },
+                ];
+                const recordFiles = [
+                    {
+                        name: duplicateFileName,
+                        item: recordBlob,
+                    },
+                ];
+                const autoSavedUpdate = {
+                    ...recordA,
+                    files: autoSavedFiles,
+                };
+                const recordWithFiles = {
+                    ...recordA,
+                    files: recordFiles,
+                };
+
+                records
+                    .updateAutoSavedRecord(autoSavedUpdate)
+                    .then(() => records.save('set', recordWithFiles))
+                    .then(() => store.record.get(instanceIdA))
+                    .then((record) => {
+                        // Should have only one file (auto-saved takes priority)
+                        expect(record.files.length).to.equal(1);
+                        expect(record.files[0].name).to.equal(
+                            duplicateFileName
+                        );
+
+                        // Verify it's the auto-saved content (by checking blob size)
+                        // Auto-saved content is longer: 'autosaved-content' vs 'record-content'
+                        expect(record.files[0].item.size).to.equal(
+                            autoSavedBlob.size
+                        );
+                        expect(record.files[0].item.size).to.be.greaterThan(
+                            recordBlob.size
+                        );
+                    })
+                    .then(done, done);
+            });
+        });
     });
 
     describe('Retrieving records', () => {

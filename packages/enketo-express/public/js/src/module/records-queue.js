@@ -71,9 +71,8 @@ function set(record) {
             ]) {
                 filesMap.set(file.name, file);
             }
+            record.files = [...filesMap.values()];
         }
-
-        record.files = [...filesMap.values()];
 
         return store.record.set(record);
     });
