@@ -96,3 +96,16 @@ jobs:
                 "short_sha": "${{ needs.build-base.outputs.short-sha }}",
                 "branch": "${{ needs.build-base.outputs.branch }}"
               }
+
+    notify-failure:
+        name: Notify Failure
+        needs:
+          - build-base
+          - trigger-extra-widgets
+        if: ${{ always() && (needs.build-base.result == 'failure' || needs.trigger-extra-widgets.result == 'failure') }}
+        uses: kobotoolbox/kpi/.github/workflows/zulip.yml@main
+        secrets: inherit
+        with:
+          topic: "enketo/enketo builds"
+          stream: "Enketo"
+          content: ":warning: @*devs*, EE-extra-widgets build [run #${{ github.run_number }}](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}) failed"
