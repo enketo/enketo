@@ -103,7 +103,7 @@ jobs:
       with:
         topic: "enketo/enketo builds"
         stream: "Enketo"
-        content: ":check: Successfully deployed! Latest commit: [\"$COMMIT_TITLE\"](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})"
+        content: ":check: Successfully deployed! Latest [run](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})"
 
     notify-failure:
       name: Notify Failure
