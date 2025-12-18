@@ -105,7 +105,7 @@ function setToken(req, res) {
     // Do not allow authentication cookies to be saved if enketo runs on http, unless 'allow insecure transport' is set to true
     // This is double because the check in login() already ensures the login screen isn't even shown.
     const secure =
-        req.protocol === 'production' &&
+        req.protocol === 'https' &&
         !req.app.get('linked form and data server').authentication[
             'allow insecure transport'
         ];
@@ -130,7 +130,12 @@ function setToken(req, res) {
 
     // store the token in a cookie on the client
     res.cookie(req.app.get('authentication cookie name'), token, authOptions)
-        .cookie('__enketo_logout', true)
+        .cookie('__enketo_logout', true, {
+            secure,
+            httpOnly: true,
+            sameSite: 'lax',
+            path: '/',
+        })
         .cookie('__enketo_meta_username', username, uidOptions);
 
     if (returnUrl) {
