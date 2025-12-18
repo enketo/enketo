@@ -85,7 +85,7 @@ jobs:
           with:
             workflow: build-extra-widgets.yml
             repo: kobotoolbox/enketo-express-extra-widgets
-            ref: cicd
+            ref: main
             token: ${{ steps.app-token.outputs.token }}
             inputs: |
               {
