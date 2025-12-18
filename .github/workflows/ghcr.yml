@@ -1,28 +1,36 @@
-name: GHCR
+name: Build Base Enketo in GCHR and Trigger Extra Widgets 
 
 on:
   workflow_dispatch:
   push:
     branches: [main]
-    tags:
+    tags: ['*']
 
 env:
     REGISTRY: ghcr.io
     IMAGE_NAME: ${{ github.repository }}
 
 jobs:
-    build:
+    build-base:
         runs-on: ubuntu-latest
         permissions:
             contents: read
             packages: write
-
+        outputs:
+          image-tag: ${{ steps.image-tag.outputs.tag }}
+          short-sha: ${{ steps.sha.outputs.short }}
+          branch: ${{ github.ref_name }}
         steps:
             - name: Check out repository
               uses: actions/checkout@v4
-
-            - name: Store version information
-              run: git describe --tags > .tag.txt || git rev-parse --short HEAD > .tag.txt
+              
+            - name: Set version information
+              id: sha
+              run: |
+                SHORT_SHA=$(git rev-parse --short HEAD)
+                echo "short=$SHORT_SHA" >> $GITHUB_OUTPUT
+                echo "SHORT_SHA=$SHORT_SHA" >> $GITHUB_ENV
+                echo "TAG_NAME=$GITHUB_REF_NAME-$SHORT_SHA" >> $GITHUB_ENV
 
             - name: Log into registry ${{ env.REGISTRY }}
               uses: docker/login-action@v3
@@ -36,6 +44,13 @@ jobs:
               uses: docker/metadata-action@v5
               with:
                   images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+
+            - name: Get initial tag for output
+              id: image-tag
+              run: |
+                IMAGE_TAG=$(echo "${{ steps.meta.outputs.tags }}" | head -n1)
+                echo "tag=${IMAGE_TAG}" >> $GITHUB_OUTPUT
+                echo "Using tag: ${IMAGE_TAG}"
 
             - name: Set up QEMU emulator for multi-arch images
               uses: docker/setup-qemu-action@v3
@@ -51,3 +66,54 @@ jobs:
                   tags: ${{ steps.meta.outputs.tags }}
                   labels: ${{ steps.meta.outputs.labels }}
                   platforms: 'linux/amd64,linux/arm64'
+
+    trigger-extra-widgets:
+      needs: build-base
+      runs-on: ubuntu-latest
+      steps:
+        - name: Generate GitHub App Token
+          id: app-token
+          uses: actions/create-github-app-token@v1
+          with:
+            app-id: ${{ secrets.APP_ID }}
+            private-key: ${{ secrets.APP_PRIVATE_KEY }}
+            owner: kobotoolbox
+            repositories: "enketo-express-extra-widgets"
+
+        - name: Trigger extra-widgets build
+          uses: benc-uk/workflow-dispatch@v1
+          with:
+            workflow: build-extra-widgets.yml
+            repo: kobotoolbox/enketo-express-extra-widgets
+            ref: main
+            token: ${{ steps.app-token.outputs.token }}
+            inputs: |
+              {
+                "base_image_tag": "${{ needs.build-base.outputs.image-tag }}",
+                "short_sha": "${{ needs.build-base.outputs.short-sha }}",
+                "branch": "${{ needs.build-base.outputs.branch }}"
+              }
+    notify-success:
+      needs:
+        - build-base
+        - trigger-extra-widgets
+      if: ${{ !cancelled() && !failure() }}
+      uses: ./.github/workflows/zulip.yml
+      secrets: inherit
+      with:
+        topic: "enketo/enketo builds"
+        stream: "Enketo"
+        content: ":check: Successfully deployed! Latest [run](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})"
+
+    notify-failure:
+      name: Notify Failure
+      needs:
+        - build-base
+        - trigger-extra-widgets
+      if: ${{ always() && (needs.build-base.result == 'failure' || needs.trigger-extra-widgets.result == 'failure') }}
+      uses: ./.github/workflows/zulip.yml
+      secrets: inherit
+      with:
+        topic: "enketo/enketo builds"
+        stream: "Enketo"
+        content: ":warning: @*devs*, EE-extra-widgets build [run #${{ github.run_number }}](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}) failed"
