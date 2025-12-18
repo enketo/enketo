@@ -98,7 +98,7 @@ jobs:
         - build-base
         - trigger-extra-widgets
       if: ${{ !cancelled() && !failure() }}
-      uses: kobotoolbox/kpi/.github/workflows/zulip.yml@main
+      uses: ./.github/workflows/zulip.yml
       secrets: inherit
       with:
         topic: "enketo/enketo builds"
@@ -111,7 +111,7 @@ jobs:
         - build-base
         - trigger-extra-widgets
       if: ${{ always() && (needs.build-base.result == 'failure' || needs.trigger-extra-widgets.result == 'failure') }}
-      uses: kobotoolbox/kpi/.github/workflows/zulip.yml@main
+      uses: ./.github/workflows/zulip.yml
       secrets: inherit
       with:
         topic: "enketo/enketo builds"
