@@ -12,6 +12,75 @@ const config = require('../models/config-model').server;
 
 // var debug = require( 'debug' )( 'offline-controller' );
 
+// Cache the build hash once at startup for performance in production
+// In development, always recalculate to pick up file changes
+const isDevelopment =
+    process.env.NODE_ENV === 'development' ||
+    process.env.NODE_ENV === 'develop';
+let cachedBuildHash = null;
+
+const shouldCacheBuildHash = !isDevelopment;
+
+/**
+ * Calculates a hash of all built client files to ensure cache invalidation on code changes
+ */
+function getBuildFilesHash() {
+    // In development, always recalculate. In production, return cached hash if available.
+    if (shouldCacheBuildHash && cachedBuildHash !== null) {
+        return cachedBuildHash;
+    }
+
+    const dirs = [
+        path.resolve(config.root, 'public/js/build'),
+        path.resolve(config.root, 'public/css'),
+        path.resolve(config.root, 'app/views'),
+    ];
+    const hash = crypto.createHash('md5');
+    let hasFiles = false;
+
+    dirs.forEach((dir) => {
+        try {
+            const files = fs.readdirSync(dir, { recursive: true });
+            files.forEach((file) => {
+                const filePath = path.join(dir, file);
+                try {
+                    if (
+                        fs.statSync(filePath).isFile() &&
+                        !filePath.endsWith('.map')
+                    ) {
+                        const content = fs.readFileSync(filePath);
+                        hash.update(content);
+                        hasFiles = true;
+                    }
+                } catch (err) {
+                    // Skip files that can't be read
+                }
+            });
+        } catch (e) {
+            // If directory doesn't exist or can't be read, continue
+            console.warn(`Could not read directory ${dir}:`, e.message);
+        }
+    });
+
+    if (!hasFiles) {
+        // If no build files exist (e.g., during development), return a timestamp-based hash
+        return crypto
+            .createHash('md5')
+            .update(Date.now().toString())
+            .digest('hex')
+            .substring(0, 7);
+    }
+
+    const computedHash = hash.digest('hex').substring(0, 7);
+
+    // Cache the hash in production only (in development, recalculate every time)
+    if (shouldCacheBuildHash) {
+        cachedBuildHash = computedHash;
+    }
+
+    return computedHash;
+}
+
 module.exports = (app) => {
     app.use(`${app.get('base path')}/`, router);
 };
@@ -23,7 +92,9 @@ router.get('/x/offline-app-worker.js', (req, res, next) => {
         error.status = 404;
         next(error);
     } else {
-        res.set('Content-Type', 'text/javascript').send(getScriptContent());
+        res.set('Content-Type', 'text/javascript')
+            .set('Cache-Control', 'no-cache')
+            .send(getScriptContent());
     }
 });
 
@@ -51,9 +122,15 @@ function getScriptContent() {
         .update(JSON.stringify(config))
         .digest('hex')
         .substring(0, 7);
-    const version = [config.version, configurationHash, partialScriptHash].join(
-        '-'
-    );
+
+    const buildHash = getBuildFilesHash();
+    const version = [
+        config.version,
+        configurationHash,
+        partialScriptHash,
+        buildHash,
+    ].join('-');
+
     // We add as few explicit resources as possible because the offline-app-worker can do this dynamically and that is preferred
     // for easier maintenance of the offline launch feature.
     const resources = config['themes supported']

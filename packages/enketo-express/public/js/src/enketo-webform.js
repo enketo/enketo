@@ -23,7 +23,6 @@ const survey = {
     defaults: settings.defaults,
 };
 const range = document.createRange();
-
 _setEmergencyHandlers();
 
 if (settings.offline) {
@@ -124,6 +123,8 @@ function _setAppCacheEventHandlers() {
             20,
             t('alert.appupdated.heading')
         );
+        // After updating we force the use of the new version by reloading
+        location.reload();
     });
 }
 
