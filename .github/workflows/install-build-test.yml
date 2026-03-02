@@ -17,8 +17,8 @@ jobs:
             express: ${{ steps.changes.outputs.express }}
 
         steps:
-            - uses: 'actions/checkout@v3'
-            - uses: dorny/paths-filter@v2
+            - uses: 'actions/checkout@v6'
+            - uses: dorny/paths-filter@v3
               id: changes
               with:
                   filters: |
@@ -46,14 +46,14 @@ jobs:
                 node-version: ['20.18.1', '22.12.0']
 
         steps:
-            - uses: 'actions/checkout@v3'
+            - uses: 'actions/checkout@v6'
 
             - uses: 'volta-cli/action@v4'
               with:
                   node-version: '${{ matrix.node-version }}'
                   yarn-version: '1.22.22'
 
-            - uses: 'actions/cache@v3'
+            - uses: 'actions/cache@v5'
               id: cache-install
               with:
                   path: |
@@ -63,7 +63,7 @@ jobs:
                       **/node_modules
                   key: install-${{ matrix.node-version }}-${{ hashFiles('yarn.lock', 'examples/*/yarn.lock', 'packages/*/yarn.lock') }}
 
-            - uses: 'actions/cache@v3'
+            - uses: 'actions/cache@v5'
               id: cache-build
               with:
                   path: |
@@ -91,14 +91,14 @@ jobs:
                 node-version: ['22.12.0']
 
         steps:
-            - uses: 'actions/checkout@v3'
+            - uses: 'actions/checkout@v6'
 
             - uses: 'volta-cli/action@v4'
               with:
                   node-version: '${{ matrix.node-version }}'
                   yarn-version: '1.22.22'
 
-            - uses: 'actions/cache@v3'
+            - uses: 'actions/cache@v5'
               id: cache-install
               with:
                   path: |
@@ -109,7 +109,7 @@ jobs:
                   key: install-${{ matrix.node-version }}-${{ hashFiles('yarn.lock', 'examples/*/yarn.lock', 'packages/*/yarn.lock') }}
                   fail-on-cache-miss: true
 
-            - uses: 'actions/cache@v3'
+            - uses: 'actions/cache@v5'
               id: cache-build
               with:
                   path: |
@@ -132,7 +132,7 @@ jobs:
                 node-version: ['22.12.0']
 
         steps:
-            - uses: 'actions/checkout@v3'
+            - uses: 'actions/checkout@v6'
 
             - uses: 'volta-cli/action@v4'
               with:
@@ -140,7 +140,7 @@ jobs:
                   yarn-version: '1.22.22'
                   registry-url: 'https://registry.npmjs.org'
 
-            - uses: 'actions/cache@v3'
+            - uses: 'actions/cache@v5'
               id: cache-install
               with:
                   path: |
@@ -151,7 +151,7 @@ jobs:
                   key: install-${{ matrix.node-version }}-${{ hashFiles('yarn.lock', 'examples/*/yarn.lock', 'packages/*/yarn.lock') }}
                   fail-on-cache-miss: true
 
-            - uses: 'actions/cache@v3'
+            - uses: 'actions/cache@v5'
               id: cache-build
               with:
                   path: |
@@ -190,7 +190,7 @@ jobs:
                       browser: 'WebKit'
 
         steps:
-            - uses: 'actions/checkout@v3'
+            - uses: 'actions/checkout@v6'
 
             - uses: 'volta-cli/action@v4'
               with:
@@ -198,7 +198,7 @@ jobs:
                   yarn-version: '1.22.22'
                   registry-url: 'https://registry.npmjs.org'
 
-            - uses: 'actions/cache@v3'
+            - uses: 'actions/cache@v5'
               id: cache-install
               with:
                   path: |
@@ -209,7 +209,7 @@ jobs:
                   key: install-${{ matrix.node-version }}-${{ hashFiles('yarn.lock', 'examples/*/yarn.lock', 'packages/*/yarn.lock') }}
                   fail-on-cache-miss: true
 
-            - uses: 'actions/cache@v3'
+            - uses: 'actions/cache@v5'
               id: cache-build
               with:
                   path: |
@@ -242,7 +242,7 @@ jobs:
                 node-version: ['22.12.0']
 
         steps:
-            - uses: 'actions/checkout@v3'
+            - uses: 'actions/checkout@v6'
 
             - uses: 'volta-cli/action@v4'
               with:
@@ -250,7 +250,7 @@ jobs:
                   yarn-version: '1.22.22'
                   registry-url: 'https://registry.npmjs.org'
 
-            - uses: 'actions/cache@v3'
+            - uses: 'actions/cache@v5'
               id: cache-install
               with:
                   path: |
@@ -261,7 +261,7 @@ jobs:
                   key: install-${{ matrix.node-version }}-${{ hashFiles('yarn.lock', 'examples/*/yarn.lock', 'packages/*/yarn.lock') }}
                   fail-on-cache-miss: true
 
-            - uses: 'actions/cache@v3'
+            - uses: 'actions/cache@v5'
               id: cache-build
               with:
                   path: |
@@ -319,14 +319,14 @@ jobs:
                     - '6380:6379'
 
         steps:
-            - uses: 'actions/checkout@v3'
+            - uses: 'actions/checkout@v6'
 
             - uses: 'volta-cli/action@v4'
               with:
                   node-version: '${{ matrix.node-version }}'
                   yarn-version: '1.22.22'
 
-            - uses: 'actions/cache@v3'
+            - uses: 'actions/cache@v5'
               id: cache-install
               with:
                   path: |
@@ -337,7 +337,7 @@ jobs:
                   key: install-${{ matrix.node-version }}-${{ hashFiles('yarn.lock', 'examples/*/yarn.lock', 'packages/*/yarn.lock') }}
                   fail-on-cache-miss: true
 
-            - uses: 'actions/cache@v3'
+            - uses: 'actions/cache@v5'
               id: cache-build
               with:
                   path: |
