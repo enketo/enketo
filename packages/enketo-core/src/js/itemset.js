@@ -342,6 +342,21 @@ export default {
                                         label.classList.contains('active');
                                     const { alt } = label;
 
+                                    // For media elements (IMG, AUDIO, VIDEO), preserve all attributes
+                                    const attributes = [
+                                        'IMG',
+                                        'AUDIO',
+                                        'VIDEO',
+                                    ].includes(type)
+                                        ? Array.from(label.attributes).reduce(
+                                              (acc, attr) => {
+                                                  acc[attr.name] = attr.value;
+                                                  return acc;
+                                              },
+                                              {}
+                                          )
+                                        : null;
+
                                     return {
                                         language,
                                         type,
@@ -349,6 +364,7 @@ export default {
                                         active,
                                         src,
                                         alt,
+                                        attributes,
                                     };
                                 });
                                 break;
@@ -582,6 +598,17 @@ export default {
         if (translation.src) {
             el.src = translation.src;
             el.alt = translation.alt;
+            // Restore all attributes for media elements
+            if (translation.attributes) {
+                Object.entries(translation.attributes).forEach(
+                    ([name, value]) => {
+                        // Do not overwrite attributes already set
+                        if (!el.getAttribute(name)) {
+                            el.setAttribute(name, value);
+                        }
+                    }
+                );
+            }
         }
 
         return el;
