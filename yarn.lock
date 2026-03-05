@@ -5133,10 +5133,10 @@ grunt-mocha-test@^0.13.3:
     hooker "^0.2.3"
     mkdirp "^0.5.0"
 
-grunt-sass@^3.1.0:
-  version "3.1.0"
-  resolved "https://registry.yarnpkg.com/grunt-sass/-/grunt-sass-3.1.0.tgz#a5936cc2a80ec08092d9f31c101dc307d1e4f71c"
-  integrity sha512-90s27H7FoCDcA8C8+R0GwC+ntYD3lG6S/jqcavWm3bn9RiJTmSfOvfbFa1PXx4NbBWuiGQMLfQTj/JvvqT5w6A==
+grunt-sass@^4.0.0:
+  version "4.0.0"
+  resolved "https://registry.yarnpkg.com/grunt-sass/-/grunt-sass-4.0.0.tgz#b42fa81c7d1904cb5a8f66efdc37037323862576"
+  integrity sha512-J9JvhVByJaIBjqPvFs/bOrRb9Wa2wVeSM5bRzjD8YiwuEi03tdIPI9OXuygq35z/eTurcO4yxsF5MU8nHdH11w==
 
 grunt-shell-spawn@^0.4.0:
   version "0.4.0"
