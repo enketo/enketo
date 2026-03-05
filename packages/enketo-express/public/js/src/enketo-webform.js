@@ -118,12 +118,7 @@ function _setAppCacheEventHandlers() {
     });
 
     document.addEventListener(events.ApplicationUpdated().type, () => {
-        gui.feedback(
-            t('alert.appupdated.msg'),
-            20,
-            t('alert.appupdated.heading')
-        );
-        // After updating we force the use of the new version by reloading
+        // Force the use of the new version by reloading immediately
         location.reload();
     });
 }

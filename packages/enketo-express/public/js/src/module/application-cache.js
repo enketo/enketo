@@ -60,6 +60,11 @@ function init(survey) {
                 _reportOfflineLaunchCapable(true);
             }
 
+            // Periodic background check for long-lived tabs.
+            // If a user keeps a tab open for days without reloading,
+            // this ensures they still get notified of updates.
+            _startPeriodicUpdateCheck(registration);
+
             const isFirstInstall = !registration.active;
             const shouldBlockOnCheck = !isFirstInstall && _isForcedCheckDue();
 
@@ -81,36 +86,10 @@ function init(survey) {
                     resolve(survey);
                 };
 
-                const onWorkerActivated = () => {
-                    // Real update detected — dispatch event; page will reload
-                    _setLastCheckTime();
-                    document.dispatchEvent(events.ApplicationUpdated());
-                };
-
-                registration.addEventListener('updatefound', () => {
-                    const newWorker = registration.installing;
-
-                    if (!newWorker) {
-                        proceedWithInit();
-
-                        return;
-                    }
-
-                    // Handle race condition: skipWaiting() may have already activated
-                    if (newWorker.state === 'activated') {
-                        onWorkerActivated();
-
-                        return;
-                    }
-
-                    newWorker.addEventListener('statechange', () => {
-                        if (newWorker.state === 'activated') {
-                            onWorkerActivated();
-                        }
-                    });
-                });
-
-                // Trigger the blocking update check
+                // Trigger the blocking update check.
+                // If an update is found, _startPeriodicUpdateCheck's
+                // updatefound handler dispatches ApplicationUpdated -> page reload.
+                // If no update, we proceed with init.
                 registration
                     .update()
                     .then((reg) => {
@@ -118,7 +97,7 @@ function init(survey) {
                             // No update found — proceed
                             proceedWithInit();
                         }
-                        // Otherwise updatefound handler takes over
+                        // Otherwise the updatefound handler takes over
                     })
                     .catch(() => {
                         // Update check failed (e.g. offline mid-check) — proceed anyway
@@ -138,6 +117,43 @@ function init(survey) {
 
             return survey;
         });
+}
+
+/**
+ * Starts a periodic background update check so that long-lived tabs
+ * (kept open for days without reloading) still detect new versions.
+ * When an update is found, `ApplicationUpdated` is dispatched, which
+ * triggers a banner/reload via the event handler in enketo-webform.
+ */
+function _startPeriodicUpdateCheck(registration) {
+    setInterval(() => {
+        if (!navigator.onLine) return;
+
+        console.log(
+            'Checking for offline application cache service worker update'
+        );
+
+        registration.update().catch(() => {
+            // Silently ignore update check failures (e.g. network error)
+        });
+    }, FORCE_CHECK_INTERVAL_MS);
+
+    // Listen for updates found by the periodic check
+    registration.addEventListener('updatefound', () => {
+        const newWorker = registration.installing;
+
+        if (!newWorker) return;
+
+        newWorker.addEventListener('statechange', () => {
+            if (newWorker.state === 'activated') {
+                console.log(
+                    'New offline application service worker activated!'
+                );
+                _setLastCheckTime();
+                document.dispatchEvent(events.ApplicationUpdated());
+            }
+        });
+    });
 }
 
 function _reportOfflineLaunchCapable(capable = true) {
