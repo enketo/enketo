@@ -117,9 +117,23 @@ function _setAppCacheEventHandlers() {
         }
     });
 
-    document.addEventListener(events.ApplicationUpdated().type, () => {
-        // Force the use of the new version by reloading immediately
-        location.reload();
+    document.addEventListener(events.ApplicationUpdated().type, (event) => {
+        const source = event.detail && event.detail.source;
+
+        if (source === 'init') {
+            // Update detected during initial blocking check (user hasn't
+            // interacted yet) — reload silently to apply the new version.
+            location.reload();
+        } else {
+            // Update detected by the periodic background check on a
+            // long-lived tab — show the user a notification.
+            // The user can reload at their convenience.
+            gui.feedback(
+                t('alert.appupdated.msg'),
+                20,
+                t('alert.appupdated.heading')
+            );
+        }
     });
 }
 

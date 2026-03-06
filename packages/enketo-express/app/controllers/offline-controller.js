@@ -36,7 +36,6 @@ function getBuildFilesHash() {
         path.resolve(config.root, 'app/views'),
     ];
     const hash = crypto.createHash('md5');
-    let hasFiles = false;
 
     dirs.forEach((dir) => {
         try {
@@ -50,7 +49,6 @@ function getBuildFilesHash() {
                     ) {
                         const content = fs.readFileSync(filePath);
                         hash.update(content);
-                        hasFiles = true;
                     }
                 } catch (err) {
                     // Skip files that can't be read
@@ -61,15 +59,6 @@ function getBuildFilesHash() {
             console.warn(`Could not read directory ${dir}:`, e.message);
         }
     });
-
-    if (!hasFiles) {
-        // If no build files exist (e.g., during development), return a timestamp-based hash
-        return crypto
-            .createHash('md5')
-            .update(Date.now().toString())
-            .digest('hex')
-            .substring(0, 7);
-    }
 
     const computedHash = hash.digest('hex').substring(0, 7);
 

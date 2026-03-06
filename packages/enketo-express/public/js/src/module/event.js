@@ -16,8 +16,8 @@ events.OfflineLaunchCapable = function (detail) {
     return new CustomEvent('offlinelaunchcapable', { detail, bubbles: true });
 };
 
-events.ApplicationUpdated = function () {
-    return new CustomEvent('applicationupdated', { bubbles: true });
+events.ApplicationUpdated = function (detail) {
+    return new CustomEvent('applicationupdated', { detail, bubbles: true });
 };
 
 events.FormUpdated = function () {

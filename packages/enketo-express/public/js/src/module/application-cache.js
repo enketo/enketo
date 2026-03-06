@@ -12,6 +12,11 @@ import settings from './settings';
 const LAST_CHECK_KEY = 'enketo:sw-last-check';
 const FORCE_CHECK_INTERVAL_MS = 12 * 60 * 60 * 1000; // 12 hours
 
+// Flag used to let the shared updatefound listener know whether the
+// update was triggered by the blocking init check or by a periodic check.
+let _initCheckInProgress = false;
+let _isFirstInstall = false;
+
 function _getLastCheckTime() {
     try {
         const val = localStorage.getItem(LAST_CHECK_KEY);
@@ -56,6 +61,8 @@ function init(survey) {
     return navigator.serviceWorker
         .register(`${settings.basePath}/x/offline-app-worker.js`)
         .then((registration) => {
+            setupRegistrationListeners(registration);
+
             if (registration.active) {
                 _reportOfflineLaunchCapable(true);
             }
@@ -65,8 +72,8 @@ function init(survey) {
             // this ensures they still get notified of updates.
             _startPeriodicUpdateCheck(registration);
 
-            const isFirstInstall = !registration.active;
-            const shouldBlockOnCheck = !isFirstInstall && _isForcedCheckDue();
+            _isFirstInstall = !registration.active;
+            const shouldBlockOnCheck = !_isFirstInstall && _isForcedCheckDue();
 
             if (!shouldBlockOnCheck) {
                 // No forced check needed — proceed immediately
@@ -82,13 +89,16 @@ function init(survey) {
                 const proceedWithInit = () => {
                     if (settled) return;
                     settled = true;
+                    _initCheckInProgress = false;
                     _setLastCheckTime();
                     resolve(survey);
                 };
 
+                _initCheckInProgress = true;
+
                 // Trigger the blocking update check.
-                // If an update is found, _startPeriodicUpdateCheck's
-                // updatefound handler dispatches ApplicationUpdated -> page reload.
+                // If an update is found, the shared updatefound listener
+                // (registered in _startPeriodicUpdateCheck) handles it.
                 // If no update, we proceed with init.
                 registration
                     .update()
@@ -120,10 +130,43 @@ function init(survey) {
 }
 
 /**
+ * Sets up shared listeners for service worker registration events related to updates.
+ * The same listeners are used for both the initial blocking check and the periodic background check.
+ * When an update is detected, an ApplicationUpdated event is dispatched with the source of the update.
+ */
+function setupRegistrationListeners(registration) {
+    // Single shared listener for updates — determines source from the flag
+    registration.addEventListener('updatefound', () => {
+        const newWorker = registration.installing;
+
+        if (!newWorker) return;
+
+        // On first install the worker activating is expected — not an "update"
+        // so, no event dispatched and no reload triggered.
+        if (_isFirstInstall) {
+            _isFirstInstall = false;
+
+            return;
+        }
+
+        newWorker.addEventListener('statechange', () => {
+            if (newWorker.state === 'activated') {
+                const source = _initCheckInProgress ? 'init' : 'periodic';
+                _initCheckInProgress = false;
+
+                console.log(
+                    `New offline application service worker activated (${source})!`
+                );
+                _setLastCheckTime();
+                document.dispatchEvent(events.ApplicationUpdated({ source }));
+            }
+        });
+    });
+}
+
+/**
  * Starts a periodic background update check so that long-lived tabs
  * (kept open for days without reloading) still detect new versions.
- * When an update is found, `ApplicationUpdated` is dispatched, which
- * triggers a banner/reload via the event handler in enketo-webform.
  */
 function _startPeriodicUpdateCheck(registration) {
     setInterval(() => {
@@ -137,23 +180,6 @@ function _startPeriodicUpdateCheck(registration) {
             // Silently ignore update check failures (e.g. network error)
         });
     }, FORCE_CHECK_INTERVAL_MS);
-
-    // Listen for updates found by the periodic check
-    registration.addEventListener('updatefound', () => {
-        const newWorker = registration.installing;
-
-        if (!newWorker) return;
-
-        newWorker.addEventListener('statechange', () => {
-            if (newWorker.state === 'activated') {
-                console.log(
-                    'New offline application service worker activated!'
-                );
-                _setLastCheckTime();
-                document.dispatchEvent(events.ApplicationUpdated());
-            }
-        });
-    });
 }
 
 function _reportOfflineLaunchCapable(capable = true) {
