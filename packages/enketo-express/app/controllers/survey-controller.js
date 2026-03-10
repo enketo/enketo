@@ -200,6 +200,12 @@ function _renderWebform(req, res, next, options) {
         sameSite: 'lax',
     };
 
+    const response = res.cookie(
+        '__enketo_meta_deviceid',
+        deviceId,
+        cookieOptions
+    );
+
     // Force existing __enketo_logout cookies to have httpOnly: false, so that the
     // logout button is displayed properly.
     // This is a healing fix for users who had the old httpOnly: true set
