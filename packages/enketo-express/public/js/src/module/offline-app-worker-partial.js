@@ -45,6 +45,8 @@ self.addEventListener('activate', (event) => {
             )
             .then(() => {
                 console.log(`${version} now ready to handle fetches!`);
+
+                return self.clients.claim();
             })
     );
 });

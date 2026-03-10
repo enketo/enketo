@@ -67,6 +67,12 @@ function init(survey) {
                 _reportOfflineLaunchCapable(true);
             }
 
+            // After an offline cache update, re-dispatch OfflineLaunchCapable
+            // so the version is shown in the side slider.
+            navigator.serviceWorker.addEventListener('controllerchange', () => {
+                _reportOfflineLaunchCapable(true);
+            });
+
             // Periodic background check for long-lived tabs.
             // If a user keeps a tab open for days without reloading,
             // this ensures they still get notified of updates.
