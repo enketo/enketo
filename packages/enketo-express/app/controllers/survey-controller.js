@@ -200,10 +200,22 @@ function _renderWebform(req, res, next, options) {
         sameSite: 'lax',
     };
 
-    res.cookie('__enketo_meta_deviceid', deviceId, cookieOptions).render(
-        'surveys/webform',
-        options
-    );
+    // Force existing __enketo_logout cookies to have httpOnly: false, so that the
+    // logout button is displayed properly.
+    // This is a healing fix for users who had the old httpOnly: true set
+    // due to a prior mistaken implementation at commit d1370fb7.
+    const authCookieName = req.app.get('authentication cookie name');
+    const isLoggedIn = authCookieName && req.signedCookies[authCookieName];
+    if (isLoggedIn) {
+        response.cookie('__enketo_logout', true, {
+            secure: true,
+            httpOnly: false,
+            sameSite: 'lax',
+            path: '/',
+        });
+    }
+
+    response.render('surveys/webform', options);
 }
 
 /**
