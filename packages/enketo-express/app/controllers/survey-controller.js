@@ -194,7 +194,8 @@ function _renderWebform(req, res, next, options) {
         signed: true,
         maxAge: 10 * 365 * 24 * 60 * 60 * 1000,
         secure: true,
-        httpOnly: true,
+        // Note: This cookie is supposed to be accessed via clientside Javascript code,
+        // so we cannot set it to `httpOnly: true`
         sameSite: 'lax',
     };
 
