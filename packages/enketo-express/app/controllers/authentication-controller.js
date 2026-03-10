@@ -132,6 +132,7 @@ function setToken(req, res) {
     res.cookie(req.app.get('authentication cookie name'), token, authOptions)
         .cookie('__enketo_logout', true, {
             secure,
+            httpOnly: false,
             // Note: This cookie is read by client-side JS in setLogoutLinkVisibility()
             // to show/hide the logout button. So we cannot set it to `httpOnly: true`
             sameSite: 'lax',
