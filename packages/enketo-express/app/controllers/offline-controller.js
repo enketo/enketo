@@ -34,6 +34,7 @@ function getBuildFilesHash() {
         path.resolve(config.root, 'public/js/build'),
         path.resolve(config.root, 'public/css'),
         path.resolve(config.root, 'app/views'),
+        path.resolve(config.root, 'locales/build'),
     ];
     const hash = crypto.createHash('md5');
 
