@@ -613,6 +613,13 @@ updateStatus = {
     applicationVersion(version) {
         $('.side-slider__app-version__value').text(version);
     },
+    newVersionAvailable() {
+        $('.side-slider__update').removeClass('hide');
+        $('.side-slider__update__reload').one('click', (e) => {
+            e.preventDefault();
+            location.reload();
+        });
+    },
 };
 
 function getErrorResponseMsg(result) {

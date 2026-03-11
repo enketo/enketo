@@ -12,6 +12,9 @@ aside.record-list.side-slider
 	p.side-slider__app-version
 		span(data-i18n='version')= t('version')
 		span.side-slider__app-version__value
+	p.side-slider__update.hide
+		span(data-i18n='update.newversion')= t('update.newversion')
+		a.side-slider__update__reload(href='#', data-i18n='update.reload')= t('update.reload')
 	p.side-slider__advanced.hide
 		button.side-slider__advanced__button.flush-db.btn.btn-default(type="button", data-i18n='advanced.flushdb')= t('advanced.flushdb')
 button.side-slider__toggle.open(type="button", aria-label="open")

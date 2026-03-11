@@ -45,8 +45,18 @@ self.addEventListener('activate', (event) => {
             )
             .then(() => {
                 console.log(`${version} now ready to handle fetches!`);
+
+                // return self.clients.claim();
             })
     );
+});
+
+self.addEventListener('message', (event) => {
+    // SW_MESSAGE_GET_VERSION is declared in sw-constants.js and prepended
+    // to this script by offline-controller.js at serve time.
+    if (event.data && event.data.type === SW_MESSAGE_GET_VERSION) {
+        event.ports[0].postMessage({ version });
+    }
 });
 
 self.addEventListener('fetch', (event) => {

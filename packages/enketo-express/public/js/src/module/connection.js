@@ -744,22 +744,6 @@ function getDataFile(url, languageMap) {
         });
 }
 
-/**
- * Extracts version from service worker script
- *
- * @param { string } serviceWorkerUrl - service worker URL
- * @return {Promise<string>} a Promise that resolves with the version of the service worker or 'unknown'
- */
-function getServiceWorkerVersion(serviceWorkerUrl) {
-    return fetch(serviceWorkerUrl)
-        .then((response) => response.text())
-        .then((text) => {
-            const matches = text.match(/version\s?=\s?'([^\n]+)'/);
-
-            return matches ? matches[1] : 'unknown';
-        });
-}
-
 function getFormPartsHash() {
     return _postData(TRANSFORM_HASH_URL + _getQuery()).then(
         (data) => data.hash
@@ -793,5 +777,4 @@ export default {
     getFormPartsHash,
     getMediaFile,
     getExistingInstance,
-    getServiceWorkerVersion,
 };
