@@ -206,10 +206,8 @@ function _renderWebform(req, res, next, options) {
         cookieOptions
     );
 
-    // Force existing __enketo_logout cookies to have httpOnly: false, so that the
-    // logout button is displayed properly.
-    // This is a healing fix for users who had the old httpOnly: true set
-    // due to a prior mistaken implementation at commit d1370fb7.
+    // Make sure that __enketo_logout cookies have httpOnly: false
+    //  so that the logout button is displayed properly.
     const authCookieName = req.app.get('authentication cookie name');
     const isLoggedIn = authCookieName && req.signedCookies[authCookieName];
     if (isLoggedIn) {
