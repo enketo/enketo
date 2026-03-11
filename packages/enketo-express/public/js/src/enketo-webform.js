@@ -109,10 +109,9 @@ function _setAppCacheEventHandlers() {
         const { capable } = event.detail;
         gui.updateStatus.offlineCapable(capable);
 
-        const scriptUrl = applicationCache.serviceWorkerScriptUrl;
-        if (scriptUrl) {
-            connection
-                .getServiceWorkerVersion(scriptUrl)
+        if (applicationCache.serviceWorkerScriptUrl) {
+            applicationCache
+                .getVersion()
                 .then(gui.updateStatus.applicationVersion);
         }
     });

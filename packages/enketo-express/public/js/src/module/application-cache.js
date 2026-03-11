@@ -4,6 +4,7 @@
 
 import events from './event';
 import settings from './settings';
+import { SW_MESSAGE_GET_VERSION } from './sw-constants';
 
 // After every 12 hours we force enketo to wait for the offline-app-worker
 // and local cache update before proceeding with initialization.
@@ -70,7 +71,7 @@ function init(survey) {
             // After an offline cache update, re-dispatch OfflineLaunchCapable
             // so the version is shown in the side slider.
             navigator.serviceWorker.addEventListener('controllerchange', () => {
-                _reportOfflineLaunchCapable(true);
+                // _reportOfflineLaunchCapable(true);
             });
 
             // Periodic background check for long-lived tabs.
@@ -203,5 +204,34 @@ export default {
         }
 
         return null;
+    },
+
+    /**
+     * Returns the currently running (active/controlling) service worker for its
+     * version string via postMessage.  This reflects what is actually executing
+     * in the browser, not what is available on the server.
+     *
+     * @return {Promise<string>} resolves with the version string, or 'unknown'
+     */
+    getVersion() {
+        if (
+            !('serviceWorker' in navigator) ||
+            !navigator.serviceWorker.controller
+        ) {
+            return Promise.resolve('unknown');
+        }
+
+        return new Promise((resolve) => {
+            const channel = new MessageChannel();
+            channel.port1.onmessage = (event) => {
+                resolve((event.data && event.data.version) || 'unknown');
+            };
+            navigator.serviceWorker.controller.postMessage(
+                { type: SW_MESSAGE_GET_VERSION },
+                [channel.port2]
+            );
+            // Fallback in case the service worker does not respond
+            setTimeout(() => resolve('unknown'), 2000);
+        });
     },
 };

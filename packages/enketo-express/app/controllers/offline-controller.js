@@ -102,6 +102,13 @@ function getScriptContent() {
         ),
         'utf8'
     );
+    const swConstants = fs
+        .readFileSync(
+            path.resolve(config.root, 'public/js/src/module/sw-constants.js'),
+            'utf8'
+        )
+        // Strip ES module export keywords so constants are plain globals in the SW scope
+        .replace(/^export\s+/gm, '');
     const partialScriptHash = crypto
         .createHash('md5')
         .update(partialOfflineAppWorkerScript)
@@ -143,6 +150,8 @@ const version = '${version}';
 const resources = [
     '${resources.join("',\n    '")}'
 ];
+
+${swConstants}
 
 ${partialOfflineAppWorkerScript}`;
 }
