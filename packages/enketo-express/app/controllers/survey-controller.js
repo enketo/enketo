@@ -194,14 +194,32 @@ function _renderWebform(req, res, next, options) {
         signed: true,
         maxAge: 10 * 365 * 24 * 60 * 60 * 1000,
         secure: true,
-        httpOnly: true,
+        // Note: This cookie is supposed to be accessed via clientside Javascript code,
+        // so we cannot set it to `httpOnly: true`
+        httpOnly: false,
         sameSite: 'lax',
     };
 
-    res.cookie('__enketo_meta_deviceid', deviceId, cookieOptions).render(
-        'surveys/webform',
-        options
+    const response = res.cookie(
+        '__enketo_meta_deviceid',
+        deviceId,
+        cookieOptions
     );
+
+    // Make sure that __enketo_logout cookies have httpOnly: false
+    //  so that the logout button is displayed properly.
+    const authCookieName = req.app.get('authentication cookie name');
+    const isLoggedIn = authCookieName && req.signedCookies[authCookieName];
+    if (isLoggedIn) {
+        response.cookie('__enketo_logout', true, {
+            secure: true,
+            httpOnly: false,
+            sameSite: 'lax',
+            path: '/',
+        });
+    }
+
+    response.render('surveys/webform', options);
 }
 
 /**
