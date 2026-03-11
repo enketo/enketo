@@ -424,6 +424,10 @@
     "themes": {
         "supported": "Themes supported"
     },
+    "update": {
+        "newversion": "New version available",
+        "reload": "reload to update"
+    },
     "version": "version:",
     "widget": {
         "comment": {

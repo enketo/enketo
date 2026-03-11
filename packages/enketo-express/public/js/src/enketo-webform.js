@@ -132,6 +132,8 @@ function _setAppCacheEventHandlers() {
                 20,
                 t('alert.appupdated.heading')
             );
+            // Also update sidebar to display the new version warning.
+            gui.updateStatus.newVersionAvailable();
         }
     });
 }

@@ -95,6 +95,24 @@ $slider-width: 240px;
         }
     }
 
+    &__update {
+        color: #ccc;
+        font-size: 13px;
+        text-align: center;
+        padding: 2px 5px;
+
+        &__reload {
+            display: block;
+            color: #888;
+            text-decoration: underline;
+            cursor: pointer;
+
+            &:hover {
+                color: white;
+            }
+        }
+    }
+
     &__advanced {
         &__button {
             width: 100%;
