@@ -27,6 +27,7 @@ try {
             return srcValue;
         }
     });
+    _updateConfigFromEnv(config);
 } catch (err) {
     // Override default config with environment variables if a local config.json does not exist
     console.warn(
@@ -349,6 +350,7 @@ module.exports = {
         csrfCookieName: config['csrf cookie name'],
         excludeNonRelevant: config['exclude non-relevant'],
         experimentalOptimizations: config['experimental optimizations'],
+        hidePoweredBy: config['hide powered by'],
     },
     getThemesSupported,
 };
