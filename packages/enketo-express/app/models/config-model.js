@@ -350,7 +350,10 @@ module.exports = {
         csrfCookieName: config['csrf cookie name'],
         excludeNonRelevant: config['exclude non-relevant'],
         experimentalOptimizations: config['experimental optimizations'],
-        hidePoweredBy: config['hide powered by'],
+        hidePoweredBy:
+            config['hide powered by'] === true ||
+            (typeof config['hide powered by'] === 'string' &&
+                config['hide powered by'].toLowerCase() === 'true'),
     },
     getThemesSupported,
 };
