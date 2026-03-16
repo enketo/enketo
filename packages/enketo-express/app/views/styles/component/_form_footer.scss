@@ -135,7 +135,8 @@
         line-height: 25px;
 
         img {
-            width: 51px;
+            height: 18px;
+            width: auto;
         }
     }
 }
@@ -159,7 +160,7 @@
     .form-footer .enketo-power {
         position: absolute;
         bottom: -85px;
-        right: 5px;
+        right: -8px;
         width: auto;
     }
 

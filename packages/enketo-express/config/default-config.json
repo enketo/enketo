@@ -124,5 +124,6 @@
     "exclude non-relevant": false,
     "experimental optimizations": {
         "computeAsync": false
-    }
+    },
+    "hide powered by": false
 }
