@@ -7,14 +7,15 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Fixed
 
-- Audio options not being displayed for select-one questions (#1473)
-- Autocomplete fails on repeating questions (#1454)
-- Sanitize text values in print view to prevent XSS (#1460)
+-   Audio options not being displayed for select-one questions (#1473)
+-   Autocomplete fails on repeating questions (#1454)
+-   Sanitize text values in print view to prevent XSS (#1460)
 
 ### Changed
 
-- Reverted changes for importing extra widgets (#1476)
-- Removed test fixture broken on Firefox (#1477)
+-   Updated footer image layout styles (#1483)
+-   Reverted changes for importing extra widgets (#1476)
+-   Removed test fixture broken on Firefox (#1477)
 
 ## [9.0.2] - 2025-10-23
 

@@ -7,7 +7,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Changed
 
-- Bump node-forge from 1.3.1 to 1.3.2 (#1462)
+-   Bump node-forge from 1.3.1 to 1.3.2 (#1462)
 
 ## [3.2.1] - 2025-10-23
 
