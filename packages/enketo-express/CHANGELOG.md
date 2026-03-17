@@ -3,6 +3,25 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## 7.6.1 - 2026-03-15
+
+### Added
+
+-   Improved offline caching: service worker version now includes a hash of all built JS, CSS, and Pug view files, ensuring cache updates reliably reach users within 12 hours (#1474)
+
+### Fixed
+
+-   Update footer image and add configurable `hidePoweredBy` option (#1483)
+-   Add security attributes to all cookies (#1465)
+-   Sanitize media URL parameter and reject attacks (#1456)
+-   Device ID cookie settings updated to allow client-side access (#1480)
+-   Encrypted submissions missing media attachments (#1464)
+-   Reverted changes for importing extra widgets (#1476)
+
+### Removed
+
+-   PDF generation feature and production `puppeteer` dependency (#1455)
+
 ## 7.6.0 - 2025-10-23
 
 ### Added
