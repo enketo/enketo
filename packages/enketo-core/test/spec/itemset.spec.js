@@ -578,6 +578,25 @@ describe('Itemset functionality', () => {
             )[1];
             expect(option2.textContent.trim()).to.equal('#bb');
         });
+
+        it('populates outputs in generated option labels in forms without repeats', () => {
+            const form = loadForm('output-dynamic-itemset-no-repeat.xml');
+            form.init();
+
+            const nameInput = form.view.html.querySelector(
+                '[name="/data/name"]'
+            );
+            nameInput.value = 'John';
+            nameInput.dispatchEvent(events.Change());
+
+            const optionLabels = form.view.html.querySelectorAll(
+                '[data-name="/data/select_name"]+.option-label.active'
+            );
+
+            expect(optionLabels.length).to.equal(2);
+            expect(optionLabels[0].textContent).to.contain('John');
+            expect(optionLabels[1].textContent).to.contain('John');
+        });
     });
 
     describe('in a group that becomes relevant', () => {

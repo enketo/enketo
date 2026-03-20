@@ -801,11 +801,15 @@ Form.prototype.getRelatedNodes = function (attr, filter, updated) {
         repeatControls = this.filterRadioCheckSiblings(controls);
     }
 
-    // If a new repeat was created, update the cached collection of all form controls with that attribute
-    // If a repeat was deleted (updated.repeatPath && !updated.cloned), rebuild cache.
-    // Exclude outputs from the cache, because outputs can be added via itemsets (in labels).
-    if (!this.all[attr] || (repeatPath && !cloned) || filter === '.or-output') {
-        // (re)build the cache
+    // Outputs can be dynamically added by itemsets (in labels), so always
+    // re-query the DOM to ensure cloned outputs are included.
+    if (filter === '.or-output') {
+        this.all[attr] = this.filterRadioCheckSiblings([
+            ...this.view.html.querySelectorAll(`[${attr}]`),
+        ]);
+    } else if (!this.all[attr] || (repeatPath && !cloned)) {
+        // If a new repeat was created, update the cached collection of all form controls with that attribute
+        // If a repeat was deleted (updated.repeatPath && !updated.cloned), rebuild cache.
         // However, if repeats have not been initialized exclude nodes inside a repeat until the first repeat has been added during repeat initialization.
         // The default view repeat will be removed during initialization (and stored as template), before it is re-added, if necessary.
         // We need to avoid adding these fields to the initial cache,
