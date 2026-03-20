@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<h:html xmlns="http://www.w3.org/2002/xforms" xmlns:h="http://www.w3.org/1999/xhtml" xmlns:jr="http://openrosa.org/javarosa" xmlns:odk="http://www.opendatakit.org/xforms" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+	<h:head>
+		<h:title>Setvalue xforms-value-changed in repeat</h:title>
+		<model odk:xforms-version="1.0.0">
+			<instance>
+				<data id="setvalue-repeat-value-changed" version="1">
+					<person jr:template="">
+						<dob/>
+						<age/>
+						<age_note/>
+					</person>
+					<person>
+						<dob/>
+						<age/>
+						<age_note/>
+					</person>
+					<meta>
+						<instanceID/>
+					</meta>
+				</data>
+			</instance>
+			<bind nodeset="/data/person/dob" type="string"/>
+			<bind nodeset="/data/person/age" type="string"/>
+			<bind nodeset="/data/person/age_note" type="string" readonly="true()"/>
+			<bind jr:preload="uid" nodeset="/data/meta/instanceID" readonly="true()" type="string"/>
+		</model>
+	</h:head>
+	<h:body class="theme-grid no-text-transform">
+		<group ref="/data/person">
+			<label/>
+			<repeat nodeset="/data/person">
+				<input ref="/data/person/dob">
+					<label>Date of birth</label>
+					<setvalue event="xforms-value-changed" ref="/data/person/age" value="concat('age from ', ../dob)"/>
+				</input>
+				<input ref="/data/person/age_note">
+					<label>Age note</label>
+				</input>
+			</repeat>
+		</group>
+	</h:body>
+</h:html>
