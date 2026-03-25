@@ -24,4 +24,12 @@ describe('digest', () => {
             assertStringValue(expr, expected);
         });
     });
+
+    it('should dereference an xpath', () => {
+        assertStringValue(
+            'integrity',
+            'digest(/simple/xpath/to/node, "MD5", "hex")',
+            '164731747fc7236d799e588f60efbbe7'
+        );
+    });
 });
