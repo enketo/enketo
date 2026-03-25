@@ -248,7 +248,7 @@ const openrosaXPathExtensions = function () {
             return XPR.number(dec);
         },
         digest(msg, algo, encoding) {
-            return XPR.string(digest(msg, algo, encoding));
+            return XPR.string(digest(XPR.string(asString(msg)), algo, encoding));
         },
         distance(...r) {
             if (arguments.length === 0) throw TOO_FEW_ARGS;
