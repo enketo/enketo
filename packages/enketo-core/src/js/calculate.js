@@ -275,7 +275,7 @@ export default {
                 // Control for xforms-value-changed is located elsewhere, or does not exist.
                 // First we test if the control can be found by looking for the same index as the trigger
                 let control = this.form.input.find(props.name, props.index);
-                if (!control) {
+                if (!control && dataNodes.length <= 1) {
                     // In case the trigger was inside a repeat, but the target is not.
                     props.index = 0;
                     control = this.form.input.find(props.name, 0);

@@ -530,6 +530,33 @@ describe('setvalue action to populate defaults', () => {
                 expect(itemX.textContent).not.to.equal('initial default');
                 expect(hid.textContent).not.to.equal('');
             });
+
+            it('when both trigger and target are inside the same repeat', async () => {
+                const form = loadForm('setvalue-repeat-value-changed.xml');
+                form.init();
+
+                // Add a second repeat instance
+                form.view.html.querySelector('.add-repeat-btn').click();
+
+                const dobInputs = form.view.html.querySelectorAll(
+                    '[name="/data/person/dob"]'
+                );
+
+                // Set dob in first repeat instance
+                form.input.setVal(dobInputs[0], '2000-01-01', events.Change());
+                await timers.runAllAsync();
+
+                // Set dob in second repeat instance
+                form.input.setVal(dobInputs[1], '2010-06-15', events.Change());
+                await timers.runAllAsync();
+
+                const ageNodes =
+                    form.model.xml.querySelectorAll('person > age');
+
+                // Both repeat instances should have their age calculated correctly
+                expect(ageNodes[0].textContent).to.equal('age from 2000-01-01');
+                expect(ageNodes[1].textContent).to.equal('age from 2010-06-15');
+            });
         });
     });
 
