@@ -3,6 +3,7 @@ import types from './types';
 import event from './event';
 import { getXPath } from './dom-utils';
 import { isNodeRelevant, setNonRelevantValue } from './relevant';
+import { stripInvalidXmlCharacters } from './utils';
 
 /**
  * @typedef NodesetFilter
@@ -119,6 +120,7 @@ Nodeset.prototype.setVal = function (newVals, xmlDataType) {
         newVal = '';
     }
 
+    newVal = stripInvalidXmlCharacters(newVal);
     newVal = this.convert(newVal, xmlDataType);
 
     const strVal = String(newVal);
