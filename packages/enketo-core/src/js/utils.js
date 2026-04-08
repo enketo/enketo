@@ -163,12 +163,40 @@ function dataUriToBlobSync(dataURI) {
 }
 
 /**
+ * Regex matching characters that are not valid in XML 1.0.
+ *
+ * @see https://www.w3.org/TR/REC-xml/#charsets
+ * @type {RegExp}
+ */
+const INVALID_XML_CHARS =
+    /[^\x09\x0A\x0D\x20-\uD7FF\uE000-\uFFFD\u{10000}-\u{10FFFF}]/gu;
+
+/**
+ * Strips characters that are not valid in XML 1.0.
+ *
+ * @static
+ * @param {string} str - The string to sanitize
+ * @return {string} The sanitized string with invalid XML characters removed
+ */
+function stripInvalidXmlCharacters(str) {
+    if (!str) {
+        return str;
+    }
+
+    return str.replace(INVALID_XML_CHARS, '');
+}
+
+/**
  * @static
  * @param {Event} event - a paste event
  * @return {string|null} clipboard data text value contained in event or null
  */
 function getPasteData(event) {
-    return event.clipboardData ? event.clipboardData.getData('text') : null;
+    const data = event.clipboardData
+        ? event.clipboardData.getData('text')
+        : null;
+
+    return data ? stripInvalidXmlCharacters(data) : data;
 }
 
 /**
@@ -338,6 +366,7 @@ export {
     readCookie,
     dataUriToBlobSync,
     getPasteData,
+    stripInvalidXmlCharacters,
     resizeImage,
     joinPath,
     getScript,
