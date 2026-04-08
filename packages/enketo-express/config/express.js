@@ -154,7 +154,7 @@ if (hsts && hsts.seconds !== 0) {
     securityHeaders['Strict-Transport-Security'] = hstsDirectives.join('; ');
 }
 const defaultCSP =
-    "default-src 'self'; script-src 'self' 'unsafe-inline' data:; style-src 'self' 'unsafe-inline' data:; img-src 'self' data:";
+    "default-src 'self' blob:; script-src 'self' 'unsafe-inline' data:; style-src 'self' 'unsafe-inline' data:; img-src 'self' data: blob:";
 const csp = app.get('csp');
 if (csp && csp.enabled) {
     const cspHeader = csp['report only']
