@@ -259,6 +259,10 @@ FormModel.prototype.createSession = function (id, sessObj) {
     let instance;
     let session;
     const model = this.xml.querySelector('model');
+    if (!model || model !== this.xml.documentElement) {
+        return;
+    }
+
     const fixedProps = [
         'deviceid',
         'username',
@@ -267,9 +271,6 @@ FormModel.prototype.createSession = function (id, sessObj) {
         'simserial',
         'subscriberid',
     ];
-    if (!model) {
-        return;
-    }
 
     sessObj = typeof sessObj === 'object' ? sessObj : {};
     instance = model.querySelector(`instance#${CSS.escape(id)}`);
