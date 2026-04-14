@@ -168,8 +168,8 @@ function dataUriToBlobSync(dataURI) {
  * @see https://www.w3.org/TR/REC-xml/#charsets
  * @type {RegExp}
  */
-// eslint-disable-next-line no-control-regex, no-misleading-character-class
 const INVALID_XML_CHARS =
+    // eslint-disable-next-line no-control-regex, no-misleading-character-class
     /[^\x09\x0A\x0D\x20-\uD7FF\uE000-\uFFFD\u{10000}-\u{10FFFF}]/gu;
 
 /**
