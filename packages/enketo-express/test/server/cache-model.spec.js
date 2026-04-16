@@ -115,12 +115,15 @@ describe('Cache Model', () => {
                 .then(() => model.get(survey))
                 .then(() => getTtl('ca:testserver.com/bob,widgets'));
 
+            // We have 10ms tolerance here to account for the
+            // time it takes to execute the code in between and
+            // the variation expected in setTimeout.
             return Promise.all([
                 expect(promise1)
-                    .to.eventually.be.at.most(expiration - delayTime)
-                    .and.to.be.at.least(expiration - delayTime - 100),
+                    .to.eventually.be.at.most(expiration - delayTime + 10)
+                    .and.to.be.at.least(expiration - delayTime - 10),
                 expect(promise2)
-                    .to.eventually.be.at.most(expiration)
+                    .to.eventually.be.at.most(expiration + 10)
                     .and.to.be.at.least(expiration - 10),
             ]);
         });
