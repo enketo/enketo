@@ -165,29 +165,25 @@ function _uploadBatch(recordBatch) {
                 message: undefined,
             };
 
-            // Note: OpenRosa servers return 201 or 202 status codes upon successful submission.
-            if (response.status !== 201 && response.status !== 202) {
-                return response.text().then((text) => {
-                    const xmlResponse = parser.parseFromString(
-                        text,
-                        'text/xml'
+            return response.text().then((text) => {
+                const xmlResponse = parser.parseFromString(text, 'text/xml');
+                if (xmlResponse) {
+                    const messageEl = xmlResponse.querySelector(
+                        'OpenRosaResponse > message'
                     );
-                    if (xmlResponse) {
-                        const messageEl = xmlResponse.querySelector(
-                            'OpenRosaResponse > message'
-                        );
-                        if (messageEl) {
-                            result.message = messageEl.textContent;
-                        } else {
-                            result.message = text;
-                        }
-                    } else {
+                    if (messageEl) {
+                        result.message = messageEl.textContent;
+                    }
+                }
+                // Note: OpenRosa servers return 201 or 202 status codes upon successful submission.
+                if (response.status !== 201 && response.status !== 202) {
+                    if (!result.message) {
                         result.message = text;
                     }
                     throw result;
-                });
-            }
-            return result;
+                }
+                return result;
+            });
         })
         .catch((error) => {
             if (

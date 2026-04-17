@@ -21,6 +21,7 @@ import encryptor from './encryptor';
 import formCache from './form-cache';
 import { getLastSavedRecord, populateLastSavedInstances } from './last-saved';
 import { replaceMediaSources, replaceModelMediaSources } from './media';
+import markdownit from 'markdown-it';
 
 /**
  * @typedef {import('../../../../app/models/survey-model').SurveyObject} Survey
@@ -355,6 +356,8 @@ function _submitRecord(survey) {
     let msg = '';
     const include = { irrelevant: false };
 
+    const hasSubmitMessage = getSubmitMessage() !== null;
+
     form.view.html.dispatchEvent(events.BeforeSave());
 
     beforeMsg = redirect ? t('alert.submission.redirectmsg') : '';
@@ -403,10 +406,29 @@ function _submitRecord(survey) {
                 })}<br/>`;
                 level = 'warning';
             }
+
+            return result;
         })
-        .then(() => {
+        .then((result) => {
             // this event is used in communicating back to iframe parent window
             document.dispatchEvent(events.SubmissionSuccess());
+
+            if (
+                settings.type === 'single' &&
+                hasSubmitMessage &&
+                result.message &&
+                result.message.length > 0
+            ) {
+                const md = markdownit();
+                gui.fullScreenAlert(
+                    md.render(result.message),
+                    t('alert.submissionsuccess.heading'),
+                    'normal'
+                );
+                _resetForm(survey);
+
+                return;
+            }
 
             if (redirect) {
                 if (!settings.multipleAllowed) {
@@ -895,6 +917,13 @@ function setLogoutLinkVisibility() {
         .split('; ')
         .some((rawCookie) => rawCookie.indexOf('__enketo_logout=') !== -1);
     $('.form-footer .logout').toggleClass('hide', !visible);
+}
+
+function getSubmitMessage() {
+    const xmlParser = new DOMParser();
+    const xmlForm = xmlParser.parseFromString(formData.modelStr, 'text/xml');
+
+    return xmlForm.querySelector('submitMessage');
 }
 
 /**
