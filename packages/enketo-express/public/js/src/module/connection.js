@@ -165,14 +165,25 @@ function _uploadBatch(recordBatch) {
                 message: undefined,
             };
 
-            return response.text().then((text) => {
-                const xmlResponse = parser.parseFromString(text, 'text/xml');
-                if (xmlResponse) {
-                    const messageEl = xmlResponse.querySelector(
-                        'OpenRosaResponse > message'
+            // safeguard for response.text() not being a function/not existing (e.g. in some test environments)
+            const textPromise =
+                typeof response.text === 'function'
+                    ? response.text()
+                    : Promise.resolve('');
+
+            return textPromise.then((text) => {
+                if (text) {
+                    const xmlResponse = parser.parseFromString(
+                        text,
+                        'text/xml'
                     );
-                    if (messageEl) {
-                        result.message = messageEl.textContent;
+                    if (xmlResponse) {
+                        const messageEl = xmlResponse.querySelector(
+                            'OpenRosaResponse > message'
+                        );
+                        if (messageEl) {
+                            result.message = messageEl.textContent;
+                        }
                     }
                 }
                 // Note: OpenRosa servers return 201 or 202 status codes upon successful submission.
