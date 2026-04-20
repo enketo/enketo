@@ -1,0 +1,67 @@
+<?xml version="1.0"?>
+<h:html xmlns="http://www.w3.org/2002/xforms" xmlns:h="http://www.w3.org/1999/xhtml"
+        xmlns:ev="http://www.w3.org/2001/xml-events" xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+        xmlns:jr="http://openrosa.org/javarosa" xmlns:orx="http://openrosa.org/xforms"
+        xmlns:odk="http://www.opendatakit.org/xforms" xmlns:cht="https://communityhealthtoolkit.org">
+  <h:head>
+    <h:title>Dynamic Choice Label</h:title>
+    <model odk:xforms-version="1.0.0">
+      <itext>
+        <translation lang="English (en)">
+          <text id="names-0">
+            <value>Mr.
+              <output value=" /data/name "/>
+            </value>
+          </text>
+          <text id="names-1">
+            <value>Mrs.
+              <output value=" /data/name "/>
+            </value>
+          </text>
+          <text id="/data/name:label">
+            <value>Name</value>
+          </text>
+          <text id="/data/select_name:label">
+            <value>Select Variant</value>
+          </text>
+        </translation>
+      </itext>
+      <instance>
+        <data id="dynamic_choice_label" version="20260320082937">
+          <name/>
+          <select_name/>
+          <meta>
+            <instanceID/>
+          </meta>
+        </data>
+      </instance>
+      <instance id="names">
+        <root>
+          <item>
+            <itextId>names-0</itextId>
+            <name>mr</name>
+          </item>
+          <item>
+            <itextId>names-1</itextId>
+            <name>mrs</name>
+          </item>
+        </root>
+      </instance>
+      <bind nodeset="/data/name" type="string"/>
+      <bind nodeset="/data/select_name" type="string"/>
+      <bind nodeset="/data/meta/instanceID" type="string" readonly="true()" jr:preload="uid"/>
+    </model>
+  </h:head>
+  <h:body class="pages">
+    <input ref="/data/name">
+      <label ref="jr:itext('/data/name:label')"/>
+    </input>
+    <select1 ref="/data/select_name">
+      <label ref="jr:itext('/data/select_name:label')"/>
+      <itemset nodeset="instance('names')/root/item">
+        <value ref="name"/>
+        <label ref="jr:itext(itextId)"/>
+      </itemset>
+    </select1>
+  </h:body>
+</h:html>
