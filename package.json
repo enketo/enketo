@@ -16,6 +16,8 @@
         ]
     },
     "scripts": {
+        "docker:dev": "docker compose -f docker-compose.dev.yml up -d --build",
+        "docker:logs": "docker compose -f docker-compose.dev.yml logs -f",
         "build": "yarn workspaces run build",
         "watch:express": "yarn workspace enketo-express develop",
         "watch:transformer:web": "yarn workspace enketo-transformer watch:web",

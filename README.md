@@ -47,6 +47,32 @@ export TEST_REDIS_MAIN_PORT=6379
 yarn watch # see http://localhost:8005/preview?xform=http://localhost:3000/all-widgets.xml
 ```
 
+### Development with Docker
+
+Use the development compose setup to run the root-level `yarn watch` command inside a container while editing code on your host:
+
+```sh
+cp .env.docker.example .env.docker
+docker compose -f docker-compose.dev.yml up --build
+```
+
+This setup uses Node `22.12.0` and Yarn `1.22.22`, bind-mounts the repository, and keeps dependencies in a Docker volume for stable native module builds.
+
+-   Enketo Express: http://localhost:8005
+-   Test forms server: http://localhost:3000
+
+For external services (such as Redis running on the host or another reachable machine), configure `.env.docker`.
+The container can reach the host via `host.docker.internal`.
+
+If Redis runs on your host, a typical config is:
+
+```sh
+ENKETO_REDIS_MAIN_HOST=host.docker.internal
+ENKETO_REDIS_MAIN_PORT=6379
+ENKETO_REDIS_CACHE_HOST=host.docker.internal
+ENKETO_REDIS_CACHE_PORT=6380
+```
+
 This is a monorepo, see for details on each package see their README:
 
 -   [Enketo Express](./packages/enketo-express/README.md): Enketo's integrated web application, embedding Enketo Core and providing integration with OpenRosa form servers

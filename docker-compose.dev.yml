@@ -1,0 +1,37 @@
+services:
+    enketo-dev:
+        build:
+            context: .
+            dockerfile: Dockerfile.dev
+        image: enketo-dev:local
+        container_name: enketo-dev
+        working_dir: /srv/src/enketo
+        command: bash docker/dev/start-watch.sh
+        ports:
+            - '8005:8005'
+            - '8008:3000'
+        env_file:
+            - .env.docker
+        environment:
+            CHOKIDAR_USEPOLLING: 'true'
+            CHOKIDAR_INTERVAL: '200'
+            WATCHPACK_POLLING: 'true'
+            ENKETO_PORT: '8005'
+        extra_hosts:
+            - 'host.docker.internal:host-gateway'
+        volumes:
+            - ./:/srv/src/enketo
+            - enketo_node_modules:/srv/src/enketo/node_modules
+            - enketo_yarn_cache:/usr/local/share/.cache/yarn
+        stdin_open: true
+        tty: true
+        networks:
+            - enketo-dev-net
+networks:
+    enketo-dev-net:
+        name: enketo-dev-net
+        driver: bridge
+
+volumes:
+    enketo_node_modules:
+    enketo_yarn_cache:
