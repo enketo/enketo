@@ -413,9 +413,8 @@ function _submitRecord(survey) {
             // this event is used in communicating back to iframe parent window
             document.dispatchEvent(events.SubmissionSuccess());
 
-            const submitMessage = submitMessageXPath
-                ? form.model.node(submitMessageXPath).getVal()
-                : null;
+            // Only check for result message if there was a submitMessageXPath defined
+            const submitMessage = submitMessageXPath ? result.message : null;
 
             if (
                 settings.type === 'single' &&
