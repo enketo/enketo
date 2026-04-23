@@ -356,7 +356,7 @@ function _submitRecord(survey) {
     let msg = '';
     const include = { irrelevant: false };
 
-    const hasSubmitMessage = getSubmitMessage() !== null;
+    const submitMessageXPath = getSubmitMessageXPath();
 
     form.view.html.dispatchEvent(events.BeforeSave());
 
@@ -413,15 +413,18 @@ function _submitRecord(survey) {
             // this event is used in communicating back to iframe parent window
             document.dispatchEvent(events.SubmissionSuccess());
 
+            const submitMessage = submitMessageXPath
+                ? form.model.node(submitMessageXPath).getVal()
+                : null;
+
             if (
                 settings.type === 'single' &&
-                hasSubmitMessage &&
-                result.message &&
-                result.message.length > 0
+                submitMessage &&
+                submitMessage.length > 0
             ) {
                 const md = markdownit();
                 gui.fullScreenAlert(
-                    md.render(result.message),
+                    md.render(submitMessage),
                     t('alert.submissionsuccess.heading'),
                     'normal'
                 );
@@ -919,11 +922,17 @@ function setLogoutLinkVisibility() {
     $('.form-footer .logout').toggleClass('hide', !visible);
 }
 
-function getSubmitMessage() {
+function getSubmitMessageXPath() {
     const xmlParser = new DOMParser();
     const xmlForm = xmlParser.parseFromString(formData.modelStr, 'text/xml');
+    const dataEl = xmlForm.querySelector('model > instance > data');
 
-    return xmlForm.querySelector('submitMessage');
+    return dataEl
+        ? dataEl.getAttributeNS(
+              'http://kobotoolbox.org/xforms',
+              'submitMessage'
+          )
+        : null;
 }
 
 /**
