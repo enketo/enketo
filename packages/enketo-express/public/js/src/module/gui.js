@@ -238,6 +238,41 @@ function alert(
 }
 
 /**
+ * Shows a full-screen modal alert.
+ * Intended for custom form submission confirmation messages.
+ *
+ * @param {string} message - message to show (HTML)
+ * @param {string=} heading - heading (visually hidden, available to assistive technologies)
+ * @param {string=} level - css class ('alert', 'info', 'warning', 'error', 'success')
+ * @param {boolean} [dismissible=false] - whether the dialog can be dismissed via button, X, or ESC
+ * @returns {Promise} resolves when the alert is closed
+ */
+function fullScreenAlert(message, heading, level, dismissible = false) {
+    return new Promise((resolve) => {
+        level = level || 'error';
+        vex.closeAll();
+        vex.dialog.alert({
+            className: 'vex-theme-plain full-screen',
+            unsafeMessage: `<span>${message}</span>`,
+            title: heading || t('alert.default.heading'),
+            messageClassName: level === 'normal' ? '' : `alert-box ${level}`,
+            buttons: dismissible
+                ? [
+                      {
+                          text: t('alert.default.button'),
+                          type: 'submit',
+                          className: 'btn btn-primary small',
+                      },
+                  ]
+                : [],
+            showCloseButton: dismissible,
+            escapeButtonCloses: dismissible,
+            afterClose: resolve,
+        });
+    });
+}
+
+/**
  * Shows a confirmation dialog
  *
  * @param {?(object.<string, (string|boolean)>|string)=} content - In its simplest form this is just a string but it can
@@ -675,6 +710,7 @@ $(document).ready(() => {
 
 export default {
     alert,
+    fullScreenAlert,
     confirm,
     prompt,
     feedback,

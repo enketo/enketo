@@ -165,9 +165,14 @@ function _uploadBatch(recordBatch) {
                 message: undefined,
             };
 
-            // Note: OpenRosa servers return 201 or 202 status codes upon successful submission.
-            if (response.status !== 201 && response.status !== 202) {
-                return response.text().then((text) => {
+            // safeguard for response.text() not being a function/not existing (e.g. in some test environments)
+            const textPromise =
+                typeof response.text === 'function'
+                    ? response.text()
+                    : Promise.resolve('');
+
+            return textPromise.then((text) => {
+                if (text) {
                     const xmlResponse = parser.parseFromString(
                         text,
                         'text/xml'
@@ -178,16 +183,18 @@ function _uploadBatch(recordBatch) {
                         );
                         if (messageEl) {
                             result.message = messageEl.textContent;
-                        } else {
-                            result.message = text;
                         }
-                    } else {
+                    }
+                }
+                // Note: OpenRosa servers return 201 or 202 status codes upon successful submission.
+                if (response.status !== 201 && response.status !== 202) {
+                    if (!result.message) {
                         result.message = text;
                     }
                     throw result;
-                });
-            }
-            return result;
+                }
+                return result;
+            });
         })
         .catch((error) => {
             if (

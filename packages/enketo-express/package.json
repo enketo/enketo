@@ -47,6 +47,7 @@
         "jquery": "3.6.3",
         "jstransformer-markdown-it": "^3.0.0",
         "jszip": "^3.10.1",
+        "markdown-it": "^13.0.2",
         "jwt-simple": "^0.5.6",
         "libxslt": "0.10.2",
         "load-grunt-tasks": "^5.1.0",

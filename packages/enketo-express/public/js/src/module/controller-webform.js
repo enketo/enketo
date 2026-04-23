@@ -21,6 +21,7 @@ import encryptor from './encryptor';
 import formCache from './form-cache';
 import { getLastSavedRecord, populateLastSavedInstances } from './last-saved';
 import { replaceMediaSources, replaceModelMediaSources } from './media';
+import markdownit from 'markdown-it';
 
 /**
  * @typedef {import('../../../../app/models/survey-model').SurveyObject} Survey
@@ -355,6 +356,8 @@ function _submitRecord(survey) {
     let msg = '';
     const include = { irrelevant: false };
 
+    const submitMessageXPath = getSubmitMessageXPath();
+
     form.view.html.dispatchEvent(events.BeforeSave());
 
     beforeMsg = redirect ? t('alert.submission.redirectmsg') : '';
@@ -403,10 +406,31 @@ function _submitRecord(survey) {
                 })}<br/>`;
                 level = 'warning';
             }
+
+            return result;
         })
-        .then(() => {
+        .then((result) => {
             // this event is used in communicating back to iframe parent window
             document.dispatchEvent(events.SubmissionSuccess());
+
+            // Only check for result message if there was a submitMessageXPath defined
+            const submitMessage = submitMessageXPath ? result.message : null;
+
+            if (
+                settings.type === 'single' &&
+                submitMessage &&
+                submitMessage.length > 0
+            ) {
+                const md = markdownit();
+                gui.fullScreenAlert(
+                    md.render(submitMessage),
+                    t('alert.submissionsuccess.heading'),
+                    'normal'
+                );
+                _resetForm(survey);
+
+                return;
+            }
 
             if (redirect) {
                 if (!settings.multipleAllowed) {
@@ -895,6 +919,19 @@ function setLogoutLinkVisibility() {
         .split('; ')
         .some((rawCookie) => rawCookie.indexOf('__enketo_logout=') !== -1);
     $('.form-footer .logout').toggleClass('hide', !visible);
+}
+
+function getSubmitMessageXPath() {
+    const xmlParser = new DOMParser();
+    const xmlForm = xmlParser.parseFromString(formData.modelStr, 'text/xml');
+    const dataEl = xmlForm.querySelector('model > instance > data');
+
+    return dataEl
+        ? dataEl.getAttributeNS(
+              'http://kobotoolbox.org/xforms',
+              'submitMessage'
+          )
+        : null;
 }
 
 /**

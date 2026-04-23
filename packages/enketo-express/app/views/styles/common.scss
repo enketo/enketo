@@ -67,3 +67,36 @@ progress {
 .log {
     word-break: break-all;
 }
+
+.vex.vex-theme-plain.full-screen {
+    padding: 0;
+
+    .vex-content {
+        width: 100vw; // fallback for browsers without dvw support
+        width: 100dvw; // dynamic viewport: accounts for mobile browser UI
+        min-height: 100vh; // fallback for browsers without dvh support
+        min-height: 100dvh; // dynamic viewport: accounts for mobile browser UI
+        border: none;
+        border-radius: 0;
+    }
+
+    .vex-dialog-message {
+        border: 7px solid #ddd;
+        border-radius: 7px;
+        padding: 1em 3em;
+        margin: 1em 3em;
+    }
+
+    .vex-dialog-title {
+        // visually hidden but available to assistive technologies
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        padding: 0;
+        margin: -1px;
+        overflow: hidden;
+        clip: rect(0, 0, 0, 0);
+        white-space: nowrap;
+        border-width: 0;
+    }
+}
