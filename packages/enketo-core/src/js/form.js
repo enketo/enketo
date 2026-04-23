@@ -7,6 +7,7 @@ import {
     stripQuotes,
     getFilename,
     joinPath,
+    stripInvalidXmlCharacters,
 } from './utils';
 import {
     getXPath,
@@ -1062,6 +1063,29 @@ Form.prototype.setEventHandlers = function () {
 
     // Prevent default submission, e.g. when text field is filled in and Enter key is pressed
     this.view.$.attr('onsubmit', 'return false;');
+
+    // Strip invalid XML characters from pasted text in input fields and textareas
+    this.view.html.addEventListener('paste', (event) => {
+        const el = event.target;
+        if (
+            el.matches &&
+            el.matches(
+                'input:not(.ignore):not([type="file"]), textarea:not(.ignore)'
+            )
+        ) {
+            const pasteData = event.clipboardData
+                ? event.clipboardData.getData('text')
+                : null;
+            if (
+                pasteData &&
+                pasteData !== stripInvalidXmlCharacters(pasteData)
+            ) {
+                event.preventDefault();
+                const sanitized = stripInvalidXmlCharacters(pasteData);
+                document.execCommand('insertText', false, sanitized);
+            }
+        }
+    });
 
     /*
      * The listener below catches both change and change.file events.
