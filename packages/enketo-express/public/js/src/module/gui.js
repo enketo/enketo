@@ -7,6 +7,7 @@ import support from 'enketo-core/src/js/support';
 import * as printHelper from 'enketo-core/src/js/print';
 import vex from 'vex-js';
 import $ from 'jquery';
+import markdownit from 'markdown-it';
 import vexEnketoDialog from 'vex-dialog-enketo';
 import feedbackBar from './feedback-bar';
 import settings from './settings';
@@ -708,6 +709,47 @@ $(document).ready(() => {
     init();
 });
 
+/**
+ * Replaces the form content with the given HTML element, keeping the
+ * surrounding layout (header, footer) intact. Footer action buttons are
+ * removed, leaving only the "powered by" branding.
+ *
+ * Attention: This is a destructive action, intended for use after a form submission,
+ * in single mode, when the form content is no longer needed.
+ *
+ * @param {string} markdown - the message to render
+ */
+function displayMessageInForm(markdown) {
+    const md = markdownit();
+    const msgEl = document.createElement('div');
+    msgEl.className = 'in-form-message';
+    msgEl.innerHTML = md.render(markdown);
+
+    const formEl = document.querySelector('form.or');
+    if (!formEl) {
+        return;
+    }
+    vex.closeAll();
+
+    formEl.replaceChildren(msgEl);
+
+    // Hide buttons from the footer, but keep the "powered by" branding.
+    const mainControls = document.querySelector(
+        '.form-footer__content__main-controls'
+    );
+    const enketoPower = mainControls
+        ? mainControls.querySelector('.enketo-power')
+        : null;
+    if (mainControls) {
+        mainControls.replaceChildren(...(enketoPower ? [enketoPower] : []));
+    }
+
+    const jumpNav = document.querySelector('.form-footer__content__jump-nav');
+    if (jumpNav) {
+        jumpNav.hidden = true;
+    }
+}
+
 export default {
     alert,
     fullScreenAlert,
@@ -724,4 +766,5 @@ export default {
     applyPrintStyle,
     getPrintDialogComponents,
     printForm,
+    displayMessageInForm,
 };
