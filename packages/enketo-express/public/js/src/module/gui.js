@@ -7,6 +7,7 @@ import support from 'enketo-core/src/js/support';
 import * as printHelper from 'enketo-core/src/js/print';
 import vex from 'vex-js';
 import $ from 'jquery';
+import markdownit from 'markdown-it';
 import vexEnketoDialog from 'vex-dialog-enketo';
 import feedbackBar from './feedback-bar';
 import settings from './settings';
@@ -232,41 +233,6 @@ function alert(
             ],
             autoClose: duration,
             showCloseButton: true,
-            afterClose: resolve,
-        });
-    });
-}
-
-/**
- * Shows a full-screen modal alert.
- * Intended for custom form submission confirmation messages.
- *
- * @param {string} message - message to show (HTML)
- * @param {string=} heading - heading (visually hidden, available to assistive technologies)
- * @param {string=} level - css class ('alert', 'info', 'warning', 'error', 'success')
- * @param {boolean} [dismissible=false] - whether the dialog can be dismissed via button, X, or ESC
- * @returns {Promise} resolves when the alert is closed
- */
-function fullScreenAlert(message, heading, level, dismissible = false) {
-    return new Promise((resolve) => {
-        level = level || 'error';
-        vex.closeAll();
-        vex.dialog.alert({
-            className: 'vex-theme-plain full-screen',
-            unsafeMessage: `<span>${message}</span>`,
-            title: heading || t('alert.default.heading'),
-            messageClassName: level === 'normal' ? '' : `alert-box ${level}`,
-            buttons: dismissible
-                ? [
-                      {
-                          text: t('alert.default.button'),
-                          type: 'submit',
-                          className: 'btn btn-primary small',
-                      },
-                  ]
-                : [],
-            showCloseButton: dismissible,
-            escapeButtonCloses: dismissible,
             afterClose: resolve,
         });
     });
@@ -708,9 +674,49 @@ $(document).ready(() => {
     init();
 });
 
+/**
+ * Replaces the form content with the given HTML element, keeping the
+ * surrounding layout (header, footer) intact. Footer action buttons are
+ * removed, leaving only the "powered by" branding.
+ *
+ * Attention: This is a destructive action, intended for use after a form submission,
+ * in single mode, when the form content is no longer needed.
+ *
+ * @param {string} markdown - the message to render
+ */
+function displayMessageInForm(markdown) {
+    const md = markdownit();
+    const msgEl = document.createElement('div');
+    msgEl.className = 'in-form-message';
+    msgEl.innerHTML = md.render(markdown);
+
+    const formEl = document.querySelector('form.or');
+    if (!formEl) {
+        return;
+    }
+    vex.closeAll();
+
+    formEl.replaceChildren(msgEl);
+
+    // Hide buttons from the footer, but keep the "powered by" branding.
+    const mainControls = document.querySelector(
+        '.form-footer__content__main-controls'
+    );
+    const enketoPower = mainControls
+        ? mainControls.querySelector('.enketo-power')
+        : null;
+    if (mainControls) {
+        mainControls.replaceChildren(...(enketoPower ? [enketoPower] : []));
+    }
+
+    const jumpNav = document.querySelector('.form-footer__content__jump-nav');
+    if (jumpNav) {
+        jumpNav.hidden = true;
+    }
+}
+
 export default {
     alert,
-    fullScreenAlert,
     confirm,
     prompt,
     feedback,
@@ -724,4 +730,5 @@ export default {
     applyPrintStyle,
     getPrintDialogComponents,
     printForm,
+    displayMessageInForm,
 };

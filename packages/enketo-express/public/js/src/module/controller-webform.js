@@ -21,7 +21,6 @@ import encryptor from './encryptor';
 import formCache from './form-cache';
 import { getLastSavedRecord, populateLastSavedInstances } from './last-saved';
 import { replaceMediaSources, replaceModelMediaSources } from './media';
-import markdownit from 'markdown-it';
 
 /**
  * @typedef {import('../../../../app/models/survey-model').SurveyObject} Survey
@@ -413,7 +412,7 @@ function _submitRecord(survey) {
             // this event is used in communicating back to iframe parent window
             document.dispatchEvent(events.SubmissionSuccess());
 
-            // Only check for result message if there was a submitMessageXPath defined
+            // Only consider result message if there was a submitMessageXPath defined
             const submitMessage = submitMessageXPath ? result.message : null;
 
             if (
@@ -421,13 +420,7 @@ function _submitRecord(survey) {
                 submitMessage &&
                 submitMessage.length > 0
             ) {
-                const md = markdownit();
-                gui.fullScreenAlert(
-                    md.render(submitMessage),
-                    t('alert.submissionsuccess.heading'),
-                    'normal'
-                );
-                _resetForm(survey);
+                gui.displayMessageInForm(submitMessage);
 
                 return;
             }
