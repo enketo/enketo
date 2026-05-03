@@ -1,0 +1,43 @@
+<?xml version="1.0"?>
+<h:html xmlns="http://www.w3.org/2002/xforms" xmlns:ev="http://www.w3.org/2001/xml-events" xmlns:h="http://www.w3.org/1999/xhtml" xmlns:jr="http://openrosa.org/javarosa" xmlns:orx="http://openrosa.org/xforms/" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <h:head>
+    <h:title>readonly-dynamic</h:title>
+    <model>
+      <instance>
+        <readonly-dynamic id="readonly-dynamic">
+          <status>locked</status>
+          <field1></field1>
+          <field2></field2>
+          <count>0</count>
+          <field3></field3>
+          <meta>
+            <instanceID/>
+          </meta>
+        </readonly-dynamic>
+      </instance>
+      <bind nodeset="/readonly-dynamic/status" type="string"/>
+      <bind nodeset="/readonly-dynamic/field1" readonly="./status = 'locked'" type="string"/>
+      <bind nodeset="/readonly-dynamic/field2" readonly="../status = 'locked'" type="string"/>
+      <bind nodeset="/readonly-dynamic/count" type="int"/>
+      <bind nodeset="/readonly-dynamic/field3" readonly="/readonly-dynamic/count > 5" type="string"/>
+      <bind calculate="concat('uuid:', uuid())" nodeset="/readonly-dynamic/meta/instanceID" readonly="true()" type="string"/>
+    </model>
+  </h:head>
+  <h:body>
+    <input ref="/readonly-dynamic/status">
+      <label>Status (type "locked" to make fields readonly)</label>
+    </input>
+    <input ref="/readonly-dynamic/field1">
+      <label>Field 1 (readonly when status = locked, using relative path)</label>
+    </input>
+    <input ref="/readonly-dynamic/field2">
+      <label>Field 2 (readonly when status = locked, using parent path)</label>
+    </input>
+    <input ref="/readonly-dynamic/count">
+      <label>Count (enter a number > 5 to make field3 readonly)</label>
+    </input>
+    <input ref="/readonly-dynamic/field3">
+      <label>Field 3 (readonly when count > 5)</label>
+    </input>
+  </h:body>
+</h:html>

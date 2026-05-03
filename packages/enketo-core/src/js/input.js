@@ -140,9 +140,17 @@ export default {
     },
     /**
      * @param {Element} control - form control HTML element
-     * @return {boolean} whether element is read only
+     * @return {string|boolean} readonly expression or boolean
      */
     getReadonly(control) {
+        const { readonly } = control.dataset;
+
+        // If data-readonly attribute exists, return the expression
+        if (readonly != null) {
+            return readonly;
+        }
+
+        // Fall back to checking for static readonly attribute (backward compatibility)
         return control.matches('[readonly]');
     },
     /**
