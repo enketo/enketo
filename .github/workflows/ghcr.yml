@@ -22,7 +22,7 @@ jobs:
           branch: ${{ github.ref_name }}
         steps:
             - name: Check out repository
-              uses: actions/checkout@v4
+              uses: actions/checkout@v6
               
             - name: Set version information
               id: sha
