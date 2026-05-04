@@ -53,7 +53,13 @@ class AudioWidget extends Widget {
             const file = event.target.files[0];
             if (file) {
                 await this.updateValue(file); // Update the widget with the uploaded file
-                this.fileName = file.name; // Update the filename from the uploaded file
+                this.fileName = this.postFixFilename(file.name); // Update the filename with a unique timestamp postfix
+                // Restore type to 'text' so getCurrentFiles() uses the data-cache blob
+                // instead of the original files[0] reference (which would lose the postfixed name)
+                this.element.type = 'text';
+                // Set the postfixed filename in the form model so the submission XML
+                // references the renamed file, matching what getCurrentFiles() provides
+                this.originalInputValue = this.fileName;
                 this.showPlaybackStep();
             }
         });
@@ -456,12 +462,31 @@ class AudioWidget extends Widget {
             this.element.name.lastIndexOf('/') + 1
         );
         const baseFileName = `${fileName || 'audio-recording'}`;
+        return this.postFixFilename(`${baseFileName}.webm`);
+    }
+
+    /**
+     * This function adds a timestamp postfix to the filename in the format: `-YYYYMMDD_HHMMSS`.
+     * This is important because we cannot have multiple files with the same name in the file manager,
+     * and this ensures that each recording has a unique filename, for cases where the
+     * user may upload the same file for multiple questions in the same form.
+     *
+     * @param {string} filename - The original filename.
+     * @returns {string} - The filename with a timestamp postfix.
+     */
+    postFixFilename(filename) {
+        // Breaks down the file name
+        const nameParts = filename.split('.');
+        const baseName = nameParts.slice(0, -1).join('.'); // Get the base name without extension
+        const extension = nameParts.slice(-1)[0]; // Get the file extension
+
         const timestamp = new Date()
             .toISOString()
             .replace(/\D/g, '')
             .slice(0, 14);
-        const postfix = `-${timestamp.slice(0, 8)}_${timestamp.slice(8)}`;
-        return `${baseFileName}${postfix}.webm`;
+        return `${baseName}-${timestamp.slice(0, 8)}_${timestamp.slice(
+            8
+        )}.${extension}`;
     }
 
     /**
