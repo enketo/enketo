@@ -260,7 +260,7 @@ describe('AudioWidget', () => {
         });
 
         it('resets element type to text after upload', (done) => {
-            const { widget, control } = createWidget();
+            const { control } = createWidget();
 
             const file = new File(['audio data'], 'test.webm', {
                 type: 'audio/webm',
