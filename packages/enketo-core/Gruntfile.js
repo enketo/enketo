@@ -23,6 +23,7 @@ module.exports = (grunt) => {
         client: {
             mocha: {
                 timeout: Number.MAX_SAFE_INTEGER,
+                grep: grunt.option('grep') || undefined,
             },
         },
         reporters: ['dots'],
