@@ -1,7 +1,7 @@
 const fs = require('fs');
 const path = require('path');
 const loadGruntTasks = require('load-grunt-tasks');
-const nodeSass = require('node-sass');
+const sass = require('sass');
 const timeGrunt = require('time-grunt');
 const { resolveSassPackageImport } = require('../../tools/grunt/sass-paths');
 
@@ -107,8 +107,7 @@ module.exports = (grunt) => {
         },
         sass: {
             options: {
-                implementation: nodeSass,
-
+                implementation: sass,
                 importer: resolveSassPackageImport,
             },
             compile: {

@@ -88,7 +88,7 @@
         "markdown-eslint-parser": "^1.2.1",
         "mocha": "^9.2.2",
         "nan": "^2.22.0",
-        "node-sass": "^9.0.0",
+        "sass": "^1.99.0",
         "nyc": "^15.1.0",
         "playwright": "1.50.0",
         "prettier": "^3.0.3",
