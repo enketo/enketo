@@ -344,7 +344,8 @@ export default {
                       newExpr,
                       'string',
                       props.name,
-                      props.index
+                      props.index,
+                      true // Try native XPath evaluation
                   )
                 : '';
 
