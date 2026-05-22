@@ -230,6 +230,46 @@ describe('SVG Sanitization', () => {
         expect(sanitized.querySelector('g')).to.not.be.null;
     });
 
+    it('should remove <style> elements to prevent page-wide CSS injection', () => {
+        const maliciousSvg = parser
+            .parseFromString(
+                `
+            <svg xmlns="http://www.w3.org/2000/svg">
+                <style>body { display: none !important; }</style>
+                <path id="safe" d="M 10 10 L 20 20"/>
+            </svg>
+        `,
+                'text/xml'
+            )
+            .querySelector('svg');
+
+        const sanitized = utils.sanitizeSvg(maliciousSvg);
+
+        expect(sanitized.querySelector('style')).to.be.null;
+        expect(sanitized.querySelector('path')).to.not.be.null;
+    });
+
+    it('should remove style attributes to prevent CSS overlay attacks', () => {
+        const maliciousSvg = parser
+            .parseFromString(
+                `
+            <svg xmlns="http://www.w3.org/2000/svg"
+                 style="position:fixed;top:0;left:0;right:0;bottom:0;z-index:9999">
+                <path id="safe" style="fill:red" d="M 10 10 L 20 20"/>
+            </svg>
+        `,
+                'text/xml'
+            )
+            .querySelector('svg');
+
+        const sanitized = utils.sanitizeSvg(maliciousSvg);
+
+        expect(sanitized.hasAttribute('style')).to.be.false;
+        expect(sanitized.querySelector('path').hasAttribute('style')).to.be
+            .false;
+        expect(sanitized.querySelector('#safe')).to.not.be.null;
+    });
+
     it('should return null for null input', () => {
         expect(utils.sanitizeSvg(null)).to.be.null;
     });

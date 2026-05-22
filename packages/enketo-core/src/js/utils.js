@@ -294,6 +294,11 @@ function encodeHtmlEntities(text) {
 const DOMPURIFY_SVG_CONFIG = {
     USE_PROFILES: { svg: true, svgFilters: true },
     RETURN_DOM_FRAGMENT: true,
+    // From the attack risks described in https://www.alxndrsn.com/2025-11-17-dompurify-default-dangers/:
+    // Block <style> elements and style attribute since they can be used
+    // to overlay the whole page and generate clickjacking attacks
+    FORBID_TAGS: ['style'],
+    FORBID_ATTR: ['style'],
 };
 
 /**
