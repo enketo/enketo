@@ -141,12 +141,34 @@ describe('SVG Sanitization', () => {
         );
     });
 
+    it('should remove all event handler attributes when multiple are present on the same element', () => {
+        const maliciousSvg = parser
+            .parseFromString(
+                `
+            <svg xmlns="http://www.w3.org/2000/svg" onload="alert(1)" onclick="alert(2)" onmouseover="alert(3)">
+                <path id="test" d="M 10 10 L 20 20"/>
+            </svg>
+        `,
+                'text/xml'
+            )
+            .querySelector('svg');
+
+        const sanitized = utils.sanitizeSvg(maliciousSvg);
+
+        expect(sanitized.hasAttribute('onload')).to.be.false;
+        expect(sanitized.hasAttribute('onclick')).to.be.false;
+        expect(sanitized.hasAttribute('onmouseover')).to.be.false;
+        expect(sanitized.querySelector('path').getAttribute('id')).to.equal(
+            'test'
+        );
+    });
+
     it('should remove javascript: URLs from href attributes', () => {
         const maliciousSvg = parser
             .parseFromString(
                 `
             <svg xmlns="http://www.w3.org/2000/svg">
-                <a href="javascript:alert('XSS')">
+                <a href="   javascript:alert('XSS')">
                     <path id="link" d="M 10 10 L 20 20"/>
                 </a>
             </svg>
