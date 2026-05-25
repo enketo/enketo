@@ -312,8 +312,18 @@ function sanitizeSvg(svgElement) {
         return svgElement;
     }
 
-    const serialized = new XMLSerializer().serializeToString(svgElement);
-    const fragment = DOMPurify.sanitize(serialized, DOMPURIFY_SVG_CONFIG);
+    // Import the element into a temporary HTML container before passing to
+    // DOMPurify. This forces HTML serialization (e.g. <iframe></iframe>)
+    // instead of XML serialization (e.g. <iframe/>). Without this,
+    // DOMPurify's internal HTML parser misreads self-closing XML tags as
+    // open tags, causing elements that follow (like <path>) to be swallowed
+    // as their content and silently dropped from the sanitized output.
+    const container = document.createElement('div');
+    container.appendChild(document.importNode(svgElement, true));
+    const fragment = DOMPurify.sanitize(
+        container.innerHTML,
+        DOMPURIFY_SVG_CONFIG
+    );
     return fragment.querySelector('svg');
 }
 
