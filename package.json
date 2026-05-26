@@ -35,7 +35,7 @@
         "@types/mocha": "^10.0.1",
         "@types/node": "^18.17.5",
         "@types/sinon": "^10.0.16",
-        "@typescript-eslint/eslint-plugin": "^7.16.0",
+        "@typescript-eslint/eslint-plugin": "^7.18.0",
         "@typescript-eslint/parser": "^7.16.0",
         "@vitest/coverage-istanbul": "^0.34.3",
         "@vitest/runner": "^0.34.3",
