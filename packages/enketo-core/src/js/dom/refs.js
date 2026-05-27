@@ -62,7 +62,7 @@ export const setRefTypeClasses = (form) => {
                     : 'non-form-control-action',
             ];
             const elementEvents = isAction
-                ? element.dataset.event?.trim()?.split(/\s+/) ?? []
+                ? (element.dataset.event?.trim()?.split(/\s+/) ?? [])
                 : [];
             const eventClasses = isAction
                 ? eventTypes.map((event, index) =>

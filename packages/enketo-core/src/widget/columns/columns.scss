@@ -153,7 +153,9 @@
 
 .touch {
     // this ridiculous not:() specificity is required to combat an aggressive rule in _main.scss
-    .question:not(.or-appearance-no-buttons):not(.or-appearance-label):not(.or-appearance-list-nolabel):not(.or-appearance-likert) {
+    .question:not(.or-appearance-no-buttons):not(.or-appearance-label):not(
+            .or-appearance-list-nolabel
+        ):not(.or-appearance-likert) {
         &.or-columns-initialized {
             .option-wrapper > label {
                 @include margin(right);
@@ -163,7 +165,9 @@
 
     .or[dir='rtl'] {
         // this ridiculous not:() specificity is required to combat an aggressive rule in _main.scss
-        .question:not(.or-appearance-no-buttons):not(.or-appearance-label):not(.or-appearance-list-nolabel):not(.or-appearance-likert) {
+        .question:not(.or-appearance-no-buttons):not(.or-appearance-label):not(
+                .or-appearance-list-nolabel
+            ):not(.or-appearance-likert) {
             &.or-columns-initialized {
                 .option-wrapper > label {
                     @include margin(left);

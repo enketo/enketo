@@ -332,8 +332,8 @@ class DrawWidget extends Widget {
                 this.props.type === 'signature'
                     ? t('drawwidget.signature')
                     : this.props.type === 'drawing'
-                    ? t('drawwidget.drawing')
-                    : t('drawwidget.annotation');
+                      ? t('drawwidget.drawing')
+                      : t('drawwidget.annotation');
             dialog
                 .confirm(t('filepicker.resetWarning', { item }))
                 .then((confirmed) => {
@@ -588,8 +588,8 @@ class DrawWidget extends Widget {
         props.type = props.appearances.includes('draw')
             ? 'drawing'
             : props.appearances.includes('signature')
-            ? 'signature'
-            : 'annotation';
+              ? 'signature'
+              : 'annotation';
         props.filename = `${props.type}.png`;
         props.load = props.type === 'annotation';
         props.colors =

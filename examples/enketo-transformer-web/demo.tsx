@@ -12,8 +12,10 @@ import type { JSX } from 'solid-js';
 import { For, Match, Show, Switch, render } from 'solid-js/web';
 import { fixtures as baseFixtures } from '../../packages/enketo-transformer/test/fixtures';
 
-interface CodeBlockProps
-    extends Omit<JSX.IntrinsicElements['pre'], 'children'> {
+interface CodeBlockProps extends Omit<
+    JSX.IntrinsicElements['pre'],
+    'children'
+> {
     children: string | undefined | Array<string | undefined>;
 }
 

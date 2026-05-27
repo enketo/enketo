@@ -1,8 +1,9 @@
 **/.nyc*
 **/node_modules/**
 **/docs/**
+**/dist/**
 **/test-coverage/**
-**/coverage.shield.badge.md
+**/*.md
 
 /packages/enketo-transformer/dist/*
 /packages/enketo-transformer/src/xsl/*

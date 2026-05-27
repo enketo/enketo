@@ -142,9 +142,8 @@ class RangeWidget extends Widget {
         const bulbHeight = this.widget.querySelector(
             '.range-widget__bulb'
         ).clientHeight;
-        this.widget.querySelector(
-            '.range-widget__bulb__mercury'
-        ).style.height = `${completeness * trackHeight + 0.5 * bulbHeight}px`;
+        this.widget.querySelector('.range-widget__bulb__mercury').style.height =
+            `${completeness * trackHeight + 0.5 * bulbHeight}px`;
     }
 
     /**
