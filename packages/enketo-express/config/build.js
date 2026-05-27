@@ -24,5 +24,5 @@ module.exports = /** @satisfies {import('esbuild').BuildOptions} */ ({
     outdir: path.resolve(cwd, './public/js/build'),
     sourcemap: true,
     splitting: true,
-    target: ['chrome89', 'edge89', 'firefox90', 'safari13'],
+    target: ['chrome100', 'edge100', 'firefox100', 'safari15'],
 });

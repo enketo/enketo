@@ -19,5 +19,5 @@ esbuild.build({
     minify: isProduction,
     outdir: 'build',
     sourcemap: isProduction ? false : 'inline',
-    target: ['chrome89', 'edge89', 'firefox90', 'safari13'],
+    target: ['chrome100', 'edge100', 'firefox100', 'safari15'],
 });
