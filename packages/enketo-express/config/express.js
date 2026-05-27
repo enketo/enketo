@@ -41,12 +41,12 @@ i18next
     .init({
         // debug: true, // DEBUG
         supportedLngs: app.get('languages supported'),
-        fallbackLng: 'en',
+        fallbackLng: ['en'],
         joinArrays: '\n',
         backend: {
             loadPath: path.resolve(
                 __dirname,
-                '../locales/build/__lng__/translation-combined.json'
+                '../locales/build/{{lng}}/translation-combined.json'
             ),
         },
         load: 'languageOnly',
