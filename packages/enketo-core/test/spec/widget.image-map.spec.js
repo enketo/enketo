@@ -54,6 +54,7 @@ runAllCommonWidgetTests(ImageMapWidget, FORM1, 'CO');
 // referenced by the form fixture at test/forms/svg-xss-test.xml.
 // It is embedded here as a string so the test is fully self-contained and
 // does not depend on Karma's file-serving infrastructure.
+/* eslint-disable no-script-url */
 const MALICIOUS_SVG_CONTENT = `<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
      width="400" height="300" viewBox="0 0 400 300"
      onload="alert('XSS: onload on root')"
@@ -87,6 +88,7 @@ const MALICIOUS_SVG_CONTENT = `<svg xmlns="http://www.w3.org/2000/svg" xmlns:xli
     <circle id="safe-circle" cx="310" cy="200" r="30" fill="lightyellow" stroke="black"/>
   </g>
 </svg>`;
+/* eslint-enable no-script-url */
 
 describe('SVG XSS sanitization via image-map widget', () => {
     let container;
@@ -174,6 +176,7 @@ describe('SVG XSS sanitization via image-map widget', () => {
             });
 
             // No javascript: URLs on any href (plain or xlink)
+            /* eslint-disable no-script-url */
             svg.querySelectorAll('a').forEach((a) => {
                 const href = a.getAttribute('href') || '';
                 const xlinkHref =
@@ -188,6 +191,7 @@ describe('SVG XSS sanitization via image-map widget', () => {
                     `javascript: xlink:href survived on <a>`
                 ).to.be.false;
             });
+            /* eslint-enable no-script-url */
         });
     });
 });
