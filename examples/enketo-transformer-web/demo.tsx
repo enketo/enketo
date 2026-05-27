@@ -1,5 +1,5 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
-import { Router, Routes, Route, useSearchParams } from '@solidjs/router';
+import { Router, Route, useSearchParams } from '@solidjs/router';
 import { transform } from 'enketo-transformer/web';
 import {
     createEffect,
@@ -333,11 +333,9 @@ function Demo() {
 render(
     () => (
         <Router>
-            <Routes>
-                <Route path="/" component={Demo} />
-                <Route path="/:xform" component={Demo} />
-                {/* <Route path="/*" component={Demo} /> */}
-            </Routes>
+            <Route path="/" component={Demo} />
+            <Route path="/:xform" component={Demo} />
+            {/* <Route path="/*" component={Demo} /> */}
         </Router>
     ),
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
