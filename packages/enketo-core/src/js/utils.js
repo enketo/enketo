@@ -291,13 +291,20 @@ function encodeHtmlEntities(text) {
         .replace(/"/g, '&quot;');
 }
 
+// Tags that are forbidden when DOMPurify sanitizes SVG content.
 const DOMPURIFY_SVG_CONFIG = {
     USE_PROFILES: { svg: true, svgFilters: true },
     RETURN_DOM_FRAGMENT: true,
-    // From the attack risks described in https://www.alxndrsn.com/2025-11-17-dompurify-default-dangers/:
-    // Block <style> elements and style attribute since they can be used
-    // to overlay the whole page and generate clickjacking attacks
-    FORBID_TAGS: ['style'],
+    FORBID_TAGS: [
+        'foreignObject',
+        'iframe',
+        'object',
+        'embed',
+        'link',
+        'meta',
+        'script',
+        'style',
+    ],
     FORBID_ATTR: ['style'],
 };
 
@@ -312,13 +319,22 @@ function sanitizeSvg(svgElement) {
         return svgElement;
     }
 
-    // Import the element into a temporary HTML container before passing to
-    // DOMPurify. This forces HTML serialization (e.g. <iframe></iframe>)
-    // instead of XML serialization (e.g. <iframe/>). Without this,
-    // DOMPurify's internal HTML parser misreads self-closing XML tags as
-    // open tags, causing elements that follow (like <path>) to be swallowed
-    // as their content and silently dropped from the sanitized output.
-    const container = document.createElement('div');
+    // Strip <foreignObject> subtrees at the XML level before any HTML parsing
+    // occurs. The onerror payload is dispatched during DOMPurify's internal
+    // HTML parse step.
+    // Doing this pre-strip here ensures dangerous HTML descendants from
+    // foreignObject never reach that parse step.
+    Array.from(
+        svgElement.getElementsByTagNameNS(
+            'http://www.w3.org/2000/svg',
+            'foreignObject'
+        )
+    ).forEach((el) => el.remove());
+
+    // importNode + container.innerHTML gives DOMPurify proper HTML
+    // serialization. XMLSerializer alone produces self-closing XML tags
+    // (e.g. <script/>) which confuse the HTML parser and silently drop
+    // sibling elements.    const container = document.createElement('div');
     container.appendChild(document.importNode(svgElement, true));
     const fragment = DOMPurify.sanitize(
         container.innerHTML,

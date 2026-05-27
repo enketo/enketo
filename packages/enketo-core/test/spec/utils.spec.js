@@ -207,6 +207,33 @@ describe('SVG Sanitization', () => {
         expect(sanitized.querySelector('path')).to.not.be.null;
     });
 
+    it('should remove HTML elements (e.g. img with onerror) nested inside foreignObject', () => {
+        const maliciousSvg = parser
+            .parseFromString(
+                `<svg xmlns="http://www.w3.org/2000/svg">
+                    <foreignObject width="100%" height="100%">
+                        <div xmlns="http://www.w3.org/1999/xhtml">
+                            <img src="x" onerror="alert('XSS: foreignObject img onerror')"/>
+                        </div>
+                    </foreignObject>
+                    <path id="safe" d="M 10 10 L 20 20"/>
+                </svg>`,
+                'text/xml'
+            )
+            .querySelector('svg');
+
+        const sanitized = utils.sanitizeSvg(maliciousSvg);
+
+        expect(sanitized.querySelector('foreignObject')).to.be.null;
+        expect(sanitized.querySelector('img')).to.be.null;
+        // Verify no element anywhere in the sanitized SVG has an onerror attribute
+        const allElements = sanitized.querySelectorAll('*');
+        for (const el of allElements) {
+            expect(el.hasAttribute('onerror')).to.be.false;
+        }
+        expect(sanitized.querySelector('path')).to.not.be.null;
+    });
+
     it('should preserve safe SVG content', () => {
         const safeSvg = parser
             .parseFromString(

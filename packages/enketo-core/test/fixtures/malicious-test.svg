@@ -1,0 +1,61 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+     width="400" height="300" viewBox="0 0 400 300"
+     onload="alert('XSS: onload on root')"
+     style="position:fixed;top:0;left:0;width:100%;height:100%;z-index:9999;background:red">
+
+  <title>Malicious SVG Test</title>
+
+  <!-- 1. Script tag - should be removed -->
+  <script>alert('XSS: script tag')</script>
+
+  <!-- 2. Style tag - should be removed (clickjacking risk) -->
+  <style>
+    body { display: none !important; }
+    * { background: red !important; }
+  </style>
+
+  <!-- 3. foreignObject - should be removed (HTML injection) -->
+  <foreignObject width="100%" height="100%">
+    <div xmlns="http://www.w3.org/1999/xhtml">
+      <img src="x" onerror="alert('XSS: foreignObject img onerror')"/>
+    </div>
+  </foreignObject>
+
+  <!-- 4. use with external href - should be removed -->
+  <use xlink:href="http://attacker.example.com/evil.svg#payload"/>
+  <use href="#safe-path" onclick="alert('XSS: use onclick')"/>
+
+  <!-- 5. SMIL animation targeting href - should be removed -->
+  <animate attributeName="href" values="javascript:alert('XSS: SMIL animate')"/>
+
+  <!-- 6. javascript: href with whitespace prefix (bypass attempt) -->
+  <a href="   javascript:alert('XSS: whitespace-prefixed javascript:')">
+    <rect x="10" y="10" width="80" height="40" fill="blue"/>
+  </a>
+
+  <!-- 7. xlink:href javascript: URL -->
+  <a xlink:href="javascript:alert('XSS: xlink:href javascript:')">
+    <rect x="100" y="10" width="80" height="40" fill="green"/>
+  </a>
+
+  <!-- 8. Multiple event handlers on same element (tests live-collection iteration bug) -->
+  <rect id="multi-event"
+        x="10" y="60" width="80" height="40" fill="orange"
+        onmouseover="alert('XSS: onmouseover')"
+        onclick="alert('XSS: onclick')"
+        onfocus="alert('XSS: onfocus')"/>
+
+  <!-- 9. style attribute on child element -->
+  <rect id="style-attr"
+        x="100" y="60" width="80" height="40"
+        style="fill:red;position:fixed;top:0;left:0;width:100%;height:100%"/>
+
+  <!-- 10. Safe elements that SHOULD survive sanitization -->
+  <g id="safe-group">
+    <path id="safe-path" fill="pink" d="M200,150 L250,200 L300,150 Z"/>
+    <rect id="safe-rect" x="200" y="60" width="80" height="40" fill="lightblue"/>
+    <text id="safe-text" x="200" y="170" font-size="14">Safe text</text>
+    <circle id="safe-circle" cx="310" cy="200" r="30" fill="lightyellow" stroke="black"/>
+  </g>
+
+</svg>
