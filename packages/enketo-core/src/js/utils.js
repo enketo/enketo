@@ -334,7 +334,8 @@ function sanitizeSvg(svgElement) {
     // importNode + container.innerHTML gives DOMPurify proper HTML
     // serialization. XMLSerializer alone produces self-closing XML tags
     // (e.g. <script/>) which confuse the HTML parser and silently drop
-    // sibling elements.    const container = document.createElement('div');
+    // sibling elements.
+    const container = document.createElement('div');
     container.appendChild(document.importNode(svgElement, true));
     const fragment = DOMPurify.sanitize(
         container.innerHTML,
