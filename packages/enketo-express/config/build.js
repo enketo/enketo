@@ -2,6 +2,7 @@
 
 const path = require('path');
 const pkg = require('../package.json');
+const browsers = require('../../../browser-targets');
 
 const cwd = process.cwd();
 
@@ -24,5 +25,5 @@ module.exports = /** @satisfies {import('esbuild').BuildOptions} */ ({
     outdir: path.resolve(cwd, './public/js/build'),
     sourcemap: true,
     splitting: true,
-    target: ['chrome100', 'edge100', 'firefox100', 'safari15'],
+    target: browsers,
 });

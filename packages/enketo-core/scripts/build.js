@@ -1,6 +1,7 @@
 const esbuild = require('esbuild');
 const path = require('path');
 const pkg = require('../package.json');
+const browsers = require('../../../browser-targets');
 
 const isProduction = process.env.NODE_ENV === 'production';
 
@@ -19,5 +20,5 @@ esbuild.build({
     minify: isProduction,
     outdir: 'build',
     sourcemap: isProduction ? false : 'inline',
-    target: ['chrome100', 'edge100', 'firefox100', 'safari15'],
+    target: browsers,
 });

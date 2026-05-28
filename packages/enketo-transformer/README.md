@@ -17,8 +17,8 @@ In v2.3.0 (Mar 2023), a web compatibility layer was introduced so that Enketo Tr
 
 Our current primary goals are:
 
--   Rethink transformation to be as minimal as possible, ideally without XSLT, and moving most (or all) of Enketo Transformer's current responsibilities to other parts of the Enketo stack.
--   Identifying and addressing remaining performance bottlenecks to remove the need for server-side caching.
+- Rethink transformation to be as minimal as possible, ideally without XSLT, and moving most (or all) of Enketo Transformer's current responsibilities to other parts of the Enketo stack.
+- Identifying and addressing remaining performance bottlenecks to remove the need for server-side caching.
 
 ## How Enketo Transformer is used by other Enketo projects
 
@@ -28,19 +28,19 @@ Enketo Express uses the `transform` function to serve requests to its server-sid
 
 Neither project currently uses the following functionality:
 
--   Media URL mapping. Enketo Express has its own implementation of this functionality, so that dynamic media replacements are not cached. This functionality is maintained for backwards compatibility.
+- Media URL mapping. Enketo Express has its own implementation of this functionality, so that dynamic media replacements are not cached. This functionality is maintained for backwards compatibility.
 
--   The `openclinica` flag. This functionality is used by OpenClinica's fork of Enketo Express.
+- The `openclinica` flag. This functionality is used by OpenClinica's fork of Enketo Express.
 
--   The deprecated `preprocess` option. This functionality _may_ be used to update XForms before the standard transform, but its use is discouraged as users can achieve the same thing by preprocessing their XForms with entirely custom code before calling `transform`.
+- The deprecated `preprocess` option. This functionality _may_ be used to update XForms before the standard transform, but its use is discouraged as users can achieve the same thing by preprocessing their XForms with entirely custom code before calling `transform`.
 
 ## Prerequisites
 
--   See [CONTRIBUTING.md](../../CONTRIBUTING.md)
--   For Node/server-side transforms:
-    -   Python (at least 3.7, but less than 3.11)
-    -   An appropriate [C++ build toolchain for your machine](https://github.com/nodejs/node-gyp#on-unix)
-    -   The `libxslt` library is now a peer dependency, and must be installed alongside `enketo-transformer`
+- See [CONTRIBUTING.md](../../CONTRIBUTING.md)
+- For Node/server-side transforms:
+    - Python (at least 3.7, but less than 3.11)
+    - An appropriate [C++ build toolchain for your machine](https://github.com/nodejs/node-gyp#on-unix)
+    - The `libxslt` library is now a peer dependency, and must be installed alongside `enketo-transformer`
 
 ## Interactive web demo
 
@@ -135,8 +135,8 @@ yarn start
 
 It provides two endpoints:
 
--   limited use with `GET /transform` with xform parameter (required, **xform URL**), or
--   full-featured use with: `POST /transform` with URL-encoded body including `xform` (required, **full XForm as a string**), `theme` (optional, string), and `media` (optional, map) parameters
+- limited use with `GET /transform` with xform parameter (required, **xform URL**), or
+- full-featured use with: `POST /transform` with URL-encoded body including `xform` (required, **full XForm as a string**), `theme` (optional, string), and `media` (optional, map) parameters
 
 sample GET request:
 
@@ -177,8 +177,8 @@ DEBUG=api,transformer,markdown,language node app.js
 
 ### Test
 
--   run tests with `yarn test`
--   Tests can be run in watch mode for [TDD](https://en.wikipedia.org/wiki/Test-driven_development) workflows with `yarn run test:watch`, and support for debugging in [VSCode](https://code.visualstudio.com/) is provided. For instructions see [./#debugging-test-watch-mode-in-vscode](Debugging test watch mode in VSCode) below
+- run tests with `yarn test`
+- Tests can be run in watch mode for [TDD](https://en.wikipedia.org/wiki/Test-driven_development) workflows with `yarn run test:watch`, and support for debugging in [VSCode](https://code.visualstudio.com/) is provided. For instructions see [./#debugging-test-watch-mode-in-vscode](Debugging test watch mode in VSCode) below
 
 #### Debugging test watch mode in VSCode
 

@@ -3,7 +3,7 @@
 **/docs/**
 **/dist/**
 **/test-coverage/**
-**/*.md
+**/coverage.shield.badge.md
 
 /packages/enketo-transformer/dist/*
 /packages/enketo-transformer/src/xsl/*

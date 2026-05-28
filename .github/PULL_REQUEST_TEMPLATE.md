@@ -17,14 +17,13 @@
 - [ ] request reviewers & improve according to review
 - [ ] delete this section before merging
 
-
 ### 📣 Summary
+
 <!-- Delete this section if changes are internal only. -->
 <!-- One sentence summary, worded for non-technical seasoned Enketo end-users. -->
 
-
-
 ### 📖 Description
+
 <!-- Delete this section if summary already said everything. -->
 <!-- Full description, worded for non-technical seasoned Enketo end-users. -->
 <!-- Examples:
@@ -32,15 +31,13 @@
 - What are the intentional changes to behavior?
 -->
 
-
-
 ### 👷 Description for integrators
+
 <!-- Delete this section if everything is already said above. -->
 <!-- Full description, worded for technical Enketo integrators (Kobo, ODK, etc.). -->
 
-
-
 ### 💭 Notes
+
 <!-- Delete this section if empty. -->
 <!-- Anything else useful, worded for reviewers, testers, and future git archaeologist maintainers. -->
 <!-- Examples:
@@ -51,13 +48,13 @@
 - proactively answer likely questions,
 -->
 
-
-
 ### 👀 Preview steps
+
 <!-- Delete this section if behavior can't change. -->
 <!-- If behavior changes or merely may change, add a preview of a minimal happy path. -->
 
 Template:
+
 1. ℹ️ have an account and a project
 2. do this
 3. do that
