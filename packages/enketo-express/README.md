@@ -40,14 +40,14 @@ Enketo Express is the top entry point of all other packages, therefore see [CONT
 
 Testing is done with Mocha and Karma:
 
--   all: `yarn workspace enketo-express run test`
--   headless: `yarn workspace enketo-express run test-headless`
--   browsers: `yarn workspace enketo-express run test-browsers`
+- all: `yarn workspace enketo-express run test`
+- headless: `yarn workspace enketo-express run test-headless`
+- browsers: `yarn workspace enketo-express run test-browsers`
 
 Tests can be run in watch mode for [TDD](https://en.wikipedia.org/wiki/Test-driven_development) workflows with:
 
--   client: `yarn workspace enketo-express run test-watch-client`
--   server: `yarn workspace enketo-express run test-watch-server`
+- client: `yarn workspace enketo-express run test-watch-client`
+- server: `yarn workspace enketo-express run test-watch-server`
 
 #### Debugging test watch mode in VSCode
 

@@ -1,3 +1,5 @@
+const browsers = require('../../../browser-targets');
+
 module.exports = (config) => {
     // Force timezone for tests, so that datetime conversion results are predictable
     // Use timezone that doesn't have Daylight Savings Time.
@@ -54,7 +56,7 @@ module.exports = (config) => {
             define: {
                 ENV: '"test"',
             },
-            target: ['chrome109', 'edge109', 'firefox109', 'safari16'],
+            target: browsers,
         },
 
         browserify: {

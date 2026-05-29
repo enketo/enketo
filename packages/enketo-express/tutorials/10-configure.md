@@ -28,11 +28,11 @@ If you are tempted to make this setting as short as possible, make sure you unde
 
 ## linked form and data server
 
--   name: The (short) name of your form server. This name will be used in various places in the app to provide feedback to the user. E.g. "ODK Central", "KoboToolbox", "MyCoolService"
--   👉 **server url**: For local development, this can be an empty string (`""`). This will allow any server that knows the secret api key to use your Enketo installation. If you'd like to lock the usage down to a particular form server, fill in your domain without the protocol. E.g. "kobotoolbox.org". Depending on your form server, you can even specify that the server can only be used for a particular account e.g. "myformhub.org/janedoe". You can also use a regular expression string e.g. `"opendatakit\\.appspot\\.com"` (it will be used to create a regular expression with RegExp()).
--   👉 **api key**: The key that will be used to authenticate any API usage. Your form server will need to know this key. You can use any hard-to-guess alphanumeric string you want. We're not aware of limitations in length or characters.
--   legacy formhub: Formhub is a dead project and therefore has bugs that won't be fixed. Setting this setting to `true` temporarily works around some of these bugs to give you time to switch to a better alternative that is alive.
--   authentication: an object that configures the type of authentication to use. See examples and details below:
+- name: The (short) name of your form server. This name will be used in various places in the app to provide feedback to the user. E.g. "ODK Central", "KoboToolbox", "MyCoolService"
+- 👉 **server url**: For local development, this can be an empty string (`""`). This will allow any server that knows the secret api key to use your Enketo installation. If you'd like to lock the usage down to a particular form server, fill in your domain without the protocol. E.g. "kobotoolbox.org". Depending on your form server, you can even specify that the server can only be used for a particular account e.g. "myformhub.org/janedoe". You can also use a regular expression string e.g. `"opendatakit\\.appspot\\.com"` (it will be used to create a regular expression with RegExp()).
+- 👉 **api key**: The key that will be used to authenticate any API usage. Your form server will need to know this key. You can use any hard-to-guess alphanumeric string you want. We're not aware of limitations in length or characters.
+- legacy formhub: Formhub is a dead project and therefore has bugs that won't be fixed. Setting this setting to `true` temporarily works around some of these bugs to give you time to switch to a better alternative that is alive.
+- authentication: an object that configures the type of authentication to use. See examples and details below:
 
 Examples of authentication configuration objects:
 
@@ -42,7 +42,7 @@ This is the default authentication that lets Enketo collect credentials from the
 
 > ⚠️ Both Basic and Digest auth have security and usability drawbacks. If possible, use one of the other authentication methods described below.
 
--   allow insecure transport: For development use, to test default form authentication on a server without an SSL certificate. Should be `false` on a production server to avoid sharing sensitive user credentials.
+- allow insecure transport: For development use, to test default form authentication on a server without an SSL certificate. Should be `false` on a production server to avoid sharing sensitive user credentials.
 
 ```json
 "authentication" : {
@@ -105,7 +105,7 @@ The basepath Enketo should use for everything. The default is `""`, which gives 
 
 ## log
 
--   submissions: Whether successfully submitted _record instanceIDs_ should be logged into log files. This could help troubleshoot any issues with the Form/Data Server or with Enketo. Only 201 responses to /submission on the Form/Data server will be logged. If a record is divided into multiple batches, it should only be recorded once. Logging instancedIDs could be considered a privacy issue, as together with web server logs it will potentially allow one to determine which IP address a specific record (instanceID) was submitted from and when.
+- submissions: Whether successfully submitted _record instanceIDs_ should be logged into log files. This could help troubleshoot any issues with the Form/Data Server or with Enketo. Only 201 responses to /submission on the Form/Data server will be logged. If a record is divided into multiple batches, it should only be recorded once. Logging instancedIDs could be considered a privacy issue, as together with web server logs it will potentially allow one to determine which IP address a specific record (instanceID) was submitted from and when.
 
 ## themes supported
 
@@ -113,7 +113,7 @@ An array of theme names to enable. This can be used to disable certain themes. I
 
 ## 👉 support
 
--   **email**: The email address your users can contact when they experience problems with the service.
+- **email**: The email address your users can contact when they experience problems with the service.
 
 ## widgets
 
@@ -129,17 +129,17 @@ Which analytics service you'd like to use, either `"google"` or `"piwik"` or if 
 
 ### google
 
--   analytics -> measurementId: The Measurement Id that Google has assigned to your domain's stream if you choose to collect statistics on Enketo Express' usage using Google's Analytics product as your data processer ([Google Ads Data Processing Terms](https://business.safety.google/adsprocessorterms/)). Required if google service is selected under [analytics](#analytics).
--   api key: The Google API key that is used for geocoding (i.e. the search box in the geo widgets). Can be obtained [here](https://console.developers.google.com/project). Make sure to enable the _GeoCoding API_ service. If you are using Google Maps layers, the same API key is used. Make sure to enable the _Google Maps JavaScript API v3_ service as well in that case (see next item).
+- analytics -> measurementId: The Measurement Id that Google has assigned to your domain's stream if you choose to collect statistics on Enketo Express' usage using Google's Analytics product as your data processer ([Google Ads Data Processing Terms](https://business.safety.google/adsprocessorterms/)). Required if google service is selected under [analytics](#analytics).
+- api key: The Google API key that is used for geocoding (i.e. the search box in the geo widgets). Can be obtained [here](https://console.developers.google.com/project). Make sure to enable the _GeoCoding API_ service. If you are using Google Maps layers, the same API key is used. Make sure to enable the _Google Maps JavaScript API v3_ service as well in that case (see next item).
 
 ### piwik
 
--   analytics -> tracker url -> URL on which your piwik service is hosted. The protocol can be omitted, e.g. `"//enketo.piwikpro.com/"`. Required if piwik service is selected under [analytics](#analytics).
--   analytics -> site id -> The site ID of this server on your piwik service, e.g. `"1"` (number or string). Required if piwik service is selected under [analytics](#analytics).
+- analytics -> tracker url -> URL on which your piwik service is hosted. The protocol can be omitted, e.g. `"//enketo.piwikpro.com/"`. Required if piwik service is selected under [analytics](#analytics).
+- analytics -> site id -> The site ID of this server on your piwik service, e.g. `"1"` (number or string). Required if piwik service is selected under [analytics](#analytics).
 
 ## headless
 
--   timeout: Connection timeout in milliseconds used in headless views that are run on the server, such as for PDF generation API endpoints.
+- timeout: Connection timeout in milliseconds used in headless views that are run on the server, such as for PDF generation API endpoints.
 
 ## maps
 
@@ -167,17 +167,17 @@ Specifies the name of a query parameter that will be copied from an Enketo URL t
 > [!NOTE]
 > You can use `main -> url` or `cache --> url` or the corresponding environmental variables instead of the host/port/password combination described below. Use a URL to specify additional Redis configuration such as SSL, username, or DB index. A URL takes precedence over the separate configuration items.
 
--   main -> host: The IP address of the main redis database instance. If installed on the same server as Enketo Express, the value is `"127.0.0.1"`
--   👉 **main -> port**: The port of the main redis database instance. This is the important persistent database that contains the unique IDs for each forms. The default value is `"6379"`
--   main -> password: Password of the main redis database instance. Usually `null`.
--   cache -> host: The IP address of the cache redis database instance. If installed on the same server as Enketo Express, the value is `"127.0.0.1"`
--   👉 **cache -> port**: The port of the cache redis database instance. This is the non-persistent database that is just used for caching transformed forms. When testing or developing you could use one redis instance for both 'main' and 'cache' (e.g. both `"6379"`") but do not do this in production.
--   cache -> password: Password of the cache redis database instance. Usually `null`.
+- main -> host: The IP address of the main redis database instance. If installed on the same server as Enketo Express, the value is `"127.0.0.1"`
+- 👉 **main -> port**: The port of the main redis database instance. This is the important persistent database that contains the unique IDs for each forms. The default value is `"6379"`
+- main -> password: Password of the main redis database instance. Usually `null`.
+- cache -> host: The IP address of the cache redis database instance. If installed on the same server as Enketo Express, the value is `"127.0.0.1"`
+- 👉 **cache -> port**: The port of the cache redis database instance. This is the non-persistent database that is just used for caching transformed forms. When testing or developing you could use one redis instance for both 'main' and 'cache' (e.g. both `"6379"`") but do not do this in production.
+- cache -> password: Password of the cache redis database instance. Usually `null`.
 
 ## logo
 
--   source: The logo at the top of each form. Can be a Data URI or just a path to a image file you place in public/images, e.g. `"/images/mylogo.png"`.
--   href: The optional link to redirect to if the logo is clicked by the user.
+- source: The logo at the top of each form. Can be a Data URI or just a path to a image file you place in public/images, e.g. `"/images/mylogo.png"`.
+- href: The optional link to redirect to if the logo is clicked by the user.
 
 ## disable save as draft
 
@@ -220,17 +220,17 @@ Set to `true` to set the X-Content-Type-Options header to nosniff. This mitigate
 
 Set HTTP Strict Transport Security (HSTS) headers in express. Default is disabled. See more here: https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Strict-Transport-Security
 
--   `seconds`: Default is `0`. Seconds for HSTS to be enabled. When set to 0, header will not be set and HSTS is disabled. Set to a low number to test. For production, set to 63072000 (2 years).
--   `preload`: Default is `false`. Submit to HSTS preload service.
--   `includeSubDomains`: Default is `false`. When set, all subdomains will be subject to same HSTS rules.
+- `seconds`: Default is `0`. Seconds for HSTS to be enabled. When set to 0, header will not be set and HSTS is disabled. Set to a low number to test. For production, set to 63072000 (2 years).
+- `preload`: Default is `false`. Submit to HSTS preload service.
+- `includeSubDomains`: Default is `false`. When set, all subdomains will be subject to same HSTS rules.
 
 ## csp
 
 Set Content Security Policy (CSP) headers in express. Default is disabled. When enabled, a default policy is applied unless the `value` field is provided. See more here: https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP
 
--   `enabled`: Default is `false`. Set to `true` to enable CSP headers.
--   `report only`: Default is `false`. Set to `true` to report, but not enforce, CSP.
--   `value`: Default is `null`. Set to a custom value to override default CSP value.
+- `enabled`: Default is `false`. Set to `true` to enable CSP headers.
+- `report only`: Default is `false`. Set to `true` to report, but not enforce, CSP.
+- `value`: Default is `null`. Set to a custom value to override default CSP value.
 
 ## csrf cookie name
 

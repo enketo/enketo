@@ -2,9 +2,9 @@
 
 ### Local environment
 
--   **Node LTS** (install via [volta](https://volta.sh/), [fnm](https://github.com/Schniz/fnm), etc.): Enketo targets current and active Node versions, development targets the current.
--   **[Yarn v1 (classic)](https://classic.yarnpkg.com/lang/en/)** (install via `corepack enable yarn`): Enketo uses Yarn Classic as dependency management instead of npm.
--   **[docker](https://docs.docker.com/engine/install/)**: Enketo Express is a docker container, and documentation provides examples for redis from docker for convenience.
+- **Node LTS** (install via [volta](https://volta.sh/), [fnm](https://github.com/Schniz/fnm), etc.): Enketo targets current and active Node versions, development targets the current.
+- **[Yarn v1 (classic)](https://classic.yarnpkg.com/lang/en/)** (install via `corepack enable yarn`): Enketo uses Yarn Classic as dependency management instead of npm.
+- **[docker](https://docs.docker.com/engine/install/)**: Enketo Express is a docker container, and documentation provides examples for redis from docker for convenience.
 
 ### Accounts
 
@@ -24,9 +24,9 @@ cp packages/enketo-express/config/default-config.json packages/enketo-express/co
 All monorepo packages are already symlinked into `node_modules` by `yarn` workspaces.
 The top entry point is Enketo Express that depends on all other packages.
 
--   enketo-core source is used directly in develop and watched by enketo-express
--   enketo-transformer dist is watched by enketo-express, so need another watch to rebuild it on changes
--   openrosa-xpath-evaluator src and dist is the same, and watched by enketo-express
+- enketo-core source is used directly in develop and watched by enketo-express
+- enketo-transformer dist is watched by enketo-express, so need another watch to rebuild it on changes
+- openrosa-xpath-evaluator src and dist is the same, and watched by enketo-express
 
 ##### Watch every package and rebuild on it's own or dependency changes:
 
@@ -41,8 +41,8 @@ yarn watch
 
 ##### Preview a static XForm test file:
 
--   list available test forms at http://localhost:3000
--   open a form, e.g. http://localhost:8005/preview?xform=http://localhost:3000/all-widgets.xml
+- list available test forms at http://localhost:3000
+- open a form, e.g. http://localhost:8005/preview?xform=http://localhost:3000/all-widgets.xml
 
 ##### Preview and submit survey with a server:
 
@@ -59,7 +59,6 @@ yarn watch
 3. view the Enketo survey
     - open the received `url` in browser
     - fill the survey and submit it 🎉
-
 
 ##### Edit a Submission
 
@@ -97,7 +96,6 @@ Although Enketo has a comprehensive suite of automated tests, it is still import
 - **Saving offline drafts** - See above: _"Offline capabilities: Save a draft."_
 - **Loading offline drafts** - See above: _"Offline capabilities: Load a draft."_
 - **Editing submissions** - See above: _"Edit a Submission."_
-
 
 ### Other tasks
 

@@ -8,8 +8,8 @@ Enketo is an open source project that produces web form software based on open-s
 
 There are two major ways to use Enketo:
 
--   embedding the client-side [Enketo Core](./packages/enketo-core) library in a broader frontend,
--   using the [Enketo Express](./packages/enketo-express) service through [its APIs](https://enketo.org/develop/api/).
+- embedding the client-side [Enketo Core](./packages/enketo-core) library in a broader frontend,
+- using the [Enketo Express](./packages/enketo-express) service through [its APIs](https://enketo.org/develop/api/).
 
 Which you choose depends on the functionality you what to implement in your host app (for example, Enketo Core doesn't provide offline caching of in-progress submissions, form transformation, or form URL management) and whether or not you already implement the OpenRosa APIs.
 
@@ -22,9 +22,9 @@ We publish a [minimal docker image](https://github.com/enketo/enketo/pkgs/contai
 > [!IMPORTANT]
 > If you used the Enketo Express Docker image [from before the monorepo migration](https://github.com/enketo/enketo-express/blob/master/Dockerfile), you will need to make adjustments:
 >
-> -   Paths have changed. The working directory was previously the Enketo Express root so you would put your config at `config/config.json`. Now it is the Enketo monorepo root so your config must go to `packages/enketo-express/config/config.json`.
-> -   Previous versions generated and templated in secrets using a Python script. If you need a templated configuration, you need to manage that yourself in your deployment infrastructure.
-> -   Previous versions installed `pm2` and started Enketo Express with it.
+> - Paths have changed. The working directory was previously the Enketo Express root so you would put your config at `config/config.json`. Now it is the Enketo monorepo root so your config must go to `packages/enketo-express/config/config.json`.
+> - Previous versions generated and templated in secrets using a Python script. If you need a templated configuration, you need to manage that yourself in your deployment infrastructure.
+> - Previous versions installed `pm2` and started Enketo Express with it.
 
 ### Using Enketo Core
 
@@ -49,15 +49,15 @@ yarn watch # see http://localhost:8005/preview?xform=http://localhost:3000/all-w
 
 This is a monorepo, see for details on each package see their README:
 
--   [Enketo Express](./packages/enketo-express/README.md): Enketo's integrated web application, embedding Enketo Core and providing integration with OpenRosa form servers
--   [Enketo Core](./packages/enketo-core/README.md): Enketo's web form engine, intended for embedding in a web application
--   [Enketo Transformer](./packages/enketo-transformer/README.md): used by Enketo to transform [XForms](https://getodk.github.io/xforms-spec/README.md) into the format consumed by Enketo Core
--   [OpenRosa XPath Evaluator](./packages/openrosa-xpath-evaluator/README.md): Enketo's implementation of the OpenRosa XPath extensions, used in Enketo Core
+- [Enketo Express](./packages/enketo-express/README.md): Enketo's integrated web application, embedding Enketo Core and providing integration with OpenRosa form servers
+- [Enketo Core](./packages/enketo-core/README.md): Enketo's web form engine, intended for embedding in a web application
+- [Enketo Transformer](./packages/enketo-transformer/README.md): used by Enketo to transform [XForms](https://getodk.github.io/xforms-spec/README.md) into the format consumed by Enketo Core
+- [OpenRosa XPath Evaluator](./packages/openrosa-xpath-evaluator/README.md): Enketo's implementation of the OpenRosa XPath extensions, used in Enketo Core
 
 And also an [Enketo Transformer Web (example)](./examples/enketo-transformer-web): example app demonstrating client-side usage of Enketo Transformer
 
 ## History
 
--   March 2025 - [Kobo team](https://www.kobotoolbox.org/about-us/meet-the-team/) takes over maintainership ([#1392](https://github.com/enketo/enketo/issues/1392)) in response to ODK's annoucement ([#1317](https://github.com/enketo/enketo/pull/1317/files)) about stepping away from maintainership in May 2024.
--   c.a. 2021 - [ODK team](https://getodk.org/about/team) takes over maintainership. The ODK team's goals have been to increase alignment with ODK Collect, improve error messages to help users get out of bad states and improve long-term maintainability by modernizing the code base, removing code duplication, and simplifying state mutation.
--   c.a. 2009 - Enketo was initiated by Martijn van de Rijdt as a web-based alternative or complement to [ODK Collect](https://docs.getodk.org/collect-intro/). It has become a core component of the ODK ecosystem and been adopted by several organizations beyond that ecosystem.
+- March 2025 - [Kobo team](https://www.kobotoolbox.org/about-us/meet-the-team/) takes over maintainership ([#1392](https://github.com/enketo/enketo/issues/1392)) in response to ODK's annoucement ([#1317](https://github.com/enketo/enketo/pull/1317/files)) about stepping away from maintainership in May 2024.
+- c.a. 2021 - [ODK team](https://getodk.org/about/team) takes over maintainership. The ODK team's goals have been to increase alignment with ODK Collect, improve error messages to help users get out of bad states and improve long-term maintainability by modernizing the code base, removing code duplication, and simplifying state mutation.
+- c.a. 2009 - Enketo was initiated by Martijn van de Rijdt as a web-based alternative or complement to [ODK Collect](https://docs.getodk.org/collect-intro/). It has become a core component of the ODK ecosystem and been adopted by several organizations beyond that ecosystem.

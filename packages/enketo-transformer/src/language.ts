@@ -64,13 +64,15 @@ export const parseLanguage = (
 const getLanguageFromDescription = (description: string) =>
     description.trim() === ''
         ? ''
-        : tags.search(description).find(isLanguage) ?? '';
+        : (tags.search(description).find(isLanguage) ?? '');
 
 /**
  * Performs IANA search to find language object with provided subtag.
  */
 const getLanguageFromSubtag = (subtag: string) =>
-    subtag.trim() === '' ? null : tags.subtags(subtag).find(isLanguage) ?? null;
+    subtag.trim() === ''
+        ? null
+        : (tags.subtags(subtag).find(isLanguage) ?? null);
 
 const isLanguage = (object: Tag | Subtag) => object.data.type === 'language';
 

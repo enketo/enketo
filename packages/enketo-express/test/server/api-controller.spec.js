@@ -96,14 +96,14 @@ describe('api', () => {
             test.auth === true
                 ? 'valid'
                 : test.auth === false
-                ? 'invalid'
-                : 'empty';
+                  ? 'invalid'
+                  : 'empty';
         const auth =
             test.auth === true
                 ? validAuth
                 : test.auth === false
-                ? invalidAuth
-                : {};
+                  ? invalidAuth
+                  : {};
         const { version } = test;
         const server =
             typeof test.server !== 'undefined' ? test.server : validServer;

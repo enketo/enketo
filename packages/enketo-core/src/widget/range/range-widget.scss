@@ -46,7 +46,9 @@ $left: -85px;
     padding: 0.25 * $margin;
     width: $track-w;
     background: transparent;
-    font: 1em/1 arial, sans-serif;
+    font:
+        1em/1 arial,
+        sans-serif;
     z-index: 10;
 
     &::-webkit-slider-runnable-track {

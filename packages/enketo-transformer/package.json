@@ -14,16 +14,16 @@
     ],
     "exports": {
         ".": {
-            "import": "./dist/enketo-transformer/enketo-transformer.js",
-            "require": "./dist/enketo-transformer/transformer.cjs",
             "browser": "./dist/enketo-transformer/web/transformer.js",
-            "types": "./dist/types/src/transformer.d.ts"
+            "types": "./dist/types/src/transformer.d.ts",
+            "import": "./dist/enketo-transformer/enketo-transformer.js",
+            "require": "./dist/enketo-transformer/transformer.cjs"
         },
         "./dom": {
-            "import": "./dist/enketo-transformer/dom/node/index.js",
-            "require": "./dist/enketo-transformer/dom/node/index.cjs",
             "browser": "./dist/dom/web/index.js",
-            "types": "./dist/types/src/dom/node/index.d.ts"
+            "types": "./dist/types/src/dom/node/index.d.ts",
+            "import": "./dist/enketo-transformer/dom/node/index.js",
+            "require": "./dist/enketo-transformer/dom/node/index.cjs"
         },
         "./web": {
             "types": "./dist/enketo-transformer/web/src/transformer.d.ts",
@@ -71,16 +71,16 @@
         "css.escape": "^1.5.1",
         "express": "^4.21.2",
         "language-tags": "1.0.5",
-        "linkedom": "^0.14.26",
+        "linkedom": "^0.18.12",
         "string-direction": "0.1.x",
         "undici": "^5.28.4",
-        "xpath-to-css": "^1.1.0"
+        "xpath-to-css": "^1.2.0"
     },
     "devDependencies": {
-        "@prettier/sync": "^0.3.0",
-        "@prettier/plugin-xml": "^3.2.0",
-        "@types/benchmark": "^2.1.2",
-        "@types/css.escape": "^1.5.0",
+        "@prettier/sync": "^0.6.1",
+        "@prettier/plugin-xml": "^3.4.2",
+        "@types/benchmark": "^2.1.5",
+        "@types/css.escape": "^1.5.2",
         "@types/prettier": "^3.0.0",
         "benchmark": "^2.1.4",
         "http-server": "^13.1.0",

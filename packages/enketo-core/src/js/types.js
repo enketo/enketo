@@ -318,8 +318,8 @@ const types = {
             tz = parts[2]
                 ? [parts[1]].concat(parts[2].split(':'))
                 : parts[1] === 'Z'
-                ? ['+', '00', '00']
-                : [];
+                  ? ['+', '00', '00']
+                  : [];
 
             o.hours = time[0].padStart(2, '0');
             o.minutes = time[1].padStart(2, '0');

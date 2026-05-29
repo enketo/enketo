@@ -293,8 +293,8 @@ class Filepicker extends Widget {
             fb instanceof TranslatedError
                 ? t(fb.translationKey, fb.translationOptions)
                 : fb instanceof Error
-                ? fb.message
-                : fb || '';
+                  ? fb.message
+                  : fb || '';
         status = status || '';
         // replace text and replace all existing classes with the new status class
         this.feedback.textContent = message;

@@ -663,7 +663,7 @@
 
         // Known dev modules run in a Node/CJS context
         {
-            "files": ["tools/**/*.js", "**/Gruntfile.js", "**/karma.conf.js"],
+            "files": ["tools/**/*.js", "**/Gruntfile.js", "**/karma.conf.js", "browser-targets.js"],
 
             "env": {
                 "browser": false,
