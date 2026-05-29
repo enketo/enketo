@@ -14,16 +14,16 @@
     ],
     "exports": {
         ".": {
-            "import": "./dist/enketo-transformer/enketo-transformer.js",
-            "require": "./dist/enketo-transformer/transformer.cjs",
             "browser": "./dist/enketo-transformer/web/transformer.js",
-            "types": "./dist/types/src/transformer.d.ts"
+            "types": "./dist/types/src/transformer.d.ts",
+            "import": "./dist/enketo-transformer/enketo-transformer.js",
+            "require": "./dist/enketo-transformer/transformer.cjs"
         },
         "./dom": {
-            "import": "./dist/enketo-transformer/dom/node/index.js",
-            "require": "./dist/enketo-transformer/dom/node/index.cjs",
             "browser": "./dist/dom/web/index.js",
-            "types": "./dist/types/src/dom/node/index.d.ts"
+            "types": "./dist/types/src/dom/node/index.d.ts",
+            "import": "./dist/enketo-transformer/dom/node/index.js",
+            "require": "./dist/enketo-transformer/dom/node/index.cjs"
         },
         "./web": {
             "types": "./dist/enketo-transformer/web/src/transformer.d.ts",
