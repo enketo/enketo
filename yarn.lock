@@ -5230,10 +5230,10 @@ grunt-mocha-test@^0.13.3:
     hooker "^0.2.3"
     mkdirp "^0.5.0"
 
-grunt-sass@^3.1.0:
-  version "3.1.0"
-  resolved "https://registry.yarnpkg.com/grunt-sass/-/grunt-sass-3.1.0.tgz#a5936cc2a80ec08092d9f31c101dc307d1e4f71c"
-  integrity sha512-90s27H7FoCDcA8C8+R0GwC+ntYD3lG6S/jqcavWm3bn9RiJTmSfOvfbFa1PXx4NbBWuiGQMLfQTj/JvvqT5w6A==
+grunt-sass@^4.1.0:
+  version "4.1.0"
+  resolved "https://registry.yarnpkg.com/grunt-sass/-/grunt-sass-4.1.0.tgz#abfe411a1494e6e9d99e046efd28e506ee46decb"
+  integrity sha512-4RsrEDGn4C/UpiTFYxO7so2WUUXQjokZWsZoKihFKGFQYR+zj4fop7Pz8c2aX1HPk0u2DwtsQDjucW61vbSZew==
 
 grunt-shell-spawn@^0.5.0:
   version "0.5.0"
