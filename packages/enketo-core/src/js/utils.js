@@ -295,6 +295,7 @@ function encodeHtmlEntities(text) {
 const DOMPURIFY_SVG_CONFIG = {
     USE_PROFILES: { svg: true, svgFilters: true },
     RETURN_DOM_FRAGMENT: true,
+    WHOLE_DOCUMENT: false,
     FORBID_TAGS: [
         'foreignObject',
         'iframe',
@@ -305,7 +306,7 @@ const DOMPURIFY_SVG_CONFIG = {
         'script',
         'style',
     ],
-    FORBID_ATTR: ['style'],
+
 };
 
 /**
@@ -324,6 +325,8 @@ function sanitizeSvg(svgElement) {
     // HTML parse step.
     // Doing this pre-strip here ensures dangerous HTML descendants from
     // foreignObject never reach that parse step.
+    // This should not happen since we're using an inert document, but we are keeping
+    // this as a safeguard to avoid any potential code execution from foreingObject descendants.
     Array.from(
         svgElement.getElementsByTagNameNS(
             'http://www.w3.org/2000/svg',
@@ -331,17 +334,15 @@ function sanitizeSvg(svgElement) {
         )
     ).forEach((el) => el.remove());
 
-    // importNode + container.innerHTML gives DOMPurify proper HTML
-    // serialization. XMLSerializer alone produces self-closing XML tags
-    // (e.g. <script/>) which confuse the HTML parser and silently drop
-    // sibling elements.
-    const container = document.createElement('div');
-    container.appendChild(document.importNode(svgElement, true));
-    const fragment = DOMPurify.sanitize(
-        container.innerHTML,
-        DOMPURIFY_SVG_CONFIG
-    );
-    return fragment.querySelector('svg');
+    // Use an inert document to prevent any potential code execution on live document during the sanitization process. 
+    const inertDoc = document.implementation.createHTMLDocument('');  
+    const container = inertDoc.createElement('div');  
+    container.appendChild(inertDoc.importNode(svgElement, true));  
+    const fragment = DOMPurify.sanitize(  
+        container.innerHTML,  
+        DOMPURIFY_SVG_CONFIG  
+    );  
+    return fragment.querySelector('svg');  
 }
 
 export {
