@@ -219,8 +219,8 @@ class DatetimepickerExtended extends Widget {
             vals[1] && vals[1].length > 4
                 ? vals[1].substring(0, 5)
                 : dateVal && !vals[1]
-                ? '00:00'
-                : '';
+                  ? '00:00'
+                  : '';
         this.$fakeDateI.datepicker('setDate', dateVal);
         this.$fakeTimeI.timepicker('setTime', timeVal);
     }

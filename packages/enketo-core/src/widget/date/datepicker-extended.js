@@ -35,16 +35,16 @@ class DatepickerExtended extends Widget {
                   minViewMode: 'years',
               }
             : this.props.appearances.includes('month-year')
-            ? {
-                  format: 'yyyy-mm',
-                  startView: 'year',
-                  minViewMode: 'months',
-              }
-            : {
-                  format: 'yyyy-mm-dd',
-                  startView: 'month',
-                  minViewMode: 'days',
-              };
+              ? {
+                    format: 'yyyy-mm',
+                    startView: 'year',
+                    minViewMode: 'months',
+                }
+              : {
+                    format: 'yyyy-mm-dd',
+                    startView: 'month',
+                    minViewMode: 'days',
+                };
 
         this.$fakeDateI = this._createFakeDateInput(this.settings.format);
 
@@ -164,8 +164,8 @@ class DatepickerExtended extends Widget {
         return date && this.settings.format === 'yyyy' && date.length < 5
             ? `${date}-01-01`
             : date && this.settings.format === 'yyyy-mm' && date.length < 8
-            ? `${date}-01`
-            : date;
+              ? `${date}-01`
+              : date;
     }
 
     /**
@@ -178,8 +178,8 @@ class DatepickerExtended extends Widget {
         return date && this.settings.format === 'yyyy'
             ? date.substring(0, 4)
             : this.settings.format === 'yyyy-mm'
-            ? date.substring(0, 7)
-            : date;
+              ? date.substring(0, 7)
+              : date;
     }
 
     disable() {

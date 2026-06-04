@@ -575,14 +575,14 @@ class Geopicker extends Widget {
             typeof latLng[0] === 'number'
                 ? latLng[0]
                 : typeof latLng.lat === 'number'
-                ? latLng.lat
-                : null;
+                  ? latLng.lat
+                  : null;
         const lng =
             typeof latLng[1] === 'number'
                 ? latLng[1]
                 : typeof latLng.lng === 'number'
-                ? latLng.lng
-                : null;
+                  ? latLng.lng
+                  : null;
 
         // This conversion seems backwards, but it is helpful to have only one place where geopoints are validated.
         return types.geopoint.validate([lat, lng].join(' '));
@@ -1090,8 +1090,8 @@ class Geopicker extends Widget {
                 that.props.type === 'geopoint'
                     ? iconSingle
                     : index === that.currentIndex
-                    ? iconMultiActive
-                    : iconMulti;
+                      ? iconMultiActive
+                      : iconMulti;
             if (that._isValidLatLng(latLng)) {
                 coords.push(that._cleanLatLng(latLng));
                 markers.push(
@@ -1543,14 +1543,14 @@ class Geopicker extends Widget {
                 typeof point[0] === 'number'
                     ? point[0]
                     : typeof point.lat === 'number'
-                    ? point.lat
-                    : null;
+                      ? point.lat
+                      : null;
             const lng =
                 typeof point[1] === 'number'
                     ? point[1]
                     : typeof point.lng === 'number'
-                    ? point.lng
-                    : null;
+                      ? point.lng
+                      : null;
             const alt = typeof point[2] === 'number' ? point[2] : 0.0;
             const acc = typeof point[3] === 'number' ? point[3] : 0.0;
 

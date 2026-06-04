@@ -541,9 +541,8 @@ function _generateWebformUrls(id, req) {
                 req.defaultsQueryParam,
                 req.parentWindowOriginParam,
             ]);
-            obj[
-                `preview${iframePart ? '_iframe' : ''}_url`
-            ] = `${baseUrl}preview/${iframePart}${id}${queryString}${hash}`;
+            obj[`preview${iframePart ? '_iframe' : ''}_url`] =
+                `${baseUrl}preview/${iframePart}${id}${queryString}${hash}`;
             // Keep in a bug since apps probably started relying on this.
 
             if (iframePart) {
@@ -584,9 +583,8 @@ function _generateWebformUrls(id, req) {
             }
             queryParts.push(req.returnQueryParam);
             queryString = _generateQueryString(queryParts);
-            obj[
-                `view${iframePart ? '_iframe' : ''}_url`
-            ] = `${baseUrl}view/${iframePart}${idPartView}${queryString}${hash}`;
+            obj[`view${iframePart ? '_iframe' : ''}_url`] =
+                `${baseUrl}view/${iframePart}${idPartView}${queryString}${hash}`;
             break;
         case 'all':
             // non-iframe views

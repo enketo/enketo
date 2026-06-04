@@ -25,8 +25,8 @@ If applicable, add screenshots to help explain your problem.
 
 **Browser and OS (please complete the following information):**
 
--   OS: [e.g. iOS]
--   Browser [e.g. chrome, safari]
+- OS: [e.g. iOS]
+- Browser [e.g. chrome, safari]
 
 **Additional context**
 Add any other context about the problem here.

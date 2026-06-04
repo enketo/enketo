@@ -12,12 +12,12 @@ This repo is meant to be used as a building block for any Enketo-powered applica
 
 The following browsers are officially supported:
 
--   latest Android webview on latest Android OS
--   latest WKWebView on latest iOS
--   latest version of Chrome/Chromium on Mac OS, Linux, Windows, Android and iOS
--   latest version of Firefox on Mac OS, Windows, Linux, Android and iOS
--   latest version of Safari on Mac OS, Windows, and on the latest version of iOS
--   latest version of Microsoft Edge
+- latest Android webview on latest Android OS
+- latest WKWebView on latest iOS
+- latest version of Chrome/Chromium on Mac OS, Linux, Windows, Android and iOS
+- latest version of Firefox on Mac OS, Windows, Linux, Android and iOS
+- latest version of Safari on Mac OS, Windows, and on the latest version of iOS
+- latest version of Microsoft Edge
 
 We have to admit we do not test on all of these, but are committed to fixing browser-specific bugs that are reported for these browsers. Naturally, older browsers versions will often work as well - they are just not officially supported.
 
@@ -184,11 +184,11 @@ Note: running tests updates the coverage badge in README.md, but these changes s
 
 ### Notes for JavaScript Developers
 
--   When creating new functions/Classes, make sure to describe them with JSDoc comments.
--   JavaScript style see [ESLint](./eslintrc.json) config files. The check is added to the grunt `test` task. You can also manually run `grunt eslint:fix` to fix style issues.
--   Testing is done with Mocha and Karma (all: `grunt karma`, headless: `grunt karma:headless`, browsers: `grunt karma:browsers`)
--   Tests can be run in watch mode for [TDD](https://en.wikipedia.org/wiki/Test-driven_development) workflows with `yarn run test-watch`, and support for debugging in [VSCode](https://code.visualstudio.com/) is provided. For instructions see [Debugging test watch mode in VSCode](./#debugging-test-watch-mode-in-vscode) below
--   When making a pull request, please add tests where relevant
+- When creating new functions/Classes, make sure to describe them with JSDoc comments.
+- JavaScript style see [ESLint](./eslintrc.json) config files. The check is added to the grunt `test` task. You can also manually run `grunt eslint:fix` to fix style issues.
+- Testing is done with Mocha and Karma (all: `grunt karma`, headless: `grunt karma:headless`, browsers: `grunt karma:browsers`)
+- Tests can be run in watch mode for [TDD](https://en.wikipedia.org/wiki/Test-driven_development) workflows with `yarn run test-watch`, and support for debugging in [VSCode](https://code.visualstudio.com/) is provided. For instructions see [Debugging test watch mode in VSCode](./#debugging-test-watch-mode-in-vscode) below
+- When making a pull request, please add tests where relevant
 
 #### Debugging test watch mode in VSCode
 
@@ -348,26 +348,26 @@ runAllCommonWidgetTests(ExampleWidget, FORM, VALUE);
 
 ### DO
 
--   use the rank widget as a more complex example that uses the best practices (some other widgets use an older style)
--   add an `_init` function to your widget that either returns nothing or a Promise (if it initializes asynchronously)
--   include a widget.my-widget.spec.js file in the /test folder
--   run at least the standardized common widget tests by doing: TBD
--   make the widget responsive up to a minimum window width of 320px
--   ensure the widget's scss and js file is/are loaded in widgets.js and \_widgets.scss respectively
--   if hiding the original input element, it needs to load the default value `this.originalInputValue` into the widget
--   if hiding the original input element, keep its value syncronized using `this.originalInputValue = ...`
--   if hiding the original input element, it needs to listen for the `applyfocus` event on the original input and focus the widget
--   if hiding the original input element, the widget value needs to update when the original input updates due to a calculation or becoming non-relevant (update)
--   apply the `widget` css class to the top level elements it adds to the DOM (but not to their children)
--   new input/select/textarea elements inside widgets should have the `ignore` class to isolate them from the Enketo form engine
--   include `enable()`, `disable()` and `update()` method overrides. See the Widget class.
--   if the widget needs tweaks or needs to be disabled for mobile use, use support.js to detect this and override the static `condition()` function in Widget.js.
--   allow clearing of the original input (i.e. setting value to '')
--   if the widget does not get automatic (built-in HTML) focus, trigger a `fakefocus` event to the original input when the widget gets focus (rarely required, but see rank widget)
+- use the rank widget as a more complex example that uses the best practices (some other widgets use an older style)
+- add an `_init` function to your widget that either returns nothing or a Promise (if it initializes asynchronously)
+- include a widget.my-widget.spec.js file in the /test folder
+- run at least the standardized common widget tests by doing: TBD
+- make the widget responsive up to a minimum window width of 320px
+- ensure the widget's scss and js file is/are loaded in widgets.js and \_widgets.scss respectively
+- if hiding the original input element, it needs to load the default value `this.originalInputValue` into the widget
+- if hiding the original input element, keep its value syncronized using `this.originalInputValue = ...`
+- if hiding the original input element, it needs to listen for the `applyfocus` event on the original input and focus the widget
+- if hiding the original input element, the widget value needs to update when the original input updates due to a calculation or becoming non-relevant (update)
+- apply the `widget` css class to the top level elements it adds to the DOM (but not to their children)
+- new input/select/textarea elements inside widgets should have the `ignore` class to isolate them from the Enketo form engine
+- include `enable()`, `disable()` and `update()` method overrides. See the Widget class.
+- if the widget needs tweaks or needs to be disabled for mobile use, use support.js to detect this and override the static `condition()` function in Widget.js.
+- allow clearing of the original input (i.e. setting value to '')
+- if the widget does not get automatic (built-in HTML) focus, trigger a `fakefocus` event to the original input when the widget gets focus (rarely required, but see rank widget)
 
 #### DON'T
 
--   do not include jQuery, React, Vue or any other general purpose libraries or frameworks
+- do not include jQuery, React, Vue or any other general purpose libraries or frameworks
 
 ### Events in Enketo Core
 
@@ -433,14 +433,14 @@ The development of this library is now led by [ODK](https://getodk.org) and fund
 
 Past sponsors include:
 
--   [OpenClinica](https://www.openclinica.com/)
--   [Sustainable Engineering Lab at Columbia University](http://modi.mech.columbia.edu/)
--   [WHO - HRP project](http://www.who.int/reproductivehealth/topics/mhealth/en/index.html)
--   [Santa Fe Insitute & Slum/Shack Dwellers International](http://www.santafe.edu/)
--   [Enketo LLC](http://www.linkedin.com/company/enketo-llc)
--   [iMMAP](http://immap.org)
--   [KoBo Toolbox (Harvard Humanitarian Initiative)](https://kobotoolbox.org)
--   [Ona](https://ona.io)
--   [Medic](https://medic.org/)
--   [Esri](https://esri.com)
--   [DIAL Open Source Center](https://www.osc.dial.community/)
+- [OpenClinica](https://www.openclinica.com/)
+- [Sustainable Engineering Lab at Columbia University](http://modi.mech.columbia.edu/)
+- [WHO - HRP project](http://www.who.int/reproductivehealth/topics/mhealth/en/index.html)
+- [Santa Fe Insitute & Slum/Shack Dwellers International](http://www.santafe.edu/)
+- [Enketo LLC](http://www.linkedin.com/company/enketo-llc)
+- [iMMAP](http://immap.org)
+- [KoBo Toolbox (Harvard Humanitarian Initiative)](https://kobotoolbox.org)
+- [Ona](https://ona.io)
+- [Medic](https://medic.org/)
+- [Esri](https://esri.com)
+- [DIAL Open Source Center](https://www.osc.dial.community/)

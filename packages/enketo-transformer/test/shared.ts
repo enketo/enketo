@@ -53,7 +53,7 @@ if (ENV === 'node') {
         page.on('console', async (message) => {
             // This basically just suppresses useless built-in Vite logging
             if (!isLoading) {
-                let type = message.type();
+                let type: string = message.type();
 
                 if (type === 'warning') {
                     type = 'warn';

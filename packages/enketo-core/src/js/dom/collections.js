@@ -130,7 +130,7 @@ export class RefIndexedDOMCollection {
         /** @type {HTMLElement} */
         this.startElementContainer = isNoop
             ? rootElement
-            : this.startElement.closest('.or-group') ?? rootElement;
+            : (this.startElement.closest('.or-group') ?? rootElement);
 
         const elementName = firstElement?.nodeName.toLowerCase();
 
@@ -408,7 +408,7 @@ export class RefIndexedDOMCollection {
         index,
         ref = this.refAttr == null
             ? ''
-            : element.getAttribute(this.refAttr) ?? ''
+            : (element.getAttribute(this.refAttr) ?? '')
     ) {
         let cache = this.refIndexCache.get(ref);
 
