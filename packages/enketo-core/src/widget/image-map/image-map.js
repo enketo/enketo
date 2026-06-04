@@ -2,7 +2,7 @@ import { t } from 'enketo/translator';
 import Widget from '../../js/widget';
 import events from '../../js/event';
 import { getSiblingElement } from '../../js/dom-utils';
-import { sanitizeSvg } from '../../js/utils';
+import { sanitizeSvg } from '../../js/sanitization-utils';
 
 const SELECTORS = 'path[id], g[id], circle[id]';
 
@@ -87,9 +87,8 @@ class ImageMap extends Widget {
             .then((txt) => new DOMParser().parseFromString(txt, 'text/xml'))
             .then((doc) => {
                 if (that._isSvgDoc(doc)) {
-                    const sanitizedDoc = sanitizeSvg(doc);
                     const svgFragment = that._removeUnmatchedIds(
-                        sanitizedDoc.querySelector('svg')
+                        sanitizeSvg(doc.querySelector('svg'))
                     );
                     const fragment = document
                         .createRange()
