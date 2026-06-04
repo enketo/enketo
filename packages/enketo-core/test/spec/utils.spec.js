@@ -337,6 +337,27 @@ describe('SVG Sanitization', () => {
         expect(pathStyle).to.equal('opacity:1;');
     });
 
+    it('should reject escaped url() function names in style values', () => {
+        const maliciousSvg = parser
+            .parseFromString(
+                `
+            <svg xmlns="http://www.w3.org/2000/svg">
+                <path
+                    id="safe"
+                    style="fill:u\\72l(https://evil.example/escaped);stroke:blue"
+                    d="M 10 10 L 20 20"/>
+            </svg>
+        `,
+                'text/xml'
+            )
+            .querySelector('svg');
+
+        const sanitized = utils.sanitizeSvg(maliciousSvg);
+        const pathStyle = sanitized.querySelector('path').getAttribute('style');
+
+        expect(pathStyle).to.equal('stroke:blue;');
+    });
+
     it('should return null for null input', () => {
         expect(utils.sanitizeSvg(null)).to.be.null;
     });
