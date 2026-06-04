@@ -4,8 +4,6 @@
  * @module utils
  */
 
-import { sanitizeSvg } from './sanitization-utils';
-
 let cookies;
 
 /**
@@ -304,5 +302,4 @@ export {
     joinPath,
     getScript,
     encodeHtmlEntities,
-    sanitizeSvg,
 };

@@ -65,7 +65,6 @@ const ALLOWED_SVG_SELECTOR_TAGS = new Set([
     'fetile',
     'feturbulence',
     'filter',
-    'foreignobject',
     'g',
     'image',
     'line',
@@ -191,54 +190,40 @@ function normalizeTypeSelectorName(name) {
     return unprefixedName.toLowerCase();
 }
 
-function isAllowedSvgSelector(prelude) {
-    if (!prelude || prelude.type !== 'SelectorList' || !prelude.children) {
+function isAllowedSvgSelector(selector) {
+    if (!selector || selector.type !== 'Selector') {
         return false;
     }
 
     let isAllowed = true;
 
-    prelude.children.forEach((selector) => {
-        if (!isAllowed || selector.type !== 'Selector') {
+    csstree.walk(selector, (node) => {
+        if (!isAllowed) {
+            return;
+        }
+
+        if (node.type === 'TypeSelector') {
+            const normalizedTypeName = normalizeTypeSelectorName(node.name);
+
+            if (!ALLOWED_SVG_SELECTOR_TAGS.has(normalizedTypeName)) {
+                isAllowed = false;
+
+                return;
+            }
+        }
+
+        if (node.type === 'UniversalSelector') {
             isAllowed = false;
 
             return;
         }
 
-        let selectorAllowed = true;
+        if (node.type === 'PseudoClassSelector') {
+            const pseudoClassName = node.name.toLowerCase();
 
-        csstree.walk(selector, (node) => {
-            if (!selectorAllowed) {
-                return;
+            if (FORBIDDEN_SELECTOR_PSEUDO_CLASSES.has(pseudoClassName)) {
+                isAllowed = false;
             }
-
-            if (node.type === 'TypeSelector') {
-                const normalizedTypeName = normalizeTypeSelectorName(node.name);
-
-                if (!ALLOWED_SVG_SELECTOR_TAGS.has(normalizedTypeName)) {
-                    selectorAllowed = false;
-
-                    return;
-                }
-            }
-
-            if (node.type === 'UniversalSelector') {
-                selectorAllowed = false;
-
-                return;
-            }
-
-            if (node.type === 'PseudoClassSelector') {
-                const pseudoClassName = node.name.toLowerCase();
-
-                if (FORBIDDEN_SELECTOR_PSEUDO_CLASSES.has(pseudoClassName)) {
-                    selectorAllowed = false;
-                }
-            }
-        });
-
-        if (!selectorAllowed) {
-            isAllowed = false;
         }
     });
 
@@ -350,9 +335,14 @@ function sanitizeStyleElementText(node) {
             if (
                 rule.type === 'Rule' &&
                 rule.prelude &&
+                rule.prelude.type === 'SelectorList' &&
+                rule.prelude.children &&
                 rule.block &&
                 rule.block.children &&
-                isAllowedSvgSelector(rule.prelude)
+                // A rule is safe only if all its selectors are safe.
+                // e.g. "circle, script { fill: red }" has two selectors —
+                // one bad selector poisons the entire rule.
+                Array.from(rule.prelude.children).every(isAllowedSvgSelector)
             ) {
                 const declarations = sanitizeStyleDeclarations(
                     rule.block.children
@@ -420,11 +410,11 @@ function sanitizeHrefAttributes(node) {
  * Sanitizes an SVG element using DOMPurify, removing potentially dangerous
  * elements and attributes (scripts, event handlers, javascript: URLs, etc.).
  * @param {SVGElement} svgElement - The SVG element to sanitize
- * @return {SVGElement|null|undefined} The sanitized SVG element
+ * @return {SVGElement|null} The sanitized SVG element
  */
 function sanitizeSvg(svgElement) {
     if (!svgElement) {
-        return svgElement;
+        return null;
     }
 
     // Strip <foreignObject> subtrees at the XML level before any HTML parsing
@@ -448,13 +438,13 @@ function sanitizeSvg(svgElement) {
     // Hooks to sanitize style elements and style attributes.
     // Implementation reference:
     // https://github.com/cure53/DOMPurify/blob/main/demos/hooks-sanitize-css-demo.html
-    DOMPurify.addHook('uponSanitizeElement', (node, data) => {
+    const uponSanitizeElementHook = (node, data) => {
         if (data.tagName === 'style') {
             node.textContent = sanitizeStyleElementText(node);
         }
-    });
+    };
 
-    DOMPurify.addHook('afterSanitizeAttributes', (node) => {
+    const afterSanitizeAttributesHook = (node) => {
         sanitizeHrefAttributes(node);
 
         if (node.hasAttribute && node.hasAttribute('style')) {
@@ -468,13 +458,19 @@ function sanitizeSvg(svgElement) {
                 node.removeAttribute('style');
             }
         }
-    });
+    };
+
+    DOMPurify.addHook('uponSanitizeElement', uponSanitizeElementHook);
+    DOMPurify.addHook('afterSanitizeAttributes', afterSanitizeAttributesHook);
 
     try {
         DOMPurify.sanitize(sanitizedSvg, DOMPURIFY_SVG_CONFIG);
     } finally {
-        DOMPurify.removeHook('uponSanitizeElement');
-        DOMPurify.removeHook('afterSanitizeAttributes');
+        DOMPurify.removeHook('uponSanitizeElement', uponSanitizeElementHook);
+        DOMPurify.removeHook(
+            'afterSanitizeAttributes',
+            afterSanitizeAttributesHook
+        );
     }
 
     return sanitizedSvg;

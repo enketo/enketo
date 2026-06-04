@@ -2,7 +2,7 @@ import { t } from 'enketo/translator';
 import Widget from '../../js/widget';
 import events from '../../js/event';
 import { getSiblingElement } from '../../js/dom-utils';
-import { sanitizeSvg } from '../../js/utils';
+import { sanitizeSvg } from '../../js/sanitization-utils';
 
 const SELECTORS = 'path[id], g[id], circle[id]';
 
