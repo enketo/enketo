@@ -257,6 +257,30 @@ describe('SVG Sanitization', () => {
         expect(sanitized.querySelector('g')).to.not.be.null;
     });
 
+    it('should preserve safe text and tspan nodes', () => {
+        const safeSvg = parser
+            .parseFromString(
+                `
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 80">
+                <text id="label" x="10" y="20" font-size="12">
+                    Safe text
+                    <tspan id="suffix" dx="4">node</tspan>
+                </text>
+            </svg>
+        `,
+                'text/xml'
+            )
+            .querySelector('svg');
+
+        const sanitized = utils.sanitizeSvg(safeSvg);
+
+        expect(sanitized.querySelector('text#label')).to.not.be.null;
+        expect(sanitized.querySelector('tspan#suffix')).to.not.be.null;
+        expect(
+            sanitized.querySelector('text#label').textContent.replace(/\s+/g, ' ').trim()
+        ).to.equal('Safe text node');
+    });
+
     it('should sanitize <style> elements and keep only safe CSS declarations', () => {
         const maliciousSvg = parser
             .parseFromString(
@@ -286,6 +310,35 @@ describe('SVG Sanitization', () => {
         expect(styleText).to.not.contain('url(');
         expect(styleText).to.not.contain('@import');
         expect(sanitized.querySelector('path')).to.not.be.null;
+    });
+
+    it('should keep class-only style selectors scoped to svg', () => {
+        const maliciousSvg = parser
+            .parseFromString(
+                `
+            <svg xmlns="http://www.w3.org/2000/svg">
+                <style>
+                    body { opacity: .5; }
+                    :root { color: red; }
+                    .outside { fill: red; }
+                    path { fill: red; }
+                    svg rect { stroke: blue; }
+                </style>
+                <rect id="safe" d="M 10 10 L 20 20"/>
+            </svg>
+        `,
+                'text/xml'
+            )
+            .querySelector('svg');
+
+        const sanitized = utils.sanitizeSvg(maliciousSvg);
+        const styleText = sanitized.querySelector('style').textContent;
+
+        expect(styleText).to.contain('path{fill:red;}');
+        expect(styleText).to.contain('svg rect{stroke:blue;}');
+        expect(styleText).to.not.contain('body{');
+        expect(styleText).to.not.contain(':root{');
+        expect(styleText).to.contain('svg .outside{fill:red;}');
     });
 
     it('should sanitize style attributes and keep only safe CSS declarations', () => {

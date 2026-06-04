@@ -1,19 +1,28 @@
-<svg xmlns="http://www.w3.org/2000/svg"
-     xmlns:xlink="http://www.w3.org/1999/xlink"
-     width="900" height="1250" viewBox="0 0 900 1250">
+<svg
+	xmlns="http://www.w3.org/2000/svg"
+	xmlns:xlink="http://www.w3.org/1999/xlink"
+	width="900"
+	height="2000"
+	viewBox="0 0 900 2000"
+>
+	<title>Malicious SVG Corpus for Sanitizer Testing</title>
+	<desc>
+		Defensive test fixture only. Each section includes a quick verification note
+		describing what should remain after sanitization.
+	</desc>
 
-  <title>Malicious SVG Corpus for Sanitizer Testing</title>
-  <desc>Defensive test fixture only. Contains intentionally malicious patterns.</desc>
-
-  <!-- 1) Global / upscoped CSS selectors -->
-  <style>
+	<!-- ============================================================ -->
+	<!-- 01) STYLE TAG: GLOBAL OR UPSCOPED SELECTORS                  -->
+	<!-- Verify: Keep only SVG-targeted safe declarations; drop body/html/*/:root/form. -->
+	<!-- ============================================================ -->
+	<style>
     body { opacity: 0.4; pointer-events: none; }
     html, * { cursor: none !important; }
     form { filter: blur(3px); }
     :root { filter: saturate(0.1); }
     rect.safe-preview { fill: #2e8b57; }
 
-    /* URL-based CSS attacks in style element */
+    /* URL/protocol/function vectors in style element */
     .s-url-1 { fill: url(javascript:alert('css-url-javascript')); }
     .s-url-2 { fill: url(data:text/html,%3Cscript%3Ealert('css-url-data')%3C/script%3E); }
     .s-url-3 { fill: url(vbscript:msgbox('css-url-vbscript')); }
@@ -30,152 +39,417 @@
       font-family: leak;
       src: url(https://example.com/leak.woff2);
     }
+
+    /* Positive control: SVG tag + class selectors with allowed fill/stroke */
+    path { fill: #2e8b57; stroke: #145a32; }
+    rect.safe-fill-ok { fill: #1e88e5; stroke: #0d47a1; }
+    .circle-safe-fill-ok { fill: #43a047; stroke: #1b5e20; }
+    path.safe-fill-ok { fill: #fb8c00; stroke: #e65100; }
+
+    /* Human-friendly table/list styles */
+    rect.layout-card { fill: #ffffff; stroke: #cfd8dc; stroke-width: 1; }
+    rect.row-band { fill: #f7fafc; }
+    text.layout-title { fill: #102a43; font-size: 15px; font-weight: 700; }
+    text.layout-header { fill: #334e68; font-size: 12px; font-weight: 700; }
+    text.row-label { fill: #243b53; font-size: 11px; }
+    text.row-status-pass { fill: #0b6b3a; font-size: 10px; font-weight: 700; }
+    text.row-status-fail { fill: #9b1c1c; font-size: 10px; font-weight: 700; }
+    line.baseline-axis { stroke: #546e7a; stroke-width: 1.5; }
+    polyline.baseline-line { fill: none; stroke: #00897b; stroke-width: 2; }
   </style>
 
-  <!-- 2) Script elements -->
-  <script>alert('script-inline');</script>
-  <script xlink:href="https://example.com/evil.js"></script>
+	<!-- Visible structure overlay for the test matrix -->
+	<g id="test-layout-visual-structure">
+		<rect class="layout-card" x="10" y="10" width="880" height="640" rx="10" ry="10" />
+		<text class="layout-title" x="28" y="36">SVG Sanitization Test Matrix</text>
+		<text class="layout-header" x="28" y="58">Scenario</text>
+		<text class="layout-header" x="735" y="58">Expected</text>
 
-  <!-- 3) Root and element event handlers -->
-  <g id="events-root" onload="alert('onload-root')" onclick="alert('onclick-root')">
-    <rect x="20" y="20" width="120" height="50" fill="#c44"
-          onmouseover="alert('onmouseover-rect')"
-          onfocus="alert('onfocus-rect')" />
-  </g>
+		<rect class="row-band" x="20" y="70" width="860" height="64" rx="6" ry="6" />
+		<rect class="row-band" x="20" y="146" width="860" height="64" rx="6" ry="6" />
+		<rect class="row-band" x="20" y="222" width="860" height="64" rx="6" ry="6" />
+		<rect class="row-band" x="20" y="298" width="860" height="64" rx="6" ry="6" />
+		<rect class="row-band" x="20" y="374" width="860" height="64" rx="6" ry="6" />
+		<rect class="row-band" x="20" y="450" width="860" height="64" rx="6" ry="6" />
+		<rect class="row-band" x="20" y="526" width="860" height="64" rx="6" ry="6" />
 
-  <!-- 4) href/xlink javascript and data URLs -->
-  <a href="javascript:alert('href-js')">
-    <rect x="170" y="20" width="120" height="50" fill="#f7a" />
-  </a>
-  <a xlink:href="javascript:alert('xlink-href-js')">
-    <rect x="320" y="20" width="120" height="50" fill="#fa7" />
-  </a>
-  <a href="data:text/html,%3Cscript%3Ealert('href-data')%3C/script%3E">
-    <rect x="470" y="20" width="120" height="50" fill="#7af" />
-  </a>
-  <a href="jAvaScRiPt:alert('href-js-mixed-case')">
-    <rect x="620" y="20" width="120" height="50" fill="#8cf" />
-  </a>
-  <a href="&#10;javascript:alert('href-js-leading-newline')">
-    <rect x="760" y="20" width="120" height="50" fill="#c8f" />
-  </a>
+		<text class="row-label" x="30" y="94">R1. Events + href/xlink javascript/data payloads</text>
+		<text class="row-status-fail" x="735" y="94">FAIL if any click/JS still works</text>
 
-  <!-- 5) External refs / use / image -->
-  <use href="javascript:alert('use-href-js')" x="620" y="20"></use>
-  <use xlink:href="https://example.com/remote.svg#payload" x="760" y="20"></use>
-  <image x="20" y="95" width="120" height="50"
-         href="javascript:alert('image-href-js')" />
-  <image x="170" y="95" width="120" height="50"
-         xlink:href="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%3E%3Cscript%3Ealert('image-data-svg')%3C/script%3E%3C/svg%3E" />
-    <image x="320" y="95" width="120" height="50"
-      href="https://example.com/tracker.svg?vector=image-external" />
+		<text class="row-label" x="30" y="170">R2. External refs, foreignObject and SMIL mutation
+			vectors</text>
+		<text class="row-status-fail" x="735" y="170">FAIL if unsafe refs remain active</text>
 
-  <!-- 6) foreignObject HTML -->
-  <foreignObject x="320" y="95" width="280" height="120">
-    <div xmlns="http://www.w3.org/1999/xhtml" style="font: 12px sans-serif;">
-      <img src="x" onerror="alert('foreignObject-img-onerror')" />
-      <iframe src="javascript:alert('foreignObject-iframe-js')"></iframe>
-      <a href="javascript:alert('foreignObject-link-js')">click</a>
-    </div>
-  </foreignObject>
+		<text class="row-label" x="30" y="246">R3. Inline style url/var/expression declarations</text>
+		<text class="row-status-fail" x="735" y="246">FAIL if blocked CSS appears</text>
 
-  <!-- 7) SMIL / animation vectors -->
-  <rect x="620" y="95" width="120" height="50" fill="#a5f">
-    <animate attributeName="x" values="620;640;620" dur="2s" repeatCount="indefinite" />
-    <set attributeName="href" to="javascript:alert('smil-set-href')" begin="0s" />
-    <set attributeName="xlink:href" to="javascript:alert('smil-set-xlink-href')" begin="0s" />
-    <animate attributeName="href" values="javascript:alert('smil-animate-href')" begin="0s" dur="0.01s" />
-  </rect>
-  <animate onbegin="alert('smil-onbegin')" attributeName="width" from="1" to="2" dur="1s" />
-  <animateTransform attributeName="transform" type="rotate"
-                    from="0 680 120" to="360 680 120" dur="2s"
-                    onend="alert('smil-onend')" />
+		<text class="row-label" x="30" y="322">R4. Escaped/commented url() bypass attempts</text>
+		<text class="row-status-fail" x="735" y="322">FAIL if obfuscated url survives</text>
 
-  <!-- 8) Inline style attr URL / var / expression / protocol variants -->
-  <rect x="20" y="250" width="120" height="50"
-        style="fill:url(javascript:alert('inline-url-js'));" />
-    <rect x="170" y="250" width="120" height="50"
-      style="fill:url(data:text/html,%3Cscript%3Ealert('inline-url-data')%3C/script%3E);" />
-  <rect x="320" y="250" width="120" height="50"
-        style="fill:url(vbscript:msgbox('inline-url-vbs'));" />
-  <rect x="470" y="250" width="120" height="50"
-        style="fill:var(--inline-evil);" />
-  <rect x="620" y="250" width="120" height="50"
-        style="width:expression(alert('inline-expression'));" />
-    <rect x="760" y="250" width="120" height="50"
-      style="fill:url(data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%3E%3Cscript%3Ealert('inline-data-svg')%3C/script%3E%3C/svg%3E);" />
+		<text class="row-label" x="30" y="398">R5. Multiple event attributes on one element</text>
+		<text class="row-status-fail" x="735" y="398">FAIL if any on* attribute remains</text>
 
-  <!-- 9) Inline style attr comment / whitespace bypass attempts -->
-  <rect x="20" y="330" width="120" height="50"
-        style="fill:url/**/(https://example.com/comment-bypass-1);" />
-  <rect x="170" y="330" width="120" height="50"
-        style="fill:u\72l(https://example.com/escaped-url);" />
-  <rect x="320" y="330" width="120" height="50"
-        style="fill:  url ( javascript:alert('spaced-url-js') );" />
-  <rect x="470" y="330" width="120" height="50"
-        style="transform:none;" />
-  <rect x="620" y="330" width="120" height="50"
-        style="transform:rotate(deed);" />
-    <rect x="760" y="330" width="120" height="50"
-      style="fill:url\000028javascript:alert('css-unicode-url')\000029;" />
+		<text class="row-label" x="30" y="474">R6. Resource URL payload attributes</text>
+		<text class="row-status-fail" x="735" y="474">FAIL if javascript: refs remain</text>
 
-  <!-- 10) Multi-event attributes -->
-  <rect x="20" y="410" width="120" height="50" fill="#fc6"
-        onclick="alert('multi-onclick')"
-        onmouseover="alert('multi-onmouseover')"
-        onmouseenter="alert('multi-onmouseenter')"
-        onmouseleave="alert('multi-onmouseleave')"
-        onfocus="alert('multi-onfocus')"
-        onblur="alert('multi-onblur')" />
+		<text class="row-label" x="30" y="550">R7. Safe controls with safe-fill-ok class</text>
+		<text class="row-status-pass" x="735" y="550">PASS if these remain visible</text>
+	</g>
 
-  <!-- 11) Object/embed/iframe-like tags -->
-  <object data="javascript:alert('object-data-js')"></object>
-  <embed src="javascript:alert('embed-src-js')"></embed>
-  <iframe src="javascript:alert('iframe-src-js')"></iframe>
+	<!-- ============================================================ -->
+	<!-- 02) SCRIPT ELEMENTS                                          -->
+	<!-- Verify: Remove script elements entirely.                     -->
+	<!-- ============================================================ -->
+	<g id="raw-vectors" opacity="0.28">
+		<script>alert('script-inline');</script>
+		<script xlink:href="https://example.com/evil.js"></script>
 
-  <!-- 12) Metadata / desc payload strings -->
-  <metadata>
+		<!-- ============================================================ -->
+		<!-- 03) EVENT HANDLERS                                           -->
+		<!-- Verify: Drop all on* attributes (onload/onclick/onfocus...). -->
+		<!-- ============================================================ -->
+		<g id="events-root" onload="alert('onload-root')" onclick="alert('onclick-root')">
+			<rect
+				x="20"
+				y="20"
+				width="120"
+				height="50"
+				fill="#c44"
+				onmouseover="alert('onmouseover-rect')"
+				onfocus="alert('onfocus-rect')"
+			/>
+		</g>
+
+		<!-- ============================================================ -->
+		<!-- 04) href/xlink:href JAVASCRIPT/DATA URLS                     -->
+		<!-- Verify: Dangerous URL values are removed/neutralized.        -->
+		<!-- ============================================================ -->
+		<a href="javascript:alert('href-js')">
+			<rect x="170" y="20" width="120" height="50" fill="#f7a" />
+		</a>
+		<a xlink:href="javascript:alert('xlink-href-js')">
+			<rect x="320" y="20" width="120" height="50" fill="#fa7" />
+		</a>
+		<a href="data:text/html,%3Cscript%3Ealert('href-data')%3C/script%3E">
+			<rect x="470" y="20" width="120" height="50" fill="#7af" />
+		</a>
+		<a href="jAvaScRiPt:alert('href-js-mixed-case')">
+			<rect x="620" y="20" width="120" height="50" fill="#8cf" />
+		</a>
+		<a href="&#10;javascript:alert('href-js-leading-newline')">
+			<rect x="760" y="20" width="120" height="50" fill="#c8f" />
+		</a>
+
+		<!-- ============================================================ -->
+		<!-- 05) EXTERNAL REFERENCES (use/image)                          -->
+		<!-- Verify: javascript: and risky data URLs are stripped.        -->
+		<!-- ============================================================ -->
+		<use href="javascript:alert('use-href-js')" x="620" y="20"></use>
+		<use xlink:href="https://example.com/remote.svg#payload" x="760" y="20"></use>
+
+		<image
+			x="20"
+			y="95"
+			width="120"
+			height="50"
+			href="javascript:alert('image-href-js')"
+		/>
+		<image
+			x="170"
+			y="95"
+			width="120"
+			height="50"
+			xlink:href="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%3E%3Cscript%3Ealert('image-data-svg')%3C/script%3E%3C/svg%3E"
+		/>
+		<image
+			x="320"
+			y="95"
+			width="120"
+			height="50"
+			href="https://example.com/tracker.svg?vector=image-external"
+		/>
+
+		<!-- ============================================================ -->
+		<!-- 06) foreignObject HTML                                       -->
+		<!-- Verify: foreignObject or embedded HTML script vectors removed/safe. -->
+		<!-- ============================================================ -->
+		<foreignObject x="320" y="95" width="280" height="120">
+			<div xmlns="http://www.w3.org/1999/xhtml" style="font: 12px sans-serif;">
+				<img src="x" onerror="alert('foreignObject-img-onerror')" />
+				<iframe src="javascript:alert('foreignObject-iframe-js')"></iframe>
+				<a href="javascript:alert('foreignObject-link-js')">click</a>
+			</div>
+		</foreignObject>
+
+		<!-- ============================================================ -->
+		<!-- 07) SMIL / ANIMATION VECTORS                                 -->
+		<!-- Verify: event handlers and dangerous href mutations removed. -->
+		<!-- ============================================================ -->
+		<rect x="620" y="95" width="120" height="50" fill="#a5f">
+			<animate attributeName="x" values="620;640;620" dur="2s" repeatCount="indefinite" />
+			<set attributeName="href" to="javascript:alert('smil-set-href')" begin="0s" />
+			<set attributeName="xlink:href" to="javascript:alert('smil-set-xlink-href')" begin="0s" />
+			<animate
+				attributeName="href"
+				values="javascript:alert('smil-animate-href')"
+				begin="0s"
+				dur="0.01s"
+			/>
+		</rect>
+		<animate
+			onbegin="alert('smil-onbegin')"
+			attributeName="width"
+			from="1"
+			to="2"
+			dur="1s"
+		/>
+		<animateTransform
+			attributeName="transform"
+			type="rotate"
+			from="0 680 120"
+			to="360 680 120"
+			dur="2s"
+			onend="alert('smil-onend')"
+		/>
+
+		<!-- ============================================================ -->
+		<!-- 08) STYLE ATTRIBUTE: URL/VAR/EXPRESSION                      -->
+		<!-- Verify: keep only allowed props with safe values.            -->
+		<!-- ============================================================ -->
+		<rect
+			x="20"
+			y="250"
+			width="120"
+			height="50"
+			style="fill:url(javascript:alert('inline-url-js'));"
+		/>
+		<rect
+			x="170"
+			y="250"
+			width="120"
+			height="50"
+			style="fill:url(data:text/html,%3Cscript%3Ealert('inline-url-data')%3C/script%3E);"
+		/>
+		<rect
+			x="320"
+			y="250"
+			width="120"
+			height="50"
+			style="fill:url(vbscript:msgbox('inline-url-vbs'));"
+		/>
+		<rect
+			x="470"
+			y="250"
+			width="120"
+			height="50"
+			style="fill:var(--inline-evil);"
+		/>
+		<rect
+			x="620"
+			y="250"
+			width="120"
+			height="50"
+			style="width:expression(alert('inline-expression'));"
+		/>
+		<rect
+			x="760"
+			y="250"
+			width="120"
+			height="50"
+			style="fill:url(data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%3E%3Cscript%3Ealert('inline-data-svg')%3C/script%3E%3C/svg%3E);"
+		/>
+
+		<!-- ============================================================ -->
+		<!-- 09) STYLE ATTRIBUTE BYPASS ATTEMPTS                          -->
+		<!-- Verify: escaped/commented URL tricks are blocked.            -->
+		<!-- ============================================================ -->
+		<rect
+			x="20"
+			y="330"
+			width="120"
+			height="50"
+			style="fill:url/**/(https://example.com/comment-bypass-1);"
+		/>
+		<rect
+			x="170"
+			y="330"
+			width="120"
+			height="50"
+			style="fill:u\72l(https://example.com/escaped-url);"
+		/>
+		<rect
+			x="320"
+			y="330"
+			width="120"
+			height="50"
+			style="fill:  url ( javascript:alert('spaced-url-js') );"
+		/>
+		<rect
+			x="470"
+			y="330"
+			width="120"
+			height="50"
+			style="transform:none;"
+		/>
+		<rect
+			x="620"
+			y="330"
+			width="120"
+			height="50"
+			style="transform:rotate(deed);"
+		/>
+		<rect
+			x="760"
+			y="330"
+			width="120"
+			height="50"
+			style="fill:url\000028javascript:alert('css-unicode-url')\000029;"
+		/>
+
+		<!-- ============================================================ -->
+		<!-- 10) MANY EVENT ATTRIBUTES                                    -->
+		<!-- Verify: all event attributes removed.                        -->
+		<!-- ============================================================ -->
+		<rect
+			x="20"
+			y="410"
+			width="120"
+			height="50"
+			fill="#fc6"
+			onclick="alert('multi-onclick')"
+			onmouseover="alert('multi-onmouseover')"
+			onmouseenter="alert('multi-onmouseenter')"
+			onmouseleave="alert('multi-onmouseleave')"
+			onfocus="alert('multi-onfocus')"
+			onblur="alert('multi-onblur')"
+		/>
+
+		<!-- ============================================================ -->
+		<!-- 11) OBJECT/EMBED/IFRAME-LIKE TAGS                            -->
+		<!-- Verify: remove these non-SVG dangerous embeds.               -->
+		<!-- ============================================================ -->
+		<object data="javascript:alert('object-data-js')"></object>
+		<embed src="javascript:alert('embed-src-js')"></embed>
+		<iframe src="javascript:alert('iframe-src-js')"></iframe>
+
+		<!-- ============================================================ -->
+		<!-- 12) METADATA/TEXTUAL PAYLOADS                                -->
+		<!-- Verify: text remains inert, no executable behavior.          -->
+		<!-- ============================================================ -->
+		<metadata>
     <![CDATA[
       <script>alert('metadata-script')</script>
       javascript:alert('metadata-js-url')
     ]]>
   </metadata>
-  <desc><![CDATA["><script>alert('desc-breakout')</script>]]></desc>
+		<desc><![CDATA["><script>alert('desc-breakout')</script>]]></desc>
 
-  <!-- 13) Namespace tricks -->
-  <g xmlns:h="http://www.w3.org/1999/xhtml">
-    <h:script>alert('namespaced-html-script');</h:script>
-  </g>
+		<!-- ============================================================ -->
+		<!-- 13) NAMESPACE TRICKS                                          -->
+		<!-- Verify: namespaced script-like content is neutralized.       -->
+		<!-- ============================================================ -->
+		<g xmlns:h="http://www.w3.org/1999/xhtml">
+			<h:script>alert('namespaced-html-script');</h:script>
+		</g>
 
-  <!-- 14) Attribute-based URL payloads outside style -->
-  <filter id="f1" xlink:href="javascript:alert('filter-xlink-js')"></filter>
-  <mask id="m1" xlink:href="javascript:alert('mask-xlink-js')"></mask>
-  <pattern id="p1" xlink:href="javascript:alert('pattern-xlink-js')"></pattern>
+		<!-- ============================================================ -->
+		<!-- 14) URL PAYLOADS IN RESOURCE ATTRIBUTES                       -->
+		<!-- Verify: javascript: refs dropped from filter/mask/pattern.   -->
+		<!-- ============================================================ -->
+		<filter id="f1" xlink:href="javascript:alert('filter-xlink-js')"></filter>
+		<mask id="m1" xlink:href="javascript:alert('mask-xlink-js')"></mask>
+		<pattern id="p1" xlink:href="javascript:alert('pattern-xlink-js')"></pattern>
 
-  <!-- 15) Additional SVG resource vectors -->
-  <defs>
-    <filter id="fx-ext">
-      <feImage href="https://example.com/feimage.svg?vector=filter-external" />
-    </filter>
-    <mask id="mask-ext">
-      <image href="https://example.com/mask-image.svg?vector=mask-external" width="40" height="40" />
-    </mask>
-    <pattern id="pt-ext" width="20" height="20" patternUnits="userSpaceOnUse">
-      <image href="https://example.com/pattern-image.svg?vector=pattern-external" width="20" height="20" />
-    </pattern>
-  </defs>
-  <rect x="20" y="500" width="120" height="50" fill="#bbb" filter="url(#fx-ext)" />
-  <rect x="170" y="500" width="120" height="50" fill="#bbb" mask="url(#mask-ext)" />
-  <rect x="320" y="500" width="120" height="50" fill="url(#pt-ext)" />
+		<!-- ============================================================ -->
+		<!-- 15) ADDITIONAL EXTERNAL RESOURCE VECTORS                      -->
+		<!-- Verify: unsafe external refs handled according to policy.    -->
+		<!-- ============================================================ -->
+		<defs>
+			<filter id="fx-ext">
+				<feImage href="https://example.com/feimage.svg?vector=filter-external" />
+			</filter>
+			<mask id="mask-ext">
+				<image
+					href="https://example.com/mask-image.svg?vector=mask-external"
+					width="40"
+					height="40"
+				/>
+			</mask>
+			<pattern id="pt-ext" width="20" height="20" patternUnits="userSpaceOnUse">
+				<image
+					href="https://example.com/pattern-image.svg?vector=pattern-external"
+					width="20"
+					height="20"
+				/>
+			</pattern>
+		</defs>
 
-  <!-- 16) Safe controls (should survive sanitization) -->
-  <g id="safe-controls">
-    <rect class="safe-preview" x="20" y="590" width="120" height="50" />
-    <circle cx="200" cy="615" r="25" fill="steelblue" />
-    <text x="250" y="620" font-size="14">Safe content control</text>
-  </g>
+		<rect x="20" y="500" width="120" height="50" fill="#bbb" filter="url(#fx-ext)" />
+		<rect x="170" y="500" width="120" height="50" fill="#bbb" mask="url(#mask-ext)" />
+		<rect x="320" y="500" width="120" height="50" fill="url(#pt-ext)" />
+	</g>
 
-  <!-- Visual legend -->
-  <text x="20" y="680" font-size="14">Malicious SVG corpus loaded. Use sanitizer output inspection + network tab.</text>
-  <text x="20" y="705" font-size="12">Sections: global CSS, script, events, href/xlink, foreignObject, SMIL, style attrs, bypasses, external refs, SVG resources.</text>
+	<!-- ============================================================ -->
+	<!-- 16) SAFE CONTROLS                                             -->
+	<!-- Verify: class-based safe fill/stroke rules should survive.    -->
+	<!-- ============================================================ -->
+	<g id="safe-controls">
+		<rect class="safe-preview safe-fill-ok" x="20" y="590" width="120" height="50" />
+		<circle class="circle-safe-fill-ok" cx="200" cy="615" r="25" fill="steelblue" />
+		<path class="safe-fill-ok" d="M 250 635 L 280 585 L 310 635 Z" />
+		<text x="330" y="620" font-size="14">Safe class style control</text>
+
+		<!-- Extra valid baseline visuals to quickly detect structural breakage -->
+		<line class="baseline-axis" x1="470" y1="640" x2="850" y2="640" />
+		<line class="baseline-axis" x1="470" y1="640" x2="470" y2="575" />
+		<polyline class="baseline-line"
+			points="480,630 540,610 600,620 660,595 720,605 780,585 840,600" />
+		<text x="470" y="565" font-size="12">Valid baseline line chart (should remain visible)</text>
+	</g>
+
+	<!-- ============================================================ -->
+	<!-- 17) QUICK MANUAL CHECKLIST                                    -->
+	<!-- Verify after sanitize:                                        -->
+	<!-- - No script execution                                          -->
+	<!-- - No on* handlers                                              -->
+	<!-- - No javascript:/data:/vbscript: URLs in unsafe contexts       -->
+	<!-- - Only allowed SVG CSS props/selectors remain                  -->
+	<!-- - Safe controls still visible                                  -->
+	<!-- ============================================================ -->
+	<text x="20" y="700" font-size="14">
+		Malicious SVG corpus loaded. Inspect sanitized output and compare sections.
+	</text>
+	<text x="20" y="725" font-size="12">
+		This file is intentionally dangerous before sanitization.
+	</text>
+
+	<text x="20" y="770" font-size="14" font-weight="bold">
+		Visible Verification Notes
+	</text>
+	<text x="20" y="795" font-size="12">01: style selectors -> keep SVG targets, drop
+		body/html/*/:root/form.</text>
+	<text x="20" y="815" font-size="12">02: script elements -> remove entirely.</text>
+	<text x="20" y="835" font-size="12">03: on* handlers -> remove all event attributes.</text>
+	<text x="20" y="855" font-size="12">04: href/xlink javascript/data -> neutralize dangerous URLs.</text>
+	<text x="20" y="875" font-size="12">05: use/image refs -> block javascript and risky data
+		payloads.</text>
+	<text x="20" y="895" font-size="12">06: foreignObject HTML -> remove or neutralize scriptable
+		HTML vectors.</text>
+	<text x="20" y="915" font-size="12">07: SMIL href/event abuse -> remove dangerous mutations and
+		on* hooks.</text>
+	<text x="20" y="935" font-size="12">08: style attrs url/var/expression -> keep only safe
+		declarations.</text>
+	<text x="20" y="955" font-size="12">09: escaped/comment URL tricks -> block obfuscated url()
+		patterns.</text>
+	<text x="20" y="975" font-size="12">10: multi-event attributes -> strip every on* attribute.</text>
+	<text x="20" y="995" font-size="12">11: object/embed/iframe tags -> remove dangerous embeds.</text>
+	<text x="20" y="1015" font-size="12">12: metadata text payloads -> remain inert text only.</text>
+	<text x="20" y="1035" font-size="12">13: namespace tricks -> prevent namespaced script
+		execution.</text>
+	<text x="20" y="1055" font-size="12">14: filter/mask/pattern href payloads -> drop javascript
+		refs.</text>
+	<text x="20" y="1075" font-size="12">15: external resource vectors -> enforce policy for remote
+		refs.</text>
+	<text x="20" y="1095" font-size="12">16: safe-fill-ok classes -> keep valid class-based
+		fill/stroke styles.</text>
 </svg>
