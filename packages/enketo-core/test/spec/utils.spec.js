@@ -257,12 +257,17 @@ describe('SVG Sanitization', () => {
         expect(sanitized.querySelector('g')).to.not.be.null;
     });
 
-    it('should remove <style> elements to prevent page-wide CSS injection', () => {
+    it('should sanitize <style> elements and keep only safe CSS declarations', () => {
         const maliciousSvg = parser
             .parseFromString(
                 `
             <svg xmlns="http://www.w3.org/2000/svg">
-                <style>body { display: none !important; }</style>
+                <style>
+                    path { fill: red; position: fixed; stroke: green; }
+                    text { font-size: 12px; color: blue; background: yellow; }
+                    circle { fill: url(https://evil.example/fill); opacity: 0.5; }
+                    @import url(https://evil.example/import.css);
+                </style>
                 <path id="safe" d="M 10 10 L 20 20"/>
             </svg>
         `,
@@ -271,18 +276,25 @@ describe('SVG Sanitization', () => {
             .querySelector('svg');
 
         const sanitized = utils.sanitizeSvg(maliciousSvg);
+        const styleText = sanitized.querySelector('style').textContent;
 
-        expect(sanitized.querySelector('style')).to.be.null;
+        expect(styleText).to.contain('path{fill:red;stroke:green;}');
+        expect(styleText).to.contain('text{font-size:12px;color:blue;}');
+        expect(styleText).to.contain('circle{opacity:0.5;}');
+        expect(styleText).to.not.contain('position:fixed');
+        expect(styleText).to.not.contain('background:yellow');
+        expect(styleText).to.not.contain('url(');
+        expect(styleText).to.not.contain('@import');
         expect(sanitized.querySelector('path')).to.not.be.null;
     });
 
-    it('should remove style attributes to prevent CSS overlay attacks', () => {
+    it('should sanitize style attributes and keep only safe CSS declarations', () => {
         const maliciousSvg = parser
             .parseFromString(
                 `
             <svg xmlns="http://www.w3.org/2000/svg"
-                 style="position:fixed;top:0;left:0;right:0;bottom:0;z-index:9999">
-                <path id="safe" style="fill:red" d="M 10 10 L 20 20"/>
+                 style="opacity:0.8;position:fixed;fill:url(https://evil.example/a.svg)">
+                <path id="safe" style="fill:red;stroke:blue;background:yellow;transform:translate(10,20) rotate(45deg)" d="M 10 10 L 20 20"/>
             </svg>
         `,
                 'text/xml'
@@ -290,11 +302,39 @@ describe('SVG Sanitization', () => {
             .querySelector('svg');
 
         const sanitized = utils.sanitizeSvg(maliciousSvg);
+        const svgStyle = sanitized.getAttribute('style');
+        const pathStyle = sanitized.querySelector('path').getAttribute('style');
 
-        expect(sanitized.hasAttribute('style')).to.be.false;
-        expect(sanitized.querySelector('path').hasAttribute('style')).to.be
-            .false;
+        expect(svgStyle).to.equal('opacity:0.8;');
+        expect(pathStyle).to.contain('fill:red;');
+        expect(pathStyle).to.contain('stroke:blue;');
+        expect(pathStyle).to.contain(
+            'transform:translate(10,20) rotate(45deg);'
+        );
+        expect(pathStyle).to.not.contain('background:yellow');
+        expect(pathStyle).to.not.contain('url(');
         expect(sanitized.querySelector('#safe')).to.not.be.null;
+    });
+
+    it('should reject unsafe transform and url-like style values', () => {
+        const maliciousSvg = parser
+            .parseFromString(
+                `
+            <svg xmlns="http://www.w3.org/2000/svg">
+                <path
+                    id="safe"
+                    style="transform:translate(10,20) evil(1);fill:var(--x);stroke:expression(alert(1));opacity:1"
+                    d="M 10 10 L 20 20"/>
+            </svg>
+        `,
+                'text/xml'
+            )
+            .querySelector('svg');
+
+        const sanitized = utils.sanitizeSvg(maliciousSvg);
+        const pathStyle = sanitized.querySelector('path').getAttribute('style');
+
+        expect(pathStyle).to.equal('opacity:1;');
     });
 
     it('should return null for null input', () => {

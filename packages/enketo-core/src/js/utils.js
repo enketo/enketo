@@ -291,6 +291,109 @@ function encodeHtmlEntities(text) {
         .replace(/"/g, '&quot;');
 }
 
+const ALLOWED_SVG_STYLE_PROPERTIES = new Set([
+    'fill',
+    'fill-opacity',
+    'fill-rule',
+    'stroke',
+    'stroke-opacity',
+    'stroke-width',
+    'stroke-linecap',
+    'stroke-linejoin',
+    'stroke-miterlimit',
+    'stroke-dasharray',
+    'stroke-dashoffset',
+    'opacity',
+    'color',
+    'font-family',
+    'font-size',
+    'font-style',
+    'font-weight',
+    'text-anchor',
+    'letter-spacing',
+    'word-spacing',
+    'shape-rendering',
+    'text-rendering',
+    'image-rendering',
+    'transform',
+    'transform-origin',
+]);
+
+const BLOCKED_STYLE_VALUE =
+    /\b(url|var|expression)\s*\(|@import|javascript:|data:|vbscript:/i;
+
+const SAFE_TRANSFORM_VALUE =
+    /^(matrix|translate|scale|rotate|skewX|skewY)\([0-9eE+\-.,\s%deg]+\)(\s+(matrix|translate|scale|rotate|skewX|skewY)\([0-9eE+\-.,\s%deg]+\))*$/;
+
+function sanitizeStyleValue(prop, value) {
+    if (!value || BLOCKED_STYLE_VALUE.test(value)) {
+        return false;
+    }
+
+    if (prop === 'transform') {
+        return SAFE_TRANSFORM_VALUE.test(value.trim());
+    }
+
+    return true;
+}
+
+function sanitizeStyleDeclarations(styles) {
+    const output = [];
+    const seen = new Set();
+
+    Array.from(styles).forEach((propName) => {
+        const normalizedPropName = propName.toLowerCase();
+
+        if (
+            seen.has(normalizedPropName) ||
+            !ALLOWED_SVG_STYLE_PROPERTIES.has(normalizedPropName)
+        ) {
+            return;
+        }
+
+        const value = styles.getPropertyValue(propName).trim();
+
+        if (sanitizeStyleValue(normalizedPropName, value)) {
+            output.push(`${normalizedPropName}:${value};`);
+            seen.add(normalizedPropName);
+        }
+    });
+
+    return output.join('');
+}
+
+function sanitizeStyleElementText(node) {
+    if (!node || !node.ownerDocument) {
+        return '';
+    }
+
+    const parsedCssDocument = document.implementation.createHTMLDocument('');
+    const parsedCssStyleElement = parsedCssDocument.createElement('style');
+    parsedCssStyleElement.textContent = node.textContent;
+    parsedCssDocument.head.appendChild(parsedCssStyleElement);
+
+    const output = [];
+
+    try {
+        const { cssRules } = parsedCssStyleElement.sheet;
+
+        Array.from(cssRules).forEach((rule) => {
+            // Keep selector rules only; drop @import, @font-face, @media and others.
+            if (rule.type === CSSRule.STYLE_RULE && rule.selectorText) {
+                const declarations = sanitizeStyleDeclarations(rule.style);
+
+                if (declarations) {
+                    output.push(`${rule.selectorText}{${declarations}}`);
+                }
+            }
+        });
+    } catch {
+        return '';
+    }
+
+    return output.join('\n');
+}
+
 // Tags that are forbidden when DOMPurify sanitizes SVG content.
 const DOMPURIFY_SVG_CONFIG = {
     USE_PROFILES: { svg: true, svgFilters: true },
@@ -304,9 +407,7 @@ const DOMPURIFY_SVG_CONFIG = {
         'link',
         'meta',
         'script',
-        'style',
     ],
-
 };
 
 /**
@@ -334,15 +435,44 @@ function sanitizeSvg(svgElement) {
         )
     ).forEach((el) => el.remove());
 
-    // Use an inert document to prevent any potential code execution on live document during the sanitization process. 
-    const inertDoc = document.implementation.createHTMLDocument('');  
-    const container = inertDoc.createElement('div');  
-    container.appendChild(inertDoc.importNode(svgElement, true));  
-    const fragment = DOMPurify.sanitize(  
-        container.innerHTML,  
-        DOMPURIFY_SVG_CONFIG  
-    );  
-    return fragment.querySelector('svg');  
+    // Use an inert document to prevent any potential code execution on live document during the sanitization process.
+    const inertDoc = document.implementation.createHTMLDocument('');
+    const container = inertDoc.createElement('div');
+    container.appendChild(inertDoc.importNode(svgElement, true));
+
+    // Implementation reference:
+    // https://github.com/cure53/DOMPurify/blob/main/demos/hooks-sanitize-css-demo.html
+    DOMPurify.addHook('uponSanitizeElement', (node, data) => {
+        if (data.tagName === 'style') {
+            node.textContent = sanitizeStyleElementText(node);
+        }
+    });
+
+    DOMPurify.addHook('afterSanitizeAttributes', (node) => {
+        if (node.hasAttribute && node.hasAttribute('style')) {
+            const sanitizedStyle = sanitizeStyleDeclarations(node.style);
+
+            if (sanitizedStyle) {
+                node.setAttribute('style', sanitizedStyle);
+            } else {
+                node.removeAttribute('style');
+            }
+        }
+    });
+
+    let fragment;
+
+    try {
+        fragment = DOMPurify.sanitize(
+            container.innerHTML,
+            DOMPURIFY_SVG_CONFIG
+        );
+    } finally {
+        DOMPurify.removeHook('uponSanitizeElement');
+        DOMPurify.removeHook('afterSanitizeAttributes');
+    }
+
+    return fragment.querySelector('svg');
 }
 
 export {
