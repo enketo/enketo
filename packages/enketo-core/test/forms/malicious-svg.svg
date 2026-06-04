@@ -1,0 +1,181 @@
+<svg xmlns="http://www.w3.org/2000/svg"
+     xmlns:xlink="http://www.w3.org/1999/xlink"
+     width="900" height="1250" viewBox="0 0 900 1250">
+
+  <title>Malicious SVG Corpus for Sanitizer Testing</title>
+  <desc>Defensive test fixture only. Contains intentionally malicious patterns.</desc>
+
+  <!-- 1) Global / upscoped CSS selectors -->
+  <style>
+    body { opacity: 0.4; pointer-events: none; }
+    html, * { cursor: none !important; }
+    form { filter: blur(3px); }
+    :root { filter: saturate(0.1); }
+    rect.safe-preview { fill: #2e8b57; }
+
+    /* URL-based CSS attacks in style element */
+    .s-url-1 { fill: url(javascript:alert('css-url-javascript')); }
+    .s-url-2 { fill: url(data:text/html,%3Cscript%3Ealert('css-url-data')%3C/script%3E); }
+    .s-url-3 { fill: url(vbscript:msgbox('css-url-vbscript')); }
+    .s-var-1 { fill: var(--evil-fill); }
+    .s-exp-1 { width: expression(alert('css-expression')); }
+    .s-url-4 { clip-path: url(javascript:alert('css-clip-path-js')); }
+    .s-url-5 { cursor: url(javascript:alert('css-cursor-js')), auto; }
+
+    @import url(https://example.com/evil.css);
+    @media all {
+      body { opacity: 0.2 !important; }
+    }
+    @font-face {
+      font-family: leak;
+      src: url(https://example.com/leak.woff2);
+    }
+  </style>
+
+  <!-- 2) Script elements -->
+  <script>alert('script-inline');</script>
+  <script xlink:href="https://example.com/evil.js"></script>
+
+  <!-- 3) Root and element event handlers -->
+  <g id="events-root" onload="alert('onload-root')" onclick="alert('onclick-root')">
+    <rect x="20" y="20" width="120" height="50" fill="#c44"
+          onmouseover="alert('onmouseover-rect')"
+          onfocus="alert('onfocus-rect')" />
+  </g>
+
+  <!-- 4) href/xlink javascript and data URLs -->
+  <a href="javascript:alert('href-js')">
+    <rect x="170" y="20" width="120" height="50" fill="#f7a" />
+  </a>
+  <a xlink:href="javascript:alert('xlink-href-js')">
+    <rect x="320" y="20" width="120" height="50" fill="#fa7" />
+  </a>
+  <a href="data:text/html,%3Cscript%3Ealert('href-data')%3C/script%3E">
+    <rect x="470" y="20" width="120" height="50" fill="#7af" />
+  </a>
+  <a href="jAvaScRiPt:alert('href-js-mixed-case')">
+    <rect x="620" y="20" width="120" height="50" fill="#8cf" />
+  </a>
+  <a href="&#10;javascript:alert('href-js-leading-newline')">
+    <rect x="760" y="20" width="120" height="50" fill="#c8f" />
+  </a>
+
+  <!-- 5) External refs / use / image -->
+  <use href="javascript:alert('use-href-js')" x="620" y="20"></use>
+  <use xlink:href="https://example.com/remote.svg#payload" x="760" y="20"></use>
+  <image x="20" y="95" width="120" height="50"
+         href="javascript:alert('image-href-js')" />
+  <image x="170" y="95" width="120" height="50"
+         xlink:href="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%3E%3Cscript%3Ealert('image-data-svg')%3C/script%3E%3C/svg%3E" />
+    <image x="320" y="95" width="120" height="50"
+      href="https://example.com/tracker.svg?vector=image-external" />
+
+  <!-- 6) foreignObject HTML -->
+  <foreignObject x="320" y="95" width="280" height="120">
+    <div xmlns="http://www.w3.org/1999/xhtml" style="font: 12px sans-serif;">
+      <img src="x" onerror="alert('foreignObject-img-onerror')" />
+      <iframe src="javascript:alert('foreignObject-iframe-js')"></iframe>
+      <a href="javascript:alert('foreignObject-link-js')">click</a>
+    </div>
+  </foreignObject>
+
+  <!-- 7) SMIL / animation vectors -->
+  <rect x="620" y="95" width="120" height="50" fill="#a5f">
+    <animate attributeName="x" values="620;640;620" dur="2s" repeatCount="indefinite" />
+    <set attributeName="href" to="javascript:alert('smil-set-href')" begin="0s" />
+    <set attributeName="xlink:href" to="javascript:alert('smil-set-xlink-href')" begin="0s" />
+    <animate attributeName="href" values="javascript:alert('smil-animate-href')" begin="0s" dur="0.01s" />
+  </rect>
+  <animate onbegin="alert('smil-onbegin')" attributeName="width" from="1" to="2" dur="1s" />
+  <animateTransform attributeName="transform" type="rotate"
+                    from="0 680 120" to="360 680 120" dur="2s"
+                    onend="alert('smil-onend')" />
+
+  <!-- 8) Inline style attr URL / var / expression / protocol variants -->
+  <rect x="20" y="250" width="120" height="50"
+        style="fill:url(javascript:alert('inline-url-js'));" />
+    <rect x="170" y="250" width="120" height="50"
+      style="fill:url(data:text/html,%3Cscript%3Ealert('inline-url-data')%3C/script%3E);" />
+  <rect x="320" y="250" width="120" height="50"
+        style="fill:url(vbscript:msgbox('inline-url-vbs'));" />
+  <rect x="470" y="250" width="120" height="50"
+        style="fill:var(--inline-evil);" />
+  <rect x="620" y="250" width="120" height="50"
+        style="width:expression(alert('inline-expression'));" />
+    <rect x="760" y="250" width="120" height="50"
+      style="fill:url(data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%3E%3Cscript%3Ealert('inline-data-svg')%3C/script%3E%3C/svg%3E);" />
+
+  <!-- 9) Inline style attr comment / whitespace bypass attempts -->
+  <rect x="20" y="330" width="120" height="50"
+        style="fill:url/**/(https://example.com/comment-bypass-1);" />
+  <rect x="170" y="330" width="120" height="50"
+        style="fill:u\72l(https://example.com/escaped-url);" />
+  <rect x="320" y="330" width="120" height="50"
+        style="fill:  url ( javascript:alert('spaced-url-js') );" />
+  <rect x="470" y="330" width="120" height="50"
+        style="transform:none;" />
+  <rect x="620" y="330" width="120" height="50"
+        style="transform:rotate(deed);" />
+    <rect x="760" y="330" width="120" height="50"
+      style="fill:url\000028javascript:alert('css-unicode-url')\000029;" />
+
+  <!-- 10) Multi-event attributes -->
+  <rect x="20" y="410" width="120" height="50" fill="#fc6"
+        onclick="alert('multi-onclick')"
+        onmouseover="alert('multi-onmouseover')"
+        onmouseenter="alert('multi-onmouseenter')"
+        onmouseleave="alert('multi-onmouseleave')"
+        onfocus="alert('multi-onfocus')"
+        onblur="alert('multi-onblur')" />
+
+  <!-- 11) Object/embed/iframe-like tags -->
+  <object data="javascript:alert('object-data-js')"></object>
+  <embed src="javascript:alert('embed-src-js')"></embed>
+  <iframe src="javascript:alert('iframe-src-js')"></iframe>
+
+  <!-- 12) Metadata / desc payload strings -->
+  <metadata>
+    <![CDATA[
+      <script>alert('metadata-script')</script>
+      javascript:alert('metadata-js-url')
+    ]]>
+  </metadata>
+  <desc><![CDATA["><script>alert('desc-breakout')</script>]]></desc>
+
+  <!-- 13) Namespace tricks -->
+  <g xmlns:h="http://www.w3.org/1999/xhtml">
+    <h:script>alert('namespaced-html-script');</h:script>
+  </g>
+
+  <!-- 14) Attribute-based URL payloads outside style -->
+  <filter id="f1" xlink:href="javascript:alert('filter-xlink-js')"></filter>
+  <mask id="m1" xlink:href="javascript:alert('mask-xlink-js')"></mask>
+  <pattern id="p1" xlink:href="javascript:alert('pattern-xlink-js')"></pattern>
+
+  <!-- 15) Additional SVG resource vectors -->
+  <defs>
+    <filter id="fx-ext">
+      <feImage href="https://example.com/feimage.svg?vector=filter-external" />
+    </filter>
+    <mask id="mask-ext">
+      <image href="https://example.com/mask-image.svg?vector=mask-external" width="40" height="40" />
+    </mask>
+    <pattern id="pt-ext" width="20" height="20" patternUnits="userSpaceOnUse">
+      <image href="https://example.com/pattern-image.svg?vector=pattern-external" width="20" height="20" />
+    </pattern>
+  </defs>
+  <rect x="20" y="500" width="120" height="50" fill="#bbb" filter="url(#fx-ext)" />
+  <rect x="170" y="500" width="120" height="50" fill="#bbb" mask="url(#mask-ext)" />
+  <rect x="320" y="500" width="120" height="50" fill="url(#pt-ext)" />
+
+  <!-- 16) Safe controls (should survive sanitization) -->
+  <g id="safe-controls">
+    <rect class="safe-preview" x="20" y="590" width="120" height="50" />
+    <circle cx="200" cy="615" r="25" fill="steelblue" />
+    <text x="250" y="620" font-size="14">Safe content control</text>
+  </g>
+
+  <!-- Visual legend -->
+  <text x="20" y="680" font-size="14">Malicious SVG corpus loaded. Use sanitizer output inspection + network tab.</text>
+  <text x="20" y="705" font-size="12">Sections: global CSS, script, events, href/xlink, foreignObject, SMIL, style attrs, bypasses, external refs, SVG resources.</text>
+</svg>
