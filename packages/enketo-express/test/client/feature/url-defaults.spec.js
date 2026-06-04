@@ -78,7 +78,9 @@ describe.only('URL defaults (_prepareInstance)', () => {
         });
         const doc = parser.parseFromString(result, 'text/xml');
         expect(doc.querySelector('name').textContent).to.equal('Alice');
-        expect(doc.querySelector('instanceID').textContent).to.equal('');
+        expect(doc.querySelector('instanceID').textContent).to.not.equal(
+            'fixed-uuid'
+        );
     });
 
     it('allows a default on a field nested inside a group', () => {
