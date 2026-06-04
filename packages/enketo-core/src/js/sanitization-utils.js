@@ -391,6 +391,31 @@ const DOMPURIFY_SVG_CONFIG = {
     ],
 };
 
+const XLINK_NAMESPACE = 'http://www.w3.org/1999/xlink';
+
+function isLocalSvgReference(value) {
+    return /^#[^\s]+$/.test((value || '').trim());
+}
+
+function sanitizeHrefAttributes(node) {
+    if (!node || !node.hasAttribute) {
+        return;
+    }
+
+    const href = node.getAttribute('href');
+    if (href != null && !isLocalSvgReference(href)) {
+        node.removeAttribute('href');
+    }
+
+    const xlinkHref =
+        node.getAttributeNS(XLINK_NAMESPACE, 'href') ||
+        node.getAttribute('xlink:href');
+    if (xlinkHref != null && !isLocalSvgReference(xlinkHref)) {
+        node.removeAttributeNS(XLINK_NAMESPACE, 'href');
+        node.removeAttribute('xlink:href');
+    }
+}
+
 /**
  * Sanitizes an SVG element using DOMPurify, removing potentially dangerous
  * elements and attributes (scripts, event handlers, javascript: URLs, etc.).
@@ -430,6 +455,8 @@ function sanitizeSvg(svgElement) {
     });
 
     DOMPurify.addHook('afterSanitizeAttributes', (node) => {
+        sanitizeHrefAttributes(node);
+
         if (node.hasAttribute && node.hasAttribute('style')) {
             const sanitizedStyle = sanitizeInlineStyleText(
                 node.getAttribute('style')

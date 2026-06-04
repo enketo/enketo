@@ -369,6 +369,47 @@ describe('SVG Sanitization', () => {
         expect(sanitized.querySelector('#safe')).to.not.be.null;
     });
 
+    it('should remove external href references and keep local fragment refs', () => {
+        const maliciousSvg = parser
+            .parseFromString(
+                `
+            <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+                <defs>
+                    <path id="safe-path" d="M 10 10 L 20 20" />
+                    <pattern id="pt-base" width="10" height="10" />
+                    <pattern id="pt-safe-ref" xlink:href="#pt-base" />
+                    <pattern id="pt-unsafe-ref" xlink:href="https://evil.example/remote.svg#pt" />
+                </defs>
+                <image id="img-unsafe" href="https://evil.example/tracker.svg" width="10" height="10" />
+                <a id="a-unsafe" href="https://evil.example">link</a>
+                <a id="a-safe" href="#safe-path">safe link</a>
+            </svg>
+        `,
+                'text/xml'
+            )
+            .querySelector('svg');
+
+        const sanitized = utils.sanitizeSvg(maliciousSvg);
+
+        expect(
+            sanitized
+                .querySelector('#pt-safe-ref')
+                .getAttributeNS('http://www.w3.org/1999/xlink', 'href')
+        ).to.equal('#pt-base');
+        expect(
+            sanitized
+                .querySelector('#pt-unsafe-ref')
+                .getAttributeNS('http://www.w3.org/1999/xlink', 'href')
+        ).to.be.null;
+        expect(sanitized.querySelector('#img-unsafe').hasAttribute('href')).to.be
+            .false;
+        expect(sanitized.querySelector('#a-unsafe').hasAttribute('href')).to.be
+            .false;
+        expect(sanitized.querySelector('#a-safe').getAttribute('href')).to.equal(
+            '#safe-path'
+        );
+    });
+
     it('should reject unsafe transform and url-like style values', () => {
         const maliciousSvg = parser
             .parseFromString(
