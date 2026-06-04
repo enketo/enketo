@@ -277,7 +277,10 @@ describe('SVG Sanitization', () => {
         expect(sanitized.querySelector('text#label')).to.not.be.null;
         expect(sanitized.querySelector('tspan#suffix')).to.not.be.null;
         expect(
-            sanitized.querySelector('text#label').textContent.replace(/\s+/g, ' ').trim()
+            sanitized
+                .querySelector('text#label')
+                .textContent.replace(/\s+/g, ' ')
+                .trim()
         ).to.equal('Safe text node');
     });
 
@@ -401,13 +404,13 @@ describe('SVG Sanitization', () => {
                 .querySelector('#pt-unsafe-ref')
                 .getAttributeNS('http://www.w3.org/1999/xlink', 'href')
         ).to.be.null;
-        expect(sanitized.querySelector('#img-unsafe').hasAttribute('href')).to.be
-            .false;
+        expect(sanitized.querySelector('#img-unsafe').hasAttribute('href')).to
+            .be.false;
         expect(sanitized.querySelector('#a-unsafe').hasAttribute('href')).to.be
             .false;
-        expect(sanitized.querySelector('#a-safe').getAttribute('href')).to.equal(
-            '#safe-path'
-        );
+        expect(
+            sanitized.querySelector('#a-safe').getAttribute('href')
+        ).to.equal('#safe-path');
     });
 
     it('should reject unsafe transform and url-like style values', () => {
