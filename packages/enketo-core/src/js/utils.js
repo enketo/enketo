@@ -325,43 +325,77 @@ const BLOCKED_STYLE_VALUE =
 const SAFE_TRANSFORM_VALUE =
     /^(matrix|translate|scale|rotate|skewX|skewY)\([0-9eE+\-.,\s%deg]+\)(\s+(matrix|translate|scale|rotate|skewX|skewY)\([0-9eE+\-.,\s%deg]+\))*$/;
 
-function sanitizeStyleValue(prop, value) {
-    if (!value || BLOCKED_STYLE_VALUE.test(value)) {
-        return false;
+function sanitizeStyleProp(propName, value) {
+    const normalizedPropName = propName.trim().toLowerCase();
+    let normalizedValue = value.trim();
+
+    if (!ALLOWED_SVG_STYLE_PROPERTIES.has(normalizedPropName)) {
+        return null;
     }
 
-    if (prop === 'transform') {
-        return SAFE_TRANSFORM_VALUE.test(value.trim());
+    if (!normalizedValue || BLOCKED_STYLE_VALUE.test(normalizedValue)) {
+        return null;
     }
 
-    return true;
+    if (
+        normalizedPropName === 'transform' &&
+        !SAFE_TRANSFORM_VALUE.test(normalizedValue)
+    ) {
+        return null;
+    }
+
+    return {
+        propName: normalizedPropName,
+        value: normalizedValue,
+    };
 }
 
 function sanitizeStyleDeclarations(styles) {
-    const output = [];
-    const seen = new Set();
+    const output = {};
 
     Array.from(styles).forEach((propName) => {
-        const normalizedPropName = propName.toLowerCase();
-
-        if (
-            seen.has(normalizedPropName) ||
-            !ALLOWED_SVG_STYLE_PROPERTIES.has(normalizedPropName)
-        ) {
-            return;
-        }
-
         const value = styles.getPropertyValue(propName).trim();
+        const sanitizedProp = sanitizeStyleProp(propName, value);
 
-        if (sanitizeStyleValue(normalizedPropName, value)) {
-            output.push(`${normalizedPropName}:${value};`);
-            seen.add(normalizedPropName);
+        if (sanitizedProp) {
+            output[sanitizedProp.propName] = sanitizedProp.value;
         }
     });
 
-    return output.join('');
+    return Object.entries(output)
+        .map(([propName, value]) => `${propName}:${value};`)
+        .join('');
 }
 
+function sanitizeInlineStyleText(styleText) {
+    if (!styleText) {
+        return '';
+    }
+
+    const output = {};
+
+    styleText.split(';').forEach((declaration) => {
+        const [propName, ...valueParts] = declaration.split(':');
+        const value = valueParts.join(':').trim();
+
+        if (!propName || !value) {
+            return;
+        }
+
+        const sanitizedProp = sanitizeStyleProp(propName, value);
+
+        if (sanitizedProp) {
+            output[sanitizedProp.propName] = sanitizedProp.value;
+        }
+    });
+
+    return Object.entries(output)
+        .map(([propName, value]) => `${propName}:${value};`)
+        .join('');
+}
+
+// Parses and separates the text content of a <style> element
+// into individual rules and declarations to sanitize them.
 function sanitizeStyleElementText(node) {
     if (!node || !node.ownerDocument) {
         return '';
@@ -440,8 +474,7 @@ function sanitizeSvg(svgElement) {
     const container = inertDoc.createElement('div');
     container.appendChild(inertDoc.importNode(svgElement, true));
 
-    // Implementation reference:
-    // https://github.com/cure53/DOMPurify/blob/main/demos/hooks-sanitize-css-demo.html
+    // Hooks to deal with sanitization of style elements and attributes, based on the approach described in
     DOMPurify.addHook('uponSanitizeElement', (node, data) => {
         if (data.tagName === 'style') {
             node.textContent = sanitizeStyleElementText(node);
@@ -450,7 +483,9 @@ function sanitizeSvg(svgElement) {
 
     DOMPurify.addHook('afterSanitizeAttributes', (node) => {
         if (node.hasAttribute && node.hasAttribute('style')) {
-            const sanitizedStyle = sanitizeStyleDeclarations(node.style);
+            const sanitizedStyle = sanitizeInlineStyleText(
+                node.getAttribute('style')
+            );
 
             if (sanitizedStyle) {
                 node.setAttribute('style', sanitizedStyle);

@@ -141,9 +141,8 @@ describe('SVG XSS sanitization via image-map widget', () => {
             expect(svg.querySelector('path'), 'Safe <path> was removed').to.not
                 .be.null;
 
-            // Dangerous elements must be absent
+            // Dangerous executable elements must be absent
             expect(svg.querySelector('script'), '<script> survived').to.be.null;
-            expect(svg.querySelector('style'), '<style> survived').to.be.null;
             expect(
                 svg.querySelector('foreignObject'),
                 '<foreignObject> survived'
@@ -163,17 +162,30 @@ describe('SVG XSS sanitization via image-map widget', () => {
                 });
             });
 
-            // No style attributes (CSS injection prevention)
+            // Style tags/attributes may remain, but must be sanitized.
+            const styleElement = svg.querySelector('style');
+            expect(styleElement, 'Sanitized <style> should be present').to.not
+                .be.null;
+
+            const styleText = styleElement.textContent || '';
+            expect(styleText).to.not.contain('display:none');
+            expect(styleText).to.not.contain('background:red');
+            expect(styleText).to.not.contain('!important');
+            expect(styleText).to.not.contain('@import');
+            expect(styleText).to.not.contain('url(');
+
             expect(
-                svg.hasAttribute('style'),
-                'style attribute survived on root <svg>'
-            ).to.be.false;
-            svg.querySelectorAll('[style]').forEach((el) => {
-                expect(
-                    el.hasAttribute('style'),
-                    `style attribute survived on <${el.tagName}>`
-                ).to.be.false;
-            });
+                svg.getAttribute('style'),
+                'Unsafe style attribute survived on root <svg>'
+            ).to.be.null;
+
+            const styleAttrRect = svg.querySelector('#style-attr');
+            expect(styleAttrRect, 'Expected #style-attr to exist').to.not.be
+                .null;
+            expect(
+                styleAttrRect.getAttribute('style'),
+                'Expected only safe style declarations to survive'
+            ).to.equal('fill:red;');
 
             // No javascript: URLs on any href (plain or xlink)
             /* eslint-disable no-script-url */
