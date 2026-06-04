@@ -15,7 +15,7 @@ const MODEL = `<model>
   </instance>
 </model>`;
 
-describe.only('URL defaults (_prepareInstance)', () => {
+describe('URL defaults (_prepareInstance)', () => {
     const parser = new DOMParser();
 
     it('applies a default value to a matching leaf node', () => {
