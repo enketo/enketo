@@ -238,6 +238,29 @@ const PROTECTED_META_FIELDS = new Set([
     'audit',
 ]);
 
+function _isAllowedDefault(path, targetNode, rootElement) {
+    // Defaults should not target attributes
+    if (path.includes('@')) return false;
+    // Must resolve to a node strictly inside the primary instance root
+    if (
+        !targetNode ||
+        !rootElement.contains(targetNode) ||
+        targetNode === rootElement
+    )
+        return false;
+    // Defaults should not target groups, only leaf fields
+    if (targetNode.children.length > 0) return false;
+    // Standard ODK metadata fields must not be overridden
+    const metaEl = rootElement.querySelector(':scope > meta');
+    if (
+        metaEl &&
+        metaEl.contains(targetNode) &&
+        PROTECTED_META_FIELDS.has(targetNode.localName)
+    )
+        return false;
+    return true;
+}
+
 export function _prepareInstance(modelStr, defaults) {
     let model;
     let init;
@@ -251,38 +274,15 @@ export function _prepareInstance(modelStr, defaults) {
                     full: false,
                 });
             init = init || model.init();
-            // Defaults should not target attributes
-            if (path.includes('@')) {
-                continue;
-            }
             const targetNode = model.node(path).getElement();
-            // Must resolve to a node strictly inside the primary instance root
-            if (
-                !targetNode ||
-                !model.rootElement.contains(targetNode) ||
-                targetNode === model.rootElement
-            ) {
-                continue;
+            if (_isAllowedDefault(path, targetNode, model.rootElement)) {
+                // if this fails, the FormModel will output a console error and ignore the instruction
+                model.node(path).setVal(defaults[path]);
+                // TODO: would be good to not include nodes that weren't in the defaults parameter
+                // HOWEVER, that would also set number of repeats to 0, which may be undesired
+                // TODO: would be good to just pass model along instead of converting to string first
+                existingInstance = model.getStr();
             }
-            // Defaults should not target groups, only leaf fields
-            if (targetNode.children.length > 0) {
-                continue;
-            }
-            // Standard ODK metadata fields must not be overridden
-            const metaEl = model.rootElement.querySelector(':scope > meta');
-            if (
-                metaEl &&
-                metaEl.contains(targetNode) &&
-                PROTECTED_META_FIELDS.has(targetNode.localName)
-            ) {
-                continue;
-            }
-            // if this fails, the FormModel will output a console error and ignore the instruction
-            model.node(path).setVal(defaults[path]);
-            // TODO: would be good to not include nodes that weren't in the defaults parameter
-            // HOWEVER, that would also set number of repeats to 0, which may be undesired
-            // TODO: would be good to just pass model along instead of converting to string first
-            existingInstance = model.getStr();
         }
     }
 
