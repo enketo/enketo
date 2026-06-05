@@ -222,7 +222,46 @@ function _swapTheme(survey) {
     return Promise.reject(new Error('Received form incomplete'));
 }
 
-function _prepareInstance(modelStr, defaults) {
+// Standard ODK metadata fields that must not be pre-populated via URL defaults.
+// https://getodk.github.io/xforms-spec/#metadata
+const PROTECTED_META_FIELDS = new Set([
+    'instanceID',
+    'instanceName',
+    'timeStart',
+    'timeEnd',
+    'today',
+    'userID',
+    'deviceID',
+    'deprecatedID',
+    'email',
+    'phoneNumber',
+    'audit',
+]);
+
+function _isAllowedDefault(path, targetNode, rootElement) {
+    // Defaults should not target attributes
+    if (path.includes('@')) return false;
+    // Must resolve to a node strictly inside the primary instance root
+    if (
+        !targetNode ||
+        !rootElement.contains(targetNode) ||
+        targetNode === rootElement
+    )
+        return false;
+    // Defaults should not target groups, only leaf fields
+    if (targetNode.children.length > 0) return false;
+    // Standard ODK metadata fields must not be overridden
+    const metaEl = rootElement.querySelector(':scope > meta');
+    if (
+        metaEl &&
+        metaEl.contains(targetNode) &&
+        PROTECTED_META_FIELDS.has(targetNode.localName)
+    )
+        return false;
+    return true;
+}
+
+export function _prepareInstance(modelStr, defaults) {
     let model;
     let init;
     let existingInstance = null;
@@ -235,14 +274,15 @@ function _prepareInstance(modelStr, defaults) {
                     full: false,
                 });
             init = init || model.init();
-            if (Object.prototype.hasOwnProperty.call(defaults, path)) {
+            const targetNode = model.node(path).getElement();
+            if (_isAllowedDefault(path, targetNode, model.rootElement)) {
                 // if this fails, the FormModel will output a console error and ignore the instruction
                 model.node(path).setVal(defaults[path]);
+                // TODO: would be good to not include nodes that weren't in the defaults parameter
+                // HOWEVER, that would also set number of repeats to 0, which may be undesired
+                // TODO: would be good to just pass model along instead of converting to string first
+                existingInstance = model.getStr();
             }
-            // TODO: would be good to not include nodes that weren't in the defaults parameter
-            // HOWEVER, that would also set number of repeats to 0, which may be undesired
-            // TODO: would be good to just pass model along instead of converting to string first
-            existingInstance = model.getStr();
         }
     }
 
