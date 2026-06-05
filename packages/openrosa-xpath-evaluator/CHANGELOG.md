@@ -3,6 +3,16 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## [3.2.3] - 2026-06-05
+
+### Fixed
+
+- Dereference argument to `digest()` function so dynamic values are evaluated correctly (#1489)
+
+### Technical
+
+- Upgrade dependencies (#1521)
+
 ## [3.2.2] - 2026-03-16
 
 ### Changed

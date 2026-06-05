@@ -3,6 +3,21 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## 7.6.2 - 2026-06-05
+
+### Added
+
+- Full-screen custom submission message for single-submission forms (#1504, #1507)
+
+### Fixed
+
+- Ensure default params can't target unexpected form elements (#1532)
+- Update Content Security Policy to allow blob URLs for audio recording playback (#1490)
+
+### Technical
+
+- Upgrade dependencies (#1521)
+
 ## 7.6.1 - 2026-03-15
 
 ### Added
