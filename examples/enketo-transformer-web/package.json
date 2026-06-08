@@ -21,7 +21,7 @@
     "dependencies": {
         "@solidjs/router": "^0.16.1",
         "babel-preset-solid": "^1.9.12",
-        "enketo-transformer": "4.3.0",
+        "enketo-transformer": "4.3.1",
         "solid-js": "^1.9.13",
         "vite-plugin-solid": "^2.11.12"
     }
