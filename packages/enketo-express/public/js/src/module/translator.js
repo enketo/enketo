@@ -3,7 +3,7 @@ import HttpApi from 'i18next-http-backend';
 import LanguageDetector from 'i18next-browser-languagedetector';
 import settings from './settings';
 
-const LOADPATH = `${settings.basePath}${settings.offlinePath}/locales/build/__lng__/translation-combined.json`;
+const LOADPATH = `${settings.basePath}${settings.offlinePath}/locales/build/{{lng}}/translation-combined.json`;
 const LANGEXTRACT = /^[a-z]{2,3}/;
 const range = document.createRange();
 
@@ -141,7 +141,7 @@ const localize = (container, lng) => {
 const loadTranslation = (lang) => {
     if (lang) {
         console.log(`loading translations for ${lang}`);
-        fetch(LOADPATH.replace('__lng__', lang));
+        fetch(LOADPATH.replace('{{lng}}', lang));
         // Do nothing. It is now cached. Wonderful.
     }
 };

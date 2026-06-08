@@ -3,6 +3,24 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## [9.0.4] - 2026-06-05
+
+### Added
+
+- Improve SVG sanitization using DOMPurify to prevent XSS attacks (#1518)
+- Add timestamp postfix to uploaded audio filenames to avoid duplicates (#1510)
+- Strip invalid XML characters from text input to prevent submission errors (#1499)
+
+### Fixed
+
+- Show dynamic value in itemset label for forms without repeats (#1485)
+- Prevent session creation if model is invalid (#1501)
+- Value calculation in repeat groups with `xforms-value-changed` (#1486)
+
+### Technical
+
+- Upgrade dependencies (#1521)
+
 ## [9.0.3] - 2026-03-15
 
 ### Fixed
