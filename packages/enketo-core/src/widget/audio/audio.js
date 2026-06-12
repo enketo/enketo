@@ -170,12 +170,12 @@ class AudioWidget extends Widget {
         const stepFragment = document.createRange().createContextualFragment(
             `<div class="step-action-select">
                 <div class="button-group">
-                    <button class="btn-record btn btn-primary small">
+                    <button type="button" class="btn-record btn btn-primary small">
                     <i class="icon icon-volume-down"></i> ${t(
                         'audioRecording.startRecording'
                     )}
                     </button>
-                    <button class="btn-upload btn btn-default small">
+                    <button type="button" class="btn-upload btn btn-default small">
                     <i class="icon icon-upload"></i> ${t(
                         'audioRecording.uploadAudioFile'
                     )}
@@ -227,13 +227,13 @@ class AudioWidget extends Widget {
                     </div>
                     <canvas class="audio-waveform"></canvas>
                     <div class="recording-controls">
-                        <button class="btn-icon-only btn-pause">
+                        <button type="button" class="btn-icon-only btn-pause">
                             <i class="icon icon-pause"></i>
                         </button>
-                        <button class="btn-icon-only btn-resume hidden">
+                        <button type="button" class="btn-icon-only btn-resume hidden">
                             <i class="icon icon-microphone"></i>
                         </button>
-                        <button class="btn-icon-only btn-stop">
+                        <button type="button" class="btn-icon-only btn-stop">
                             <i class="icon icon-stop"></i>
                         </button>
                     </div>
@@ -329,10 +329,10 @@ class AudioWidget extends Widget {
         const stepFragment = document.createRange().createContextualFragment(
             `<div class="step-preview">
                 <div class="audio-preview">
-                    <button class="btn-icon-only btn-play">
+                    <button type="button" class="btn-icon-only btn-play">
                         <i class="icon icon-play"></i>
                     </button>
-                    <button class="btn-icon-only btn-pause hidden">
+                    <button type="button" class="btn-icon-only btn-pause hidden">
                         <i class="icon icon-pause"></i>
                     </button>
                     <span class="time-progress">00:00 / 1:24</span>
@@ -342,10 +342,10 @@ class AudioWidget extends Widget {
                         </div>
                     </div>
                 </div>
-                <button class="btn-icon-only btn-download">
+                <button type="button" class="btn-icon-only btn-download">
                     <i class="icon icon-download"></i>
                 </button>
-                <button class="btn-icon-only btn-delete">
+                <button type="button" class="btn-icon-only btn-delete">
                     <i class="icon icon-trash"></i>
                 </button>
             </div>`
