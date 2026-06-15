@@ -15,6 +15,9 @@ const URL_RE = /[a-zA-Z0-9+-.]+?:\/\//;
 /** @type {Record<string, string>} */
 let instanceAttachments;
 
+/** @type {Map<string, Blob>} */
+const prefetchedBlobCache = new Map();
+
 /**
  * Initialize the file manager .
  *
@@ -41,6 +44,48 @@ function isWaitingForPermissions() {
  */
 function setInstanceAttachments(attachments) {
     instanceAttachments = attachments;
+    if (!attachments) {
+        prefetchedBlobCache.clear();
+    }
+}
+
+/**
+ * Pre-fetches all instance attachment URLs and caches the resulting Blobs.
+ * Should be called immediately after setInstanceAttachments while the
+ * server-side cache is still fresh.
+ *
+ * @return {Promise<void>}
+ */
+function prefetchInstanceAttachments() {
+    if (!instanceAttachments) {
+        return Promise.resolve();
+    }
+
+    const fetchPromises = Object.entries(instanceAttachments).map(
+        ([filename, url]) =>
+            fetch(url, { credentials: 'include' })
+                .then((response) => {
+                    if (!response.ok) {
+                        throw new Error(
+                            `Failed to fetch ${filename}: ${response.status}`
+                        );
+                    }
+
+                    return response.blob();
+                })
+                .then((blob) => {
+                    blob.name = filename;
+                    prefetchedBlobCache.set(filename, blob);
+                })
+                .catch((err) => {
+                    console.warn(
+                        `Failed to prefetch attachment "${filename}":`,
+                        err
+                    );
+                })
+    );
+
+    return Promise.all(fetchPromises).then(() => undefined);
 }
 /**
  * Obtains a url that can be used to show a preview of the file when used
@@ -204,9 +249,11 @@ function getCurrentFiles() {
         // get any file names of files that were loaded as DataURI and have remained unchanged (i.e. loaded from Storage)
         fileInputs
             .filter((input) => input.matches('[data-loaded-file-name]'))
-            .forEach((input) =>
-                files.push(input.getAttribute('data-loaded-file-name'))
-            );
+            .forEach((input) => {
+                const filename = input.getAttribute('data-loaded-file-name');
+                const cached = prefetchedBlobCache.get(filename);
+                files.push(cached || filename);
+            });
 
         return files;
     });
@@ -269,6 +316,7 @@ export default {
     isWaitingForPermissions,
     init,
     setInstanceAttachments,
+    prefetchInstanceAttachments,
     getFileUrl,
     getObjectUrl,
     getCurrentFiles,

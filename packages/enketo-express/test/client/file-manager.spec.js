@@ -82,6 +82,102 @@ describe('File manager', () => {
             });
         });
 
+        describe('prefetching instance attachments', () => {
+            afterEach(() => {
+                fileManager.setInstanceAttachments(null);
+            });
+
+            it('prefetchInstanceAttachments fetches and caches blobs', async () => {
+                const content = 'test image content';
+                const dataURI = `data:image/jpeg;base64,${btoa(content)}`;
+
+                fileManager.setInstanceAttachments({
+                    'photo.jpg': dataURI,
+                });
+
+                await fileManager.prefetchInstanceAttachments();
+
+                // Verify by creating a DOM input with data-loaded-file-name
+                // and checking getCurrentFiles returns a Blob
+                const formEl = document.createElement('form');
+                formEl.className = 'or';
+                const input = document.createElement('input');
+                input.type = 'file';
+                input.setAttribute('data-loaded-file-name', 'photo.jpg');
+                formEl.appendChild(input);
+                document.body.appendChild(formEl);
+
+                try {
+                    const files = await fileManager.getCurrentFiles();
+                    expect(files.length).to.equal(1);
+                    expect(files[0]).to.be.an.instanceof(Blob);
+                    expect(files[0].name).to.equal('photo.jpg');
+                } finally {
+                    document.body.removeChild(formEl);
+                }
+            });
+
+            it('getCurrentFiles returns string filename when not prefetched', async () => {
+                fileManager.setInstanceAttachments({
+                    'photo.jpg': 'https://example.com/photo.jpg',
+                });
+
+                // Do NOT call prefetchInstanceAttachments
+
+                const formEl = document.createElement('form');
+                formEl.className = 'or';
+                const input = document.createElement('input');
+                input.type = 'file';
+                input.setAttribute('data-loaded-file-name', 'photo.jpg');
+                formEl.appendChild(input);
+                document.body.appendChild(formEl);
+
+                try {
+                    const files = await fileManager.getCurrentFiles();
+                    expect(files.length).to.equal(1);
+                    expect(files[0]).to.equal('photo.jpg');
+                } finally {
+                    document.body.removeChild(formEl);
+                }
+            });
+
+            it('clearing instance attachments clears prefetch cache', async () => {
+                const content = 'test content';
+                const dataURI = `data:image/jpeg;base64,${btoa(content)}`;
+
+                fileManager.setInstanceAttachments({
+                    'photo.jpg': dataURI,
+                });
+
+                await fileManager.prefetchInstanceAttachments();
+
+                // Clear attachments (and cache)
+                fileManager.setInstanceAttachments(null);
+
+                // Re-set attachments but don't prefetch
+                fileManager.setInstanceAttachments({
+                    'photo.jpg': 'https://example.com/photo.jpg',
+                });
+
+                const formEl = document.createElement('form');
+                formEl.className = 'or';
+                const input = document.createElement('input');
+                input.type = 'file';
+                input.setAttribute('data-loaded-file-name', 'photo.jpg');
+                formEl.appendChild(input);
+                document.body.appendChild(formEl);
+
+                try {
+                    const files = await fileManager.getCurrentFiles();
+                    expect(files.length).to.equal(1);
+                    // Should be string since cache was cleared
+                    expect(files[0]).to.equal('photo.jpg');
+                } finally {
+                    document.body.removeChild(formEl);
+                }
+            });
+        });
+
         describe('cached resources', () => {
             const enketoId = 'survey a';
             const recordId = 'record 1';
