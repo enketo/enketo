@@ -385,7 +385,7 @@ describe('SVG Sanitization', () => {
             )
             .querySelector('svg');
 
-        DOMPurify.setConfig({ ALLOWED_TAGS:[], ALLOWED_ATTR:[] });
+        DOMPurify.setConfig({ ALLOWED_TAGS: [], ALLOWED_ATTR: [] });
         const sanitized = sanitizeSvg(maliciousSvg);
 
         expect(sanitized.querySelector('script')).to.be.null;
