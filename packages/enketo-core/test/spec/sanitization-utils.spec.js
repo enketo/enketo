@@ -1,3 +1,5 @@
+import DOMPurify from 'dompurify';
+
 import { sanitizeSvg } from '../../src/js/sanitization-utils';
 
 describe('SVG Sanitization', () => {
@@ -368,5 +370,25 @@ describe('SVG Sanitization', () => {
 
     it('should return null for undefined input', () => {
         expect(sanitizeSvg(undefined)).to.be.null;
+    });
+
+    it('should not be affected by 3rd-party calls to DOMPurify.setConfig()', () => {
+        const maliciousSvg = parser
+            .parseFromString(
+                `
+            <svg xmlns="http://www.w3.org/2000/svg">
+                <script>alert('XSS')</script>
+                <path id="safe" d="M 10 10 L 20 20"/>
+            </svg>
+        `,
+                'text/xml'
+            )
+            .querySelector('svg');
+
+        DOMPurify.setConfig({ ALLOWED_TAGS:[], ALLOWED_ATTR:[] });
+        const sanitized = sanitizeSvg(maliciousSvg);
+
+        expect(sanitized.querySelector('script')).to.be.null;
+        expect(sanitized.querySelector('path')).to.not.be.null;
     });
 });
