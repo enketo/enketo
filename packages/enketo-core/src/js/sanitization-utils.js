@@ -464,6 +464,7 @@ function sanitizeSvg(svgElement) {
     DOMPurify.addHook('afterSanitizeAttributes', afterSanitizeAttributesHook);
 
     try {
+        DOMPurify.clearConfig();
         DOMPurify.sanitize(sanitizedSvg, DOMPURIFY_SVG_CONFIG);
     } finally {
         DOMPurify.removeHook('uponSanitizeElement', uponSanitizeElementHook);
