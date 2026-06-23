@@ -9,7 +9,11 @@ import dialog from 'enketo/dialog';
 import support from '../../js/support';
 import events from '../../js/event';
 import Widget from '../../js/widget';
-import { dataUriToBlobSync, getFilename, encodeHtmlEntities } from '../../js/utils';
+import {
+    dataUriToBlobSync,
+    getFilename,
+    encodeHtmlEntities,
+} from '../../js/utils';
 import downloadUtils from '../../js/download-utils';
 
 /**
