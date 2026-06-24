@@ -70,13 +70,12 @@ class AutocompleteSelectpicker extends Widget {
             }
         });
 
-        const fragment = document
-            .createRange()
-            .createContextualFragment(
-                `<input type="text" class="ignore widget autocomplete" list="${listId}" />`
-            );
+        const fakeInput = document.createElement('input');
+        fakeInput.type = 'text';
+        fakeInput.className = 'ignore widget autocomplete';
+        fakeInput.setAttribute('list', listId);
         this.element.classList.add('hide');
-        this.element.after(fragment);
+        this.element.after(fakeInput);
 
         this.fakeInput =
             this.element.parentElement.querySelector('input.autocomplete');

