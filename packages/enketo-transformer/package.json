@@ -73,7 +73,7 @@
         "language-tags": "1.0.5",
         "linkedom": "^0.18.12",
         "string-direction": "0.1.x",
-        "undici": "^5.28.4",
+        "undici": "^8.5.0",
         "xpath-to-css": "^1.2.0"
     },
     "devDependencies": {
