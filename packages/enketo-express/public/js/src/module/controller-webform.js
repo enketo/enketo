@@ -133,6 +133,9 @@ function init(formEl, data, loadErrors = []) {
             }
 
             if (form.encryptionKey) {
+                if (data.instanceAttachments) {
+                    fileManager.prefetchInstanceAttachments();
+                }
                 const saveDraftButton = document.querySelector(
                     '.form-footer#save-draft'
                 );
