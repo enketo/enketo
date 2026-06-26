@@ -391,4 +391,30 @@ describe('SVG Sanitization', () => {
         expect(sanitized.querySelector('script')).to.be.null;
         expect(sanitized.querySelector('path')).to.not.be.null;
     });
+
+    it('should not be affected by 3rd-party calls to DOMPurify.addHook()', () => {
+        const maliciousSvg = parser
+            .parseFromString(
+                `
+            <svg xmlns="http://www.w3.org/2000/svg" onload="alert('XSS')">
+                <path id="test" onclick="alert('click')" d="M 10 10 L 20 20"/>
+            </svg>
+        `,
+                'text/xml'
+            )
+            .querySelector('svg');
+
+        DOMPurify.addHook('uponSanitizeAttribute', (_, hookEvent) => {
+            hookEvent.forceKeepAttr = true;
+        });
+
+        const sanitized = sanitizeSvg(maliciousSvg);
+
+        expect(sanitized.hasAttribute('onload')).to.be.false;
+        expect(sanitized.querySelector('path').hasAttribute('onclick')).to.be
+            .false;
+        expect(sanitized.querySelector('path').getAttribute('id')).to.equal(
+            'test'
+        );
+    });
 });
