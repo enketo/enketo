@@ -9,7 +9,11 @@ import dialog from 'enketo/dialog';
 import support from '../../js/support';
 import events from '../../js/event';
 import Widget from '../../js/widget';
-import { dataUriToBlobSync, getFilename } from '../../js/utils';
+import {
+    dataUriToBlobSync,
+    getFilename,
+    encodeHtmlEntities,
+} from '../../js/utils';
 import downloadUtils from '../../js/download-utils';
 
 /**
@@ -253,11 +257,11 @@ class DrawWidget extends Widget {
         const load = this.props.load
             ? `<input type="file" class="ignore draw-widget__load"${
                   this.props.capture !== null
-                      ? ` capture="${this.props.capture}"`
+                      ? ` capture="${encodeHtmlEntities(this.props.capture)}"`
                       : ''
-              } accept="${
+              } accept="${encodeHtmlEntities(
                   this.props.accept
-              }"/><div class="widget file-picker"><input class="ignore fake-file-input"/><div class="file-feedback"></div></div>`
+              )}"/><div class="widget file-picker"><input class="ignore fake-file-input"/><div class="file-feedback"></div></div>`
             : '';
         const fullscreenBtns = this.props.touch
             ? '<button type="button" class="show-canvas-btn btn btn-default">Draw/Sign</button>' +

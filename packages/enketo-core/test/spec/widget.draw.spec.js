@@ -25,13 +25,47 @@ const FORM3 = `<form class="or">
 });
 
 describe('draw widget', () => {
-    it('does not instantiate for non image accept attributes', () => {
-        const form = FORM1.replace(
-            'accept="image/*"',
-            'accept="something/else"'
-        );
-        const fragment = document.createRange().createContextualFragment(form);
-        const control = fragment.querySelector(DrawWidget.selector);
-        expect(control).to.equal(null);
+    describe('widget selection', () => {
+        it('does not instantiate for non image accept attributes', () => {
+            const form = FORM1.replace(
+                'accept="image/*"',
+                'accept="something/else"'
+            );
+            const fragment = document
+                .createRange()
+                .createContextualFragment(form);
+            const control = fragment.querySelector(DrawWidget.selector);
+            expect(control).to.equal(null);
+        });
+    });
+
+    describe('markup', () => {
+        it('preserves valid accept attribute value on file input', () => {
+            const fragment = document
+                .createRange()
+                .createContextualFragment(FORM3);
+            const control = fragment.querySelector('[name="/data/a"]');
+            const widget = new DrawWidget(control, {});
+            const fileInput = widget.question.querySelector(
+                'input[type="file"].draw-widget__load'
+            );
+            expect(fileInput.getAttribute('accept')).to.equal('image/*');
+        });
+
+        it('escapes malicious accept attribute values', () => {
+            const form = FORM3.replace(
+                'accept="image/*"',
+                'accept="image/*&quot;><img src=x onerror=alert(1)>"'
+            );
+            const fragment = document
+                .createRange()
+                .createContextualFragment(form);
+            const control = fragment.querySelector('[name="/data/a"]');
+            const widget = new DrawWidget(control, {});
+            expect(widget.question.querySelector('img[onerror]')).to.equal(
+                null
+            );
+            expect(widget.question.querySelector('[onerror]')).to.equal(null);
+        });
     });
 });
