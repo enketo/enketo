@@ -73,9 +73,7 @@ class AutocompleteSelectpicker extends Widget {
         const fakeInput = document.createElement('input');
         fakeInput.type = 'text';
         fakeInput.className = 'ignore widget autocomplete';
-        // Setting the attribute directly is safe because the browser will
-        // automatically escape any malicious characters in the listId and
-        // consider it a literal string, preventing XSS attacks.
+        // Setting the attribute directly is safe because it is being added as a literal string
         fakeInput.setAttribute('list', listId);
         this.element.classList.add('hide');
         this.element.after(fakeInput);
