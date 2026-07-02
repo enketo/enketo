@@ -590,11 +590,10 @@ $input-button-border: 2px solid #aaaaaa;
     .search-bar {
         float: left;
         border-left: none;
-        border-right: solid 1px $groupline; //padding-left: 0;
+        border-right: solid 1px $groupline;
 
-        //padding-right: $separator-width;
         @media screen and (max-width: $geo-main-breakpoint) {
-            //padding-right: 0;
+            float: none;
             border-right: none;
         }
 
