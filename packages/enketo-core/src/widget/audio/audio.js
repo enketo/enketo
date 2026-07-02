@@ -52,6 +52,17 @@ class AudioWidget extends Widget {
             // Handle file input change event for uploading audio files
             const file = event.target.files[0];
             if (file) {
+                const isValid = await this.isValidAudioFile(file);
+                if (!isValid) {
+                    this.element.type = 'text';
+                    this.showActionSelectStep();
+                    dialog.alert(
+                        t('audioRecording.error.invalidAudioFile.msg'),
+                        t('audioRecording.error.invalidAudioFile.heading'),
+                        'normal'
+                    );
+                    return;
+                }
                 await this.updateValue(file); // Update the widget with the uploaded file
                 this.fileName = this.postFixFilename(file.name); // Update the filename with a unique timestamp postfix
                 // Restore type to 'text' so getCurrentFiles() uses the data-cache blob
@@ -335,7 +346,7 @@ class AudioWidget extends Widget {
                     <button type="button" class="btn-icon-only btn-pause hidden">
                         <i class="icon icon-pause"></i>
                     </button>
-                    <span class="time-progress">00:00 / 1:24</span>
+                    <span class="time-progress">00:00 / 0:00</span>
                     <div class="seek-bar">
                         <div class="play-progress">
                             <div class="progress-bar"></div>
@@ -487,6 +498,39 @@ class AudioWidget extends Widget {
         return `${baseName}-${timestamp.slice(0, 8)}_${timestamp.slice(
             8
         )}.${extension}`;
+    }
+
+    /**
+     * Checks whether the given file can be decoded as audio by the browser.
+     * Creates a temporary Audio element and attempts to load the file,
+     * resolving to true on success or false on error.
+     *
+     * @param {File} file - The file to verify.
+     * @returns {Promise<boolean>} - Resolves to true if the file is playable audio, false otherwise.
+     */
+    isValidAudioFile(file) {
+        return new Promise((resolve) => {
+            const url = URL.createObjectURL(file);
+            const audio = new Audio();
+            const cleanup = () => URL.revokeObjectURL(url);
+            audio.addEventListener(
+                'canplay',
+                () => {
+                    cleanup();
+                    resolve(true);
+                },
+                { once: true }
+            );
+            audio.addEventListener(
+                'error',
+                () => {
+                    cleanup();
+                    resolve(false);
+                },
+                { once: true }
+            );
+            audio.src = url;
+        });
     }
 
     /**

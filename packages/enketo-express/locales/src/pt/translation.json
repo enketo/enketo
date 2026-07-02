@@ -128,7 +128,11 @@
             "noMicrophone": "Nenhum microfone encontrado neste dispositivo.",
             "notSupported": "Gravação de áudio não é suportada neste navegador.",
             "unknownError": "Falha ao acessar o microfone. Verifique as configurações e permissões do seu navegador.",
-            "recordingError": "Ocorreu um erro ao tentar gravar áudio."
+            "recordingError": "Ocorreu um erro ao tentar gravar áudio.",
+            "invalidAudioFile": {
+                "msg": "O arquivo selecionado não é um arquivo de áudio válido e não pode ser reproduzido.",
+                "heading": "Arquivo de áudio inválido"
+            }
         },
         "startRecording": "Iniciar gravação",
         "uploadAudioFile": "Enviar arquivo",
