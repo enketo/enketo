@@ -3,6 +3,21 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## [9.0.5] - 2026-07-02
+
+### Fixed
+
+- Detect and reject invalid uploaded audio files, showing an error to the user (#1555)
+- Geopicker input label covering map on small screens (#1554)
+- Audio widget buttons triggered by Enter key (#1536)
+
+### Security
+
+- DOMPurify: clear hooks before sanitisation (#1544)
+- DOMPurify: clear persistent config before sanitisation (#1541)
+- Autocomplete script execution risk (#1548)
+- Draw widget: escape user-supplied attribute values (#1547)
+
 ## [9.0.4] - 2026-06-05
 
 ### Added

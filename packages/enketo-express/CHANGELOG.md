@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## 7.6.3 - 2026-07-02
+
+### Fixed
+
+- Detect and reject invalid uploaded audio files (#1555)
+
 ## 7.6.2 - 2026-06-05
 
 ### Added
