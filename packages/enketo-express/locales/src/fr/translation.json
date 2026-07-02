@@ -138,7 +138,11 @@
             "noMicrophone": "Aucun micro trouvé sur cet appareil.",
             "notSupported": "L'enregistrement audio n'est pas pris en charge par ce navigateur.",
             "unknownError": "Erreur lors de l'accès au micro : __errorMessage__",
-            "recordingError": "Une erreur s'est produite lors de la tentative d'enregistrement audio."
+            "recordingError": "Une erreur s'est produite lors de la tentative d'enregistrement audio.",
+            "invalidAudioFile": {
+                "msg": "Le fichier sélectionné n'est pas un fichier audio valide et ne peut pas être lu.",
+                "heading": "Fichier audio invalide"
+            }
         },
         "startRecording": "Démarrer l'enregistrement",
         "uploadAudioFile": "Téléverser le fichier",

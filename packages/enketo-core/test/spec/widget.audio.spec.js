@@ -1,4 +1,5 @@
 import AudioWidget from '../../src/widget/audio/audio';
+import dialog from '../../src/js/fake-dialog';
 import {
     testStaticProperties,
     testRequiredMethods,
@@ -213,6 +214,7 @@ describe('AudioWidget', () => {
 
             control.type = 'file';
             const postFixSpy = sandbox.spy(widget, 'postFixFilename');
+            sandbox.stub(widget, 'isValidAudioFile').resolves(true);
 
             Object.defineProperty(control, 'files', {
                 get: () => ({ 0: file, length: 1 }),
@@ -242,6 +244,7 @@ describe('AudioWidget', () => {
             });
 
             control.type = 'file';
+            sandbox.stub(widget, 'isValidAudioFile').resolves(true);
 
             Object.defineProperty(control, 'files', {
                 get: () => ({ 0: file, length: 1 }),
@@ -260,13 +263,14 @@ describe('AudioWidget', () => {
         });
 
         it('resets element type to text after upload', (done) => {
-            const { control } = createWidget();
+            const { widget, control } = createWidget();
 
             const file = new File(['audio data'], 'test.webm', {
                 type: 'audio/webm',
             });
 
             control.type = 'file';
+            sandbox.stub(widget, 'isValidAudioFile').resolves(true);
 
             Object.defineProperty(control, 'files', {
                 get: () => ({ 0: file, length: 1 }),
@@ -278,6 +282,58 @@ describe('AudioWidget', () => {
             // FileReader is macrotask-based; setTimeout ensures all async work completes
             setTimeout(() => {
                 expect(control.type).to.equal('text');
+                done();
+            }, 0);
+        });
+
+        it('shows an error and stays on action-select step when file is not valid audio', (done) => {
+            const { widget, control } = createWidget();
+
+            const file = new File(['this is not audio content'], 'test.mp3', {
+                type: 'audio/mpeg',
+            });
+
+            control.type = 'file';
+            sandbox.stub(widget, 'isValidAudioFile').resolves(false);
+            const alertStub = sandbox.stub(dialog, 'alert').resolves();
+
+            Object.defineProperty(control, 'files', {
+                get: () => ({ 0: file, length: 1 }),
+                configurable: true,
+            });
+
+            control.dispatchEvent(new Event('change', { bubbles: true }));
+
+            setTimeout(() => {
+                const actionSelect = widget.question.querySelector(
+                    '.step-action-select'
+                );
+                expect(actionSelect).not.to.equal(null);
+                expect(alertStub.calledOnce).to.equal(true);
+                done();
+            }, 0);
+        });
+
+        it('does not proceed to playback step when file is not valid audio', (done) => {
+            const { widget, control } = createWidget();
+
+            const file = new File(['this is not audio content'], 'fake.mp3', {
+                type: 'audio/mpeg',
+            });
+
+            control.type = 'file';
+            sandbox.stub(widget, 'isValidAudioFile').resolves(false);
+            const showPlaybackSpy = sandbox.spy(widget, 'showPlaybackStep');
+
+            Object.defineProperty(control, 'files', {
+                get: () => ({ 0: file, length: 1 }),
+                configurable: true,
+            });
+
+            control.dispatchEvent(new Event('change', { bubbles: true }));
+
+            setTimeout(() => {
+                expect(showPlaybackSpy.called).to.equal(false);
                 done();
             }, 0);
         });
