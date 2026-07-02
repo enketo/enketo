@@ -42,13 +42,11 @@ import { time } from '../../js/format';
             const self = e.data.scope;
             // This condition was inspired by datepicker.
             // The element the timepicker is invoked on is the input but it has a sibling for addon/button.
-            if (
-                !(
-                    self.$element.parent().find(e.target).length ||
-                    self.$widget.is(e.target) ||
-                    self.$widget.find(e.target).length
-                )
-            ) {
+            if (!(
+                self.$element.parent().find(e.target).length ||
+                self.$widget.is(e.target) ||
+                self.$widget.find(e.target).length
+            )) {
                 self.hideWidget();
             }
         };
