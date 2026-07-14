@@ -32,6 +32,15 @@ class Filepicker extends Widget {
         );
         const that = this;
 
+        // Ensure HEIC/HEIF files appear under "Image Files" in the OS file picker,
+        // since `image/*` alone excludes them on most non-Apple browsers/OS.
+        if (this.element.getAttribute('accept') === 'image/*') {
+            this.element.setAttribute(
+                'accept',
+                'image/*,image/heic,image/heif'
+            );
+        }
+
         this.element.classList.add('hide');
         this.question.classList.add('with-media', 'clearfix');
 

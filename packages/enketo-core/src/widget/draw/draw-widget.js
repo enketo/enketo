@@ -615,7 +615,11 @@ class DrawWidget extends Widget {
                       'darkgray',
                   ];
         props.touch = support.touch;
-        props.accept = this.element.getAttribute('accept');
+        const accept = this.element.getAttribute('accept');
+        // Ensure HEIC/HEIF files appear under "Image Files" in the OS file picker,
+        // since `image/*` alone excludes them on most non-Apple browsers/OS.
+        props.accept =
+            accept === 'image/*' ? 'image/*,image/heic,image/heif' : accept;
         props.capture = this.element.getAttribute('capture');
 
         return props;
