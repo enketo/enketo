@@ -989,7 +989,7 @@ class Geopicker extends Widget {
      *
      * @param {object} map - Map layer as defined in the apps configuration.
      * @param {number} index - The index of the layer.
-     * @return {{id: string, maxZoom: number, minZoom: number, name: string, attribution: string}} Tilelayer options object
+     * @return {{id: string, maxZoom: number, minZoom: number, name: string, attribution: string, referrerPolicy: boolean | string}} Tilelayer options object
      */
     _getTileOptions(map, index) {
         const name = map.name || `map-${index + 1}`;
@@ -1000,6 +1000,7 @@ class Geopicker extends Widget {
             minZoom: map.minzoom || 0,
             name,
             attribution: map.attribution || '',
+            referrerPolicy: map.referrerPolicy || false,
         };
     }
 
