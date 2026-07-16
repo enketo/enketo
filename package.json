@@ -108,7 +108,13 @@
         "nan": "^2.27.0",
         "libxslt/nan": "^2.22.0",
         "node1-libxmljsmt-myh/nan": "^2.22.0",
-        "ws": "^8.18.0"
+        "ws": "^8.18.0",
+        "markdown-eslint-parser/eslint/file-entry-cache/flat-cache/flatted": "^3.4.2",
+        "**/globule/minimatch": "^3.1.5",
+        "mocha/minimatch": "^4.2.5",
+        "mocha/serialize-javascript": "^7.0.3",
+        "markdown-eslint-parser/eslint/inquirer/external-editor/tmp": "^0.2.7",
+        "markdown-it": "^14.3.0"
     },
     "engines": {
         "node": ">=20 <23",
