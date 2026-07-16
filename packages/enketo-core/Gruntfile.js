@@ -4,7 +4,7 @@
  */
 const fs = require('fs');
 const path = require('path');
-const nodeSass = require('node-sass');
+const sass = require('sass');
 const transformer = require('enketo-transformer');
 const timeGrunt = require('time-grunt');
 const loadGruntTasks = require('load-grunt-tasks');
@@ -138,7 +138,7 @@ module.exports = (grunt) => {
         },
         sass: {
             options: {
-                implementation: nodeSass,
+                implementation: sass,
                 sourceMap: false,
                 importer: resolveSassPackageImport,
             },
