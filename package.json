@@ -37,9 +37,9 @@
         "@types/sinon": "^10.0.16",
         "@typescript-eslint/eslint-plugin": "^7.18.0",
         "@typescript-eslint/parser": "^7.16.0",
-        "@vitest/coverage-istanbul": "^0.34.3",
-        "@vitest/runner": "^0.34.3",
-        "@vitest/utils": "^0.34.3",
+        "@vitest/coverage-istanbul": "^4.1.10",
+        "@vitest/runner": "^4.1.10",
+        "@vitest/utils": "^4.1.10",
         "chai": "^4.3.7",
         "chai-as-promised": "^7.1.1",
         "concurrently": "^9.2.1",
@@ -98,10 +98,9 @@
         "sinon-chai": "^3.7.0",
         "time-grunt": "^2.0.0",
         "typescript": "^5.2.2",
-        "vite": "^4.5.3",
-        "vite-node": "^2.1.1",
-        "vite-plugin-node": "^3.1.0",
-        "vitest": "^0.34.6",
+        "vite": "^7.3.6",
+        "vite-node": "^5.3.0",
+        "vitest": "^4.1.10",
         "webpack": "^5.107.2"
     },
     "resolutions": {
@@ -115,7 +114,12 @@
         "mocha/serialize-javascript": "^7.0.3",
         "markdown-eslint-parser/eslint/inquirer/external-editor/tmp": "^0.2.7",
         "markdown-it": "^14.3.0",
-        "@xmldom/xmldom": "^0.9.8"
+        "@xmldom/xmldom": "^0.9.8",
+        "vite": "^7.3.6",
+        "cookie": "^0.7.2",
+        "qs": "^6.15.3",
+        "mocha/js-yaml": "^4.3.0",
+        "grunt/js-yaml": "^3.15.0"
     },
     "engines": {
         "node": ">=20 <23",
