@@ -5,6 +5,7 @@ import {
     testRequiredMethods,
     testBasicInstantiation,
 } from '../helpers/test-widget';
+import { waitFor } from '../helpers/wait-for';
 
 const FORM = `<form class="or">
         <label class="question">
@@ -205,7 +206,7 @@ describe('AudioWidget', () => {
     });
 
     describe('uploading a file', () => {
-        it('applies a timestamp postfix to the uploaded filename', (done) => {
+        it('applies a timestamp postfix to the uploaded filename', async () => {
             const { widget, control } = createWidget();
 
             const file = new File(['audio data'], 'same-name-test.webm', {
@@ -223,20 +224,17 @@ describe('AudioWidget', () => {
 
             control.dispatchEvent(new Event('change', { bubbles: true }));
 
-            // The handler calls FileReader (macrotask), so setTimeout drains microtasks first
-            setTimeout(() => {
-                expect(postFixSpy.calledOnce).to.equal(true);
-                expect(postFixSpy.firstCall.args[0]).to.equal(
-                    'same-name-test.webm'
-                );
-                expect(widget.fileName).to.match(
-                    /^same-name-test-\d{8}_\d{6}\.webm$/
-                );
-                done();
-            }, 0);
+            await waitFor(() => postFixSpy.calledOnce);
+
+            expect(postFixSpy.firstCall.args[0]).to.equal(
+                'same-name-test.webm'
+            );
+            expect(widget.fileName).to.match(
+                /^same-name-test-\d{8}_\d{6}\.webm$/
+            );
         });
 
-        it('sets originalInputValue to the postfixed filename after upload', (done) => {
+        it('sets originalInputValue to the postfixed filename after upload', async () => {
             const { widget, control } = createWidget();
 
             const file = new File(['audio data'], 'test-upload.mp3', {
@@ -253,16 +251,12 @@ describe('AudioWidget', () => {
 
             control.dispatchEvent(new Event('change', { bubbles: true }));
 
-            // FileReader is macrotask-based; setTimeout ensures all async work completes
-            setTimeout(() => {
-                expect(widget.originalInputValue).to.match(
-                    /^test-upload-\d{8}_\d{6}\.mp3$/
-                );
-                done();
-            }, 0);
+            await waitFor(() =>
+                /^test-upload-\d{8}_\d{6}\.mp3$/.test(widget.originalInputValue)
+            );
         });
 
-        it('resets element type to text after upload', (done) => {
+        it('resets element type to text after upload', async () => {
             const { widget, control } = createWidget();
 
             const file = new File(['audio data'], 'test.webm', {
@@ -279,14 +273,10 @@ describe('AudioWidget', () => {
 
             control.dispatchEvent(new Event('change', { bubbles: true }));
 
-            // FileReader is macrotask-based; setTimeout ensures all async work completes
-            setTimeout(() => {
-                expect(control.type).to.equal('text');
-                done();
-            }, 0);
+            await waitFor(() => control.type === 'text');
         });
 
-        it('shows an error and stays on action-select step when file is not valid audio', (done) => {
+        it('shows an error and stays on action-select step when file is not valid audio', async () => {
             const { widget, control } = createWidget();
 
             const file = new File(['this is not audio content'], 'test.mp3', {
@@ -304,14 +294,12 @@ describe('AudioWidget', () => {
 
             control.dispatchEvent(new Event('change', { bubbles: true }));
 
-            setTimeout(() => {
-                const actionSelect = widget.question.querySelector(
-                    '.step-action-select'
-                );
-                expect(actionSelect).not.to.equal(null);
-                expect(alertStub.calledOnce).to.equal(true);
-                done();
-            }, 0);
+            await waitFor(() => alertStub.calledOnce);
+
+            const actionSelect = widget.question.querySelector(
+                '.step-action-select'
+            );
+            expect(actionSelect).not.to.equal(null);
         });
 
         it('does not proceed to playback step when file is not valid audio', (done) => {
@@ -332,10 +320,13 @@ describe('AudioWidget', () => {
 
             control.dispatchEvent(new Event('change', { bubbles: true }));
 
+            // No positive signal to wait for here (we're asserting something
+            // does NOT happen), so give the async handler a fixed window to
+            // (not) call showPlaybackStep, then assert.
             setTimeout(() => {
                 expect(showPlaybackSpy.called).to.equal(false);
                 done();
-            }, 0);
+            }, 100);
         });
     });
 
@@ -460,18 +451,13 @@ describe('AudioWidget', () => {
     });
 
     describe('showActionSelectStep()', () => {
-        it('clears the current value', (done) => {
+        it('clears the current value', async () => {
             const { widget } = createWidget();
 
             widget.value = 'data:audio/webm;base64,AAAA';
             widget.showActionSelectStep();
 
-            // showActionSelectStep is synchronous but calls updateValue() without
-            // awaiting it; setTimeout drains all queued microtasks before asserting
-            setTimeout(() => {
-                expect(widget.value).to.equal('');
-                done();
-            }, 0);
+            await waitFor(() => widget.value === '');
         });
 
         it('resets the input type to text', () => {
