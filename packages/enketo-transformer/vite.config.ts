@@ -65,7 +65,13 @@ export default defineConfig(async () => {
                   replacement: './src/dom/web/index.ts',
               },
               {
-                  find: /^\/@fs\/(.*)/,
+                  // Note: the capture group intentionally includes the leading
+                  // slash of the filesystem path (rather than being consumed
+                  // by the `/@fs` literal match). Excluding it here produces
+                  // a path like `home/user/...` instead of `/home/user/...`,
+                  // which Node's ESM resolver misinterprets as a bare
+                  // specifier (looking for a package named `home`).
+                  find: /^\/@fs(\/.*)/,
                   replacement: '$1',
               },
           ]
