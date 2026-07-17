@@ -70,7 +70,7 @@
         "@types/geojson": "^7946.0.16",
         "abortcontroller-polyfill": "^1.7.8",
         "nock": "^13.3.3",
-        "sass": "^1.101.0",
+        "sass": "1.99.0",
         "supertest": "^6.3.3"
     },
     "resolutions": {
