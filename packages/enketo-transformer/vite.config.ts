@@ -57,12 +57,15 @@ export default defineConfig(async () => {
     const alias = isWeb
         ? [
               {
+                  // Must be absolute: relative replacements here fail to
+                  // resolve under Vitest 4's nested dev server (used by
+                  // the "web" test target's globalSetup).
                   find: /^libxslt$/,
-                  replacement: './src/dom/web/libxslt.ts',
+                  replacement: resolve(__dirname, './src/dom/web/libxslt.ts'),
               },
               {
                   find: /^enketo-transformer\/dom$/,
-                  replacement: './src/dom/web/index.ts',
+                  replacement: resolve(__dirname, './src/dom/web/index.ts'),
               },
               {
                   // Note: the capture group intentionally includes the leading
@@ -78,7 +81,7 @@ export default defineConfig(async () => {
         : [
               {
                   find: /^enketo-transformer\/dom$/,
-                  replacement: './src/dom/node/index.ts',
+                  replacement: resolve(__dirname, './src/dom/node/index.ts'),
               },
           ];
 
