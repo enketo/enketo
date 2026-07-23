@@ -90,8 +90,8 @@
         "nan": "^2.27.0",
         "node-sass": "^9.0.0",
         "nyc": "^15.1.0",
-        "playwright": "1.60.0",
-        "prettier": "^3.8.3",
+        "playwright": "1.61.1",
+        "prettier": "^3.9.6",
         "rimraf": "^3.0.2",
         "serve": "^14.2.6",
         "sinon": "^15.2.0",
@@ -102,7 +102,7 @@
         "vite-node": "^2.1.1",
         "vite-plugin-node": "^3.1.0",
         "vitest": "^0.34.6",
-        "webpack": "^5.107.2"
+        "webpack": "^5.109.0"
     },
     "resolutions": {
         "nan": "^2.27.0",
