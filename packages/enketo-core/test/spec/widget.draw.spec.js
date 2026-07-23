@@ -49,7 +49,9 @@ describe('draw widget', () => {
             const fileInput = widget.question.querySelector(
                 'input[type="file"].draw-widget__load'
             );
-            expect(fileInput.getAttribute('accept')).to.equal('image/*');
+            expect(fileInput.getAttribute('accept')).to.equal(
+                'image/*,image/heic,image/heif,.heic,.heif'
+            );
         });
 
         it('escapes malicious accept attribute values', () => {
