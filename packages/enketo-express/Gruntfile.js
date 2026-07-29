@@ -1,7 +1,7 @@
 const fs = require('fs');
 const path = require('path');
 const loadGruntTasks = require('load-grunt-tasks');
-const nodeSass = require('node-sass');
+const sass = require('sass');
 const timeGrunt = require('time-grunt');
 const { resolveSassPackageImport } = require('../../tools/grunt/sass-paths');
 
@@ -107,9 +107,28 @@ module.exports = (grunt) => {
         },
         sass: {
             options: {
-                implementation: nodeSass,
+                implementation: sass,
 
                 importer: resolveSassPackageImport,
+                // The switch from node-sass to (Dart) sass surfaces a large
+                // volume of deprecation warnings for constructs used
+                // throughout the existing .scss sources (legacy @import,
+                // global built-in functions, color functions, slash
+                // division, the if() function) as well as for the legacy JS
+                // render() API used by this Grunt task itself. None of these
+                // are being removed imminently (earliest removal is Dart
+                // Sass 2.0/3.0) and migrating away from them is a separate,
+                // larger effort. Silence them here rather than drowning the
+                // build output.
+                quietDeps: true,
+                silenceDeprecations: [
+                    'legacy-js-api',
+                    'import',
+                    'global-builtin',
+                    'color-functions',
+                    'slash-div',
+                    'if-function',
+                ],
             },
             compile: {
                 cwd: 'app/views/styles',

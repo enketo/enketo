@@ -1,6 +1,5 @@
 import { resolve } from 'path';
-import type { LibraryFormats } from 'vite';
-import type { UserConfig } from 'vitest/config';
+import type { LibraryFormats, UserConfig } from 'vite';
 import { defineConfig } from 'vitest/config';
 import config from './config/config.json';
 import { define, TARGET_ENV } from './config/build.shared';
@@ -48,29 +47,41 @@ export default defineConfig(async () => {
         process.argv.some((arg) => arg.endsWith(`/vitest`));
 
     /**
-     * Use Vite's default {@link https://vitejs.dev/config/build-options.html#build-target `modules`} target for Vite runtimes (app.js, test) and web.
+     * Use an esnext target (assumes native dynamic import support) for Vite
+     * runtimes (app.js, test) and web. `'modules'` was a special Vite build
+     * target value that has since been removed; `'esnext'` is its closest
+     * equivalent. See {@link https://vite.dev/config/build-options.html#build-target}.
      */
-    const target = isWeb || isViteRuntime ? 'modules' : 'node14';
+    const target = isWeb || isViteRuntime ? 'esnext' : 'node14';
 
     const alias = isWeb
         ? [
               {
+                  // Must be absolute: relative replacements here fail to
+                  // resolve under Vitest 4's nested dev server (used by
+                  // the "web" test target's globalSetup).
                   find: /^libxslt$/,
-                  replacement: './src/dom/web/libxslt.ts',
+                  replacement: resolve(__dirname, './src/dom/web/libxslt.ts'),
               },
               {
                   find: /^enketo-transformer\/dom$/,
-                  replacement: './src/dom/web/index.ts',
+                  replacement: resolve(__dirname, './src/dom/web/index.ts'),
               },
               {
-                  find: /^\/@fs\/(.*)/,
+                  // Note: the capture group intentionally includes the leading
+                  // slash of the filesystem path (rather than being consumed
+                  // by the `/@fs` literal match). Excluding it here produces
+                  // a path like `home/user/...` instead of `/home/user/...`,
+                  // which Node's ESM resolver misinterprets as a bare
+                  // specifier (looking for a package named `home`).
+                  find: /^\/@fs(\/.*)/,
                   replacement: '$1',
               },
           ]
         : [
               {
                   find: /^enketo-transformer\/dom$/,
-                  replacement: './src/dom/node/index.ts',
+                  replacement: resolve(__dirname, './src/dom/node/index.ts'),
               },
           ];
 
@@ -84,7 +95,7 @@ export default defineConfig(async () => {
                 formats,
                 name: baseName,
                 // Note: this is only called for Node builds.
-                fileName(format, entryName) {
+                fileName(format: string, entryName: string) {
                     const extension = format === 'es' ? '.js' : '.cjs';
 
                     return `${baseName}/${entryName.replace(
@@ -134,13 +145,12 @@ export default defineConfig(async () => {
             // means we cannot use concurrency for testing
             // functionality which depends on libxmljs/libxslt.
             //
-            // In Vitest 0.29.0+, the `singleThread` option must
-            // be set to achieve the same behavior as `threads`
-            // did previously. The `threads` option must *also*
-            // be set to prevent spinning up threads which may
-            // fail to close when tests complete.
-            threads: false,
-            singleThread: true,
+            // In Vitest 4, `singleThread`/`singleFork` were
+            // replaced by `maxWorkers: 1` + `isolate: false`,
+            // which achieves the same effect (see the migration
+            // guide: https://vitest.dev/guide/migration#pool-rework).
+            maxWorkers: 1,
+            isolate: false,
 
             chaiConfig: {
                 // Preserves previous truncation in snapshots.
