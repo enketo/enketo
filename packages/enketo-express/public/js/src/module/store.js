@@ -35,6 +35,180 @@ const version = 4;
 
 const REMOVE_RECORD_NAME_UNIQUENESS_VERSION = 4;
 
+// the enketo db.js schema, shared between the initial connection and any
+// reconnection attempts (see `_openDatabase`)
+const schema = {
+    // the surveys
+    surveys: {
+        key: {
+            keyPath: 'enketoId',
+            autoIncrement: false,
+        },
+        indexes: {
+            enketoId: {
+                unique: true,
+            },
+        },
+    },
+    // the resources that belong to a survey
+    resources: {
+        key: {
+            autoIncrement: false,
+        },
+        indexes: {
+            key: {
+                unique: true,
+            },
+        },
+    },
+    // Records in separate table because it makes more sense for getting, updating and removing records
+    // if they are not stored in one (giant) array or object value.
+    // Need to watch out for bad iOS bug: http://www.raymondcamden.com/2014/9/25/IndexedDB-on-iOS-8--Broken-Bad
+    // but with the current keys there is no risk of using the same key in multiple tables.
+    // InstanceId is the key because instanceName may change when editing a draft.
+    records: {
+        key: {
+            keyPath: 'instanceId',
+        },
+        indexes: {
+            // https://github.com/enketo/enketo-express/issues/416
+            recordName: {
+                keyPath: ['enketoId', 'name'],
+                unique: true,
+            },
+            // the actual key
+            instanceId: {
+                unique: true,
+            },
+            // to get all records belonging to a form
+            enketoId: {
+                unique: false,
+            },
+        },
+    },
+    lastSavedRecords: {
+        /**
+         * @see Note on `records` about unique keys across IndexedDB object stores
+         */
+        key: {
+            keyPath: '_enketoId',
+            autoIncrement: false,
+        },
+    },
+    // the files that belong to a record
+    files: {
+        key: {
+            autoIncrement: false,
+        },
+        indexes: {
+            key: {
+                unique: true,
+            },
+        },
+    },
+    // settings or other global app properties
+    properties: {
+        key: {
+            keyPath: 'name',
+            autoIncrement: false,
+        },
+        indexes: {
+            key: {
+                unique: true,
+            },
+        },
+    },
+    // Dynamic data, passed by via querystring is stored in a separate table,
+    // because its update mechanism is separate from the survey + resources.
+    // Otherwise the all-or-nothing form+resources update would remove this data.
+    data: {
+        key: {
+            keyPath: 'enketoId',
+            autoIncrement: false,
+        },
+        indexes: {
+            enketoId: {
+                unique: true,
+            },
+        },
+    },
+};
+
+/**
+ * Opens the db.js connection to the enketo database, applying its schema.
+ *
+ * @return { Promise } resolves with the db.js server object
+ */
+function _openDatabase() {
+    return db.open({
+        server: databaseName,
+        version,
+        schema,
+    });
+}
+
+/**
+ * Handles the (rare) event of the underlying IndexedDB connection being closed
+ * unexpectedly, i.e. without `server.close()` having been called. This can happen
+ * e.g. on iOS when the OS aggressively reclaims memory from backgrounded Safari tabs.
+ *
+ * db.js caches the raw `IDBDatabase` connection internally and will keep handing out
+ * this now-unusable connection unless it is told the connection was closed. Explicitly
+ * closing the (already closed) server clears that cache, so the reconnect below opens
+ * a fresh connection instead of reusing the dead one.
+ *
+ * @return { void }
+ */
+function _handleConnectionClose() {
+    available = false;
+
+    console.error(
+        'IndexedDB connection was closed unexpectedly. Attempting to reconnect...'
+    );
+
+    Promise.resolve()
+        .then(() => (server ? server.close() : undefined))
+        .catch(() => {
+            // ignore, the connection is already unusable
+        })
+        .then(_openDatabase)
+        .then((s) => {
+            server = s;
+            _listenForConnectionClose();
+
+            return _isWriteable();
+        })
+        .then(_setBlobStorageEncoding)
+        .then(() => {
+            available = true;
+            console.log('IndexedDB connection was successfully recreated.');
+        })
+        .catch((error) => {
+            console.error('Failed to reconnect to IndexedDB', error);
+        });
+}
+
+/**
+ * Listens for the underlying `IDBDatabase` connection being closed unexpectedly, so
+ * that the connection can be reinitialized. `close` is a native `IDBDatabase` event
+ * that db.js does not support directly, so it is added to the raw connection obtained
+ * via `server.getIndexedDB()`.
+ *
+ * @return { void }
+ */
+function _listenForConnectionClose() {
+    const idb =
+        server && typeof server.getIndexedDB === 'function'
+            ? server.getIndexedDB()
+            : null;
+
+    if (!idb || typeof idb.addEventListener !== 'function') {
+        return;
+    }
+
+    idb.addEventListener('close', _handleConnectionClose, { once: true });
+}
+
 /**
  * @typedef StoreInitOptions
  * @property {boolean} [failSilently]
@@ -95,110 +269,10 @@ function init({ failSilently } = {}) {
                 });
             });
         })
-        .then(() =>
-            db.open({
-                server: databaseName,
-                version,
-                schema: {
-                    // the surveys
-                    surveys: {
-                        key: {
-                            keyPath: 'enketoId',
-                            autoIncrement: false,
-                        },
-                        indexes: {
-                            enketoId: {
-                                unique: true,
-                            },
-                        },
-                    },
-                    // the resources that belong to a survey
-                    resources: {
-                        key: {
-                            autoIncrement: false,
-                        },
-                        indexes: {
-                            key: {
-                                unique: true,
-                            },
-                        },
-                    },
-                    // Records in separate table because it makes more sense for getting, updating and removing records
-                    // if they are not stored in one (giant) array or object value.
-                    // Need to watch out for bad iOS bug: http://www.raymondcamden.com/2014/9/25/IndexedDB-on-iOS-8--Broken-Bad
-                    // but with the current keys there is no risk of using the same key in multiple tables.
-                    // InstanceId is the key because instanceName may change when editing a draft.
-                    records: {
-                        key: {
-                            keyPath: 'instanceId',
-                        },
-                        indexes: {
-                            // https://github.com/enketo/enketo-express/issues/416
-                            recordName: {
-                                keyPath: ['enketoId', 'name'],
-                                unique: true,
-                            },
-                            // the actual key
-                            instanceId: {
-                                unique: true,
-                            },
-                            // to get all records belonging to a form
-                            enketoId: {
-                                unique: false,
-                            },
-                        },
-                    },
-                    lastSavedRecords: {
-                        /**
-                         * @see Note on `records` about unique keys across IndexedDB object stores
-                         */
-                        key: {
-                            keyPath: '_enketoId',
-                            autoIncrement: false,
-                        },
-                    },
-                    // the files that belong to a record
-                    files: {
-                        key: {
-                            autoIncrement: false,
-                        },
-                        indexes: {
-                            key: {
-                                unique: true,
-                            },
-                        },
-                    },
-                    // settings or other global app properties
-                    properties: {
-                        key: {
-                            keyPath: 'name',
-                            autoIncrement: false,
-                        },
-                        indexes: {
-                            key: {
-                                unique: true,
-                            },
-                        },
-                    },
-                    // Dynamic data, passed by via querystring is stored in a separate table,
-                    // because its update mechanism is separate from the survey + resources.
-                    // Otherwise the all-or-nothing form+resources update would remove this data.
-                    data: {
-                        key: {
-                            keyPath: 'enketoId',
-                            autoIncrement: false,
-                        },
-                        indexes: {
-                            enketoId: {
-                                unique: true,
-                            },
-                        },
-                    },
-                },
-            })
-        )
+        .then(_openDatabase)
         .then((s) => {
             server = s;
+            _listenForConnectionClose();
         })
         .then(_isWriteable)
         .then(_setBlobStorageEncoding)
