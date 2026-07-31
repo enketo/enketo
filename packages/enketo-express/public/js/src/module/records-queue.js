@@ -106,7 +106,9 @@ function save(action, record) {
             return result;
         })
         .then(({ enketoId }) => formCache.get({ enketoId }))
-        .then((survey) => setLastSavedRecord(survey, record))
+        .then((survey) =>
+            survey ? setLastSavedRecord(survey, record) : undefined
+        )
         .then(_updateRecordList)
         .then(() => result);
 }

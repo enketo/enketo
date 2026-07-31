@@ -253,6 +253,19 @@ describe('Records queue', () => {
                 .then(done, done);
         });
 
+        it('saves a record even when its survey is missing from the form cache', (done) => {
+            // Simulates the survey cache being unavailable, e.g. after an
+            // unexpected IndexedDB connection reset that clears stored data.
+            store.survey
+                .remove(enketoId)
+                .then(() => records.save('set', recordA))
+                .then(() => store.record.get(instanceIdA))
+                .then((record) => {
+                    expect(record.instanceId).to.equal(instanceIdA);
+                })
+                .then(done, done);
+        });
+
         describe('file handling when no auto-saved record exists', () => {
             beforeEach((done) => {
                 // Remove any existing auto-saved record
