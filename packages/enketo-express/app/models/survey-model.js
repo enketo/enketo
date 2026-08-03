@@ -243,6 +243,10 @@ function _updateProperties(id, survey) {
         if (typeof survey.openRosaServer !== 'undefined') {
             update.openRosaServer = survey.openRosaServer;
         }
+        // also write openRosaId to repair surveys created from a dangling openRosaKey pointer
+        if (typeof survey.openRosaId !== 'undefined') {
+            update.openRosaId = survey.openRosaId;
+        }
         if (typeof survey.active !== 'undefined') {
             update.active = survey.active;
         }

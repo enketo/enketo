@@ -5,6 +5,7 @@ const chai = require('chai');
 const chaiAsPromised = require('chai-as-promised');
 const config = require('../../app/models/config-model').server;
 const model = require('../../app/models/survey-model');
+const { mainClient } = require('../../app/lib/db');
 
 chai.use(chaiAsPromised);
 
@@ -281,6 +282,27 @@ describe('Survey Model', () => {
                 expect(promise)
                     .to.eventually.have.property('theme')
                     .and.to.equal('different'),
+            ]);
+        });
+
+        it('returns the (openRosaId restored) survey object when the record only exists as a pointer and called via set()', () => {
+            const danglingId = 'dangl1ng';
+            const promise = new Promise((resolve, reject) => {
+                mainClient.set(
+                    `or:ona.io/enketo,${survey.openRosaId}`,
+                    danglingId,
+                    (error) => (error ? reject(error) : resolve(undefined))
+                );
+            })
+                .then(() => model.set(survey))
+                .then(model.get);
+            return Promise.all([
+                expect(promise)
+                    .to.eventually.have.property('enketoId')
+                    .and.to.equal(danglingId),
+                expect(promise)
+                    .to.eventually.have.property('openRosaId')
+                    .and.to.equal(survey.openRosaId),
             ]);
         });
     });
