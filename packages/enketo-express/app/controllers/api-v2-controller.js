@@ -209,7 +209,8 @@ function getNewOrExistingSurvey(req, res, next) {
             id ? surveyModel.get(id) : null
         )
         .catch((error) => {
-            if (error.status === 404) {
+            // 406 = incomplete survey record; let set() below repair it
+            if (error.status === 404 || error.status === 406) {
                 return null;
             }
             throw error;

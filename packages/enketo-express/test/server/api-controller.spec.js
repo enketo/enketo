@@ -6,6 +6,7 @@ process.env.NODE_ENV = 'test';
  * at http://apidocs.enketo.org.
  */
 const request = require('supertest');
+const { expect } = require('chai');
 const config = require('../../app/models/config-model').server;
 
 config['base path'] = '';
@@ -13,6 +14,7 @@ const app = require('../../config/express');
 const surveyModel = require('../../app/models/survey-model');
 const instanceModel = require('../../app/models/instance-model');
 const cacheModel = require('../../app/models/cache-model');
+const { mainClient } = require('../../app/lib/db');
 
 let v1Survey;
 let v1Instance;
@@ -1342,6 +1344,39 @@ describe('api', () => {
                 return obj;
             })
             .forEach(testResponse);
+    });
+
+    describe('repairing surveys that are missing openRosaId', () => {
+        function test(version) {
+            it(`v${version}: POST /survey completes the survey record`, async () => {
+                const endpoint = `/api/v${version}/survey`;
+                const id = await surveyModel.getId({
+                    openRosaServer: validServer,
+                    openRosaId: validFormId,
+                });
+                await new Promise((resolve, reject) => {
+                    mainClient.hdel(`id:${id}`, 'openRosaId', (error) =>
+                        error ? reject(error) : resolve(undefined)
+                    );
+                });
+
+                return request(app)
+                    .post(endpoint)
+                    .set(validAuth)
+                    .send({
+                        server_url: validServer,
+                        form_id: validFormId,
+                    })
+                    .expect(201)
+                    .then(() => surveyModel.get(id))
+                    .then((survey) =>
+                        expect(survey.openRosaId).to.equal(validFormId)
+                    );
+            });
+        }
+
+        test('1');
+        test('2');
     });
 
     describe('re-activating forms', () => {
