@@ -60,6 +60,11 @@ self.addEventListener('message', (event) => {
 });
 
 self.addEventListener('fetch', (event) => {
+    // Non-GET requests (e.g. form submissions) are not cached and should not be intercepted.
+    if (event.request.method !== 'GET') {
+        return;
+    }
+
     event.respondWith(
         caches.match(event.request).then((response) => {
             if (response) {
