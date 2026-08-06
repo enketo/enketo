@@ -71,7 +71,7 @@
         "css.escape": "^1.5.1",
         "express": "^4.21.2",
         "language-tags": "1.0.5",
-        "linkedom": "^0.18.12",
+        "linkedom": "^0.18.13",
         "string-direction": "0.1.x",
         "undici": "^6.24.0",
         "xpath-to-css": "^1.2.0"
