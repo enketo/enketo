@@ -60,6 +60,17 @@ self.addEventListener('message', (event) => {
 });
 
 self.addEventListener('fetch', (event) => {
+    // Only intervene for GET requests, which is all that is ever cached.
+    // Re-constructing a Request/Response for non-GET requests (e.g. the
+    // multipart/form-data POST used for submissions, which can carry large
+    // file Blobs) through `fetch(event.request, {...})` is not needed here
+    // and is known to be unreliable in some browsers (notably Safari/WebKit),
+    // which can silently send an empty body. Letting the browser handle
+    // those requests natively avoids that risk entirely.
+    if (event.request.method !== 'GET') {
+        return;
+    }
+
     event.respondWith(
         caches.match(event.request).then((response) => {
             if (response) {
