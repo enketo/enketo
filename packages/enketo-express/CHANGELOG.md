@@ -3,6 +3,20 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## 7.6.4 - 2026-08-07
+
+### Added
+
+- Support for HEIC/HEIF file extensions in filepicker and draw widgets (DEV-2396, #1571)
+
+### Fixed
+
+- Service worker no longer intercepts non-GET requests, fixing submission corruption on iOS/Safari (DEV-2598, #1584)
+
+### Security
+
+- Bump library versions: vitest → 4.x, vite → 6.x, node-sass → sass, markdown-it → 14.x, undici → 6.x (DEV-2423, #1572)
+
 ## 7.6.3 - 2026-07-02
 
 ### Fixed

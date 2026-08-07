@@ -3,6 +3,16 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## [9.0.6] - 2026-08-07
+
+### Added
+
+- Support for HEIC/HEIF file extensions in filepicker and draw widgets (DEV-2396, #1571)
+
+### Security
+
+- Bump library versions: vitest → 4.x, vite → 6.x, node-sass → sass, markdown-it → 14.x, undici → 6.x (DEV-2423, #1572)
+
 ## [9.0.5] - 2026-07-02
 
 ### Fixed
