@@ -7,15 +7,20 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Added
 
-- Support for HEIC/HEIF file extensions in filepicker and draw widgets (DEV-2396, #1571)
+- Support for HEIC/HEIF file extensions in filepicker and draw widgets (#1571)
+- Support for dynamic readonly expressions, allowing readonly state to change based on XPath expressions as data changes (#1588)
+- Allow configuring Leaflet tile layer `referrerPolicy` option for geopicker maps (#1565)
 
 ### Fixed
 
-- Service worker no longer intercepts non-GET requests, fixing submission corruption on iOS/Safari (DEV-2598, #1584)
+- Service worker no longer intercepts non-GET requests, fixing submission corruption on iOS/Safari (#1584)
+- Google Maps tiles failing to load due to a `leaflet.gridlayer.googlemutant` incompatibility with `leaflet` 1.9.4 (#1564)
+- OpenSans fonts triggering glyph bbox warnings in Firefox; also reduces font file size (#1566)
 
 ### Security
 
-- Bump library versions: vitest → 4.x, vite → 6.x, node-sass → sass, markdown-it → 14.x, undici → 6.x (DEV-2423, #1572)
+- Bump library versions: vitest → 4.x, vite → 6.x, node-sass → sass, markdown-it → 14.x, undici → 6.x (#1572)
+- Remove `X-Powered-By: Express` response header to reduce fingerprinting (#1567)
 
 ## 7.6.3 - 2026-07-02
 
