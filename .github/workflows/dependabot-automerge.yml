@@ -17,7 +17,7 @@ jobs:
     needs:
       - install-build-test
     if: |
-      ${{ github.event.pull_request.user.login == 'dependabot[bot]' }} &&
+      github.event.pull_request.user.login == 'dependabot[bot]' &&
       !failure() &&
       needs.install-build-test.result == 'success'
     outputs:
