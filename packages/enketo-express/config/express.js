@@ -18,6 +18,7 @@ const debug = require('debug')('enketo:express');
 const config = require('../app/models/config-model');
 
 // general
+app.disable('x-powered-by');
 for (const item in config.server) {
     if (Object.prototype.hasOwnProperty.call(config.server, item)) {
         app.set(item, app.get(item) || config.server[item]);
