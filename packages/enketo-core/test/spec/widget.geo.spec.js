@@ -123,6 +123,34 @@ describe('geoshape widget', () => {
         });
     });
 
+    describe('tile layer options', () => {
+        // Coverage for https://github.com/enketo/enketo/pull/1565 - ensures
+        // `referrerPolicy` configured on a map layer actually reaches the
+        // Leaflet TileLayer instance, not just the intermediate options object.
+        it('passes a configured referrerPolicy through to the Leaflet tile layer', async () => {
+            const map = {
+                tiles: ['https://example.com/{z}/{x}/{y}.png'],
+                referrerPolicy: 'no-referrer-when-downgrade',
+            };
+
+            const layer = await geoshapePicker._getLeafletTileLayer(map, 0);
+
+            expect(layer.options.referrerPolicy).to.equal(
+                'no-referrer-when-downgrade'
+            );
+        });
+
+        it('defaults referrerPolicy to false when not configured', async () => {
+            const map = {
+                tiles: ['https://example.com/{z}/{x}/{y}.png'],
+            };
+
+            const layer = await geoshapePicker._getLeafletTileLayer(map, 0);
+
+            expect(layer.options.referrerPolicy).to.equal(false);
+        });
+    });
+
     it('does not load a geopicker widget for setvalue references within an input', () => {
         const form = loadForm('setvalue-setgeopoint-geopoint.xml');
 
