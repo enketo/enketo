@@ -25,6 +25,9 @@ function getCredentials(req) {
         creds = jwToken
             ? jwt.decode(jwToken, req.app.get('encryption key'))
             : null;
+        if (creds && creds.exp && Math.floor(Date.now() / 1000) > creds.exp) {
+            creds = null;
+        }
     } else if (authType === 'token') {
         const paramName = auth['query parameter'];
         if (!paramName) {
