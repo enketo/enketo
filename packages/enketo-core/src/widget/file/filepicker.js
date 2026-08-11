@@ -32,11 +32,21 @@ class Filepicker extends Widget {
         );
         const that = this;
 
+        // Capture the original media type before the accept attribute is
+        // potentially expanded below, and resolve it to flags up front. The
+        // `accept` attribute itself is not a reliable source of truth after
+        // that point (see below), so nothing else in this widget should read
+        // or compare against it directly.
+        this.mediaType = this.element.getAttribute('accept');
+        this.shouldDisplayPreview =
+            this.mediaType === 'image/*' || this.mediaType === 'video/*';
+        this.shouldResizeImage = this.mediaType === 'image/*';
+
         // Ensure HEIC/HEIF files appear under "Image Files" in the OS file picker,
         // since `image/*` alone excludes them on most non-Apple browsers/OS.
         // File extensions (.heic/.heif) are needed alongside MIME types because
         // image/heic is not registered in most Linux MIME databases.
-        if (this.element.getAttribute('accept') === 'image/*') {
+        if (this.mediaType === 'image/*') {
             this.element.setAttribute(
                 'accept',
                 'image/*,image/heic,image/heif,.heic,.heif'
@@ -104,7 +114,7 @@ class Filepicker extends Widget {
                     fileManager
                         .getFileUrl(existingFileName)
                         .then((url) => {
-                            that._showPreview(url, that.props.mediaType);
+                            that._showPreview(url);
                             that._updateDownloadLink(url, existingFileName);
                         })
                         .catch(() => {
@@ -204,7 +214,7 @@ class Filepicker extends Widget {
 
                 // Process the file
                 // Resize the file. Currently will resize an image.
-                this._resizeFile(file, that.props.mediaType)
+                this._resizeFile(file)
                     .then((resizedFile) => {
                         // Put information in file element that file is resized
                         // Put resizedDataURI that will be used by fileManager.getCurrentFiles to get blob synchronously
@@ -221,7 +231,7 @@ class Filepicker extends Widget {
                             .getFileUrl(file, fileName)
                             .then((url) => {
                                 // Update UI
-                                that._showPreview(url, that.props.mediaType);
+                                that._showPreview(url);
                                 that._showFeedback();
                                 that._showFileName(fileName);
                                 if (
@@ -314,23 +324,21 @@ class Filepicker extends Widget {
 
     /**
      * @param {string} url - URL
-     * @param {string} mediaType - media type
      */
-    _showPreview(url, mediaType) {
+    _showPreview(url) {
         let htmlStr;
 
         empty(this.preview);
 
-        switch (mediaType) {
-            case 'image/*':
-                htmlStr = '<img />';
-                break;
-            case 'audio/*':
-                htmlStr = '<audio controls="controls"/>';
-                break;
-            case 'video/*':
-                htmlStr = '<video controls="controls"/>';
-                break;
+        if (this.shouldDisplayPreview) {
+            switch (this.mediaType) {
+                case 'image/*':
+                    htmlStr = '<img />';
+                    break;
+                case 'video/*':
+                    htmlStr = '<video controls="controls"/>';
+                    break;
+            }
         }
 
         if (url && htmlStr) {
@@ -344,13 +352,13 @@ class Filepicker extends Widget {
 
     /**
      * @param {File} file - image file to be resized
-     * @param {string} mediaType - media type
      * @return {Promise<Blob|File>} resolves with blob, rejects with input file
      */
-    _resizeFile(file, mediaType) {
+    _resizeFile(file) {
         return new Promise((resolve, reject) => {
-            if (mediaType !== 'image/*') {
+            if (!this.shouldResizeImage) {
                 reject(file);
+                return;
             }
 
             // file is image, resize it
@@ -409,7 +417,7 @@ class Filepicker extends Widget {
      */
     get props() {
         const props = this._props;
-        props.mediaType = this.element.getAttribute('accept');
+        props.mediaType = this.mediaType;
 
         if (
             this.element.dataset.maxPixels &&
