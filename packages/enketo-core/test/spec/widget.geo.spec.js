@@ -1,3 +1,5 @@
+import L from 'leaflet';
+import 'leaflet.gridlayer.googlemutant';
 import Geopicker from '../../src/widget/geo/geopicker';
 import {
     createTestCoordinates,
@@ -15,6 +17,18 @@ const SHAPE =
     '7.9377 -11.5845 0 0;7.9324 -11.5902 0 0;7.927 -11.5857 0 0;7.9377 -11.5845 0 0';
 
 runAllCommonWidgetTests(Geopicker, FORM, SHAPE);
+
+describe('Google Maps tile layer plugin', () => {
+    // Regression test for https://github.com/enketo/enketo/issues/1574 -
+    // leaflet.gridlayer.googlemutant@0.16.0 is incompatible with leaflet@1.9.4
+    // and fails with `L.GridLayer.GoogleMutant is not a constructor`.
+    it('registers a working L.gridLayer.googleMutant constructor', () => {
+        expect(typeof L.gridLayer.googleMutant).to.equal('function');
+        expect(() =>
+            L.gridLayer.googleMutant({ type: 'roadmap' })
+        ).not.to.throw();
+    });
+});
 
 describe('geoshape widget', () => {
     let geoshapePicker;
@@ -106,6 +120,34 @@ describe('geoshape widget', () => {
                     kmlCoordinates
                 )
             ).to.deep.equal(a.result);
+        });
+    });
+
+    describe('tile layer options', () => {
+        // Coverage for https://github.com/enketo/enketo/pull/1565 - ensures
+        // `referrerPolicy` configured on a map layer actually reaches the
+        // Leaflet TileLayer instance, not just the intermediate options object.
+        it('passes a configured referrerPolicy through to the Leaflet tile layer', async () => {
+            const map = {
+                tiles: ['https://example.com/{z}/{x}/{y}.png'],
+                referrerPolicy: 'no-referrer-when-downgrade',
+            };
+
+            const layer = await geoshapePicker._getLeafletTileLayer(map, 0);
+
+            expect(layer.options.referrerPolicy).to.equal(
+                'no-referrer-when-downgrade'
+            );
+        });
+
+        it('defaults referrerPolicy to false when not configured', async () => {
+            const map = {
+                tiles: ['https://example.com/{z}/{x}/{y}.png'],
+            };
+
+            const layer = await geoshapePicker._getLeafletTileLayer(map, 0);
+
+            expect(layer.options.referrerPolicy).to.equal(false);
         });
     });
 
