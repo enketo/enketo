@@ -14,6 +14,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 ### Fixed
 
 - Google Maps tiles failing to load due to a `leaflet.gridlayer.googlemutant` incompatibility with `leaflet` 1.9.4 (#1564)
+- Image previews not showing for photo/file widgets (#1592)
 
 ### Security
 
