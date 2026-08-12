@@ -925,4 +925,57 @@ describe('Client Storage', () => {
             expect(caught).to.equal(null);
         });
     });
+
+    describe('reconnecting after an unexpected IndexedDB close', () => {
+        /** @type {import('sinon').SinonSandbox} */
+        let sandbox;
+
+        /** @type {EventTarget} */
+        let fakeIDB;
+
+        /** @type {{ close: import('sinon').SinonStub, getIndexedDB: () => EventTarget, properties: { update: import('sinon').SinonStub } }} */
+        let fakeServer;
+
+        beforeEach(async () => {
+            sandbox = sinon.createSandbox();
+            fakeIDB = new EventTarget();
+            fakeServer = {
+                close: sandbox.stub().resolves(),
+                getIndexedDB: () => fakeIDB,
+                properties: {
+                    update: sandbox
+                        .stub()
+                        .resolves([{ name: 'test', value: 1 }]),
+                },
+            };
+
+            sandbox.stub(db, 'open').resolves(fakeServer);
+
+            await store.init();
+        });
+
+        afterEach(async () => {
+            sandbox.restore();
+
+            // restore a real connection for subsequent tests
+            await store.init();
+        });
+
+        it('marks the store as unavailable as soon as the connection closes', () => {
+            fakeIDB.dispatchEvent(new Event('close'));
+
+            expect(store.available).to.equal(false);
+        });
+
+        it('closes the stale connection and reopens a new one', async () => {
+            fakeIDB.dispatchEvent(new Event('close'));
+
+            // let the reconnect promise chain settle
+            await new Promise((resolve) => setTimeout(resolve, 0));
+
+            expect(fakeServer.close).to.have.been.calledOnce;
+            expect(db.open).to.have.been.calledTwice;
+            expect(store.available).to.equal(true);
+        });
+    });
 });
