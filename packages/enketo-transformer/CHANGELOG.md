@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## [4.4.0] - 2026-08-07
+
+### Added
+
+- Generate a `data-readonly` attribute for readonly XPath expressions in `openrosa2html5form.xsl`, enabling dynamic readonly support in `enketo-core` (#1588)
+
 ## [4.3.1] - 2025-06-05
 
 ### Technical
