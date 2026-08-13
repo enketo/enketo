@@ -5,7 +5,8 @@
 const csrfProtection = require('csurf')({
     cookie: true,
 });
-const jwt = require('jwt-simple');
+const { EncryptJWT } = require('jose');
+const { deriveEncryptionKey } = require('../lib/encryption');
 const express = require('express');
 
 const router = express.Router();
@@ -88,19 +89,28 @@ function logout(req, res) {
 /**
  * @param {module:api-controller~ExpressRequest} req - HTTP request
  * @param {module:api-controller~ExpressResponse} res - HTTP response
+ * @param {Function} next - Express callback
  */
-function setToken(req, res) {
+async function setToken(req, res, next) {
     const username = req.body.username.trim();
     const maxAge = 30 * 24 * 60 * 60 * 1000;
     const returnUrl = req.query.return_url || '';
 
-    const token = jwt.encode(
-        {
-            user: username,
-            pass: req.body.password,
-        },
-        req.app.get('encryption key')
-    );
+    let token;
+    try {
+        const derivedKey = deriveEncryptionKey(req.app.get('encryption key'));
+        const nowSecs = Math.floor(Date.now() / 1000);
+        const expSecs = req.body.remember
+            ? nowSecs + 30 * 24 * 60 * 60
+            : nowSecs + 24 * 60 * 60;
+        token = await new EncryptJWT({ user: username, pass: req.body.password })
+            .setProtectedHeader({ alg: 'dir', enc: 'A256GCM' })
+            .setIssuedAt()
+            .setExpirationTime(expSecs)
+            .encrypt(derivedKey);
+    } catch (err) {
+        return next(err);
+    }
 
     // Do not allow authentication cookies to be saved if enketo runs on http, unless 'allow insecure transport' is set to true
     // This is double because the check in login() already ensures the login screen isn't even shown.

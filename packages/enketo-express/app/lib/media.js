@@ -281,8 +281,8 @@ const rebuildMediaURLCache = async (resourceType, resourceId, options) => {
  * @param {string} [mediaHash]
  * @return {HostURLOptions}
  */
-const getHostURLOptions = (request, mediaHash) => ({
-    auth: userModel.getCredentials(request),
+const getHostURLOptions = async (request, mediaHash) => ({
+    auth: await userModel.getCredentials(request),
     basePath: request.app.get('base path') ?? '',
     cookie: request.headers.cookie,
     mediaHash,
