@@ -23,6 +23,6 @@
         "babel-preset-solid": "^1.9.12",
         "enketo-transformer": "4.4.0",
         "solid-js": "^1.9.13",
-        "vite-plugin-solid": "^2.11.12"
+        "vite-plugin-solid": "^2.11.14"
     }
 }
