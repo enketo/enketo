@@ -200,7 +200,6 @@
         "instancenotfound": "رکورد موجود نیست. ممکن است منقضی شده باشد.",
         "invalidediturl": "آدرس ویرایش، نامعتبر است",
         "loadfailed": "بارگذاری __resource__ ناموفق بود",
-        "notfoundinformlist": "فرمی با شناسهٔ __formId__ در آدرس /formList پیدا نشد.",
         "pagenotfound": "صفحه یافت نشد",
         "surveyidnotactive": "پروژهٔ جمع‌آوری داده با این شناسه دیگر فعال نیست",
         "surveyidnotfound": "پروژهٔ جمع‌آوری داده با این شناسه پیدا نشد",
