@@ -32,7 +32,10 @@ describe('URL defaults (getValidatedDefaults)', () => {
             '/myform/age': '30',
         });
 
-        expect(result).to.deep.equal({ '/myform/name': 'Bob', '/myform/age': '30' });
+        expect(result).to.deep.equal({
+            '/myform/name': 'Bob',
+            '/myform/age': '30',
+        });
     });
 
     it('excludes a path targeting the primary instance root', () => {
@@ -42,7 +45,9 @@ describe('URL defaults (getValidatedDefaults)', () => {
     });
 
     it('excludes a path targeting an attribute of the primary instance root', () => {
-        const result = getValidatedDefaults(MODEL, { '/myform/@id': 'injected' });
+        const result = getValidatedDefaults(MODEL, {
+            '/myform/@id': 'injected',
+        });
 
         expect(result).to.deep.equal({});
     });
@@ -78,7 +83,9 @@ describe('URL defaults (getValidatedDefaults)', () => {
             '/myform/respondent/first_name': 'Alice',
         });
 
-        expect(result).to.deep.equal({ '/myform/respondent/first_name': 'Alice' });
+        expect(result).to.deep.equal({
+            '/myform/respondent/first_name': 'Alice',
+        });
     });
 
     it('excludes a path targeting a group element', () => {

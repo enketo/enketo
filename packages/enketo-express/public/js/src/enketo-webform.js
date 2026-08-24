@@ -279,10 +279,11 @@ export function getValidatedDefaults(modelStr, defaults) {
     const validated = {};
 
     for (const path in defaults) {
-        if (!Object.prototype.hasOwnProperty.call(defaults, path)) continue;
-        const targetNode = model.node(path).getElement();
-        if (_isAllowedDefault(path, targetNode, model.rootElement)) {
-            validated[path] = defaults[path];
+        if (Object.prototype.hasOwnProperty.call(defaults, path)) {
+            const targetNode = model.node(path).getElement();
+            if (_isAllowedDefault(path, targetNode, model.rootElement)) {
+                validated[path] = defaults[path];
+            }
         }
     }
 
@@ -305,13 +306,13 @@ function _prepareInstance(modelStr, validatedDefaults) {
     let instanceStr = null;
 
     for (const path in validatedDefaults) {
-        if (!Object.prototype.hasOwnProperty.call(validatedDefaults, path))
-            continue;
-        // TODO: would be good to not include nodes that weren't in the defaults parameter
-        // HOWEVER, that would also set number of repeats to 0, which may be undesired
-        // TODO: would be good to just pass model along instead of converting to string first
-        model.node(path).setVal(validatedDefaults[path]);
-        instanceStr = model.getStr();
+        if (Object.prototype.hasOwnProperty.call(validatedDefaults, path)) {
+            // TODO: would be good to not include nodes that weren't in the defaults parameter
+            // HOWEVER, that would also set number of repeats to 0, which may be undesired
+            // TODO: would be good to just pass model along instead of converting to string first
+            model.node(path).setVal(validatedDefaults[path]);
+            instanceStr = model.getStr();
+        }
     }
 
     return instanceStr;
