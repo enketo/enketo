@@ -223,7 +223,11 @@ function _checkAutoSavedRecord() {
  * @param {ResetFormOptions} [options]
  * @return {Promise<void>}
  */
+let _isResetting = false;
+
 function _resetForm(survey, options = {}) {
+    _isResetting = true;
+
     return getLastSavedRecord(survey.enketoId)
         .then((lastSavedRecord) =>
             populateLastSavedInstances(survey, lastSavedRecord)
@@ -257,6 +261,9 @@ function _resetForm(survey, options = {}) {
             if (loadErrors.length > 0) {
                 gui.alertLoadErrors(loadErrors);
             }
+        })
+        .finally(() => {
+            _isResetting = false;
         });
 }
 
@@ -613,9 +620,9 @@ function _saveRecord(survey, draft, recordName, confirmed) {
 
             return records.save(saveMethod, record);
         })
-        .then(() => {
-            records.removeAutoSavedRecord();
-            _resetForm(survey, { isOffline: true });
+        .then(async () => {
+            await records.removeAutoSavedRecord();
+            await _resetForm(survey, { isOffline: true });
 
             if (draft) {
                 gui.alert(
@@ -659,9 +666,10 @@ function _saveRecord(survey, draft, recordName, confirmed) {
 let autoSavePromise = Promise.resolve();
 
 function _autoSaveRecord() {
-    // Do not auto-save a record if the record was loaded from storage
-    // or if the form has enabled encryption
-    if (form.recordName || form.encryptionKey) {
+    // Do not auto-save a record if the record was loaded from storage,
+    // if the form has enabled encryption, or if the form is currently being
+    // reset (e.g. after a submission).
+    if (form.recordName || form.encryptionKey || _isResetting) {
         return autoSavePromise;
     }
 
