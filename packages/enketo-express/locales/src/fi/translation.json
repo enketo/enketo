@@ -30,11 +30,9 @@
             "heading": "Hälyytys"
         },
         "export": {
-            "alternativequestion": "vaihtoehtoinen lataus - verkossa",
             "error": {
                 "filecreatedmsg": "Joka tapauksessa epätäydellinen vientitiedosto luotiin. ",
                 "heading": "Vientivirhe",
-                "linknotcreated": "Epäonnistuit luomaan vientilinkkiä tallentamattomille tiedostoille. Oletko verkossa?",
                 "msg": "Virheitä esiintyi luotaessa vientitiedostoa lähettämättömille tietueille. Virheet: __errors__"
             },
             "success": {

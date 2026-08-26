@@ -27,11 +27,9 @@
             "heading": "Alarm"
         },
         "export": {
-            "alternativequestion": "Alternatywne pobranie - online",
             "error": {
                 "filecreatedmsg": "Tym niemniej, niekompletny plik eksportu został utworzony.",
                 "heading": "Błąd eksportu",
-                "linknotcreated": "Nie udało się utworzyć linku eksportu dla niezatwierdzonych rekordów. Czy jesteś online?",
                 "msg": "Wystąpił błąd podczas tworzenia pliku eksportu dla niezatwierdzonych rekordów. Błędy: __errors__"
             },
             "success": {

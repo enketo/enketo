@@ -30,11 +30,9 @@
             "heading": "警示"
         },
         "export": {
-            "alternativequestion": "另外一种下载方式 - 在线",
             "error": {
                 "filecreatedmsg": "尽管如此，一个不完整的输出文档仍然被创建。",
                 "heading": "输出错误",
-                "linknotcreated": "不能为未提交的记录创建一个输出链接。你在线上吗？",
                 "msg": "在为未提交的记录创建输出文档的过程中出现错误。错误：_错误_"
             },
             "success": {

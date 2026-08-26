@@ -27,11 +27,9 @@
             "heading": "Alerta"
         },
         "export": {
-            "alternativequestion": "Download alternativo - online",
             "error": {
                 "filecreatedmsg": "Mesmo assim, foi criado um arquivo para exportação incompleto.",
                 "heading": "Erro de exportação",
-                "linknotcreated": "Falha ao criar um link de exportação para registros não enviados. Você está online?",
                 "msg": "Ocorreram erros durante a criação do arquivo de exportação de registros não enviados. Erros: __errors__"
             },
             "success": {

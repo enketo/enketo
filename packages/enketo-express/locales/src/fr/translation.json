@@ -242,7 +242,6 @@
         "invalidediturl": "Ceci n'est pas une URL d'édition valide",
         "loadfailed": "Impossible de charger __resource__",
         "notfoundinformlist": "This form is no longer available.",
-        "notfounddirectformurl": "Ce formulaire n'existe pas ou vous n'y avez plus accès. Veuillez vérifier l'URL et vous assurer qu'elle ne manque pas de caractères.\n\nSi le formulaire existait précédemment, il a peut-être été archivé, désactivé ou suprimmé. Si ceci est inattendu, veuillez contacter la personne qui vous a demandé de remplir le formulaire.\n\n(Tentative d'accès du formulaire: __notfounddirectformurl__)",
         "pagenotfound": "Page non trouvée",
         "surveyidnotactive": "L'enquête avec cet ID n'est plus active",
         "surveyidnotfound": "No form found with this URL, please double check.",

@@ -225,7 +225,6 @@
         "instancenotfound": "Record niet gevonden. Het kan verlopen zijn.",
         "invalidediturl": "Niet een geldig edit URL",
         "loadfailed": "Kon __resource__ niet laden",
-        "notfounddirectformurl": "Dit formulier bestaat niet of u heeft er geen toegang meer toe. Controleer het web address op ontbrekende tekens. Als het formulier eerder bestond, is het mogelijk gearchiveerd, uitgeschakeld of verwijderd. Als dit onverwachts is, neem dan contact op met de persoon die u heeft gevraagd het formulier in te vullen. (Geprobeerd toegang te krijgen tot formulier: __notfounddirectformurl__)",
         "pagenotfound": "Pagina niet gevonden",
         "surveyidnotactive": "Enquete met dit ID is niet langer aktief",
         "surveyidnotfound": "Enquete met dit ID niet gevonden",

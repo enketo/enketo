@@ -30,11 +30,9 @@
             "heading": "Khẩn"
         },
         "export": {
-            "alternativequestion": "tùy chọn tải xuống khác- trực tuyến",
             "error": {
                 "filecreatedmsg": "Thay vào đó, một tệp tin không đầy đủ đã được tạo.",
                 "heading": "Lỗi xuất dữ liệu",
-                "linknotcreated": "Lỗi khi tạo một liên kết xuất dữ liệu đối với các bản ghi chưa được gởi lên máy chủ. Bạn đang online?",
                 "msg": "Có lỗi khi tạo file dữ liệu xuất bản ghi. Các lỗi là __errors__"
             },
             "success": {
