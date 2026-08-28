@@ -1,0 +1,47 @@
+name: Transifex - push source strings
+
+# Pushes the English source strings to Transifex whenever they change on main,
+# so translators immediately see new/changed keys to translate.
+#
+# Requires:
+# - a `packages/enketo-express/.tx/config` file (generate locally with
+#   `tx add remote` once, then commit it - see tutorials/40-translate.md)
+# - a `TRANSIFEX_TOKEN` repository secret with a Transifex API token that has push
+#   access to the enketo-express project
+
+on:
+    push:
+        branches:
+            - main
+        paths:
+            - 'packages/enketo-express/locales/src/en/translation.json'
+            - 'packages/enketo-express/.tx/config'
+    workflow_dispatch: {}
+
+jobs:
+    push-source-strings:
+        runs-on: ubuntu-latest
+        steps:
+            - name: Checkout
+              uses: actions/checkout@v4
+
+            - name: Install Transifex CLI
+              run: |
+                  curl -o- https://raw.githubusercontent.com/transifex/cli/master/install.sh | bash
+                  echo "$GITHUB_WORKSPACE" >> "$GITHUB_PATH"
+
+            - name: Push source strings
+              working-directory: packages/enketo-express
+              env:
+                  TX_TOKEN: ${{ secrets.TRANSIFEX_TOKEN }}
+              run: tx push --source
+
+    notify-failure:
+        needs: push-source-strings
+        if: failure()
+        uses: ./.github/workflows/zulip.yml
+        secrets: inherit
+        with:
+            topic: 'Transifex automation'
+            stream: 'Enketo'
+            content: ':warning: @*devs*, [Transifex push run #${{ github.run_number }}](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}) failed'
