@@ -44,6 +44,7 @@ const formOptions = {
  * @typedef ControllerWebformInitData
  * @property {string} modelStr
  * @property {string} instanceStr
+ * @property {object} [validatedDefaults] - pre-validated URL default values from getValidatedDefaults
  * @property {Document[]} external
  * @property {Survey} survey
  * @property {InstanceAttachment[]} [instanceAttachments]
@@ -247,6 +248,14 @@ function _resetForm(survey, options = {}) {
             replaceModelMediaSources(form, survey.media);
 
             const loadErrors = form.init();
+
+            const { validatedDefaults } = formData;
+            if (validatedDefaults && Object.keys(validatedDefaults).length) {
+                for (const [path, value] of Object.entries(validatedDefaults)) {
+                    form.model.node(path).setVal(value);
+                }
+                form.setAllVals();
+            }
 
             form.view.html.dispatchEvent(events.FormReset());
 

@@ -1,4 +1,4 @@
-import { _prepareInstance } from '../../../public/js/src/enketo-webform';
+import { getValidatedDefaults } from '../../../public/js/src/enketo-webform';
 
 const MODEL = `<model>
   <instance>
@@ -15,98 +15,93 @@ const MODEL = `<model>
   </instance>
 </model>`;
 
-describe('URL defaults (_prepareInstance)', () => {
-    const parser = new DOMParser();
+describe('URL defaults (getValidatedDefaults)', () => {
+    it('includes a valid leaf node path', () => {
+        const result = getValidatedDefaults(MODEL, { '/myform/name': 'Alice' });
 
-    it('applies a default value to a matching leaf node', () => {
-        const result = _prepareInstance(MODEL, { '/myform/name': 'Alice' });
-        const doc = parser.parseFromString(result, 'text/xml');
-
-        expect(doc.querySelector('name').textContent).to.equal('Alice');
+        expect(result).to.deep.equal({ '/myform/name': 'Alice' });
     });
 
-    it('returns null when defaults is empty', () => {
-        expect(_prepareInstance(MODEL, {})).to.be.null;
+    it('returns an empty object when defaults is empty', () => {
+        expect(getValidatedDefaults(MODEL, {})).to.deep.equal({});
     });
 
-    it('applies multiple defaults independently', () => {
-        const result = _prepareInstance(MODEL, {
+    it('includes multiple valid paths', () => {
+        const result = getValidatedDefaults(MODEL, {
             '/myform/name': 'Bob',
             '/myform/age': '30',
         });
-        const doc = parser.parseFromString(result, 'text/xml');
 
-        expect(doc.querySelector('name').textContent).to.equal('Bob');
-        expect(doc.querySelector('age').textContent).to.equal('30');
+        expect(result).to.deep.equal({
+            '/myform/name': 'Bob',
+            '/myform/age': '30',
+        });
     });
 
-    it('rejects a path targeting the primary instance root', () => {
-        const result = _prepareInstance(MODEL, { '/myform': 'injected' });
-        // rejected path produces no instance output
-        expect(result).to.be.null;
+    it('excludes a path targeting the primary instance root', () => {
+        const result = getValidatedDefaults(MODEL, { '/myform': 'injected' });
+
+        expect(result).to.deep.equal({});
     });
 
-    it('rejects a path targeting an attribute of the primary instance root', () => {
-        const result = _prepareInstance(MODEL, { '/myform/@id': 'injected' });
-        expect(result).to.be.null;
+    it('excludes a path targeting an attribute of the primary instance root', () => {
+        const result = getValidatedDefaults(MODEL, {
+            '/myform/@id': 'injected',
+        });
+
+        expect(result).to.deep.equal({});
     });
 
-    it('rejects a path targeting an attribute of a field', () => {
-        const result = _prepareInstance(MODEL, {
+    it('excludes attribute paths while keeping valid sibling paths', () => {
+        const result = getValidatedDefaults(MODEL, {
             '/myform/name': 'Alice',
             '/myform/name/@someattr': 'injected',
         });
-        const doc = parser.parseFromString(result, 'text/xml');
-        expect(doc.querySelector('name').textContent).to.equal('Alice');
-        expect(doc.querySelector('name').hasAttribute('someattr')).to.be.false;
+
+        expect(result).to.deep.equal({ '/myform/name': 'Alice' });
     });
 
-    it('allows a field whose name matches a protected meta field name but is outside meta', () => {
-        const result = _prepareInstance(MODEL, {
+    it('includes a field whose name matches a protected meta field name but is outside meta', () => {
+        const result = getValidatedDefaults(MODEL, {
             '/myform/email': 'test@example.com',
         });
-        const doc = parser.parseFromString(result, 'text/xml');
-        expect(doc.querySelector('email').textContent).to.equal(
-            'test@example.com'
-        );
+
+        expect(result).to.deep.equal({ '/myform/email': 'test@example.com' });
     });
 
-    it('rejects a path targeting a protected meta field', () => {
-        const result = _prepareInstance(MODEL, {
+    it('excludes a path targeting a protected meta field', () => {
+        const result = getValidatedDefaults(MODEL, {
             '/myform/name': 'Alice',
             '/myform/meta/instanceID': 'fixed-uuid',
         });
-        const doc = parser.parseFromString(result, 'text/xml');
-        expect(doc.querySelector('name').textContent).to.equal('Alice');
-        expect(doc.querySelector('instanceID').textContent).to.not.equal(
-            'fixed-uuid'
-        );
+
+        expect(result).to.deep.equal({ '/myform/name': 'Alice' });
     });
 
-    it('allows a default on a field nested inside a group', () => {
-        const result = _prepareInstance(MODEL, {
+    it('includes a field nested inside a group', () => {
+        const result = getValidatedDefaults(MODEL, {
             '/myform/respondent/first_name': 'Alice',
         });
-        const doc = parser.parseFromString(result, 'text/xml');
-        expect(doc.querySelector('first_name').textContent).to.equal('Alice');
+
+        expect(result).to.deep.equal({
+            '/myform/respondent/first_name': 'Alice',
+        });
     });
 
-    it('rejects a path targeting a group element', () => {
-        const result = _prepareInstance(MODEL, {
+    it('excludes a path targeting a group element', () => {
+        const result = getValidatedDefaults(MODEL, {
             '/myform/respondent': 'injected',
         });
-        expect(result).to.be.null;
+
+        expect(result).to.deep.equal({});
     });
 
-    it('rejects a path outside the primary instance entirely', () => {
-        const result = _prepareInstance(MODEL, {
+    it('excludes paths outside the primary instance while keeping valid ones', () => {
+        const result = getValidatedDefaults(MODEL, {
             '/myform/name': 'Alice',
             '/other/field': 'injected',
         });
-        const doc = parser.parseFromString(result, 'text/xml');
-        // valid path still applied
-        expect(doc.querySelector('name').textContent).to.equal('Alice');
-        // no 'other' element was created
-        expect(doc.querySelector('other')).to.be.null;
+
+        expect(result).to.deep.equal({ '/myform/name': 'Alice' });
     });
 });

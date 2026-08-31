@@ -261,32 +261,61 @@ function _isAllowedDefault(path, targetNode, rootElement) {
     return true;
 }
 
-export function _prepareInstance(modelStr, defaults) {
-    let model;
-    let init;
-    let existingInstance = null;
+/**
+ * Validates URL default parameters against the form model and returns only
+ * the subset that are safe to apply. This is the security gate for d[path]=value
+ * query parameters — paths targeting attributes, group nodes, the instance root,
+ * or protected ODK metadata fields are silently dropped.
+ *
+ * @param {string} modelStr - XForm model XML string
+ * @param {object} defaults - raw d[path]=value map from URL query params
+ * @return {object} filtered map containing only allowed path/value pairs
+ */
+export function getValidatedDefaults(modelStr, defaults) {
+    if (!defaults || !Object.keys(defaults).length) return {};
+
+    const model = new FormModel(modelStr, { full: false });
+    model.init();
+    const validated = {};
 
     for (const path in defaults) {
         if (Object.prototype.hasOwnProperty.call(defaults, path)) {
-            model =
-                model ||
-                new FormModel(modelStr, {
-                    full: false,
-                });
-            init = init || model.init();
             const targetNode = model.node(path).getElement();
             if (_isAllowedDefault(path, targetNode, model.rootElement)) {
-                // if this fails, the FormModel will output a console error and ignore the instruction
-                model.node(path).setVal(defaults[path]);
-                // TODO: would be good to not include nodes that weren't in the defaults parameter
-                // HOWEVER, that would also set number of repeats to 0, which may be undesired
-                // TODO: would be good to just pass model along instead of converting to string first
-                existingInstance = model.getStr();
+                validated[path] = defaults[path];
             }
         }
     }
 
-    return existingInstance;
+    return validated;
+}
+
+/**
+ * Applies pre-validated defaults to a fresh model instance and returns the
+ * serialized XML string for use as instanceStr on form initialization.
+ *
+ * @param {string} modelStr - XForm model XML string
+ * @param {object} validatedDefaults - already-validated path/value map from getValidatedDefaults
+ * @return {string|null} instance XML string, or null if no defaults to apply
+ */
+function _prepareInstance(modelStr, validatedDefaults) {
+    if (!Object.keys(validatedDefaults).length) return null;
+
+    const model = new FormModel(modelStr, { full: false });
+    model.init();
+    let instanceStr = null;
+
+    for (const path in validatedDefaults) {
+        if (Object.prototype.hasOwnProperty.call(validatedDefaults, path)) {
+            // TODO: would be good to not include nodes that weren't in the defaults parameter
+            // HOWEVER, that would also set number of repeats to 0, which may be undesired
+            // TODO: would be good to just pass model along instead of converting to string first
+            model.node(path).setVal(validatedDefaults[path]);
+            instanceStr = model.getStr();
+        }
+    }
+
+    return instanceStr;
 }
 
 function _init(formParts) {
@@ -294,10 +323,16 @@ function _init(formParts) {
     formheader.after(formFragment);
     const formEl = document.querySelector('form.or');
 
+    const validatedDefaults = getValidatedDefaults(
+        formParts.model,
+        settings.defaults
+    );
+
     return controller
         .init(formEl, {
             modelStr: formParts.model,
-            instanceStr: _prepareInstance(formParts.model, settings.defaults),
+            instanceStr: _prepareInstance(formParts.model, validatedDefaults),
+            validatedDefaults,
             external: formParts.externalData,
             survey: formParts,
         })
