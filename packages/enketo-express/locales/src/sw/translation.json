@@ -30,11 +30,9 @@
             "heading": "Arifu"
         },
         "export": {
-            "alternativequestion": "alternative download - online",
             "error": {
                 "filecreatedmsg": "Nevertheless, an incomplete export file was still created.",
                 "heading": "Export Error",
-                "linknotcreated": "Failed to create an export link for unsubmitted records. Are you online?",
                 "msg": "Errors occurred during creating of the record export file for unsubmitted records. Errors: __errors__"
             },
             "success": {
@@ -200,7 +198,6 @@
         "instancenotfound": "Rekodi hii haipatikani. Inaweza kuwa imetolewa kwenye hifadhi kwa sababu imekaa hapo kwa muda mrefu.",
         "invalidediturl": "Anwani ya wavuti uliyopeana sio halali",
         "loadfailed": "Failed to load __resource__",
-        "notfoundinformlist": "Fomu lenye kitambulisho nambari __formId__ halikupatikana kwenye /orodha la fomu zote",
         "pagenotfound": "Ukurasa haukupatikana",
         "surveyidnotactive": "Tafiti lililoko na kitambulisho hiki haliko amilifu tena",
         "surveyidnotfound": "Tafiti lililo na kitambulisho hiki halijapatikana",

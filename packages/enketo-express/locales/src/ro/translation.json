@@ -30,11 +30,9 @@
             "heading": "Alertă"
         },
         "export": {
-            "alternativequestion": "alternative download - online",
             "error": {
                 "filecreatedmsg": "Nevertheless, an incomplete export file was still created.",
                 "heading": "Export Error",
-                "linknotcreated": "Failed to create an export link for unsubmitted records. Are you online?",
                 "msg": "Errors occurred during creating of the record export file for unsubmitted records. Errors: __errors__"
             },
             "success": {
@@ -195,7 +193,6 @@
         "instancenotfound": "Înregistrarea nu poate fi găsită. Este posibil că a expirat.",
         "invalidediturl": "Nu este un URL valid",
         "loadfailed": "Failed to load __resource__",
-        "notfoundinformlist": "Formularul cu ID __formId__ nu a fost găsit în /formList",
         "pagenotfound": "Pagina nu a fost găsită",
         "surveyidnotactive": "Sondajul cu acest ID nu mai este activ",
         "surveyidnotfound": "Sondajul cu acest ID nu a fost găsit",

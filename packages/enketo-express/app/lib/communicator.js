@@ -342,7 +342,7 @@ function _request(options) {
 
         request[method](options, (error, response, body) => {
             if (error) {
-                debug(`Error occurred when requesting ${options.url}`, error);
+                debug(`Error occurred when making this request`, error);
                 reject(error);
             } else if (response.statusCode === 401) {
                 error = new Error('Forbidden. Authorization Required.');
@@ -352,14 +352,14 @@ function _request(options) {
                 response.statusCode < 200 ||
                 response.statusCode >= 300
             ) {
-                error = new Error(`Request to ${options.url} failed.`);
+                error = new Error(`Request failed.`);
                 error.status = response.statusCode;
                 reject(error);
             } else if (method === 'head') {
                 resolve(response);
             } else {
                 debug(
-                    `response of request to ${options.url} has status code: `,
+                    `response of request has status code: `,
                     response.statusCode
                 );
                 resolve(body);
@@ -413,9 +413,7 @@ function _findFormAddInfo(formListXml, survey) {
                 }
 
                 if (!found) {
-                    error = new TError('error.notfoundinformlist', {
-                        formId: survey.openRosaId,
-                    });
+                    error = new TError('error.notfoundinformlist');
                     error.status = 404;
                     reject(error);
                 } else {

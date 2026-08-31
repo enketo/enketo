@@ -225,8 +225,6 @@
         "instancenotfound": "Datensatz nicht vorhanden. Er ist wahrscheinlich abgelaufen.",
         "invalidediturl": "Keine gültige Bearbeitungs-URL",
         "loadfailed": "Fehler beim Laden von __resource__",
-        "notfoundinformlist": "Dieses Formular existiert nicht mehr oder Sie haben keiner Zugriff mehr darauf. Bitte überprüfen Sie die URL auf fehlende Zeichen.\n\nWenn das Formular bisher existierte, wurde es vielleicht archiviert, deaktiviert oder gelöscht. Falls dies unerwartet ist, kontaktieren Sie die Person, die Sie gebeten hat das Formular auszufüllen.\n\n(Versuchter Zugriff auf Formular mit ID: __formId__)",
-        "notfounddirectformurl": "Dieses Formular existiert nicht mehr oder Sie haben keiner Zugriff mehr darauf. Bitte überprüfen Sie die URL auf fehlende Zeichen.\n\nWenn das Formular bisher existierte, wurde es vielleicht archiviert, deaktiviert oder gelöscht. Falls dies unerwartet ist, kontaktieren Sie die Person, die Sie gebeten hat das Formular auszufüllen.\n\n(Versuchter Zugriff auf Formular mit ID: __notfounddirectformurl__)",
         "pagenotfound": "Seite nicht gefunden",
         "surveyidnotactive": "Umfrage mit dieser ID ist nicht mehr aktiv",
         "surveyidnotfound": "Umfrage mit dieser ID nicht gefunden",

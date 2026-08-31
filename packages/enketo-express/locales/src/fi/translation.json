@@ -30,11 +30,9 @@
             "heading": "Hälyytys"
         },
         "export": {
-            "alternativequestion": "vaihtoehtoinen lataus - verkossa",
             "error": {
                 "filecreatedmsg": "Joka tapauksessa epätäydellinen vientitiedosto luotiin. ",
                 "heading": "Vientivirhe",
-                "linknotcreated": "Epäonnistuit luomaan vientilinkkiä tallentamattomille tiedostoille. Oletko verkossa?",
                 "msg": "Virheitä esiintyi luotaessa vientitiedostoa lähettämättömille tietueille. Virheet: __errors__"
             },
             "success": {
@@ -200,7 +198,6 @@
         "instancenotfound": "Tietue ei ole saatavilla. Se on saattanut vanhentua. ",
         "invalidediturl": "Epäkelpo URL muoto",
         "loadfailed": "__resource__ lataus epäonnistui",
-        "notfoundinformlist": "Lomaketta numerolla __formId__ ei löytynyt /formList",
         "pagenotfound": "Sivua ei löytynyt",
         "surveyidnotactive": "Tutkimusta tällä numerolla ei ole enää aktiivisena",
         "surveyidnotfound": "Tutkimusta tällä numerolla ei löytynyt",
