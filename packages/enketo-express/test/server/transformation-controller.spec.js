@@ -77,7 +77,7 @@ describe('Transformation Controller', () => {
         // No-op `_checkQuota`
         sandbox.stub(config, 'account lib').get(() => null);
 
-        sandbox.stub(userModel, 'getCredentials').callsFake(() => ({ bearer }));
+        sandbox.stub(userModel, 'getCredentials').callsFake(() => Promise.resolve({ bearer }));
 
         app = require('../../config/express');
         basePath = app.get('base path');

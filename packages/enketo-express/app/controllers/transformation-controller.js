@@ -65,7 +65,7 @@ async function getSurveyParts(req, res, next) {
         survey = await _updateCache(cached ?? survey);
 
         const { enketoId, manifest, mediaHash } = survey;
-        const mediaOptions = mediaLib.getHostURLOptions(req, mediaHash);
+        const mediaOptions = await mediaLib.getHostURLOptions(req, mediaHash);
 
         const media = await mediaLib.getMediaMap(
             enketoId,
@@ -270,13 +270,13 @@ function _getCombinedHash(survey) {
  *
  * @return { Promise<module:survey-model~SurveyObject> } a Promise resolving with survey object with added credentials
  */
-function _setCookieAndCredentials(survey, req) {
+async function _setCookieAndCredentials(survey, req) {
     // for external authentication, pass the cookie(s)
     survey.cookie = req.headers.cookie;
     // for OpenRosa authentication, add the credentials
-    survey.credentials = user.getCredentials(req);
+    survey.credentials = await user.getCredentials(req);
 
-    return Promise.resolve(survey);
+    return survey;
 }
 
 /**
