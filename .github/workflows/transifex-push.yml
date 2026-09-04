@@ -1,0 +1,36 @@
+name: Transifex - push source strings
+
+# Pushes the English source strings to Transifex whenever they change on main,
+# so translators immediately see new/changed keys to translate.
+
+on:
+    push:
+        branches:
+            - main
+        paths:
+            - 'packages/enketo-express/locales/src/en/translation.json'
+            - '.tx/config'
+    workflow_dispatch: {}
+
+jobs:
+    push-source-strings:
+        runs-on: ubuntu-latest
+        steps:
+            - name: Checkout
+              uses: actions/checkout@v7
+
+            - name: Push source strings
+              uses: transifex/cli-action@v2
+              with:
+                  token: ${{ secrets.TRANSIFEX_TOKEN }}
+                  args: 'push --source'
+
+    notify-failure:
+        needs: push-source-strings
+        if: failure()
+        uses: ./.github/workflows/zulip.yml
+        secrets: inherit
+        with:
+            topic: 'Transifex automation'
+            stream: 'Enketo'
+            content: ':warning: @*devs*, [Transifex push run #${{ github.run_number }}](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}) failed'

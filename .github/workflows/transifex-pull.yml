@@ -1,0 +1,61 @@
+name: Transifex - pull translations
+
+# Periodically pulls completed translations from Transifex and opens a PR,
+# so translation work done by the community actually lands in the repo.
+
+on:
+    schedule:
+        # Every Monday at 06:17 UTC (odd minute, to avoid GHA congestion on the hour)
+        - cron: '17 6 * * 1'
+    workflow_dispatch: {}
+
+jobs:
+    pull-translations:
+        runs-on: ubuntu-latest
+        permissions:
+            contents: write
+            pull-requests: write
+        outputs:
+            pr-operation: ${{ steps.cpr.outputs.pull-request-operation }}
+        steps:
+            - name: Checkout
+              uses: actions/checkout@v7
+
+            - name: Pull translations
+              uses: transifex/cli-action@v2
+              with:
+                  token: ${{ secrets.TRANSIFEX_TOKEN }}
+                  args: 'pull --all --mode reviewed'
+
+            - name: Open pull request
+              id: cpr
+              uses: peter-evans/create-pull-request@v6
+              with:
+                  commit-message: 'chore(i18n): update translations from Transifex'
+                  title: 'chore(i18n): update translations from Transifex'
+                  body: Automated update of translated strings pulled from Transifex.
+                  branch: chore/transifex-translations
+                  delete-branch: true
+                  add-paths: |
+                      packages/enketo-express/locales/src/**/translation.json
+
+    notify-success:
+        needs: pull-translations
+        # Skip when tx pull found nothing new, so the PR step had nothing to commit
+        if: success() && needs.pull-translations.outputs.pr-operation != ''
+        uses: ./.github/workflows/zulip.yml
+        secrets: inherit
+        with:
+            topic: 'Transifex automation'
+            stream: 'Enketo'
+            content: ':check: New translations pulled from Transifex - [check for an open PR](${{ github.server_url }}/${{ github.repository }}/pulls)'
+
+    notify-failure:
+        needs: pull-translations
+        if: failure()
+        uses: ./.github/workflows/zulip.yml
+        secrets: inherit
+        with:
+            topic: 'Transifex automation'
+            stream: 'Enketo'
+            content: ':warning: @*devs*, [Transifex pull run #${{ github.run_number }}](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}) failed'
