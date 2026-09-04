@@ -2,8 +2,8 @@
 host = https://app.transifex.com
 
 [o:enketo:p:enketo-express:r:translation]
-file_filter            = locales/src/<lang>/translation.json
-source_file            = locales/src/en/translation.json
+file_filter            = packages/enketo-express/locales/src/<lang>/translation.json
+source_file            = packages/enketo-express/locales/src/en/translation.json
 source_lang            = en
 type                   = KEYVALUEJSON
 minimum_perc           = 0

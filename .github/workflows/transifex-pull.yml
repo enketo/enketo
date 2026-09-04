@@ -2,17 +2,11 @@ name: Transifex - pull translations
 
 # Periodically pulls completed translations from Transifex and opens a PR,
 # so translation work done by the community actually lands in the repo.
-#
-# Requires:
-# - a `packages/enketo-express/.tx/config` file (generate locally with
-#   `tx add remote` once, then commit it - see tutorials/40-translate.md)
-# - a `TRANSIFEX_TOKEN` repository secret with a Transifex API token that has read
-#   access to the enketo-express project
 
 on:
     schedule:
-        # Every Monday at 06:00 UTC
-        - cron: '0 6 * * 1'
+        # Every Monday at 06:17 UTC (odd minute, to avoid GHA congestion on the hour)
+        - cron: '17 6 * * 1'
     workflow_dispatch: {}
 
 jobs:
@@ -25,21 +19,13 @@ jobs:
             pr-operation: ${{ steps.cpr.outputs.pull-request-operation }}
         steps:
             - name: Checkout
-              uses: actions/checkout@v4
-
-            - name: Install Transifex CLI
-              run: |
-                  curl -o- https://raw.githubusercontent.com/transifex/cli/master/install.sh | bash
-                  echo "$GITHUB_WORKSPACE" >> "$GITHUB_PATH"
+              uses: actions/checkout@v7
 
             - name: Pull translations
-              working-directory: packages/enketo-express
-              env:
-                  TX_TOKEN: ${{ secrets.TRANSIFEX_TOKEN }}
-              # Only pull strings that have actually been translated, so untranslated
-              # keys keep falling back to English instead of being overwritten with
-              # empty/placeholder values.
-              run: tx pull --all --mode onlytranslated
+              uses: transifex/cli-action@v2
+              with:
+                  token: ${{ secrets.TRANSIFEX_TOKEN }}
+                  args: 'pull --all --mode reviewed'
 
             - name: Open pull request
               id: cpr
