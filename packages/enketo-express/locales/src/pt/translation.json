@@ -27,9 +27,11 @@
             "heading": "Alerta"
         },
         "export": {
+            "alternativequestion": "Download alternativo - online",
             "error": {
                 "filecreatedmsg": "Mesmo assim, foi criado um arquivo para exportação incompleto.",
                 "heading": "Erro de exportação",
+                "linknotcreated": "Falha ao criar um link de exportação para registros não enviados. Você está online?",
                 "msg": "Ocorreram erros durante a criação do arquivo de exportação de registros não enviados. Erros: __errors__"
             },
             "success": {
@@ -229,10 +231,13 @@
         "instancenotfound": "Registro não presente. Talvez tenha expirado.",
         "invalidediturl": "URL de edição inválido",
         "loadfailed": "Falha ao carregar __recurso__",
-        "notfoundinformlist": "This form is no longer available.",
+        "notfoundinformlist": [
+            "Opa, este formulário não existe (mais). Muito provavelmente, o proprietário do formulário o excluiu, arquivou ou desativou. Por favor, entre em contato com o proprietário do formulário para verificar.",
+            "Erro detalhado: Formulário com ID __formId__ não encontrado em /formList."
+        ],
         "pagenotfound": "Página não encontrada",
         "surveyidnotactive": "A pesquisa com este ID não está mais ativa",
-        "surveyidnotfound": "No form found with this URL, please double check.",
+        "surveyidnotfound": "A pesquisa com este ID não foi encontrada",
         "unknown": "Ocorreu um erro desconhecido"
     },
     "feedback": {
