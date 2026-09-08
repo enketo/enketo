@@ -1,0 +1,13 @@
+[main]
+host = https://app.transifex.com
+
+[o:enketo:p:enketo-express:r:translation]
+file_filter            = packages/enketo-express/locales/src/<lang>/translation.json
+source_file            = packages/enketo-express/locales/src/en/translation.json
+source_lang            = en
+type                   = KEYVALUEJSON
+minimum_perc           = 0
+resource_name          = enketo-express-source
+replace_edited_strings = false
+keep_translations      = false
+
