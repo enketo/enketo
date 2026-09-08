@@ -147,9 +147,7 @@ describe('Transformation Controller', () => {
 
             authenticateStub.rejects(error);
 
-            const message = app.i18next.t('error.notfoundinformlist', {
-                formId: openRosaId,
-            });
+            const message = app.i18next.t('error.notfoundinformlist');
             const actual = await getTransformResult(404);
 
             expect(actual).to.deep.equal({
