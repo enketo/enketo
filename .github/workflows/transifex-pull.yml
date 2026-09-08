@@ -20,12 +20,16 @@ jobs:
         steps:
             - name: Checkout
               uses: actions/checkout@v7
+              with:
+                  # avoid a persisted auth header clashing with create-pull-request's own credentials
+                  persist-credentials: false
 
             - name: Pull translations
               uses: transifex/cli-action@v2
               with:
                   token: ${{ secrets.TRANSIFEX_TOKEN }}
-                  args: 'pull --all --mode reviewed'
+                  # compare against git commit dates, not checkout mtime, to avoid re-pulling unchanged files
+                  args: 'pull --all --mode reviewed --use-git-timestamps'
 
             - name: Open pull request
               id: cpr

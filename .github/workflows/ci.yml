@@ -9,5 +9,23 @@ on:
             - 'published'
 
 jobs:
-  install-build-test:
-    uses: ./.github/workflows/install-build-test.yml
+    install-build-test:
+        uses: ./.github/workflows/install-build-test.yml
+
+    check-translations:
+        # The Transifex pull automation is the only legitimate source of non-English translation changes
+        if: github.event_name == 'pull_request' && github.head_ref != 'chore/transifex-translations'
+        runs-on: 'ubuntu-latest'
+        steps:
+            - uses: 'actions/checkout@v7'
+              with:
+                  fetch-depth: 0
+
+            - name: Ensure only English translations are hand-edited
+              run: |
+                  changed=$(git diff --name-only "origin/${{ github.base_ref }}...HEAD" -- 'packages/enketo-express/locales/src/*/translation.json' | grep -v '/en/translation.json' || true)
+                  if [ -n "$changed" ]; then
+                    echo "::error::Non-English translation files must only be updated by the Transifex pull automation, not edited directly:"
+                    echo "$changed"
+                    exit 1
+                  fi
