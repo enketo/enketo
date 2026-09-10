@@ -92,12 +92,13 @@ function logout(req, res) {
  * @param {Function} next - Express callback
  */
 async function setToken(req, res, next) {
-    const username = req.body.username.trim();
     const maxAge = 30 * 24 * 60 * 60 * 1000;
     const returnUrl = req.query.return_url || '';
 
+    let username;
     let token;
     try {
+        username = req.body.username.trim();
         const derivedKey = deriveEncryptionKey(req.app.get('encryption key'));
         const nowSecs = Math.floor(Date.now() / 1000);
         const expSecs = req.body.remember
