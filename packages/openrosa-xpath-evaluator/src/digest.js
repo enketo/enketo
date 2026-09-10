@@ -26,10 +26,12 @@ module.exports = (message, algo, encoding) => {
         throw new Error('Invalid encoding.');
     }
     const md = forge.md[algo.replace('-', '')].create();
-    md.update(message);
+    // The second argument is essential: without it, node-forge consumes the
+    // string as raw code units, which digests non-ASCII characters incorrectly.
+    md.update(message, 'utf8');
     const hashBuffer = md.digest();
-    if (!encoding || encoding === 'base64') {
+    if (encoding === 'base64') {
         return forge.util.encode64(hashBuffer.bytes());
     }
-    return md.digest().toHex();
+    return hashBuffer.toHex();
 };
