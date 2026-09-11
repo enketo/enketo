@@ -2,10 +2,10 @@
  * @module user-model
  */
 
-const { jwtDecrypt } = require('jose');
+const { jwtDecrypt, errors } = require('jose');
 const { deriveEncryptionKey } = require('../lib/encryption');
 const url = require('url');
-// var debug = require( 'debug' )( 'user-model' );
+const debug = require('debug')('enketo:user-model');
 
 /**
  * Returns credentials from request object.
@@ -24,14 +24,17 @@ async function getCredentials(req) {
         const jwToken =
             req.signedCookies[req.app.get('authentication cookie name')];
         if (jwToken) {
+            const derivedKey = deriveEncryptionKey(
+                req.app.get('encryption key')
+            );
             try {
-                const derivedKey = deriveEncryptionKey(
-                    req.app.get('encryption key')
-                );
                 const { payload } = await jwtDecrypt(jwToken, derivedKey);
                 creds = { user: payload.user, pass: payload.pass };
-            } catch {
-                creds = null;
+            } catch (err) {
+                if (!(err instanceof errors.JOSEError)) {
+                    throw err;
+                }
+                debug('auth cookie rejected: %s', err.code);
             }
         }
     } else if (authType === 'token') {

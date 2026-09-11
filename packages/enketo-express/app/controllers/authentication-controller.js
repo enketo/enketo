@@ -6,8 +6,8 @@ const csrfProtection = require('csurf')({
     cookie: true,
 });
 const { EncryptJWT } = require('jose');
-const { deriveEncryptionKey } = require('../lib/encryption');
 const express = require('express');
+const { deriveEncryptionKey } = require('../lib/encryption');
 
 const router = express.Router();
 // var debug = require( 'debug' )( 'authentication-controller' );
@@ -92,19 +92,21 @@ function logout(req, res) {
  * @param {Function} next - Express callback
  */
 async function setToken(req, res, next) {
-    const maxAge = 30 * 24 * 60 * 60 * 1000;
     const returnUrl = req.query.return_url || '';
+    const maxAge = req.body.remember
+        ? 30 * 24 * 60 * 60 * 1000
+        : 24 * 60 * 60 * 1000;
 
     let username;
     let token;
     try {
         username = req.body.username.trim();
         const derivedKey = deriveEncryptionKey(req.app.get('encryption key'));
-        const nowSecs = Math.floor(Date.now() / 1000);
-        const expSecs = req.body.remember
-            ? nowSecs + 30 * 24 * 60 * 60
-            : nowSecs + 24 * 60 * 60;
-        token = await new EncryptJWT({ user: username, pass: req.body.password })
+        const expSecs = Math.floor((Date.now() + maxAge) / 1000);
+        token = await new EncryptJWT({
+            user: username,
+            pass: req.body.password,
+        })
             .setProtectedHeader({ alg: 'dir', enc: 'A256GCM' })
             .setIssuedAt()
             .setExpirationTime(expSecs)
@@ -126,18 +128,14 @@ async function setToken(req, res, next) {
         signed: true,
         httpOnly: true,
         path: '/',
+        maxAge,
     };
 
     const uidOptions = {
         signed: true,
-        maxAge: 30 * 24 * 60 * 60 * 1000,
+        maxAge,
         path: '/',
     };
-
-    if (req.body.remember) {
-        authOptions.maxAge = maxAge;
-        uidOptions.maxAge = maxAge;
-    }
 
     // store the token in a cookie on the client
     res.cookie(req.app.get('authentication cookie name'), token, authOptions)
