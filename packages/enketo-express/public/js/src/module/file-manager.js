@@ -12,11 +12,32 @@ import { t } from './translator';
 
 const URL_RE = /[a-zA-Z0-9+-.]+?:\/\//;
 
+const MARKUP_ENTITIES = {
+    '&amp;': '&',
+    '&lt;': '<',
+    '&gt;': '>',
+    '&quot;': '"',
+};
+
 /** @type {Record<string, string>} */
 let instanceAttachments;
 
-/** @type {Map<string, Blob>} */
+/**
+ * Blobs of the attachments loaded with the record, keyed by the file name as it
+ * appears in the record (i.e. unescaped).
+ *
+ * @type {Map<string, Blob>}
+ */
 const prefetchedBlobCache = new Map();
+
+/**
+ * Resolves once every attachment has either been downloaded or failed. Remains
+ * null when no prefetch was requested, which is how the file names of unchanged
+ * attachments are known to be good enough as-is.
+ *
+ * @type {?Promise<void>}
+ */
+let prefetchPromise = null;
 
 /**
  * Initialize the file manager .
@@ -44,49 +65,78 @@ function isWaitingForPermissions() {
  */
 function setInstanceAttachments(attachments) {
     instanceAttachments = attachments;
-    if (!attachments) {
-        prefetchedBlobCache.clear();
+    prefetchedBlobCache.clear();
+    prefetchPromise = null;
+}
+
+/**
+ * Reverses the escaping the server applies to instance attachment file names
+ * (see `escapeFileName` in /app/lib/media.js), so that a downloaded attachment
+ * can be found by the file name as it appears in the record.
+ *
+ * @param {string} escapedFilename - file name as used in the attachments map
+ * @return {string} file name as used in the record
+ */
+function _unescapeFilename(escapedFilename) {
+    const unescaped = escapedFilename.replace(
+        /&(?:amp|lt|gt|quot);/g,
+        (entity) => MARKUP_ENTITIES[entity]
+    );
+
+    try {
+        return decodeURIComponent(unescaped);
+    } catch {
+        // The name is not percent-encoded, e.g. it contains a literal `%`.
+        return unescaped;
     }
 }
 
 /**
- * Pre-fetches all instance attachment URLs and caches the resulting Blobs.
- * Should be called immediately after setInstanceAttachments while the
- * server-side cache is still fresh.
+ * Downloads the attachments loaded with the record and caches the Blobs.
+ *
+ * Encrypted submissions have to encrypt and re-upload every attachment, so for
+ * those the file names of unchanged attachments are not enough. The URLs are
+ * served from a server-side cache that expires shortly after the record is
+ * opened, so this should be called as early as possible after
+ * setInstanceAttachments. Repeat calls return the same promise.
  *
  * @return {Promise<void>}
  */
 function prefetchInstanceAttachments() {
-    if (!instanceAttachments) {
-        return Promise.resolve();
+    if (prefetchPromise == null) {
+        prefetchPromise = Promise.all(
+            Object.entries(instanceAttachments ?? {}).map(
+                ([escapedFilename, url]) => {
+                    const filename = _unescapeFilename(escapedFilename);
+
+                    return fetch(url, { credentials: 'include' })
+                        .then((response) => {
+                            if (!response.ok) {
+                                throw new Error(
+                                    `Request failed with status ${response.status}`
+                                );
+                            }
+
+                            return response.blob();
+                        })
+                        .then((blob) => {
+                            blob.name = filename;
+                            prefetchedBlobCache.set(filename, blob);
+                        })
+                        .catch((error) => {
+                            console.error(
+                                `Failed to download attachment "${filename}":`,
+                                error
+                            );
+                        });
+                }
+            )
+        ).then(() => undefined);
     }
 
-    const fetchPromises = Object.entries(instanceAttachments).map(
-        ([filename, url]) =>
-            fetch(url, { credentials: 'include' })
-                .then((response) => {
-                    if (!response.ok) {
-                        throw new Error(
-                            `Failed to fetch ${filename}: ${response.status}`
-                        );
-                    }
-
-                    return response.blob();
-                })
-                .then((blob) => {
-                    blob.name = filename;
-                    prefetchedBlobCache.set(filename, blob);
-                })
-                .catch((err) => {
-                    console.warn(
-                        `Failed to prefetch attachment "${filename}":`,
-                        err
-                    );
-                })
-    );
-
-    return Promise.all(fetchPromises).then(() => undefined);
+    return prefetchPromise;
 }
+
 /**
  * Obtains a url that can be used to show a preview of the file when used
  * as a src attribute.
@@ -186,6 +236,33 @@ function getObjectUrl(subject) {
 }
 
 /**
+ * Obtains the file of an attachment that was loaded with the record and left
+ * unchanged. Encrypted submissions have to encrypt and re-upload their
+ * attachments, so for those the downloaded Blob is returned instead of the
+ * file name.
+ *
+ * @param {string} filename - file name as it appears in the record
+ * @return {Blob|string} the downloaded Blob, or the file name
+ */
+function _getUnchangedFile(filename) {
+    if (prefetchPromise == null) {
+        return filename;
+    }
+
+    const blob = prefetchedBlobCache.get(filename);
+
+    if (!blob) {
+        throw new Error(t('error.dataloadfailed', { filename }));
+    }
+
+    if (isTooLarge(blob)) {
+        throw new Error(`${filename}: ${_getMaxSizeError().message}`);
+    }
+
+    return blob;
+}
+
+/**
  * Obtain files currently stored in file input elements of open record
  *
  * @return { Promise } A promise that resolves with an array of files
@@ -197,6 +274,12 @@ function getCurrentFiles() {
         ),
     ];
     const fileTasks = [];
+    /**
+     * Inputs holding a file the user just picked, drew or recorded. A
+     * data-loaded-file-name left on one of these belongs to the file that was
+     * replaced: widgets only remove it once the new file has been processed.
+     */
+    const replacedInputs = new Set();
 
     const _processNameAndSize = function (input, file) {
         if (file && file.name) {
@@ -225,6 +308,7 @@ function getCurrentFiles() {
         if (input.type === 'file') {
             // first get any files inside file input elements
             if (input.files[0]) {
+                replacedInputs.add(input);
                 fileTasks.push(
                     Promise.resolve(_processNameAndSize(input, input.files[0]))
                 );
@@ -235,6 +319,7 @@ function getCurrentFiles() {
             input.dataset?.cache
         ) {
             // Load drawing from cache
+            replacedInputs.add(input);
             const blob = utils.dataUriToBlobSync(input.dataset.cache);
             blob.name = input.value;
             fileTasks.push(
@@ -245,18 +330,26 @@ function getCurrentFiles() {
         }
     });
 
-    return Promise.all(fileTasks).then((files) => {
-        // get any file names of files that were loaded as DataURI and have remained unchanged (i.e. loaded from Storage)
-        fileInputs
-            .filter((input) => input.matches('[data-loaded-file-name]'))
-            .forEach((input) => {
-                const filename = input.getAttribute('data-loaded-file-name');
-                const cached = prefetchedBlobCache.get(filename);
-                files.push(cached || filename);
-            });
+    return Promise.all(fileTasks).then((files) =>
+        Promise.resolve(prefetchPromise).then(() => {
+            // get any file names of files that were loaded as DataURI and have remained unchanged (i.e. loaded from Storage)
+            fileInputs
+                .filter(
+                    (input) =>
+                        !replacedInputs.has(input) &&
+                        input.matches('[data-loaded-file-name]')
+                )
+                .forEach((input) => {
+                    files.push(
+                        _getUnchangedFile(
+                            input.getAttribute('data-loaded-file-name')
+                        )
+                    );
+                });
 
-        return files;
-    });
+            return files;
+        })
+    );
 }
 
 /**
