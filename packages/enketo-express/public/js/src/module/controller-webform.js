@@ -105,8 +105,8 @@ function init(formEl, data, loadErrors = []) {
 
             if (form.encryptionKey && data.instanceAttachments) {
                 // Fetch the attachments now: their URLs resolve through the
-                // record cached in Redis, which expires seconds after it is
-                // opened for editing.
+                // record cached in Redis, which starts expiring when the edit
+                // link is issued, before this page is even loaded.
                 fileManager.prefetchInstanceAttachments();
             }
 
