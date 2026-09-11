@@ -556,11 +556,13 @@ describe('File manager', () => {
 
             await fileManager.prefetchInstanceAttachments();
 
-            // enketo-core clears the model value but leaves
-            // data-loaded-file-name in place, and disables the control
-            const input = addFileInput('photo.jpg');
+            // enketo-core clears the model value and marks the branch
+            // disabled, but leaves data-loaded-file-name in place
+            const question = document.createElement('label');
 
-            input.disabled = true;
+            question.className = 'question or-branch disabled';
+            formEl.appendChild(question);
+            question.appendChild(addFileInput('photo.jpg'));
 
             const files = await fileManager.getCurrentFiles();
 
@@ -574,20 +576,45 @@ describe('File manager', () => {
 
             await fileManager.prefetchInstanceAttachments();
 
-            // a non-relevant group disables its fieldset, which disables the
-            // controls inside it without setting their disabled attribute
-            const fieldset = document.createElement('fieldset');
+            const group = document.createElement('fieldset');
 
-            fieldset.disabled = true;
-            formEl.appendChild(fieldset);
+            group.className = 'or-group or-branch disabled';
+            formEl.appendChild(group);
 
-            const input = addFileInput('photo.jpg');
+            const question = document.createElement('label');
 
-            fieldset.appendChild(input);
+            question.className = 'question';
+            group.appendChild(question);
+            question.appendChild(addFileInput('photo.jpg'));
 
             const files = await fileManager.getCurrentFiles();
 
             expect(files).to.deep.equal([]);
+        });
+
+        // the filepicker disables the control of a readonly question for the
+        // life of the widget, so being disabled says nothing about relevance
+        it('returns the attachment of a readonly question', async () => {
+            fileManager.setInstanceAttachments({
+                'photo.jpg': dataURL('a photo'),
+            });
+
+            await fileManager.prefetchInstanceAttachments();
+
+            const question = document.createElement('label');
+
+            question.className = 'question readonly';
+            formEl.appendChild(question);
+
+            const input = addFileInput('photo.jpg');
+
+            input.disabled = true;
+            question.appendChild(input);
+
+            const [file] = await fileManager.getCurrentFiles();
+
+            expect(file).to.be.an.instanceof(Blob);
+            expect(file.name).to.equal('photo.jpg');
         });
 
         it('forgets the attachments of a previously loaded record', async () => {
