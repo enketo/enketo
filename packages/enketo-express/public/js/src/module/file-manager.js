@@ -13,18 +13,21 @@ import { t } from './translator';
 const URL_RE = /[a-zA-Z0-9+-.]+?:\/\//;
 
 const MARKUP_ENTITIES = {
-    '&amp;': '&',
-    '&lt;': '<',
-    '&gt;': '>',
-    '&quot;': '"',
+    '&': '&amp;',
+    '<': '&lt;',
+    '>': '&gt;',
+    '"': '&quot;',
 };
+
+/** Stand-in host used to escape a file name as a URL path, as the server does. */
+const ESCAPE_URL_HOST = 'http://example.com';
 
 /** @type {Record<string, string>} */
 let instanceAttachments;
 
 /**
- * Blobs of the attachments loaded with the record, keyed by the file name as it
- * appears in the record (i.e. unescaped).
+ * Blobs of the attachments loaded with the record, keyed exactly as the
+ * attachments map keys them (i.e. escaped by the server).
  *
  * @type {Map<string, Blob>}
  */
@@ -70,25 +73,29 @@ function setInstanceAttachments(attachments) {
 }
 
 /**
- * Reverses the escaping the server applies to instance attachment file names
- * (see `escapeFileName` in /app/lib/media.js), so that a downloaded attachment
- * can be found by the file name as it appears in the record.
+ * Applies the escaping the server applies to the keys of the instance
+ * attachments map (see `escapeFileName` in /app/lib/media.js), so that an
+ * attachment can be looked up by the file name as it appears in the record.
  *
- * @param {string} escapedFilename - file name as used in the attachments map
- * @return {string} file name as used in the record
+ * That escaping cannot be undone: a file name may itself contain a literal `%`
+ * or something that merely looks percent-encoded, and both survive it
+ * unchanged. It is therefore applied in the same direction here rather than
+ * reversed.
+ *
+ * @param {string} filename - file name as it appears in the record
+ * @return {string} file name as used in the attachments map
  */
-function _unescapeFilename(escapedFilename) {
-    const unescaped = escapedFilename.replace(
-        /&(?:amp|lt|gt|quot);/g,
-        (entity) => MARKUP_ENTITIES[entity]
+function _escapeFilename(filename) {
+    const { pathname, search } = new URL(
+        `${ESCAPE_URL_HOST}/${filename.replace(/^\//, '')}`
     );
+    const path = filename.startsWith('/')
+        ? pathname
+        : pathname.replace(/^\//, '');
 
-    try {
-        return decodeURIComponent(unescaped);
-    } catch {
-        // The name is not percent-encoded, e.g. it contains a literal `%`.
-        return unescaped;
-    }
+    return `${path}${search}`
+        .replace(/[\\/]/g, (character) => encodeURIComponent(character))
+        .replace(/[&<>"]/g, (character) => MARKUP_ENTITIES[character]);
 }
 
 /**
@@ -105,31 +112,26 @@ function _unescapeFilename(escapedFilename) {
 function prefetchInstanceAttachments() {
     if (prefetchPromise == null) {
         prefetchPromise = Promise.all(
-            Object.entries(instanceAttachments ?? {}).map(
-                ([escapedFilename, url]) => {
-                    const filename = _unescapeFilename(escapedFilename);
-
-                    return fetch(url, { credentials: 'include' })
-                        .then((response) => {
-                            if (!response.ok) {
-                                throw new Error(
-                                    `Request failed with status ${response.status}`
-                                );
-                            }
-
-                            return response.blob();
-                        })
-                        .then((blob) => {
-                            blob.name = filename;
-                            prefetchedBlobCache.set(filename, blob);
-                        })
-                        .catch((error) => {
-                            console.error(
-                                `Failed to download attachment "${filename}":`,
-                                error
+            Object.entries(instanceAttachments ?? {}).map(([filename, url]) =>
+                fetch(url, { credentials: 'include' })
+                    .then((response) => {
+                        if (!response.ok) {
+                            throw new Error(
+                                `Request failed with status ${response.status}`
                             );
-                        });
-                }
+                        }
+
+                        return response.blob();
+                    })
+                    .then((blob) => {
+                        prefetchedBlobCache.set(filename, blob);
+                    })
+                    .catch((error) => {
+                        console.error(
+                            `Failed to download attachment "${filename}":`,
+                            error
+                        );
+                    })
             )
         ).then(() => undefined);
     }
@@ -249,7 +251,9 @@ function _getUnchangedFile(filename) {
         return filename;
     }
 
-    const blob = prefetchedBlobCache.get(filename);
+    const blob =
+        prefetchedBlobCache.get(_escapeFilename(filename)) ??
+        prefetchedBlobCache.get(filename);
 
     if (!blob) {
         throw new Error(t('error.dataloadfailed', { filename }));
@@ -258,6 +262,10 @@ function _getUnchangedFile(filename) {
     if (isTooLarge(blob)) {
         throw new Error(`${filename}: ${_getMaxSizeError().message}`);
     }
+
+    // the record, not the attachments map, is the authority on the name the
+    // submission XML refers to this file by
+    blob.name = filename;
 
     return blob;
 }

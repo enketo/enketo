@@ -384,11 +384,15 @@ describe('File manager', () => {
             expect(await file.text()).to.equal('a photo');
         });
 
+        // keys as the server escapes them, per `escapeFileName` in
+        // /app/lib/media.js: percent-encoded as a URL path, then `&<>"`
+        // replaced with markup entities
         it('returns the downloaded blob for an attachment whose name was escaped', async () => {
             fileManager.setInstanceAttachments({
                 'space%20madness.png': dataURL('a photo', 'image/png'),
-                'me%20%26%20you.png': dataURL('another photo', 'image/png'),
-                'r%26d.png': dataURL('a third photo', 'image/png'),
+                'me%20&amp;%20you.png': dataURL('another photo', 'image/png'),
+                'r&amp;d.png': dataURL('a third photo', 'image/png'),
+                'a%3Cb%3E.png': dataURL('a fourth photo', 'image/png'),
             });
 
             await fileManager.prefetchInstanceAttachments();
@@ -396,6 +400,7 @@ describe('File manager', () => {
             addFileInput('space madness.png');
             addFileInput('me & you.png');
             addFileInput('r&d.png');
+            addFileInput('a<b>.png');
 
             const files = await fileManager.getCurrentFiles();
 
@@ -403,8 +408,36 @@ describe('File manager', () => {
                 'space madness.png',
                 'me & you.png',
                 'r&d.png',
+                'a<b>.png',
             ]);
             files.forEach((file) => expect(file).to.be.an.instanceof(Blob));
+        });
+
+        // the server's escaping is not reversible: these names survive it
+        // unchanged, or collide with an escape sequence
+        it('returns the downloaded blob for an attachment whose name contains a percent', async () => {
+            fileManager.setInstanceAttachments({
+                '100%20thing.jpg': dataURL('a photo'),
+                '50%%20done.jpg': dataURL('another photo'),
+                '50%.jpg': dataURL('a third photo'),
+            });
+
+            await fileManager.prefetchInstanceAttachments();
+
+            addFileInput('100%20thing.jpg');
+            addFileInput('50% done.jpg');
+            addFileInput('50%.jpg');
+
+            const files = await fileManager.getCurrentFiles();
+
+            expect(files.map((file) => file.name)).to.deep.equal([
+                '100%20thing.jpg',
+                '50% done.jpg',
+                '50%.jpg',
+            ]);
+            expect(await files[0].text()).to.equal('a photo');
+            expect(await files[1].text()).to.equal('another photo');
+            expect(await files[2].text()).to.equal('a third photo');
         });
 
         it('waits for a download that is still in progress', async () => {
