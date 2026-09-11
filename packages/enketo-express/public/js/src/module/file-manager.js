@@ -99,6 +99,32 @@ function _escapeFilename(filename) {
 }
 
 /**
+ * Obtains the URL of an attachment loaded with the record.
+ *
+ * The map is keyed by the escaped file name, so that is tried first. The
+ * unescaped name and a plain `encodeURIComponent` of it are tried too, for
+ * maps that predate the server escaping these keys.
+ *
+ * @param {string} filename - file name as it appears in the record
+ * @return {?string} the URL, or null when the record has no such attachment
+ */
+function _getInstanceAttachmentUrl(filename) {
+    if (!instanceAttachments) {
+        return null;
+    }
+
+    const key = [
+        _escapeFilename(filename),
+        encodeURIComponent(filename),
+        filename,
+    ].find((candidate) =>
+        Object.prototype.hasOwnProperty.call(instanceAttachments, candidate)
+    );
+
+    return key == null ? null : instanceAttachments[key];
+}
+
+/**
  * Downloads the attachments loaded with the record and caches the Blobs.
  *
  * Encrypted submissions have to encrypt and re-upload every attachment, so for
@@ -151,26 +177,12 @@ function getFileUrl(subject) {
         if (!subject) {
             resolve(null);
         } else if (typeof subject === 'string') {
-            const escapedSubject = encodeURIComponent(subject);
+            const attachmentUrl = _getInstanceAttachmentUrl(subject);
 
             if (subject.startsWith('/') || subject.startsWith('data:')) {
                 resolve(subject);
-            } else if (
-                instanceAttachments &&
-                Object.prototype.hasOwnProperty.call(
-                    instanceAttachments,
-                    escapedSubject
-                )
-            ) {
-                resolve(instanceAttachments[escapedSubject]);
-            } else if (
-                instanceAttachments &&
-                Object.prototype.hasOwnProperty.call(
-                    instanceAttachments,
-                    subject
-                )
-            ) {
-                resolve(instanceAttachments[subject]);
+            } else if (attachmentUrl != null) {
+                resolve(attachmentUrl);
             } else if (!settings.offline || !store.available) {
                 // e.g. in an online-only edit view
                 reject(new Error('store not available'));
