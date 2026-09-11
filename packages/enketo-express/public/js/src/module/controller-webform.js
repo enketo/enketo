@@ -104,10 +104,8 @@ function init(formEl, data, loadErrors = []) {
             replaceModelMediaSources(form, media);
 
             if (form.encryptionKey && data.instanceAttachments) {
-                // Attachments already on the record being edited arrive as
-                // file names only, and encrypting the submission needs their
-                // bytes. Fetch them now: the URLs stop working shortly after
-                // the record is opened.
+                // Fetch the attachments now: their URLs stop working
+                // shortly after the record is opened.
                 fileManager.prefetchInstanceAttachments();
             }
 
