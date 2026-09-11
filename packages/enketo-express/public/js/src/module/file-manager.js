@@ -377,9 +377,9 @@ function getCurrentFiles() {
             fileInputs
                 // a question that has become non-relevant keeps its
                 // data-loaded-file-name, but the record no longer refers to
-                // the file, so it must not be submitted or signed. Its branch
-                // is the thing to test: the control is disabled when readonly
-                // too, and that file is still part of the record.
+                // the file, so it must not be submitted or signed. Ask the
+                // branch rather than the control: a readonly control is
+                // disabled too, and its file is still part of the record.
                 .filter(
                     (input) =>
                         !replacedInputs.has(input) &&
