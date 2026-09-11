@@ -1,6 +1,7 @@
 import fileManager from '../../public/js/src/module/file-manager';
 import settings from '../../public/js/src/module/settings';
 import store from '../../public/js/src/module/store';
+import { t } from '../../public/js/src/module/translator';
 
 describe('File manager', () => {
     /** @type {import('sinon').SinonSandbox} */
@@ -79,102 +80,6 @@ describe('File manager', () => {
                 expect(result).to.equal(
                     'https://example.com/path/to/space%20madness.png'
                 );
-            });
-        });
-
-        describe('prefetching instance attachments', () => {
-            afterEach(() => {
-                fileManager.setInstanceAttachments(null);
-            });
-
-            it('prefetchInstanceAttachments fetches and caches blobs', async () => {
-                const content = 'test image content';
-                const dataURI = `data:image/jpeg;base64,${btoa(content)}`;
-
-                fileManager.setInstanceAttachments({
-                    'photo.jpg': dataURI,
-                });
-
-                await fileManager.prefetchInstanceAttachments();
-
-                // Verify by creating a DOM input with data-loaded-file-name
-                // and checking getCurrentFiles returns a Blob
-                const formEl = document.createElement('form');
-                formEl.className = 'or';
-                const input = document.createElement('input');
-                input.type = 'file';
-                input.setAttribute('data-loaded-file-name', 'photo.jpg');
-                formEl.appendChild(input);
-                document.body.appendChild(formEl);
-
-                try {
-                    const files = await fileManager.getCurrentFiles();
-                    expect(files.length).to.equal(1);
-                    expect(files[0]).to.be.an.instanceof(Blob);
-                    expect(files[0].name).to.equal('photo.jpg');
-                } finally {
-                    document.body.removeChild(formEl);
-                }
-            });
-
-            it('getCurrentFiles returns string filename when not prefetched', async () => {
-                fileManager.setInstanceAttachments({
-                    'photo.jpg': 'https://example.com/photo.jpg',
-                });
-
-                // Do NOT call prefetchInstanceAttachments
-
-                const formEl = document.createElement('form');
-                formEl.className = 'or';
-                const input = document.createElement('input');
-                input.type = 'file';
-                input.setAttribute('data-loaded-file-name', 'photo.jpg');
-                formEl.appendChild(input);
-                document.body.appendChild(formEl);
-
-                try {
-                    const files = await fileManager.getCurrentFiles();
-                    expect(files.length).to.equal(1);
-                    expect(files[0]).to.equal('photo.jpg');
-                } finally {
-                    document.body.removeChild(formEl);
-                }
-            });
-
-            it('clearing instance attachments clears prefetch cache', async () => {
-                const content = 'test content';
-                const dataURI = `data:image/jpeg;base64,${btoa(content)}`;
-
-                fileManager.setInstanceAttachments({
-                    'photo.jpg': dataURI,
-                });
-
-                await fileManager.prefetchInstanceAttachments();
-
-                // Clear attachments (and cache)
-                fileManager.setInstanceAttachments(null);
-
-                // Re-set attachments but don't prefetch
-                fileManager.setInstanceAttachments({
-                    'photo.jpg': 'https://example.com/photo.jpg',
-                });
-
-                const formEl = document.createElement('form');
-                formEl.className = 'or';
-                const input = document.createElement('input');
-                input.type = 'file';
-                input.setAttribute('data-loaded-file-name', 'photo.jpg');
-                formEl.appendChild(input);
-                document.body.appendChild(formEl);
-
-                try {
-                    const files = await fileManager.getCurrentFiles();
-                    expect(files.length).to.equal(1);
-                    // Should be string since cache was cleared
-                    expect(files[0]).to.equal('photo.jpg');
-                } finally {
-                    document.body.removeChild(formEl);
-                }
             });
         });
 
@@ -407,6 +312,215 @@ describe('File manager', () => {
 
                 expect(caught).to.be.an.instanceof(Error);
             });
+        });
+    });
+
+    describe('attachments of the record being edited', () => {
+        const dataURL = (contents, type = 'image/jpeg') =>
+            `data:${type};base64,${btoa(contents)}`;
+
+        /** @type {HTMLFormElement} */
+        let formEl;
+
+        /** @type {number} */
+        let maxSize;
+
+        beforeEach(() => {
+            maxSize = Number.MAX_SAFE_INTEGER;
+
+            sandbox.stub(settings, 'maxSize').get(() => maxSize);
+
+            formEl = document.createElement('form');
+            formEl.className = 'or';
+            document.body.appendChild(formEl);
+        });
+
+        afterEach(() => {
+            fileManager.setInstanceAttachments(null);
+            formEl.remove();
+        });
+
+        /**
+         * @param {string} loadedFileName - value of data-loaded-file-name
+         * @return {HTMLInputElement} the added file input
+         */
+        const addFileInput = (loadedFileName) => {
+            const input = document.createElement('input');
+            input.type = 'file';
+
+            if (loadedFileName != null) {
+                input.setAttribute('data-loaded-file-name', loadedFileName);
+            }
+
+            formEl.appendChild(input);
+
+            return input;
+        };
+
+        /**
+         * @param {HTMLInputElement} input - the file input to select a file on
+         * @param {File} file - the file to select
+         */
+        const selectFile = (input, file) => {
+            const transfer = new DataTransfer();
+
+            transfer.items.add(file);
+            input.files = transfer.files;
+        };
+
+        it('returns the downloaded blob for an unchanged attachment', async () => {
+            fileManager.setInstanceAttachments({
+                'photo.jpg': dataURL('a photo'),
+            });
+
+            await fileManager.prefetchInstanceAttachments();
+
+            addFileInput('photo.jpg');
+
+            const [file] = await fileManager.getCurrentFiles();
+
+            expect(file).to.be.an.instanceof(Blob);
+            expect(file.name).to.equal('photo.jpg');
+            expect(await file.text()).to.equal('a photo');
+        });
+
+        it('returns the downloaded blob for an attachment whose name was escaped', async () => {
+            fileManager.setInstanceAttachments({
+                'space%20madness.png': dataURL('a photo', 'image/png'),
+                'me%20%26%20you.png': dataURL('another photo', 'image/png'),
+                'r%26d.png': dataURL('a third photo', 'image/png'),
+            });
+
+            await fileManager.prefetchInstanceAttachments();
+
+            addFileInput('space madness.png');
+            addFileInput('me & you.png');
+            addFileInput('r&d.png');
+
+            const files = await fileManager.getCurrentFiles();
+
+            expect(files.map((file) => file.name)).to.deep.equal([
+                'space madness.png',
+                'me & you.png',
+                'r&d.png',
+            ]);
+            files.forEach((file) => expect(file).to.be.an.instanceof(Blob));
+        });
+
+        it('waits for a download that is still in progress', async () => {
+            fileManager.setInstanceAttachments({
+                'photo.jpg': dataURL('a photo'),
+            });
+
+            addFileInput('photo.jpg');
+
+            // deliberately not awaited
+            fileManager.prefetchInstanceAttachments();
+
+            const [file] = await fileManager.getCurrentFiles();
+
+            expect(file).to.be.an.instanceof(Blob);
+        });
+
+        it('fails with the name of an attachment that could not be downloaded', async () => {
+            sandbox
+                .stub(window, 'fetch')
+                .resolves(new Response('', { status: 404 }));
+
+            fileManager.setInstanceAttachments({
+                'photo.jpg': 'https://example.com/photo.jpg',
+            });
+
+            await fileManager.prefetchInstanceAttachments();
+
+            addFileInput('photo.jpg');
+
+            /** @type {Error} */
+            let caught;
+
+            try {
+                await fileManager.getCurrentFiles();
+            } catch (error) {
+                caught = error;
+            }
+
+            expect(caught).to.be.an.instanceof(Error);
+            expect(caught.message).to.equal(
+                t('error.dataloadfailed', { filename: 'photo.jpg' })
+            );
+        });
+
+        it('fails with the name of an attachment that is too large', async () => {
+            fileManager.setInstanceAttachments({
+                'photo.jpg': dataURL('a photo'),
+            });
+
+            await fileManager.prefetchInstanceAttachments();
+
+            addFileInput('photo.jpg');
+
+            maxSize = 1;
+
+            /** @type {Error} */
+            let caught;
+
+            try {
+                await fileManager.getCurrentFiles();
+            } catch (error) {
+                caught = error;
+            }
+
+            expect(caught).to.be.an.instanceof(Error);
+            expect(caught.message).to.contain('photo.jpg');
+        });
+
+        it('does not return an attachment the user has replaced', async () => {
+            fileManager.setInstanceAttachments({
+                'photo.jpg': dataURL('a photo'),
+            });
+
+            await fileManager.prefetchInstanceAttachments();
+
+            // the filepicker only removes data-loaded-file-name once the newly
+            // selected file has been processed
+            const input = addFileInput('photo.jpg');
+
+            selectFile(input, new File(['a new photo'], 'new.jpg'));
+
+            const files = await fileManager.getCurrentFiles();
+
+            expect(files.length).to.equal(1);
+            expect(await files[0].text()).to.equal('a new photo');
+        });
+
+        it('forgets the attachments of a previously loaded record', async () => {
+            fileManager.setInstanceAttachments({
+                'photo.jpg': dataURL('a photo'),
+            });
+
+            await fileManager.prefetchInstanceAttachments();
+
+            fileManager.setInstanceAttachments({
+                'other.jpg': dataURL('another photo'),
+            });
+
+            addFileInput('photo.jpg');
+
+            const [file] = await fileManager.getCurrentFiles();
+
+            expect(file).to.equal('photo.jpg');
+        });
+
+        it('returns the file name of an unchanged attachment when nothing was downloaded', async () => {
+            fileManager.setInstanceAttachments({
+                'photo.jpg': 'https://example.com/photo.jpg',
+            });
+
+            addFileInput('photo.jpg');
+
+            const [file] = await fileManager.getCurrentFiles();
+
+            expect(file).to.equal('photo.jpg');
         });
     });
 });

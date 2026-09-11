@@ -103,6 +103,13 @@ function init(formEl, data, loadErrors = []) {
             form = new Form(formEl, data, formOptions);
             replaceModelMediaSources(form, media);
 
+            if (form.encryptionKey && data.instanceAttachments) {
+                // Encrypted submissions have to re-upload the attachments the
+                // record was loaded with. Start downloading them right away:
+                // their URLs stop working shortly after the record is opened.
+                fileManager.prefetchInstanceAttachments();
+            }
+
             loadErrors = loadErrors.concat(form.init());
 
             // Determine whether UI language should be attempted to be switched.
@@ -134,9 +141,6 @@ function init(formEl, data, loadErrors = []) {
             }
 
             if (form.encryptionKey) {
-                if (data.instanceAttachments) {
-                    fileManager.prefetchInstanceAttachments();
-                }
                 const saveDraftButton = document.querySelector(
                     '.form-footer#save-draft'
                 );
