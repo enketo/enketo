@@ -67,6 +67,29 @@ describe('File manager', () => {
                 );
             });
 
+            it('gets a URL from instance attachments by filename with an ampersand', async () => {
+                fileManager.setInstanceAttachments({
+                    'r&amp;d.png': 'https://example.com/path/to/r&d.png',
+                });
+
+                const result = await fileManager.getFileUrl('r&d.png');
+
+                expect(result).to.equal('https://example.com/path/to/r&d.png');
+            });
+
+            it('gets a URL from instance attachments by filename with a percent', async () => {
+                fileManager.setInstanceAttachments({
+                    '50%%20done.jpg':
+                        'https://example.com/path/to/50%25%20done.jpg',
+                });
+
+                const result = await fileManager.getFileUrl('50% done.jpg');
+
+                expect(result).to.equal(
+                    'https://example.com/path/to/50%25%20done.jpg'
+                );
+            });
+
             it('gets a URL from instance attachments by escaped filename with an escaped space', async () => {
                 fileManager.setInstanceAttachments({
                     'space%20madness.png':
