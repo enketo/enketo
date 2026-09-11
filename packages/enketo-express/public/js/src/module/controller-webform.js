@@ -103,6 +103,13 @@ function init(formEl, data, loadErrors = []) {
             form = new Form(formEl, data, formOptions);
             replaceModelMediaSources(form, media);
 
+            if (form.encryptionKey && data.instanceAttachments) {
+                // Fetch the attachments now: their URLs resolve through the
+                // record cached in Redis, which starts expiring when the edit
+                // link is issued, before this page is even loaded.
+                fileManager.prefetchInstanceAttachments();
+            }
+
             loadErrors = loadErrors.concat(form.init());
 
             // Determine whether UI language should be attempted to be switched.
