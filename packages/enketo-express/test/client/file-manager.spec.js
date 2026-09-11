@@ -438,6 +438,29 @@ describe('File manager', () => {
 
         // the server's escaping is not reversible: these names survive it
         // unchanged, or collide with an escape sequence
+        // the server escapes a name that opens with something it reads as a
+        // URL scheme as a URL in its own right
+        it('returns the downloaded blob for an attachment whose name looks like a URL', async () => {
+            fileManager.setInstanceAttachments({
+                'c:a%5Cb.jpg': dataURL('a photo'),
+                'jr:%2F%2Fy.jpg%2F': dataURL('another photo'),
+            });
+
+            await fileManager.prefetchInstanceAttachments();
+
+            addFileInput('c:a\\b.jpg');
+            addFileInput('jr:y.jpg');
+
+            const files = await fileManager.getCurrentFiles();
+
+            expect(files.map((file) => file.name)).to.deep.equal([
+                'c:a\\b.jpg',
+                'jr:y.jpg',
+            ]);
+            expect(await files[0].text()).to.equal('a photo');
+            expect(await files[1].text()).to.equal('another photo');
+        });
+
         it('returns the downloaded blob for an attachment whose name contains a percent', async () => {
             fileManager.setInstanceAttachments({
                 '100%20thing.jpg': dataURL('a photo'),
