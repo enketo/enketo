@@ -86,24 +86,49 @@ function setInstanceAttachments(attachments) {
  * @return {string} file name as used in the attachments map
  */
 function _escapeFilename(filename) {
-    const { pathname, search } = new URL(
-        `${ESCAPE_URL_HOST}/${filename.replace(/^\//, '')}`
-    );
-    const path = filename.startsWith('/')
-        ? pathname
-        : pathname.replace(/^\//, '');
+    const [scheme] = filename.match(/^[a-z]+:/) ?? [];
+    let escaped;
 
-    return `${path}${search}`
+    try {
+        if (scheme == null) {
+            const { pathname, search } = new URL(
+                `${ESCAPE_URL_HOST}/${filename.replace(/^\//, '')}`
+            );
+
+            escaped = filename.startsWith('/')
+                ? `${pathname}${search}`
+                : `${pathname.replace(/^\//, '')}${search}`;
+        } else {
+            // a name that opens with something the URL parser reads as a
+            // scheme is escaped as a URL in its own right
+            escaped = new URL(
+                filename.replace(/^jr:\/*/, 'http://')
+            ).href.replace('http:', scheme);
+        }
+    } catch {
+        // not parseable as a URL, so the server could not have filed it either
+        return filename;
+    }
+
+    return escaped
         .replace(/[\\/]/g, (character) => encodeURIComponent(character))
         .replace(/[&<>"]/g, (character) => MARKUP_ENTITIES[character]);
 }
 
 /**
- * Obtains the URL of an attachment loaded with the record.
+ * The keys an attachment may be filed under. The escaping the server applies
+ * comes first; a plain `encodeURIComponent` and the bare name follow, for maps
+ * that predate the server escaping these keys.
  *
- * The map is keyed by the escaped file name, so that is tried first. The
- * unescaped name and a plain `encodeURIComponent` of it are tried too, for
- * maps that predate the server escaping these keys.
+ * @param {string} filename - file name as it appears in the record
+ * @return {string[]} candidate keys, most likely first
+ */
+function _attachmentKeys(filename) {
+    return [_escapeFilename(filename), encodeURIComponent(filename), filename];
+}
+
+/**
+ * Obtains the URL of an attachment already on the record being edited.
  *
  * @param {string} filename - file name as it appears in the record
  * @return {?string} the URL, or null when the record has no such attachment
@@ -113,11 +138,7 @@ function _getInstanceAttachmentUrl(filename) {
         return null;
     }
 
-    const key = [
-        _escapeFilename(filename),
-        encodeURIComponent(filename),
-        filename,
-    ].find((candidate) =>
+    const key = _attachmentKeys(filename).find((candidate) =>
         Object.prototype.hasOwnProperty.call(instanceAttachments, candidate)
     );
 
@@ -129,7 +150,8 @@ function _getInstanceAttachmentUrl(filename) {
  * Blobs.
  *
  * Those attachments arrive as file names only, and encrypting the submission
- * needs their bytes. Repeat calls return the same promise.
+ * needs their bytes. Repeat calls return the same promise, until another
+ * record is loaded.
  *
  * @return {Promise<void>}
  */
@@ -261,9 +283,9 @@ function _getUnchangedFile(filename) {
         return filename;
     }
 
-    const blob =
-        prefetchedBlobCache.get(_escapeFilename(filename)) ??
-        prefetchedBlobCache.get(filename);
+    const blob = _attachmentKeys(filename)
+        .map((candidate) => prefetchedBlobCache.get(candidate))
+        .find((candidate) => candidate != null);
 
     if (!blob) {
         throw new Error(t('error.dataloadfailed', { filename }));
