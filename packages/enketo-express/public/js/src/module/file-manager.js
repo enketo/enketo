@@ -125,13 +125,13 @@ function _getInstanceAttachmentUrl(filename) {
 }
 
 /**
- * Downloads the attachments loaded with the record and caches the Blobs.
+ * Downloads the attachments already on the record being edited and caches the
+ * Blobs.
  *
- * Encrypted submissions have to encrypt and re-upload every attachment, so for
- * those the file names of unchanged attachments are not enough. The URLs are
- * served from a server-side cache that expires shortly after the record is
- * opened, so this should be called as early as possible after
- * setInstanceAttachments. Repeat calls return the same promise.
+ * Those attachments arrive as file names only, and encrypting the submission
+ * needs their bytes. The URLs are served from a server-side cache that expires
+ * shortly after the record is opened, so this should be called as early as
+ * possible after setInstanceAttachments. Repeat calls return the same promise.
  *
  * @return {Promise<void>}
  */
@@ -250,9 +250,9 @@ function getObjectUrl(subject) {
 }
 
 /**
- * Obtains the file of an attachment that was loaded with the record and left
- * unchanged. Encrypted submissions have to encrypt and re-upload their
- * attachments, so for those the downloaded Blob is returned instead of the
+ * Obtains the file of an attachment that was already on the record being
+ * edited and was left unchanged. Encrypting the submission needs its bytes, so
+ * where the attachments were downloaded the Blob is returned rather than the
  * file name.
  *
  * @param {string} filename - file name as it appears in the record
