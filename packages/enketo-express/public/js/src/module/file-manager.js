@@ -129,10 +129,7 @@ function _getInstanceAttachmentUrl(filename) {
  * Blobs.
  *
  * Those attachments arrive as file names only, and encrypting the submission
- * needs their bytes. The URLs are served from a server-side cache that expires
- * shortly after the record is opened, so this should be called as early as
- * possible once the attachments are known. Repeat calls return the same
- * promise.
+ * needs their bytes. Repeat calls return the same promise.
  *
  * @return {Promise<void>}
  */
