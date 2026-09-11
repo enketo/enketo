@@ -283,9 +283,10 @@ function getCurrentFiles() {
     ];
     const fileTasks = [];
     /**
-     * Inputs holding a file the user just picked, drew or recorded. A
-     * data-loaded-file-name left on one of these belongs to the file that was
-     * replaced: widgets only remove it once the new file has been processed.
+     * Inputs that already contributed the file they hold. A
+     * data-loaded-file-name left on one of these refers to the file that was
+     * replaced: the filepicker removes it only once the new file has been
+     * processed, and the drawing and audio widgets never remove it at all.
      */
     const replacedInputs = new Set();
 
@@ -342,10 +343,13 @@ function getCurrentFiles() {
         Promise.resolve(prefetchPromise).then(() => {
             // get any file names of files that were loaded as DataURI and have remained unchanged (i.e. loaded from Storage)
             fileInputs
+                // a question that has become non-relevant keeps its
+                // data-loaded-file-name, but the record no longer refers to
+                // the file, so it must not be submitted or signed
                 .filter(
                     (input) =>
                         !replacedInputs.has(input) &&
-                        input.matches('[data-loaded-file-name]')
+                        input.matches('[data-loaded-file-name]:not(:disabled)')
                 )
                 .forEach((input) => {
                     files.push(

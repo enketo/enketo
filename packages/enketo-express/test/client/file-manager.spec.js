@@ -526,6 +526,47 @@ describe('File manager', () => {
             expect(await files[0].text()).to.equal('a new photo');
         });
 
+        it('does not return the attachment of a question that became non-relevant', async () => {
+            fileManager.setInstanceAttachments({
+                'photo.jpg': dataURL('a photo'),
+            });
+
+            await fileManager.prefetchInstanceAttachments();
+
+            // enketo-core clears the model value but leaves
+            // data-loaded-file-name in place, and disables the control
+            const input = addFileInput('photo.jpg');
+
+            input.disabled = true;
+
+            const files = await fileManager.getCurrentFiles();
+
+            expect(files).to.deep.equal([]);
+        });
+
+        it('does not return the attachment of a question inside a non-relevant group', async () => {
+            fileManager.setInstanceAttachments({
+                'photo.jpg': dataURL('a photo'),
+            });
+
+            await fileManager.prefetchInstanceAttachments();
+
+            // a non-relevant group disables its fieldset, which disables the
+            // controls inside it without setting their disabled attribute
+            const fieldset = document.createElement('fieldset');
+
+            fieldset.disabled = true;
+            formEl.appendChild(fieldset);
+
+            const input = addFileInput('photo.jpg');
+
+            fieldset.appendChild(input);
+
+            const files = await fileManager.getCurrentFiles();
+
+            expect(files).to.deep.equal([]);
+        });
+
         it('forgets the attachments of a previously loaded record', async () => {
             fileManager.setInstanceAttachments({
                 'photo.jpg': dataURL('a photo'),
