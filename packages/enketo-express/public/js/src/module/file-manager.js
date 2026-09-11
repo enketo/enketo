@@ -355,11 +355,14 @@ function getCurrentFiles() {
             fileInputs
                 // a question that has become non-relevant keeps its
                 // data-loaded-file-name, but the record no longer refers to
-                // the file, so it must not be submitted or signed
+                // the file, so it must not be submitted or signed. Its branch
+                // is the thing to test: the control is disabled when readonly
+                // too, and that file is still part of the record.
                 .filter(
                     (input) =>
                         !replacedInputs.has(input) &&
-                        input.matches('[data-loaded-file-name]:not(:disabled)')
+                        input.matches('[data-loaded-file-name]') &&
+                        !input.closest('.or-branch.disabled')
                 )
                 .forEach((input) => {
                     files.push(
