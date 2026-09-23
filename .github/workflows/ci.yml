@@ -9,5 +9,5 @@ on:
             - 'published'
 
 jobs:
-    install-build-test:
-        uses: ./.github/workflows/install-build-test.yml
+  install-build-test:
+    uses: ./.github/workflows/install-build-test.yml
