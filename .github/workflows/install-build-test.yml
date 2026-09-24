@@ -53,7 +53,7 @@ jobs:
                   node-version: '${{ matrix.node-version }}'
                   yarn-version: '1.22.22'
 
-            - uses: 'actions/cache@v5'
+            - uses: 'actions/cache@v6'
               id: cache-install
               with:
                   path: |
@@ -63,7 +63,7 @@ jobs:
                       **/node_modules
                   key: install-${{ matrix.node-version }}-${{ hashFiles('yarn.lock', 'examples/*/yarn.lock', 'packages/*/yarn.lock') }}
 
-            - uses: 'actions/cache@v5'
+            - uses: 'actions/cache@v6'
               id: cache-build
               with:
                   path: |
@@ -98,7 +98,7 @@ jobs:
                   node-version: '${{ matrix.node-version }}'
                   yarn-version: '1.22.22'
 
-            - uses: 'actions/cache@v5'
+            - uses: 'actions/cache@v6'
               id: cache-install
               with:
                   path: |
@@ -109,7 +109,7 @@ jobs:
                   key: install-${{ matrix.node-version }}-${{ hashFiles('yarn.lock', 'examples/*/yarn.lock', 'packages/*/yarn.lock') }}
                   fail-on-cache-miss: true
 
-            - uses: 'actions/cache@v5'
+            - uses: 'actions/cache@v6'
               id: cache-build
               with:
                   path: |
@@ -140,7 +140,7 @@ jobs:
                   yarn-version: '1.22.22'
                   registry-url: 'https://registry.npmjs.org'
 
-            - uses: 'actions/cache@v5'
+            - uses: 'actions/cache@v6'
               id: cache-install
               with:
                   path: |
@@ -151,7 +151,7 @@ jobs:
                   key: install-${{ matrix.node-version }}-${{ hashFiles('yarn.lock', 'examples/*/yarn.lock', 'packages/*/yarn.lock') }}
                   fail-on-cache-miss: true
 
-            - uses: 'actions/cache@v5'
+            - uses: 'actions/cache@v6'
               id: cache-build
               with:
                   path: |
@@ -198,7 +198,7 @@ jobs:
                   yarn-version: '1.22.22'
                   registry-url: 'https://registry.npmjs.org'
 
-            - uses: 'actions/cache@v5'
+            - uses: 'actions/cache@v6'
               id: cache-install
               with:
                   path: |
@@ -209,7 +209,7 @@ jobs:
                   key: install-${{ matrix.node-version }}-${{ hashFiles('yarn.lock', 'examples/*/yarn.lock', 'packages/*/yarn.lock') }}
                   fail-on-cache-miss: true
 
-            - uses: 'actions/cache@v5'
+            - uses: 'actions/cache@v6'
               id: cache-build
               with:
                   path: |
@@ -250,7 +250,7 @@ jobs:
                   yarn-version: '1.22.22'
                   registry-url: 'https://registry.npmjs.org'
 
-            - uses: 'actions/cache@v5'
+            - uses: 'actions/cache@v6'
               id: cache-install
               with:
                   path: |
@@ -261,7 +261,7 @@ jobs:
                   key: install-${{ matrix.node-version }}-${{ hashFiles('yarn.lock', 'examples/*/yarn.lock', 'packages/*/yarn.lock') }}
                   fail-on-cache-miss: true
 
-            - uses: 'actions/cache@v5'
+            - uses: 'actions/cache@v6'
               id: cache-build
               with:
                   path: |
@@ -326,7 +326,7 @@ jobs:
                   node-version: '${{ matrix.node-version }}'
                   yarn-version: '1.22.22'
 
-            - uses: 'actions/cache@v5'
+            - uses: 'actions/cache@v6'
               id: cache-install
               with:
                   path: |
@@ -337,7 +337,7 @@ jobs:
                   key: install-${{ matrix.node-version }}-${{ hashFiles('yarn.lock', 'examples/*/yarn.lock', 'packages/*/yarn.lock') }}
                   fail-on-cache-miss: true
 
-            - uses: 'actions/cache@v5'
+            - uses: 'actions/cache@v6'
               id: cache-build
               with:
                   path: |
