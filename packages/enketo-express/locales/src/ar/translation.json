@@ -45,10 +45,10 @@
             "msg": "Failed to find question \"__path__\" in form. Is the reference to this question correct?"
         },
         "loaderror": {
-            "editadvice": "من الأفضل عدم تعديل التسجيل حتى يتم حل هذه الإشكالية.",
-            "entryadvice": "من الأفضل عدم استخدام هذا النموذج من أجل إدخال البيانات حتى يتم حل هذه الإشكالية.",
+            "editadvice": "We do not recommend you edit this record until this is resolved.",
+            "entryadvice": "We do not recommend you use this form for data entry until this is resolved.",
             "heading": "خطا في التحميل",
-            "msg1": "حدث خطأ أثناء تحميل هذا النموذج.",
+            "msg1": "Something went wrong while loading this form. Please try again later.",
             "msg2": "يرجى إلاتصال بـ __emailLink__ مع ارسال الرابط لهذه الصفحة ورسالة الخطأ الموجودة في الأسفل:",
             "heading_plural": "أخطاء في التحميل",
             "msg1_plural": "حدث خطأ أثناء تحميل هذا النموذج.",
@@ -63,14 +63,15 @@
             "msg": [
                 "يمكن تحميل واستخدام هذا النموذج بدون الاتصال بالانترنت على هذا الجهاز. قم بحفظ هذه الصفحة لأجل الوصول إليها بسهولة في حالة عدم الاتصال بالشبكة.",
                 "يتم حفظ التسجيلات تلقائياً في المتصفح الخاص بك لحين توفر الاتصال بالإنترنت، وعند إعادة الاتصال بالانترنت سيتم إرسال التسجيلات تلقائياً واحد بعد الآخر.",
-                "سيتم إزالة التسجيل من قائمة الانتظار فقط بعد إرساله بنجاح. يمكنك إغلاق المتصفح والجهاز بأمان حتى بوجود الملفات في القائمة، سوف تظل موجودة عند إعادة تحميل النموذج في المرة القادمة."
+                "Only after a record has been successfully submitted, it will be removed from the queue. You can safely close down your browser and device with items in the queue. They will still be there next time you load the form."
             ]
         },
         "offlineunsupported": {
             "heading": "تعذر تشغيل التطبيق دون الاتصال بالإنترنت",
             "msg": "المتصفح الخاص بك لا يدعم بدء هذا التطبيق في حالة عدم الاتصال بشبكة الإنترنت. يمكنك استخدام النموذج بدون هذه الخاصية أو عرض المزيد من الخيارات لحل المشكلة.",
             "negButton": "اختيار ذلك",
-            "posButton": "إظهار الخيارات"
+            "posButton": "إظهار الخيارات",
+            "refresh": "This form can no longer launch offline. Please refresh the page to try to fix this."
         },
         "queuesubmissionsuccess": {
             "msg": "تم إرسال __recordNames__ بنجاح",
@@ -87,11 +88,11 @@
             "finalmsg": "تم إضافة التسجيل إلى قائمة الانتظار لغرض الارسال."
         },
         "savedraftinfo": {
-            "heading": "وضع الصيغة النهائية للسجلات لاحقا",
+            "heading": "Finalize record later",
             "msg": [
-                "يتم تخزين مسودة السجلات داخل المتصفح الحالي فقط, يمكنك ان تغلق المتصفح دون ان تفقد السجلات المخزنة.",
-                "يمكن الوصول إلى مسودة السجلات من خلال إعادة فتح هذه الصفحة والنقر على الزر الموجود في يسار الشاشة والذي يبدو كالتالي: __icon__",
-                "تحذير: إذا قمت بمسح ذاكرة التخزين المؤقت للمتصفح, سيتم حذف المسودة والسجلات التي لم يتم ارسالها بعد نهائيا."
+                "The draft record is stored only within the current browser. You can close this browser without losing the stored record.",
+                "Draft records can be accessed by reopening this page and clicking the button on the left of the screen that looks like this: __icon__",
+                "Warning: If you clear your browser cache, all draft and unsubmitted final records will be permanently deleted."
             ]
         },
         "submission": {
@@ -131,6 +132,34 @@
             "msg": " حدث خطأ اثناء التقييم. يرجى إلاتصال بـ __emailLink__ حول هذا الخطأ:"
         }
     },
+    "audioRecording": {
+        "error": {
+            "accessDenied": "Microphone access denied by user.",
+            "noMicrophone": "No microphone found on this device.",
+            "notSupported": "Audio recording is not supported in this browser.",
+            "unknownError": "Failed to access microphone. Check your browser settings and permissions.",
+            "recordingError": "An error occurred while trying to record audio.",
+            "recordingInProgress": "The current audio recording needs to be stopped before continuing.",
+            "invalidAudioFile": {
+                "msg": "The selected file is not a valid audio file and cannot be played.",
+                "heading": "Invalid Audio File"
+            }
+        },
+        "startRecording": "Start Recording",
+        "uploadAudioFile": "Upload audio File",
+        "deleteWarning": "The audio will be deleted. Are you sure you want to do this?",
+        "backgroundDisclaimer": {
+            "heading": "Background Audio Recording",
+            "msg": [
+                "This form records the audio from your device's microphone.",
+                "You can use the volume indicator to make sure the microphone is close enough to the sound you need to record.",
+                "To stop the recording please exit this form.",
+                "For more information please contact the person who asked you to collect data."
+            ],
+            "buttonText": "Ok, start Recording"
+        },
+        "hasRecordedAudio": "This submission has a background audio recording."
+    },
     "changelog": "Change Log",
     "confirm": {
         "autosaveload": {
@@ -146,7 +175,7 @@
             "posButton": "تأكيد"
         },
         "deleteall": {
-            "heading": "حالة طوارئ!",
+            "heading": "PANIC!",
             "msg": [
                 "هذا سيقوم بإزالة جميع البيانات المحفوظة وجميع النماذج من متصفح التخزين. سيتم ازالة البيانات بشكل نهائي. استخدم هذا الخيار فقط كملجأ اخير في حالة كون المتصفح وكأنه يبدو تالفا.",
                 "اغلق جميع قوائم متصفح Enketo اولا",
@@ -162,6 +191,10 @@
         },
         "login": {
             "heading": "مطلوب تسجيل الدخول",
+            "queuedMsg": [
+                "Record queued for submission. In order to submit your queued data, you need to login.",
+                "Would you like to login now or later?"
+            ],
             "msg": [
                 "لإرسال بيانات قائمة الانتظار قم بتسجيل الدخول، واذا اردت القيام بهذا الان، ستم إعادة توجيهك دون حفظ المعلومات غير المحفوظة سابقاً.",
                 "هل تريد تسجيل الدخول الآن او لاحقاً؟"
@@ -186,7 +219,7 @@
             "msg": "This action is irreversible. Are you sure you want to proceed?"
         },
         "save": {
-            "existingerror": "ان هذا الاسم او المعرف للتسجيل موجود مسبقا. ",
+            "existingerror": "This record name or ID already exists. Please change it.",
             "hint": "هذا الاسم يسمح لك بالرجوع السهل إلى مسودة التسجيل لإكماله لاحقاً.",
             "msg": "يوجد تغييرات غير محفوظة، هل تريد الاستمرار بدون حفظها؟",
             "name": "‏‏اسم التسجيل",
@@ -213,19 +246,17 @@
     },
     "error": {
         "code": "رمز الخطأ: __code__",
-        "dataloadfailed": "Failed to load data from __url__",
-        "econnrefused": "تعذر الاتصال بالخادم",
+        "dataloadfailed": "Failed to load __filename__.",
+        "econnrefused": "Could not connect with Form Server",
         "encryptionnotsupported": "This form requires local encryption of records. Unfortunately this is not supported by your browser. We recommend switching to a modern browser.",
+        "formloadfailed": "Failed to load form",
         "instancenotfound": "التسجيل غير موجود. قد يكون منتهي الصلاحية.",
-        "invalidediturl": "هذا URL غير صحيح للتعديل",
+        "invalidediturl": "Not a valid edit URL",
         "loadfailed": "Failed to load __resource__",
-        "notfoundinformlist": [
-            "Oops, this form doesn't exist (anymore). Most likely the owner of the form has deleted it, archived it, or disabled it. Please contact the form's owner to confirm.",
-            "Detailed error: Form with ID __formId__ not found in /formList."
-        ],
+        "notfoundinformlist": "This form is no longer available.",
         "pagenotfound": "الصفحة غير موجودة",
         "surveyidnotactive": "النموذج بهذا المعرف لم يعد فعالا",
-        "surveyidnotfound": "لا يوجد نموذج بهذا المعرف",
+        "surveyidnotfound": "No form found with this URL, please double check.",
         "unknown": "حدث خطأ غير معروف"
     },
     "feedback": {
@@ -275,7 +306,8 @@
         "longitude": "longitude (x.y °)",
         "points": "points",
         "removePoint": "This will completely remove the current geopoint from the list of geopoints and cannot be undone. Are you sure you want to do this?",
-        "searchPlaceholder": "search for place or address"
+        "searchPlaceholder": "search for place or address",
+        "bordersintersectwarning": "Borders cannot intersect"
     },
     "here": "هنا",
     "hint": {
@@ -302,10 +334,12 @@
         "he": "اللغة العبرية",
         "hi": "اللغة الهندية",
         "it": "Italian",
+        "ka": "Georgian",
         "km": "اللغة الكمبودية",
         "lo": "Lao",
         "nl": "اللغة الهولندية",
         "no": "Norwegian",
+        "pa": "Panjabi",
         "pl": "Polish",
         "pt": "Portuguese",
         "ro": "اللغة الرومانية",
@@ -316,6 +350,8 @@
         "sv": "Swedish",
         "sw": "اللغة السواحيلية",
         "th": "اللغة التايلاندية",
+        "tr": "Turkish",
+        "uk": "Ukrainian",
         "vi": "اللغة الفيتنامية",
         "zh": "Chinese"
     },
@@ -376,7 +412,7 @@
         }
     },
     "submission": {
-        "http0": "فشل (غير متصل بالإنترنت؟)",
+        "http0": "The server is not available or you may not be connected to the Internet.",
         "http2xx": "استجابة غير متوقعة أثناء إرسال البيانات",
         "http400": "خادم البيانات لم يقبل البيانات",
         "http401": "Authentication problem with data server.",
@@ -390,6 +426,10 @@
     },
     "themes": {
         "supported": "Themes supported"
+    },
+    "update": {
+        "newversion": "New version available",
+        "reload": "reload to update"
     },
     "version": "الإصدار:",
     "widget": {

@@ -8,13 +8,7 @@
                 "msg": "برای افزودن این فرم به صفحهٔ اصلی، بر روی آیکن تنظیمات مرورگر  __image1__ کلیک کنید و گزینهٔ 'اضافه به صفحهٔ اصلی' را انتخاب کنید."
             },
             "androidfirefox": {
-                "msg": [
-                    "برای افزودن این فرم به صفحهٔ اصلی:",
-                    "1. این صفحه را با کلیک بر روی آیکن تنظیمات __image1__ و سپس آیکن ستاره  __image2__ به بوک‌مارک‌های فایرفاکس خود اضافه کنید.",
-                    "2. بوک‌مارک‌های خود را از طریق باز کردن یک صفحهٔ جدید و رفتن به زبانهٔ بوک‌مارک‌ها، باز کنید.",
-                    "3. بر روی فرم کلیک کنید و آن را تا زمان نمایش منو نگه‌دارید.",
-                    "4. 'افزودن به صفحهٔ اصلی' را انتخاب کنید."
-                ]
+                "msg": "To add this form to your Homescreen, long-press the address bar and select 'Add to Home Screen'."
             },
             "heading": "افزودن به صفحهٔ اصلی",
             "iossafari": {
@@ -25,16 +19,17 @@
             "heading": "برنامه به روز شد!",
             "msg": "نگارش جدید برنامه دانلود شده‌است. برای بارگذاری نگارش جدید، صفحه را بازنشانی کنید."
         },
+        "closing": {
+            "heading": "Closing..."
+        },
         "default": {
             "button": "بستن",
             "heading": "هشدار"
         },
         "export": {
-            "alternativequestion": "دانلود جایگزین - آنلاین",
             "error": {
                 "filecreatedmsg": "با این وجود، یک خروجی ناقص از فایل ایجاد شد.",
                 "heading": "خطا در گرفتن خروجی",
-                "linknotcreated": "مشکل در ایجاد لینک خروجی برای رکوردهای ارسال‌نشده. آیا آنلاین هستید؟",
                 "msg": "خطایی در زمان ایجاد فایل خروجی برای رکوردهای ارسال‌نشده، رخ داده است. \nخطا: __errors__"
             },
             "success": {
@@ -46,11 +41,14 @@
             "heading": "فرم به‌روزرسانی شد!",
             "msg": "نگارش جدید فرم دانلود شده است. برای بارگذاری نگارش جدید، صفحه را بازنشانی کنید."
         },
+        "gotonotfound": {
+            "msg": "Failed to find question \"__path__\" in form. Is the reference to this question correct?"
+        },
         "loaderror": {
-            "editadvice": "توصیه می‌شود این رکورد را تا قبل از اصلاح شدن، ویرایش نکنید.",
-            "entryadvice": "توصیه می‌شود تا قبل از اصلاح شدن، از این فرم برای ورود داده استفاده نکنید.",
+            "editadvice": "We do not recommend you edit this record until this is resolved.",
+            "entryadvice": "We do not recommend you use this form for data entry until this is resolved.",
             "heading": "خطا در زمان بارگذاری",
-            "msg1": "خطایی در زمان بارگذاری فرم رخ داده است.",
+            "msg1": "Something went wrong while loading this form. Please try again later.",
             "msg2": "لطفاً با ایمیل __emailLink__ تماس بگیرید و  آدرس این صفحه و خطای زیر را ارسال کنید.",
             "heading_plural": "خطا در زمان بارگذاری",
             "msg1_plural": "خطایی در زمان بارگذاری این فرم رخ داده است.",
@@ -65,14 +63,15 @@
             "msg": [
                 "هم‌اکنون می‌توانید این فرم را بدون اتصال به اینترنت بر روی این دستگاه بارگذاری و استفاده کنید. برای دسترسی آفلاین و آسان، صفحه را در مرورگر خود بوک‌مارک کنید.",
                 " رکوردها به صورت خودکار در مرورگر شما ذخیره می‌شوند. هنگامی که اتصال به اینترنت برقرار شود، رکوردها یکی یکی به صورت خودکار به سرور ارسال خواهند شد.",
-                "تنها هنگامی که یک رکورد با موفقیت ارسال شود، از صف فرم‌ها حذف می‌گردد. شما می‌توانید هنگامی که در صف ارسال، رکورد قرار دارد، با خیال راحت مرورگر خود را ببندید. رکوردها تا زمان بعدی که مرورگر را باز می‌کنید و همچنین تا زمانی که به سرور ارسال نشده‌اند، در حافظه مرورگر می‌مانند."
+                "Only after a record has been successfully submitted, it will be removed from the queue. You can safely close down your browser and device with items in the queue. They will still be there next time you load the form."
             ]
         },
         "offlineunsupported": {
             "heading": "برنامه به صورت آفلاین نمی‌تواند راه‌اندازی شود",
             "msg": "اجرای برنامه به صورت آفلاین در مرورگر شما پشتیبانی نمی‌شود. شما می‌توانید بدون این ویژگی از فرم استفاده کنید یا گزینه‌ها را برای اصلاح این مشکل ببینید.",
             "negButton": "استفاده کنید",
-            "posButton": "نمایش گزینه‌ها"
+            "posButton": "نمایش گزینه‌ها",
+            "refresh": "This form can no longer launch offline. Please refresh the page to try to fix this."
         },
         "queuesubmissionsuccess": {
             "msg": "__recordNames__ با موفقیت ارسال شد",
@@ -87,6 +86,14 @@
         "recordsavesuccess": {
             "draftmsg": "رکورد به عنوان پیش‌نویس ذخیره شد.",
             "finalmsg": "رکورد برای ارسال در صف قرار گرفت."
+        },
+        "savedraftinfo": {
+            "heading": "Finalize record later",
+            "msg": [
+                "The draft record is stored only within the current browser. You can close this browser without losing the stored record.",
+                "Draft records can be accessed by reopening this page and clicking the button on the left of the screen that looks like this: __icon__",
+                "Warning: If you clear your browser cache, all draft and unsubmitted final records will be permanently deleted."
+            ]
         },
         "submission": {
             "msg": "در حال ارسال...",
@@ -117,11 +124,43 @@
             "heading": "قبول",
             "msg": "فرم معتبر است!"
         },
+        "valuehasspaces": {
+            "multiple": "Select multiple question has an illegal value \"__value__\" that contains a space."
+        },
         "xpatherror": {
             "heading": "خطای فرمول محاسباتی",
             "msg": "یک خطای ارزیابی فرمول رخ داده است. لطفاً برای گزارش خطا با آدرس __emailLink__ تماس بگیرید و این خطا را ارسال کنید:"
         }
     },
+    "audioRecording": {
+        "error": {
+            "accessDenied": "Microphone access denied by user.",
+            "noMicrophone": "No microphone found on this device.",
+            "notSupported": "Audio recording is not supported in this browser.",
+            "unknownError": "Failed to access microphone. Check your browser settings and permissions.",
+            "recordingError": "An error occurred while trying to record audio.",
+            "recordingInProgress": "The current audio recording needs to be stopped before continuing.",
+            "invalidAudioFile": {
+                "msg": "The selected file is not a valid audio file and cannot be played.",
+                "heading": "Invalid Audio File"
+            }
+        },
+        "startRecording": "Start Recording",
+        "uploadAudioFile": "Upload audio File",
+        "deleteWarning": "The audio will be deleted. Are you sure you want to do this?",
+        "backgroundDisclaimer": {
+            "heading": "Background Audio Recording",
+            "msg": [
+                "This form records the audio from your device's microphone.",
+                "You can use the volume indicator to make sure the microphone is close enough to the sound you need to record.",
+                "To stop the recording please exit this form.",
+                "For more information please contact the person who asked you to collect data."
+            ],
+            "buttonText": "Ok, start Recording"
+        },
+        "hasRecordedAudio": "This submission has a background audio recording."
+    },
+    "changelog": "Change Log",
     "confirm": {
         "autosaveload": {
             "heading": "رکورد ذخیره‌نشده‌ای یافت‌شد",
@@ -152,6 +191,10 @@
         },
         "login": {
             "heading": "ابتدا به حساب کاربری خود وارد شوید",
+            "queuedMsg": [
+                "Record queued for submission. In order to submit your queued data, you need to login.",
+                "Would you like to login now or later?"
+            ],
             "msg": [
                 "برای ارسال داده های موجود در صف، ابتدا به حساب کاربری خود وارد شوید. اگر اکنون بخواهید به حساب خود وارد شوید، به صفحه ای دیگر هدایت خواهید شد و اطلاعات ذخیره‌نشده از دست خواهد رفت.",
                 "تمایل دارید اکنون به حساب خود وارد شوید یا بعداً ؟"
@@ -171,8 +214,12 @@
             "psize": "اندازهٔ صفحه",
             "reminder": "به خاطر داشته‌باشید پس از این مرحله، همین تنظیمات را در تنظیمات چاپ مرورگر خود نیز اعمال کنید!"
         },
+        "repeatremove": {
+            "heading": "Delete this group of responses?",
+            "msg": "This action is irreversible. Are you sure you want to proceed?"
+        },
         "save": {
-            "existingerror": "رکوردی با این نام یا شناسه وجود دارد.",
+            "existingerror": "This record name or ID already exists. Please change it.",
             "hint": "این نام به شما کمک می‌کند تا به راحتی رکورد پیش‌نویس خود را پیدا کنید و آن را بعداً به اتمام برسانید. ",
             "msg": "تغییرات ذخیره‌نشده‌ای وجود دارد، تمایل دارید بدون ذخیرهٔ تغییرات ادامه دهید؟",
             "name": "نام رکورد",
@@ -189,25 +236,39 @@
         "admin": "لطفاً با مدیر جمع‌آوری داده تماس بگیرید.",
         "support": "لطفاً با __supportEmail__ تماس بگیرید."
     },
+    "drawwidget": {
+        "annotation": "file and drawing",
+        "drawing": "drawing",
+        "signature": "signature"
+    },
     "enketo": {
         "power": "قدرت گرفته از"
     },
     "error": {
         "code": "کد خطا: __code__",
-        "dataloadfailed": "بارگذاری داده از آدرس __url__ ناموفق بود",
-        "econnrefused": "ارتباط با سرور برقرار نشد",
-        "encryptionnotsupported": "این فرم نیازمند رمزگذاری بصورت محلی می‌باشد که متأسفانه هنوز قابل انجام نیست. پیشنهاد می‌کنیم برای جمع‌آوری داده بر روی این فرم از اپلیکیشن اندرویدی ODK Collect استفاده کنید.",
+        "dataloadfailed": "Failed to load __filename__.",
+        "econnrefused": "Could not connect with Form Server",
+        "encryptionnotsupported": "This form requires local encryption of records. Unfortunately this is not supported by your browser. We recommend switching to a modern browser.",
+        "formloadfailed": "Failed to load form",
         "instancenotfound": "رکورد موجود نیست. ممکن است منقضی شده باشد.",
         "invalidediturl": "آدرس ویرایش، نامعتبر است",
         "loadfailed": "بارگذاری __resource__ ناموفق بود",
-        "notfoundinformlist": "فرمی با شناسهٔ __formId__ در آدرس /formList پیدا نشد.",
+        "notfoundinformlist": "This form is no longer available.",
         "pagenotfound": "صفحه یافت نشد",
         "surveyidnotactive": "پروژهٔ جمع‌آوری داده با این شناسه دیگر فعال نیست",
-        "surveyidnotfound": "پروژهٔ جمع‌آوری داده با این شناسه پیدا نشد",
+        "surveyidnotfound": "No form found with this URL, please double check.",
         "unknown": "خطای نامشخصی رخ داد"
     },
     "feedback": {
         "header": "اطلاعات"
+    },
+    "filepicker": {
+        "file": "file",
+        "notFound": "File __existing__ could not be found (leave unchanged if already submitted and you want to preserve it).",
+        "placeholder": "Click here to upload file. (< __maxSize__)",
+        "resetWarning": "This will remove the __item__. Are you sure you want to do this?",
+        "toolargeerror": "File too large (> __maxSize__)",
+        "waitingForPermissions": "Waiting for user permissions."
     },
     "form": {
         "chooseLanguage": "انتخاب زبان",
@@ -222,7 +283,7 @@
     },
     "formfooter": {
         "complete": {
-            "btn": "تکمیل"
+            "btn": "Complete"
         },
         "savedraft": {
             "btn": "ذخیرهٔ پیش‌نویس",
@@ -244,11 +305,21 @@
         "latitude": "عرض جغرافیایی (° x.y)",
         "longitude": "طول جغرافیایی (° x.y)",
         "points": "نقاط",
-        "searchPlaceholder": "جستجوی مکان یا آدرس"
+        "removePoint": "This will completely remove the current geopoint from the list of geopoints and cannot be undone. Are you sure you want to do this?",
+        "searchPlaceholder": "جستجوی مکان یا آدرس",
+        "bordersintersectwarning": "Borders cannot intersect"
     },
     "here": "اینجا",
+    "hint": {
+        "guidance": {
+            "details": "more details"
+        }
+    },
     "home": {
         "msg": "__appTitle__ در حال اجرا است! لطفاً از طریق __serverName__ خود به فرم‌های اِنکتو دسترسی پیدا کنید."
+    },
+    "imagemap": {
+        "svgNotFound": "SVG image could not be found"
     },
     "langs": {
         "ar": "عربی",
@@ -263,17 +334,30 @@
         "he": "عبری",
         "hi": "هندی",
         "it": "ایتالیایی",
+        "ka": "Georgian",
         "km": "خمری",
         "lo": "لائو",
         "nl": "هلندی",
         "no": "نروژی",
+        "pa": "Panjabi",
+        "pl": "Polish",
+        "pt": "Portuguese",
         "ro": "رومانیایی",
+        "ru": "Russian",
         "sk": "اسلواکیایی",
+        "sq": "Albanian",
         "supported": "زبان‌های پشتیبانی‌شده:",
+        "sv": "Swedish",
         "sw": "سواحیلی",
         "th": "تایلندی",
+        "tr": "Turkish",
+        "uk": "Ukrainian",
         "vi": "ویتنامی",
         "zh": "چینی"
+    },
+    "literacywidget": {
+        "finish": "Finish",
+        "start": "Start"
     },
     "page": {
         "modernbrowsers": {
@@ -302,6 +386,10 @@
             "username": "نام کاربری"
         }
     },
+    "rankwidget": {
+        "clickstart": "Click to start",
+        "tapstart": "Tap to start"
+    },
     "record-list": {
         "export": "خروجی گرفتن",
         "msg1": "رکوردها در مرورگر شما تا زمانی که آن‌ها را به سرور ارسال کنید، ذخیره می‌شوند (حتی اگر رایانهٔ خود را خاموش کنید یا اتصال اینترنت شما قطع شود).",
@@ -324,7 +412,7 @@
         }
     },
     "submission": {
-        "http0": "ناموفق ( آفلاین هستید؟).",
+        "http0": "The server is not available or you may not be connected to the Internet.",
         "http2xx": "پاسخ غیرمنتظره هنگام ارسال داده‌ها.",
         "http400": "سرور، داده را قبول نمی‌کند.",
         "http401": "مشکل احراز هویت با سرور.",
@@ -335,6 +423,13 @@
         "http4xx": "خطای ناشناخته‌ای هنگام ارسال داده به سرور رخ داد.",
         "http500": "سرور داده‌ها برای فرم شما یا سرور Enketo از کار افتاده است. لطفاً دوباره تلاش کنید یا با __supportEmail__ تماس بگیرید.",
         "http504": "ارتباط با سرور برقرار نشد."
+    },
+    "themes": {
+        "supported": "Themes supported"
+    },
+    "update": {
+        "newversion": "New version available",
+        "reload": "reload to update"
     },
     "version": "نگارش:",
     "widget": {

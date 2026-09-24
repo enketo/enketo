@@ -1,409 +1,440 @@
 {
     "advanced": {
-        "flushdb": "Vyčistiť Úložisko"
+        "flushdb": "Clear Storage"
     },
     "alert": {
         "addtohomescreen": {
             "androidchrome": {
-                "msg": "Pre pridanie tohto formulára na Domovskú Obrazovku, kliknite na ikonu možnosti prehliadača __image1__ a zvolte: 'Pridať na Domovskú Obrazovku'."
+                "msg": "To add this form to your Home screen, click the browser settings icon __image1__ and select: 'Add to Home screen'."
             },
             "androidfirefox": {
-                "msg": "Pre pridanie tohto formulára na Domovskú Obrazovku, podržte dlho adresnú riadku a zvolte: 'Pridať na Domovskú Obrazovku'."
+                "msg": "To add this form to your Homescreen, long-press the address bar and select 'Add to Home Screen'."
             },
-            "heading": "Pridať na Domovskú Obrazovku",
+            "heading": "Add to Home Screen",
             "iossafari": {
-                "msg": "Pre pridanie tohto formulára na Domovskú Obrazovku, kliknite na ikonu zdieľania __image1__ v pravo hore vo Vašom prehliadači a vyberte možnosť: '+ Pridať na Domovskú Obrazovku'."
+                "msg": "To add this form to your Home screen, click the share icon __image1__ in the top right of your browser, and select: '+ Add to Home Screen'."
             }
         },
         "appupdated": {
-            "heading": "Aplikácia Aktualizovaná!",
-            "msg": "Nová verzia tejto aplikácie bola stiahnutá. Obnovte túto stránku pre načítanie aktualizovanej verzie."
+            "heading": "App Updated!",
+            "msg": "A new version of this application has been downloaded. Refresh this page to load the updated version."
         },
         "closing": {
-            "heading": "Zatvára sa..."
+            "heading": "Closing..."
         },
         "default": {
-            "button": "Zatvoriť",
-            "heading": "Výstraha"
+            "button": "Close",
+            "heading": "Alert"
         },
         "export": {
             "error": {
-                "filecreatedmsg": "Avšak, neúplný export bol aj napriek tomu vytvorený.",
-                "heading": "Chyba pri Exporte",
-                "msg": "Nastali chyby pri tvorbe exportu pre neodoslané záznamy. Chyby: __error__"
+                "filecreatedmsg": "Nevertheless, an incomplete export file was still created.",
+                "heading": "Export Error",
+                "msg": "Errors occurred during creating of the record export file for unsubmitted records. Errors: __errors__"
             },
             "success": {
-                "heading": "Export Vytvorený",
-                "msg": "Export bol vytvorený pre všetky neodoslané záznamy patriace tomuto formuláru."
+                "heading": "Export Created",
+                "msg": "Export file created for all unsubmitted records belonging to this form."
             }
         },
         "formupdated": {
-            "heading": "Formulár Aktualizovaný!",
-            "msg": "Nová verzia tohto formulára bola stiahnutá. Obnovte túto stránku pre načítanie aktualizovanej verzie."
+            "heading": "Form Updated!",
+            "msg": "A new version of this form has been downloaded. Refresh this page to load the updated version."
         },
         "gotonotfound": {
-            "msg": "Vo formulári sa nepodarilo nájsť otázku \"__path__\". Je odkaz na túto otázku správny?"
+            "msg": "Failed to find question \"__path__\" in form. Is the reference to this question correct?"
         },
         "loaderror": {
-            "editadvice": "Neodporúčame Vám upravovať tento záznam pokým sa to nevyrieši.",
-            "entryadvice": "Neodporúčame Vám používať tento formulár pre vkladanie dát pokým sa to nevyrieši.",
-            "heading": "Chyba pri Načítaní",
-            "msg1": "Počas načítavania tohto formulára došlo k chybe.",
-            "msg2": "Prosím kontaktujte __emailLink__ s odkazom na túto stránku a nižšie zobrazenou chybovou správou:",
-            "heading_plural": "Chyby pri Načítaní",
-            "msg1_plural": "Počas načítavania tohto formulára sa vyskytli chyby.",
-            "msg2_plural": "Prosím kontaktujte __emailLink__ s odkazom na túto stránku a zobrazenými chybovými správami:"
+            "editadvice": "We do not recommend you edit this record until this is resolved.",
+            "entryadvice": "We do not recommend you use this form for data entry until this is resolved.",
+            "heading": "Loading Error",
+            "msg1": "Something went wrong while loading this form. Please try again later.",
+            "msg2": "Please contact __emailLink__ with the link to this page and the error message below:",
+            "heading_plural": "Loading Errors",
+            "msg1_plural": "Errors occurred during the loading of this form.",
+            "msg2_plural": "Please contact __emailLink__ with the link to this page and the error messages below:"
         },
         "logout": {
-            "heading": "Odhlásený",
-            "msg": "Boli ste odhlásený."
+            "heading": "Logged Out",
+            "msg": "You have been logged out."
         },
         "offlinesupported": {
-            "heading": "Formulár funguje v režime offline!",
+            "heading": "Form works offline!",
             "msg": [
-                "Tento formulár môže byť teraz načítaný bez internetového pripojenia na tomto zariadení. Vytvorte si jeho záložku pre ľahký offline prístup.",
-                "Záznamy sú automaticky ukladané vo fronte dát čakajúcich na odoslanie v prehliadači až do chvíle kým nie je k dispozícii pripojenie k Internetu. Keď je aplikácia online, záznamy budú automaticky odoslané - jeden po druhom.",
-                "Až po úspešnom odoslaní záznamu bude tento odstránený z fronty dát čakajúcich na odoslanie. Môžete bezpečne zatvoriť prehliadač a zariadenie s dátami čakajúcimi na odoslanie. Tie budú znovu načítané pri budúcom načítaní tohto formulára."
+                "This form can now be loaded and used without an Internet connection on this device. Bookmark it for easy offline access.",
+                "Records are automatically stored and queued in your browser until an Internet connection is available. When the app is online, records will be automatically submitted - one by one.",
+                "Only after a record has been successfully submitted, it will be removed from the queue. You can safely close down your browser and device with items in the queue. They will still be there next time you load the form."
             ]
         },
         "offlineunsupported": {
-            "heading": "Aplikácia nemôžno spustiť v režime offline",
-            "msg": "Váš prehliadač nepodporuje offline spustenie aplikácie. Môžete pokračovať na prieskum bez využitia tejto funkcie, alebo sa pozrite na možností pre riešenie tohto problému.",
-            "negButton": "Použi",
-            "posButton": "Zobraziť možnosti",
-            "refresh": "Tento formulár už nie je možné spustiť offline. Pre vyriešenie problému skúste obnoviť stránku. "
+            "heading": "Application cannot launch offline",
+            "msg": "Offline application launch is not supported by your browser. You can use the survey without this feature or see options for resolving this.",
+            "negButton": "Use it",
+            "posButton": "Show options",
+            "refresh": "This form can no longer launch offline. Please refresh the page to try to fix this."
         },
         "queuesubmissionsuccess": {
-            "msg": "__recordNames__ bol úspešne odoslaný",
-            "msg_plural": "__recordNames__ boli úspešne odoslané"
+            "msg": "__recordNames__ was successfully submitted",
+            "msg_plural": "__recordNames__ were successfully submitted"
         },
         "recordloadsuccess": {
-            "msg": "__recordName__ bol načítaný"
+            "msg": "__recordName__ has been loaded"
         },
         "recordnotfound": {
-            "msg": "Záznam sa nepodarilo získať alebo neobsahuje žiadne dáta."
+            "msg": "Record could not be retrieved or contained no data."
         },
         "recordsavesuccess": {
-            "draftmsg": "Záznam uložený ako koncept.",
-            "finalmsg": "Záznam vložený do fronty dát pre odoslanie."
+            "draftmsg": "Record stored as draft.",
+            "finalmsg": "Record queued for submission."
         },
         "savedraftinfo": {
-            "heading": "Dokončite záznam neskôr",
+            "heading": "Finalize record later",
             "msg": [
-                "Koncept záznamu je uložený iba v tomto aktuálnom prehliadači. Môžete zavrieť tento prehliadač bez straty uloženého záznamu.",
-                "Ku konceptom záznamov sa dostanete opätovným otvorením tejto stránky a kliknutím na tlačidlo vľavo na obrazovke, ktoré vyzerá takto: __icon__",
-                "Varovanie: Ak vymažete cache prehliadača, všetky koncepty a neodoslané konečné záznamy budú natrvalo odstránené."
+                "The draft record is stored only within the current browser. You can close this browser without losing the stored record.",
+                "Draft records can be accessed by reopening this page and clicking the button on the left of the screen that looks like this: __icon__",
+                "Warning: If you clear your browser cache, all draft and unsubmitted final records will be permanently deleted."
             ]
         },
         "submission": {
-            "msg": "Odosielam...",
-            "redirectmsg": "Budete automaticky presmerovaný po odoslaní dát."
+            "msg": "Submitting...",
+            "redirectmsg": "You will be automatically redirected after submission."
         },
         "submissionerror": {
-            "authrequiredmsg": "Prihlásenie je nevyhnutné. Prosím prihláste sa __here__ použitím inej záložky prehliadača a skúste to ešte raz.",
+            "authrequiredmsg": "Authentication required. Please authenticate __here__ in a different browser tab and try again.",
             "fnfmsg": [
-                "Nasledujúce multimediálne súbory sa nepodarilo načítať: __failedFiles__. Odoslanie prebehlo úspešne bez týchto súborov.",
-                "Prosím, kontaktujte __supportEmail__  pre nahlásenie chyby, a ak je to možné vysvetlite postup ako je možné nahlasovaný problém reprodukovať."
+                "The following media files could not be retrieved: __failedFiles__. The submission went ahead without these files and this succeeded.",
+                "Please contact __supportEmail__ to report a bug and if possible explain how the issue can be reproduced."
             ],
-            "heading": "Odoslanie Zlyhalo"
+            "heading": "Submission Failed"
         },
         "submissionsuccess": {
-            "heading": "Odoslanie prebehlo Úspešne",
-            "msg": "Vaše dáta boli odoslané!",
-            "redirectmsg": "Teraz budete presmerovaný."
+            "heading": "Submission Successful",
+            "msg": "Your data was submitted!",
+            "redirectmsg": "You will now be redirected."
         },
         "thanks": {
-            "heading": "Ďakujeme za účasť!",
-            "msg": "Toto okno môže byť teraz zavreté. ",
-            "msgTaken": "Tento prieskum ste už dokončili."
+            "heading": "Thank you for participating!",
+            "msg": "You can close this window now.",
+            "msgTaken": "You have already completed this survey."
         },
         "validationerror": {
-            "msg": "Formulár obsahuje chyby. Prosím, skontrolujte polia označené červenou farbou."
+            "msg": "Form contains errors. Please see fields marked in red."
         },
         "validationsuccess": {
             "heading": "OK",
-            "msg": "Formulár je validný!"
+            "msg": "Form is valid!"
         },
         "valuehasspaces": {
-            "multiple": "Viac-výberová otázka má neplatnú hodnotu  \"__value__\", ktorá obsahuje medzeru."
+            "multiple": "Select multiple question has an illegal value \"__value__\" that contains a space."
         },
         "xpatherror": {
-            "heading": "Chyba pri Vyhodnocovaný Vzorca",
-            "msg": "Došlo k chybe pri vyhodnocovaní vzorca. Prosím kontaktujte __emailLink__ s touto chybou:"
+            "heading": "Formula Error",
+            "msg": "A formula evaluation error occurred. Please contact __emailLink__ with this error:"
         }
     },
-    "changelog": "Denník Zmien",
+    "audioRecording": {
+        "error": {
+            "accessDenied": "Microphone access denied by user.",
+            "noMicrophone": "No microphone found on this device.",
+            "notSupported": "Audio recording is not supported in this browser.",
+            "unknownError": "Failed to access microphone. Check your browser settings and permissions.",
+            "recordingError": "An error occurred while trying to record audio.",
+            "recordingInProgress": "The current audio recording needs to be stopped before continuing.",
+            "invalidAudioFile": {
+                "msg": "The selected file is not a valid audio file and cannot be played.",
+                "heading": "Invalid Audio File"
+            }
+        },
+        "startRecording": "Start Recording",
+        "uploadAudioFile": "Upload audio File",
+        "deleteWarning": "The audio will be deleted. Are you sure you want to do this?",
+        "backgroundDisclaimer": {
+            "heading": "Background Audio Recording",
+            "msg": [
+                "This form records the audio from your device's microphone.",
+                "You can use the volume indicator to make sure the microphone is close enough to the sound you need to record.",
+                "To stop the recording please exit this form.",
+                "For more information please contact the person who asked you to collect data."
+            ],
+            "buttonText": "Ok, start Recording"
+        },
+        "hasRecordedAudio": "This submission has a background audio recording."
+    },
+    "changelog": "Change Log",
     "confirm": {
         "autosaveload": {
-            "heading": "Nájdený Neuložený Záznam",
-            "msg": "Enketo našlo neuložený záznam. Chceli by ste tento záznam načítať alebo ho vymazať?",
-            "negButton": "Vymazať",
-            "posButton": "Načítaj Záznam"
+            "heading": "Unsaved Record Found",
+            "msg": "Enketo has found an unsaved record. Would you like to load this record or discard it?",
+            "negButton": "Discard",
+            "posButton": "Load Record"
         },
         "default": {
-            "heading": "Ste si istý?",
-            "msg": "Potvrďte túto akciu prosím",
-            "negButton": "Zrušiť",
-            "posButton": "Potvrdiť"
+            "heading": "Are you sure?",
+            "msg": "Please confirm this action",
+            "negButton": "Cancel",
+            "posButton": "Confirm"
         },
         "deleteall": {
-            "heading": "PANIKA!",
+            "heading": "PANIC!",
             "msg": [
-                "Týmto odstránite všetky vaše dáta čakajúce na odoslanie a vaše formuláre z úložiska prehliadača. Dáta budú permanentne vymazané. Použite túto možnosť iba ako poslednú alternatívu v prípade, že úložisko prehliadača sa zdá byť poškodené.",
-                "Najprv zatvorte všetky ostatné záložky prehliadača ktoré Enketo používa.",
-                "Táto stránka bude znovu načítaná. Ak vidíte chybovú hlášku môže byť nevyhnutné túto akciu zopakovať.",
-                "Ste si istý že toto chcete urobiť?"
+                "This will remove all your queued data and all your forms from the browser storage. Data will be lost forever. Use this only as a last resort if the browser storage seems corrupt.",
+                "Close all other Enketo browser tabs first.",
+                "The page will reload. If you see an error you may have to repeat this action.",
+                "Are you sure you want to do this?"
             ],
-            "posButton": "Vymazať Všetko"
+            "posButton": "Delete All"
         },
         "discardcurrent": {
-            "heading": "Neuložené zmeny",
-            "msg": "Tento formulár má neuložené zmeny. Chceli by ste nahrať záznam bez uloženia zmien do formulára na ktorom ste doteraz pracovali?",
-            "posButton": "Pokračovať bez uloženia"
+            "heading": "Unsaved edits",
+            "msg": "The current form has unsaved changes. Would you like to load a record without saving changes to the form you were working on?",
+            "posButton": "Proceed without saving"
         },
         "login": {
-            "heading": "Prihlásenie Nevyhnutné",
+            "heading": "Login Required",
             "queuedMsg": [
                 "Record queued for submission. In order to submit your queued data, you need to login.",
                 "Would you like to login now or later?"
             ],
             "msg": [
-                "Pre odoslanie dát čakajúcich na odoslanie sa musíte prihlásiť. Ak tak chcete urobiť teraz, budete presmerovaní, a stratíte všetky neuložené dáta.",
-                "Chcete sa prihlásiť teraz alebo neskôr?"
+                "In order to submit your queued data, you need to login. If you want to do this now, you will be redirected, and lose unsaved information.",
+                "Would you like to login now or later?"
             ],
-            "negButton": "Neskôr",
-            "posButton": "Prihlásiť"
+            "negButton": "Later",
+            "posButton": "Log in now"
         },
         "print": {
             "a4": "A4",
-            "heading": "Vyberte Nastavenia Tlače",
-            "landscape": "Orientácia naležato",
-            "letter": "List",
-            "msg": "Pre prípravu optimalizovanej tlače, prosím označte možnosti tlače nižšie",
-            "orientation": "Orientácia Papiera",
-            "portrait": "Portrét",
-            "posButton": "Pripraviť",
-            "psize": "Veľkosť Papiera",
-            "reminder": "Nezabudnite neskôr nastaviť tie isté nastavenia tlače v ponuke tlače prehliadača!"
+            "heading": "Select Print Settings",
+            "landscape": "Landscape",
+            "letter": "Letter",
+            "msg": "To prepare an optimized print, please select the print settings below",
+            "orientation": "Paper Orientation",
+            "portrait": "Portrait",
+            "posButton": "Prepare",
+            "psize": "Paper Size",
+            "reminder": "Remember to set these same print settings in the browser's print menu afterwards!"
         },
         "repeatremove": {
-            "heading": "Vymazať túto skupinu odpovedí?",
-            "msg": "Táto akcia je nezvratná. Ste si istý že chcete pokračovať?"
+            "heading": "Delete this group of responses?",
+            "msg": "This action is irreversible. Are you sure you want to proceed?"
         },
         "save": {
-            "existingerror": "Záznam s rovnakým názvom alebo ID už existuje. Použite prosím iný identifikátor.",
-            "hint": "Tento názov vám umožní ľahko nájsť váš koncept záznamu a dokončiť ho neskôr.",
-            "msg": "Existujú neuložené zmeny, chcete pokračovať bez ich uloženia?",
-            "name": "Názov Záznamu",
-            "posButton": "Uložiť & Zavrieť",
-            "renamemsg": "Ste si istý, že chcete premenovať __currentName__ na __newName__?",
-            "unkownerror": "Nastala neznáma chyba počas pokusu uložiť dáta."
+            "existingerror": "This record name or ID already exists. Please change it.",
+            "hint": "This name allows you to easily find your draft record to finish it later.",
+            "msg": "There are unsaved changes, would you like to continue without saving those?",
+            "name": "Record Name",
+            "posButton": "Save & Close",
+            "renamemsg": "Are you sure you want to rename __currentName__ to __newName__?",
+            "unkownerror": "An unknown error occurred when trying to save data."
         }
     },
     "constraint": {
-        "invalid": "Nepovolená hodnota",
-        "required": "Požadované pole"
+        "invalid": "Value not allowed",
+        "required": "This field is required"
     },
     "contact": {
-        "admin": "Obráťte sa prosím na správcu prieskumu.",
-        "support": "Kontaktujte __supportEmail__ prosím."
+        "admin": "Contact the survey administrator please.",
+        "support": "Contact __supportEmail__ please."
     },
     "drawwidget": {
-        "annotation": "súbor a kresba",
-        "drawing": "kresba",
-        "signature": "podpis"
+        "annotation": "file and drawing",
+        "drawing": "drawing",
+        "signature": "signature"
     },
     "enketo": {
-        "power": "Bežiace na"
+        "power": "Powered by"
     },
     "error": {
-        "code": "Chybový Kód: __code__",
-        "dataloadfailed": "Nepodarilo sa načítať __filename__.",
-        "econnrefused": "Nepodarilo sa nadviazať spojenie s formulárovým serverom",
-        "encryptionnotsupported": "Tento formulár vyžaduje lokálne šifrovanie záznamov. Váš prehliadač to bohužiaľ nepodporuje. Odporúčame použitie moderného prehliadača.",
-        "formloadfailed": "Nepodarilo sa načítať formulár",
-        "instancenotfound": "Záznam nie je k dispozícii. Môže to byť spôsobené tým že expiroval.",
-        "invalidediturl": "Neplatná URL pre úpravu",
-        "loadfailed": "Nepodarilo sa načítať __resource__",
-        "notfoundinformlist": "Tento formulár buď neexistuje alebo k nemu už nemáte prístup. Skontrolujte prosím či v adrese URL nechýbajú niektoré znaky.\n\nAk sa jedná o formulár ktorý bol dostupný v minulosti, je možné že bol archivovaný, zneprístupnený alebo zmazaný. V prípade že tento scenár nie je pravdepodobný, prosím kontaktujte osobu ktorá Vás požiadala o vyplnenie daného formulára.\n\n(Pokus o prístup k formuláru s ID: __formId__)",
-        "notfounddirectformurl": "Tento formulár buď neexistuje alebo k nemu už nemáte prístup. Skontrolujte prosím či v adrese URL nechýbajú niektoré znaky.\n\nAk sa jedná o formulár ktorý bol dostupný v minulosti, je možné že bol archivovaný, zneprístupnený alebo zmazaný. V prípade že tento scenár nie je pravdepodobný, prosím kontaktujte osobu ktorá Vás požiadala o vyplnenie daného formulára.\n\n(Pokus o prístup k formuláru: __notfounddirectformurl__)",
-        "pagenotfound": "Stránka nebola Nájdená",
-        "surveyidnotactive": "Prieskum s týmto ID už nie je aktívny",
-        "surveyidnotfound": "Prieskum s týmto ID nebol nájdený",
-        "unknown": "Nastala neznáma chyba"
+        "code": "Error Code: __code__",
+        "dataloadfailed": "Failed to load __filename__.",
+        "econnrefused": "Could not connect with Form Server",
+        "encryptionnotsupported": "This form requires local encryption of records. Unfortunately this is not supported by your browser. We recommend switching to a modern browser.",
+        "formloadfailed": "Failed to load form",
+        "instancenotfound": "Record not present. It may have expired.",
+        "invalidediturl": "Not a valid edit URL",
+        "loadfailed": "Failed to load __resource__",
+        "notfoundinformlist": "This form is no longer available.",
+        "pagenotfound": "Page not Found",
+        "surveyidnotactive": "Survey with this ID no longer active",
+        "surveyidnotfound": "No form found with this URL, please double check.",
+        "unknown": "An unknown error occured"
     },
     "feedback": {
-        "header": "Infrormácia"
+        "header": "Information"
     },
     "filepicker": {
-        "file": "súbor",
-        "notFound": "Súbor __existing__ sa nepodarilo nájsť (ponechajte nezmenené ak už bol odoslaný a chcete ho ponechať).",
-        "placeholder": "Kliknite sem pre nahranie súboru. (< __maxSize__)",
-        "resetWarning": "Touto akciou odstránite __item__. Ste si istý že toto chcete urobiť?",
-        "toolargeerror": "Súbor je príliš veľký (> __maxSize__)",
-        "waitingForPermissions": "Čaká sa na užívateľské oprávnenia."
+        "file": "file",
+        "notFound": "File __existing__ could not be found (leave unchanged if already submitted and you want to preserve it).",
+        "placeholder": "Click here to upload file. (< __maxSize__)",
+        "resetWarning": "This will remove the __item__. Are you sure you want to do this?",
+        "toolargeerror": "File too large (> __maxSize__)",
+        "waitingForPermissions": "Waiting for user permissions."
     },
     "form": {
-        "chooseLanguage": "Vyberte Jazyk",
-        "logout": "odhlásiť",
+        "chooseLanguage": "Choose Language",
+        "logout": "log out",
         "pages": {
-            "back": "Späť",
-            "end": "Prejsť na Koniec",
-            "next": "Ďalej",
-            "return": "Späť na Začiatok"
+            "back": "Back",
+            "end": "Go to End",
+            "next": "Next",
+            "return": "Return to Beginning"
         },
-        "required": "povinný"
+        "required": "required"
     },
     "formfooter": {
         "complete": {
-            "btn": "Dokončiť"
+            "btn": "Complete"
         },
         "savedraft": {
-            "btn": "Uložiť Koncept",
-            "label": "Uložiť ako Koncept"
+            "btn": "Save Draft",
+            "label": "Save as Draft"
         },
         "submit": {
-            "btn": "Odoslať"
+            "btn": "Submit"
         },
         "validate": {
-            "btn": "Overiť"
+            "btn": "Validate"
         }
     },
     "geopicker": {
-        "accuracy": "presnosť (m)",
-        "altitude": "nadmorská výška (m)",
-        "closepolygon": "uzavretý poligón",
-        "kmlcoords": "KML súradnice",
-        "kmlpaste": "sem vložte KML súradnice",
-        "latitude": "zemepisná šírka (x.y °)",
-        "longitude": "zemepisná dĺžka (x.y °)",
-        "points": "body",
-        "removePoint": "Touto akciou úplne a nenávratne odstránite súčasný geolokačný bod z listu geolokacných bodov. Ste si istý že toto chcete urobiť.",
-        "searchPlaceholder": "hľadanie miesta alebo adresy",
-        "bordersintersectwarning": "Hranice sa nemôžu pretínať"
+        "accuracy": "accuracy (m)",
+        "altitude": "altitude (m)",
+        "closepolygon": "close polygon",
+        "kmlcoords": "KML coordinates",
+        "kmlpaste": "paste KML coordinates here",
+        "latitude": "latitude (x.y °)",
+        "longitude": "longitude (x.y °)",
+        "points": "points",
+        "removePoint": "This will completely remove the current geopoint from the list of geopoints and cannot be undone. Are you sure you want to do this?",
+        "searchPlaceholder": "search for place or address",
+        "bordersintersectwarning": "Borders cannot intersect"
     },
-    "here": "tu",
+    "here": "here",
     "hint": {
         "guidance": {
-            "details": "viac informácií"
+            "details": "more details"
         }
     },
     "home": {
-        "msg": "__appTitle__ beží! Prosím pristupujte k Enketo formulárom z inštalácie vašeho __serverName__ ."
+        "msg": "__appTitle__ is running! Please access Enketo forms from your __serverName__ installation."
     },
     "imagemap": {
-        "svgNotFound": "SVG obrázok sa nepodarilo nájsť"
+        "svgNotFound": "SVG image could not be found"
     },
     "langs": {
-        "ar": "Arabčina",
-        "cs": "Čeština",
-        "de": "Nemčina",
-        "el": "Gréčtina",
-        "en": "Angličtina",
-        "es": "Španielčina",
-        "fa": "Perzština",
-        "fi": "Fínčina",
-        "fr": "Francúzština",
-        "he": "Hebrejčina",
-        "hi": "Hindčina",
-        "it": "Taliančina",
-        "ka": "Gruzínčina",
-        "km": "Khmérčina",
-        "lo": "Laoština",
-        "nl": "Holandčina ",
-        "no": "Nórčina ",
-        "pa": "Pandžábčina",
-        "pl": "Poľština",
-        "pt": "Portugalčina",
-        "ro": "Rumunčina",
-        "ru": "Ruština",
-        "sk": "Slovenčina",
-        "sq": "Albánčina",
-        "supported": "Podporované jazyky:",
-        "sv": "Švédčina",
-        "sw": "Svahilčina",
-        "th": "Thajčina",
-        "tr": "Turečtina",
+        "ar": "Arabic",
+        "cs": "Czech",
+        "de": "German",
+        "el": "Greek",
+        "en": "English",
+        "es": "Spanish",
+        "fa": "Persian",
+        "fi": "Finnish",
+        "fr": "French",
+        "he": "Hebrew",
+        "hi": "Hindi",
+        "it": "Italian",
+        "ka": "Georgian",
+        "km": "Khmer",
+        "lo": "Lao",
+        "nl": "Dutch",
+        "no": "Norwegian",
+        "pa": "Panjabi",
+        "pl": "Polish",
+        "pt": "Portuguese",
+        "ro": "Romanian",
+        "ru": "Russian",
+        "sk": "Slovak",
+        "sq": "Albanian",
+        "supported": "Languages supported:",
+        "sv": "Swedish",
+        "sw": "Swahili",
+        "th": "Thai",
+        "tr": "Turkish",
         "uk": "Ukrainian",
-        "vi": "Vietnamčina",
-        "zh": "Čínština"
+        "vi": "Vietnamese",
+        "zh": "Chinese"
     },
     "literacywidget": {
-        "finish": "Dokončiť",
-        "start": "Začať"
+        "finish": "Finish",
+        "start": "Start"
     },
     "page": {
         "modernbrowsers": {
-            "heading": "Moderné Prehliadače",
+            "heading": "Modern Browsers",
             "ie": {
-                "heading": "No nemilujte tieto zákerné zastarané verzie Internet Explorera?",
-                "msg": "Chápeme, že niektorí ľudia, najmä tí, ktorí pracujú pre veľké byrokracie, nemajú prístup k najnovším a najlepším prehliadačov. Pretože vieme, aký skvelý by web mohol byť s tými správnymi nástrojmi, máme veľkú empatiu pre užívateľov v tejto nešťastnej situácii. Za normálnych okolností by sme sa snažili poskytnúť riešenia pre podporu niektorých populárne zastaraných prehliadačov. Avšak jeden z dôvodov, prečo Enketo existuje, je dostupnosť niektorých moderných špičkových technológií. Bohužiaľ, užívatelia starších prehliadačov majú teda smolu."
+                "heading": "Why no love for those evil outdated versions of Internet Explorer?",
+                "msg": "We understand that some people, especially those working for large bureaucracies, do not have access to the latest and greatest browsers. Since we know how great the web could be with the right tools, we have great empathy for users in that unfortunate situation. Normally, we would try to provide workarounds to support some populair outdated browsers. However, the reason Enketo exists is the availability of some very fancy cutting-edge technologies. Unfortunately, users of older browsers are therefore out of luck."
             },
-            "msg1": "Ach! Prepáčte, ale pravdepodobne ste sem boli presmerovaní pretože váš prehliadač je zastaraný, alebo ho používate v režime 'ochrany súkromia' a teda sú určité kľúčové funkcie nedostupné.",
-            "msg2": "Ak používate zastaraný prehliadač, odporúčame upgrade na najnovšiu verziu jedného z nasledujúcich vynikajúcich moderných prehliadačov:"
+            "msg1": "Ouch! Sorry, you were probably sent here because your browser is outdated or perhaps it has its key features disabled by using 'private browsing' mode.",
+            "msg2": "If you are using an outdated browser, we recommend upgrading to a recent version of one of the following excellent modern browsers:"
         },
         "offline": {
-            "heading": "Nemožno získať prístup k požadovanej stránke",
-            "msg1": "Táto stránka je dostupná iba, keď je prehliadač pripojený k Internetu a server je prístupný (alebo táto stránka neexistuje)."
+            "heading": "Cannot access requested page",
+            "msg1": "This page is only accessible when the browser has an Internet connection and the server is accessible (unless the page does not exist)."
         }
     },
     "prompt": {
         "default": {
-            "heading": "Zadajte dáta"
+            "heading": "Enter values"
         },
         "login": {
-            "heading": "Zadajte prihlasovacie údaje pre __server__ ",
-            "password": "Heslo",
-            "remember": "Zapamätať na tomto počítači",
-            "submit": "Odoslať",
-            "username": "Užívateľské meno"
+            "heading": "Enter your __server__ credentials",
+            "password": "Password",
+            "remember": "Remember on this computer",
+            "submit": "Submit",
+            "username": "Username"
         }
     },
     "rankwidget": {
-        "clickstart": "Kliknite pre spustenie",
-        "tapstart": "Klepnite pre spustenie"
+        "clickstart": "Click to start",
+        "tapstart": "Tap to start"
     },
     "record-list": {
-        "export": "Exportovať",
-        "msg1": "Záznamy sú uložené vo vašom prehliadači, až kým sa neodošlú (aj v prípade, keď vypnete počítač alebo prejdete do offline režimu).",
-        "msg2": "Záznamy vo fronte, s výnimkou tých, ktoré sú označené ako koncept __icon__, sú nahrávané automaticky na pozadí, každých 5 minút, pokým je webová stránka otvorená a pripojenie k internetu je k dispozícii.",
-        "msg2-nodraft": "Záznamy vo fronte sú nahrávané automaticky na pozadí každých 5 minúť, pokým je webová stránka otvorená a pripojenie k internetu je k dispozícii.",
-        "msg3": "Ak si chcete vynútiť odoslanie medzi týmito automatickými pokusmi, kliknite na tlačidlo Nahrať.",
-        "norecords": "žiadne záznamy vo fronte",
-        "title": "Fronta",
-        "upload": "Nahrať"
+        "export": "Export",
+        "msg1": "Records are stored inside your browser until they have been uploaded (even if you turn off your computer or go offline).",
+        "msg2": "Queued records, except those marked as draft __icon__, are uploaded automatically, in the background, every 5 minutes when the web page is open and an Internet connection is available.",
+        "msg2-nodraft": "Queued records are uploaded automatically, in the background, every 5 minutes when the web page is open and an Internet connection is available.",
+        "msg3": "To force an upload in between automatic attempts, click Upload.",
+        "norecords": "no records queued",
+        "title": "Queue",
+        "upload": "Upload"
     },
     "selectpicker": {
-        "noneselected": "žiadne informácie",
-        "numberselected": "__number__ vybrané"
+        "noneselected": "none selected",
+        "numberselected": "__number__ selected"
     },
     "store": {
         "error": {
-            "iosusesafari": "Váš iOS prehliadač nie je schopný zobraziť tento formulár. Na iOS platforme odporúčame používať Safari.",
-            "notavailable": "Je požadovaný prístup k úložisku prehliadača, ale to nie je k dispozícii, je poškodený, alebo do neho nie je možné zapisovať. Ak ste v režime 'súkromného prehliadania', prepnite prosím do normálneho režimu, alebo použite iný prehliadač. (error: __error__)",
-            "notsupported": "Váš prehliadač nie je schopný zobraziť tento formulár. Odporúčame používať moderný prehliadač."
+            "iosusesafari": "Your iOS browser is not able to run this form. On iOS, we recommend using Safari.",
+            "notavailable": "Browser storage is required but is not available, is corrupted, or is not writeable. If you are in 'private browsing' mode please switch to regular mode, otherwise switch to another browser. (error: __error__)",
+            "notsupported": "Your browser is not able to run this form. We recommend using a modern browser."
         }
     },
     "submission": {
-        "http0": "Server je nedostupný alebo nie ste pripojení k internetu.",
-        "http2xx": "Neočakávaná odpoveď pri odosielaní dát.",
-        "http400": "Dátový server neakceptoval dáta.",
-        "http401": "Nastal prolém pri autentikácii s dátovým serverom.",
-        "http403": "Nie je povolené posielať dáta na tento dátový server.",
-        "http404": "Služba pre odoslanie nebola nájdená na dátovom serveri.",
-        "http408": "Spojenie s dátovým serverom vypršalo.",
-        "http413": "Dáta sú príliš veľké.",
-        "http4xx": "Nastal neznámy problém počas odoslania na dátovom serveri.",
-        "http500": "Dátový server vášho formulára alebo Enketo server je nedostupný. Skúste to prosím neskôr alebo kontaktujte __supportEmail__.",
-        "http504": "Nepodarilo sa nadviazať spojenie s dátovým serverom."
+        "http0": "The server is not available or you may not be connected to the Internet.",
+        "http2xx": "Unexpected response when submitting data.",
+        "http400": "Data server did not accept data.",
+        "http401": "Authentication problem with data server.",
+        "http403": "Not allowed to post data to this data server.",
+        "http404": "Submission service on data server not found.",
+        "http408": "Data server timed out.",
+        "http413": "Data is too large.",
+        "http4xx": "Unknown submission problem on data server.",
+        "http500": "The data server for your form or the Enketo server is down. Please try again later or contact __supportEmail__.",
+        "http504": "Could not establish connection with data server."
     },
     "themes": {
-        "supported": "Podporované motívy"
+        "supported": "Themes supported"
     },
-    "version": "verzia:",
+    "update": {
+        "newversion": "New version available",
+        "reload": "reload to update"
+    },
+    "version": "version:",
     "widget": {
         "comment": {
-            "update": "Aktualizovať"
+            "update": "Update"
         }
     }
 }
