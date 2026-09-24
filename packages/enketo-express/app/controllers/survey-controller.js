@@ -232,8 +232,8 @@ function _renderWebform(req, res, next, options) {
 function xform(req, res, next) {
     return surveyModel
         .get(req.enketoId)
-        .then((survey) => {
-            survey.credentials = userModel.getCredentials(req);
+        .then(async (survey) => {
+            survey.credentials = await userModel.getCredentials(req);
 
             return survey;
         })

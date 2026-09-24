@@ -2,9 +2,10 @@
  * @module user-model
  */
 
-const jwt = require('jwt-simple');
+const { jwtDecrypt, errors } = require('jose');
+const { deriveEncryptionKey } = require('../lib/encryption');
 const url = require('url');
-// var debug = require( 'debug' )( 'user-model' );
+const debug = require('debug')('enketo:user-model');
 
 /**
  * Returns credentials from request object.
@@ -12,9 +13,9 @@ const url = require('url');
  *
  * @static
  * @param {module:api-controller~ExpressRequest} req - HTTP request
- * @return {object|null} Credentials
+ * @return {Promise<object|null>} Credentials
  */
-function getCredentials(req) {
+async function getCredentials(req) {
     const auth = req.app.get('linked form and data server').authentication;
     const authType = auth.type.toLowerCase();
     let creds = null;
@@ -22,9 +23,20 @@ function getCredentials(req) {
     if (authType === 'basic') {
         const jwToken =
             req.signedCookies[req.app.get('authentication cookie name')];
-        creds = jwToken
-            ? jwt.decode(jwToken, req.app.get('encryption key'))
-            : null;
+        if (jwToken) {
+            const derivedKey = deriveEncryptionKey(
+                req.app.get('encryption key')
+            );
+            try {
+                const { payload } = await jwtDecrypt(jwToken, derivedKey);
+                creds = { user: payload.user, pass: payload.pass };
+            } catch (err) {
+                if (!(err instanceof errors.JOSEError)) {
+                    throw err;
+                }
+                debug('auth cookie rejected: %s', err.code);
+            }
+        }
     } else if (authType === 'token') {
         const paramName = auth['query parameter'];
         if (!paramName) {

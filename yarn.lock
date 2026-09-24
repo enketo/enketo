@@ -5934,6 +5934,11 @@ jest-worker@^27.4.5:
     merge-stream "^2.0.0"
     supports-color "^8.0.0"
 
+jose@^5.9.6:
+  version "5.10.0"
+  resolved "https://registry.yarnpkg.com/jose/-/jose-5.10.0.tgz#c37346a099d6467c401351a9a0c2161e0f52c4be"
+  integrity sha512-s+3Al/p9g32Iq+oqXxkW//7jk2Vig6FF1CFqzVXoTUXt2qz89YWbL+OwS17NFYEvxC35n0FKeGO2LGYSxeM2Gg==
+
 jquery-touchswipe@^1.6.19:
   version "1.6.19"
   resolved "https://registry.yarnpkg.com/jquery-touchswipe/-/jquery-touchswipe-1.6.19.tgz#dfd5ddaec0b78212dd500d29707129b9c7fd6cd4"
@@ -6097,11 +6102,6 @@ just-extend@^6.2.0:
   version "6.2.0"
   resolved "https://registry.yarnpkg.com/just-extend/-/just-extend-6.2.0.tgz#b816abfb3d67ee860482e7401564672558163947"
   integrity sha512-cYofQu2Xpom82S6qD778jBDpwvvy39s1l/hrYij2u9AMdQcGRpaBu6kY4mVhuno5kJVi1DAz4aiphA2WI1/OAw==
-
-jwt-simple@^0.5.6:
-  version "0.5.6"
-  resolved "https://registry.yarnpkg.com/jwt-simple/-/jwt-simple-0.5.6.tgz#3357adec55b26547114157be66748995b75b333a"
-  integrity sha512-40aUybvhH9t2h71ncA1/1SbtTNCVZHgsTsTgqPUxGWDmUDrXyDf2wMNQKEbdBjbf4AI+fQhbECNTV6lWxQKUzg==
 
 karma-chrome-launcher@^3.2.0:
   version "3.2.0"
