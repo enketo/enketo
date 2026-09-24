@@ -1,91 +1,91 @@
 {
     "advanced": {
-        "flushdb": "संग्रहित जानकारी हटाएँ"
+        "flushdb": "Clear Storage"
     },
     "alert": {
         "addtohomescreen": {
             "androidchrome": {
-                "msg": "अपने होम स्क्रीन पर इस फॉर्म  को जोड़ने के लिए ब्राउज़र सेटिंग्स आइकन __image1__ पर क्लिक करें और 'होम स्क्रीन पर जोड़ें ' चुनें।"
+                "msg": "To add this form to your Home screen, click the browser settings icon __image1__ and select: 'Add to Home screen'."
             },
             "androidfirefox": {
-                "msg": "इसे फ़ॉर्म को अपने होम स्क्रीन पर जोड़ने के लिए ऐड्रेस बार को थोड़ा लम्बा दबाएँ और 'होम स्क्रीन पर जोड़ें' चुनें।"
+                "msg": "To add this form to your Homescreen, long-press the address bar and select 'Add to Home Screen'."
             },
-            "heading": "होम स्क्रीन में  जोड़ें",
+            "heading": "Add to Home Screen",
             "iossafari": {
-                "msg": "अपनी होम स्क्रीन पर यह फॉर्म  को जोड़ने के लिए अपने ब्राउज़र के  ऊपर दांई ओर  पर शेयर आइकन __image1__, क्लिक करें और  '+ होम स्क्रीन पर जोड़ें' चुनें।"
+                "msg": "To add this form to your Home screen, click the share icon __image1__ in the top right of your browser, and select: '+ Add to Home Screen'."
             }
         },
         "appupdated": {
-            "heading": "एप्लिकेशन अपडेट हो गई!",
-            "msg": "इस फॉर्म  का एक नया संस्करण डाउनलोड किया गया है। अपडेटेड  संस्करण लोड करने के लिए इस पेज को रिफ्रेश  करें।"
+            "heading": "App Updated!",
+            "msg": "A new version of this application has been downloaded. Refresh this page to load the updated version."
         },
         "closing": {
-            "heading": "बंद हो रहा है "
+            "heading": "Closing..."
         },
         "default": {
-            "button": "बंद करे",
-            "heading": "चेतावनी"
+            "button": "Close",
+            "heading": "Alert"
         },
         "export": {
             "error": {
-                "filecreatedmsg": "एक अधूरी निर्यात फाइल फिर भी बन गयी ।",
-                "heading": " त्रुटि को निर्यात  करें",
-                "msg": "त्रुटियाँ unsubmitted रिकॉर्ड के लिए रिकॉर्ड निर्यात फ़ाइल के बनाने के दौरान हुई। त्रुटियाँ: __errors__"
+                "filecreatedmsg": "Nevertheless, an incomplete export file was still created.",
+                "heading": "Export Error",
+                "msg": "Errors occurred during creating of the record export file for unsubmitted records. Errors: __errors__"
             },
             "success": {
-                "heading": "निर्यात बन गया है",
-                "msg": "इस फार्म से संबंधित सभी unsubmitted रेकॉर्डों के लिए  निर्यात फाइल निर्मित हो गयी है।"
+                "heading": "Export Created",
+                "msg": "Export file created for all unsubmitted records belonging to this form."
             }
         },
         "formupdated": {
-            "heading": " फॉर्म अपडेट हो गया!",
-            "msg": "इस फार्म का एक नया संस्करण डाउनलोड किया गया है। अद्यतन संस्करण लोड करने के लिए इस पेज को रिफ्रेश करें।"
+            "heading": "Form Updated!",
+            "msg": "A new version of this form has been downloaded. Refresh this page to load the updated version."
         },
         "gotonotfound": {
-            "msg": "सवाल \"__path__\" फ़ॉर्म में नहीं मिला। क्या इस सवाल का संदर्भ सही है?"
+            "msg": "Failed to find question \"__path__\" in form. Is the reference to this question correct?"
         },
         "loaderror": {
-            "editadvice": "कृपया इस रिकॉर्ड को नहीं बदलें जब तक  इसका समाधान हो नहीं जाता है।",
-            "entryadvice": "कृपया तब तक इस फॉर्म का उपयोग डाटा प्रविष्ट करने के लिए न करें जब तक इसका समाधान नहीं हो जाता।",
-            "heading": "त्रुटि लोड हो रही है",
-            "msg1": "त्रुटि इस फार्म की लोडिंग के दौरान हुई।",
-            "msg2": "इस पेज और नीचे त्रुटि संदेश के लिंक के साथ __emailLink__पर संपर्क करें:",
-            "heading_plural": "त्रुटियाँ लोड हो रही हैं",
-            "msg1_plural": " इस फार्म की लोडिंग के दौरान त्रुटियाँ हुई।",
-            "msg2_plural": "इस पेज और नीचे त्रुटि संदेश के लिए लिंक के साथ __emailLink__ संपर्क करें:"
+            "editadvice": "We do not recommend you edit this record until this is resolved.",
+            "entryadvice": "We do not recommend you use this form for data entry until this is resolved.",
+            "heading": "Loading Error",
+            "msg1": "Something went wrong while loading this form. Please try again later.",
+            "msg2": "Please contact __emailLink__ with the link to this page and the error message below:",
+            "heading_plural": "Loading Errors",
+            "msg1_plural": "Errors occurred during the loading of this form.",
+            "msg2_plural": "Please contact __emailLink__ with the link to this page and the error messages below:"
         },
         "logout": {
-            "heading": "लॉग आउट",
-            "msg": "आप लॉग आउट हो चुके हैं।"
+            "heading": "Logged Out",
+            "msg": "You have been logged out."
         },
         "offlinesupported": {
-            "heading": "फॉर्म ऑफ़लाइन काम करता है!",
+            "heading": "Form works offline!",
             "msg": [
-                "यह फार्म अब इस  यंत्र पर  इंटरनेट कनेक्शन के बिना लोड व इस्तेमाल किया जा सकता है। आसान ऑफ़लाइन उपयोग के लिए इसे बुकमार्क करें।",
-                "जब तक  इंटरनेट कनेक्शन उपलब्ध नही है रेकॉर्ड स्वतःआपके ब्राउज़र में सहेजे और पंक्तिबद्ध हैं।जब एप्लिकेशन  ऑनलाइन होगा, रेकॉर्ड स्वचालित रूप से  एक के बाद एक जमा  हो जाएँगे ।",
-                "रिकॉर्ड के सफलतापूर्वक प्रस्तुत किए जाने के बाद ही वह कतार से निकाला जाएगा। आप सुरक्षित रूप से कतार में आइटम के साथ अपने ब्राउज़र और डिवाइस को बंद कर सकते हैं।अगली बार जब आप फॉर्म लोड करेंगे आइटम तब भी वहाँ रहेंगे।"
+                "This form can now be loaded and used without an Internet connection on this device. Bookmark it for easy offline access.",
+                "Records are automatically stored and queued in your browser until an Internet connection is available. When the app is online, records will be automatically submitted - one by one.",
+                "Only after a record has been successfully submitted, it will be removed from the queue. You can safely close down your browser and device with items in the queue. They will still be there next time you load the form."
             ]
         },
         "offlineunsupported": {
-            "heading": "एप्लीकेशन ऑफ़लाइन शुरू नहीं कर सकते हैं ",
-            "msg": "ऑफलाइन एप्लीकेशन लांच आपके ब्राउज़र द्वारा समर्थित नहीं है। आप इस सुविधा के बिना सर्वेक्षण का उपयोग करें या इस को हल करने के लिए विकल्प देख सकते हैं।",
-            "negButton": "इसका उपयोग करें",
-            "posButton": "विकल्प दिखायें",
+            "heading": "Application cannot launch offline",
+            "msg": "Offline application launch is not supported by your browser. You can use the survey without this feature or see options for resolving this.",
+            "negButton": "Use it",
+            "posButton": "Show options",
             "refresh": "This form can no longer launch offline. Please refresh the page to try to fix this."
         },
         "queuesubmissionsuccess": {
-            "msg": "__recordNames__ सफलतापूर्वक प्रस्तुत की गई थी",
-            "msg_plural": "__recordNames__ सफलतापूर्वक प्रस्तुत किए गये"
+            "msg": "__recordNames__ was successfully submitted",
+            "msg_plural": "__recordNames__ were successfully submitted"
         },
         "recordloadsuccess": {
-            "msg": "__recordName__ लोड हो गया है"
+            "msg": "__recordName__ has been loaded"
         },
         "recordnotfound": {
-            "msg": "रिकार्ड प्राप्त नहीं किया जा सकता है या उसमें कोई डेटा नहीं है।"
+            "msg": "Record could not be retrieved or contained no data."
         },
         "recordsavesuccess": {
-            "draftmsg": "रिकार्ड ड्राफ्ट के रूप में सांचयित।",
-            "finalmsg": "रिकार्ड जमा होने के लिए पंक्तिबद्ध।"
+            "draftmsg": "Record stored as draft.",
+            "finalmsg": "Record queued for submission."
         },
         "savedraftinfo": {
             "heading": "Finalize record later",
@@ -96,308 +96,345 @@
             ]
         },
         "submission": {
-            "msg": "जमा हो रहा है ...",
-            "redirectmsg": " जमा होने के बाद आपको  स्वचालित रूप से पुनः निर्देशित किया जाएगा।"
+            "msg": "Submitting...",
+            "redirectmsg": "You will be automatically redirected after submission."
         },
         "submissionerror": {
-            "authrequiredmsg": "प्रमाणीकरण आवश्यक। एक अलग ब्राउज़र टैब में __here__ प्रमाणित करें और फिर कोशिश करें।",
+            "authrequiredmsg": "Authentication required. Please authenticate __here__ in a different browser tab and try again.",
             "fnfmsg": [
-                "निम्नलिखित मीडिया फ़ाइलों को प्राप्त नहीं किया जा सकता है: __failedFiles__।  इन फ़ाइलों के बिना फॉर्म सफलतापूर्वक जमा हो गया",
+                "The following media files could not be retrieved: __failedFiles__. The submission went ahead without these files and this succeeded.",
                 "Please contact __supportEmail__ to report a bug and if possible explain how the issue can be reproduced."
             ],
-            "heading": "जमा करने में असफल"
+            "heading": "Submission Failed"
         },
         "submissionsuccess": {
-            "heading": "सफलतापूर्वक जमा हो गया",
-            "msg": "आपका डेटा जमा हो  गया!",
-            "redirectmsg": "अब आपको पुनः निर्देशित किया जाएगा।"
+            "heading": "Submission Successful",
+            "msg": "Your data was submitted!",
+            "redirectmsg": "You will now be redirected."
         },
         "thanks": {
-            "heading": "भाग लेने के लिए धन्यवाद!",
-            "msg": "आप अब इस विंडो को बंद कर सकते हैं।",
-            "msgTaken": "आप यह सर्वेक्षण पहले ही पूरा कर चुके हैं।"
+            "heading": "Thank you for participating!",
+            "msg": "You can close this window now.",
+            "msgTaken": "You have already completed this survey."
         },
         "validationerror": {
-            "msg": "फार्म में त्रुटियां हैं। कृपया लाल रंग में चिह्नित फील्ड देखें।"
+            "msg": "Form contains errors. Please see fields marked in red."
         },
         "validationsuccess": {
-            "heading": "ठीक है",
-            "msg": "फार्म मान्य है!"
+            "heading": "OK",
+            "msg": "Form is valid!"
         },
         "valuehasspaces": {
-            "multiple": "एक से अधिक विकल्प वाले सवाल में \"__value__\" में अनियमित स्पेस है।"
+            "multiple": "Select multiple question has an illegal value \"__value__\" that contains a space."
         },
         "xpatherror": {
-            "heading": "फ़ॉर्मूले में त्रुटि",
-            "msg": "एक फ़ॉर्मूला मूल्यांकन त्रुटि उत्पन्न हुई। इस त्रुटि के साथ __emailLink__  पर संपर्क करें:"
+            "heading": "Formula Error",
+            "msg": "A formula evaluation error occurred. Please contact __emailLink__ with this error:"
         }
     },
-    "changelog": "बदलाव संग्रह",
+    "audioRecording": {
+        "error": {
+            "accessDenied": "Microphone access denied by user.",
+            "noMicrophone": "No microphone found on this device.",
+            "notSupported": "Audio recording is not supported in this browser.",
+            "unknownError": "Failed to access microphone. Check your browser settings and permissions.",
+            "recordingError": "An error occurred while trying to record audio.",
+            "recordingInProgress": "The current audio recording needs to be stopped before continuing.",
+            "invalidAudioFile": {
+                "msg": "The selected file is not a valid audio file and cannot be played.",
+                "heading": "Invalid Audio File"
+            }
+        },
+        "startRecording": "Start Recording",
+        "uploadAudioFile": "Upload audio File",
+        "deleteWarning": "The audio will be deleted. Are you sure you want to do this?",
+        "backgroundDisclaimer": {
+            "heading": "Background Audio Recording",
+            "msg": [
+                "This form records the audio from your device's microphone.",
+                "You can use the volume indicator to make sure the microphone is close enough to the sound you need to record.",
+                "To stop the recording please exit this form.",
+                "For more information please contact the person who asked you to collect data."
+            ],
+            "buttonText": "Ok, start Recording"
+        },
+        "hasRecordedAudio": "This submission has a background audio recording."
+    },
+    "changelog": "Change Log",
     "confirm": {
         "autosaveload": {
-            "heading": "बिना सहेजा हुआ रेकॉर्ड मिला ",
-            "msg": "Enketo को  बिना सहेजा हुआ एक रिकॉर्ड मिला है। आप इस रिकॉर्ड  को लोड करना चाहेंगे या हटाना चाहेंगे?",
-            "negButton": "छोड़ना",
-            "posButton": "रेकॉर्ड लोड करें"
+            "heading": "Unsaved Record Found",
+            "msg": "Enketo has found an unsaved record. Would you like to load this record or discard it?",
+            "negButton": "Discard",
+            "posButton": "Load Record"
         },
         "default": {
-            "heading": "क्या आपको यकीन है?",
-            "msg": " कृपया इस कार्यवाही की पुष्टि करें",
-            "negButton": "रद्द करें",
-            "posButton": "पुष्टि करें"
+            "heading": "Are you sure?",
+            "msg": "Please confirm this action",
+            "negButton": "Cancel",
+            "posButton": "Confirm"
         },
         "deleteall": {
-            "heading": "ख़तरा !",
+            "heading": "PANIC!",
             "msg": [
-                "यह ब्राउज़र संग्रहण में से सारा पंक्तिबद्ध डाटा और आपके सारे फॉर्म हटा देगा।डाटा हमेशा के लिए खो जाएगा। अगर ब्राउज़र संग्रहण भ्रष्ट लगता है तो इस का प्रयोग केवल एक अंतिम उपाय के रूप में करें ।",
-                "सब से पहले अन्य Enketo ब्राउज़र टैब बंद करें।",
-                "यह पेज दोबारा लोड होगा।अगर आपको कोई ग़लती दिखती है तो आपको यह कार्य दोहराना पड़ेगा ।",
-                "क्या आप निश्चित रूप से  इसे करना चाहते हैं?"
+                "This will remove all your queued data and all your forms from the browser storage. Data will be lost forever. Use this only as a last resort if the browser storage seems corrupt.",
+                "Close all other Enketo browser tabs first.",
+                "The page will reload. If you see an error you may have to repeat this action.",
+                "Are you sure you want to do this?"
             ],
-            "posButton": "सब हटाएँ"
+            "posButton": "Delete All"
         },
         "discardcurrent": {
-            "heading": "बिना सहेजे हुए बदलाव",
-            "msg": "मौजूदा फार्म में बिना सहेजे हुए परिवर्तन  हैं। क्या आप  इस फॉर्म में बिना सहेजे हुए परिवर्तनों  के साथ रेकॉर्ड को लोड करना चाहेंगे? ",
-            "posButton": "सहेजे बिना आगे बढ़ें"
+            "heading": "Unsaved edits",
+            "msg": "The current form has unsaved changes. Would you like to load a record without saving changes to the form you were working on?",
+            "posButton": "Proceed without saving"
         },
         "login": {
-            "heading": "लॉगिन अनिवार्य ",
-            "msg": [
-                "अपना कतारबद्ध डाटा जमा करने के लिए,आपको लॉग इन करना पड़ेगा । अगर आप अब ऐसा करना चाहेंगे, तो आपको पुनः निर्देशित किया जाएगा, और आप बिना सहेज़ी हुई जानकारी खो देंगे।",
-                "क्या आप लॉगिन अभी करना चाहेंगे या बाद में?"
+            "heading": "Login Required",
+            "queuedMsg": [
+                "Record queued for submission. In order to submit your queued data, you need to login.",
+                "Would you like to login now or later?"
             ],
-            "negButton": "बाद में",
-            "posButton": "अब लॉगिन करें"
+            "msg": [
+                "In order to submit your queued data, you need to login. If you want to do this now, you will be redirected, and lose unsaved information.",
+                "Would you like to login now or later?"
+            ],
+            "negButton": "Later",
+            "posButton": "Log in now"
         },
         "print": {
-            "a4": "ए 4",
-            "heading": " प्रिंट सेटिंग्स चुनें",
-            "landscape": "परिदृश्य",
-            "letter": "पत्र",
-            "msg": "एक अनुकूलित प्रिंट तैयार करने के लिए, कृपया नीचे प्रिंट सेटिंग्स का चयन करें ",
-            "orientation": "कागज का अनुस्थापन",
-            "portrait": "चित्र",
-            "posButton": "तैयार करें",
-            "psize": "पेपर का  माप",
-            "reminder": "ध्यान रखें की बाद में भी यही प्रिंट रूपरेखा ब्राउज़र के प्रिंट मेनू में लगाएँ !"
+            "a4": "A4",
+            "heading": "Select Print Settings",
+            "landscape": "Landscape",
+            "letter": "Letter",
+            "msg": "To prepare an optimized print, please select the print settings below",
+            "orientation": "Paper Orientation",
+            "portrait": "Portrait",
+            "posButton": "Prepare",
+            "psize": "Paper Size",
+            "reminder": "Remember to set these same print settings in the browser's print menu afterwards!"
         },
         "repeatremove": {
-            "heading": "इन प्रतिक्रियाओं को डिलीट करें?",
-            "msg": "यह क्रिया अपरिवर्तनीय है। क्या आप इसके साथ आगे बढ़ना चाहते हैं?"
+            "heading": "Delete this group of responses?",
+            "msg": "This action is irreversible. Are you sure you want to proceed?"
         },
         "save": {
-            "existingerror": "यह रिकॉर्ड नाम या ID पहले से  मौजूद है।",
-            "hint": "।इस नाम से आप वह ड्राफ्ट रेकॉर्ड जिसे आप बाद में बाद में पूर्ण करना चाहते हों, सरलता से ढूंड  सकते हैं ",
-            "msg": " परिवर्तन सहेजे  नही गये हैं क्या आप उन्हें बिना सहेजे आगे बढ़ना चाहते  हैं ?",
-            "name": "रिकॉर्ड का नाम",
-            "posButton": "सहेजे और बंद करें",
-            "renamemsg": "क्या आप सुनिश्चित  रूप से__currentName__का नाम बदल कर__newName__ रखना चाहते हैं?",
-            "unkownerror": " डेटा को  सहेजते समय एक अज्ञात त्रुटि हुई।"
+            "existingerror": "This record name or ID already exists. Please change it.",
+            "hint": "This name allows you to easily find your draft record to finish it later.",
+            "msg": "There are unsaved changes, would you like to continue without saving those?",
+            "name": "Record Name",
+            "posButton": "Save & Close",
+            "renamemsg": "Are you sure you want to rename __currentName__ to __newName__?",
+            "unkownerror": "An unknown error occurred when trying to save data."
         }
     },
     "constraint": {
-        "invalid": "  इस मान को दर्ज करने की अनुमति नहीं  है",
-        "required": "यह फ़ील्ड अनिवार्य है"
+        "invalid": "Value not allowed",
+        "required": "This field is required"
     },
     "contact": {
-        "admin": "सर्वेक्षण व्यवस्थापक से संपर्क करें।",
-        "support": "कृपया __supportEmail__ से संपर्क करें।"
+        "admin": "Contact the survey administrator please.",
+        "support": "Contact __supportEmail__ please."
     },
     "drawwidget": {
-        "annotation": "फ़ाइल और चित्र",
-        "drawing": "चित्र",
-        "signature": "हस्ताक्षर"
+        "annotation": "file and drawing",
+        "drawing": "drawing",
+        "signature": "signature"
     },
     "enketo": {
-        "power": "द्वारा संचालित"
+        "power": "Powered by"
     },
     "error": {
-        "code": "त्रुटि कोड: __code__",
-        "dataloadfailed": "__url__ से  डाटा लोड करने में असफल",
-        "econnrefused": "सर्वर से कनेक्ट नहीं हो पाया ",
+        "code": "Error Code: __code__",
+        "dataloadfailed": "Failed to load __filename__.",
+        "econnrefused": "Could not connect with Form Server",
         "encryptionnotsupported": "This form requires local encryption of records. Unfortunately this is not supported by your browser. We recommend switching to a modern browser.",
-        "instancenotfound": "रिकार्ड मौजूद नहीं है।हो सकता है कि उसकी अवधि समाप्त हो गयी हो।",
-        "invalidediturl": "यह एक  मान्य संपादित यूआरएल नही है ",
-        "loadfailed": "__resource__ लोड करने में असफल",
-        "notfoundinformlist": [
-            "Oops, this form doesn't exist (anymore). Most likely the owner of the form has deleted it, archived it, or disabled it. Please contact the form's owner to confirm.",
-            "आईडी __formId__ वाल फ़ॉर्म /formList में नहीं मिला।"
-        ],
-        "pagenotfound": "पृष्ठ नहीं मिला",
-        "surveyidnotactive": "इस आईडी के साथ सर्वेक्षण अब सक्रिय नहीं है",
-        "surveyidnotfound": "इस आईडी के साथ सर्वेक्षण नहीं मिला",
-        "unknown": "एक अज्ञात त्रुटि हुई"
+        "formloadfailed": "Failed to load form",
+        "instancenotfound": "Record not present. It may have expired.",
+        "invalidediturl": "Not a valid edit URL",
+        "loadfailed": "Failed to load __resource__",
+        "notfoundinformlist": "This form is no longer available.",
+        "pagenotfound": "Page not Found",
+        "surveyidnotactive": "Survey with this ID no longer active",
+        "surveyidnotfound": "No form found with this URL, please double check.",
+        "unknown": "An unknown error occured"
     },
     "feedback": {
-        "header": "सूचना"
+        "header": "Information"
     },
     "filepicker": {
-        "file": "फ़ाइल",
+        "file": "file",
         "notFound": "File __existing__ could not be found (leave unchanged if already submitted and you want to preserve it).",
-        "placeholder": "फ़ाइल अपलोड करने के लिए यहाँ दबाएँ। (<__maxSize__)",
-        "resetWarning": "इस से __item__ को हटा दिया जाएगा। क्या आप यह करना चाहते हैं?",
-        "toolargeerror": "फ़ाइल बहुत बड़ी है (>__maxSize__)",
-        "waitingForPermissions": "उपयोगकर्ता अनुमतियों का इंतेज़ार है।"
+        "placeholder": "Click here to upload file. (< __maxSize__)",
+        "resetWarning": "This will remove the __item__. Are you sure you want to do this?",
+        "toolargeerror": "File too large (> __maxSize__)",
+        "waitingForPermissions": "Waiting for user permissions."
     },
     "form": {
-        "chooseLanguage": "भाषा चुनें",
-        "logout": "लोग आउट",
+        "chooseLanguage": "Choose Language",
+        "logout": "log out",
         "pages": {
-            "back": "वापस  जाएँ",
-            "end": "अंत में जाएँ",
-            "next": "अगला",
-            "return": "शुरुआत पर लौटें"
+            "back": "Back",
+            "end": "Go to End",
+            "next": "Next",
+            "return": "Return to Beginning"
         },
-        "required": "अपेक्षित"
+        "required": "required"
     },
     "formfooter": {
         "complete": {
-            "btn": "पूरा हो गया है।"
+            "btn": "Complete"
         },
         "savedraft": {
-            "btn": "ड्राफ्ट को सहेजें",
-            "label": "ड्राफ्ट के रूप में सहेजें  "
+            "btn": "Save Draft",
+            "label": "Save as Draft"
         },
         "submit": {
-            "btn": "प्रस्तुत करें"
+            "btn": "Submit"
         },
         "validate": {
-            "btn": "पुष्टि करें"
+            "btn": "Validate"
         }
     },
     "geopicker": {
-        "accuracy": "सटीकता (एम)",
-        "altitude": "ऊंचाई (मीटर)",
-        "closepolygon": "बंद बहुभुज",
+        "accuracy": "accuracy (m)",
+        "altitude": "altitude (m)",
+        "closepolygon": "close polygon",
         "kmlcoords": "KML coordinates",
         "kmlpaste": "paste KML coordinates here",
-        "latitude": "अक्षांश (XY °)",
-        "longitude": "देशांतर (XY °)",
-        "points": "बिंदूएँ",
+        "latitude": "latitude (x.y °)",
+        "longitude": "longitude (x.y °)",
+        "points": "points",
         "removePoint": "This will completely remove the current geopoint from the list of geopoints and cannot be undone. Are you sure you want to do this?",
-        "searchPlaceholder": "स्थान या पता खोजने हेतु"
+        "searchPlaceholder": "search for place or address",
+        "bordersintersectwarning": "Borders cannot intersect"
     },
-    "here": "यहाँ",
+    "here": "here",
     "hint": {
         "guidance": {
-            "details": "अन्य जानकारी"
+            "details": "more details"
         }
     },
     "home": {
-        "msg": "__appTitle__ चल रहा है! अपने __serverName__ स्थापना से Enketo फ़ॉर्मों का उपयोग करें।"
+        "msg": "__appTitle__ is running! Please access Enketo forms from your __serverName__ installation."
     },
     "imagemap": {
         "svgNotFound": "SVG image could not be found"
     },
     "langs": {
-        "ar": "अरबी",
-        "cs": "चेकoslovakian",
-        "de": "जर्मन",
-        "el": "यूनानी",
-        "en": "अंग्रेज़ी",
-        "es": "स्पेनिश",
-        "fa": "फ़ारसी",
+        "ar": "Arabic",
+        "cs": "Czech",
+        "de": "German",
+        "el": "Greek",
+        "en": "English",
+        "es": "Spanish",
+        "fa": "Persian",
         "fi": "Finnish",
-        "fr": "फ्रेंच",
-        "he": "यहूदी",
-        "hi": "हिंदी",
-        "it": "इतालवी",
+        "fr": "French",
+        "he": "Hebrew",
+        "hi": "Hindi",
+        "it": "Italian",
         "ka": "Georgian",
-        "km": "खमेर",
+        "km": "Khmer",
         "lo": "Lao",
-        "nl": "डच",
-        "no": "नार्वेजियन",
+        "nl": "Dutch",
+        "no": "Norwegian",
         "pa": "Panjabi",
         "pl": "Polish",
-        "pt": "पॉर्चुगीज़",
-        "ro": "रोमानियाई",
-        "ru": "रूसी",
-        "sk": "स्लोवाक",
+        "pt": "Portuguese",
+        "ro": "Romanian",
+        "ru": "Russian",
+        "sk": "Slovak",
         "sq": "Albanian",
-        "supported": "यह बोलियाँ समर्थित हैं :",
+        "supported": "Languages supported:",
         "sv": "Swedish",
-        "sw": "स्वाहिली",
-        "th": "थाई",
-        "vi": "वियतनामी",
-        "zh": "चीनी"
+        "sw": "Swahili",
+        "th": "Thai",
+        "tr": "Turkish",
+        "uk": "Ukrainian",
+        "vi": "Vietnamese",
+        "zh": "Chinese"
     },
     "literacywidget": {
-        "finish": "समाप्त करें",
-        "start": "शुरू करें"
+        "finish": "Finish",
+        "start": "Start"
     },
     "page": {
         "modernbrowsers": {
-            "heading": "आधुनिक ब्राउज़र",
+            "heading": "Modern Browsers",
             "ie": {
-                "heading": "क्यों इंटरनेट एक्सप्लोरर के पुराने संस्करणों के लिए कोई लगाव नहीं?",
-                "msg": "हम समझते हैं कि कुछ लोगों को, विशेष रूप से बड़ी नौकरशाही के लिए काम कर रहे लोगों, नवीनतम और सबसे बड़ी ब्राउज़र को पहुँच नहीं है। चूंकि हम जानते हैं कि कैसे महान वेब सही उपकरण के साथ हो सकता है, हम उस दुर्भाग्यपूर्ण स्थिति में उपयोगकर्ताओं के लिए महान सहानुभूति है। आम तौर पर, हम कुछ लोकप्रिय पुरानी ब्राउज़रों का समर्थन करने के लिए workarounds प्रदान करने की कोशिश करेंगे। बहरहाल, कारण Enketo मौजूद कुछ बहुत फैंसी अत्याधुनिक प्रौद्योगिकियों की उपलब्धता है। दुर्भाग्य से, पुराने ब्राउज़र के उपयोगकर्ताओं के भाग्य से बाहर इसलिए कर रहे हैं।"
+                "heading": "Why no love for those evil outdated versions of Internet Explorer?",
+                "msg": "We understand that some people, especially those working for large bureaucracies, do not have access to the latest and greatest browsers. Since we know how great the web could be with the right tools, we have great empathy for users in that unfortunate situation. Normally, we would try to provide workarounds to support some populair outdated browsers. However, the reason Enketo exists is the availability of some very fancy cutting-edge technologies. Unfortunately, users of older browsers are therefore out of luck."
             },
-            "msg1": "क्षमा करें, आपको शायद यहाँ इसलिए भेजा गया था क्योंकि आपका ब्राउजर पुराना  हो चुका  है या शायद  'निजी ब्राउज़िंग मोड का उपयोग करके उसकी प्रमुख विशेषताओं को निष्क्रिय कर दिया गया है ।",
-            "msg2": "अगर आप एक पुराने ब्राउज़र का उपयोग कर रहे हैं, तो हम निम्नलिखित उत्कृष्ट आधुनिक ब्राउज़रों में से एक के नये संस्करण में उन्नयन करने का अनुगृह करते हैं"
+            "msg1": "Ouch! Sorry, you were probably sent here because your browser is outdated or perhaps it has its key features disabled by using 'private browsing' mode.",
+            "msg2": "If you are using an outdated browser, we recommend upgrading to a recent version of one of the following excellent modern browsers:"
         },
         "offline": {
-            "heading": "अनुरोधित पृष्ठ तक नही पहुँच सकते",
-            "msg1": "इस पृष्ट पर तभी पहुँचा जा सकता है जब ब्राउज़र के पास इंटरनेट कनेक्शन  हो और सर्वर तक पहुँचा जा सके ( अगर पृष्ठ मौजूद है) ।"
+            "heading": "Cannot access requested page",
+            "msg1": "This page is only accessible when the browser has an Internet connection and the server is accessible (unless the page does not exist)."
         }
     },
     "prompt": {
         "default": {
-            "heading": "मान दर्ज करें"
+            "heading": "Enter values"
         },
         "login": {
-            "heading": "अपने __server__ क्रेडेंशियल दर्ज करें",
-            "password": "पासवर्ड",
-            "remember": "इस कम्प्यूटर पर याद रखें",
-            "submit": "जमा करें",
-            "username": "उपयोगकर्ता का नाम"
+            "heading": "Enter your __server__ credentials",
+            "password": "Password",
+            "remember": "Remember on this computer",
+            "submit": "Submit",
+            "username": "Username"
         }
     },
     "rankwidget": {
-        "clickstart": "शुरू करने के लिए यहाँ क्लिक करें",
-        "tapstart": "शुरू करने के लिए यहाँ दबाएँ"
+        "clickstart": "Click to start",
+        "tapstart": "Tap to start"
     },
     "record-list": {
-        "export": "निर्यात करें",
-        "msg1": "रिकॉर्ड आपके ब्राउज़र में तब तक संग्रहित रहते हैं, जब तक वे अपलोड नहीं होते ( भले ही आप अपने कंप्यूटर को बंद कर दें या ऑफलाइन हो जाएँ)।",
+        "export": "Export",
+        "msg1": "Records are stored inside your browser until they have been uploaded (even if you turn off your computer or go offline).",
         "msg2": "Queued records, except those marked as draft __icon__, are uploaded automatically, in the background, every 5 minutes when the web page is open and an Internet connection is available.",
         "msg2-nodraft": "Queued records are uploaded automatically, in the background, every 5 minutes when the web page is open and an Internet connection is available.",
-        "msg3": "स्वचालित प्रयास के दौरान बाध्यपुर्वक अपलोड हेतु, अपलोड पर क्लिक करें",
-        "norecords": "कोई रिकॉर्ड पंक्तिबद्ध नहीं है",
-        "title": "कतार",
-        "upload": "अपलोड"
+        "msg3": "To force an upload in between automatic attempts, click Upload.",
+        "norecords": "no records queued",
+        "title": "Queue",
+        "upload": "Upload"
     },
     "selectpicker": {
-        "noneselected": "कुछ चुना नहीं गया है",
-        "numberselected": "__number__ चुना गया है"
+        "noneselected": "none selected",
+        "numberselected": "__number__ selected"
     },
     "store": {
         "error": {
-            "iosusesafari": "आपका आईओएस ब्राउज़र  इस फार्म को चलाने के लिए सक्षम नहीं है। आईओएस पर, हम सफारी का उपयोग करने की सलाह देते हैं ।",
-            "notavailable": "ब्राउज़र  संग्रहण की आवश्यकता है, लेकिन या तो यह उपलब्ध नहीं है,या भ्रष्ट है, या लिखने योग्य नहीं है। अगर आप 'निजी ब्राउज़िंग मोड' में हैं तो कृपया 'नियमित मोड' का उपयोग करें अन्यथा किसी अन्य ब्राउज़र का उपयोग करें। (त्रुटि: __error__)",
-            "notsupported": "आपका ब्राउज़र इस फार्म को चलाने के लिए सक्षम नहीं है।हमारा अनुगृह है की आपको एक आधुनिक ब्राउज़र का उपयोग करना चाहिये।"
+            "iosusesafari": "Your iOS browser is not able to run this form. On iOS, we recommend using Safari.",
+            "notavailable": "Browser storage is required but is not available, is corrupted, or is not writeable. If you are in 'private browsing' mode please switch to regular mode, otherwise switch to another browser. (error: __error__)",
+            "notsupported": "Your browser is not able to run this form. We recommend using a modern browser."
         }
     },
     "submission": {
-        "http0": "विफल (ऑफलाइन?)।",
-        "http2xx": "डेटा भेजने के दौरान अप्रत्याशित प्रतिक्रिया हुई।",
-        "http400": "डाटा सर्वर  ने  स्वीकार डाटा नहीं किया।",
-        "http401": " डेटा  सर्वर के साथ प्रमाणीकरण समस्या है।",
-        "http403": "इस डेटा सर्वर से डेटा पोस्ट करने की अनुमति नहीं है।",
-        "http404": "डेटा सर्वर पर जमा करने की  सेवा नहीं मिली ।",
-        "http408": "डाटा सर्वर टाईम आउट कर गया है।",
-        "http413": "डेटा बहुत बड़ा है।",
-        "http4xx": "जमा करने  पर डेटा सर्वर पर अज्ञात समस्या है।",
-        "http500": "आपके फार्म का डेटा सर्वर या Enketo का सर्वर डाउन है। बाद में फिर से कोशिश करें या __supportEmail__ से संपर्क करें।",
-        "http504": "डाटा सर्वर से मेल नहीं हो पाया।"
+        "http0": "The server is not available or you may not be connected to the Internet.",
+        "http2xx": "Unexpected response when submitting data.",
+        "http400": "Data server did not accept data.",
+        "http401": "Authentication problem with data server.",
+        "http403": "Not allowed to post data to this data server.",
+        "http404": "Submission service on data server not found.",
+        "http408": "Data server timed out.",
+        "http413": "Data is too large.",
+        "http4xx": "Unknown submission problem on data server.",
+        "http500": "The data server for your form or the Enketo server is down. Please try again later or contact __supportEmail__.",
+        "http504": "Could not establish connection with data server."
     },
     "themes": {
         "supported": "Themes supported"
     },
-    "version": "संस्करण:",
+    "update": {
+        "newversion": "New version available",
+        "reload": "reload to update"
+    },
+    "version": "version:",
     "widget": {
         "comment": {
-            "update": "संशोधन करें"
+            "update": "Update"
         }
     }
 }

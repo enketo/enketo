@@ -1,6 +1,6 @@
 {
     "advanced": {
-        "flushdb": "Slett Lagring"
+        "flushdb": "Clear Storage"
     },
     "alert": {
         "addtohomescreen": {
@@ -8,13 +8,7 @@
                 "msg": "To add this form to your Home screen, click the browser settings icon __image1__ and select: 'Add to Home screen'."
             },
             "androidfirefox": {
-                "msg": [
-                    "To add this form to your Homescreen:",
-                    "1. Add this page to your Firefox bookmarks by clicking the settings icon __image1__ and then the star icon __image2__.",
-                    "2. Open your bookmarks by opening a new page and clicking the Bookmarks tab.",
-                    "3. Click-and-hold your form until a pop-up menu appears.",
-                    "4. Select 'Add to Home Screen'."
-                ]
+                "msg": "To add this form to your Homescreen, long-press the address bar and select 'Add to Home Screen'."
             },
             "heading": "Add to Home Screen",
             "iossafari": {
@@ -22,19 +16,20 @@
             }
         },
         "appupdated": {
-            "heading": "App oppdatert!",
-            "msg": "En ny versjon av denne applikasjonen har blitt lastet ned. Oppdater denne siden for å hente inn den nye versjonen."
+            "heading": "App Updated!",
+            "msg": "A new version of this application has been downloaded. Refresh this page to load the updated version."
+        },
+        "closing": {
+            "heading": "Closing..."
         },
         "default": {
-            "button": "Lukk",
-            "heading": "Advarsel"
+            "button": "Close",
+            "heading": "Alert"
         },
         "export": {
-            "alternativequestion": "alternative download - online",
             "error": {
                 "filecreatedmsg": "Nevertheless, an incomplete export file was still created.",
                 "heading": "Export Error",
-                "linknotcreated": "Failed to create an export link for unsubmitted records. Are you online?",
                 "msg": "Errors occurred during creating of the record export file for unsubmitted records. Errors: __errors__"
             },
             "success": {
@@ -43,270 +38,403 @@
             }
         },
         "formupdated": {
-            "heading": "Skjema oppdatert!",
-            "msg": "En ny versjon av dette skjemaet har blitt lastet ned. Oppdater denne siden for å hente inn nyeste versjon."
+            "heading": "Form Updated!",
+            "msg": "A new version of this form has been downloaded. Refresh this page to load the updated version."
+        },
+        "gotonotfound": {
+            "msg": "Failed to find question \"__path__\" in form. Is the reference to this question correct?"
         },
         "loaderror": {
-            "editadvice": "Det anbefales å ikke endre denne oppføringen før dette er løst.",
-            "entryadvice": "Det anbefales å ikke bruke dette skjemaet for legge inn data før dette er løst.",
-            "heading": "Innlastningsfeil",
-            "msg1": "En feil oppstod under innhentingen av skjemaet.",
-            "msg2": "Vennligst kontakt __emailLink__ med en kobling til denne siden og feilmeldingen under:",
-            "heading_plural": "Innlastingsfeil",
-            "msg1_plural": "En feil oppstod under innhentingen av skjemaet.",
-            "msg2_plural": "Vennligst kontakt __emailLink__ med en kobling til denne siden og feilmeldingene under:"
+            "editadvice": "We do not recommend you edit this record until this is resolved.",
+            "entryadvice": "We do not recommend you use this form for data entry until this is resolved.",
+            "heading": "Loading Error",
+            "msg1": "Something went wrong while loading this form. Please try again later.",
+            "msg2": "Please contact __emailLink__ with the link to this page and the error message below:",
+            "heading_plural": "Loading Errors",
+            "msg1_plural": "Errors occurred during the loading of this form.",
+            "msg2_plural": "Please contact __emailLink__ with the link to this page and the error messages below:"
         },
         "logout": {
-            "heading": "Logget Ut",
-            "msg": "Du har blitt logget ut."
+            "heading": "Logged Out",
+            "msg": "You have been logged out."
         },
         "offlinesupported": {
-            "heading": "Skjemaet fungerer frakoblet!",
+            "heading": "Form works offline!",
             "msg": [
-                "Dette skjemaet kan nå bli lastet inn uten en internett-tilkobling på denne enheten. Lagre det som bokmerke for rask tilgang.",
-                "Innføringer er automatisk lagret og lagt i kø i nettleseren din frem til en internett-tilkobling er tilgjengelig. ",
-                "Oppføringer blir kun fjernet fra køen etter at det har blitt sendt inn. Du kan trygt lukke ned nettleseren og enheten med oppføringer i køen. De er der fortsatt neste gang du laster inn skjemaet. "
+                "This form can now be loaded and used without an Internet connection on this device. Bookmark it for easy offline access.",
+                "Records are automatically stored and queued in your browser until an Internet connection is available. When the app is online, records will be automatically submitted - one by one.",
+                "Only after a record has been successfully submitted, it will be removed from the queue. You can safely close down your browser and device with items in the queue. They will still be there next time you load the form."
             ]
         },
         "offlineunsupported": {
-            "heading": "Applikasjonen kan ikke kjøres frakoblet",
-            "msg": "Frakoblet start av applikasjonen er ikke støttet i din nettleser. Du kan bruke skjemaet uten denne funksjonen og se på muligheter for å løse dette.",
-            "negButton": "Bruk",
-            "posButton": "Vis instillinger"
+            "heading": "Application cannot launch offline",
+            "msg": "Offline application launch is not supported by your browser. You can use the survey without this feature or see options for resolving this.",
+            "negButton": "Use it",
+            "posButton": "Show options",
+            "refresh": "This form can no longer launch offline. Please refresh the page to try to fix this."
         },
         "queuesubmissionsuccess": {
-            "msg": "__recordNames__ har blitt sendt",
-            "msg_plural": "__recordNames__ har blitt sendt"
+            "msg": "__recordNames__ was successfully submitted",
+            "msg_plural": "__recordNames__ were successfully submitted"
         },
         "recordloadsuccess": {
-            "msg": "__recordName__ har blitt lastet inn"
+            "msg": "__recordName__ has been loaded"
         },
         "recordnotfound": {
-            "msg": "Oppføringen kunne ikke hentes eller inneholder ikke noe data."
+            "msg": "Record could not be retrieved or contained no data."
         },
         "recordsavesuccess": {
-            "draftmsg": "Oppføring lagret som utkast.",
-            "finalmsg": "Oppføring lagt i kø for sending."
+            "draftmsg": "Record stored as draft.",
+            "finalmsg": "Record queued for submission."
+        },
+        "savedraftinfo": {
+            "heading": "Finalize record later",
+            "msg": [
+                "The draft record is stored only within the current browser. You can close this browser without losing the stored record.",
+                "Draft records can be accessed by reopening this page and clicking the button on the left of the screen that looks like this: __icon__",
+                "Warning: If you clear your browser cache, all draft and unsubmitted final records will be permanently deleted."
+            ]
         },
         "submission": {
-            "msg": "Sender...",
-            "redirectmsg": "Du blir automatisk videresendt etter fullført sending."
+            "msg": "Submitting...",
+            "redirectmsg": "You will be automatically redirected after submission."
         },
         "submissionerror": {
-            "authrequiredmsg": "Pålogging kreves. Vennligst logg på __here__ i en annen nettleserfane og prøv på nytt.",
+            "authrequiredmsg": "Authentication required. Please authenticate __here__ in a different browser tab and try again.",
             "fnfmsg": [
-                "Følgende mediafiler kunne ikke hentes inn: __failedFiles__. Sending fortsatte og var vellykket uten disse filene. ",
-                "Vennligst kontakt __supportEmail__ for å rapportere en feil og, hvis mulig, forklar hvordan feilen kan bli reprodusert."
+                "The following media files could not be retrieved: __failedFiles__. The submission went ahead without these files and this succeeded.",
+                "Please contact __supportEmail__ to report a bug and if possible explain how the issue can be reproduced."
             ],
-            "heading": "Sending Mislykket"
+            "heading": "Submission Failed"
         },
         "submissionsuccess": {
-            "heading": "Sending Vellykket ",
-            "msg": "Dataen har blitt sendt!",
-            "redirectmsg": "Du blir nå videresendt"
+            "heading": "Submission Successful",
+            "msg": "Your data was submitted!",
+            "redirectmsg": "You will now be redirected."
+        },
+        "thanks": {
+            "heading": "Thank you for participating!",
+            "msg": "You can close this window now.",
+            "msgTaken": "You have already completed this survey."
         },
         "validationerror": {
-            "msg": "Skjemaet inneholder feil. Vennligst se skjemaet markert i rødt."
+            "msg": "Form contains errors. Please see fields marked in red."
         },
         "validationsuccess": {
             "heading": "OK",
-            "msg": "Skjemaet er ikke gyldig!"
+            "msg": "Form is valid!"
+        },
+        "valuehasspaces": {
+            "multiple": "Select multiple question has an illegal value \"__value__\" that contains a space."
         },
         "xpatherror": {
-            "heading": "Feil i Formel",
-            "msg": "En feil ved formel-evaluering oppstod. Vennligst kontakt __emailLink__ med denne feilmeldingen:"
+            "heading": "Formula Error",
+            "msg": "A formula evaluation error occurred. Please contact __emailLink__ with this error:"
         }
     },
+    "audioRecording": {
+        "error": {
+            "accessDenied": "Microphone access denied by user.",
+            "noMicrophone": "No microphone found on this device.",
+            "notSupported": "Audio recording is not supported in this browser.",
+            "unknownError": "Failed to access microphone. Check your browser settings and permissions.",
+            "recordingError": "An error occurred while trying to record audio.",
+            "recordingInProgress": "The current audio recording needs to be stopped before continuing.",
+            "invalidAudioFile": {
+                "msg": "The selected file is not a valid audio file and cannot be played.",
+                "heading": "Invalid Audio File"
+            }
+        },
+        "startRecording": "Start Recording",
+        "uploadAudioFile": "Upload audio File",
+        "deleteWarning": "The audio will be deleted. Are you sure you want to do this?",
+        "backgroundDisclaimer": {
+            "heading": "Background Audio Recording",
+            "msg": [
+                "This form records the audio from your device's microphone.",
+                "You can use the volume indicator to make sure the microphone is close enough to the sound you need to record.",
+                "To stop the recording please exit this form.",
+                "For more information please contact the person who asked you to collect data."
+            ],
+            "buttonText": "Ok, start Recording"
+        },
+        "hasRecordedAudio": "This submission has a background audio recording."
+    },
+    "changelog": "Change Log",
     "confirm": {
         "autosaveload": {
-            "heading": "Ulagrede Oppføringer Funnet",
-            "msg": "Enketo har funnet en ulagret oppføring. Vil du laste inn eller forkaste den?",
-            "negButton": "Forkast",
-            "posButton": "Last inn Oppføring"
+            "heading": "Unsaved Record Found",
+            "msg": "Enketo has found an unsaved record. Would you like to load this record or discard it?",
+            "negButton": "Discard",
+            "posButton": "Load Record"
         },
         "default": {
-            "heading": "Er du sikker?",
-            "msg": "Vennligst bekreft denne handlingen",
-            "negButton": "Avbryt",
-            "posButton": "Bekreft"
+            "heading": "Are you sure?",
+            "msg": "Please confirm this action",
+            "negButton": "Cancel",
+            "posButton": "Confirm"
         },
         "deleteall": {
-            "heading": "PANIKK!",
+            "heading": "PANIC!",
             "msg": [
-                "Dette vil fjerne all data i køen og alle skjemaene som er lagret i nettleseren din. Data blir slettet for alltid. Bruk dette bare som en siste utvei hvis lagringen til nettleseren virker ødelagt. ",
-                "Steng alle andre nettleserfaner med Enketo først.",
-                "Denne siden vil bli lastet inn på nytt. Hvis du ser en feilmelding kan det hende du må gjenta dette.",
-                "Er du sikker på at du vil gjøre dette?'"
+                "This will remove all your queued data and all your forms from the browser storage. Data will be lost forever. Use this only as a last resort if the browser storage seems corrupt.",
+                "Close all other Enketo browser tabs first.",
+                "The page will reload. If you see an error you may have to repeat this action.",
+                "Are you sure you want to do this?"
             ],
-            "posButton": "Slett Alle"
+            "posButton": "Delete All"
         },
         "discardcurrent": {
-            "heading": "Ulagrede endringer",
-            "msg": "Dette skjemaet har ulagrede endringer. Vil du hente en oppføring uten å lagre endringene i det skjemaet du jobber med?",
-            "posButton": "Gå videre uten å lagre"
+            "heading": "Unsaved edits",
+            "msg": "The current form has unsaved changes. Would you like to load a record without saving changes to the form you were working on?",
+            "posButton": "Proceed without saving"
         },
         "login": {
-            "heading": "Innlogging Påkrevet",
-            "msg": [
-                "For å kunne sende data før køen må du logge inn. Hvis du vil gjøre det nå vil du bli videresendt til en ny side og miste informasjon som ikke er lagret.",
-                "Vil du logge inn nå eller senere?"
+            "heading": "Login Required",
+            "queuedMsg": [
+                "Record queued for submission. In order to submit your queued data, you need to login.",
+                "Would you like to login now or later?"
             ],
-            "negButton": "Senere",
-            "posButton": "Logge inn"
+            "msg": [
+                "In order to submit your queued data, you need to login. If you want to do this now, you will be redirected, and lose unsaved information.",
+                "Would you like to login now or later?"
+            ],
+            "negButton": "Later",
+            "posButton": "Log in now"
         },
         "print": {
             "a4": "A4",
-            "heading": "Velg Utskriftsinnstillinger",
-            "landscape": "Landskap",
-            "letter": "Brev",
-            "msg": "For å lage en optimalisert utskrift, vennligst velg utskriftsinnstillinger under",
-            "orientation": "Papirorientering",
-            "portrait": "Portrett",
-            "posButton": "Forbered",
-            "psize": "Papirstørrelse",
-            "reminder": "Husk å velge de samme utskriftsinnstillingene i nettleserens utskriftsmeny etterpå!"
+            "heading": "Select Print Settings",
+            "landscape": "Landscape",
+            "letter": "Letter",
+            "msg": "To prepare an optimized print, please select the print settings below",
+            "orientation": "Paper Orientation",
+            "portrait": "Portrait",
+            "posButton": "Prepare",
+            "psize": "Paper Size",
+            "reminder": "Remember to set these same print settings in the browser's print menu afterwards!"
+        },
+        "repeatremove": {
+            "heading": "Delete this group of responses?",
+            "msg": "This action is irreversible. Are you sure you want to proceed?"
         },
         "save": {
-            "existingerror": "Dette oppføringsnavnet eller ID eksistere allerede.",
-            "hint": "Dette navner gjør det enklere for deg å finne dine utkast for å fullføre senere.",
-            "msg": "Det er ulagrede endringer. Vil du fortsette uten å lagre disse?",
-            "name": "Oppføringsnavn",
-            "posButton": "Lagre og Lukk",
-            "renamemsg": "Er du sikker på at du vil endre navn fra __currentName__ til __newName__?",
-            "unkownerror": "En ukjent feil oppstod ved lagring av data."
+            "existingerror": "This record name or ID already exists. Please change it.",
+            "hint": "This name allows you to easily find your draft record to finish it later.",
+            "msg": "There are unsaved changes, would you like to continue without saving those?",
+            "name": "Record Name",
+            "posButton": "Save & Close",
+            "renamemsg": "Are you sure you want to rename __currentName__ to __newName__?",
+            "unkownerror": "An unknown error occurred when trying to save data."
         }
     },
     "constraint": {
-        "invalid": "Verdien er ikke tillatt",
-        "required": "Dette feltet er påkrevet"
+        "invalid": "Value not allowed",
+        "required": "This field is required"
     },
     "contact": {
-        "admin": "Vennligst kontakt administratoren for skjemaet",
-        "support": "Vennligst kontakt __supportEmail__."
+        "admin": "Contact the survey administrator please.",
+        "support": "Contact __supportEmail__ please."
+    },
+    "drawwidget": {
+        "annotation": "file and drawing",
+        "drawing": "drawing",
+        "signature": "signature"
     },
     "enketo": {
-        "power": "Drevet av"
+        "power": "Powered by"
     },
     "error": {
-        "code": "Feilmeldingskode: __code__",
-        "dataloadfailed": "Klarte ikke å laste inn data fra __url__",
-        "econnrefused": "Kunne ikke koble til Server",
-        "encryptionnotsupported": "Dette skjemaet krever lokal kryptering av oppføringer. Uheldigvis er dette ikke støttet enda, men vi anbefaler at du bruker ODK Collect for datainnsamling med dette skjemaet.",
-        "instancenotfound": "Oppføringen er ikke tilgjengelig. Den kan ha utløpt.",
-        "invalidediturl": "Ikke en gyldig redigerings-adresse",
-        "loadfailed": "Klarte ikke å laste inn __resource__",
-        "notfoundinformlist": "Skjemaet med ID __formId__ ble ikke funnet i /formList",
-        "pagenotfound": "Side ikke Funnet",
-        "surveyidnotactive": "Skjemaet med denne IDen er ikke lengre aktivt",
-        "surveyidnotfound": "Skjema med denne IDen ble ikke funnet",
-        "unknown": "En ukjent feil har oppstått"
+        "code": "Error Code: __code__",
+        "dataloadfailed": "Failed to load __filename__.",
+        "econnrefused": "Could not connect with Form Server",
+        "encryptionnotsupported": "This form requires local encryption of records. Unfortunately this is not supported by your browser. We recommend switching to a modern browser.",
+        "formloadfailed": "Failed to load form",
+        "instancenotfound": "Record not present. It may have expired.",
+        "invalidediturl": "Not a valid edit URL",
+        "loadfailed": "Failed to load __resource__",
+        "notfoundinformlist": "This form is no longer available.",
+        "pagenotfound": "Page not Found",
+        "surveyidnotactive": "Survey with this ID no longer active",
+        "surveyidnotfound": "No form found with this URL, please double check.",
+        "unknown": "An unknown error occured"
     },
     "feedback": {
-        "header": "Informasjon"
+        "header": "Information"
+    },
+    "filepicker": {
+        "file": "file",
+        "notFound": "File __existing__ could not be found (leave unchanged if already submitted and you want to preserve it).",
+        "placeholder": "Click here to upload file. (< __maxSize__)",
+        "resetWarning": "This will remove the __item__. Are you sure you want to do this?",
+        "toolargeerror": "File too large (> __maxSize__)",
+        "waitingForPermissions": "Waiting for user permissions."
     },
     "form": {
-        "chooseLanguage": "Velg språk",
-        "logout": "logg ut",
+        "chooseLanguage": "Choose Language",
+        "logout": "log out",
         "pages": {
-            "back": "Tilbake",
-            "end": "Gå til Slutt",
-            "next": "Neste",
-            "return": "Tilbake til Begynnelsen"
-        }
+            "back": "Back",
+            "end": "Go to End",
+            "next": "Next",
+            "return": "Return to Beginning"
+        },
+        "required": "required"
     },
     "formfooter": {
+        "complete": {
+            "btn": "Complete"
+        },
         "savedraft": {
-            "btn": "Lagre Utkast",
-            "label": "Lagre som Utkast"
+            "btn": "Save Draft",
+            "label": "Save as Draft"
         },
         "submit": {
-            "btn": "Send"
+            "btn": "Submit"
         },
         "validate": {
-            "btn": "Valider"
+            "btn": "Validate"
         }
     },
-    "here": "her",
+    "geopicker": {
+        "accuracy": "accuracy (m)",
+        "altitude": "altitude (m)",
+        "closepolygon": "close polygon",
+        "kmlcoords": "KML coordinates",
+        "kmlpaste": "paste KML coordinates here",
+        "latitude": "latitude (x.y °)",
+        "longitude": "longitude (x.y °)",
+        "points": "points",
+        "removePoint": "This will completely remove the current geopoint from the list of geopoints and cannot be undone. Are you sure you want to do this?",
+        "searchPlaceholder": "search for place or address",
+        "bordersintersectwarning": "Borders cannot intersect"
+    },
+    "here": "here",
+    "hint": {
+        "guidance": {
+            "details": "more details"
+        }
+    },
     "home": {
-        "msg": "__appTitle__ kjører! Vennligst åpne Enketo-skjemaer fra din __serverName__-installasjon."
+        "msg": "__appTitle__ is running! Please access Enketo forms from your __serverName__ installation."
+    },
+    "imagemap": {
+        "svgNotFound": "SVG image could not be found"
     },
     "langs": {
-        "ar": "Arabisk",
+        "ar": "Arabic",
         "cs": "Czech",
-        "de": "Tysk",
-        "el": "Gresk",
-        "en": "Engelsk",
-        "es": "Spansk",
+        "de": "German",
+        "el": "Greek",
+        "en": "English",
+        "es": "Spanish",
         "fa": "Persian",
+        "fi": "Finnish",
         "fr": "French",
-        "he": "Hebraisk",
+        "he": "Hebrew",
         "hi": "Hindi",
         "it": "Italian",
+        "ka": "Georgian",
         "km": "Khmer",
-        "nl": "Nederlansk",
-        "no": "Norsk",
-        "ro": "Rumensk",
+        "lo": "Lao",
+        "nl": "Dutch",
+        "no": "Norwegian",
+        "pa": "Panjabi",
+        "pl": "Polish",
+        "pt": "Portuguese",
+        "ro": "Romanian",
+        "ru": "Russian",
         "sk": "Slovak",
-        "supported": "Støttede språk:",
+        "sq": "Albanian",
+        "supported": "Languages supported:",
+        "sv": "Swedish",
         "sw": "Swahili",
         "th": "Thai",
-        "vi": "Vietnamesisk",
+        "tr": "Turkish",
+        "uk": "Ukrainian",
+        "vi": "Vietnamese",
         "zh": "Chinese"
+    },
+    "literacywidget": {
+        "finish": "Finish",
+        "start": "Start"
     },
     "page": {
         "modernbrowsers": {
-            "heading": "Moderne Nettlesere",
+            "heading": "Modern Browsers",
             "ie": {
-                "heading": "Hvorfor viser vi ingen kjærlighet for de slemme, udaterte versjonene av Internet Explorer?",
-                "msg": "Vi forstår at noen mennesker, spesielt de som jobber for større byråkratier, ikke har tilgang til den beste og nyeste nettleserene. Fordi vi vet hvor fantastisk internet kan være med de riktige verktøyene føler vi med alle brukere i slike uheldige situasjoner. Normalt hadde vi forsøkt å tilby midlertidige løsninger for å støtte noen populære, utdaterte nettlesere, men Enketo eksisterer på grunn av tilgjengeligheten til noen veldig flotte, moderne teknologier. Dessverre er dette derfor ikke noe man kan bruke med eldre nettlesere."
+                "heading": "Why no love for those evil outdated versions of Internet Explorer?",
+                "msg": "We understand that some people, especially those working for large bureaucracies, do not have access to the latest and greatest browsers. Since we know how great the web could be with the right tools, we have great empathy for users in that unfortunate situation. Normally, we would try to provide workarounds to support some populair outdated browsers. However, the reason Enketo exists is the availability of some very fancy cutting-edge technologies. Unfortunately, users of older browsers are therefore out of luck."
             },
-            "msg1": "Au! Unnskyld, du ble mest sannsynlig sendt hit fordi nettleseren din er utdatert eller kanskje fordi noen viktige funksjoner har blitt skrudd av i \"privat surfing\" modus.",
-            "msg2": "Hvis du bruker en utdatert nettleser anbefaler vi at du oppgraderer til en nyere versjon av en av disse følgende utmerkede moderne nettleserne:"
+            "msg1": "Ouch! Sorry, you were probably sent here because your browser is outdated or perhaps it has its key features disabled by using 'private browsing' mode.",
+            "msg2": "If you are using an outdated browser, we recommend upgrading to a recent version of one of the following excellent modern browsers:"
         },
         "offline": {
-            "heading": "Ingen tilgang til forespurte side",
-            "msg1": "Denne siden er bare tilgjengelig når nettleseren har en internett-tilkobling og serveren er tilgjengelig (med mindre siden ikke eksisterer). "
+            "heading": "Cannot access requested page",
+            "msg1": "This page is only accessible when the browser has an Internet connection and the server is accessible (unless the page does not exist)."
         }
     },
     "prompt": {
         "default": {
-            "heading": "Skriv inn verdier"
+            "heading": "Enter values"
         },
         "login": {
-            "heading": "Skriv inn din __server__ legitimasjon",
-            "password": "Passord",
-            "remember": "Husk på denne datamaskinen",
-            "submit": "Send",
-            "username": "Brukernavn"
+            "heading": "Enter your __server__ credentials",
+            "password": "Password",
+            "remember": "Remember on this computer",
+            "submit": "Submit",
+            "username": "Username"
         }
     },
+    "rankwidget": {
+        "clickstart": "Click to start",
+        "tapstart": "Tap to start"
+    },
     "record-list": {
-        "export": "Eksporter",
-        "msg1": "Oppføringer er lagret i nettleseren din frem til de er lastet opp (selv om du skrur av datamaskinen eller kobler fra internett).",
-        "msg2": "Oppføringer i køen, bortsett fra de markert som utkast __icon__, blir lastet opp automatisk i bakgrunnen. Dette skjer hvert 5. minutt når websiden er åpen og en internett-tilkobling er tilgjengelig.",
-        "msg2-nodraft": "Oppføringer i køen blir lastet opp automatisk i bakgrunnen. Dette skjer hvert 5. minutt når websiden er åpen og en internett-tilkobling er tilgjengelig.",
-        "msg3": "For å tvinge en opplastning i perioden mellom automatiske forsøk, trykk på Last Opp",
-        "norecords": "ingen oppføringer i køen",
-        "title": "Kø",
-        "upload": "Last Opp"
+        "export": "Export",
+        "msg1": "Records are stored inside your browser until they have been uploaded (even if you turn off your computer or go offline).",
+        "msg2": "Queued records, except those marked as draft __icon__, are uploaded automatically, in the background, every 5 minutes when the web page is open and an Internet connection is available.",
+        "msg2-nodraft": "Queued records are uploaded automatically, in the background, every 5 minutes when the web page is open and an Internet connection is available.",
+        "msg3": "To force an upload in between automatic attempts, click Upload.",
+        "norecords": "no records queued",
+        "title": "Queue",
+        "upload": "Upload"
+    },
+    "selectpicker": {
+        "noneselected": "none selected",
+        "numberselected": "__number__ selected"
     },
     "store": {
         "error": {
             "iosusesafari": "Your iOS browser is not able to run this form. On iOS, we recommend using Safari.",
-            "notavailable": "Nettleserlagring er behøves men er ikke tilgjengelig, er ødelagt eller ikke skrivbar. Hvis du er i modus for \"privat surfing,\" vennligst bytt til vanlig modus eller en annen nettleser. (error: __error__)",
+            "notavailable": "Browser storage is required but is not available, is corrupted, or is not writeable. If you are in 'private browsing' mode please switch to regular mode, otherwise switch to another browser. (error: __error__)",
             "notsupported": "Your browser is not able to run this form. We recommend using a modern browser."
         }
     },
     "submission": {
-        "http0": "Mislykket (Frakoblet?)",
-        "http2xx": "Uforventet svar ved sending av data.",
-        "http400": "Dataserveren tok ikke imot dataen.",
+        "http0": "The server is not available or you may not be connected to the Internet.",
+        "http2xx": "Unexpected response when submitting data.",
+        "http400": "Data server did not accept data.",
         "http401": "Authentication problem with data server.",
-        "http403": "Ikke tillatt å sende data til denne dataserveren.",
-        "http404": "Innsendingsservice på dataserveren ble ikke funnet.",
-        "http413": "Dataen er for stor.",
-        "http4xx": "Ukjent problem ved sending til dataserver.",
-        "http500": "Dataserveren for ditt skjema eller Enketo-serveren er nede. Vennligst prøv igjen senere eller kontakt __supportEmail__."
+        "http403": "Not allowed to post data to this data server.",
+        "http404": "Submission service on data server not found.",
+        "http408": "Data server timed out.",
+        "http413": "Data is too large.",
+        "http4xx": "Unknown submission problem on data server.",
+        "http500": "The data server for your form or the Enketo server is down. Please try again later or contact __supportEmail__.",
+        "http504": "Could not establish connection with data server."
     },
-    "version": "Versjon:"
+    "themes": {
+        "supported": "Themes supported"
+    },
+    "update": {
+        "newversion": "New version available",
+        "reload": "reload to update"
+    },
+    "version": "version:",
+    "widget": {
+        "comment": {
+            "update": "Update"
+        }
+    }
 }

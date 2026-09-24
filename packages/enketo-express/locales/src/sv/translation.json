@@ -1,409 +1,440 @@
 {
     "advanced": {
-        "flushdb": "Töm lagring"
+        "flushdb": "Clear Storage"
     },
     "alert": {
         "addtohomescreen": {
             "androidchrome": {
-                "msg": "För att lägga till detta formulär på din startskärm, klicka på webbläsarens inställningsikon  __image1__ och välj: 'Lägg till på startskärmen'."
+                "msg": "To add this form to your Home screen, click the browser settings icon __image1__ and select: 'Add to Home screen'."
             },
             "androidfirefox": {
-                "msg": "För att lägga till detta formulär på startskärmen, långklicka i adressfältet och välj 'Lägg till på hemskärmen'."
+                "msg": "To add this form to your Homescreen, long-press the address bar and select 'Add to Home Screen'."
             },
-            "heading": "Lägg till på startsidan",
+            "heading": "Add to Home Screen",
             "iossafari": {
-                "msg": "För att lägga till detta formulär på startsidan klickar du på dela-ikonen __image1__ i det övre högra hörnet i webbläsaren och väljer: '+ Lägg till på hemskärmen'."
+                "msg": "To add this form to your Home screen, click the share icon __image1__ in the top right of your browser, and select: '+ Add to Home Screen'."
             }
         },
         "appupdated": {
-            "heading": "Appen uppdaterades!",
-            "msg": "En ny version av detta program har laddats ner. Uppdatera sidan för att ladda in den uppdaterade versionen."
+            "heading": "App Updated!",
+            "msg": "A new version of this application has been downloaded. Refresh this page to load the updated version."
         },
         "closing": {
-            "heading": "Stänger..."
+            "heading": "Closing..."
         },
         "default": {
-            "button": "Stäng",
-            "heading": "Varning"
+            "button": "Close",
+            "heading": "Alert"
         },
         "export": {
             "error": {
-                "filecreatedmsg": "En ofullständig exportfil skapades ändå.",
-                "heading": "Fel vid export",
-                "msg": "Fel inträffade vid skapande av postexportfilen för ej inskickade poster. Fel: __errors__"
+                "filecreatedmsg": "Nevertheless, an incomplete export file was still created.",
+                "heading": "Export Error",
+                "msg": "Errors occurred during creating of the record export file for unsubmitted records. Errors: __errors__"
             },
             "success": {
-                "heading": "Export skapad",
-                "msg": "Exportfil skapades för ej inskickade poster som hör till detta formulär."
+                "heading": "Export Created",
+                "msg": "Export file created for all unsubmitted records belonging to this form."
             }
         },
         "formupdated": {
-            "heading": "Formuläret har uppdaterats!",
-            "msg": "En ny version av detta formulär har laddats ner. Uppdatera denna sida för att ladda in den uppdaterade versionen."
+            "heading": "Form Updated!",
+            "msg": "A new version of this form has been downloaded. Refresh this page to load the updated version."
         },
         "gotonotfound": {
-            "msg": "Hittar inte fråga \"__path__\" i formuläret. Är referensen till denna fråga korrekt?"
+            "msg": "Failed to find question \"__path__\" in form. Is the reference to this question correct?"
         },
         "loaderror": {
-            "editadvice": "Du rekommenderas att inte redigera detta formlär förrän detta har löst sig.",
-            "entryadvice": "Det rekommenderas att inte använda detta formulär för inmatning av data förrän detta har lösts.",
-            "heading": "Fel vid inläsning",
-            "msg1": "Ett fel uppstod vid inläsning av detta formulär.",
-            "msg2": "Vänligen kontakta __emailLink__ med länken till denna sida och felmeddelandet nedan:",
-            "heading_plural": "Fel vid inläsning",
-            "msg1_plural": "Fel inträffade under inladdning av formuläret.",
-            "msg2_plural": "Vänligen kontakta __emailLink__ med länken till denna sida och felmeddelanden nedan:"
+            "editadvice": "We do not recommend you edit this record until this is resolved.",
+            "entryadvice": "We do not recommend you use this form for data entry until this is resolved.",
+            "heading": "Loading Error",
+            "msg1": "Something went wrong while loading this form. Please try again later.",
+            "msg2": "Please contact __emailLink__ with the link to this page and the error message below:",
+            "heading_plural": "Loading Errors",
+            "msg1_plural": "Errors occurred during the loading of this form.",
+            "msg2_plural": "Please contact __emailLink__ with the link to this page and the error messages below:"
         },
         "logout": {
-            "heading": "Utloggad",
-            "msg": "Du har blivit utloggad."
+            "heading": "Logged Out",
+            "msg": "You have been logged out."
         },
         "offlinesupported": {
-            "heading": "Formuläret fungerar offline!",
+            "heading": "Form works offline!",
             "msg": [
-                "Detta formulär kan nu laddas in och användas utan en internetanslutning på den här enheten. Ange ett bokmärke för enkel åtkomst offline.",
-                "Poster lagras automatiskt och köas i din webbläsare tills en internetanslutning är tillgänglig. När appen är online kommer posterna automatiskt att skickas in - en efter en.",
-                "Först efter det att posten har skickats in kommer den att tas bort från kön. Du kan säkert stänga din webbläsare och enheter med objekt i kön. Dessa kommer att finnas kvar nästa gång du laddar in formuläret."
+                "This form can now be loaded and used without an Internet connection on this device. Bookmark it for easy offline access.",
+                "Records are automatically stored and queued in your browser until an Internet connection is available. When the app is online, records will be automatically submitted - one by one.",
+                "Only after a record has been successfully submitted, it will be removed from the queue. You can safely close down your browser and device with items in the queue. They will still be there next time you load the form."
             ]
         },
         "offlineunsupported": {
-            "heading": "Programmet kan inte starta i offline-läge",
-            "msg": "Offline programstart stöds inte av din webbläsare. Du kan använda undersökningen utan denna funktion eller se alternativ för att lösa detta.",
-            "negButton": "Använd det",
-            "posButton": "Visa alternativ",
-            "refresh": "Det här formuläret kan inte längre startas offline. Ladda om sidan för att försöka fixa detta."
+            "heading": "Application cannot launch offline",
+            "msg": "Offline application launch is not supported by your browser. You can use the survey without this feature or see options for resolving this.",
+            "negButton": "Use it",
+            "posButton": "Show options",
+            "refresh": "This form can no longer launch offline. Please refresh the page to try to fix this."
         },
         "queuesubmissionsuccess": {
-            "msg": "__recordNames__ har skickats in",
-            "msg_plural": "__recordNames__ har skickats in"
+            "msg": "__recordNames__ was successfully submitted",
+            "msg_plural": "__recordNames__ were successfully submitted"
         },
         "recordloadsuccess": {
-            "msg": "__recordName__ har laddats in"
+            "msg": "__recordName__ has been loaded"
         },
         "recordnotfound": {
-            "msg": "Posten kunde inte hämtas eller innehöll inga uppgifter."
+            "msg": "Record could not be retrieved or contained no data."
         },
         "recordsavesuccess": {
-            "draftmsg": "Posten sparas som utkast.",
-            "finalmsg": "Posten köad för inlämning."
+            "draftmsg": "Record stored as draft.",
+            "finalmsg": "Record queued for submission."
         },
         "savedraftinfo": {
-            "heading": "Avsluta inmatningen senare",
+            "heading": "Finalize record later",
             "msg": [
-                "Utkastet lagras endast i den lokala enheten. Du kan stänga den här webbläsaren utan att förlora den lagrade posten.",
-                "Utkast till inmatningar kan nås genom att öppna den här sidan igen och klicka på knappen till vänster på skärmen som ser ut så här: __icon__",
-                "Varning: Om du rensar webbläsarens cache raderas alla utkast och alla ej skickade inmatningar permanent."
+                "The draft record is stored only within the current browser. You can close this browser without losing the stored record.",
+                "Draft records can be accessed by reopening this page and clicking the button on the left of the screen that looks like this: __icon__",
+                "Warning: If you clear your browser cache, all draft and unsubmitted final records will be permanently deleted."
             ]
         },
         "submission": {
-            "msg": "Skickar...",
-            "redirectmsg": "Du kommer automatiskt att omdirigeras efter inlämningen."
+            "msg": "Submitting...",
+            "redirectmsg": "You will be automatically redirected after submission."
         },
         "submissionerror": {
-            "authrequiredmsg": "Autentisering krävs. Vänligen autentisera __here__ i en annan webbläsarflik och försök igen.",
+            "authrequiredmsg": "Authentication required. Please authenticate __here__ in a different browser tab and try again.",
             "fnfmsg": [
-                "Följande mediafiler kunde inte hämtas: __failedFiles__. Inskickning gjordes utan dessa filer, vilket lyckades.",
-                "Vänligen kontakta __supportEmail__ att rapportera ett fel och om möjligt förklara hur problemet kan reproduceras."
+                "The following media files could not be retrieved: __failedFiles__. The submission went ahead without these files and this succeeded.",
+                "Please contact __supportEmail__ to report a bug and if possible explain how the issue can be reproduced."
             ],
-            "heading": "Inskickning misslyckades"
+            "heading": "Submission Failed"
         },
         "submissionsuccess": {
-            "heading": "Inlämning lyckades",
-            "msg": "Dina uppgifter skickades in!",
-            "redirectmsg": "Du kommer nu att omdirigeras."
+            "heading": "Submission Successful",
+            "msg": "Your data was submitted!",
+            "redirectmsg": "You will now be redirected."
         },
         "thanks": {
-            "heading": "Tack för ditt deltagande!",
-            "msg": "Du kan stänga detta fönster nu.",
-            "msgTaken": "Du har redan avslutat den här undersökningen."
+            "heading": "Thank you for participating!",
+            "msg": "You can close this window now.",
+            "msgTaken": "You have already completed this survey."
         },
         "validationerror": {
-            "msg": "Formuläret innehåller fel. Se dem rödmarkerade fälten."
+            "msg": "Form contains errors. Please see fields marked in red."
         },
         "validationsuccess": {
             "heading": "OK",
-            "msg": "Formuläret är giltigt!"
+            "msg": "Form is valid!"
         },
         "valuehasspaces": {
-            "multiple": "Flervalsfrågan har ett otillåtet värde \"__value__\" som innehåller ett mellanslag."
+            "multiple": "Select multiple question has an illegal value \"__value__\" that contains a space."
         },
         "xpatherror": {
-            "heading": "Formulärfel",
-            "msg": "Ett fel inträffade vid utvärdering av formel. Vänligen kontakta __emailLink__ med det här felet:"
+            "heading": "Formula Error",
+            "msg": "A formula evaluation error occurred. Please contact __emailLink__ with this error:"
         }
     },
-    "changelog": "Ändringslogg",
+    "audioRecording": {
+        "error": {
+            "accessDenied": "Microphone access denied by user.",
+            "noMicrophone": "No microphone found on this device.",
+            "notSupported": "Audio recording is not supported in this browser.",
+            "unknownError": "Failed to access microphone. Check your browser settings and permissions.",
+            "recordingError": "An error occurred while trying to record audio.",
+            "recordingInProgress": "The current audio recording needs to be stopped before continuing.",
+            "invalidAudioFile": {
+                "msg": "The selected file is not a valid audio file and cannot be played.",
+                "heading": "Invalid Audio File"
+            }
+        },
+        "startRecording": "Start Recording",
+        "uploadAudioFile": "Upload audio File",
+        "deleteWarning": "The audio will be deleted. Are you sure you want to do this?",
+        "backgroundDisclaimer": {
+            "heading": "Background Audio Recording",
+            "msg": [
+                "This form records the audio from your device's microphone.",
+                "You can use the volume indicator to make sure the microphone is close enough to the sound you need to record.",
+                "To stop the recording please exit this form.",
+                "For more information please contact the person who asked you to collect data."
+            ],
+            "buttonText": "Ok, start Recording"
+        },
+        "hasRecordedAudio": "This submission has a background audio recording."
+    },
+    "changelog": "Change Log",
     "confirm": {
         "autosaveload": {
-            "heading": "Det finns osparade uppgifter",
-            "msg": "Enketo har hittat en osparad post. Vill du läsa in denna post eller ta bort den?",
-            "negButton": "Släng",
-            "posButton": "Ladda in post"
+            "heading": "Unsaved Record Found",
+            "msg": "Enketo has found an unsaved record. Would you like to load this record or discard it?",
+            "negButton": "Discard",
+            "posButton": "Load Record"
         },
         "default": {
-            "heading": "Är du säker?",
-            "msg": "Bekräfta åtgärden",
-            "negButton": "Avbryt",
-            "posButton": "Bekräfta"
+            "heading": "Are you sure?",
+            "msg": "Please confirm this action",
+            "negButton": "Cancel",
+            "posButton": "Confirm"
         },
         "deleteall": {
-            "heading": "PANIK!",
+            "heading": "PANIC!",
             "msg": [
-                "Detta tar bort alla dina köade data och alla formulär från webbläsarens minne. Data kommer att att förloras permanent. Använd detta endast som en sista utväg om webbläsaren minne verkar vara korrupt.",
-                "Stäng övriga Enketo-flikar i webbläsaren först.",
-                "Denna sida kommer att laddas om. Om ett fel uppstår behöver du kanske upprepa denna åtgärd.",
-                "Är du säker på att du vill göra detta?"
+                "This will remove all your queued data and all your forms from the browser storage. Data will be lost forever. Use this only as a last resort if the browser storage seems corrupt.",
+                "Close all other Enketo browser tabs first.",
+                "The page will reload. If you see an error you may have to repeat this action.",
+                "Are you sure you want to do this?"
             ],
-            "posButton": "Radera allt"
+            "posButton": "Delete All"
         },
         "discardcurrent": {
-            "heading": "Osparade uppgifter",
-            "msg": "Detta formulär innehåller ändringar som inte sparats. Vill du läsa in en post utan att spara ändringarna i det formulär som du arbetade med?",
-            "posButton": "Fortsätt utan att spara"
+            "heading": "Unsaved edits",
+            "msg": "The current form has unsaved changes. Would you like to load a record without saving changes to the form you were working on?",
+            "posButton": "Proceed without saving"
         },
         "login": {
-            "heading": "Inloggning krävs",
+            "heading": "Login Required",
             "queuedMsg": [
-                "Post i kö för inlämning. För att kunna skicka in din köade data måste du logga in.",
-                "Vill du logga in nu eller senare?"
+                "Record queued for submission. In order to submit your queued data, you need to login.",
+                "Would you like to login now or later?"
             ],
             "msg": [
-                "För att skicka in dina köade data måste du logga in. Om du vill göra detta nu kommer du att omdirigeras och förlorar information som inte har sparats.",
-                "Vill du logga in nu eller senare?"
+                "In order to submit your queued data, you need to login. If you want to do this now, you will be redirected, and lose unsaved information.",
+                "Would you like to login now or later?"
             ],
-            "negButton": "Senare",
-            "posButton": "Logga in nu"
+            "negButton": "Later",
+            "posButton": "Log in now"
         },
         "print": {
             "a4": "A4",
-            "heading": "Välj utskriftsinställningar",
-            "landscape": "Liggande",
+            "heading": "Select Print Settings",
+            "landscape": "Landscape",
             "letter": "Letter",
-            "msg": "För att förbereda en optimerad utskrift, välj utskriftsinställningar nedan",
-            "orientation": "Pappersorientering",
-            "portrait": "Stående",
-            "posButton": "Förbered",
-            "psize": "Pappersstorlek",
-            "reminder": "Kom ihåg att ställa in dessa utskriftsinställningar i webbläsarens utskriftsmenyn efteråt!"
+            "msg": "To prepare an optimized print, please select the print settings below",
+            "orientation": "Paper Orientation",
+            "portrait": "Portrait",
+            "posButton": "Prepare",
+            "psize": "Paper Size",
+            "reminder": "Remember to set these same print settings in the browser's print menu afterwards!"
         },
         "repeatremove": {
-            "heading": "Ta bort den här gruppen med svar?",
-            "msg": "Denna åtgärd går inte att ångra. Är du säker på att du vill fortsätta?"
+            "heading": "Delete this group of responses?",
+            "msg": "This action is irreversible. Are you sure you want to proceed?"
         },
         "save": {
-            "existingerror": "Detta postnamn eller ID finns redan.",
-            "hint": "Med detta namn kan du enkelt hitta ditt postutkast för att avsluta det senare.",
-            "msg": "Det finns ändringar som inte sparats. Vill du fortsätta utan att spara dem?",
-            "name": "Postnamn",
-            "posButton": "Spara & stäng",
-            "renamemsg": "Är du säker på att du vill byta namn __currentName__ till __newName__?",
-            "unkownerror": "Ett okänt fel uppstod vid sparande av data."
+            "existingerror": "This record name or ID already exists. Please change it.",
+            "hint": "This name allows you to easily find your draft record to finish it later.",
+            "msg": "There are unsaved changes, would you like to continue without saving those?",
+            "name": "Record Name",
+            "posButton": "Save & Close",
+            "renamemsg": "Are you sure you want to rename __currentName__ to __newName__?",
+            "unkownerror": "An unknown error occurred when trying to save data."
         }
     },
     "constraint": {
-        "invalid": "Ej tillåtet värde",
-        "required": "Detta fält är obligatoriskt"
+        "invalid": "Value not allowed",
+        "required": "This field is required"
     },
     "contact": {
-        "admin": "Kontakta enkätens administratör.",
-        "support": "Vänligen kontakta __supportEmail__"
+        "admin": "Contact the survey administrator please.",
+        "support": "Contact __supportEmail__ please."
     },
     "drawwidget": {
-        "annotation": "fil och skiss",
-        "drawing": "skiss",
-        "signature": "underskrift"
+        "annotation": "file and drawing",
+        "drawing": "drawing",
+        "signature": "signature"
     },
     "enketo": {
-        "power": "Drivs med"
+        "power": "Powered by"
     },
     "error": {
-        "code": "Felkod: __code__",
-        "dataloadfailed": "Det gick inte att läsa in __resource__",
-        "econnrefused": "Det gick inte att ansluta till formulärservern",
-        "encryptionnotsupported": "Denna blankett kräver lokal kryptering av poster. Tyvärr stöds detta inte av din webbläsare. Vi rekommenderar att du byter till en modern webbläsare.",
-        "formloadfailed": "Det gick inte att ladda formuläret.",
-        "instancenotfound": "Post finns inte. Den kan ha blivit ogiltig.",
-        "invalidediturl": "Inte en giltig URL för redigering",
-        "loadfailed": "Det gick inte att läsa in __resource__",
-        "notfoundinformlist": "Formuläret finns inte eller så har du inte behörighet till det. Kolla så URL är korrekt.\n\nFanns formuläret tidigare kan det ha blivit arkiverat eller raderat. Kontakta personen som bad dig fylla i formuläret.\n\n(Försök att använda formulär: __formId__)",
-        "notfounddirectformurl": "Formuläret finns inte eller så har du inte behörighet till det. Kolla så URL är korrekt.\n\nFanns formuläret tidigare kan det ha blivit arkiverat eller raderat. Kontakta personen som bad dig fylla i formuläret.\n\n(Försök att använda formulär: __notfounddirectformurl__)",
-        "pagenotfound": "Sidan hittades inte",
-        "surveyidnotactive": "Undersökning med detta ID är inte längre aktiv",
-        "surveyidnotfound": "Undersökning med detta ID hittades inte",
-        "unknown": "Ett okänt fel inträffade"
+        "code": "Error Code: __code__",
+        "dataloadfailed": "Failed to load __filename__.",
+        "econnrefused": "Could not connect with Form Server",
+        "encryptionnotsupported": "This form requires local encryption of records. Unfortunately this is not supported by your browser. We recommend switching to a modern browser.",
+        "formloadfailed": "Failed to load form",
+        "instancenotfound": "Record not present. It may have expired.",
+        "invalidediturl": "Not a valid edit URL",
+        "loadfailed": "Failed to load __resource__",
+        "notfoundinformlist": "This form is no longer available.",
+        "pagenotfound": "Page not Found",
+        "surveyidnotactive": "Survey with this ID no longer active",
+        "surveyidnotfound": "No form found with this URL, please double check.",
+        "unknown": "An unknown error occured"
     },
     "feedback": {
         "header": "Information"
     },
     "filepicker": {
-        "file": "fil",
-        "notFound": "Filen __existing__ kunde inte hittas (lämna oförändrad om den redan skickats in och du vill behålla den).",
-        "placeholder": "Klicka här för att ladda upp filen. (<__maxSize__)",
-        "resetWarning": "Detta kommer att ta bort __item__. Är du säker på att du vill göra det här?",
-        "toolargeerror": "Filen är för stor (> __maxSize__)",
-        "waitingForPermissions": "Väntar på användarbehörigheter."
+        "file": "file",
+        "notFound": "File __existing__ could not be found (leave unchanged if already submitted and you want to preserve it).",
+        "placeholder": "Click here to upload file. (< __maxSize__)",
+        "resetWarning": "This will remove the __item__. Are you sure you want to do this?",
+        "toolargeerror": "File too large (> __maxSize__)",
+        "waitingForPermissions": "Waiting for user permissions."
     },
     "form": {
-        "chooseLanguage": "Välj språk",
-        "logout": "logga ut",
+        "chooseLanguage": "Choose Language",
+        "logout": "log out",
         "pages": {
-            "back": "Tillbaka",
-            "end": "Gå till sista",
-            "next": "Nästa",
-            "return": "Åter till start"
+            "back": "Back",
+            "end": "Go to End",
+            "next": "Next",
+            "return": "Return to Beginning"
         },
-        "required": "obligatoriskt"
+        "required": "required"
     },
     "formfooter": {
         "complete": {
-            "btn": "Färdig"
+            "btn": "Complete"
         },
         "savedraft": {
-            "btn": "Spara utkast",
-            "label": "Spara som utkast"
+            "btn": "Save Draft",
+            "label": "Save as Draft"
         },
         "submit": {
-            "btn": "Skicka"
+            "btn": "Submit"
         },
         "validate": {
-            "btn": "Validera"
+            "btn": "Validate"
         }
     },
     "geopicker": {
-        "accuracy": "noggrannhet (m)",
-        "altitude": "altitud (m)",
-        "closepolygon": "avsluta polygon",
-        "kmlcoords": "KML koordinater",
-        "kmlpaste": "klistra in KML koordinater här",
-        "latitude": "latitud (x.y °)",
-        "longitude": "longitud (x.y °)",
-        "points": "punkter",
-        "removePoint": "Detta kommer helt att ta bort den aktuella geopointen från listan över geopoints och kan inte ångras. Är du säker på att du vill göra det här?",
-        "searchPlaceholder": "sök efter plats eller adress",
-        "bordersintersectwarning": "Gränslinjer får inte korsas"
+        "accuracy": "accuracy (m)",
+        "altitude": "altitude (m)",
+        "closepolygon": "close polygon",
+        "kmlcoords": "KML coordinates",
+        "kmlpaste": "paste KML coordinates here",
+        "latitude": "latitude (x.y °)",
+        "longitude": "longitude (x.y °)",
+        "points": "points",
+        "removePoint": "This will completely remove the current geopoint from the list of geopoints and cannot be undone. Are you sure you want to do this?",
+        "searchPlaceholder": "search for place or address",
+        "bordersintersectwarning": "Borders cannot intersect"
     },
-    "here": "här",
+    "here": "here",
     "hint": {
         "guidance": {
-            "details": "fler detaljer"
+            "details": "more details"
         }
     },
     "home": {
-        "msg": "__appTitle__ är igång! Vänligen få åtkomst till Enketo-formulär från __serverName__ installationen."
+        "msg": "__appTitle__ is running! Please access Enketo forms from your __serverName__ installation."
     },
     "imagemap": {
-        "svgNotFound": "SVG-bild kunde inte hittas"
+        "svgNotFound": "SVG image could not be found"
     },
     "langs": {
-        "ar": "Arabiska",
-        "cs": "Tjeckiska",
-        "de": "Tyska",
-        "el": "Grekiska",
-        "en": "Engelska",
-        "es": "Spanska",
-        "fa": "Persiska",
-        "fi": "Finska",
-        "fr": "Franska",
-        "he": "Hebreiska",
+        "ar": "Arabic",
+        "cs": "Czech",
+        "de": "German",
+        "el": "Greek",
+        "en": "English",
+        "es": "Spanish",
+        "fa": "Persian",
+        "fi": "Finnish",
+        "fr": "French",
+        "he": "Hebrew",
         "hi": "Hindi",
-        "it": "Italienska",
-        "ka": "georgiska",
+        "it": "Italian",
+        "ka": "Georgian",
         "km": "Khmer",
-        "lo": "Laotiska",
-        "nl": "Nederländska",
-        "no": "Norska",
-        "pa": "panjabi",
-        "pl": "Polska",
-        "pt": "Portugisiska",
-        "ro": "Rumänska",
-        "ru": "Ryska",
-        "sk": "Slovakiska",
-        "sq": "Albanska",
-        "supported": "Språk som stöds:",
-        "sv": "Svenska",
+        "lo": "Lao",
+        "nl": "Dutch",
+        "no": "Norwegian",
+        "pa": "Panjabi",
+        "pl": "Polish",
+        "pt": "Portuguese",
+        "ro": "Romanian",
+        "ru": "Russian",
+        "sk": "Slovak",
+        "sq": "Albanian",
+        "supported": "Languages supported:",
+        "sv": "Swedish",
         "sw": "Swahili",
-        "th": "Thailändska",
-        "tr": "turkiska",
-        "uk": "ukrainska",
-        "vi": "Vietnamesiska",
-        "zh": "Kinesiska"
+        "th": "Thai",
+        "tr": "Turkish",
+        "uk": "Ukrainian",
+        "vi": "Vietnamese",
+        "zh": "Chinese"
     },
     "literacywidget": {
-        "finish": "Avsluta",
-        "start": "Starta"
+        "finish": "Finish",
+        "start": "Start"
     },
     "page": {
         "modernbrowsers": {
-            "heading": "Moderna webbläsare",
+            "heading": "Modern Browsers",
             "ie": {
-                "heading": "Varför finns det ingen kärlek till dem ondskefulla daterade versionerna av Internet Explorer?",
-                "msg": "Vi förstår att vissa människor, särskilt de som arbetar för stora byråkratier, inte har tillgång till dem senaste och bästa webbläsarna. Eftersom vi vet hur bra webben skulle kunna vara med de rätt verktygen, har vi stor empati för användare i denna otursamma situation. Normalt sett skulle vi försöka erbjuda lösningar för att stödja vissa populära och föråldrade webbläsare. Dock är anledningen till att  Enketo finns tillgängligheten av spjutspetsteknik. Tyvärr är därför användare av äldre webbläsare utan tur i detta avseende."
+                "heading": "Why no love for those evil outdated versions of Internet Explorer?",
+                "msg": "We understand that some people, especially those working for large bureaucracies, do not have access to the latest and greatest browsers. Since we know how great the web could be with the right tools, we have great empathy for users in that unfortunate situation. Normally, we would try to provide workarounds to support some populair outdated browsers. However, the reason Enketo exists is the availability of some very fancy cutting-edge technologies. Unfortunately, users of older browsers are therefore out of luck."
             },
-            "msg1": "Aj då! Du har förmodligen skickas hit eftersom webbläsaren är föråldrad eller kanske har viktiga funktioner avaktiveras genom att använda 'privat surfning'.",
-            "msg2": "Om du använder en gammal webbläsare, rekommenderar vi att du uppgraderar till den senaste versionen av en av följande utmärkta moderna webbläsare:"
+            "msg1": "Ouch! Sorry, you were probably sent here because your browser is outdated or perhaps it has its key features disabled by using 'private browsing' mode.",
+            "msg2": "If you are using an outdated browser, we recommend upgrading to a recent version of one of the following excellent modern browsers:"
         },
         "offline": {
-            "heading": "Åtkomst till den begärda sidan ej möjlig",
-            "msg1": "Denna sida är endast tillgänglig när webbläsaren har en Internet-anslutning och servern är tillgänglig (såvida sidan inte existerar)."
+            "heading": "Cannot access requested page",
+            "msg1": "This page is only accessible when the browser has an Internet connection and the server is accessible (unless the page does not exist)."
         }
     },
     "prompt": {
         "default": {
-            "heading": "Mata in värden"
+            "heading": "Enter values"
         },
         "login": {
-            "heading": "Ange dina __server__ behörighetsuppgifter",
-            "password": "Lösenord",
-            "remember": "Kom ihåg mig på den här datorn",
-            "submit": "Skicka",
-            "username": "Användarnamn"
+            "heading": "Enter your __server__ credentials",
+            "password": "Password",
+            "remember": "Remember on this computer",
+            "submit": "Submit",
+            "username": "Username"
         }
     },
     "rankwidget": {
-        "clickstart": "Klicka för att starta",
-        "tapstart": "Tryck för att starta"
+        "clickstart": "Click to start",
+        "tapstart": "Tap to start"
     },
     "record-list": {
-        "export": "Exportera",
-        "msg1": "Poster lagras i din webbläsare tills de har laddats upp (även om du stänger av datorn eller går offline).",
-        "msg2": "Köade poster, utom de som är markerade som utkast __icon__ , överförs automatiskt i bakgrunden var 5:e minut när webbsidan är öppen och en internetanslutning är tillgänglig.",
-        "msg2-nodraft": "Köade poster laddas upp automatiskt i bakgrunden var 5:e minut när webbsidan är öppen och en internetanslutning är tillgänglig.",
-        "msg3": "För att forcera en uppladdning mellan automatiska försök klickar du på 'Ladda upp'.",
-        "norecords": "inga poster är köade",
-        "title": "Kö",
-        "upload": "Ladda upp"
+        "export": "Export",
+        "msg1": "Records are stored inside your browser until they have been uploaded (even if you turn off your computer or go offline).",
+        "msg2": "Queued records, except those marked as draft __icon__, are uploaded automatically, in the background, every 5 minutes when the web page is open and an Internet connection is available.",
+        "msg2-nodraft": "Queued records are uploaded automatically, in the background, every 5 minutes when the web page is open and an Internet connection is available.",
+        "msg3": "To force an upload in between automatic attempts, click Upload.",
+        "norecords": "no records queued",
+        "title": "Queue",
+        "upload": "Upload"
     },
     "selectpicker": {
-        "noneselected": "ingen vald",
-        "numberselected": "__number__vald"
+        "noneselected": "none selected",
+        "numberselected": "__number__ selected"
     },
     "store": {
         "error": {
-            "iosusesafari": "Din iOS webbläsare kan inte använda det här formuläret. För iOS rekommenderar vi att du använder Safari.",
-            "notavailable": "Webbläsaren kräver lagring men detta är inte tillgänglig, skadat eller inte skrivbart. Om du använder privat surfning, vänligen byta till vanligt läge, annars byt till en annan webbläsare. (Fel: __error__)",
-            "notsupported": "Din webbläsare kan inte använda det här formuläret. Vi rekommenderar att du använder en modern webbläsare."
+            "iosusesafari": "Your iOS browser is not able to run this form. On iOS, we recommend using Safari.",
+            "notavailable": "Browser storage is required but is not available, is corrupted, or is not writeable. If you are in 'private browsing' mode please switch to regular mode, otherwise switch to another browser. (error: __error__)",
+            "notsupported": "Your browser is not able to run this form. We recommend using a modern browser."
         }
     },
     "submission": {
-        "http0": "Kommer inte åt servern eller så saknas kontakt med internet.",
-        "http2xx": "Oväntat svar vid inskickning av data.",
-        "http400": "Dataserver accepterar inte data.",
-        "http401": "Autentiseringsproblem med dataservern.",
-        "http403": "Ej tillåtet att publicera data till denna dataserver.",
-        "http404": "Inskickningstjänst på dataservern hittades inte.",
-        "http408": "Dataservern har pausats.",
-        "http413": "Datamängden är för stor.",
-        "http4xx": "Okänt problem med att skicka in på dataservern.",
-        "http500": "Dataservern för formuläret eller Enketo-servern är ur funktion. Försök igen senare eller kontakta __supportEmail__.",
-        "http504": "Det gick inte att etablera en anslutning till dataservern."
+        "http0": "The server is not available or you may not be connected to the Internet.",
+        "http2xx": "Unexpected response when submitting data.",
+        "http400": "Data server did not accept data.",
+        "http401": "Authentication problem with data server.",
+        "http403": "Not allowed to post data to this data server.",
+        "http404": "Submission service on data server not found.",
+        "http408": "Data server timed out.",
+        "http413": "Data is too large.",
+        "http4xx": "Unknown submission problem on data server.",
+        "http500": "The data server for your form or the Enketo server is down. Please try again later or contact __supportEmail__.",
+        "http504": "Could not establish connection with data server."
     },
     "themes": {
-        "supported": "Teman stöds"
+        "supported": "Themes supported"
+    },
+    "update": {
+        "newversion": "New version available",
+        "reload": "reload to update"
     },
     "version": "version:",
     "widget": {
         "comment": {
-            "update": "Uppdatera"
+            "update": "Update"
         }
     }
 }

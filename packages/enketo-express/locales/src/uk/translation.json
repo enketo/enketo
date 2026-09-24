@@ -1,409 +1,440 @@
 {
     "advanced": {
-        "flushdb": "Очистити сховище"
+        "flushdb": "Clear Storage"
     },
     "alert": {
         "addtohomescreen": {
             "androidchrome": {
-                "msg": "Щоб додати цю форму на головний екран, клацніть піктограму налаштувань браузера __image1__ і виберіть: «Додати на головний екран»."
+                "msg": "To add this form to your Home screen, click the browser settings icon __image1__ and select: 'Add to Home screen'."
             },
             "androidfirefox": {
-                "msg": "Щоб додати цю форму на головний екран, утримуйте адресний рядок і виберіть «Додати на головний екран»."
+                "msg": "To add this form to your Homescreen, long-press the address bar and select 'Add to Home Screen'."
             },
-            "heading": "Додати на головний екран",
+            "heading": "Add to Home Screen",
             "iossafari": {
-                "msg": "Щоб додати цю форму на головний екран, клацніть піктограму спільного доступу __image1__ у верхньому правому куті браузера та виберіть: «+ Додати на головний екран»."
+                "msg": "To add this form to your Home screen, click the share icon __image1__ in the top right of your browser, and select: '+ Add to Home Screen'."
             }
         },
         "appupdated": {
-            "heading": "Форму оновлено!",
-            "msg": "Завантажено нову версію цієї форми. Оновіть цю сторінку, щоб завантажити оновлену версію."
+            "heading": "App Updated!",
+            "msg": "A new version of this application has been downloaded. Refresh this page to load the updated version."
         },
         "closing": {
-            "heading": "Закриття..."
+            "heading": "Closing..."
         },
         "default": {
-            "button": "Закрити",
-            "heading": "Попередження"
+            "button": "Close",
+            "heading": "Alert"
         },
         "export": {
             "error": {
-                "filecreatedmsg": "Тим не менш, неповний файл експорту все одно було створено.",
-                "heading": "Помилка експорту",
-                "msg": "Виникли помилки під час створення файлу експорту записів для непідтверджених записів . Помилки: __errors__"
+                "filecreatedmsg": "Nevertheless, an incomplete export file was still created.",
+                "heading": "Export Error",
+                "msg": "Errors occurred during creating of the record export file for unsubmitted records. Errors: __errors__"
             },
             "success": {
-                "heading": "Експорт створено",
-                "msg": "Файл експорту, створений для всіх ненадісланих записів, що належать до цієї форми."
+                "heading": "Export Created",
+                "msg": "Export file created for all unsubmitted records belonging to this form."
             }
         },
         "formupdated": {
-            "heading": "Форма оновлена!",
-            "msg": "Завантажено нову версію цієї форми. Оновіть цю сторінку, щоб завантажити оновлену версію."
+            "heading": "Form Updated!",
+            "msg": "A new version of this form has been downloaded. Refresh this page to load the updated version."
         },
         "gotonotfound": {
-            "msg": "Не вдалося знайти запитання &quot;__path__&quot; у формі. Чи правильне посилання на це запитання?"
+            "msg": "Failed to find question \"__path__\" in form. Is the reference to this question correct?"
         },
         "loaderror": {
-            "editadvice": "Ми не рекомендуємо вам редагувати цей запис, доки це не буде вирішено.",
-            "entryadvice": "Ми не рекомендуємо вам використовувати цю форму для введення даних, доки це не буде вирішено.",
-            "heading": "Помилка завантаження",
-            "msg1": "Під час завантаження цієї форми сталася помилка.",
-            "msg2": "Будь ласка, зв’яжіться з __emailLink__ з посиланням на цю сторінку та повідомленням про помилку нижче:",
-            "heading_plural": "Помилки завантаження",
-            "msg1_plural": "Під час завантаження цієї форми виникли помилки.",
-            "msg2_plural": "Будь ласка, зв’яжіться з __emailLink__, надаючи посилання на цю сторінку та повідомлення про помилки нижче:"
+            "editadvice": "We do not recommend you edit this record until this is resolved.",
+            "entryadvice": "We do not recommend you use this form for data entry until this is resolved.",
+            "heading": "Loading Error",
+            "msg1": "Something went wrong while loading this form. Please try again later.",
+            "msg2": "Please contact __emailLink__ with the link to this page and the error message below:",
+            "heading_plural": "Loading Errors",
+            "msg1_plural": "Errors occurred during the loading of this form.",
+            "msg2_plural": "Please contact __emailLink__ with the link to this page and the error messages below:"
         },
         "logout": {
-            "heading": "Вийшов із системи",
-            "msg": "Ви вийшли з системи."
+            "heading": "Logged Out",
+            "msg": "You have been logged out."
         },
         "offlinesupported": {
-            "heading": "Форма працює офлайн!",
+            "heading": "Form works offline!",
             "msg": [
-                "Тепер на цьому пристрої дану форму можна завантажити та використовувати без підключення до інтернету . Додайте її в закладки для легкого доступу в режимі офлайн.",
-                "Записи автоматично зберігаються та ставляться в чергу у вашому браузері, доки не буде доступне підключення до Інтернету. Коли додаток підключено до мережі, записи надсилатимуться автоматично – один за іншим.",
-                "Лише після успішної відправки запис буде видалено з черги. Ви можете безпечно закрити свій веб-переглядач і пристрій із елементами в черзі. Дані залишаться доступними, коли ви завантажите форму наступного разу."
+                "This form can now be loaded and used without an Internet connection on this device. Bookmark it for easy offline access.",
+                "Records are automatically stored and queued in your browser until an Internet connection is available. When the app is online, records will be automatically submitted - one by one.",
+                "Only after a record has been successfully submitted, it will be removed from the queue. You can safely close down your browser and device with items in the queue. They will still be there next time you load the form."
             ]
         },
         "offlineunsupported": {
-            "heading": "Форму неможливо запустити офлайн",
-            "msg": "Офлайн-запуск форми не підтримується вашим браузером. Ви можете використовувати опитування без цієї функції або переглянути варіанти вирішення проблеми.",
-            "negButton": "Використай це",
-            "posButton": "Показати параметри",
-            "refresh": "Цю форму більше не можна запускати офлайн. Будь ласка, оновіть сторінку, щоб спробувати виправити це."
+            "heading": "Application cannot launch offline",
+            "msg": "Offline application launch is not supported by your browser. You can use the survey without this feature or see options for resolving this.",
+            "negButton": "Use it",
+            "posButton": "Show options",
+            "refresh": "This form can no longer launch offline. Please refresh the page to try to fix this."
         },
         "queuesubmissionsuccess": {
-            "msg": "__recordNames__ успішно надіслано",
-            "msg_plural": "__recordNames__ успішно надіслано"
+            "msg": "__recordNames__ was successfully submitted",
+            "msg_plural": "__recordNames__ were successfully submitted"
         },
         "recordloadsuccess": {
-            "msg": "__recordName__ завантажено"
+            "msg": "__recordName__ has been loaded"
         },
         "recordnotfound": {
-            "msg": "Запис не вдалося отримати або він не містив даних."
+            "msg": "Record could not be retrieved or contained no data."
         },
         "recordsavesuccess": {
-            "draftmsg": "Запис зберігається як чернетка.",
-            "finalmsg": "Запис у черзі на надсилання."
+            "draftmsg": "Record stored as draft.",
+            "finalmsg": "Record queued for submission."
         },
         "savedraftinfo": {
-            "heading": "Завершіть запис пізніше",
+            "heading": "Finalize record later",
             "msg": [
-                "Чернетка запису зберігається лише в поточному браузері. Ви можете закрити цей браузер, не втративши збережений запис.",
-                "Чернетки записів можна отримати, повторно відкривши цю сторінку та натиснувши кнопку ліворуч на екрані, яка виглядає так: __icon__",
-                "Попередження: якщо ви очистите кеш браузера, усі чернетки та ненадіслані записи буде видалено назавжди."
+                "The draft record is stored only within the current browser. You can close this browser without losing the stored record.",
+                "Draft records can be accessed by reopening this page and clicking the button on the left of the screen that looks like this: __icon__",
+                "Warning: If you clear your browser cache, all draft and unsubmitted final records will be permanently deleted."
             ]
         },
         "submission": {
-            "msg": "Відправка...",
-            "redirectmsg": "Ви будете автоматично перенаправлені після надсилання."
+            "msg": "Submitting...",
+            "redirectmsg": "You will be automatically redirected after submission."
         },
         "submissionerror": {
-            "authrequiredmsg": "Потрібна автентифікація. Пройдіть автентифікацію __here__ на іншій вкладці веб-браузера, та повторіть спробу.",
+            "authrequiredmsg": "Authentication required. Please authenticate __here__ in a different browser tab and try again.",
             "fnfmsg": [
-                "Не вдалося отримати такі мультимедійні файли: __failedFiles__. Надсилання пройшло вдало без цих файлів.",
-                "Будь ласка, зв’яжіться з __supportEmail__, щоб повідомити про помилку, постарайтесь пояснити, як її можна відтворити."
+                "The following media files could not be retrieved: __failedFiles__. The submission went ahead without these files and this succeeded.",
+                "Please contact __supportEmail__ to report a bug and if possible explain how the issue can be reproduced."
             ],
-            "heading": "Помилка надсилання"
+            "heading": "Submission Failed"
         },
         "submissionsuccess": {
-            "heading": "Надіслано успішно",
-            "msg": "Ваші дані надіслано!",
-            "redirectmsg": "Ви будете перенаправлені."
+            "heading": "Submission Successful",
+            "msg": "Your data was submitted!",
+            "redirectmsg": "You will now be redirected."
         },
         "thanks": {
-            "heading": "Дякуємо за участь!",
-            "msg": "Ви можете закрити це вікно зараз.",
-            "msgTaken": "Ви вже заповнили це опитування."
+            "heading": "Thank you for participating!",
+            "msg": "You can close this window now.",
+            "msgTaken": "You have already completed this survey."
         },
         "validationerror": {
-            "msg": "Форма містить помилки. Перегляньте поля, позначені червоним."
+            "msg": "Form contains errors. Please see fields marked in red."
         },
         "validationsuccess": {
-            "heading": "Підтверджую",
-            "msg": "Форма дійсна!"
+            "heading": "OK",
+            "msg": "Form is valid!"
         },
         "valuehasspaces": {
-            "multiple": "\"Вибір кількох\" має неприпустиме значення &quot;__value__&quot;, яке містить пробіл."
+            "multiple": "Select multiple question has an illegal value \"__value__\" that contains a space."
         },
         "xpatherror": {
-            "heading": "Помилка формули",
-            "msg": "Сталася помилка оцінки формули. Зверніться до __emailLink__ із цією помилкою:"
+            "heading": "Formula Error",
+            "msg": "A formula evaluation error occurred. Please contact __emailLink__ with this error:"
         }
     },
-    "changelog": "Журнал змін",
+    "audioRecording": {
+        "error": {
+            "accessDenied": "Microphone access denied by user.",
+            "noMicrophone": "No microphone found on this device.",
+            "notSupported": "Audio recording is not supported in this browser.",
+            "unknownError": "Failed to access microphone. Check your browser settings and permissions.",
+            "recordingError": "An error occurred while trying to record audio.",
+            "recordingInProgress": "The current audio recording needs to be stopped before continuing.",
+            "invalidAudioFile": {
+                "msg": "The selected file is not a valid audio file and cannot be played.",
+                "heading": "Invalid Audio File"
+            }
+        },
+        "startRecording": "Start Recording",
+        "uploadAudioFile": "Upload audio File",
+        "deleteWarning": "The audio will be deleted. Are you sure you want to do this?",
+        "backgroundDisclaimer": {
+            "heading": "Background Audio Recording",
+            "msg": [
+                "This form records the audio from your device's microphone.",
+                "You can use the volume indicator to make sure the microphone is close enough to the sound you need to record.",
+                "To stop the recording please exit this form.",
+                "For more information please contact the person who asked you to collect data."
+            ],
+            "buttonText": "Ok, start Recording"
+        },
+        "hasRecordedAudio": "This submission has a background audio recording."
+    },
+    "changelog": "Change Log",
     "confirm": {
         "autosaveload": {
-            "heading": "Знайдено незбережений запис",
-            "msg": "Enketo знайшов незбережений запис. Бажаєте завантажити цей запис чи видалити його?",
-            "negButton": "Відмовитись",
-            "posButton": "Завантажити запис"
+            "heading": "Unsaved Record Found",
+            "msg": "Enketo has found an unsaved record. Would you like to load this record or discard it?",
+            "negButton": "Discard",
+            "posButton": "Load Record"
         },
         "default": {
-            "heading": "Ви впевнені?",
-            "msg": "Будь ласка, підтвердьте цю дію",
-            "negButton": "Скасувати",
-            "posButton": "Підтвердити"
+            "heading": "Are you sure?",
+            "msg": "Please confirm this action",
+            "negButton": "Cancel",
+            "posButton": "Confirm"
         },
         "deleteall": {
-            "heading": "ПАНІКА!",
+            "heading": "PANIC!",
             "msg": [
-                "Це призведе до видалення всіх ваших даних у черзі та всіх ваших форм зі сховища браузера. Дані будуть втрачені назавжди. Використовуйте це лише в крайньому випадку, якщо сховище браузера здається пошкодженим.",
-                "Спочатку закрийте всі інші вкладки браузера з Enketo.",
-                "Сторінка перезавантажиться. Якщо ви бачите помилку, можливо, доведеться повторити цю дію.",
-                "Ви впевнені, що хочете це зробити?"
+                "This will remove all your queued data and all your forms from the browser storage. Data will be lost forever. Use this only as a last resort if the browser storage seems corrupt.",
+                "Close all other Enketo browser tabs first.",
+                "The page will reload. If you see an error you may have to repeat this action.",
+                "Are you sure you want to do this?"
             ],
-            "posButton": "Видалити все"
+            "posButton": "Delete All"
         },
         "discardcurrent": {
-            "heading": "Незбережені зміни",
-            "msg": "У поточній формі є незбережені зміни. Бажаєте завантажити запис без збереження змін у формі, над якою ви працювали?",
-            "posButton": "Продовжити без збереження"
+            "heading": "Unsaved edits",
+            "msg": "The current form has unsaved changes. Would you like to load a record without saving changes to the form you were working on?",
+            "posButton": "Proceed without saving"
         },
         "login": {
-            "heading": "Необхідна авторизація",
+            "heading": "Login Required",
             "queuedMsg": [
-                "Запис поставлено в чергу на надсилання. Щоб надіслати свої дані вам необхідно авторизуватися.",
-                "Бажаєте увійти зараз чи пізніше?"
+                "Record queued for submission. In order to submit your queued data, you need to login.",
+                "Would you like to login now or later?"
             ],
             "msg": [
-                "Щоб надіслати свої дані в черзі, вам потрібно авторизуватися. Якщо ви захочете зробити це зараз, ви будете перенаправлені та втратите незбережену інформацію.",
-                "Бажаєте увійти зараз чи пізніше?"
+                "In order to submit your queued data, you need to login. If you want to do this now, you will be redirected, and lose unsaved information.",
+                "Would you like to login now or later?"
             ],
-            "negButton": "Пізніше",
-            "posButton": "Авторизуйтесь"
+            "negButton": "Later",
+            "posButton": "Log in now"
         },
         "print": {
             "a4": "A4",
-            "heading": "Виберіть Налаштування друку",
-            "landscape": "Пейзаж",
-            "letter": "Лист",
-            "msg": "Щоб підготувати оптимізований друк, виберіть параметри друку нижче",
-            "orientation": "Орієнтація паперу",
-            "portrait": "Портрет",
-            "posButton": "Приготуйте",
-            "psize": "Розмір паперу",
-            "reminder": "В майбутньому не забувайте встановлювати ті самі параметри в меню друку браузера!"
+            "heading": "Select Print Settings",
+            "landscape": "Landscape",
+            "letter": "Letter",
+            "msg": "To prepare an optimized print, please select the print settings below",
+            "orientation": "Paper Orientation",
+            "portrait": "Portrait",
+            "posButton": "Prepare",
+            "psize": "Paper Size",
+            "reminder": "Remember to set these same print settings in the browser's print menu afterwards!"
         },
         "repeatremove": {
-            "heading": "Видалити цю групу відповідей?",
-            "msg": "Ця дія незворотна. Ви впевнені, що бажаєте продовжити?"
+            "heading": "Delete this group of responses?",
+            "msg": "This action is irreversible. Are you sure you want to proceed?"
         },
         "save": {
-            "existingerror": "Це Назва або ID запису уже існує. Будь ласка, змініть його.",
-            "hint": "Ця назва дає змогу легко знайти чернетку запису, щоб завершити її пізніше.",
-            "msg": "Присутні незбережені зміни, бажаєте продовжити не зберігаючи?",
-            "name": "Назва запису",
-            "posButton": "Зберегти та закрити",
-            "renamemsg": "Ви впевнені, що бажаєте перейменувати __currentName__ на __newName__?",
-            "unkownerror": "Під час спроби зберегти дані сталася невідома помилка."
+            "existingerror": "This record name or ID already exists. Please change it.",
+            "hint": "This name allows you to easily find your draft record to finish it later.",
+            "msg": "There are unsaved changes, would you like to continue without saving those?",
+            "name": "Record Name",
+            "posButton": "Save & Close",
+            "renamemsg": "Are you sure you want to rename __currentName__ to __newName__?",
+            "unkownerror": "An unknown error occurred when trying to save data."
         }
     },
     "constraint": {
-        "invalid": "Недозволене значення",
-        "required": "Це поле є обов'язковим"
+        "invalid": "Value not allowed",
+        "required": "This field is required"
     },
     "contact": {
-        "admin": "Будь ласка, зверніться до адміністратора опитування.",
-        "support": "Будь ласка, зверніться до __supportEmail__"
+        "admin": "Contact the survey administrator please.",
+        "support": "Contact __supportEmail__ please."
     },
     "drawwidget": {
-        "annotation": "файл і малюнок",
-        "drawing": "малювання",
-        "signature": "підпис"
+        "annotation": "file and drawing",
+        "drawing": "drawing",
+        "signature": "signature"
     },
     "enketo": {
-        "power": "Працює на"
+        "power": "Powered by"
     },
     "error": {
-        "code": "Код помилки: __code__",
-        "dataloadfailed": "Не вдалося завантажити __filename__.",
-        "econnrefused": "Не вдалося підключитися до Сервера Даних",
-        "encryptionnotsupported": "Ця форма потребує локального шифрування записів. На жаль, це не підтримується вашим браузером. Рекомендуємо перейти на сучасний браузер.",
-        "formloadfailed": "Не вдалося завантажити форму",
-        "instancenotfound": "Запис відсутній. Можливо, у нього сплив термін дії",
-        "invalidediturl": "Недійсна URL-адреса редагування",
-        "loadfailed": "Не вдалося завантажити __resource__",
-        "notfoundinformlist": "Ця форма не існує або ви більше не маєте до неї доступу. Будь ласка, перевірте URL на наявність відсутніх символів. \n\nЯкщо форма існувала раніше, можливо, її було заархівовано, вимкнено або видалено. Якщо це неочікувано, зв’яжіться з особою, яка попросила вас заповнити форму. \n\n(Спроба отримати доступ до форми з ID: __formId__)",
-        "notfounddirectformurl": "Ця форма не існує або ви більше не маєте до неї доступу. Будь ласка, перевірте URL на наявність відсутніх символів. \n\nЯкщо форма існувала раніше, можливо, її було заархівовано, вимкнено або видалено. Якщо це неочікувано, зв’яжіться з особою, яка попросила вас заповнити форму. \n\n(Спроба отримати доступ до форми: __notfounddirectformurl__)",
-        "pagenotfound": "Сторінку не знайдено",
-        "surveyidnotactive": "Опитування з цим ID більше не активне",
-        "surveyidnotfound": "Опитування з цим ID не знайдено",
-        "unknown": "Сталася невідома помилка"
+        "code": "Error Code: __code__",
+        "dataloadfailed": "Failed to load __filename__.",
+        "econnrefused": "Could not connect with Form Server",
+        "encryptionnotsupported": "This form requires local encryption of records. Unfortunately this is not supported by your browser. We recommend switching to a modern browser.",
+        "formloadfailed": "Failed to load form",
+        "instancenotfound": "Record not present. It may have expired.",
+        "invalidediturl": "Not a valid edit URL",
+        "loadfailed": "Failed to load __resource__",
+        "notfoundinformlist": "This form is no longer available.",
+        "pagenotfound": "Page not Found",
+        "surveyidnotactive": "Survey with this ID no longer active",
+        "surveyidnotfound": "No form found with this URL, please double check.",
+        "unknown": "An unknown error occured"
     },
     "feedback": {
-        "header": "Інформація"
+        "header": "Information"
     },
     "filepicker": {
-        "file": "файл",
-        "notFound": "Не вдалося знайти файл __existing__ (залиште без змін, якщо він уже надісланий і ви хочете його зберегти).",
-        "placeholder": "Натисніть тут, щоб завантажити файл. (< __maxSize__)",
-        "resetWarning": "Це видалить __item__. Ви впевнені, що хочете це зробити?",
-        "toolargeerror": "Ромір файлу завеликий (> __maxSize__)",
-        "waitingForPermissions": "Очікування дозволів користувача."
+        "file": "file",
+        "notFound": "File __existing__ could not be found (leave unchanged if already submitted and you want to preserve it).",
+        "placeholder": "Click here to upload file. (< __maxSize__)",
+        "resetWarning": "This will remove the __item__. Are you sure you want to do this?",
+        "toolargeerror": "File too large (> __maxSize__)",
+        "waitingForPermissions": "Waiting for user permissions."
     },
     "form": {
-        "chooseLanguage": "Виберіть мову",
-        "logout": "вийти",
+        "chooseLanguage": "Choose Language",
+        "logout": "log out",
         "pages": {
-            "back": "Назад",
-            "end": "Перейти до кінця",
-            "next": "Далі",
-            "return": "Повернутися до початку"
+            "back": "Back",
+            "end": "Go to End",
+            "next": "Next",
+            "return": "Return to Beginning"
         },
-        "required": "обов'язково"
+        "required": "required"
     },
     "formfooter": {
         "complete": {
-            "btn": "Завершено"
+            "btn": "Complete"
         },
         "savedraft": {
-            "btn": "Зберегти чернетку",
-            "label": "Зберегти як чернетку"
+            "btn": "Save Draft",
+            "label": "Save as Draft"
         },
         "submit": {
-            "btn": "Надіслати"
+            "btn": "Submit"
         },
         "validate": {
-            "btn": "Перевірити"
+            "btn": "Validate"
         }
     },
     "geopicker": {
-        "accuracy": "точність (м)",
-        "altitude": "висота (м)",
-        "closepolygon": "закрити багатокутник",
-        "kmlcoords": "координати KML",
-        "kmlpaste": "вставте тут координати KML",
-        "latitude": "широта (x.y °)",
-        "longitude": "довгота (x.y °)",
-        "points": "балів",
-        "removePoint": "Це повністю видалить поточну геоточку зі списку геоточок і не може бути скасовано. Ви впевнені, що хочете це зробити?",
-        "searchPlaceholder": "пошук місця або адреси",
-        "bordersintersectwarning": "Кордони не можуть перетинатися"
+        "accuracy": "accuracy (m)",
+        "altitude": "altitude (m)",
+        "closepolygon": "close polygon",
+        "kmlcoords": "KML coordinates",
+        "kmlpaste": "paste KML coordinates here",
+        "latitude": "latitude (x.y °)",
+        "longitude": "longitude (x.y °)",
+        "points": "points",
+        "removePoint": "This will completely remove the current geopoint from the list of geopoints and cannot be undone. Are you sure you want to do this?",
+        "searchPlaceholder": "search for place or address",
+        "bordersintersectwarning": "Borders cannot intersect"
     },
-    "here": "тут",
+    "here": "here",
     "hint": {
         "guidance": {
-            "details": "Детальніше"
+            "details": "more details"
         }
     },
     "home": {
-        "msg": "__appTitle__ запущено! Будь ласка, отримайте доступ до форм Enketo з інсталяції __serverName__."
+        "msg": "__appTitle__ is running! Please access Enketo forms from your __serverName__ installation."
     },
     "imagemap": {
-        "svgNotFound": "Зображення SVG не знайдено"
+        "svgNotFound": "SVG image could not be found"
     },
     "langs": {
-        "ar": "Арабська",
-        "cs": "Чеська",
-        "de": "Німецька",
-        "el": "Грецька",
-        "en": "Англійська",
-        "es": "Іспанська",
-        "fa": "Перська",
-        "fi": "Фінська",
-        "fr": "Французька",
-        "he": "Іврит",
-        "hi": "Хінді",
-        "it": "Італійська",
-        "ka": "Грузинська",
-        "km": "Кхмерська",
-        "lo": "Лаоська",
-        "nl": "Голландська",
-        "no": "Норвезька",
-        "pa": "Панджабська",
-        "pl": "Польська",
-        "pt": "Португальська",
-        "ro": "Румунська",
-        "ru": "Російська",
-        "sk": "Словацька",
-        "sq": "Албанська",
-        "supported": "Мови, які підтримуються:",
-        "sv": "Шведська",
-        "sw": "Суахілі",
-        "th": "Тайська",
-        "tr": "Турецька",
-        "uk": "Українська",
-        "vi": "В'єтнамська",
-        "zh": "Китайський"
+        "ar": "Arabic",
+        "cs": "Czech",
+        "de": "German",
+        "el": "Greek",
+        "en": "English",
+        "es": "Spanish",
+        "fa": "Persian",
+        "fi": "Finnish",
+        "fr": "French",
+        "he": "Hebrew",
+        "hi": "Hindi",
+        "it": "Italian",
+        "ka": "Georgian",
+        "km": "Khmer",
+        "lo": "Lao",
+        "nl": "Dutch",
+        "no": "Norwegian",
+        "pa": "Panjabi",
+        "pl": "Polish",
+        "pt": "Portuguese",
+        "ro": "Romanian",
+        "ru": "Russian",
+        "sk": "Slovak",
+        "sq": "Albanian",
+        "supported": "Languages supported:",
+        "sv": "Swedish",
+        "sw": "Swahili",
+        "th": "Thai",
+        "tr": "Turkish",
+        "uk": "Ukrainian",
+        "vi": "Vietnamese",
+        "zh": "Chinese"
     },
     "literacywidget": {
-        "finish": "Закінчити",
-        "start": "Старт"
+        "finish": "Finish",
+        "start": "Start"
     },
     "page": {
         "modernbrowsers": {
-            "heading": "Сучасні браузери",
+            "heading": "Modern Browsers",
             "ie": {
-                "heading": "Чому немає любові до цих злих застарілих версій Internet Explorer?",
-                "msg": "Ми розуміємо, що деякі люди, особливо ті, хто працює у великих бюрократичних установах, не мають доступу до останніх і найкращих браузерів. Оскільки ми знаємо, наскільки чудовою може бути мережа за наявності правильних інструментів, ми дуже співчуваємо користувачам у цій невдалій ситуації. Зазвичай ми намагаємося надати обхідні шляхи для підтримки деяких популярних застарілих браузерів. Однак причиною існування Enketo є доступність деяких дуже модних передових технологій. На жаль, користувачам старих браузерів не пощастило."
+                "heading": "Why no love for those evil outdated versions of Internet Explorer?",
+                "msg": "We understand that some people, especially those working for large bureaucracies, do not have access to the latest and greatest browsers. Since we know how great the web could be with the right tools, we have great empathy for users in that unfortunate situation. Normally, we would try to provide workarounds to support some populair outdated browsers. However, the reason Enketo exists is the availability of some very fancy cutting-edge technologies. Unfortunately, users of older browsers are therefore out of luck."
             },
-            "msg1": "Ой! Вибачте, ймовірно, вас надіслали сюди, оскільки ваш веб-переглядач застарів або, можливо, його основні функції вимкнено в режимі «приватного перегляду».",
-            "msg2": "Якщо ви користуєтеся застарілим браузером, рекомендуємо оновити до останньої версії одного з наступних відмінних сучасних браузерів:"
+            "msg1": "Ouch! Sorry, you were probably sent here because your browser is outdated or perhaps it has its key features disabled by using 'private browsing' mode.",
+            "msg2": "If you are using an outdated browser, we recommend upgrading to a recent version of one of the following excellent modern browsers:"
         },
         "offline": {
-            "heading": "Не вдається отримати доступ до запитуваної сторінки",
-            "msg1": "Ця сторінка доступна лише тоді, коли браузер має з’єднання з Інтернетом і сервер доступний (якщо сторінка не існує)."
+            "heading": "Cannot access requested page",
+            "msg1": "This page is only accessible when the browser has an Internet connection and the server is accessible (unless the page does not exist)."
         }
     },
     "prompt": {
         "default": {
-            "heading": "Введіть значення"
+            "heading": "Enter values"
         },
         "login": {
-            "heading": "Введіть ваші облікові дані __server__ ",
-            "password": "Пароль",
-            "remember": "Запам'ятати на цьому комп'ютері",
-            "submit": "Надіслати",
-            "username": "Ім'я користувача"
+            "heading": "Enter your __server__ credentials",
+            "password": "Password",
+            "remember": "Remember on this computer",
+            "submit": "Submit",
+            "username": "Username"
         }
     },
     "rankwidget": {
-        "clickstart": "Натисніть, щоб почати",
-        "tapstart": "Торкніться, щоб почати"
+        "clickstart": "Click to start",
+        "tapstart": "Tap to start"
     },
     "record-list": {
-        "export": "Експорт",
-        "msg1": "Записи зберігаються у вашому браузері, доки їх не буде завантажено (навіть якщо ви вимкнете комп’ютер або перейдете в автономний режим).",
-        "msg2": "Записи в черзі, крім тих, які позначені як чернетка __icon__, завантажуються автоматично у фоновому режимі кожні 5 хвилин, коли веб-сторінка відкрита та доступне підключення до Інтернету.",
-        "msg2-nodraft": "Записи в черзі автоматично завантажуються кожні 5 хвилин, при умові що веб-сторінка відкрита та доступне підключення до Інтернету.",
-        "msg3": "Щоб примусово завантажувати дані між автоматичними спробами, натисніть «Завантажити».",
-        "norecords": "немає записів у черзі",
-        "title": "Черга",
-        "upload": "Завантажити"
+        "export": "Export",
+        "msg1": "Records are stored inside your browser until they have been uploaded (even if you turn off your computer or go offline).",
+        "msg2": "Queued records, except those marked as draft __icon__, are uploaded automatically, in the background, every 5 minutes when the web page is open and an Internet connection is available.",
+        "msg2-nodraft": "Queued records are uploaded automatically, in the background, every 5 minutes when the web page is open and an Internet connection is available.",
+        "msg3": "To force an upload in between automatic attempts, click Upload.",
+        "norecords": "no records queued",
+        "title": "Queue",
+        "upload": "Upload"
     },
     "selectpicker": {
-        "noneselected": "нічого не вибрано",
-        "numberselected": "Вибрано __число__"
+        "noneselected": "none selected",
+        "numberselected": "__number__ selected"
     },
     "store": {
         "error": {
-            "iosusesafari": "Ваш браузер iOS не може запустити цю форму. Для iOS ми рекомендуємо використовувати Safari.",
-            "notavailable": "Сховище веб-браузера недоступне, пошкоджене або неможливе для запису. Якщо ви перебуваєте в режимі «приватного перегляду», перейдіть у звичайний режим, інакше перейдіть до іншого браузера. (помилка: __error__)",
-            "notsupported": "Ваш браузер не може запустити цю форму. Рекомендуємо використовувати сучасний браузер."
+            "iosusesafari": "Your iOS browser is not able to run this form. On iOS, we recommend using Safari.",
+            "notavailable": "Browser storage is required but is not available, is corrupted, or is not writeable. If you are in 'private browsing' mode please switch to regular mode, otherwise switch to another browser. (error: __error__)",
+            "notsupported": "Your browser is not able to run this form. We recommend using a modern browser."
         }
     },
     "submission": {
-        "http0": "Сервер недоступний або ви не підключені до Інтернету.",
-        "http2xx": "Неочікувана відповідь при надсиланні даних.",
-        "http400": "Сервер не прийняв дані.",
-        "http401": "Проблема автентифікації з сервером даних.",
-        "http403": "Не дозволено надсилати дані на цей сервер.",
-        "http404": "Службу відправки на сервері даних не знайдено.",
-        "http408": "Час очікування сервера минув.",
-        "http413": "Дані занадто великі.",
-        "http4xx": "Невідома проблема з надсиланням  даних на сервер.",
-        "http500": "Сервер даних для вашої форми або сервер Enketo не працює. Повторіть спробу пізніше або зверніться до __supportEmail__.",
-        "http504": "Не вдалося встановити з'єднання з сервером даних."
+        "http0": "The server is not available or you may not be connected to the Internet.",
+        "http2xx": "Unexpected response when submitting data.",
+        "http400": "Data server did not accept data.",
+        "http401": "Authentication problem with data server.",
+        "http403": "Not allowed to post data to this data server.",
+        "http404": "Submission service on data server not found.",
+        "http408": "Data server timed out.",
+        "http413": "Data is too large.",
+        "http4xx": "Unknown submission problem on data server.",
+        "http500": "The data server for your form or the Enketo server is down. Please try again later or contact __supportEmail__.",
+        "http504": "Could not establish connection with data server."
     },
     "themes": {
-        "supported": "Підтримуються теми"
+        "supported": "Themes supported"
     },
-    "version": "версія:",
+    "update": {
+        "newversion": "New version available",
+        "reload": "reload to update"
+    },
+    "version": "version:",
     "widget": {
         "comment": {
-            "update": "Оновити"
+            "update": "Update"
         }
     }
 }

@@ -1,409 +1,440 @@
 {
     "advanced": {
-        "flushdb": "Очистить хранилище"
+        "flushdb": "Clear Storage"
     },
     "alert": {
         "addtohomescreen": {
             "androidchrome": {
-                "msg": "Чтобы добавить эту форму на главный экран, щелкните значок настроек браузера __image1__ и выберите: \"Добавить на главный экран\"."
+                "msg": "To add this form to your Home screen, click the browser settings icon __image1__ and select: 'Add to Home screen'."
             },
             "androidfirefox": {
-                "msg": "Чтобы добавить эту форму в свою главную страницу, нажмите на адресную строку и выберите \"Добавить на главную страницу\"."
+                "msg": "To add this form to your Homescreen, long-press the address bar and select 'Add to Home Screen'."
             },
-            "heading": "Добавить на домашнюю страницу",
+            "heading": "Add to Home Screen",
             "iossafari": {
-                "msg": "Чтобы добавить эту форму на главный экран, щелкните значок общего доступа __image1__ в правом верхнем углу браузера и выберите «+ Добавить на главный экран»."
+                "msg": "To add this form to your Home screen, click the share icon __image1__ in the top right of your browser, and select: '+ Add to Home Screen'."
             }
         },
         "appupdated": {
-            "heading": "Приложения обновлено!",
-            "msg": "Была загружена новая версия этого приложения. Обновите эту страницу, чтобы загрузить обновленную версию."
+            "heading": "App Updated!",
+            "msg": "A new version of this application has been downloaded. Refresh this page to load the updated version."
         },
         "closing": {
-            "heading": "Закрытие..."
+            "heading": "Closing..."
         },
         "default": {
-            "button": "Закрыть",
-            "heading": "Тревога"
+            "button": "Close",
+            "heading": "Alert"
         },
         "export": {
             "error": {
-                "filecreatedmsg": "Тем не менее, незавершенного экспорта файл был создан.",
-                "heading": "Ошибка экспорта",
-                "msg": "Ошибки произошли во время создания файла экспорта записей для неподтвержденных  записей. Ошибки: __errors__"
+                "filecreatedmsg": "Nevertheless, an incomplete export file was still created.",
+                "heading": "Export Error",
+                "msg": "Errors occurred during creating of the record export file for unsubmitted records. Errors: __errors__"
             },
             "success": {
-                "heading": "Экспорт создан",
-                "msg": "Файл экспорта создан для всех неподтвержденных  записей, относящихся к этой форме."
+                "heading": "Export Created",
+                "msg": "Export file created for all unsubmitted records belonging to this form."
             }
         },
         "formupdated": {
-            "heading": "Форма обновлена!",
-            "msg": "Была загружена новая версия этой формы. Обновите эту страницу, чтобы загрузить обновленную версию."
+            "heading": "Form Updated!",
+            "msg": "A new version of this form has been downloaded. Refresh this page to load the updated version."
         },
         "gotonotfound": {
-            "msg": "Не удалось найти запрос \"__path__\" в форме. Правильно ли ссылка на этот запрос?"
+            "msg": "Failed to find question \"__path__\" in form. Is the reference to this question correct?"
         },
         "loaderror": {
-            "editadvice": "Мы не рекомендуем вам редактировать эту запись, пока это не будет разрешено.",
-            "entryadvice": "Мы не рекомендуем использовать эту форму для ввода данных, пока это не будет разрешено.",
-            "heading": "Ошибка загрузки",
-            "msg1": "При загрузке этой формы произошла ошибка.",
-            "msg2": "Пожалуйста, свяжитесь с __emailLink__ со ссылкой на эту страницу и сообщение об ошибке ниже:",
-            "heading_plural": "Ошибки загрузки",
-            "msg1_plural": "Произошла ошибка во время загрузки этой формы.",
-            "msg2_plural": "Пожалуйста, свяжитесь с __emailLink__ со ссылкой на эту страницу и сообщения об ошибках ниже:"
+            "editadvice": "We do not recommend you edit this record until this is resolved.",
+            "entryadvice": "We do not recommend you use this form for data entry until this is resolved.",
+            "heading": "Loading Error",
+            "msg1": "Something went wrong while loading this form. Please try again later.",
+            "msg2": "Please contact __emailLink__ with the link to this page and the error message below:",
+            "heading_plural": "Loading Errors",
+            "msg1_plural": "Errors occurred during the loading of this form.",
+            "msg2_plural": "Please contact __emailLink__ with the link to this page and the error messages below:"
         },
         "logout": {
-            "heading": "Выйти",
-            "msg": "Вы вышли из системы."
+            "heading": "Logged Out",
+            "msg": "You have been logged out."
         },
         "offlinesupported": {
-            "heading": "Форма работает в автономном режиме!",
+            "heading": "Form works offline!",
             "msg": [
-                "Эта форма теперь может быть загружена и использована без подключения к Интернету на этом устройстве. Закладка для упрощенного автономного доступа.",
-                "Записи автоматически сохраняются и помещаются в очередь в вашем браузере до тех пор пока не будет доступно подключение к Интернету. Когда появиться подключение к сети записи будут автоматически отправляться по очереди.",
-                "Только после того, как запись будет успешно отправлена, она будет удалена из очереди. Вы можете безопасно закрыть свой браузер и устройство. Они все равно будут там при следующей загрузке формы."
+                "This form can now be loaded and used without an Internet connection on this device. Bookmark it for easy offline access.",
+                "Records are automatically stored and queued in your browser until an Internet connection is available. When the app is online, records will be automatically submitted - one by one.",
+                "Only after a record has been successfully submitted, it will be removed from the queue. You can safely close down your browser and device with items in the queue. They will still be there next time you load the form."
             ]
         },
         "offlineunsupported": {
-            "heading": "Приложение не может запускаться в автономном режиме",
-            "msg": "Вызов в автономного режиме не поддерживается вашим браузером. Вы можете использовать опрос без этой функции или просмотреть варианты решения этого проблемы.",
-            "negButton": "Используй это",
-            "posButton": "Показать параметры",
-            "refresh": "Эта форма больше не может работать в автономном режиме. Обновите страницу, чтобы попытаться исправить это."
+            "heading": "Application cannot launch offline",
+            "msg": "Offline application launch is not supported by your browser. You can use the survey without this feature or see options for resolving this.",
+            "negButton": "Use it",
+            "posButton": "Show options",
+            "refresh": "This form can no longer launch offline. Please refresh the page to try to fix this."
         },
         "queuesubmissionsuccess": {
-            "msg": "__recordNames__ успешно отправлен",
-            "msg_plural": "__recordNames__ были успешно отправлены"
+            "msg": "__recordNames__ was successfully submitted",
+            "msg_plural": "__recordNames__ were successfully submitted"
         },
         "recordloadsuccess": {
-            "msg": "__recordName__ загружена"
+            "msg": "__recordName__ has been loaded"
         },
         "recordnotfound": {
-            "msg": "Запись не может быть восстановлена ​​или не содержит данных."
+            "msg": "Record could not be retrieved or contained no data."
         },
         "recordsavesuccess": {
-            "draftmsg": "Запись сохраняется как черновик.",
-            "finalmsg": "Очередь для отправки записана."
+            "draftmsg": "Record stored as draft.",
+            "finalmsg": "Record queued for submission."
         },
         "savedraftinfo": {
-            "heading": "Завершить запись позже",
+            "heading": "Finalize record later",
             "msg": [
-                "Запись черновика хранится только в текущем браузере. Вы можете закрыть этот браузер без потери сохраненной записи.",
-                "Доступ к черновикам записей можно получить, повторно открыв эту страницу и нажав кнопку в левой части экрана, которая выглядит следующим образом: __icon__",
-                "Предупреждение. Если вы очистите кеш браузера, все черновики и неотправленные записи будут окончательно удалены без возможности восстановления."
+                "The draft record is stored only within the current browser. You can close this browser without losing the stored record.",
+                "Draft records can be accessed by reopening this page and clicking the button on the left of the screen that looks like this: __icon__",
+                "Warning: If you clear your browser cache, all draft and unsubmitted final records will be permanently deleted."
             ]
         },
         "submission": {
-            "msg": "Добавляю ...",
-            "redirectmsg": "Вы будете автоматически перенаправлены после отправки."
+            "msg": "Submitting...",
+            "redirectmsg": "You will be automatically redirected after submission."
         },
         "submissionerror": {
-            "authrequiredmsg": "Необходима аутентификация. Пройдите идентификацию __here__ на другой вкладке браузера и повторите попытку.",
+            "authrequiredmsg": "Authentication required. Please authenticate __here__ in a different browser tab and try again.",
             "fnfmsg": [
-                "Не удалось получить следующие файлы мультимедиа: __failedFiles__. Представление успешно продолжилось без этих файлов.",
-                "Пожалуйста, свяжитесь с __supportEmail__, чтобы сообщить об ошибке, если возможно объясните как повторить действия приведшие к ошибке."
+                "The following media files could not be retrieved: __failedFiles__. The submission went ahead without these files and this succeeded.",
+                "Please contact __supportEmail__ to report a bug and if possible explain how the issue can be reproduced."
             ],
-            "heading": "Ошибка отправки"
+            "heading": "Submission Failed"
         },
         "submissionsuccess": {
-            "heading": "Отправка прошла успешно",
-            "msg": "Ваши данные были отправлены!",
-            "redirectmsg": "Вы будете перенаправлены."
+            "heading": "Submission Successful",
+            "msg": "Your data was submitted!",
+            "redirectmsg": "You will now be redirected."
         },
         "thanks": {
-            "heading": "Спасибо за участие!",
-            "msg": "Вы можете закрыть это окно сейчас.",
-            "msgTaken": "Вы уже завершили этот опрос."
+            "heading": "Thank you for participating!",
+            "msg": "You can close this window now.",
+            "msgTaken": "You have already completed this survey."
         },
         "validationerror": {
-            "msg": "Форма содержит ошибки. Проверьте поля отмеченные красным цветом."
+            "msg": "Form contains errors. Please see fields marked in red."
         },
         "validationsuccess": {
-            "heading": "ОК",
-            "msg": "Форма без ошибок!"
+            "heading": "OK",
+            "msg": "Form is valid!"
         },
         "valuehasspaces": {
-            "multiple": "Выбор нескольких вопросов имеет недопустимое значение \"__value__\", которое содержит пробел."
+            "multiple": "Select multiple question has an illegal value \"__value__\" that contains a space."
         },
         "xpatherror": {
-            "heading": "Ошибка в формуле",
-            "msg": "Произошла ошибка вычисления формулы. Пожалуйста, свяжитесь с __emailLink__ по этой ошибке:"
+            "heading": "Formula Error",
+            "msg": "A formula evaluation error occurred. Please contact __emailLink__ with this error:"
         }
     },
-    "changelog": "Журнал изменений",
+    "audioRecording": {
+        "error": {
+            "accessDenied": "Microphone access denied by user.",
+            "noMicrophone": "No microphone found on this device.",
+            "notSupported": "Audio recording is not supported in this browser.",
+            "unknownError": "Failed to access microphone. Check your browser settings and permissions.",
+            "recordingError": "An error occurred while trying to record audio.",
+            "recordingInProgress": "The current audio recording needs to be stopped before continuing.",
+            "invalidAudioFile": {
+                "msg": "The selected file is not a valid audio file and cannot be played.",
+                "heading": "Invalid Audio File"
+            }
+        },
+        "startRecording": "Start Recording",
+        "uploadAudioFile": "Upload audio File",
+        "deleteWarning": "The audio will be deleted. Are you sure you want to do this?",
+        "backgroundDisclaimer": {
+            "heading": "Background Audio Recording",
+            "msg": [
+                "This form records the audio from your device's microphone.",
+                "You can use the volume indicator to make sure the microphone is close enough to the sound you need to record.",
+                "To stop the recording please exit this form.",
+                "For more information please contact the person who asked you to collect data."
+            ],
+            "buttonText": "Ok, start Recording"
+        },
+        "hasRecordedAudio": "This submission has a background audio recording."
+    },
+    "changelog": "Change Log",
     "confirm": {
         "autosaveload": {
-            "heading": "Найдены не сохраненные изменения",
-            "msg": "Enketo нашла несохраненную запись. Вы хотите загрузить эту запись или отказаться от нее?",
-            "negButton": "Отказаться",
-            "posButton": "Загрузка записи"
+            "heading": "Unsaved Record Found",
+            "msg": "Enketo has found an unsaved record. Would you like to load this record or discard it?",
+            "negButton": "Discard",
+            "posButton": "Load Record"
         },
         "default": {
-            "heading": "Вы уверены?",
-            "msg": "Подтвердите действия",
-            "negButton": "Отменить",
-            "posButton": "Подтвердить"
+            "heading": "Are you sure?",
+            "msg": "Please confirm this action",
+            "negButton": "Cancel",
+            "posButton": "Confirm"
         },
         "deleteall": {
-            "heading": "ПАНИКА!",
+            "heading": "PANIC!",
             "msg": [
-                "Это приведет к удалению всех ваших данных в очереди и всех ваших форм из хранилища браузера. Данные будут потеряны навсегда. Используйте это только в крайнем случае, если хранилище браузера кажется поврежденным.",
-                "Сначала закройте все вкладки Enketo.",
-                "Страница перезагрузится. Если вы видите ошибку, возможно, вам придется повторить это действие.",
-                "Вы уверены, что хотите это сделать?"
+                "This will remove all your queued data and all your forms from the browser storage. Data will be lost forever. Use this only as a last resort if the browser storage seems corrupt.",
+                "Close all other Enketo browser tabs first.",
+                "The page will reload. If you see an error you may have to repeat this action.",
+                "Are you sure you want to do this?"
             ],
-            "posButton": "Удалить всё"
+            "posButton": "Delete All"
         },
         "discardcurrent": {
-            "heading": "Незавершенные изменения",
-            "msg": "Текущая форма имеет несохраненные изменения. Вы хотите загрузить запись без сохранения изменений в форме над которой вы работали?",
-            "posButton": "Продолжить без сохранения"
+            "heading": "Unsaved edits",
+            "msg": "The current form has unsaved changes. Would you like to load a record without saving changes to the form you were working on?",
+            "posButton": "Proceed without saving"
         },
         "login": {
-            "heading": "Требуется логин",
+            "heading": "Login Required",
             "queuedMsg": [
-                "Запись в очереди для отправки. Чтобы отправить данные в очереди, вам необходимо войти в систему.",
-                "Вы хотите войти в систему сейчас или позже?"
+                "Record queued for submission. In order to submit your queued data, you need to login.",
+                "Would you like to login now or later?"
             ],
             "msg": [
-                "Чтобы отправить ваши данные в очередь, вам необходимо войти в систему. Если вы хотите сделать это сейчас, вы будете перенаправлены и потеряете несохраненную информацию.",
-                "Вы хотите войти в систему сейчас или позже?"
+                "In order to submit your queued data, you need to login. If you want to do this now, you will be redirected, and lose unsaved information.",
+                "Would you like to login now or later?"
             ],
-            "negButton": "Позже",
-            "posButton": "Войдите в систему"
+            "negButton": "Later",
+            "posButton": "Log in now"
         },
         "print": {
-            "a4": "А4",
-            "heading": "Выберите Настройки печати",
-            "landscape": "Ландшафт",
+            "a4": "A4",
+            "heading": "Select Print Settings",
+            "landscape": "Landscape",
             "letter": "Letter",
-            "msg": "Чтобы настроить оптимизированную печать, выберите параметры настройки печати ниже",
-            "orientation": "Ориентация бумаги",
-            "portrait": "Портрет",
-            "posButton": "Подготовить",
-            "psize": "Размер бумаги",
-            "reminder": "Не забудьте установить эти же самые параметры печати в настройках печати браузера!"
+            "msg": "To prepare an optimized print, please select the print settings below",
+            "orientation": "Paper Orientation",
+            "portrait": "Portrait",
+            "posButton": "Prepare",
+            "psize": "Paper Size",
+            "reminder": "Remember to set these same print settings in the browser's print menu afterwards!"
         },
         "repeatremove": {
-            "heading": "Удалить эту группу ответов?",
-            "msg": "Это действие необратимо. Вы уверены, что хотите продолжить?"
+            "heading": "Delete this group of responses?",
+            "msg": "This action is irreversible. Are you sure you want to proceed?"
         },
         "save": {
-            "existingerror": "Это имя записи или ID уже существует. Пожалуйста, измените значения.",
-            "hint": "Это имя позволяет вам легко найти черновик, чтобы продолжить позже.",
-            "msg": "Есть несохраненные изменения, вы хотите продолжить, не сохраняя их?",
-            "name": "Имя записи",
-            "posButton": "Сохранить и закрыть",
-            "renamemsg": "Вы действительно хотите переименовать __currentName__ в __newName__?",
-            "unkownerror": "При попытке сохранить данные произошла неизвестная ошибка."
+            "existingerror": "This record name or ID already exists. Please change it.",
+            "hint": "This name allows you to easily find your draft record to finish it later.",
+            "msg": "There are unsaved changes, would you like to continue without saving those?",
+            "name": "Record Name",
+            "posButton": "Save & Close",
+            "renamemsg": "Are you sure you want to rename __currentName__ to __newName__?",
+            "unkownerror": "An unknown error occurred when trying to save data."
         }
     },
     "constraint": {
-        "invalid": "Значение не допускается",
-        "required": "Это поле обязательно к заполнению"
+        "invalid": "Value not allowed",
+        "required": "This field is required"
     },
     "contact": {
-        "admin": "Свяжитесь с администратором исследования, пожалуйста.",
-        "support": "Свяжитесь с __supportEmail__, пожалуйста."
+        "admin": "Contact the survey administrator please.",
+        "support": "Contact __supportEmail__ please."
     },
     "drawwidget": {
-        "annotation": "файл и рисунок",
-        "drawing": "рисование",
-        "signature": "подпись"
+        "annotation": "file and drawing",
+        "drawing": "drawing",
+        "signature": "signature"
     },
     "enketo": {
         "power": "Powered by"
     },
     "error": {
-        "code": "Код ошибки: __code__",
-        "dataloadfailed": "Ошибка загрузки __filename__.",
-        "econnrefused": "Не удалось подключиться к серверу форм",
-        "encryptionnotsupported": "Эта форма требует локального шифрования записей. К сожалению, это не поддерживается вашим браузером. Мы рекомендуем перейти на современный браузер.",
-        "formloadfailed": "Ошибка загрузки формы",
-        "instancenotfound": "Запись отсутствует. Возможно срок истек.",
-        "invalidediturl": "Недействительный адрес для редактирования",
-        "loadfailed": "Ошибка загрузки __resource__",
-        "notfoundinformlist": "Эта форма не существует или у вас больше нет доступа к ней. Пожалуйста, проверьте URL адрес на правильность написания.\n\nЕсли форма существовала ранее, она могла быть заархивирован, отключена или удалена. Если это вам необходимо эта форма, пожалуйста, свяжитесь с человеком, который попросил вас заполнить форму.\n\n(Попытка получить доступ к форме с ID: __formId__)",
-        "notfounddirectformurl": "Эта форма не существует или у вас больше нет доступа к ней. Пожалуйста, проверьте URL адрес на правильность написания.\n\nЕсли форма существовала ранее, она могла быть заархивирован, отключена или удалена. Если это вам необходимо эта форма, пожалуйста, свяжитесь с человеком, который попросил вас заполнить форму.\n\n(Попытка получить доступ к форме: __notfounddirectformurl__)",
-        "pagenotfound": "Страница не найдена",
-        "surveyidnotactive": "Опрос с этим идентификатором больше не активен",
-        "surveyidnotfound": "Запрос с этим ID не найден",
-        "unknown": "Произошла неизвестная ошибка"
+        "code": "Error Code: __code__",
+        "dataloadfailed": "Failed to load __filename__.",
+        "econnrefused": "Could not connect with Form Server",
+        "encryptionnotsupported": "This form requires local encryption of records. Unfortunately this is not supported by your browser. We recommend switching to a modern browser.",
+        "formloadfailed": "Failed to load form",
+        "instancenotfound": "Record not present. It may have expired.",
+        "invalidediturl": "Not a valid edit URL",
+        "loadfailed": "Failed to load __resource__",
+        "notfoundinformlist": "This form is no longer available.",
+        "pagenotfound": "Page not Found",
+        "surveyidnotactive": "Survey with this ID no longer active",
+        "surveyidnotfound": "No form found with this URL, please double check.",
+        "unknown": "An unknown error occured"
     },
     "feedback": {
-        "header": "Информация"
+        "header": "Information"
     },
     "filepicker": {
-        "file": "файл",
-        "notFound": "Не удалось найти файл __existing__ (оставить без изменений если он уже отправлен и вы хотите сохранить его).",
-        "placeholder": "Нажмите для загрузки файла. (<__maxSize__)",
-        "resetWarning": "Это приведет к удалению __item__. Вы уверены, что хотите это сделать?",
-        "toolargeerror": "Слишком большой файл (> __maxSize__)",
-        "waitingForPermissions": "Ожидание проверки прав пользователя."
+        "file": "file",
+        "notFound": "File __existing__ could not be found (leave unchanged if already submitted and you want to preserve it).",
+        "placeholder": "Click here to upload file. (< __maxSize__)",
+        "resetWarning": "This will remove the __item__. Are you sure you want to do this?",
+        "toolargeerror": "File too large (> __maxSize__)",
+        "waitingForPermissions": "Waiting for user permissions."
     },
     "form": {
-        "chooseLanguage": "Выберите язык",
-        "logout": "выйти",
+        "chooseLanguage": "Choose Language",
+        "logout": "log out",
         "pages": {
-            "back": "Назад",
-            "end": "Перейти к концу",
-            "next": "Следующий",
-            "return": "Вернуться в начало"
+            "back": "Back",
+            "end": "Go to End",
+            "next": "Next",
+            "return": "Return to Beginning"
         },
-        "required": "обязательный"
+        "required": "required"
     },
     "formfooter": {
         "complete": {
-            "btn": "Завершить"
+            "btn": "Complete"
         },
         "savedraft": {
-            "btn": "Сохранить черновик",
-            "label": "Сохранить как черновик"
+            "btn": "Save Draft",
+            "label": "Save as Draft"
         },
         "submit": {
-            "btn": "Отправить"
+            "btn": "Submit"
         },
         "validate": {
-            "btn": "Проверить"
+            "btn": "Validate"
         }
     },
     "geopicker": {
-        "accuracy": "точность (м)",
-        "altitude": "высота (м)",
-        "closepolygon": "закрыть многогранник",
-        "kmlcoords": "KML координаты",
-        "kmlpaste": "вставьте KML координаты здесь",
-        "latitude": "широта (x.y °)",
-        "longitude": "долгота (x.y °)",
-        "points": "точки",
-        "removePoint": "Это полностью удалит текущие координаты из списка координат и не может быть отменено. Вы уверены, что хотите это сделать?",
-        "searchPlaceholder": "поиск места или адреса",
-        "bordersintersectwarning": "Границы не могут пересекаться"
+        "accuracy": "accuracy (m)",
+        "altitude": "altitude (m)",
+        "closepolygon": "close polygon",
+        "kmlcoords": "KML coordinates",
+        "kmlpaste": "paste KML coordinates here",
+        "latitude": "latitude (x.y °)",
+        "longitude": "longitude (x.y °)",
+        "points": "points",
+        "removePoint": "This will completely remove the current geopoint from the list of geopoints and cannot be undone. Are you sure you want to do this?",
+        "searchPlaceholder": "search for place or address",
+        "bordersintersectwarning": "Borders cannot intersect"
     },
-    "here": "сдесь",
+    "here": "here",
     "hint": {
         "guidance": {
-            "details": "больше информации"
+            "details": "more details"
         }
     },
     "home": {
-        "msg": "__appTitle__ работает! Пожалуйста, обращайтесь к формам Enketo из вашей установки __serverName__."
+        "msg": "__appTitle__ is running! Please access Enketo forms from your __serverName__ installation."
     },
     "imagemap": {
-        "svgNotFound": "Изображение SVG не найдено"
+        "svgNotFound": "SVG image could not be found"
     },
     "langs": {
-        "ar": "Арабский",
-        "cs": "Чешский",
-        "de": "Немецкий",
-        "el": "Греческий",
-        "en": "Английский",
-        "es": "Испанский",
-        "fa": "Персидский",
-        "fi": "Финский",
-        "fr": "Французский",
-        "he": "Иврит",
-        "hi": "Хинди",
-        "it": "Итальянский",
-        "ka": "Грузинский",
-        "km": "Кхмерский",
-        "lo": "Лаосский",
-        "nl": "Голландский",
-        "no": "Норвежский",
-        "pa": "Панджаби",
-        "pl": "Польский",
-        "pt": "Португальский",
-        "ro": "Румынский",
-        "ru": "Русский",
-        "sk": "Словацкий ",
-        "sq": "Албанский",
-        "supported": "Поддерживаемые языки:",
-        "sv": "Шведский",
-        "sw": "Суахили",
-        "th": "Тайский",
-        "tr": "Турецкий",
-        "uk": "Украинский",
-        "vi": "Вьетнамский",
-        "zh": "Китайский"
+        "ar": "Arabic",
+        "cs": "Czech",
+        "de": "German",
+        "el": "Greek",
+        "en": "English",
+        "es": "Spanish",
+        "fa": "Persian",
+        "fi": "Finnish",
+        "fr": "French",
+        "he": "Hebrew",
+        "hi": "Hindi",
+        "it": "Italian",
+        "ka": "Georgian",
+        "km": "Khmer",
+        "lo": "Lao",
+        "nl": "Dutch",
+        "no": "Norwegian",
+        "pa": "Panjabi",
+        "pl": "Polish",
+        "pt": "Portuguese",
+        "ro": "Romanian",
+        "ru": "Russian",
+        "sk": "Slovak",
+        "sq": "Albanian",
+        "supported": "Languages supported:",
+        "sv": "Swedish",
+        "sw": "Swahili",
+        "th": "Thai",
+        "tr": "Turkish",
+        "uk": "Ukrainian",
+        "vi": "Vietnamese",
+        "zh": "Chinese"
     },
     "literacywidget": {
-        "finish": "Завершено",
-        "start": "Начать"
+        "finish": "Finish",
+        "start": "Start"
     },
     "page": {
         "modernbrowsers": {
-            "heading": "Современные браузеры",
+            "heading": "Modern Browsers",
             "ie": {
-                "heading": "Почему нет любви к устаревшим версиям Internet Explorer?",
-                "msg": "Мы понимаем что некоторые люди, особенно те, кто работает в больших бюрократиях, не имеют доступа к последним и самым быстрым браузерам. Поскольку мы знаем, насколько велика сеть с правильными инструментами, у нас есть большое сочувствие для пользователей в этой неудачной ситуации. Обычно мы пытаемся обеспечить обходные пути для поддержки некоторых устаревших браузеров для пользователей. Тем не менее, причина, по которой Enketo существует, - это наличие передовых технологий. К сожалению, пользователям старых браузеров не повезло."
+                "heading": "Why no love for those evil outdated versions of Internet Explorer?",
+                "msg": "We understand that some people, especially those working for large bureaucracies, do not have access to the latest and greatest browsers. Since we know how great the web could be with the right tools, we have great empathy for users in that unfortunate situation. Normally, we would try to provide workarounds to support some populair outdated browsers. However, the reason Enketo exists is the availability of some very fancy cutting-edge technologies. Unfortunately, users of older browsers are therefore out of luck."
             },
-            "msg1": "Ой! К сожалению, вы, вероятно, были отправлены сюда, потому что ваш браузер устарел или, возможно, отключил свои ключевые функции, используя режим \"инкогнито\".",
-            "msg2": "Если вы используете устаревший браузер, мы рекомендуем перейти на последнюю версию одного из следующих современных браузеров:"
+            "msg1": "Ouch! Sorry, you were probably sent here because your browser is outdated or perhaps it has its key features disabled by using 'private browsing' mode.",
+            "msg2": "If you are using an outdated browser, we recommend upgrading to a recent version of one of the following excellent modern browsers:"
         },
         "offline": {
-            "heading": "Не удается получить доступ к запрашиваемой странице",
-            "msg1": "Эта страница доступна только в том случае если браузер имеет подключение к Интернету и сервер доступен (если страница существует)."
+            "heading": "Cannot access requested page",
+            "msg1": "This page is only accessible when the browser has an Internet connection and the server is accessible (unless the page does not exist)."
         }
     },
     "prompt": {
         "default": {
-            "heading": "Введите значения"
+            "heading": "Enter values"
         },
         "login": {
-            "heading": "Введите на __server__ свои учетные данные",
-            "password": "Пароль",
-            "remember": "Запомнить об этом компьютере",
-            "submit": "Отправить",
-            "username": "Имя"
+            "heading": "Enter your __server__ credentials",
+            "password": "Password",
+            "remember": "Remember on this computer",
+            "submit": "Submit",
+            "username": "Username"
         }
     },
     "rankwidget": {
-        "clickstart": "Нажмите для старта",
-        "tapstart": "Нажмите для старта"
+        "clickstart": "Click to start",
+        "tapstart": "Tap to start"
     },
     "record-list": {
-        "export": "Экспорт",
-        "msg1": "Записи хранятся в вашем браузере до тех пор, пока они не будут загружены (даже если вы выключите компьютер или перейдете в автономный режим).",
-        "msg2": "Очередь записи кроме отмеченных как черновик __icon__ загружается автоматически в фоновом режиме каждые 5 минут когда веб-страница открыта и доступно интернет-соединение.",
-        "msg2-nodraft": "Новые записи загружаются автоматически, в фоновом режиме, каждые 5 минут, когда веб-страница открыта и доступно интернет-соединение.",
-        "msg3": "Чтобы принудительно загрузить в промежутках между автоматическими попытками, нажмите \"Загрузить\".",
-        "norecords": "нет записей в очереди",
-        "title": "Очередь",
-        "upload": "Загрузить"
+        "export": "Export",
+        "msg1": "Records are stored inside your browser until they have been uploaded (even if you turn off your computer or go offline).",
+        "msg2": "Queued records, except those marked as draft __icon__, are uploaded automatically, in the background, every 5 minutes when the web page is open and an Internet connection is available.",
+        "msg2-nodraft": "Queued records are uploaded automatically, in the background, every 5 minutes when the web page is open and an Internet connection is available.",
+        "msg3": "To force an upload in between automatic attempts, click Upload.",
+        "norecords": "no records queued",
+        "title": "Queue",
+        "upload": "Upload"
     },
     "selectpicker": {
-        "noneselected": "ничего не выбрано",
-        "numberselected": "__number__ выбрано"
+        "noneselected": "none selected",
+        "numberselected": "__number__ selected"
     },
     "store": {
         "error": {
-            "iosusesafari": "Ваш браузер iOS не может запускать эту форму. В iOS мы рекомендуем использовать браузер Safari.",
-            "notavailable": "Хранилище браузера недоступно, повреждено или не может быть записано. Если вы находитесь в режиме \"приватного просмотра\", перейдите в обычный режим, в противном случае переключитесь на другой браузер. (ошибка: __error__)",
-            "notsupported": "Ваш браузер не может запустить эту форму. Мы рекомендуем использовать современный браузер."
+            "iosusesafari": "Your iOS browser is not able to run this form. On iOS, we recommend using Safari.",
+            "notavailable": "Browser storage is required but is not available, is corrupted, or is not writeable. If you are in 'private browsing' mode please switch to regular mode, otherwise switch to another browser. (error: __error__)",
+            "notsupported": "Your browser is not able to run this form. We recommend using a modern browser."
         }
     },
     "submission": {
-        "http0": "Сервер недоступен или вы не подключены к Интернету.",
-        "http2xx": "Неожиданный ответ при отправке данных.",
-        "http400": "Сервер не принял данные.",
-        "http401": "Проблема аутентификации на сервере.",
-        "http403": "Не разрешено отправлять данные на этот сервер.",
-        "http404": "Служба отправки данных на сервер не найдена.",
-        "http408": "Время ожидания ответа сервера истекло.",
-        "http413": "Размер данных слишком велик.",
-        "http4xx": "Неизвестная проблема отправки данных на сервер.",
-        "http500": "Сервер для вашей формы или сервер Enketo не работает. Повторите попытку позже или свяжитесь с __supportEmail__.",
-        "http504": "Не удалось установить соединение с сервером."
+        "http0": "The server is not available or you may not be connected to the Internet.",
+        "http2xx": "Unexpected response when submitting data.",
+        "http400": "Data server did not accept data.",
+        "http401": "Authentication problem with data server.",
+        "http403": "Not allowed to post data to this data server.",
+        "http404": "Submission service on data server not found.",
+        "http408": "Data server timed out.",
+        "http413": "Data is too large.",
+        "http4xx": "Unknown submission problem on data server.",
+        "http500": "The data server for your form or the Enketo server is down. Please try again later or contact __supportEmail__.",
+        "http504": "Could not establish connection with data server."
     },
     "themes": {
-        "supported": "Поддерживаемые темы"
+        "supported": "Themes supported"
     },
-    "version": "версия:",
+    "update": {
+        "newversion": "New version available",
+        "reload": "reload to update"
+    },
+    "version": "version:",
     "widget": {
         "comment": {
-            "update": "Обновить"
+            "update": "Update"
         }
     }
 }
