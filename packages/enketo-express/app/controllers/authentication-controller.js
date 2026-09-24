@@ -94,10 +94,17 @@ function setToken(req, res) {
     const maxAge = 30 * 24 * 60 * 60 * 1000;
     const returnUrl = req.query.return_url || '';
 
+    const nowSecs = Math.floor(Date.now() / 1000);
+    const expSecs = req.body.remember
+        ? nowSecs + 30 * 24 * 60 * 60
+        : nowSecs + 24 * 60 * 60;
+
     const token = jwt.encode(
         {
             user: username,
             pass: req.body.password,
+            iat: nowSecs,
+            exp: expSecs,
         },
         req.app.get('encryption key')
     );

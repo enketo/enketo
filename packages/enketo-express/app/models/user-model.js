@@ -22,9 +22,13 @@ function getCredentials(req) {
     if (authType === 'basic') {
         const jwToken =
             req.signedCookies[req.app.get('authentication cookie name')];
-        creds = jwToken
-            ? jwt.decode(jwToken, req.app.get('encryption key'))
-            : null;
+        try {
+            creds = jwToken
+                ? jwt.decode(jwToken, req.app.get('encryption key'))
+                : null;
+        } catch (e) {
+            creds = null;
+        }
     } else if (authType === 'token') {
         const paramName = auth['query parameter'];
         if (!paramName) {
