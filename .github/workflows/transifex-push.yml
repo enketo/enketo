@@ -33,4 +33,4 @@ jobs:
         with:
             topic: 'Transifex automation'
             stream: 'Enketo'
-            content: ':warning: @*devs*, [Transifex push run #${{ github.run_number }}](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}) failed'
+            content: ':warning: [Transifex push run #${{ github.run_number }}](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}) failed'

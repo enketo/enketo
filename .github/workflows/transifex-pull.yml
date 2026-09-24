@@ -20,12 +20,15 @@ jobs:
         steps:
             - name: Checkout
               uses: actions/checkout@v7
+              with:
+                  # avoid a persisted auth header clashing with create-pull-request's own credentials
+                  persist-credentials: false
 
             - name: Pull translations
               uses: transifex/cli-action@v2
               with:
                   token: ${{ secrets.TRANSIFEX_TOKEN }}
-                  args: 'pull --all --mode reviewed'
+                  args: 'pull --all --mode reviewed --force'
 
             - name: Open pull request
               id: cpr
@@ -58,4 +61,4 @@ jobs:
         with:
             topic: 'Transifex automation'
             stream: 'Enketo'
-            content: ':warning: @*devs*, [Transifex pull run #${{ github.run_number }}](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}) failed'
+            content: ':warning: [Transifex pull run #${{ github.run_number }}](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}) failed'

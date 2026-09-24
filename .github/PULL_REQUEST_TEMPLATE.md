@@ -12,6 +12,7 @@
     - [ ] Editing submissions
     - [ ] Form preview
     - [ ] None of the above
+- [ ] no translation file other than `en` was changed (any such change will be overwritten by Transifex)
 - [ ] review thyself: read the diff and repro the preview as written
 - [ ] undraft PR & confirm that CI passes
 - [ ] request reviewers & improve according to review
