@@ -1,4 +1,4 @@
-name: Build Base Enketo in GCHR and Trigger Extra Widgets 
+name: Build Base Enketo in GCHR and Trigger Extra Widgets
 
 on:
   workflow_dispatch:
@@ -23,7 +23,7 @@ jobs:
         steps:
             - name: Check out repository
               uses: actions/checkout@v7
-              
+
             - name: Set version information
               id: sha
               run: |
@@ -102,7 +102,6 @@ jobs:
       secrets: inherit
       with:
         topic: "enketo/enketo builds"
-        stream: "Enketo"
         content: ":check: Successfully deployed! Latest [run](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})"
 
     notify-failure:
@@ -115,5 +114,4 @@ jobs:
       secrets: inherit
       with:
         topic: "enketo/enketo builds"
-        stream: "Enketo"
         content: ":warning: @*devs*, EE-extra-widgets build [run #${{ github.run_number }}](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}) failed"
