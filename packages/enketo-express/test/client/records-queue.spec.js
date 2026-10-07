@@ -749,6 +749,104 @@ describe('Records queue', () => {
                 }
             );
 
+            describe('with multiple queued records', () => {
+                /** @type {EnketoRecord} */
+                let recordC;
+
+                /** @type {string[]} */
+                let attempted;
+
+                beforeEach(() => {
+                    recordC = {
+                        ...recordA,
+                        files: [],
+                        instanceId: 'c',
+                        name: 'name C',
+                        xml: '<model><something>c</something></model>',
+                    };
+                    queue = [recordA, recordB, recordC];
+                    attempted = [];
+
+                    store.record.remove.callsFake(async (instanceId) => {
+                        queue = queue.filter(
+                            (item) => item.instanceId !== instanceId
+                        );
+                    });
+                });
+
+                /**
+                 * @param {(record: EnketoRecord) => boolean} shouldFail
+                 */
+                const failWhen = (shouldFail) => {
+                    connectionUploadQueuedRecordStub.callsFake(
+                        async (record) => {
+                            attempted.push(record.instanceId);
+
+                            if (shouldFail(record)) {
+                                throw new TypeError('Failed to fetch');
+                            }
+
+                            uploaded.push(record);
+                        }
+                    );
+                };
+
+                it('stops at the first failure and only attempts one record per retry', async () => {
+                    failWhen(() => true);
+
+                    await records.uploadQueue();
+
+                    expect(attempted).to.deep.equal([instanceIdA]);
+
+                    for await (const delay of delays.slice(0, 5)) {
+                        attempted = [];
+
+                        await timers.tickAsync(delay);
+
+                        expect(attempted.length).to.equal(1);
+                    }
+                });
+
+                it('starts each retry with the record after the last failed one, wrapping around', async () => {
+                    failWhen(() => true);
+
+                    await records.uploadQueue();
+                    await timers.tickAsync(delays[0]);
+                    await timers.tickAsync(delays[1]);
+                    await timers.tickAsync(delays[2]);
+
+                    expect(attempted).to.deep.equal([
+                        instanceIdA,
+                        instanceIdB,
+                        'c',
+                        instanceIdA,
+                    ]);
+                });
+
+                it('does not let a broken record block the rest of the queue', async () => {
+                    failWhen((record) => record.instanceId === instanceIdA);
+
+                    await records.uploadQueue();
+
+                    expect(attempted).to.deep.equal([instanceIdA]);
+
+                    attempted = [];
+                    await timers.tickAsync(delays[0]);
+
+                    expect(attempted).to.deep.equal([
+                        instanceIdB,
+                        'c',
+                        instanceIdA,
+                    ]);
+                    expect(queue).to.deep.equal([recordA]);
+
+                    attempted = [];
+                    await timers.tickAsync(delays[1]);
+
+                    expect(attempted).to.deep.equal([instanceIdA]);
+                });
+            });
+
             it('does not retry for authentication failures', async () => {
                 connectionUploadQueuedRecordStub.callsFake(() =>
                     Promise.reject(
