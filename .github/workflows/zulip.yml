@@ -12,7 +12,7 @@ on:
       stream:
         required: false
         type: string
-        default: "Dev"
+        default: "Enketo"
     secrets:
       ZULIP_API_KEY_GITHUB_ACTIONS_BOT:
         required: true
