@@ -163,6 +163,40 @@ function dataUriToBlobSync(dataURI) {
 }
 
 /**
+ * Files attached to form controls as Blobs, so that file managers can get them
+ * without decoding a (potentially huge) data URI stored in `data-cache`.
+ *
+ * @type {WeakMap<HTMLInputElement, Blob>}
+ */
+const cachedFiles = new WeakMap();
+
+/**
+ * Attaches a file to a form control, or removes it if `file` is empty.
+ *
+ * @static
+ * @param {HTMLInputElement} control - The form control
+ * @param {Blob|null} file - The file
+ */
+function setCachedFile(control, file) {
+    if (file) {
+        cachedFiles.set(control, file);
+    } else {
+        cachedFiles.delete(control);
+    }
+}
+
+/**
+ * Obtains the file attached to a form control with `setCachedFile()`.
+ *
+ * @static
+ * @param {HTMLInputElement} control - The form control
+ * @return {Blob|undefined} The file
+ */
+function getCachedFile(control) {
+    return cachedFiles.get(control);
+}
+
+/**
  * Regex matching characters that are not valid in XML 1.0.
  *
  * @see https://www.w3.org/TR/REC-xml/#charsets
@@ -296,6 +330,8 @@ export {
     isNumber,
     readCookie,
     dataUriToBlobSync,
+    setCachedFile,
+    getCachedFile,
     getPasteData,
     stripInvalidXmlCharacters,
     resizeImage,
