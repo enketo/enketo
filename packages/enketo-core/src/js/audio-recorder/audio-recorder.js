@@ -1,6 +1,6 @@
 import { t } from 'enketo/translator';
-import fixWebmDuration from 'fix-webm-duration';
 import { formatTimeMMSS } from '../format';
+import fixWebmDuration from './webm-duration';
 
 /**
  * AudioRecorder class for recording audio using the MediaRecorder API
@@ -23,6 +23,15 @@ const QualityParameters = {
         sampleRate: 8000,
     },
 };
+
+/**
+ * How often (in ms) MediaRecorder hands over the recorded data.
+ * Without a timeslice, the browser keeps the whole recording in its internal
+ * buffer until it stops, which for long recordings means tens of megabytes
+ * delivered at once. Small Blob chunks can be managed (and paged to disk)
+ * by the browser's Blob storage instead.
+ */
+const TIMESLICE_MS = 5000;
 
 class AudioRecorder {
     constructor() {
@@ -111,7 +120,7 @@ class AudioRecorder {
             this.startTime = Date.now();
         };
 
-        this.mediaRecorder.start();
+        this.mediaRecorder.start(TIMESLICE_MS);
     }
 
     /**
@@ -198,6 +207,9 @@ class AudioRecorder {
 
         const audioBlob = new Blob(this.recordedChunks, { type: mimeType });
 
+        // Release the individual chunks, the combined Blob is all that's needed.
+        this.recordedChunks = [audioBlob];
+
         // fixWebMDuration is used to ensure the duration metadata is correct
         // Without this, the generated webm file won't have the duration metadata
         return fixWebmDuration(audioBlob, this.recordingDuration);
@@ -217,6 +229,39 @@ class AudioRecorder {
      */
     isPaused() {
         return this.mediaRecorder && this.mediaRecorder.state === 'paused';
+    }
+
+    /**
+     * Checks if the recorder has an ongoing (recording or paused) recording
+     * @returns {boolean} True if recording or paused
+     */
+    isActive() {
+        return this.isRecording() || this.isPaused();
+    }
+
+    /**
+     * Stops any ongoing recording, releases the microphone and drops the recorded data.
+     * The recorder can't be used to get the recorded file afterwards.
+     * @returns {Promise<void>}
+     */
+    async dispose() {
+        if (this.isActive()) {
+            await this.stopRecording().catch((error) => {
+                console.error('Failed to stop the recording:', error);
+            });
+        }
+
+        if (this.stream) {
+            this.stream.getTracks().forEach((track) => track.stop());
+            this.stream = null;
+        }
+
+        if (this.mediaRecorder) {
+            this.mediaRecorder.ondataavailable = null;
+            this.mediaRecorder.onstart = null;
+        }
+
+        this.recordedChunks = [];
     }
 
     /**
