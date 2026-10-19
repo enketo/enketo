@@ -69,7 +69,7 @@ describe('AudioRecorder', () => {
         expect(recorder.isActive()).to.equal(false);
     });
 
-    it('collapses recorded chunks into a single blob', async () => {
+    it('combines recorded chunks into a single file', async () => {
         await recorder.startRecording();
         recorder.mediaRecorder.ondataavailable({ data: new Blob(['a']) });
         recorder.mediaRecorder.ondataavailable({ data: new Blob(['b']) });
@@ -78,11 +78,18 @@ describe('AudioRecorder', () => {
         const file = await recorder.getRecordedFile();
 
         expect(await file.text()).to.equal('ablast chunk');
-        expect(recorder.recordedChunks).to.have.length(1);
-        // Getting the file again still works
-        expect(await (await recorder.getRecordedFile()).text()).to.equal(
-            'ablast chunk'
-        );
+        expect(recorder.recordedChunks).to.have.length(0);
+        // Getting the file again returns the same file
+        expect(await recorder.getRecordedFile()).to.equal(file);
+    });
+
+    it('rejects when stopping an inactive recorder', async () => {
+        let error;
+        await recorder.stopRecording().catch((e) => {
+            error = e;
+        });
+
+        expect(error).to.be.instanceOf(Error);
     });
 
     describe('dispose()', () => {
@@ -96,6 +103,22 @@ describe('AudioRecorder', () => {
             expect(track.stop.called).to.equal(true);
             expect(recorder.stream).to.equal(null);
             expect(recorder.recordedChunks).to.deep.equal([]);
+        });
+
+        it('waits for a stop in progress so its caller still gets the file', async () => {
+            await recorder.startRecording();
+            recorder.mediaRecorder.ondataavailable({ data: new Blob(['a']) });
+
+            // The recorder is inactive right away, but the last chunk comes later
+            const file = recorder
+                .stopRecording()
+                .then(() => recorder.getRecordedFile());
+            expect(recorder.isActive()).to.equal(false);
+            await recorder.dispose();
+
+            expect(await (await file).text()).to.equal('alast chunk');
+            expect(recorder.recordedChunks).to.deep.equal([]);
+            expect(recorder.recordedFile).to.equal(null);
         });
 
         it('releases the microphone when no recording was started', async () => {

@@ -148,10 +148,11 @@ fileManager.getCurrentFiles = () => {
                 if (cachedFile) {
                     // Load file attached as Blob (e.g. background audio)
                     file = new Blob([cachedFile], { type: cachedFile.type });
-                    file.name = this.value;
                 } else if (this.dataset?.cache) {
                     // Load drawing from cache
                     file = dataUriToBlobSync(this.dataset.cache);
+                }
+                if (file) {
                     file.name = this.value;
                 }
             }

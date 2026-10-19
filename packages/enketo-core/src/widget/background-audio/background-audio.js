@@ -39,6 +39,7 @@ class BackgroundAudioWidget extends Widget {
         super(element, options);
 
         this.existingFilename = this.element.dataset.loadedFileName;
+        this.isDestroyed = false;
 
         this.audioRecorder = new AudioRecorder();
         this.audioQuality = this.element.dataset.quality || 'normal'; // Get audio quality from data attribute
@@ -93,8 +94,8 @@ class BackgroundAudioWidget extends Widget {
         // If it's an edit, we don't record again.
         if (this.existingFilename) return;
 
-        // If it's not recording, there's nothing to do.
-        if (!this.audioRecorder.isRecording()) return;
+        // If it's not recording (or paused), there's nothing to do.
+        if (!this.audioRecorder.isActive()) return;
 
         try {
             await this.audioRecorder.stopRecording();
@@ -145,6 +146,7 @@ class BackgroundAudioWidget extends Widget {
         this.isDestroyed = true;
         this.widgetElement.remove(); // Remove the widget element from the DOM
         this.stopWatchingAudioRecording();
+        this.value = null;
         // Also stops paused recordings, not only active ones
         this.audioRecorder.dispose();
     }
@@ -243,7 +245,12 @@ class BackgroundAudioWidget extends Widget {
 
                 return this.audioRecorder
                     .startRecording(this.audioQuality)
-                    .then(() => this.watchAudioRecording(timeDisplay));
+                    .then(() => {
+                        // Also check after starting, cleanup() may have run meanwhile
+                        if (!this.isDestroyed) {
+                            this.watchAudioRecording(timeDisplay);
+                        }
+                    });
             })
             .catch((error) => {
                 if (!this.isDestroyed) {

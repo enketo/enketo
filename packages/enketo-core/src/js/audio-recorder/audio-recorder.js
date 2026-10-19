@@ -37,6 +37,8 @@ class AudioRecorder {
     constructor() {
         this.mediaRecorder = null;
         this.recordedChunks = [];
+        this.recordedFile = null;
+        this.stopPromise = null;
         this.stream = null;
         this.startTime = null;
         this.recordingDuration = 0;
@@ -107,6 +109,8 @@ class AudioRecorder {
         });
 
         this.recordedChunks = [];
+        this.recordedFile = null;
+        this.stopPromise = null;
         this.startTime = Date.now();
 
         this.mediaRecorder.ondataavailable = (event) => {
@@ -157,17 +161,20 @@ class AudioRecorder {
 
     /**
      * Stops the current recording and releases the microphone
-     * @returns {Promise<void>} Promise that resolves when recording is stopped
-     * @throws {Error} When MediaRecorder is not active
+     * @returns {Promise<void>} Promise that resolves when recording is stopped,
+     * or rejects when MediaRecorder is not active
      */
-    async stopRecording() {
+    stopRecording() {
         if (!this.mediaRecorder || this.mediaRecorder.state === 'inactive') {
-            throw new Error(
-                'Cannot stop recording. MediaRecorder is not active.'
+            return Promise.reject(
+                new Error('Cannot stop recording. MediaRecorder is not active.')
             );
         }
 
-        return new Promise((resolve) => {
+        // Kept so that dispose() can wait for a stop that is in progress.
+        // It's returned as is (this method isn't async) so that callers that
+        // started the stop resume before dispose() drops the recorded data.
+        this.stopPromise = new Promise((resolve) => {
             // Store the paused state before stopping
             const wasPausedWhenStopped = this.isPaused();
 
@@ -189,6 +196,8 @@ class AudioRecorder {
             }; // Set the onstop handler
             this.mediaRecorder.stop();
         });
+
+        return this.stopPromise;
     }
 
     /**
@@ -197,6 +206,10 @@ class AudioRecorder {
      * @throws {Error} When no audio data is available
      */
     async getRecordedFile() {
+        if (this.recordedFile) {
+            return this.recordedFile;
+        }
+
         if (this.recordedChunks.length === 0) {
             throw new Error(
                 'No audio data available. Please record something first.'
@@ -207,12 +220,14 @@ class AudioRecorder {
 
         const audioBlob = new Blob(this.recordedChunks, { type: mimeType });
 
-        // Release the individual chunks, the combined Blob is all that's needed.
-        this.recordedChunks = [audioBlob];
+        // The file references the chunks' data, so the chunk list isn't needed anymore.
+        this.recordedChunks = [];
 
         // fixWebMDuration is used to ensure the duration metadata is correct
         // Without this, the generated webm file won't have the duration metadata
-        return fixWebmDuration(audioBlob, this.recordingDuration);
+        this.recordedFile = fixWebmDuration(audioBlob, this.recordingDuration);
+
+        return this.recordedFile;
     }
 
     /**
@@ -249,6 +264,10 @@ class AudioRecorder {
             await this.stopRecording().catch((error) => {
                 console.error('Failed to stop the recording:', error);
             });
+        } else if (this.stopPromise) {
+            // The recorder is already inactive while stopping, but the last
+            // data may not have been delivered yet.
+            await this.stopPromise;
         }
 
         if (this.stream) {
@@ -262,6 +281,7 @@ class AudioRecorder {
         }
 
         this.recordedChunks = [];
+        this.recordedFile = null;
     }
 
     /**

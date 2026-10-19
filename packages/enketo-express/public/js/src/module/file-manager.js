@@ -184,22 +184,24 @@ function getCurrentFiles() {
                     Promise.resolve(_processNameAndSize(input, input.files[0]))
                 );
             }
-        } else if (
-            input.value &&
-            !URL_RE.test(input.value) &&
-            (getCachedFile(input) || input.dataset?.cache)
-        ) {
+        } else if (input.value && !URL_RE.test(input.value)) {
             const cachedFile = getCachedFile(input);
-            // Load file attached as Blob (e.g. background audio), or drawing from cache
-            const blob = cachedFile
-                ? new Blob([cachedFile], { type: cachedFile.type })
-                : utils.dataUriToBlobSync(input.dataset.cache);
-            blob.name = input.value;
-            fileTasks.push(
-                new Promise((resolve) =>
-                    resolve(_processNameAndSize(input, blob))
-                )
-            );
+            let blob = null;
+            if (cachedFile) {
+                // Load file attached as Blob (e.g. background audio)
+                blob = new Blob([cachedFile], { type: cachedFile.type });
+            } else if (input.dataset?.cache) {
+                // Load drawing from cache
+                blob = utils.dataUriToBlobSync(input.dataset.cache);
+            }
+            if (blob) {
+                blob.name = input.value;
+                fileTasks.push(
+                    new Promise((resolve) =>
+                        resolve(_processNameAndSize(input, blob))
+                    )
+                );
+            }
         }
     });
 

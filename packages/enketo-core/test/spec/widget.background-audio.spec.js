@@ -88,6 +88,49 @@ describe('BackgroundAudioWidget', () => {
         expect(await file.text()).to.equal('audio');
     });
 
+    it('attaches a paused recording on submit', async () => {
+        const { widget } = await createRecordingWidget();
+        state = 'paused';
+
+        await widget.beforeSubmit();
+
+        expect(AudioRecorder.prototype.stopRecording.calledOnce).to.equal(true);
+        expect(widget.value).to.be.instanceOf(Blob);
+    });
+
+    it('releases the recorded file on cleanup', async () => {
+        const { widget } = await createRecordingWidget();
+        await widget.beforeSubmit();
+
+        widget.cleanup();
+
+        expect(widget.value).to.equal(null);
+    });
+
+    it('does not watch the recording if cleaned up while it starts', async () => {
+        let started;
+        AudioRecorder.prototype.startRecording.callsFake(
+            () =>
+                new Promise((resolve) => {
+                    started = () => {
+                        state = 'recording';
+                        resolve();
+                    };
+                })
+        );
+        const control = form.querySelector(BackgroundAudioWidget.selector);
+        const widget = new BackgroundAudioWidget(control);
+        await waitFor(() => !!started);
+
+        widget.cleanup();
+        started();
+        await Promise.resolve();
+        await Promise.resolve();
+
+        expect(window.AudioContext.called).to.equal(false);
+        expect(widget.audioContext).to.equal(undefined);
+    });
+
     it('closes the audio context when the recording is submitted', async () => {
         const { widget } = await createRecordingWidget();
 
