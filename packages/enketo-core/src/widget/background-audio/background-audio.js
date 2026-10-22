@@ -6,10 +6,17 @@ import dialog from 'enketo/dialog';
 
 /**
  * Minimum interval (in ms) between waveform redraws. Redrawing at the display
- * refresh rate for the whole (possibly hour-long) session is wasteful, ~10fps
- * looks the same for this small preview.
+ * refresh rate for the whole (possibly hour-long) session is wasteful, ~30fps
+ * looks the same for this small preview. Lower rates look jumpy, since the
+ * analyser also smooths the data less when it is read less often.
  */
-const WAVEFORM_FRAME_INTERVAL_MS = 100;
+const WAVEFORM_FRAME_INTERVAL_MS = 1000 / 30;
+
+/**
+ * Animation frames don't arrive at exact intervals. Without some tolerance, a
+ * frame arriving slightly early would be skipped, making the updates uneven.
+ */
+const FRAME_TIMING_TOLERANCE_MS = 5;
 
 /**
  * BackgroundAudioWidget that extends the Widget class to handle background audio recording.
@@ -317,7 +324,8 @@ class BackgroundAudioWidget extends Widget {
             // last update is too recent.
             if (
                 this.audioRecorder.isPaused() ||
-                time - lastFrameTime < WAVEFORM_FRAME_INTERVAL_MS
+                time - lastFrameTime <
+                    WAVEFORM_FRAME_INTERVAL_MS - FRAME_TIMING_TOLERANCE_MS
             ) {
                 return;
             }
