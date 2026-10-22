@@ -25,6 +25,8 @@ class AudioWidget extends Widget {
         const existingFilename = this.element.dataset.loadedFileName;
         this.existingFileUrl = null;
 
+        this.isDestroyed = false;
+
         this.audioRecorder = new AudioRecorder();
         this.audioQuality = this.element.dataset.quality || 'normal'; // Get audio quality from data attribute
         this.fileName = existingFilename || ''; // A filename to be used for data validation purposes
@@ -161,6 +163,7 @@ class AudioWidget extends Widget {
      * Stops any recording in progress and releases the microphone and the audio graph.
      */
     cleanup() {
+        this.isDestroyed = true;
         this.stopWatchingAudioRecording();
         this.audioRecorder.dispose();
     }
@@ -213,6 +216,13 @@ class AudioWidget extends Widget {
             // Request permissions first
             try {
                 await this.audioRecorder.requestPermissions(this.audioQuality);
+
+                // The form may have been reset while waiting for the user
+                if (this.isDestroyed) {
+                    this.audioRecorder.dispose();
+                    return;
+                }
+
                 errorMessage.classList.add('hidden');
                 this.showRecordStep();
             } catch (error) {

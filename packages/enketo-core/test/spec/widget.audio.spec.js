@@ -567,5 +567,39 @@ describe('AudioWidget', () => {
             expect(widget.animationFrameId).to.equal(null);
             await waitFor(() => state === 'inactive');
         });
+
+        it('does not start recording if cleaned up while waiting for permission', async () => {
+            let grantPermission;
+            AudioRecorder.prototype.requestPermissions.callsFake(
+                () =>
+                    new Promise((resolve) => {
+                        grantPermission = resolve;
+                    })
+            );
+            const control = form.querySelector(AudioWidget.selector);
+            const widget = new AudioWidget(control);
+            const otherButton = document.createElement('button');
+            otherButton.className = 'btn-record';
+            const otherWidget = document.createElement('div');
+            otherWidget.className = 'widget audio-widget';
+            otherWidget.innerHTML = '<div class="step-action-select"></div>';
+            otherWidget.firstChild.append(otherButton);
+            document.body.append(otherWidget);
+            const dispose = sandbox.spy(widget.audioRecorder, 'dispose');
+
+            widget.question.querySelector('.btn-record').click();
+            await waitFor(() => grantPermission);
+            widget.cleanup();
+            grantPermission();
+            await waitFor(() => dispose.calledTwice);
+
+            expect(AudioRecorder.prototype.startRecording.called).to.equal(
+                false
+            );
+            expect(window.AudioContext.called).to.equal(false);
+            // Record buttons elsewhere on the page aren't disabled
+            expect(otherButton.disabled).to.equal(false);
+            otherWidget.remove();
+        });
     });
 });
