@@ -2,7 +2,7 @@
  * Replaces file-manager in enketo-core.
  */
 
-import { getFilename } from 'enketo-core/src/js/utils';
+import { getFilename, getCachedFile } from 'enketo-core/src/js/utils';
 import store from './store';
 
 import settings from './settings';
@@ -184,19 +184,24 @@ function getCurrentFiles() {
                     Promise.resolve(_processNameAndSize(input, input.files[0]))
                 );
             }
-        } else if (
-            input.value &&
-            !URL_RE.test(input.value) &&
-            input.dataset?.cache
-        ) {
-            // Load drawing from cache
-            const blob = utils.dataUriToBlobSync(input.dataset.cache);
-            blob.name = input.value;
-            fileTasks.push(
-                new Promise((resolve) =>
-                    resolve(_processNameAndSize(input, blob))
-                )
-            );
+        } else if (input.value && !URL_RE.test(input.value)) {
+            const cachedFile = getCachedFile(input);
+            let blob = null;
+            if (cachedFile) {
+                // Load file attached as Blob (e.g. background audio)
+                blob = new Blob([cachedFile], { type: cachedFile.type });
+            } else if (input.dataset?.cache) {
+                // Load drawing from cache
+                blob = utils.dataUriToBlobSync(input.dataset.cache);
+            }
+            if (blob) {
+                blob.name = input.value;
+                fileTasks.push(
+                    new Promise((resolve) =>
+                        resolve(_processNameAndSize(input, blob))
+                    )
+                );
+            }
         }
     });
 

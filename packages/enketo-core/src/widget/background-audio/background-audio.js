@@ -1,7 +1,27 @@
 import { t } from 'enketo/translator';
 import Widget from '../../js/widget';
 import AudioRecorder from '../../js/audio-recorder/audio-recorder';
+import { setCachedFile, getCachedFile } from '../../js/utils';
 import dialog from 'enketo/dialog';
+
+/**
+ * Minimum interval (in ms) between waveform redraws. Redrawing at the display
+ * refresh rate for the whole (possibly hour-long) session is wasteful, ~30fps
+ * looks the same for this small preview. Lower rates look jumpy, since the
+ * analyser also smooths the data less when it is read less often.
+ */
+const WAVEFORM_FRAME_INTERVAL_MS = 1000 / 30;
+
+/**
+ * Animation frames don't arrive at exact intervals. Without some tolerance, a
+ * frame arriving slightly early would be skipped, making the updates uneven.
+ */
+const FRAME_TIMING_TOLERANCE_MS = 5;
+
+/**
+ * Minimum height (in px) of the waveform bars, so they remain visible in silence.
+ */
+const MIN_BAR_HEIGHT = 1;
 
 /**
  * BackgroundAudioWidget that extends the Widget class to handle background audio recording.
@@ -31,6 +51,7 @@ class BackgroundAudioWidget extends Widget {
         super(element, options);
 
         this.existingFilename = this.element.dataset.loadedFileName;
+        this.isDestroyed = false;
 
         this.audioRecorder = new AudioRecorder();
         this.audioQuality = this.element.dataset.quality || 'normal'; // Get audio quality from data attribute
@@ -85,15 +106,18 @@ class BackgroundAudioWidget extends Widget {
         // If it's an edit, we don't record again.
         if (this.existingFilename) return;
 
-        // If it's not recording, there's nothing to do.
-        if (!this.audioRecorder.isRecording()) return;
+        // If it's not recording (or paused), there's nothing to do.
+        if (!this.audioRecorder.isActive()) return;
 
         try {
             await this.audioRecorder.stopRecording();
+            this.stopWatchingAudioRecording();
             const blob = await this.audioRecorder.getRecordedFile();
-            const dataUrl = await this.getDataURL(blob);
+            // The file is kept as a Blob instead of a data URL. For long recordings
+            // a data URL is a huge string that needs to be decoded back into a Blob
+            // synchronously by the file manager, which can freeze the browser.
+            this.value = blob;
             this.originalInputValue = this.getFileName();
-            this.value = dataUrl;
         } catch (error) {
             console.error('Error preparing audio data:', error);
             throw error;
@@ -110,29 +134,33 @@ class BackgroundAudioWidget extends Widget {
     setValidationError(_message) {}
 
     /**
-     * Gets the current value of the audio widget.
+     * Gets the recorded audio file.
+     * @returns {Blob|null} The recorded audio file, if any.
      */
     get value() {
-        return this.element.dataset.cache || '';
+        return getCachedFile(this.element) || null;
     }
 
     /**
-     * Sets the value of the audio widget.
-     * @param {string} dataUrl - The data URL of the audio file.
+     * Sets the recorded audio file.
+     * @param {Blob|string|null} blob - The recorded audio file. Any non-Blob value clears it.
      */
-    set value(dataUrl) {
-        // dataset-cache is used by the filemanager to extract the file data
-        this.element.dataset.cache = dataUrl || '';
+    set value(blob) {
+        // The file manager obtains the file to submit from the cached file
+        setCachedFile(this.element, blob instanceof Blob ? blob : null);
     }
 
     /**
      * Cleans up the widget instance. This is called when the form is reset.
+     * Releases the microphone, the audio graph and the recorded data.
      */
     cleanup() {
+        this.isDestroyed = true;
         this.widgetElement.remove(); // Remove the widget element from the DOM
-        if (this.audioRecorder.isRecording()) {
-            this.audioRecorder.stopRecording(); // Stop recording if it's still active
-        }
+        this.stopWatchingAudioRecording();
+        this.value = null;
+        // Also stops paused recordings, not only active ones
+        this.audioRecorder.dispose();
     }
 
     /**
@@ -222,11 +250,24 @@ class BackgroundAudioWidget extends Widget {
                 this.audioRecorder.requestPermissions(this.audioQuality)
             )
             .then(() => {
-                this.audioRecorder.startRecording(this.audioQuality);
-                this.watchAudioRecording(timeDisplay);
+                // The form may have been reset while waiting for the user
+                if (this.isDestroyed) {
+                    return this.audioRecorder.dispose();
+                }
+
+                return this.audioRecorder
+                    .startRecording(this.audioQuality)
+                    .then(() => {
+                        // Also check after starting, cleanup() may have run meanwhile
+                        if (!this.isDestroyed) {
+                            this.watchAudioRecording(timeDisplay);
+                        }
+                    });
             })
             .catch((error) => {
-                this.showErrorView(error.message);
+                if (!this.isDestroyed) {
+                    this.showErrorView(error.message);
+                }
             });
     }
 
@@ -250,31 +291,20 @@ class BackgroundAudioWidget extends Widget {
     }
 
     /**
-     * This method retrieves the data URL of the recorded audio blob.
-     * It reads the blob as a data URL using FileReader.
-     * @returns {Promise<string|null>} - A promise that resolves to the data URL of the audio blob,
-     * or null if no audio blob is available.
-     */
-    getDataURL(blob) {
-        return new Promise((resolve) => {
-            const reader = new FileReader();
-            reader.onload = (event) => {
-                resolve(event.target.result);
-            };
-            reader.readAsDataURL(blob);
-        });
-    }
-
-    /**
      * This method watches the audio recording and updates the time display
      * and the waveform preview while recording.
      *
      * @param {HTMLElement} timeDisplay - The element to display the recording time.
      */
     watchAudioRecording(timeDisplay) {
-        const ctx = new AudioContext();
-        const source = ctx.createMediaStreamSource(this.audioRecorder.stream);
-        const analyser = ctx.createAnalyser();
+        this.stopWatchingAudioRecording();
+
+        // Keep a reference so the context (and its audio graph) can be closed
+        this.audioContext = new AudioContext();
+        const source = this.audioContext.createMediaStreamSource(
+            this.audioRecorder.stream
+        );
+        const analyser = this.audioContext.createAnalyser();
 
         source.connect(analyser);
 
@@ -284,27 +314,57 @@ class BackgroundAudioWidget extends Widget {
         // Prepare the canvas for waveform preview
         const canvasData = this.prepareCanvasPreview();
 
-        const updateRecordingInfo = () => {
-            // This function updates the recording time and plots the audio data
-            if (this.audioRecorder.isPaused()) {
-                // No update is needed if recording is paused
-                requestAnimationFrame(updateRecordingInfo);
+        let lastFrameTime = -Infinity;
+
+        const updateRecordingInfo = (time = 0) => {
+            // Stop updating once the recording has ended (stopped or cleaned up).
+            if (!this.audioRecorder.isActive()) {
+                this.stopWatchingAudioRecording();
                 return;
             }
-            timeDisplay.textContent =
+
+            this.animationFrameId = requestAnimationFrame(updateRecordingInfo);
+
+            // No update is needed if recording is paused, or if the
+            // last update is too recent.
+            if (
+                this.audioRecorder.isPaused() ||
+                time - lastFrameTime <
+                    WAVEFORM_FRAME_INTERVAL_MS - FRAME_TIMING_TOLERANCE_MS
+            ) {
+                return;
+            }
+            lastFrameTime = time;
+
+            const formattedTime =
                 this.audioRecorder.getRecordingTimeFormatted();
+            if (timeDisplay.textContent !== formattedTime) {
+                timeDisplay.textContent = formattedTime;
+            }
 
             analyser.getByteFrequencyData(data);
 
             this.plotAudioData(canvasData, data);
-
-            // Request the next animation frame to keep updating
-            // while recording is active.
-            if (this.audioRecorder.isRecording()) {
-                requestAnimationFrame(updateRecordingInfo);
-            }
         };
         updateRecordingInfo();
+    }
+
+    /**
+     * Stops updating the recording time and waveform preview, and releases
+     * the audio context used to analyse the recording.
+     */
+    stopWatchingAudioRecording() {
+        if (this.animationFrameId) {
+            cancelAnimationFrame(this.animationFrameId);
+            this.animationFrameId = null;
+        }
+
+        if (this.audioContext) {
+            this.audioContext.close().catch(() => {
+                // Ignore, the context may already be closed
+            });
+            this.audioContext = null;
+        }
     }
 
     /**
@@ -360,7 +420,10 @@ class BackgroundAudioWidget extends Widget {
         // Clear the canvas
         ctx.clearRect(0, 0, width, height);
 
-        const step = Math.floor(data.length / (width / (barWidth + barGap)));
+        const step = Math.max(
+            1,
+            Math.floor(data.length / (width / (barWidth + barGap)))
+        );
 
         for (let i = 0; i < data.length; i += step) {
             const value = data[i];
@@ -370,7 +433,12 @@ class BackgroundAudioWidget extends Widget {
 
             // Draw the vertical line for the current audio level
             if (value !== null) {
-                const val = (value / 255) * height * 0.8; // Scale value to canvas height
+                // Scale value to canvas height. Zero-length lines aren't drawn at all,
+                // so silent bars would disappear without a minimum height.
+                const val = Math.max(
+                    MIN_BAR_HEIGHT,
+                    (value / 255) * height * 0.8
+                );
                 ctx.beginPath();
                 ctx.moveTo(x + barWidth / 2, height / 2 - val / 2);
                 ctx.lineTo(x + barWidth / 2, height / 2 + val / 2);
