@@ -19,6 +19,11 @@ const WAVEFORM_FRAME_INTERVAL_MS = 1000 / 30;
 const FRAME_TIMING_TOLERANCE_MS = 5;
 
 /**
+ * Minimum height (in px) of the waveform bars, so they remain visible in silence.
+ */
+const MIN_BAR_HEIGHT = 1;
+
+/**
  * BackgroundAudioWidget that extends the Widget class to handle background audio recording.
  * It provides functionality to start recording audio that continues in the background,
  * with a visual waveform display and recording time indicator. The widget is designed
@@ -428,7 +433,12 @@ class BackgroundAudioWidget extends Widget {
 
             // Draw the vertical line for the current audio level
             if (value !== null) {
-                const val = (value / 255) * height * 0.8; // Scale value to canvas height
+                // Scale value to canvas height. Zero-length lines aren't drawn at all,
+                // so silent bars would disappear without a minimum height.
+                const val = Math.max(
+                    MIN_BAR_HEIGHT,
+                    (value / 255) * height * 0.8
+                );
                 ctx.beginPath();
                 ctx.moveTo(x + barWidth / 2, height / 2 - val / 2);
                 ctx.lineTo(x + barWidth / 2, height / 2 + val / 2);
