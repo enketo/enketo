@@ -157,6 +157,15 @@ class AudioWidget extends Widget {
     }
 
     /**
+     * Cleans up the widget instance. This is called when the form is reset.
+     * Stops any recording in progress and releases the microphone and the audio graph.
+     */
+    cleanup() {
+        this.stopWatchingAudioRecording();
+        this.audioRecorder.dispose();
+    }
+
+    /**
      * Sets the content of the audio widget.
      * This is used to update the widget's inner HTML with the provided fragment.
      *
@@ -272,6 +281,7 @@ class AudioWidget extends Widget {
 
         buttonStop.addEventListener('click', async () => {
             await this.audioRecorder.stopRecording();
+            this.stopWatchingAudioRecording();
 
             this.setValidationError(null); // Clear previous validation error
 
@@ -559,9 +569,14 @@ class AudioWidget extends Widget {
      * @param {HTMLElement} timeDisplay - The element to display the recording time.
      */
     watchAudioRecording(timeDisplay) {
-        const ctx = new AudioContext();
-        const source = ctx.createMediaStreamSource(this.audioRecorder.stream);
-        const analyser = ctx.createAnalyser();
+        this.stopWatchingAudioRecording();
+
+        // Keep a reference so the context (and its audio graph) can be closed
+        this.audioContext = new AudioContext();
+        const source = this.audioContext.createMediaStreamSource(
+            this.audioRecorder.stream
+        );
+        const analyser = this.audioContext.createAnalyser();
 
         source.connect(analyser);
 
@@ -579,7 +594,8 @@ class AudioWidget extends Widget {
             // This function updates the recording time and plots the audio data
             if (this.audioRecorder.isPaused()) {
                 // No update is needed if recording is paused
-                requestAnimationFrame(updateRecordingInfo);
+                this.animationFrameId =
+                    requestAnimationFrame(updateRecordingInfo);
                 return;
             }
             timeDisplay.textContent =
@@ -601,10 +617,29 @@ class AudioWidget extends Widget {
             // Request the next animation frame to keep updating
             // while recording is active.
             if (this.audioRecorder.isRecording()) {
-                requestAnimationFrame(updateRecordingInfo);
+                this.animationFrameId =
+                    requestAnimationFrame(updateRecordingInfo);
             }
         };
         updateRecordingInfo();
+    }
+
+    /**
+     * Stops updating the recording time and waveform preview, and releases
+     * the audio context used to analyse the recording.
+     */
+    stopWatchingAudioRecording() {
+        if (this.animationFrameId) {
+            cancelAnimationFrame(this.animationFrameId);
+            this.animationFrameId = null;
+        }
+
+        if (this.audioContext) {
+            this.audioContext.close().catch(() => {
+                // Ignore, the context may already be closed
+            });
+            this.audioContext = null;
+        }
     }
 
     /**
