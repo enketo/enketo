@@ -35,7 +35,6 @@
     },
     "devDependencies": {
         "enketo-transformer": "4.4.0",
-        "fix-webm-duration": "^1.0.6",
         "libxslt": "0.10.2"
     },
     "resolutions": {
