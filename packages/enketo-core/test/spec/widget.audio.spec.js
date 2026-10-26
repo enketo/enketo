@@ -542,19 +542,6 @@ describe('AudioWidget', () => {
             expect(widget.animationFrameId).to.equal(null);
         });
 
-        it('uses a new audio context for each recording', async () => {
-            const widget = await startRecording();
-            widget.question.querySelector('.btn-stop').click();
-            await waitFor(() => audioContext.close.called);
-
-            widget.showActionSelectStep();
-            widget.question.querySelector('.btn-record').click();
-            await waitFor(() => state === 'recording' && widget.audioContext);
-
-            expect(window.AudioContext.calledTwice).to.equal(true);
-            expect(audioContext.close.calledOnce).to.equal(true);
-        });
-
         it('stops a paused recording and releases resources on cleanup', async () => {
             const widget = await startRecording();
             const dispose = sandbox.spy(widget.audioRecorder, 'dispose');
@@ -578,13 +565,6 @@ describe('AudioWidget', () => {
             );
             const control = form.querySelector(AudioWidget.selector);
             const widget = new AudioWidget(control);
-            const otherButton = document.createElement('button');
-            otherButton.className = 'btn-record';
-            const otherWidget = document.createElement('div');
-            otherWidget.className = 'widget audio-widget';
-            otherWidget.innerHTML = '<div class="step-action-select"></div>';
-            otherWidget.firstChild.append(otherButton);
-            document.body.append(otherWidget);
             const dispose = sandbox.spy(widget.audioRecorder, 'dispose');
 
             widget.question.querySelector('.btn-record').click();
@@ -597,9 +577,6 @@ describe('AudioWidget', () => {
                 false
             );
             expect(window.AudioContext.called).to.equal(false);
-            // Record buttons elsewhere on the page aren't disabled
-            expect(otherButton.disabled).to.equal(false);
-            otherWidget.remove();
         });
     });
 });

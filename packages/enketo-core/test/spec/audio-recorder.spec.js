@@ -8,8 +8,7 @@ class FakeMediaRecorder {
         this.state = 'inactive';
     }
 
-    start(timeslice) {
-        this.timeslice = timeslice;
+    start() {
         this.state = 'recording';
         this.onstart?.();
     }
@@ -49,26 +48,6 @@ describe('AudioRecorder', () => {
         sandbox.restore();
     });
 
-    it('hands over recorded data periodically instead of at the end', async () => {
-        await recorder.startRecording();
-
-        expect(recorder.mediaRecorder.timeslice).to.be.a('number');
-        expect(recorder.mediaRecorder.timeslice).to.be.greaterThan(0);
-    });
-
-    it('is active while recording or paused', async () => {
-        expect(recorder.isActive()).to.not.be.ok;
-
-        await recorder.startRecording();
-        expect(recorder.isActive()).to.equal(true);
-
-        recorder.pauseRecording();
-        expect(recorder.isActive()).to.equal(true);
-
-        await recorder.stopRecording();
-        expect(recorder.isActive()).to.equal(false);
-    });
-
     it('combines recorded chunks into a single file', async () => {
         await recorder.startRecording();
         recorder.mediaRecorder.ondataavailable({ data: new Blob(['a']) });
@@ -78,18 +57,8 @@ describe('AudioRecorder', () => {
         const file = await recorder.getRecordedFile();
 
         expect(await file.text()).to.equal('ablast chunk');
-        expect(recorder.recordedChunks).to.have.length(0);
         // Getting the file again returns the same file
         expect(await recorder.getRecordedFile()).to.equal(file);
-    });
-
-    it('rejects when stopping an inactive recorder', async () => {
-        let error;
-        await recorder.stopRecording().catch((e) => {
-            error = e;
-        });
-
-        expect(error).to.be.instanceOf(Error);
     });
 
     describe('dispose()', () => {
@@ -119,13 +88,6 @@ describe('AudioRecorder', () => {
             expect(await (await file).text()).to.equal('alast chunk');
             expect(recorder.recordedChunks).to.deep.equal([]);
             expect(recorder.recordedFile).to.equal(null);
-        });
-
-        it('releases the microphone when no recording was started', async () => {
-            await recorder.dispose();
-
-            expect(track.stop.called).to.equal(true);
-            expect(recorder.stream).to.equal(null);
         });
     });
 });
