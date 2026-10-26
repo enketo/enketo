@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## [9.0.7] - 2026-10-26
+
+### Fixed
+
+- `digest()` hashing values with non-ASCII characters incorrectly, by updating `openrosa-xpath-evaluator` to 3.2.4 (#1608)
+- Long background audio recordings freezing the browser or being lost on submit or save, by keeping recordings as a Blob instead of a data URL, recording in 5s chunks, adding the WebM duration without reading the whole file, and releasing the audio context and microphone when done (#1616)
+
 ## [9.0.6] - 2026-08-07
 
 ### Added

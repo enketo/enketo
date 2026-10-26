@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## [3.2.4] - 2026-10-26
+
+### Fixed
+
+- `digest()` hashing values with non-ASCII characters incorrectly, by encoding the message as UTF-8 (#1608)
+
 ## [3.2.3] - 2026-06-05
 
 ### Fixed
