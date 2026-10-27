@@ -12,7 +12,7 @@
 import $ from 'jquery';
 
 import { t } from 'enketo/translator';
-import { getFilename, dataUriToBlobSync } from './utils';
+import { getFilename, dataUriToBlobSync, getCachedFile } from './utils';
 
 const fileManager = {};
 const URL_RE = /[a-zA-Z0-9+-.]+?:\/\//;
@@ -143,14 +143,18 @@ fileManager.getCurrentFiles = () => {
             let file = null;
             if (this.type === 'file') {
                 file = this.files[0]; // Why doesn't this fail for empty file inputs?
-            } else if (
-                this.value &&
-                !URL_RE.test(this.value) &&
-                this.dataset?.cache
-            ) {
-                // Load drawing from cache
-                file = dataUriToBlobSync(this.dataset.cache);
-                file.name = this.value;
+            } else if (this.value && !URL_RE.test(this.value)) {
+                const cachedFile = getCachedFile(this);
+                if (cachedFile) {
+                    // Load file attached as Blob (e.g. background audio)
+                    file = new Blob([cachedFile], { type: cachedFile.type });
+                } else if (this.dataset?.cache) {
+                    // Load drawing from cache
+                    file = dataUriToBlobSync(this.dataset.cache);
+                }
+                if (file) {
+                    file.name = this.value;
+                }
             }
             if (file && file.name) {
                 // Correct file names by adding a unique-ish postfix

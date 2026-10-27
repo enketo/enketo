@@ -1,4 +1,5 @@
 import AudioWidget from '../../src/widget/audio/audio';
+import AudioRecorder from '../../src/js/audio-recorder/audio-recorder';
 import dialog from '../../src/js/fake-dialog';
 import {
     testStaticProperties,
@@ -466,6 +467,116 @@ describe('AudioWidget', () => {
             control.type = 'file';
             widget.showActionSelectStep();
             expect(control.type).to.equal('text');
+        });
+    });
+
+    describe('recording', () => {
+        let state;
+        let audioContext;
+        let form;
+
+        beforeEach(() => {
+            state = 'inactive';
+
+            sandbox
+                .stub(AudioRecorder.prototype, 'requestPermissions')
+                .resolves();
+            sandbox
+                .stub(AudioRecorder.prototype, 'startRecording')
+                .callsFake(async () => {
+                    state = 'recording';
+                });
+            sandbox
+                .stub(AudioRecorder.prototype, 'stopRecording')
+                .callsFake(async () => {
+                    state = 'inactive';
+                });
+            sandbox
+                .stub(AudioRecorder.prototype, 'getRecordedFile')
+                .resolves(new Blob(['audio'], { type: 'audio/webm' }));
+            sandbox
+                .stub(AudioRecorder.prototype, 'isRecording')
+                .callsFake(() => state === 'recording');
+            sandbox
+                .stub(AudioRecorder.prototype, 'isPaused')
+                .callsFake(() => state === 'paused');
+
+            audioContext = {
+                createMediaStreamSource: () => ({ connect() {} }),
+                createAnalyser: () => ({
+                    frequencyBinCount: 16,
+                    getByteFrequencyData() {},
+                }),
+                close: sandbox.stub().resolves(),
+            };
+            sandbox.stub(window, 'AudioContext').returns(audioContext);
+
+            form = document
+                .createRange()
+                .createContextualFragment(FORM)
+                .querySelector('form');
+            document.body.append(form);
+        });
+
+        afterEach(() => {
+            form.remove();
+        });
+
+        const startRecording = async () => {
+            const control = form.querySelector(AudioWidget.selector);
+            const widget = new AudioWidget(control);
+            widget.question.querySelector('.btn-record').click();
+            await waitFor(() => state === 'recording' && widget.audioContext);
+
+            return widget;
+        };
+
+        it('closes the audio context when the recording is stopped', async () => {
+            const widget = await startRecording();
+
+            widget.question.querySelector('.btn-stop').click();
+            await waitFor(() => audioContext.close.called);
+
+            expect(audioContext.close.calledOnce).to.equal(true);
+            expect(widget.audioContext).to.equal(null);
+            expect(widget.animationFrameId).to.equal(null);
+        });
+
+        it('stops a paused recording and releases resources on cleanup', async () => {
+            const widget = await startRecording();
+            const dispose = sandbox.spy(widget.audioRecorder, 'dispose');
+            state = 'paused';
+
+            widget.cleanup();
+
+            expect(dispose.calledOnce).to.equal(true);
+            expect(audioContext.close.calledOnce).to.equal(true);
+            expect(widget.animationFrameId).to.equal(null);
+            await waitFor(() => state === 'inactive');
+        });
+
+        it('does not start recording if cleaned up while waiting for permission', async () => {
+            let grantPermission;
+            AudioRecorder.prototype.requestPermissions.callsFake(
+                () =>
+                    new Promise((resolve) => {
+                        grantPermission = resolve;
+                    })
+            );
+            const control = form.querySelector(AudioWidget.selector);
+            const widget = new AudioWidget(control);
+            const dispose = sandbox.spy(widget.audioRecorder, 'dispose');
+
+            widget.question.querySelector('.btn-record').click();
+            await waitFor(() => grantPermission);
+            widget.cleanup();
+            grantPermission();
+            await waitFor(() => dispose.calledTwice);
+
+            expect(AudioRecorder.prototype.startRecording.called).to.equal(
+                false
+            );
+            expect(window.AudioContext.called).to.equal(false);
         });
     });
 });

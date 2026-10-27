@@ -1,6 +1,6 @@
 import { t } from 'enketo/translator';
-import fixWebmDuration from 'fix-webm-duration';
 import { formatTimeMMSS } from '../format';
+import fixWebmDuration from './webm-duration';
 
 /**
  * AudioRecorder class for recording audio using the MediaRecorder API
@@ -24,10 +24,21 @@ const QualityParameters = {
     },
 };
 
+/**
+ * How often (in ms) MediaRecorder hands over the recorded data.
+ * Without a timeslice, the browser keeps the whole recording in its internal
+ * buffer until it stops, which for long recordings means tens of megabytes
+ * delivered at once. Small Blob chunks can be managed (and paged to disk)
+ * by the browser's Blob storage instead.
+ */
+const TIMESLICE_MS = 5000;
+
 class AudioRecorder {
     constructor() {
         this.mediaRecorder = null;
         this.recordedChunks = [];
+        this.recordedFile = null;
+        this.stopPromise = null;
         this.stream = null;
         this.startTime = null;
         this.recordingDuration = 0;
@@ -98,6 +109,8 @@ class AudioRecorder {
         });
 
         this.recordedChunks = [];
+        this.recordedFile = null;
+        this.stopPromise = null;
         this.startTime = Date.now();
 
         this.mediaRecorder.ondataavailable = (event) => {
@@ -111,7 +124,7 @@ class AudioRecorder {
             this.startTime = Date.now();
         };
 
-        this.mediaRecorder.start();
+        this.mediaRecorder.start(TIMESLICE_MS);
     }
 
     /**
@@ -148,17 +161,20 @@ class AudioRecorder {
 
     /**
      * Stops the current recording and releases the microphone
-     * @returns {Promise<void>} Promise that resolves when recording is stopped
-     * @throws {Error} When MediaRecorder is not active
+     * @returns {Promise<void>} Promise that resolves when recording is stopped,
+     * or rejects when MediaRecorder is not active
      */
-    async stopRecording() {
+    stopRecording() {
         if (!this.mediaRecorder || this.mediaRecorder.state === 'inactive') {
-            throw new Error(
-                'Cannot stop recording. MediaRecorder is not active.'
+            return Promise.reject(
+                new Error('Cannot stop recording. MediaRecorder is not active.')
             );
         }
 
-        return new Promise((resolve) => {
+        // Kept so that dispose() can wait for a stop that is in progress.
+        // It's returned as is (this method isn't async) so that callers that
+        // started the stop resume before dispose() drops the recorded data.
+        this.stopPromise = new Promise((resolve) => {
             // Store the paused state before stopping
             const wasPausedWhenStopped = this.isPaused();
 
@@ -180,6 +196,8 @@ class AudioRecorder {
             }; // Set the onstop handler
             this.mediaRecorder.stop();
         });
+
+        return this.stopPromise;
     }
 
     /**
@@ -188,6 +206,10 @@ class AudioRecorder {
      * @throws {Error} When no audio data is available
      */
     async getRecordedFile() {
+        if (this.recordedFile) {
+            return this.recordedFile;
+        }
+
         if (this.recordedChunks.length === 0) {
             throw new Error(
                 'No audio data available. Please record something first.'
@@ -198,9 +220,14 @@ class AudioRecorder {
 
         const audioBlob = new Blob(this.recordedChunks, { type: mimeType });
 
+        // The file references the chunks' data, so the chunk list isn't needed anymore.
+        this.recordedChunks = [];
+
         // fixWebMDuration is used to ensure the duration metadata is correct
         // Without this, the generated webm file won't have the duration metadata
-        return fixWebmDuration(audioBlob, this.recordingDuration);
+        this.recordedFile = fixWebmDuration(audioBlob, this.recordingDuration);
+
+        return this.recordedFile;
     }
 
     /**
@@ -217,6 +244,44 @@ class AudioRecorder {
      */
     isPaused() {
         return this.mediaRecorder && this.mediaRecorder.state === 'paused';
+    }
+
+    /**
+     * Checks if the recorder has an ongoing (recording or paused) recording
+     * @returns {boolean} True if recording or paused
+     */
+    isActive() {
+        return this.isRecording() || this.isPaused();
+    }
+
+    /**
+     * Stops any ongoing recording, releases the microphone and drops the recorded data.
+     * The recorder can't be used to get the recorded file afterwards.
+     * @returns {Promise<void>}
+     */
+    async dispose() {
+        if (this.isActive()) {
+            await this.stopRecording().catch((error) => {
+                console.error('Failed to stop the recording:', error);
+            });
+        } else if (this.stopPromise) {
+            // The recorder is already inactive while stopping, but the last
+            // data may not have been delivered yet.
+            await this.stopPromise;
+        }
+
+        if (this.stream) {
+            this.stream.getTracks().forEach((track) => track.stop());
+            this.stream = null;
+        }
+
+        if (this.mediaRecorder) {
+            this.mediaRecorder.ondataavailable = null;
+            this.mediaRecorder.onstart = null;
+        }
+
+        this.recordedChunks = [];
+        this.recordedFile = null;
     }
 
     /**
