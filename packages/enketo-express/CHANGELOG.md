@@ -3,6 +3,20 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## 7.6.5 - 2026-10-26
+
+### Changed
+
+- Error messages for missing or unavailable forms are clearer and no longer include form IDs or internal server URLs (DEV-243, #1597)
+- Offline submissions queue stops at the first failed upload and rotates the next retry, so a failing server gets one request per retry instead of one per queued submission (DEV-3062, #1615)
+
+### Fixed
+
+- URL default values (`d[...]`) being lost after the first submission in offline-capable forms (DEV-2716, #1600)
+- Re-initialized forms being auto-saved after a submission, which showed an "Unsaved Record Found" dialog for an untouched form (DEV-2717, #1601)
+- `digest()` hashing values with non-ASCII characters incorrectly (DEV-2814, #1608)
+- Long background audio recordings freezing the browser or being lost on submit or save, and audio widgets leaking memory after recording (DEV-2949, #1616)
+
 ## 7.6.4 - 2026-08-07
 
 ### Added
