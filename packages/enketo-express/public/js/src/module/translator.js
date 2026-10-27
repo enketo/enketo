@@ -37,6 +37,8 @@ const initialize = new Promise((resolve, reject) => {
             {
                 supportedLngs: settings.languagesSupported,
                 fallbackLng: 'en',
+                // Transifex sends untranslated strings as empty, fall back to English for them
+                returnEmptyString: false,
                 joinArrays: '\n',
                 backend: {
                     loadPath: LOADPATH,
