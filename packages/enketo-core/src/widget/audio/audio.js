@@ -97,6 +97,7 @@ class AudioWidget extends Widget {
             }
 
             this.updateValue(null); // Clear the current value
+            this.revokeExistingFileUrl();
             this.existingFileUrl = file; // Store the URL for playback
             this.originalInputValue = existingFileName;
             this.showPlaybackStep();
@@ -172,6 +173,10 @@ class AudioWidget extends Widget {
         this.stopWatchingAudioRecording();
         this.audioRecorder.dispose();
         this.revokePlaybackUrl();
+        this.revokeExistingFileUrl();
+        // The widget instance can stay referenced after a form reset,
+        // so drop the file too, like BackgroundAudio.cleanup() does
+        this.updateValue(null);
     }
 
     /**
@@ -183,6 +188,17 @@ class AudioWidget extends Widget {
             URL.revokeObjectURL(this.playbackUrl);
             this.playbackUrl = null;
         }
+    }
+
+    /**
+     * Releases the URL of a previously saved file. The file manager creates a new
+     * object URL for each call, so it's ours to revoke. Server URLs are left alone.
+     */
+    revokeExistingFileUrl() {
+        if (this.existingFileUrl?.startsWith('blob:')) {
+            URL.revokeObjectURL(this.existingFileUrl);
+        }
+        this.existingFileUrl = null;
     }
 
     /**
@@ -205,7 +221,7 @@ class AudioWidget extends Widget {
     showActionSelectStep() {
         this.updateValue(null);
         this.element.type = 'text'; // Will consider the input as a text for validation purposes
-        this.existingFileUrl = null; // Reset existing file URL
+        this.revokeExistingFileUrl();
 
         const stepFragment = document.createRange().createContextualFragment(
             `<div class="step-action-select">

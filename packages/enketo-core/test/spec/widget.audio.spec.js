@@ -559,6 +559,21 @@ describe('AudioWidget', () => {
 
             widget.cleanup();
             expect(widget.playbackUrl).to.equal(null);
+            expect(getCachedFile(control)).to.equal(undefined);
+            expect(widget.audioBlob).to.equal(null);
+        });
+
+        it('revokes the blob URL of a previously saved file on cleanup', () => {
+            const control = form.querySelector(AudioWidget.selector);
+            const widget = new AudioWidget(control);
+            const revoke = sandbox.spy(URL, 'revokeObjectURL');
+            const url = URL.createObjectURL(new Blob(['audio']));
+            widget.existingFileUrl = url;
+
+            widget.cleanup();
+
+            expect(revoke.calledWith(url)).to.equal(true);
+            expect(widget.existingFileUrl).to.equal(null);
         });
 
         it('stops a paused recording and releases resources on cleanup', async () => {
