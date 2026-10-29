@@ -34,7 +34,7 @@ function _isPrintView(req) {
  */
 async function getMedia(req, res, next) {
     try {
-        const hostURLOptions = mediaLib.getHostURLOptions(req);
+        const hostURLOptions = await mediaLib.getHostURLOptions(req);
         const url = await mediaLib.getHostURL(hostURLOptions);
 
         if (url == null) {

@@ -5,8 +5,9 @@
 const csrfProtection = require('csurf')({
     cookie: true,
 });
-const jwt = require('jwt-simple');
+const { EncryptJWT } = require('jose');
 const express = require('express');
+const { deriveEncryptionKey } = require('../lib/encryption');
 
 const router = express.Router();
 // var debug = require( 'debug' )( 'authentication-controller' );
@@ -88,19 +89,31 @@ function logout(req, res) {
 /**
  * @param {module:api-controller~ExpressRequest} req - HTTP request
  * @param {module:api-controller~ExpressResponse} res - HTTP response
+ * @param {Function} next - Express callback
  */
-function setToken(req, res) {
-    const username = req.body.username.trim();
-    const maxAge = 30 * 24 * 60 * 60 * 1000;
+async function setToken(req, res, next) {
     const returnUrl = req.query.return_url || '';
+    const maxAge = req.body.remember
+        ? 30 * 24 * 60 * 60 * 1000
+        : 24 * 60 * 60 * 1000;
 
-    const token = jwt.encode(
-        {
+    let username;
+    let token;
+    try {
+        username = req.body.username.trim();
+        const derivedKey = deriveEncryptionKey(req.app.get('encryption key'));
+        const expSecs = Math.floor((Date.now() + maxAge) / 1000);
+        token = await new EncryptJWT({
             user: username,
             pass: req.body.password,
-        },
-        req.app.get('encryption key')
-    );
+        })
+            .setProtectedHeader({ alg: 'dir', enc: 'A256GCM' })
+            .setIssuedAt()
+            .setExpirationTime(expSecs)
+            .encrypt(derivedKey);
+    } catch (err) {
+        return next(err);
+    }
 
     // Do not allow authentication cookies to be saved if enketo runs on http, unless 'allow insecure transport' is set to true
     // This is double because the check in login() already ensures the login screen isn't even shown.
@@ -115,18 +128,14 @@ function setToken(req, res) {
         signed: true,
         httpOnly: true,
         path: '/',
+        maxAge,
     };
 
     const uidOptions = {
         signed: true,
-        maxAge: 30 * 24 * 60 * 60 * 1000,
+        maxAge,
         path: '/',
     };
-
-    if (req.body.remember) {
-        authOptions.maxAge = maxAge;
-        uidOptions.maxAge = maxAge;
-    }
 
     // store the token in a cookie on the client
     res.cookie(req.app.get('authentication cookie name'), token, authOptions)
