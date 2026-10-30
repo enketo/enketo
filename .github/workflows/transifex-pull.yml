@@ -1,6 +1,6 @@
 name: Transifex - pull translations
 
-# Periodically pulls completed translations from Transifex and opens a PR,
+# Periodically pulls translations (reviewed or not) from Transifex and opens a PR,
 # so translation work done by the community actually lands in the repo.
 
 on:
@@ -28,7 +28,9 @@ jobs:
               uses: transifex/cli-action@v2
               with:
                   token: ${{ secrets.TRANSIFEX_TOKEN }}
-                  args: 'pull --all --mode reviewed --force'
+                  # onlytranslated: include translations that haven't been reviewed yet,
+                  # leaving untranslated strings out so they fall back to English
+                  args: 'pull --all --mode onlytranslated --force'
 
             - name: Open pull request
               id: cpr
