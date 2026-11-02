@@ -14,23 +14,39 @@
 #
 # Note that adding new widgets or themes requires Enketo Express to be rebuilt.
 
-FROM node:22.12.0-slim
+FROM node:22.12.0-slim AS builder
+WORKDIR /srv/src/enketo
 
 RUN apt-get update \
     && apt-get install -y --no-install-recommends \
         python3 \
         build-essential \
         git \
-        gettext-base
+        && rm -rf /var/lib/apt/lists/*
 
-ENV ENKETO_SRC_DIR=/srv/src/enketo
-WORKDIR ${ENKETO_SRC_DIR}
-
-COPY . ${ENKETO_SRC_DIR}
+COPY .tag.txt \
+     package.json \
+     yarn.lock \
+     ./
+COPY tools/grunt/ \
+     tools/grunt/
+COPY packages/ \
+     packages/
 
 # Install and build, leaving dev dependencies (yarn 1 has no prune)
 RUN yarn install --frozen-lockfile \
     && yarn cache clean
+
+FROM node:22.12.0-slim
+WORKDIR /srv/src/enketo
+
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends \
+        gettext-base \
+        && rm -rf /var/lib/apt/lists/*
+
+COPY --from=builder /srv/src/enketo .
+COPY . .
 
 EXPOSE 8005
 
