@@ -32,6 +32,7 @@ class AudioWidget extends Widget {
         this.audioQuality = this.element.dataset.quality || 'normal'; // Get audio quality from data attribute
         this.fileName = existingFilename || ''; // A filename to be used for data validation purposes
         this.audioBlob = null; // To store the recorded audio blob
+        this.audioPlayer = null; // The playback player, see showPlaybackStep()
 
         this.element.classList.add('hidden');
         this.element.dataset.audio = 'true'; // Indicate that this is an audio recording widget
@@ -172,11 +173,25 @@ class AudioWidget extends Widget {
         this.isDestroyed = true;
         this.stopWatchingAudioRecording();
         this.audioRecorder.dispose();
+        this.releaseAudioPlayer();
         this.revokePlaybackUrl();
         this.revokeExistingFileUrl();
         // The widget instance can stay referenced after a form reset,
         // so drop the file too, like BackgroundAudio.cleanup() does
         this.updateValue(null);
+    }
+
+    /**
+     * Stops the playback player and releases its resources. The player is not part
+     * of the form, so it isn't paused or released when the form is reset.
+     */
+    releaseAudioPlayer() {
+        if (this.audioPlayer) {
+            this.audioPlayer.pause();
+            this.audioPlayer.removeAttribute('src');
+            this.audioPlayer.load();
+            this.audioPlayer = null;
+        }
     }
 
     /**
@@ -423,7 +438,9 @@ class AudioWidget extends Widget {
         const seekBar = stepFragment.querySelector('.seek-bar');
         const progressBar = stepFragment.querySelector('.progress-bar');
 
+        this.releaseAudioPlayer();
         const audioPlayer = new Audio();
+        this.audioPlayer = audioPlayer;
 
         audioPlayer.addEventListener('loadedmetadata', () => {
             // Update the time display when metadata is loaded
