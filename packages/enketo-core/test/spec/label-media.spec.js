@@ -68,6 +68,10 @@ describe('Label media', () => {
         return form;
     };
 
+    // MutationObserver callbacks are microtasks queued when the DOM changes, so they
+    // have run once this resolves. Not timer based, so unaffected by fake timers.
+    const flushMutationObservers = () => Promise.resolve();
+
     it('does not preload media from forms transformed without a preload attribute', () => {
         const form = initForm(
             '<audio controls="controls" src="a.mp3" data-itext-id="/data/a:label"></audio>'
@@ -110,9 +114,7 @@ describe('Label media', () => {
         audio.dataset.itextId = '/data/a:label';
         form.view.html.querySelector('.question').append(audio);
 
-        await new Promise((resolve) => {
-            setTimeout(resolve);
-        });
+        await flushMutationObservers();
 
         expect(audio.preload).to.equal('none');
         expect(observer.targets.has(audio)).to.equal(true);
@@ -126,9 +128,7 @@ describe('Label media', () => {
 
         question.remove();
 
-        await new Promise((resolve) => {
-            setTimeout(resolve);
-        });
+        await flushMutationObservers();
 
         expect(observer.targets.size).to.equal(0);
     });
@@ -141,9 +141,7 @@ describe('Label media', () => {
 
         form.view.html.append(audio);
 
-        await new Promise((resolve) => {
-            setTimeout(resolve);
-        });
+        await flushMutationObservers();
 
         expect(observer.targets.has(audio)).to.equal(true);
     });
