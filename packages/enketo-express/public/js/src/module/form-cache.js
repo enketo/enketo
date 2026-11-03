@@ -396,6 +396,13 @@ function _loadMedia(survey, targetContainers) {
                     const resourceUrl = URL.createObjectURL(resource.item);
                     // add this resourceURL as the src for all elements in the group
                     elements.forEach((element) => {
+                        // Only load media on demand. Eagerly loading many media
+                        // elements at once makes some of them fail (e.g. in Safari).
+                        // Needed in addition to the XSL attribute for forms that were
+                        // cached before it was added.
+                        if (element instanceof HTMLMediaElement) {
+                            element.preload = 'none';
+                        }
                         element.src = resourceUrl;
                     });
                 }

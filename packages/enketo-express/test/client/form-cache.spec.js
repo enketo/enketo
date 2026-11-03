@@ -176,6 +176,36 @@ describe('Client Form Cache', () => {
                 .then(done, done);
         });
 
+        it('will only load media elements on demand', (done) => {
+            const audioUrl = '/path/to/source.mp3';
+
+            survey.enketoId = '25';
+            getFormPartsStubResult.form = `<form class="or"><img src="${url1}"/><audio controls="controls" src="${audioUrl}"></audio></form>`;
+
+            formCache
+                .init(survey)
+                .then((result) => {
+                    const currentForm = document.querySelector('form.or');
+                    const form = document
+                        .createRange()
+                        .createContextualFragment(result.form);
+
+                    currentForm.parentNode.replaceChild(form, currentForm);
+
+                    return formCache.updateMedia(result);
+                })
+                .then(() => {
+                    const audio = document.querySelector('form.or audio');
+                    const img = document.querySelector('form.or img');
+
+                    expect(audio.src).to.match(/^blob:/);
+                    expect(audio.preload).to.equal('none');
+                    expect(img.src).to.match(/^blob:/);
+                    expect(img.hasAttribute('preload')).to.equal(false);
+                })
+                .then(done, done);
+        });
+
         it('will populate the cache upon initialization', (done) => {
             survey.enketoId = '30';
             formCache
