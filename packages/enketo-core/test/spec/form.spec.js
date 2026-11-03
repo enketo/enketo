@@ -2180,6 +2180,59 @@ describe('Focus', () => {
     });
 });
 
+describe('Resetting the view', () => {
+    /** @type {import('sinon').SinonSandbox} */
+    let sandbox;
+
+    beforeEach(() => {
+        sandbox = sinon.createSandbox();
+    });
+
+    afterEach(() => {
+        sandbox.restore();
+        document.querySelector('form.or')?.remove();
+    });
+
+    it('releases the media players of the old view', () => {
+        const formEl = document
+            .createRange()
+            .createContextualFragment(
+                `<form class="or"><label class="question non-select"><span lang="" class="question-label active">A</span><audio controls="controls" src="a.mp3" data-itext-id="/data/a:label"></audio><video controls="controls" src="a.mp4" data-itext-id="/data/a:label"></video><input type="text" name="/data/a" data-type-xml="string"/></label></form>`
+            )
+            .querySelector('form');
+
+        document.body.append(formEl);
+
+        const form = new Form(formEl, {
+            modelStr:
+                '<model><instance><data id="media"><a/><meta><instanceID/></meta></data></instance></model>',
+        });
+
+        form.init();
+
+        const oldMedia = [...formEl.querySelectorAll('audio, video')];
+        const pauseSpies = oldMedia.map((element) =>
+            sandbox.spy(element, 'pause')
+        );
+        const loadSpies = oldMedia.map((element) =>
+            sandbox.spy(element, 'load')
+        );
+
+        const newFormEl = form.resetView();
+
+        oldMedia.forEach((element, index) => {
+            expect(element.hasAttribute('src')).to.equal(false);
+            expect(pauseSpies[index]).to.have.been.calledOnce;
+            expect(loadSpies[index]).to.have.been.calledOnce;
+        });
+
+        // The new view is unaffected.
+        newFormEl.querySelectorAll('audio, video').forEach((element) => {
+            expect(element.hasAttribute('src')).to.equal(true);
+        });
+    });
+});
+
 function mockChoiceNameForm() {
     const val = '__MOCK_MODEL_VALUE__';
 

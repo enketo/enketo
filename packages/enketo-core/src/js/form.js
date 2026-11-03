@@ -592,6 +592,14 @@ Form.prototype.resetView = function () {
     this.widgets.reset();
     this.labelMedia?.disconnect();
 
+    // Release the old view's media players. Removed media elements otherwise keep
+    // them until garbage collected, and browsers limit how many can exist at once.
+    this.view.html.querySelectorAll('audio, video').forEach((element) => {
+        element.pause();
+        element.removeAttribute('src');
+        element.load();
+    });
+
     // form language selector was moved outside of <form> so has to be separately removed
     if (this.langs.formLanguages) {
         this.langs.formLanguages.remove();
