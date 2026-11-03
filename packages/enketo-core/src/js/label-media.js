@@ -33,9 +33,15 @@ export default {
 
         this.observe(formEl);
 
-        // Media can be added later, e.g. in new repeat instances or itemsets.
+        // Media can be added or removed later, e.g. in repeat instances or itemsets.
+        // Removals are handled first, so that moved media is observed again.
         this.mutationObserver = new MutationObserver((records) => {
-            records.forEach(({ addedNodes }) => {
+            records.forEach(({ addedNodes, removedNodes }) => {
+                removedNodes.forEach((node) => {
+                    if (node.nodeType === Node.ELEMENT_NODE) {
+                        this.unobserve(node);
+                    }
+                });
                 addedNodes.forEach((node) => {
                     if (node.nodeType === Node.ELEMENT_NODE) {
                         this.observe(node);
@@ -51,13 +57,19 @@ export default {
 
     /**
      * @param {Element} container - element that is, or contains, media elements
+     * @return {Element[]} label media elements
+     */
+    getMediaElements(container) {
+        return container.matches(LABEL_MEDIA_SELECTOR)
+            ? [container]
+            : [...container.querySelectorAll(LABEL_MEDIA_SELECTOR)];
+    },
+
+    /**
+     * @param {Element} container - element that is, or contains, media elements
      */
     observe(container) {
-        const mediaElements = container.matches(LABEL_MEDIA_SELECTOR)
-            ? [container]
-            : container.querySelectorAll(LABEL_MEDIA_SELECTOR);
-
-        mediaElements.forEach((element) => {
+        this.getMediaElements(container).forEach((element) => {
             // Forms transformed before preload="none" was added to the XSL.
             if (!element.hasAttribute('preload')) {
                 element.preload = 'none';
@@ -66,6 +78,19 @@ export default {
             if (element.preload === 'none' && this.intersectionObserver) {
                 this.intersectionObserver.observe(element);
             }
+        });
+    },
+
+    /**
+     * @param {Element} container - element that is, or contains, media elements
+     */
+    unobserve(container) {
+        if (!this.intersectionObserver) {
+            return;
+        }
+
+        this.getMediaElements(container).forEach((element) => {
+            this.intersectionObserver.unobserve(element);
         });
     },
 

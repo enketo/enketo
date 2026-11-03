@@ -118,6 +118,36 @@ describe('Label media', () => {
         expect(observer.targets.has(audio)).to.equal(true);
     });
 
+    it('stops observing media that is removed', async () => {
+        const form = initForm(
+            '<audio controls="controls" preload="none" src="a.mp3" data-itext-id="/data/a:label"></audio>'
+        );
+        const question = form.view.html.querySelector('.question');
+
+        question.remove();
+
+        await new Promise((resolve) => {
+            setTimeout(resolve);
+        });
+
+        expect(observer.targets.size).to.equal(0);
+    });
+
+    it('keeps observing media that is moved', async () => {
+        const form = initForm(
+            '<audio controls="controls" preload="none" src="a.mp3" data-itext-id="/data/a:label"></audio>'
+        );
+        const audio = form.view.html.querySelector('audio');
+
+        form.view.html.append(audio);
+
+        await new Promise((resolve) => {
+            setTimeout(resolve);
+        });
+
+        expect(observer.targets.has(audio)).to.equal(true);
+    });
+
     it('stops observing when the view is reset', () => {
         const form = initForm(
             '<audio controls="controls" preload="none" src="a.mp3" data-itext-id="/data/a:label"></audio>'
