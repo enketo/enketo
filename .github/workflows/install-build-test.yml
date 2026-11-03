@@ -7,7 +7,7 @@ on: workflow_call
 
 jobs:
     changes:
-        runs-on: 'ubuntu-latest'
+        runs-on: 'ubuntu-24.04'
 
         outputs:
             root: ${{ steps.changes.outputs.root }}
@@ -39,7 +39,7 @@ jobs:
                           - 'packages/enketo-express/**'
 
     install-and-build:
-        runs-on: 'ubuntu-latest'
+        runs-on: 'ubuntu-24.04'
 
         strategy:
             matrix:
@@ -61,7 +61,7 @@ jobs:
                       ~/.cache/ms-playwright
                       node_modules
                       **/node_modules
-                  key: install-${{ matrix.node-version }}-${{ hashFiles('yarn.lock', 'examples/*/yarn.lock', 'packages/*/yarn.lock') }}
+                  key: install-ubuntu-24.04-${{ matrix.node-version }}-${{ hashFiles('yarn.lock', 'examples/*/yarn.lock', 'packages/*/yarn.lock') }}
 
             - uses: 'actions/cache@v5'
               id: cache-build
@@ -84,7 +84,7 @@ jobs:
 
     lint:
         needs: ['install-and-build', 'changes']
-        runs-on: 'ubuntu-latest'
+        runs-on: 'ubuntu-24.04'
 
         strategy:
             matrix:
@@ -106,7 +106,7 @@ jobs:
                       ~/.cache/ms-playwright
                       node_modules
                       **/node_modules
-                  key: install-${{ matrix.node-version }}-${{ hashFiles('yarn.lock', 'examples/*/yarn.lock', 'packages/*/yarn.lock') }}
+                  key: install-ubuntu-24.04-${{ matrix.node-version }}-${{ hashFiles('yarn.lock', 'examples/*/yarn.lock', 'packages/*/yarn.lock') }}
                   fail-on-cache-miss: true
 
             - uses: 'actions/cache@v5'
@@ -125,7 +125,7 @@ jobs:
     test-evaluator:
         needs: ['install-and-build', 'changes']
         if: github.event_name == 'release' || needs.changes.outputs.root == 'true' || needs.changes.outputs.evaluator == 'true'
-        runs-on: 'ubuntu-latest'
+        runs-on: 'ubuntu-24.04'
 
         strategy:
             matrix:
@@ -148,7 +148,7 @@ jobs:
                       ~/.cache/ms-playwright
                       node_modules
                       **/node_modules
-                  key: install-${{ matrix.node-version }}-${{ hashFiles('yarn.lock', 'examples/*/yarn.lock', 'packages/*/yarn.lock') }}
+                  key: install-ubuntu-24.04-${{ matrix.node-version }}-${{ hashFiles('yarn.lock', 'examples/*/yarn.lock', 'packages/*/yarn.lock') }}
                   fail-on-cache-miss: true
 
             - uses: 'actions/cache@v5'
@@ -172,7 +172,7 @@ jobs:
     test-transformer:
         needs: ['install-and-build', 'changes']
         if: github.event_name == 'release' || needs.changes.outputs.root == 'true' || needs.changes.outputs.transformer == 'true'
-        runs-on: 'ubuntu-latest'
+        runs-on: 'ubuntu-24.04'
 
         strategy:
             matrix:
@@ -206,7 +206,7 @@ jobs:
                       ~/.cache/ms-playwright
                       node_modules
                       **/node_modules
-                  key: install-${{ matrix.node-version }}-${{ hashFiles('yarn.lock', 'examples/*/yarn.lock', 'packages/*/yarn.lock') }}
+                  key: install-ubuntu-24.04-${{ matrix.node-version }}-${{ hashFiles('yarn.lock', 'examples/*/yarn.lock', 'packages/*/yarn.lock') }}
                   fail-on-cache-miss: true
 
             - uses: 'actions/cache@v5'
@@ -234,7 +234,7 @@ jobs:
     test-core:
         needs: ['install-and-build', 'changes']
         if: github.event_name == 'release' || needs.changes.outputs.root == 'true' || needs.changes.outputs.evaluator == 'true' || needs.changes.outputs.transformer == 'true' || needs.changes.outputs.core == 'true'
-        runs-on: 'ubuntu-latest'
+        runs-on: 'ubuntu-24.04'
 
         strategy:
             matrix:
@@ -258,7 +258,7 @@ jobs:
                       ~/.cache/ms-playwright
                       node_modules
                       **/node_modules
-                  key: install-${{ matrix.node-version }}-${{ hashFiles('yarn.lock', 'examples/*/yarn.lock', 'packages/*/yarn.lock') }}
+                  key: install-ubuntu-24.04-${{ matrix.node-version }}-${{ hashFiles('yarn.lock', 'examples/*/yarn.lock', 'packages/*/yarn.lock') }}
                   fail-on-cache-miss: true
 
             - uses: 'actions/cache@v5'
@@ -288,7 +288,7 @@ jobs:
     test-express:
         needs: ['install-and-build', 'changes']
         if: needs.changes.outputs.root == 'true' || needs.changes.outputs.evaluator == 'true' || needs.changes.outputs.transformer == 'true' || needs.changes.outputs.core == 'true' || needs.changes.outputs.express == 'true'
-        runs-on: 'ubuntu-latest'
+        runs-on: 'ubuntu-24.04'
 
         env:
             TEST_REDIS_MAIN_PORT: 6379
@@ -334,7 +334,7 @@ jobs:
                       ~/.cache/ms-playwright
                       node_modules
                       **/node_modules
-                  key: install-${{ matrix.node-version }}-${{ hashFiles('yarn.lock', 'examples/*/yarn.lock', 'packages/*/yarn.lock') }}
+                  key: install-ubuntu-24.04-${{ matrix.node-version }}-${{ hashFiles('yarn.lock', 'examples/*/yarn.lock', 'packages/*/yarn.lock') }}
                   fail-on-cache-miss: true
 
             - uses: 'actions/cache@v5'
