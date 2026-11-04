@@ -39,7 +39,11 @@
         },
         "formupdated": {
             "heading": "Form Updated!",
-            "msg": "A new version of this form has been downloaded. Refresh this page to load the updated version."
+            "later": "Later",
+            "msg": "A new version of this form has been downloaded. Refresh this page to load the updated version.",
+            "refresh": "Refresh",
+            "refreshwithoutsaving": "Refresh without saving",
+            "unsavedmsg": "A new version of this form has been downloaded. This form has unsaved changes. Save as a draft first to keep them."
         },
         "gotonotfound": {
             "msg": "Failed to find question \"__path__\" in form. Is the reference to this question correct?"

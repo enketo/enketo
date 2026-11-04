@@ -977,9 +977,30 @@ function postEventAsMessageToParentWindow(event) {
     }
 }
 
+/**
+ * Whether reloading now would lose responses. Autosave covers most edits,
+ * but it is skipped for records loaded from storage and for encrypted forms.
+ *
+ * @return {boolean}
+ */
+function hasUnrecoverableEdits() {
+    return Boolean(form?.editStatus && (form.recordName || form.encryptionKey));
+}
+
+/**
+ * Resolves once any in-flight autosave has finished.
+ *
+ * @return {Promise<void>}
+ */
+function whenAutoSaved() {
+    return autoSavePromise;
+}
+
 export default {
     init,
     setLogoutLinkVisibility,
     inIframe,
     postEventAsMessageToParentWindow,
+    hasUnrecoverableEdits,
+    whenAutoSaved,
 };

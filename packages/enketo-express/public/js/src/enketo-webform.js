@@ -1,4 +1,5 @@
 import { FormModel } from 'enketo-core/src/js/form-model';
+import support from 'enketo-core/src/js/support';
 import gui from './module/gui';
 import controller from './module/controller-webform';
 import settings from './module/settings';
@@ -140,11 +141,41 @@ function _setAppCacheEventHandlers() {
 
 function _setFormCacheEventHandlers(survey) {
     document.addEventListener(events.FormUpdated().type, () => {
-        gui.feedback(
-            t('alert.formupdated.msg'),
-            20,
-            t('alert.formupdated.heading')
-        );
+        if (!support.touch) {
+            // Desktop: self-dismissing feedback bar
+            // We should consider unifying this with mobile behavior in future
+            gui.feedback(
+                t('alert.formupdated.msg'),
+                20,
+                t('alert.formupdated.heading')
+            );
+
+            return;
+        }
+
+        // Mobile (incl. home-screen installs without a browser refresh button):
+        // offer to reload directly, warning if that would lose responses.
+        const unrecoverable = controller.hasUnrecoverableEdits();
+
+        gui.confirm(
+            {
+                heading: t('alert.formupdated.heading'),
+                msg: unrecoverable
+                    ? t('alert.formupdated.unsavedmsg')
+                    : t('alert.formupdated.msg'),
+            },
+            {
+                posButton: unrecoverable
+                    ? t('alert.formupdated.refreshwithoutsaving')
+                    : t('alert.formupdated.refresh'),
+                negButton: t('alert.formupdated.later'),
+            }
+        ).then(async (confirmed) => {
+            if (confirmed) {
+                await controller.whenAutoSaved();
+                location.reload();
+            }
+        });
     });
 
     return survey;
