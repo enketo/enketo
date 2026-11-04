@@ -23,7 +23,7 @@ function makeReq(options = {}) {
                 }
             },
         },
-        signedCookies: { '__enketo_': jwToken },
+        signedCookies: { __enketo_: jwToken },
         query: queryParam ? { token: queryParam } : {},
         headers: {},
     };
@@ -42,31 +42,43 @@ describe('user-model', () => {
     describe('getCredentials', () => {
         it('returns credentials from a valid JWE token', async () => {
             const token = await makeValidToken();
-            const creds = await userModel.getCredentials(makeReq({ jwToken: token }));
+            const creds = await userModel.getCredentials(
+                makeReq({ jwToken: token })
+            );
             expect(creds).to.deep.equal({ user: 'alice', pass: 'secret' });
         });
 
         it('returns null for an expired JWE token', async () => {
             const nowSecs = Math.floor(Date.now() / 1000);
-            const token = await new EncryptJWT({ user: 'alice', pass: 'secret' })
+            const token = await new EncryptJWT({
+                user: 'alice',
+                pass: 'secret',
+            })
                 .setProtectedHeader({ alg: 'dir', enc: 'A256GCM' })
                 .setIssuedAt()
                 .setExpirationTime(nowSecs - 10)
                 .encrypt(derivedKey);
 
-            const creds = await userModel.getCredentials(makeReq({ jwToken: token }));
+            const creds = await userModel.getCredentials(
+                makeReq({ jwToken: token })
+            );
             expect(creds).to.be.null;
         });
 
         it('returns null for an old signed JWT (pre-migration token)', async () => {
             // jwt-simple produces a 3-part compact JWS; jwtDecrypt expects a 5-part JWE
-            const oldToken = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyIjoiYWxpY2UiLCJwYXNzIjoic2VjcmV0In0.fakeSignature';
-            const creds = await userModel.getCredentials(makeReq({ jwToken: oldToken }));
+            const oldToken =
+                'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyIjoiYWxpY2UiLCJwYXNzIjoic2VjcmV0In0.fakeSignature';
+            const creds = await userModel.getCredentials(
+                makeReq({ jwToken: oldToken })
+            );
             expect(creds).to.be.null;
         });
 
         it('returns null when no cookie is present', async () => {
-            const creds = await userModel.getCredentials(makeReq({ jwToken: undefined }));
+            const creds = await userModel.getCredentials(
+                makeReq({ jwToken: undefined })
+            );
             expect(creds).to.be.null;
         });
 
