@@ -674,11 +674,20 @@ function _saveRecord(survey, draft, recordName, confirmed) {
  */
 let autoSavePromise = Promise.resolve();
 
+/**
+ * Whether autosave is disabled for the current record: records loaded from
+ * storage and encrypted forms are never auto-saved.
+ *
+ * @return {boolean}
+ */
+function _isAutoSaveDisabled() {
+    return Boolean(form?.recordName || form?.encryptionKey);
+}
+
 function _autoSaveRecord() {
-    // Do not auto-save a record if the record was loaded from storage,
-    // if the form has enabled encryption, or if the form is currently being
-    // reset (e.g. after a submission).
-    if (form.recordName || form.encryptionKey || _isResetting) {
+    // Do not auto-save a record if autosave is disabled for it, or if the
+    // form is currently being reset (e.g. after a submission).
+    if (_isAutoSaveDisabled() || _isResetting) {
         return autoSavePromise;
     }
 
@@ -984,7 +993,7 @@ function postEventAsMessageToParentWindow(event) {
  * @return {boolean}
  */
 function hasUnrecoverableEdits() {
-    return Boolean(form?.editStatus && (form.recordName || form.encryptionKey));
+    return Boolean(form?.editStatus && _isAutoSaveDisabled());
 }
 
 /**
