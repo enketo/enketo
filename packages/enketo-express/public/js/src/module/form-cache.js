@@ -29,6 +29,13 @@ const CACHE_UPDATE_INTERVAL = 20 * 60 * 1000;
 let hash;
 
 /**
+ * Object URLs created for form media (including the form logo).
+ *
+ * @type {string[]}
+ */
+let mediaObjectUrls = [];
+
+/**
  * @param {Survey} survey
  * @return {Promise<Survey>}
  */
@@ -301,6 +308,15 @@ function updateMaxSubmissionSize(survey) {
 }
 
 /**
+ * Revokes the object URLs created for form media (including the form logo), so their
+ * blobs can be freed. To be called when the form view is reset.
+ */
+function revokeMediaObjectUrls() {
+    mediaObjectUrls.forEach((url) => URL.revokeObjectURL(url));
+    mediaObjectUrls = [];
+}
+
+/**
  * Loads survey resources either from the store or via HTTP (and stores them).
  *
  * @param { Survey } survey - survey object
@@ -394,6 +410,7 @@ function _loadMedia(survey, targetContainers) {
                 if (resource.item) {
                     // create a resourceURL
                     const resourceUrl = URL.createObjectURL(resource.item);
+                    mediaObjectUrls.push(resourceUrl);
                     // add this resourceURL as the src for all elements in the group
                     elements.forEach((element) => {
                         element.src = resourceUrl;
@@ -537,6 +554,7 @@ export default {
     get,
     updateMaxSubmissionSize,
     updateMedia,
+    revokeMediaObjectUrls,
     remove,
     flush,
     CACHE_UPDATE_INITIAL_DELAY,

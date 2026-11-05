@@ -4,6 +4,7 @@ import AudioRecorder from '../../js/audio-recorder/audio-recorder';
 import { formatTimeMMSS } from '../../js/format';
 import dialog from 'enketo/dialog';
 import fileManager from 'enketo/file-manager';
+import { setCachedFile, getCachedFile } from '../../js/utils';
 
 /**
  * AudioWidget that extends the Widget class to handle audio recording and playback.
@@ -31,6 +32,7 @@ class AudioWidget extends Widget {
         this.audioQuality = this.element.dataset.quality || 'normal'; // Get audio quality from data attribute
         this.fileName = existingFilename || ''; // A filename to be used for data validation purposes
         this.audioBlob = null; // To store the recorded audio blob
+        this.audioPlayer = null; // The playback player, see showPlaybackStep()
 
         this.element.classList.add('hidden');
         this.element.dataset.audio = 'true'; // Indicate that this is an audio recording widget
@@ -65,9 +67,9 @@ class AudioWidget extends Widget {
                     );
                     return;
                 }
-                await this.updateValue(file); // Update the widget with the uploaded file
+                this.updateValue(file); // Update the widget with the uploaded file
                 this.fileName = this.postFixFilename(file.name); // Update the filename with a unique timestamp postfix
-                // Restore type to 'text' so getCurrentFiles() uses the data-cache blob
+                // Restore type to 'text' so getCurrentFiles() uses the cached file
                 // instead of the original files[0] reference (which would lose the postfixed name)
                 this.element.type = 'text';
                 // Set the postfixed filename in the form model so the submission XML
@@ -96,6 +98,7 @@ class AudioWidget extends Widget {
             }
 
             this.updateValue(null); // Clear the current value
+            this.revokeExistingFileUrl();
             this.existingFileUrl = file; // Store the URL for playback
             this.originalInputValue = existingFileName;
             this.showPlaybackStep();
@@ -105,25 +108,29 @@ class AudioWidget extends Widget {
         }
     }
 
-    async updateValue(audioBlob) {
+    updateValue(audioBlob) {
         this.audioBlob = audioBlob; // Update the audio blob
-        this.value = await this.getDataURL();
+        // The file is kept as a Blob instead of a data URL. For long recordings
+        // a data URL is a huge string that needs to be decoded back into a Blob
+        // synchronously by the file manager, which can freeze the browser.
+        this.value = audioBlob;
     }
 
     /**
-     * Gets the current value of the audio widget.
+     * Gets the recorded or uploaded audio file.
+     * @returns {Blob|null} The audio file, if any.
      */
     get value() {
-        return this.element.dataset.cache || '';
+        return getCachedFile(this.element) || null;
     }
 
     /**
-     * Sets the value of the audio widget.
-     * @param {string} dataUrl - The data URL of the audio file.
+     * Sets the recorded or uploaded audio file.
+     * @param {Blob|string|null} blob - The audio file. Any non-Blob value clears it.
      */
-    set value(dataUrl) {
-        // dataset-cache is used by the filemanager to extract the file data
-        this.element.dataset.cache = dataUrl || '';
+    set value(blob) {
+        // The file manager obtains the file to submit from the cached file
+        setCachedFile(this.element, blob instanceof Blob ? blob : null);
     }
 
     /**
@@ -166,6 +173,47 @@ class AudioWidget extends Widget {
         this.isDestroyed = true;
         this.stopWatchingAudioRecording();
         this.audioRecorder.dispose();
+        this.releaseAudioPlayer();
+        this.revokePlaybackUrl();
+        this.revokeExistingFileUrl();
+        // The widget instance can stay referenced after a form reset,
+        // so drop the file too, like BackgroundAudio.cleanup() does
+        this.updateValue(null);
+    }
+
+    /**
+     * Stops the playback player and releases its resources. The player is not part
+     * of the form, so it isn't paused or released when the form is reset.
+     */
+    releaseAudioPlayer() {
+        if (this.audioPlayer) {
+            this.audioPlayer.pause();
+            this.audioPlayer.removeAttribute('src');
+            this.audioPlayer.load();
+            this.audioPlayer = null;
+        }
+    }
+
+    /**
+     * Releases the object URL used to play the audio file, so the file
+     * can be garbage collected.
+     */
+    revokePlaybackUrl() {
+        if (this.playbackUrl) {
+            URL.revokeObjectURL(this.playbackUrl);
+            this.playbackUrl = null;
+        }
+    }
+
+    /**
+     * Releases the URL of a previously saved file. The file manager creates a new
+     * object URL for each call, so it's ours to revoke. Server URLs are left alone.
+     */
+    revokeExistingFileUrl() {
+        if (this.existingFileUrl?.startsWith('blob:')) {
+            URL.revokeObjectURL(this.existingFileUrl);
+        }
+        this.existingFileUrl = null;
     }
 
     /**
@@ -188,7 +236,7 @@ class AudioWidget extends Widget {
     showActionSelectStep() {
         this.updateValue(null);
         this.element.type = 'text'; // Will consider the input as a text for validation purposes
-        this.existingFileUrl = null; // Reset existing file URL
+        this.revokeExistingFileUrl();
 
         const stepFragment = document.createRange().createContextualFragment(
             `<div class="step-action-select">
@@ -298,7 +346,7 @@ class AudioWidget extends Widget {
             const blob = await this.audioRecorder.getRecordedFile(); // Store the recorded audio file
 
             this.fileName = this.getFileName(); // Get the filename for the recording
-            await this.updateValue(blob); // Update the widget with the recorded audio blob
+            this.updateValue(blob); // Update the widget with the recorded audio blob
 
             // originalInputValue needs to be set AFTER setting widget value (updateValue())
             // because it triggers enketo's record autosave
@@ -390,7 +438,9 @@ class AudioWidget extends Widget {
         const seekBar = stepFragment.querySelector('.seek-bar');
         const progressBar = stepFragment.querySelector('.progress-bar');
 
+        this.releaseAudioPlayer();
         const audioPlayer = new Audio();
+        this.audioPlayer = audioPlayer;
 
         audioPlayer.addEventListener('loadedmetadata', () => {
             // Update the time display when metadata is loaded
@@ -467,6 +517,7 @@ class AudioWidget extends Widget {
                     if (confirmed) {
                         audioPlayer.pause(); // Pause the audio if it's playing
                         URL.revokeObjectURL(audioPlayer.src); // Revoke the object URL
+                        this.playbackUrl = null;
                         audioPlayer.removeAttribute('src'); // Remove the source attribute
                         audioPlayer.load(); // Release resources
                         this.audioBlob = null; // Clear the audio blob
@@ -476,8 +527,13 @@ class AudioWidget extends Widget {
                 });
         });
 
-        audioPlayer.src =
-            this.existingFileUrl || URL.createObjectURL(this.audioBlob);
+        this.revokePlaybackUrl();
+        if (this.existingFileUrl) {
+            audioPlayer.src = this.existingFileUrl;
+        } else {
+            this.playbackUrl = URL.createObjectURL(this.audioBlob);
+            audioPlayer.src = this.playbackUrl;
+        }
 
         this.setWidgetContent(stepFragment);
     }
@@ -551,25 +607,6 @@ class AudioWidget extends Widget {
             );
             audio.src = url;
         });
-    }
-
-    /**
-     * This method retrieves the data URL of the recorded audio blob.
-     * It reads the blob as a data URL using FileReader.
-     * @returns {Promise<string|null>} - A promise that resolves to the data URL of the audio blob,
-     * or null if no audio blob is available.
-     */
-    async getDataURL() {
-        if (this.audioBlob) {
-            return new Promise((resolve) => {
-                const reader = new FileReader();
-                reader.onload = (event) => {
-                    resolve(event.target.result);
-                };
-                reader.readAsDataURL(this.audioBlob);
-            });
-        }
-        return Promise.resolve(null);
     }
 
     /**
