@@ -9,6 +9,10 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 - `digest()` hashing values with non-ASCII characters incorrectly, by encoding the message as UTF-8 (#1608)
 
+### Technical
+
+- Upgrade dependencies, and require `node-forge` 1.4.3 or later as a peer dependency (#1628)
+
 ## [3.2.3] - 2026-06-05
 
 ### Fixed

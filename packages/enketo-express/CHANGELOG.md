@@ -28,6 +28,10 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 - All label audio and video loading at once when a form opens, which could exhaust memory on iOS with many media files (#1622)
 - Media from a previous record staying in memory after a form reset or after loading a record, including the offline media object URLs (#1624)
 
+### Technical
+
+- Upgrade dependencies, including security fixes for `dompurify`, `express`, `node-forge` and `undici` (#1628)
+
 ## 7.6.4 - 2026-08-07
 
 ### Added
