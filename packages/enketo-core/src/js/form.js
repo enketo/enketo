@@ -31,6 +31,7 @@ import outputModule from './output';
 import calculationModule from './calculate';
 import requiredModule from './required';
 import readonlyModule from './readonly';
+import labelMediaModule from './label-media';
 import FormLogicError from './form-logic-error';
 import events from './event';
 import './plugins';
@@ -300,6 +301,7 @@ Form.prototype.init = function () {
     this.calc = this.addModule(calculationModule);
     this.required = this.addModule(requiredModule);
     this.readonly = this.addModule(readonlyModule);
+    this.labelMedia = this.addModule(labelMediaModule);
 
     const formEl = this.view.html;
 
@@ -383,6 +385,9 @@ Form.prototype.init = function () {
 
         // before repeats.init so that template contains role="page" when applicable
         this.pages.init();
+
+        // before repeats.init so that template media is not preloaded
+        this.labelMedia.init();
 
         const repeatPaths = Array.from(
             this.view.html.querySelectorAll('.or-repeat-info')
@@ -585,6 +590,7 @@ Form.prototype.getDataStr = function (include = {}) {
  */
 Form.prototype.resetView = function () {
     this.widgets.reset();
+    this.labelMedia?.disconnect();
 
     // form language selector was moved outside of <form> so has to be separately removed
     if (this.langs.formLanguages) {
