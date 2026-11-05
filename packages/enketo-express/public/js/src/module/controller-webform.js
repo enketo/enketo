@@ -235,6 +235,7 @@ function _resetForm(survey, options = {}) {
         )
         .then((survey) => {
             const formEl = form.resetView();
+            formCache.revokeMediaObjectUrls();
 
             form = new Form(
                 formEl,
@@ -313,6 +314,7 @@ function _loadRecord(survey, instanceId, confirmed) {
                 records.setActive(record.instanceId);
 
                 const formEl = form.resetView();
+                formCache.revokeMediaObjectUrls();
                 form = new Form(
                     formEl,
                     {

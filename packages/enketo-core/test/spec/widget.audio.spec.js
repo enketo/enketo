@@ -472,6 +472,44 @@ describe('AudioWidget', () => {
         });
     });
 
+    describe('playback player', () => {
+        const showPlayback = (widget) => {
+            widget.audioBlob = new Blob(['audio'], { type: 'audio/webm' });
+            widget.showPlaybackStep();
+
+            return widget.audioPlayer;
+        };
+
+        it('is stopped and released on cleanup', () => {
+            const { widget } = createWidget();
+            const player = showPlayback(widget);
+            const pause = sandbox.spy(player, 'pause');
+            const load = sandbox.spy(player, 'load');
+
+            expect(player.hasAttribute('src')).to.equal(true);
+
+            widget.cleanup();
+
+            expect(pause.calledOnce).to.equal(true);
+            expect(player.hasAttribute('src')).to.equal(false);
+            expect(load.calledOnce).to.equal(true);
+            expect(widget.audioPlayer).to.equal(null);
+        });
+
+        it('releases the previous player when the playback step is shown again', () => {
+            const { widget } = createWidget();
+            const previousPlayer = showPlayback(widget);
+            const pause = sandbox.spy(previousPlayer, 'pause');
+
+            const player = showPlayback(widget);
+
+            expect(player).not.to.equal(previousPlayer);
+            expect(pause.calledOnce).to.equal(true);
+            expect(previousPlayer.hasAttribute('src')).to.equal(false);
+            expect(player.hasAttribute('src')).to.equal(true);
+        });
+    });
+
     describe('recording', () => {
         let state;
         let audioContext;

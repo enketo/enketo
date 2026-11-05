@@ -176,6 +176,46 @@ describe('Client Form Cache', () => {
                 .then(done, done);
         });
 
+        it('will revoke the object URLs created for form media', (done) => {
+            survey.enketoId = '25';
+            formCache
+                .init(survey)
+                .then((result) => {
+                    const currentForm = document.querySelector('form.or');
+                    const form = document
+                        .createRange()
+                        .createContextualFragment(result.form);
+
+                    currentForm.parentNode.replaceChild(form, currentForm);
+
+                    // Only count the URLs created by this test
+                    formCache.revokeMediaObjectUrls();
+
+                    sandbox.spy(URL, 'createObjectURL');
+                    sandbox.spy(URL, 'revokeObjectURL');
+
+                    return formCache.updateMedia(result);
+                })
+                .then(() => {
+                    const createdUrls = URL.createObjectURL.returnValues;
+
+                    expect(createdUrls.length).to.be.greaterThan(0);
+                    expect(URL.revokeObjectURL).not.to.have.been.called;
+
+                    formCache.revokeMediaObjectUrls();
+
+                    expect(
+                        URL.revokeObjectURL.args.map(([url]) => url)
+                    ).to.deep.equal(createdUrls);
+
+                    // Nothing is left to release
+                    URL.revokeObjectURL.resetHistory();
+                    formCache.revokeMediaObjectUrls();
+                    expect(URL.revokeObjectURL).not.to.have.been.called;
+                })
+                .then(done, done);
+        });
+
         it('will populate the cache upon initialization', (done) => {
             survey.enketoId = '30';
             formCache
