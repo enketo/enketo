@@ -3,6 +3,16 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## [4.4.1] - 2026-10-26
+
+### Fixed
+
+- Add `preload="none"` to label audio and video in `openrosa2html5form.xsl`, so `enketo-core` only loads label media when it becomes visible (#1622)
+
+### Technical
+
+- Upgrade dependencies, including `undici` 6.29.1 for security fixes (#1628)
+
 ## [4.4.0] - 2026-08-07
 
 ### Added
