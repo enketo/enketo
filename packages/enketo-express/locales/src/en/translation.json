@@ -43,7 +43,7 @@
             "msg": "A new version of this form has been downloaded. Refresh this page to load the updated version.",
             "refresh": "Refresh",
             "refreshwithoutsaving": "Refresh without saving",
-            "unsavedmsg": "A new version of this form has been downloaded. This form has unsaved changes. Save as a draft first to keep them."
+            "unsavedmsg": "A new version of this form has been downloaded. This form has unsaved changes that will be lost if you refresh."
         },
         "gotonotfound": {
             "msg": "Failed to find question \"__path__\" in form. Is the reference to this question correct?"
