@@ -3,6 +3,35 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## 7.6.5 - 2026-10-26
+
+### Added
+
+- Refresh button in the "form updated" dialog on touch devices, with a warning when the form has unsaved changes that a refresh would lose (#1627)
+
+### Changed
+
+- Error messages for missing or unavailable forms are clearer and no longer include form IDs or internal server URLs (#1597)
+- Offline submissions queue stops at the first failed upload and rotates the next retry, so a failing server gets one request per retry instead of one per queued submission (#1615)
+
+### Security
+
+- Authentication cookies now hold an encrypted JWT (JWE) instead of a signed one (JWS), so the server credentials in them can no longer be read. Sessions expire after 24 hours, or 30 days with "remember me". Existing sessions are invalidated by this change, so users have to log in again after upgrading (#1626)
+
+### Fixed
+
+- URL default values (`d[...]`) being lost after the first submission in offline-capable forms (#1600)
+- Re-initialized forms being auto-saved after a submission, which showed an "Unsaved Record Found" dialog for an untouched form (#1601)
+- `digest()` hashing values with non-ASCII characters incorrectly (#1608)
+- Long background audio recordings freezing the browser or being lost on submit or save, and audio widgets leaking memory after recording (#1616)
+- Regular audio widget recordings being kept as a data URL in memory (#1621)
+- All label audio and video loading at once when a form opens, which could exhaust memory on iOS with many media files (#1622)
+- Media from a previous record staying in memory after a form reset or after loading a record, including the offline media object URLs (#1624)
+
+### Technical
+
+- Upgrade dependencies, including security fixes for `dompurify`, `express`, `node-forge` and `undici` (#1628)
+
 ## 7.6.4 - 2026-08-07
 
 ### Added
