@@ -1483,7 +1483,7 @@ XSLT Stylesheet that transforms OpenRosa style (X)Forms into valid HTMl5 forms
                         </xsl:choose>
                     </xsl:when>
                     <xsl:when test="@form = 'audio'">
-                        <audio controls="controls">
+                        <audio controls="controls" preload="none">
                             <xsl:attribute name="lang">
                                 <xsl:value-of select="$lang"/>
                             </xsl:attribute>
@@ -1502,7 +1502,7 @@ XSLT Stylesheet that transforms OpenRosa style (X)Forms into valid HTMl5 forms
                         </audio>
                     </xsl:when>
                     <xsl:when test="@form = 'video'">
-                        <video controls="controls">
+                        <video controls="controls" preload="none">
                             <xsl:attribute name="lang">
                                 <xsl:value-of select="$lang"/>
                             </xsl:attribute>

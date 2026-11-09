@@ -3,6 +3,16 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## [3.2.4] - 2026-11-08
+
+### Fixed
+
+- `digest()` hashing values with non-ASCII characters incorrectly, by encoding the message as UTF-8 (#1608)
+
+### Technical
+
+- Upgrade dependencies, and require `node-forge` 1.4.3 or later as a peer dependency (#1628)
+
 ## [3.2.3] - 2026-06-05
 
 ### Fixed

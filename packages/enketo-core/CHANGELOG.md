@@ -3,6 +3,20 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## [9.0.7] - 2026-11-08
+
+### Fixed
+
+- `digest()` hashing values with non-ASCII characters incorrectly, by updating `openrosa-xpath-evaluator` to 3.2.4 (#1608)
+- Long background audio recordings freezing the browser or being lost on submit or save, by keeping recordings as a Blob instead of a data URL, recording in 5s chunks, adding the WebM duration without reading the whole file, and releasing the audio context and microphone when done (#1616)
+- Regular audio widget recordings being kept as a data URL in memory, by storing them as a Blob too (#1621)
+- All label audio and video loading at once when a form opens, which could exhaust memory on iOS with many media files. Label media now only loads when it becomes visible, and requires `enketo-transformer` 4.4.1 (#1622)
+- Media players from a previous record staying in memory after a form reset, by releasing their sources and the audio widget's playback player (#1624)
+
+### Technical
+
+- Upgrade dependencies, including `dompurify` 3.4.17 and `node-forge` 1.4.3 for security fixes (#1628)
+
 ## [9.0.6] - 2026-08-07
 
 ### Added

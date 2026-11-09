@@ -7,6 +7,7 @@ import {
     testBasicInstantiation,
 } from '../helpers/test-widget';
 import { waitFor } from '../helpers/wait-for';
+import { getCachedFile } from '../../src/js/utils';
 
 const FORM = `<form class="or">
         <label class="question">
@@ -332,24 +333,25 @@ describe('AudioWidget', () => {
     });
 
     describe('value getter / setter', () => {
-        it('returns empty string when no audio has been set', () => {
+        it('returns null when no audio has been set', () => {
             const { widget } = createWidget();
-            expect(widget.value).to.equal('');
+            expect(widget.value).to.equal(null);
         });
 
-        it('stores and retrieves a data URL via data-cache', () => {
+        it('stores the audio file as a Blob, not as a data URL', () => {
             const { widget, control } = createWidget();
-            const fakeDataUrl = 'data:audio/webm;base64,AAAA';
-            widget.value = fakeDataUrl;
-            expect(widget.value).to.equal(fakeDataUrl);
-            expect(control.dataset.cache).to.equal(fakeDataUrl);
+            const blob = new Blob(['audio'], { type: 'audio/webm' });
+            widget.value = blob;
+            expect(widget.value).to.equal(blob);
+            expect(getCachedFile(control)).to.equal(blob);
+            expect(control.dataset.cache).to.equal(undefined);
         });
 
-        it('clears data-cache when set to null/falsy', () => {
+        it('clears the audio file when set to null', () => {
             const { widget, control } = createWidget();
-            widget.value = 'data:audio/webm;base64,AAAA';
+            widget.value = new Blob(['audio'], { type: 'audio/webm' });
             widget.value = null;
-            expect(control.dataset.cache).to.equal('');
+            expect(getCachedFile(control)).to.equal(undefined);
         });
     });
 
@@ -455,10 +457,10 @@ describe('AudioWidget', () => {
         it('clears the current value', async () => {
             const { widget } = createWidget();
 
-            widget.value = 'data:audio/webm;base64,AAAA';
+            widget.value = new Blob(['audio'], { type: 'audio/webm' });
             widget.showActionSelectStep();
 
-            await waitFor(() => widget.value === '');
+            await waitFor(() => widget.value === null);
         });
 
         it('resets the input type to text', () => {
@@ -467,6 +469,44 @@ describe('AudioWidget', () => {
             control.type = 'file';
             widget.showActionSelectStep();
             expect(control.type).to.equal('text');
+        });
+    });
+
+    describe('playback player', () => {
+        const showPlayback = (widget) => {
+            widget.audioBlob = new Blob(['audio'], { type: 'audio/webm' });
+            widget.showPlaybackStep();
+
+            return widget.audioPlayer;
+        };
+
+        it('is stopped and released on cleanup', () => {
+            const { widget } = createWidget();
+            const player = showPlayback(widget);
+            const pause = sandbox.spy(player, 'pause');
+            const load = sandbox.spy(player, 'load');
+
+            expect(player.hasAttribute('src')).to.equal(true);
+
+            widget.cleanup();
+
+            expect(pause.calledOnce).to.equal(true);
+            expect(player.hasAttribute('src')).to.equal(false);
+            expect(load.calledOnce).to.equal(true);
+            expect(widget.audioPlayer).to.equal(null);
+        });
+
+        it('releases the previous player when the playback step is shown again', () => {
+            const { widget } = createWidget();
+            const previousPlayer = showPlayback(widget);
+            const pause = sandbox.spy(previousPlayer, 'pause');
+
+            const player = showPlayback(widget);
+
+            expect(player).not.to.equal(previousPlayer);
+            expect(pause.calledOnce).to.equal(true);
+            expect(previousPlayer.hasAttribute('src')).to.equal(false);
+            expect(player.hasAttribute('src')).to.equal(true);
         });
     });
 
@@ -540,6 +580,38 @@ describe('AudioWidget', () => {
             expect(audioContext.close.calledOnce).to.equal(true);
             expect(widget.audioContext).to.equal(null);
             expect(widget.animationFrameId).to.equal(null);
+        });
+
+        it('keeps the recorded file as a Blob for the file manager', async () => {
+            const widget = await startRecording();
+            const control = form.querySelector(AudioWidget.selector);
+            // The test form has no .custom-error-msg element
+            sandbox.stub(widget, 'setValidationError');
+
+            widget.question.querySelector('.btn-stop').click();
+            await waitFor(() => getCachedFile(control));
+
+            expect(getCachedFile(control)).to.be.instanceof(Blob);
+            expect(control.dataset.cache).to.equal(undefined);
+            expect(control.value).to.equal(widget.fileName);
+
+            widget.cleanup();
+            expect(widget.playbackUrl).to.equal(null);
+            expect(getCachedFile(control)).to.equal(undefined);
+            expect(widget.audioBlob).to.equal(null);
+        });
+
+        it('revokes the blob URL of a previously saved file on cleanup', () => {
+            const control = form.querySelector(AudioWidget.selector);
+            const widget = new AudioWidget(control);
+            const revoke = sandbox.spy(URL, 'revokeObjectURL');
+            const url = URL.createObjectURL(new Blob(['audio']));
+            widget.existingFileUrl = url;
+
+            widget.cleanup();
+
+            expect(revoke.calledWith(url)).to.equal(true);
+            expect(widget.existingFileUrl).to.equal(null);
         });
 
         it('stops a paused recording and releases resources on cleanup', async () => {

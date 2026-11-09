@@ -31,6 +31,7 @@ import outputModule from './output';
 import calculationModule from './calculate';
 import requiredModule from './required';
 import readonlyModule from './readonly';
+import labelMediaModule from './label-media';
 import FormLogicError from './form-logic-error';
 import events from './event';
 import './plugins';
@@ -300,6 +301,7 @@ Form.prototype.init = function () {
     this.calc = this.addModule(calculationModule);
     this.required = this.addModule(requiredModule);
     this.readonly = this.addModule(readonlyModule);
+    this.labelMedia = this.addModule(labelMediaModule);
 
     const formEl = this.view.html;
 
@@ -383,6 +385,9 @@ Form.prototype.init = function () {
 
         // before repeats.init so that template contains role="page" when applicable
         this.pages.init();
+
+        // before repeats.init so that template media is not preloaded
+        this.labelMedia.init();
 
         const repeatPaths = Array.from(
             this.view.html.querySelectorAll('.or-repeat-info')
@@ -585,6 +590,15 @@ Form.prototype.getDataStr = function (include = {}) {
  */
 Form.prototype.resetView = function () {
     this.widgets.reset();
+    this.labelMedia?.disconnect();
+
+    // Release the old view's media players. Removed media elements otherwise keep
+    // them until garbage collected, and browsers limit how many can exist at once.
+    this.view.html.querySelectorAll('audio, video').forEach((element) => {
+        element.pause();
+        element.removeAttribute('src');
+        element.load();
+    });
 
     // form language selector was moved outside of <form> so has to be separately removed
     if (this.langs.formLanguages) {
@@ -1610,6 +1624,6 @@ Form.prototype.goToTarget = function (target, options = {}) {
  * @type {string}
  * @default
  */
-Form.requiredTransformerVersion = '4.4.0';
+Form.requiredTransformerVersion = '4.4.1';
 
 export { Form, FormModel };
