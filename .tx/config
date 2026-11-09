@@ -6,7 +6,7 @@ file_filter = packages/enketo-express/locales/src/<lang>/translation.json
 source_file = packages/enketo-express/locales/src/en/translation.json
 source_lang = en
 type = KEYVALUEJSON
-minimum_perc = 0
+minimum_perc = 40
 resource_name = enketo-express-source
 keep_translations = false
 
