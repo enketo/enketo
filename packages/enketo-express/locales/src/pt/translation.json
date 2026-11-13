@@ -27,11 +27,9 @@
             "heading": "Alerta"
         },
         "export": {
-            "alternativequestion": "Download alternativo - online",
             "error": {
                 "filecreatedmsg": "Mesmo assim, foi criado um arquivo para exportação incompleto.",
                 "heading": "Erro de exportação",
-                "linknotcreated": "Falha ao criar um link de exportação para registros não enviados. Você está online?",
                 "msg": "Ocorreram erros durante a criação do arquivo de exportação de registros não enviados. Erros: __errors__"
             },
             "success": {
@@ -41,7 +39,11 @@
         },
         "formupdated": {
             "heading": "Formulário atualizado!",
-            "msg": "Foi carregada uma nova versão deste formulário. Atualize esta página para carregar a versão atualizada."
+            "later": "Mais tarde",
+            "msg": "Foi carregada uma nova versão deste formulário. Atualize esta página para carregar a versão atualizada.",
+            "refresh": "",
+            "refreshwithoutsaving": "",
+            "unsavedmsg": ""
         },
         "gotonotfound": {
             "msg": "Não foi possível encontrar a pergunta \"__path__\" no formulário. A referência a essa pergunta está correta?"
@@ -50,7 +52,7 @@
             "editadvice": "Recomenda-se não editar este registro até que isso seja resolvido.",
             "entryadvice": "Recomenda-se não usar este formulário para entrada de dados até que isso seja resolvido.",
             "heading": "Erro ao carregar",
-            "msg1": "Erro ao carregar este formulário.",
+            "msg1": "",
             "msg2": "Por favor, entre em contato com __emailLink__ com o link desta página e a mensagem de erro abaixo:",
             "heading_plural": "Erros de carregamento",
             "msg1_plural": "Ocorreram erros ao carregar este formulário.",
@@ -72,7 +74,8 @@
             "heading": "O aplicativo não pode ser iniciado offline",
             "msg": "A visualização offline do aplicativo não é possível com seu navegador. Você pode preencher o questionário sem essa funcionalidade ou explorar as opções para resolver isso.",
             "negButton": "Usá-lo",
-            "posButton": "Mostrar opções"
+            "posButton": "Mostrar opções",
+            "refresh": ""
         },
         "queuesubmissionsuccess": {
             "msg": "__recordNames__ foi enviado com sucesso",
@@ -87,6 +90,14 @@
         "recordsavesuccess": {
             "draftmsg": "Registro armazenado como rascunho.",
             "finalmsg": "Registro pronto para envio."
+        },
+        "savedraftinfo": {
+            "heading": "",
+            "msg": [
+                "",
+                "",
+                ""
+            ]
         },
         "submission": {
             "msg": "Enviando...",
@@ -117,6 +128,9 @@
             "heading": "OK",
             "msg": "Formulário válido!"
         },
+        "valuehasspaces": {
+            "multiple": ""
+        },
         "xpatherror": {
             "heading": "Erro de fórmula",
             "msg": "Ocorreu um erro de avaliação de fórmula. Por favor, entre em contato com __emailLink__ com este erro:"
@@ -129,25 +143,28 @@
             "notSupported": "Gravação de áudio não é suportada neste navegador.",
             "unknownError": "Falha ao acessar o microfone. Verifique as configurações e permissões do seu navegador.",
             "recordingError": "Ocorreu um erro ao tentar gravar áudio.",
+            "recordingInProgress": "",
             "invalidAudioFile": {
                 "msg": "O arquivo selecionado não é um arquivo de áudio válido e não pode ser reproduzido.",
                 "heading": "Arquivo de áudio inválido"
             }
         },
         "startRecording": "Iniciar gravação",
-        "uploadAudioFile": "Enviar arquivo",
+        "uploadAudioFile": "Enviar arquivo de áudio",
         "deleteWarning": "O áudio será excluído. Tem certeza de que quer fazer isso?",
         "backgroundDisclaimer": {
-            "heading": "Gravação de Áudio em Segundo Plano",
+            "heading": "Gravação de áudio em segundo plano",
             "msg": [
                 "Este formulário grava o áudio do microfone do seu dispositivo.",
                 "Você pode usar o indicador de nível de áudio para garantir que o microfone esteja perto o suficiente do som que precisa ser gravado.",
                 "Para parar a gravação, por favor, saia deste formulário.",
                 "Para mais informações, entre em contato com a pessoa que pediu para você coletar dados."
-            ]
+            ],
+            "buttonText": ""
         },
         "hasRecordedAudio": "Este envio tem uma gravação de áudio em segundo plano."
     },
+    "changelog": "",
     "confirm": {
         "autosaveload": {
             "heading": "Registro não salvo encontrado",
@@ -178,6 +195,10 @@
         },
         "login": {
             "heading": "Login obrigatório",
+            "queuedMsg": [
+                "",
+                "Gostaria de fazer login agora ou mais tarde?"
+            ],
             "msg": [
                 "Para enviar os dados que estão na fila, você precisa fazer login. Se você quiser fazer isso agora, será redirecionado e perderá informações não salvas.",
                 "Gostaria de fazer login agora ou mais tarde?"
@@ -197,8 +218,12 @@
             "psize": "Tamanho do papel",
             "reminder": "Lembre-se de definir depois essas mesmas configurações de impressão no menu de impressão do navegador!"
         },
+        "repeatremove": {
+            "heading": "",
+            "msg": ""
+        },
         "save": {
-            "existingerror": "Este nome ou ID de registro já existe.",
+            "existingerror": "Este nome ou ID de registro já existe. Por favor, altere-o.",
             "hint": "Esse nome permite que você encontre facilmente seu rascunho para finalizá-lo mais tarde.",
             "msg": "Existem alterações não salvas, gostaria de continuar sem salvá-las?",
             "name": "Nome de registro",
@@ -225,19 +250,17 @@
     },
     "error": {
         "code": "Código de erro: __code__",
-        "dataloadfailed": "Falha ao carregar dados de __url__",
-        "econnrefused": "Não foi possível conectar ao servidor",
-        "encryptionnotsupported": "Este formulário exige criptografia local dos registros. Infelizmente isso ainda não é suportado. Recomendamos o uso do ODK Collect para coletar dados com este formulário.",
+        "dataloadfailed": "Falha ao carregar __filename__.",
+        "econnrefused": "Não foi possível conectar ao servidor de formulários",
+        "encryptionnotsupported": "Este formulário exige criptografia local dos registros. Infelizmente, isso não é suportado pelo seu navegador. Recomendamos usar um navegador moderno.",
+        "formloadfailed": "",
         "instancenotfound": "Registro não presente. Talvez tenha expirado.",
         "invalidediturl": "URL de edição inválido",
         "loadfailed": "Falha ao carregar __recurso__",
-        "notfoundinformlist": [
-            "Opa, este formulário não existe (mais). Muito provavelmente, o proprietário do formulário o excluiu, arquivou ou desativou. Por favor, entre em contato com o proprietário do formulário para verificar.",
-            "Erro detalhado: Formulário com ID __formId__ não encontrado em /formList."
-        ],
+        "notfoundinformlist": "",
         "pagenotfound": "Página não encontrada",
         "surveyidnotactive": "A pesquisa com este ID não está mais ativa",
-        "surveyidnotfound": "A pesquisa com este ID não foi encontrada",
+        "surveyidnotfound": "",
         "unknown": "Ocorreu um erro desconhecido"
     },
     "feedback": {
@@ -287,9 +310,15 @@
         "longitude": "longitude (x.y °)",
         "points": "pontos",
         "removePoint": "Isso excluirá completamente o geopoint atual da lista de geopoints e não poderá ser desfeito. Tem certeza de que quer fazer isso?",
-        "searchPlaceholder": "Buscar lugar ou endereço"
+        "searchPlaceholder": "Buscar lugar ou endereço",
+        "bordersintersectwarning": ""
     },
     "here": "aqui",
+    "hint": {
+        "guidance": {
+            "details": ""
+        }
+    },
     "home": {
         "msg": "__appTitle__ está em execução! Por favor, acesse os formulários do Enketo na sua instalação de __serverName__."
     },
@@ -309,19 +338,30 @@
         "he": "Hebraico",
         "hi": "Hindi",
         "it": "Italiano",
+        "ka": "",
         "km": "Khmer",
         "lo": "Laociano",
         "nl": "Neerlandês",
         "no": "Norueguês",
+        "pa": "",
         "pl": "Polonês",
+        "pt": "",
         "ro": "Romeno",
+        "ru": "",
         "sk": "Eslovaco",
+        "sq": "",
         "supported": "Línguas suportadas:",
         "sv": "Sueco",
         "sw": "Suaíli",
         "th": "Tailandês",
+        "tr": "",
+        "uk": "",
         "vi": "Vietnamita",
         "zh": "Chinês"
+    },
+    "literacywidget": {
+        "finish": "",
+        "start": ""
     },
     "page": {
         "modernbrowsers": {
@@ -350,6 +390,10 @@
             "username": "Usuário"
         }
     },
+    "rankwidget": {
+        "clickstart": "",
+        "tapstart": ""
+    },
     "record-list": {
         "export": "Exportar",
         "msg1": "Os registros são armazenados dentro do seu navegador até que tenham sido enviados (mesmo se você desligar o computador ou ficar sem conexão à Internet).",
@@ -372,7 +416,7 @@
         }
     },
     "submission": {
-        "http0": "Falhou (Offline?).",
+        "http0": "O servidor não está disponível ou você pode não estar conectado à Internet.",
         "http2xx": "Resposta inesperada ao enviar dados.",
         "http400": "O servidor não aceitou os dados.",
         "http401": "Problema de autenticação com o servidor de dados.",
@@ -383,6 +427,13 @@
         "http4xx": "Problema de envio desconhecido no servidor de dados.",
         "http500": "O servidor de dados para seu formulário ou o servidor Enketo está inativo. Tente novamente mais tarde ou entre em contato com __supportEmail__.",
         "http504": "Não foi possível estabelecer conexão com o servidor de dados."
+    },
+    "themes": {
+        "supported": ""
+    },
+    "update": {
+        "newversion": "",
+        "reload": ""
     },
     "version": "versão:",
     "widget": {

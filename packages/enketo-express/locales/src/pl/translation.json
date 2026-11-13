@@ -27,11 +27,9 @@
             "heading": "Alarm"
         },
         "export": {
-            "alternativequestion": "Alternatywne pobranie - online",
             "error": {
                 "filecreatedmsg": "Tym niemniej, niekompletny plik eksportu został utworzony.",
                 "heading": "Błąd eksportu",
-                "linknotcreated": "Nie udało się utworzyć linku eksportu dla niezatwierdzonych rekordów. Czy jesteś online?",
                 "msg": "Wystąpił błąd podczas tworzenia pliku eksportu dla niezatwierdzonych rekordów. Błędy: __errors__"
             },
             "success": {
@@ -41,7 +39,11 @@
         },
         "formupdated": {
             "heading": "Formularz zaktualizowany!",
-            "msg": "Nowa wersja tego formularza została wczytana. Odśwież stronę, aby wczytać zaktualizowaną wersję."
+            "later": "Później",
+            "msg": "Nowa wersja tego formularza została wczytana. Odśwież stronę, aby wczytać zaktualizowaną wersję.",
+            "refresh": "",
+            "refreshwithoutsaving": "",
+            "unsavedmsg": ""
         },
         "gotonotfound": {
             "msg": "Nie udało się odnaleźć pytania \"__path__\" w formularzu. Czy odniesienie do tego pytania jest poprawne?"
@@ -50,7 +52,7 @@
             "editadvice": "Kontynuowanie edycji tego rekordu nie jest rekomendowane do momentu rozwiązania problemu.",
             "entryadvice": "Nie jest rekomendowane używanie tego formularza do zbierania danych do momentu rozwiązania problemu.",
             "heading": "Błąd wczytywania",
-            "msg1": "Wystąpił błąd podczas wczytywania tego formularza.",
+            "msg1": "",
             "msg2": "Proszę o kontakt z __emailLink__  z linkiem do tej strony i poniższą treścią błędu:",
             "heading_plural": "Wczytywanie błędów",
             "msg1_plural": "W czasie wczytywania tego formularza wystąpiły błędy.",
@@ -72,7 +74,8 @@
             "heading": "Aplikacja nie może uruchomić się w trybie offline",
             "msg": "Uruchamianie aplikacji w trybie offline nie jest wspierane przez twoją przeglądarkę. Możesz użyć ankietę bez tej funkcjonalności lub przejrzeć opcje rozwiązania tego problemu:",
             "negButton": "Użyj",
-            "posButton": "Pokaż opcje"
+            "posButton": "Pokaż opcje",
+            "refresh": ""
         },
         "queuesubmissionsuccess": {
             "msg": "__recordNames__ zostały pomyślnie zatwierdzone.",
@@ -87,6 +90,14 @@
         "recordsavesuccess": {
             "draftmsg": "Rekord zapisany jako wersja robocza.",
             "finalmsg": "Rekord zakolejkowany do zatwierdzenia."
+        },
+        "savedraftinfo": {
+            "heading": "",
+            "msg": [
+                "",
+                "",
+                ""
+            ]
         },
         "submission": {
             "msg": "Zatwierdzanie...",
@@ -117,11 +128,43 @@
             "heading": "OK",
             "msg": "Formularz jest poprawny!"
         },
+        "valuehasspaces": {
+            "multiple": ""
+        },
         "xpatherror": {
             "heading": "Błąd formuły",
             "msg": "Wystąpił błąd oceny formuły. Proszę skontaktuj się z __emailLink__ z następującym błędem:"
         }
     },
+    "audioRecording": {
+        "error": {
+            "accessDenied": "",
+            "noMicrophone": "",
+            "notSupported": "",
+            "unknownError": "",
+            "recordingError": "",
+            "recordingInProgress": "",
+            "invalidAudioFile": {
+                "msg": "",
+                "heading": ""
+            }
+        },
+        "startRecording": "",
+        "uploadAudioFile": "",
+        "deleteWarning": "",
+        "backgroundDisclaimer": {
+            "heading": "",
+            "msg": [
+                "",
+                "",
+                "",
+                ""
+            ],
+            "buttonText": ""
+        },
+        "hasRecordedAudio": ""
+    },
+    "changelog": "",
     "confirm": {
         "autosaveload": {
             "heading": "Znaleziono niezapisany rekord",
@@ -152,6 +195,10 @@
         },
         "login": {
             "heading": "Wymagane zalogowanie",
+            "queuedMsg": [
+                "",
+                "Chciałbyś zalogować się teraz, czy później?"
+            ],
             "msg": [
                 "Aby zatwierdzić twoje zakolejkowane dane musisz się zalogować. Jeśli chcesz to zrobić teraz, zostaniesz przekierowany i utracisz niezapisane informacje.",
                 "Chciałbyś zalogować się teraz, czy później?"
@@ -171,8 +218,12 @@
             "psize": "Rozmiar papieru",
             "reminder": "Pamiętaj aby później ustawić te same parametry wydruku w menu wydruku w przeglądarce!"
         },
+        "repeatremove": {
+            "heading": "",
+            "msg": ""
+        },
         "save": {
-            "existingerror": "Istnieje już taka nazwa lub identyfikator rekordu",
+            "existingerror": "Taka nazwa lub identyfikator rekordu już istnieje. Proszę je zmienić.",
             "hint": "Ta nazwa pozwoli ci łatwo znaleźć rekord w wersji roboczej, aby go później dokończyć.",
             "msg": "Istnieją niezapisane dane, czy chcesz kontynuować bez ich zapisu?",
             "name": "Nazwa rekordu",
@@ -199,19 +250,17 @@
     },
     "error": {
         "code": "Kod błędu: __code__",
-        "dataloadfailed": "Nie udało się wczytać danych z __url__",
+        "dataloadfailed": "Nie udało się wczytać __filename__.",
         "econnrefused": "Nie udało się połączyć z serwerem",
-        "encryptionnotsupported": "Formularz wymaga lokalnego szyfrowania rekordów. Niestety nie jest to jeszcze wspomagane. Rekomendujemy użycie ODK Collect dla zbierania danych dla tego formularza.",
+        "encryptionnotsupported": "Ten formularz wymaga lokalnego szyfrowania rekordów. Niestety Twoja przeglądarka tego nie obsługuje. Zalecamy przejście na nowoczesną przeglądarkę.",
+        "formloadfailed": "",
         "instancenotfound": "Rekord nieobecny. Mógł się przedawnić.",
         "invalidediturl": "Niepoprawny adres URL",
         "loadfailed": "Nie udało się wczytać __resource__",
-        "notfoundinformlist": [
-            "Ups, ten formularz (już) nie istnieje. Najprawdopodobniej właściciel formularza go skasował, zarchiwizował lub dezaktywował. Skontaktuj się proszę z właścicielem formularza, aby to potwierdzić.",
-            "Szczegóły błędu: Formularz o identyfikatorze __formId__ nie został odnaleziony w /formList."
-        ],
+        "notfoundinformlist": "",
         "pagenotfound": "Strona nie została znaleziona",
         "surveyidnotactive": "Ankieta o takim identyfikatorze nie jest już aktywna",
-        "surveyidnotfound": "Nie znaleziono ankiety o tym identyfikatorze",
+        "surveyidnotfound": "",
         "unknown": "Wystąpił nieznany błąd"
     },
     "feedback": {
@@ -261,9 +310,15 @@
         "longitude": "długość geograficzna (x.y °)",
         "points": "punkty",
         "removePoint": "To całkowicie usunie obecną lokalizację z listy lokalizacji i jest nieodwracalne.  Czy jesteś pewny, że chcesz to zrobić?",
-        "searchPlaceholder": "szukaj miejsca lub adresu"
+        "searchPlaceholder": "szukaj miejsca lub adresu",
+        "bordersintersectwarning": ""
     },
     "here": "tutaj",
+    "hint": {
+        "guidance": {
+            "details": ""
+        }
+    },
     "home": {
         "msg": "__appTitle__ jest uruchomiona! Wczytaj proszę formularze Enketo ze swojej instalacji __serverName__."
     },
@@ -283,18 +338,30 @@
         "he": "Hebrajski",
         "hi": "Hinduski",
         "it": "Włoski",
+        "ka": "",
         "km": "Khmerski",
         "lo": "Laotański",
         "nl": "Holenderski",
         "no": "Norweski",
+        "pa": "",
+        "pl": "",
+        "pt": "",
         "ro": "Rumuński",
+        "ru": "",
         "sk": "Słowacki",
+        "sq": "",
         "supported": "Wspierane języki:",
         "sv": "Szwedzki",
         "sw": "Suahili",
         "th": "Tajski",
+        "tr": "",
+        "uk": "",
         "vi": "Wietnamski",
         "zh": "Chiński"
+    },
+    "literacywidget": {
+        "finish": "",
+        "start": ""
     },
     "page": {
         "modernbrowsers": {
@@ -323,6 +390,10 @@
             "username": "Nazwa użytkownika"
         }
     },
+    "rankwidget": {
+        "clickstart": "",
+        "tapstart": ""
+    },
     "record-list": {
         "export": "Eksport",
         "msg1": "Rekordy są zapisane w twojej przeglądarce do momentu ich wgrania (nawet gdy wyłączysz komputer lub przejdziesz do trybu offline).",
@@ -345,7 +416,7 @@
         }
     },
     "submission": {
-        "http0": "Niepowodzenie  (Offline?).",
+        "http0": "Serwer jest niedostępny lub możesz nie mieć połączenia z internetem.",
         "http2xx": "Niespodziewana odpowiedź w czasie zatwierdzania danych.",
         "http400": "Serwer danych nie zaakceptował danych",
         "http401": "Problem uwierzytelniania z serwerem danych.",
@@ -356,6 +427,13 @@
         "http4xx": "Nieznany problem zatwierdzania na serwerze danych.",
         "http500": "Nie działa serwer danych dla twojego formularza na serwerze Enketo. Proszę spróbuj ponownie później lub skontaktuj się z __supportEmail__.",
         "http504": "Nie udało się ustanowić połączenia z serwerem danych."
+    },
+    "themes": {
+        "supported": ""
+    },
+    "update": {
+        "newversion": "",
+        "reload": ""
     },
     "version": "wersja:",
     "widget": {

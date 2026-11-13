@@ -8,13 +8,7 @@
                 "msg": "如要添加该表格至你的主页，点击浏览器的设置图标 _图像1_，然后选择：“添加至主页”。"
             },
             "androidfirefox": {
-                "msg": [
-                    "如要添加该表格至你的主页：",
-                    "1. 如要添加该页面至你的火狐浏览器的书签栏，点击设置图标 _图像1_，然后点击星号图标 _图像2_。",
-                    "2. 如要打开你的书签，先打开一个新的页面，然后点击“书签”。",
-                    "3. 点击并按住你的表格，直到出现一个弹出菜单。",
-                    "4. 选择‘添加至主页’。"
-                ]
+                "msg": ""
             },
             "heading": "添加至主页",
             "iossafari": {
@@ -25,16 +19,17 @@
             "heading": "应用程序已更新！",
             "msg": "已下载该应用程序的新版本。刷新此页面以安装更新后的版本。"
         },
+        "closing": {
+            "heading": ""
+        },
         "default": {
             "button": "关闭",
             "heading": "警示"
         },
         "export": {
-            "alternativequestion": "另外一种下载方式 - 在线",
             "error": {
                 "filecreatedmsg": "尽管如此，一个不完整的输出文档仍然被创建。",
                 "heading": "输出错误",
-                "linknotcreated": "不能为未提交的记录创建一个输出链接。你在线上吗？",
                 "msg": "在为未提交的记录创建输出文档的过程中出现错误。错误：_错误_"
             },
             "success": {
@@ -44,13 +39,20 @@
         },
         "formupdated": {
             "heading": "表格已更新！",
-            "msg": "已下载该表格的新版本。刷新此页面以上载更新后的版本。"
+            "later": "稍后",
+            "msg": "已下载该表格的新版本。刷新此页面以上载更新后的版本。",
+            "refresh": "",
+            "refreshwithoutsaving": "",
+            "unsavedmsg": ""
+        },
+        "gotonotfound": {
+            "msg": ""
         },
         "loaderror": {
-            "editadvice": "建议等到该记录被解析后再进行编辑。",
-            "entryadvice": "建议等到该表格被解析后再进行数据输入。",
+            "editadvice": "建议在此问题解决之前不要编辑该记录。",
+            "entryadvice": "建议在此问题解决之前不要使用该表单录入数据。",
             "heading": "上载错误",
-            "msg1": "在上载此表格的过程中出现错误。",
+            "msg1": "",
             "msg2": "请联系 _邮箱链接_ 以链接到此页面和如下错误信息：",
             "heading_plural": "上载错误",
             "msg1_plural": "在上载此表格的过程中出现错误。",
@@ -72,7 +74,8 @@
             "heading": "应用程序不能离线启动",
             "msg": "你的浏览器不支持离线启动应用程序。你可以使用问卷调查而无须此功能，或是查看可选项来解决此问题。",
             "negButton": "采用它",
-            "posButton": "显示可选项"
+            "posButton": "显示可选项",
+            "refresh": ""
         },
         "queuesubmissionsuccess": {
             "msg": "_记录名称_ 已成功提交",
@@ -87,6 +90,14 @@
         "recordsavesuccess": {
             "draftmsg": "记录以草稿形式保存",
             "finalmsg": "记录列队等候提交。"
+        },
+        "savedraftinfo": {
+            "heading": "",
+            "msg": [
+                "",
+                "",
+                ""
+            ]
         },
         "submission": {
             "msg": "正在提交...",
@@ -105,6 +116,11 @@
             "msg": "你的数据已提交！",
             "redirectmsg": "你现在将被重新定向。"
         },
+        "thanks": {
+            "heading": "",
+            "msg": "",
+            "msgTaken": ""
+        },
         "validationerror": {
             "msg": "表格中含有错误。请查看标识为红色的地方。"
         },
@@ -112,11 +128,43 @@
             "heading": "行",
             "msg": "该表格是有效的！"
         },
+        "valuehasspaces": {
+            "multiple": ""
+        },
         "xpatherror": {
             "heading": "公式错误",
             "msg": "出现公式求值错误。请联系与该错误相链接的 _邮箱_ ："
         }
     },
+    "audioRecording": {
+        "error": {
+            "accessDenied": "",
+            "noMicrophone": "",
+            "notSupported": "",
+            "unknownError": "",
+            "recordingError": "",
+            "recordingInProgress": "",
+            "invalidAudioFile": {
+                "msg": "",
+                "heading": ""
+            }
+        },
+        "startRecording": "",
+        "uploadAudioFile": "",
+        "deleteWarning": "",
+        "backgroundDisclaimer": {
+            "heading": "",
+            "msg": [
+                "",
+                "",
+                "",
+                ""
+            ],
+            "buttonText": ""
+        },
+        "hasRecordedAudio": ""
+    },
+    "changelog": "",
     "confirm": {
         "autosaveload": {
             "heading": "发现未存储记录",
@@ -147,6 +195,10 @@
         },
         "login": {
             "heading": "需要登录",
+            "queuedMsg": [
+                "",
+                "你想现在还是稍后登录？"
+            ],
             "msg": [
                 "你需要登录来提交你的数据列。如果你现在要实施此操作，你将被重新定向，同时丢失所有未存储的信息。",
                 "你想现在还是稍后登录？"
@@ -166,8 +218,12 @@
             "psize": "纸张大小",
             "reminder": "记住以后在浏览器的打印菜单中采用相同的打印设置！"
         },
+        "repeatremove": {
+            "heading": "",
+            "msg": ""
+        },
         "save": {
-            "existingerror": "该记录的名称或是代号已存在。",
+            "existingerror": "该记录的名称或 ID 已存在。请更改。",
             "hint": "该名称方便你找到记录草稿并在稍后完善该记录。",
             "msg": "有未存储的修改内容，你想继续而不保存那些已做的修改吗？",
             "name": "记录名称",
@@ -184,25 +240,39 @@
         "admin": "请联系问卷调查管理员",
         "support": "请通过 _技术支持邮箱_ 进行联系。"
     },
+    "drawwidget": {
+        "annotation": "",
+        "drawing": "",
+        "signature": ""
+    },
     "enketo": {
         "power": "由......运营"
     },
     "error": {
         "code": "错误代码：_代码_",
-        "dataloadfailed": "上载来自于 _网络地址_ 的数据失败",
+        "dataloadfailed": "无法加载 __filename__。",
         "econnrefused": "不能与服务器连接",
-        "encryptionnotsupported": "该表格要求对记录进行本地加密。可惜的是，目前该步骤还不能获得技术支持。我们建议使用ODK Collect进行该表格的数据收集工作。",
+        "encryptionnotsupported": "该表单要求对记录进行本地加密。很遗憾，您的浏览器不支持此功能。建议您改用现代浏览器。",
+        "formloadfailed": "",
         "instancenotfound": "记录不能呈现。它可能已过期。",
         "invalidediturl": "不是一个有效的、可编辑网络地址",
         "loadfailed": "上载  _资源_  失败",
-        "notfoundinformlist": "代号为 _表格代号_ 的表格 未能在 /formList 中找到",
+        "notfoundinformlist": "",
         "pagenotfound": "页面未找到",
         "surveyidnotactive": "此代号的问卷调查不再是激活状态",
-        "surveyidnotfound": "未发现此代号的问卷调查",
+        "surveyidnotfound": "",
         "unknown": "出现一个未知的错误"
     },
     "feedback": {
         "header": "信息"
+    },
+    "filepicker": {
+        "file": "",
+        "notFound": "",
+        "placeholder": "",
+        "resetWarning": "",
+        "toolargeerror": "",
+        "waitingForPermissions": ""
     },
     "form": {
         "chooseLanguage": "选择语言",
@@ -216,6 +286,9 @@
         "required": "必须的"
     },
     "formfooter": {
+        "complete": {
+            "btn": ""
+        },
         "savedraft": {
             "btn": "保存草稿",
             "label": "保存为草稿"
@@ -236,11 +309,21 @@
         "latitude": "纬度(x.y °)",
         "longitude": "经度(x.y °)",
         "points": "点",
-        "searchPlaceholder": "查找位置或是地址"
+        "removePoint": "",
+        "searchPlaceholder": "查找位置或是地址",
+        "bordersintersectwarning": ""
     },
     "here": "这里",
+    "hint": {
+        "guidance": {
+            "details": ""
+        }
+    },
     "home": {
         "msg": "_应用程序标题_  正在运行！请从你安装的 _服务器名称_ 上访问Enketo表格。"
+    },
+    "imagemap": {
+        "svgNotFound": ""
     },
     "langs": {
         "ar": "阿拉伯语",
@@ -250,20 +333,35 @@
         "en": "英语",
         "es": "西班牙语",
         "fa": "波斯语",
+        "fi": "",
         "fr": "法语",
         "he": "希伯来语",
         "hi": "印地语",
         "it": "意大利语",
+        "ka": "",
         "km": "高棉语",
+        "lo": "",
         "nl": "荷兰语",
         "no": "挪威语",
+        "pa": "",
+        "pl": "",
+        "pt": "",
         "ro": "罗马尼亚语",
+        "ru": "",
         "sk": "斯洛伐克语",
+        "sq": "",
         "supported": "支持的语言：",
+        "sv": "",
         "sw": "斯瓦希里语",
         "th": "泰国语",
+        "tr": "",
+        "uk": "",
         "vi": "越南语",
         "zh": "中文"
+    },
+    "literacywidget": {
+        "finish": "",
+        "start": ""
     },
     "page": {
         "modernbrowsers": {
@@ -292,6 +390,10 @@
             "username": "用户名"
         }
     },
+    "rankwidget": {
+        "clickstart": "",
+        "tapstart": ""
+    },
     "record-list": {
         "export": "输出",
         "msg1": "记录会被保存在你的浏览器中(即使你关掉计算机或是下网)直至被上传。",
@@ -314,15 +416,29 @@
         }
     },
     "submission": {
-        "http0": "失败(下线？)。",
+        "http0": "服务器不可用，或者您可能未连接到互联网。",
         "http2xx": "在提交数据的过程中意外获得响应。",
         "http400": "数据服务器不接受数据上传。",
         "http401": "数据服务器出现身份验证问题。",
         "http403": "不允许传输数据至此数据服务器。",
         "http404": "在数据服务器上未找到提交服务。",
+        "http408": "",
         "http413": "数据量太大。",
         "http4xx": "数据服务器上出现未知的提交错误。",
-        "http500": "接收你的表格数据上传的数据服务器或是Enketo服务器宕机。请稍后再试或是联系 _技术支持邮箱_ 。"
+        "http500": "接收你的表格数据上传的数据服务器或是Enketo服务器宕机。请稍后再试或是联系 _技术支持邮箱_ 。",
+        "http504": ""
     },
-    "version": "版本："
+    "themes": {
+        "supported": ""
+    },
+    "update": {
+        "newversion": "",
+        "reload": ""
+    },
+    "version": "版本：",
+    "widget": {
+        "comment": {
+            "update": ""
+        }
+    }
 }
