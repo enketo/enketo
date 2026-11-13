@@ -39,7 +39,11 @@
         },
         "formupdated": {
             "heading": "Formulár Aktualizovaný!",
-            "msg": "Nová verzia tohto formulára bola stiahnutá. Obnovte túto stránku pre načítanie aktualizovanej verzie."
+            "later": "Neskôr",
+            "msg": "Nová verzia tohto formulára bola stiahnutá. Obnovte túto stránku pre načítanie aktualizovanej verzie.",
+            "refresh": "",
+            "refreshwithoutsaving": "",
+            "unsavedmsg": ""
         },
         "gotonotfound": {
             "msg": "Vo formulári sa nepodarilo nájsť otázku \"__path__\". Je odkaz na túto otázku správny?"
@@ -48,7 +52,7 @@
             "editadvice": "Neodporúčame Vám upravovať tento záznam pokým sa to nevyrieši.",
             "entryadvice": "Neodporúčame Vám používať tento formulár pre vkladanie dát pokým sa to nevyrieši.",
             "heading": "Chyba pri Načítaní",
-            "msg1": "Počas načítavania tohto formulára došlo k chybe.",
+            "msg1": "",
             "msg2": "Prosím kontaktujte __emailLink__ s odkazom na túto stránku a nižšie zobrazenou chybovou správou:",
             "heading_plural": "Chyby pri Načítaní",
             "msg1_plural": "Počas načítavania tohto formulára sa vyskytli chyby.",
@@ -132,6 +136,34 @@
             "msg": "Došlo k chybe pri vyhodnocovaní vzorca. Prosím kontaktujte __emailLink__ s touto chybou:"
         }
     },
+    "audioRecording": {
+        "error": {
+            "accessDenied": "",
+            "noMicrophone": "",
+            "notSupported": "",
+            "unknownError": "",
+            "recordingError": "",
+            "recordingInProgress": "",
+            "invalidAudioFile": {
+                "msg": "",
+                "heading": ""
+            }
+        },
+        "startRecording": "",
+        "uploadAudioFile": "",
+        "deleteWarning": "",
+        "backgroundDisclaimer": {
+            "heading": "",
+            "msg": [
+                "",
+                "",
+                "",
+                ""
+            ],
+            "buttonText": ""
+        },
+        "hasRecordedAudio": ""
+    },
     "changelog": "Denník Zmien",
     "confirm": {
         "autosaveload": {
@@ -164,8 +196,8 @@
         "login": {
             "heading": "Prihlásenie Nevyhnutné",
             "queuedMsg": [
-                "Record queued for submission. In order to submit your queued data, you need to login.",
-                "Would you like to login now or later?"
+                "",
+                "Chcete sa prihlásiť teraz alebo neskôr?"
             ],
             "msg": [
                 "Pre odoslanie dát čakajúcich na odoslanie sa musíte prihlásiť. Ak tak chcete urobiť teraz, budete presmerovaní, a stratíte všetky neuložené dáta.",
@@ -225,11 +257,10 @@
         "instancenotfound": "Záznam nie je k dispozícii. Môže to byť spôsobené tým že expiroval.",
         "invalidediturl": "Neplatná URL pre úpravu",
         "loadfailed": "Nepodarilo sa načítať __resource__",
-        "notfoundinformlist": "Tento formulár buď neexistuje alebo k nemu už nemáte prístup. Skontrolujte prosím či v adrese URL nechýbajú niektoré znaky.\n\nAk sa jedná o formulár ktorý bol dostupný v minulosti, je možné že bol archivovaný, zneprístupnený alebo zmazaný. V prípade že tento scenár nie je pravdepodobný, prosím kontaktujte osobu ktorá Vás požiadala o vyplnenie daného formulára.\n\n(Pokus o prístup k formuláru s ID: __formId__)",
-        "notfounddirectformurl": "Tento formulár buď neexistuje alebo k nemu už nemáte prístup. Skontrolujte prosím či v adrese URL nechýbajú niektoré znaky.\n\nAk sa jedná o formulár ktorý bol dostupný v minulosti, je možné že bol archivovaný, zneprístupnený alebo zmazaný. V prípade že tento scenár nie je pravdepodobný, prosím kontaktujte osobu ktorá Vás požiadala o vyplnenie daného formulára.\n\n(Pokus o prístup k formuláru: __notfounddirectformurl__)",
+        "notfoundinformlist": "",
         "pagenotfound": "Stránka nebola Nájdená",
         "surveyidnotactive": "Prieskum s týmto ID už nie je aktívny",
-        "surveyidnotfound": "Prieskum s týmto ID nebol nájdený",
+        "surveyidnotfound": "",
         "unknown": "Nastala neznáma chyba"
     },
     "feedback": {
@@ -324,7 +355,7 @@
         "sw": "Svahilčina",
         "th": "Thajčina",
         "tr": "Turečtina",
-        "uk": "Ukrainian",
+        "uk": "",
         "vi": "Vietnamčina",
         "zh": "Čínština"
     },
@@ -399,6 +430,10 @@
     },
     "themes": {
         "supported": "Podporované motívy"
+    },
+    "update": {
+        "newversion": "",
+        "reload": ""
     },
     "version": "verzia:",
     "widget": {

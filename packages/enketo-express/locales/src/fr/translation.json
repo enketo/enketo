@@ -17,7 +17,7 @@
         },
         "appupdated": {
             "heading": "Application mise à jour!",
-            "msg": "Une nouvelle version de cette application a été téléchargée. Actualiser cette page pour charger la version mise à jour."
+            "msg": "Une nouvelle version de cette application est disponible. Actualisez cette page pour afficher la version mise à jour."
         },
         "closing": {
             "heading": "En cours de fermeture..."
@@ -30,27 +30,31 @@
             "error": {
                 "filecreatedmsg": "Cependant, un export incomplet a été créé.",
                 "heading": "Erreur d'export",
-                "msg": "Des erreurs ont eu lieu durant la création du fichier d'export des enregistrements non soumis. Erreurs : __errors__"
+                "msg": "Des erreurs sont survenues lors de la création du fichier d’export pour les soumissions non envoyées. Erreurs : __errors__"
             },
             "success": {
                 "heading": "Export créé",
-                "msg": "Un fichier d'export a été créé pour tous les enregistrements non soumis appartenant à ce formulaire."
+                "msg": "Le fichier d’export a été créé pour toutes les soumissions non envoyées de ce formulaire."
             }
         },
         "formupdated": {
             "heading": "Formulaire mis à jour!",
-            "msg": "Une nouvelle version du formulaire a été téléchargée. Actualiser cette page pour charger la version mise à jour."
+            "later": "Plus tard",
+            "msg": "Une nouvelle version de ce formulaire est disponible. Actualisez cette page pour afficher la version mise à jour.",
+            "refresh": "",
+            "refreshwithoutsaving": "",
+            "unsavedmsg": ""
         },
         "gotonotfound": {
             "msg": "Impossible de trouver la question  \"__path__\" dans le formulaire. Est-ce que la référence à cette question est correcte ?"
         },
         "loaderror": {
-            "editadvice": "Il est conseillé de ne pas modifier cet enregistrement jusqu'à ce que ce soit résolu. ",
-            "entryadvice": "Il est recommandé de ne pas utiliser ce formulaire pour entrer des données jusqu'à ce que ce soit résolu.",
+            "editadvice": "Nous vous recommandons de ne pas modifier cette soumission tant que ce problème n’est pas résolu.",
+            "entryadvice": "Il est recommandé de ne pas utiliser ce formulaire jusqu'à ce que le problème soit résolu.",
             "heading": "Erreur de chargement",
-            "msg1": "Une erreur s'est produite durant le chargement de ce formulaire.",
+            "msg1": "",
             "msg2": "Merci de contacter __emailLink__ en incluant le lien vers cette page et le message d'erreur ci-dessous :",
-            "heading_plural": "Chargement des erreurs",
+            "heading_plural": "Erreurs de chargement",
             "msg1_plural": "Des erreurs se sont produites durant le chargement de ce formulaire.",
             "msg2_plural": "Merci de contacter __emailLink__ en incluant le lien vers cette page et les messages d'erreur ci-dessous :"
         },
@@ -61,9 +65,9 @@
         "offlinesupported": {
             "heading": "Le formulaire peut fonctionner hors-ligne !",
             "msg": [
-                "Ce formulaire peut maintenant être chargé et utilisé sans connexion internet sur cet équipement. Ajoutez-le aux marque-pages pour y accéder facilement hors-ligne. ",
-                "Les enregistrements sont automatiquement enregistrés et mis en attente dans votre navigateur jusqu'à ce qu'une connexion soit disponible. Quand l'application sera connectée, les enregistrements seront automatiquements soumis - un par un. ",
-                "Un enregistrement n'est supprimé de la file d'attente qu'après avoir été soumis avec succès. Vous pouvez fermer votre navigateur et éteindre l’équipement sans risque quand la file d'attente contient des éléments. Ils seront toujours présents la prochaine fois que vous chargerez le formulaire."
+                "Ce formulaire peut désormais être ouvert et utilisé sur cet appareil sans connexion Internet. Ajoutez-le à vos favoris pour y accéder facilement hors ligne.",
+                "Les soumissions sont automatiquement stockées dans votre navigateur et mises en file d’attente jusqu’à ce qu’une connexion Internet soit disponible. Lorsque l’application est en ligne, les soumissions sont automatiquement envoyées, une par une.",
+                "Les soumissions ne sont retirées de la file d’attente qu’une fois envoyées avec succès. Vous pouvez fermer votre navigateur et votre appareil en toute sécurité, même s’il reste des éléments dans la file d’attente ; ils seront toujours là la prochaine fois que vous chargerez le formulaire."
             ]
         },
         "offlineunsupported": {
@@ -71,32 +75,32 @@
             "msg": "Le lancement de l'application hors-ligne n'est pas supporté par votre navigateur. Vous pouvez utiliser l'enquête sans cette fonctionnalité ou voir des options pour résoudre cela. ",
             "negButton": "L'utiliser",
             "posButton": "Voir les options",
-            "refresh": "Ce formulaire ne peut plus être lancé sans connexion internet. Veuillez actualiser cette page pour essayer de corriger le problème."
+            "refresh": "Ce formulaire ne peut plus être ouvert sans connexion internet. Veuillez actualiser cette page pour essayer de corriger le problème."
         },
         "queuesubmissionsuccess": {
-            "msg": "__recordNames__ a été soumis avec succès",
-            "msg_plural": "__recordNames__ ont été soumis avec succès"
+            "msg": "__recordNames__ a été envoyé avec succès",
+            "msg_plural": "__recordNames__ ont été envoyés avec succès"
         },
         "recordloadsuccess": {
-            "msg": "__recordName__ a été chargé"
+            "msg": "__recordName__ est affiché"
         },
         "recordnotfound": {
-            "msg": "L'enregistrement n'a pas pu être récupéré, ou ne contient aucune donnée."
+            "msg": "La soumission n’a pas pu être récupérée ou ne contenait aucune donnée."
         },
         "recordsavesuccess": {
-            "draftmsg": "Enregistrement sauvegardé en tant que brouillon",
-            "finalmsg": "Enregistrement placé en file d'attente afin d'être soumis."
+            "draftmsg": "Soumission enregistrée comme brouillon.",
+            "finalmsg": "Soumission mise en file d’attente pour l’envoi."
         },
         "savedraftinfo": {
-            "heading": "Finaliser l'enregistrement plus tard",
+            "heading": "Finaliser la soumission plus tard",
             "msg": [
-                "Le brouillon enregistré n'est sauvegardé que dans le navigateur actuel. Vous pouvez fermer ce navigateur sans perdre l'enregistrement.",
-                "Les brouillons enregistrés sont accessibles en rouvrant cette page et en cliquant sur le bouton à gauche de l'écran qui ressemble à celui-ci: __icon__",
-                "Attention: Si vous videz le cache de votre navigateur, tous les brouillons et les enregistrements finalisés non soumis seront définitivement supprimés."
+                "Le brouillon est stocké uniquement dans ce navigateur. Vous pouvez le fermer sans perdre le brouillon.",
+                "Pour accéder aux brouillons, rouvrez cette page et cliquez sur le bouton situé à gauche de l’écran qui ressemble à ceci : __icon__",
+                "Attention: Si vous videz le cache de votre navigateur, tous les brouillons et les formulaires finalisés non-soumis seront définitivement supprimés."
             ]
         },
         "submission": {
-            "msg": "Soumission en cours...",
+            "msg": "Envoi en cours...",
             "redirectmsg": "Vous serez redirigé automatiquement après avoir soumis."
         },
         "submissionerror": {
@@ -109,7 +113,7 @@
         },
         "submissionsuccess": {
             "heading": "Soumission réussie",
-            "msg": "Vos données ont été soumises !",
+            "msg": "Vos données ont été envoyées !",
             "redirectmsg": "Vous allez maintenant être redirigé."
         },
         "thanks": {
@@ -134,27 +138,39 @@
     },
     "audioRecording": {
         "error": {
-            "accessDenied": "Accès au micro dénié par l'utilisateur.",
+            "accessDenied": "Accès au micro refusé par l'utilisateur.",
             "noMicrophone": "Aucun micro trouvé sur cet appareil.",
             "notSupported": "L'enregistrement audio n'est pas pris en charge par ce navigateur.",
-            "unknownError": "Erreur lors de l'accès au micro : __errorMessage__",
+            "unknownError": "Impossible d'accéder au micro. Vérifiez les paramètres et les autorisations de votre navigateur.",
             "recordingError": "Une erreur s'est produite lors de la tentative d'enregistrement audio.",
+            "recordingInProgress": "",
             "invalidAudioFile": {
                 "msg": "Le fichier sélectionné n'est pas un fichier audio valide et ne peut pas être lu.",
                 "heading": "Fichier audio invalide"
             }
         },
         "startRecording": "Démarrer l'enregistrement",
-        "uploadAudioFile": "Téléverser le fichier",
-        "deleteWarning": "L'audio sera supprimé. Êtes-vous sûr de vouloir faire cela ?"
+        "uploadAudioFile": "Téléverser un fichier audio",
+        "deleteWarning": "L'audio sera supprimé. Êtes-vous sûr de vouloir faire cela ?",
+        "backgroundDisclaimer": {
+            "heading": "",
+            "msg": [
+                "",
+                "",
+                "",
+                ""
+            ],
+            "buttonText": ""
+        },
+        "hasRecordedAudio": ""
     },
     "changelog": "Journal des modifications",
     "confirm": {
         "autosaveload": {
-            "heading": "Un enregistrement non sauvegardé a été trouvé",
-            "msg": "Enketo a trouvé un enregistrement non sauvegardé. Voulez-vous charger ses données ou les supprimer ?",
+            "heading": "Une soumission non sauvegardée a été trouvée",
+            "msg": "Enketo a trouvé une soumission non sauvegardée. Voulez-vous récupérer les données ou les supprimer ?",
             "negButton": "Supprimer",
-            "posButton": "Charger l'enregistrement"
+            "posButton": "Récupérer"
         },
         "default": {
             "heading": "Êtes-vous sûr?",
@@ -174,17 +190,17 @@
         },
         "discardcurrent": {
             "heading": "Changements non sauvegardés",
-            "msg": "Le formulaire contient des changements non sauvegardés. Voulez-vous charger un enregistrement sans sauvegarder les changements sur le formulaire actuel ?",
+            "msg": "Le formulaire en cours contient des modifications non enregistrées. Voulez-vous afficher une autre soumission sans sauvegarder les réponses en cours ?",
             "posButton": "Continuer sans sauvegarder"
         },
         "login": {
             "heading": "Identification requise",
             "queuedMsg": [
-                "Enregistrement placé en file d'attente afin d'être soumis. Pour soumettre vos données en attente, vous devez vous identifier.",
+                "La soumission a été mise en file d’attente pour l’envoi. Pour envoyer les données en attente, vous devez vous connecter.",
                 "Voulez-vous vous identifier maintenant ou plus tard ?"
             ],
             "msg": [
-                "Vous devez vous identifier pour soumettre votre requête. Si vous le faites maintenant, vous serez redirigé, et vous perdrez toutes les informations non sauvegardées",
+                "Pour envoyer vos données en file d’attente, vous devez vous connecter. Si vous choisissez de le faire maintenant, vous serez redirigé(e) et perdrez les informations non enregistrées.",
                 "Voulez-vous vous identifier maintenant ou plus tard ?"
             ],
             "negButton": "Plus tard",
@@ -204,13 +220,13 @@
         },
         "repeatremove": {
             "heading": "Supprimer ce groupe de réponses ?",
-            "msg": "Cette action est irréversible. Êtes-vous sûr de vouloir continuer ?"
+            "msg": "Cette action est irréversible. Êtes-vous sûr(e) de vouloir continuer ?"
         },
         "save": {
-            "existingerror": "Ce nom ou ID d'enregistrement existe déjà. ",
-            "hint": "Ce nom vous permet de trouver facilement votre brouillon d'enregistrement afin de le finir plus tard.",
+            "existingerror": "Ce nom ou cet identifiant est déjà utilisé par une autre soumission. Veuillez le modifier.",
+            "hint": "Ce nom vous permet de retrouver facilement votre brouillon afin de le compléter plus tard.",
             "msg": "Il y a des changements non sauvegardés, voulez-vous continuer sans sauvegarder ?",
-            "name": "Nom de l'enregistrement",
+            "name": "Nom de la soumission",
             "posButton": "Sauvegarder et fermer",
             "renamemsg": "Êtes vous sûr de vouloir renommer __currentName__ en __newName__ ?",
             "unkownerror": "Une erreur inconnue s'est produite lors de l'enregistrement des données."
@@ -234,18 +250,17 @@
     },
     "error": {
         "code": "Code d'erreur : __code__",
-        "dataloadfailed": "Impossible de charger __filename__.",
-        "econnrefused": "Impossible d'établir une connexion avec le serveur de formulaires",
-        "encryptionnotsupported": "Ce formulaire nécessite le chiffrement local des enregistrements. Malheureusement, votre navigateur web ne le prend pas en charge. Nous vous recommandons d'utiliser un navigateur web plus récent.",
-        "formloadfailed": "Impossible de charger le formulaire",
-        "instancenotfound": "L'enregistrement n'a pas été trouvé. Il a peut-être expiré.",
+        "dataloadfailed": "Impossible d'afficher __filename__.",
+        "econnrefused": "Impossible d'établir une connexion avec le serveur",
+        "encryptionnotsupported": "Ce formulaire nécessite un chiffrement local. Malheureusement, cette fonctionnalité n’est pas prise en charge par votre navigateur. Nous vous recommandons de passer à un navigateur plus récent.",
+        "formloadfailed": "Impossible d'afficher le formulaire",
+        "instancenotfound": "Soumission introuvable. Elle a peut-être expiré.",
         "invalidediturl": "Ceci n'est pas une URL d'édition valide",
-        "loadfailed": "Impossible de charger __resource__",
-        "notfoundinformlist": "Ce formulaire n'existe pas ou vous n'y avez plus accès. Veuillez vérifier l'URL et vous assurer qu'elle ne manque pas de caractères.\n\nSi le formulaire existait précédemment, il a peut-être été archivé, désactivé ou suprimmé. Si ceci est inattendu, veuillez contacter la personne qui vous a demandé de remplir le formulaire.\n\n(Tentative d'accès du formulaire avec ID: __formId__)",
-        "notfounddirectformurl": "Ce formulaire n'existe pas ou vous n'y avez plus accès. Veuillez vérifier l'URL et vous assurer qu'elle ne manque pas de caractères.\n\nSi le formulaire existait précédemment, il a peut-être été archivé, désactivé ou suprimmé. Si ceci est inattendu, veuillez contacter la personne qui vous a demandé de remplir le formulaire.\n\n(Tentative d'accès du formulaire: __notfounddirectformurl__)",
+        "loadfailed": "Impossible d'afficher __resource__",
+        "notfoundinformlist": "",
         "pagenotfound": "Page non trouvée",
         "surveyidnotactive": "L'enquête avec cet ID n'est plus active",
-        "surveyidnotfound": "L'enquête avec cet ID n'a pas été trouvée",
+        "surveyidnotfound": "",
         "unknown": "Une erreur inconnue s'est produite"
     },
     "feedback": {
@@ -253,8 +268,8 @@
     },
     "filepicker": {
         "file": "fichier",
-        "notFound": "Le fichier __existing__ est introuvable (ne le modifier pas s'il a déjà été envoyé et que vous voulez le conserver).",
-        "placeholder": "Cliquez ici pour téléverser un fichier. (< __maxSize__)",
+        "notFound": "Le fichier __existing__ est introuvable (ne modifiez rien si la soumission a déjà été envoyée et que vous souhaitez la préserver).",
+        "placeholder": "Cliquez ici pour importer un fichier. (< __maxSize__)",
         "resetWarning": "Cela va supprimer __item__. Êtes-vous sûr de vouloir faire cela ?",
         "toolargeerror": "Fichier trop volumineux (> __maxSize__)",
         "waitingForPermissions": "En attente des autorisations de l'utilisateur"
@@ -275,11 +290,11 @@
             "btn": "Terminé"
         },
         "savedraft": {
-            "btn": "Sauvegarder le brouillon",
-            "label": "Enregistrer en tant que Brouillon"
+            "btn": "Sauvegarder comme brouillon",
+            "label": "Sauvegarder comme brouillon"
         },
         "submit": {
-            "btn": "Soumettre"
+            "btn": "Envoyer"
         },
         "validate": {
             "btn": "Valider"
@@ -290,13 +305,13 @@
         "altitude": "altitude (m)",
         "closepolygon": "fermer le polygone",
         "kmlcoords": "coordonnées KML",
-        "kmlpaste": "Coller les coordonnées KML ici",
+        "kmlpaste": "entrer les coordonnées KML ici",
         "latitude": "latitude (x.y °)",
         "longitude": "longitude (x.y °)",
         "points": "points",
-        "removePoint": "Cela va supprimer définitivement la position géographique actuelle de la liste des géopoints et vous ne pourrez pas revenir en arrière. Êtes-vous sûr de vouloir faire cela ?",
+        "removePoint": "Cette action supprimera définitivement le geopoint actuel de la liste des geopoints et ne peut pas être annulée. Êtes-vous sûr(e) de vouloir continuer ?",
         "searchPlaceholder": "Chercher un lieu ou une adresse",
-        "bordersintersectwarning": "Les bordures ne peuvent pas s'intersecter"
+        "bordersintersectwarning": "Les bordures ne peuvent pas se croiser."
     },
     "here": "ici",
     "hint": {
@@ -318,7 +333,7 @@
         "en": "Anglais",
         "es": "Espagnol",
         "fa": "Persan",
-        "fi": "Fin",
+        "fi": "Finlandais",
         "fr": "Français",
         "he": "Hébreu",
         "hi": "Hindi",
@@ -371,7 +386,7 @@
             "heading": "Saisir vos identifiants pour __server__",
             "password": "Mot de passe",
             "remember": "Se souvenir de moi sur cet ordinateur",
-            "submit": "Soumettre",
+            "submit": "Envoyer",
             "username": "Identifiant"
         }
     },
@@ -381,13 +396,13 @@
     },
     "record-list": {
         "export": "Exporter",
-        "msg1": "Les enregistrements sont sauvegardés par le navigateur jusqu'à ce qu'ils soient transmis au serveur (même si l'ordinateur est éteint ou déconnecté).",
-        "msg2": "Les enregistrements en file d'attente, à l'exception de ceux marqués comme brouillon __icon__, sont soumis automatiquement en arrière-plan, toutes les 5 minutes, quand la page web est ouverte et la connexion disponible. Pour forcer la transmission entre les tentatives automatiques, cliquer sur Transmettre.",
-        "msg2-nodraft": "Les enregistrements en file d'attente sont transmis autoomatiquement en arrière-plan toutes les 5 minutes, quand la page web est ouverte, et une connexion Internet disponible. ",
-        "msg3": "Pour forcer une transmission entre les tentatives automatiques, cliquez sur Transmettre.",
-        "norecords": "aucun enregistrement dans la file d'attente",
+        "msg1": "Les soumissions sont conservées localement dans votre navigateur jusqu’à leur envoi (même si vous éteignez votre ordinateur ou que vous perdez la connexion).",
+        "msg2": "Toutes les soumissions en file d’attente, sauf celles marquées comme brouillons __icon__, sont envoyées automatiquement en arrière-plan toutes les 5 minutes lorsque la page est ouverte et qu’une connexion Internet est disponible.",
+        "msg2-nodraft": "Les soumissions en file d’attente sont envoyées automatiquement en arrière-plan toutes les 5 minutes lorsque la page est ouverte et qu’une connexion Internet est disponible.",
+        "msg3": "Pour forcer l'envoi entre les tentatives automatiques, cliquez sur Envoyer.",
+        "norecords": "aucune soumission en file d’attente",
         "title": "File d'attente",
-        "upload": "Transmettre"
+        "upload": "Envoyer"
     },
     "selectpicker": {
         "noneselected": "aucun élément sélectionné",
@@ -401,8 +416,8 @@
         }
     },
     "submission": {
-        "http0": "Le serveur n'est pas disponible ou vous êtes hors-ligne.",
-        "http2xx": "Réponse inattendue durant la soumission des données.",
+        "http0": "Le serveur est indisponible ou votre connexion Internet est peut-être interrompue.",
+        "http2xx": "Réponse inattendue lors de l’envoi des données.",
         "http400": "Le serveur n'a pas accepté les données.",
         "http401": "Problème d'authentification avec le serveur.",
         "http403": "Non autorisé à soumettre des données sur ce serveur.",
@@ -415,6 +430,10 @@
     },
     "themes": {
         "supported": "Thèmes supportés"
+    },
+    "update": {
+        "newversion": "",
+        "reload": ""
     },
     "version": "version :",
     "widget": {

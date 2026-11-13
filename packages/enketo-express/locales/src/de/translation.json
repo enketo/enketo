@@ -39,7 +39,11 @@
         },
         "formupdated": {
             "heading": "Formular aktualisiert!",
-            "msg": "Eine neue Version dieser Anwendung wurde heruntergeladen. Aktualisieren Sie diese Seite, um die aktualisierte Version zu laden."
+            "later": "später",
+            "msg": "Eine neue Version dieser Anwendung wurde heruntergeladen. Aktualisieren Sie diese Seite, um die aktualisierte Version zu laden.",
+            "refresh": "",
+            "refreshwithoutsaving": "",
+            "unsavedmsg": ""
         },
         "gotonotfound": {
             "msg": "Frage \"__path__\" in Formular nicht gefunden.  Ist der Verweis auf diese Frage korrekt?"
@@ -48,7 +52,7 @@
             "editadvice": "Wir empfehlen Ihnen, diesen Datensatz nicht zu bearbeiten, bis das Problem gelöst ist.",
             "entryadvice": "Wir empfehlen Ihnen, dieses Formular nicht für die Dateneingabe zu verwenden, bis das Problem gelöst ist.",
             "heading": "Ladefehler",
-            "msg1": "Fehler beim Laden des Formulars aufgetreten.",
+            "msg1": "",
             "msg2": "Bitte senden Sie eine E-Mail mit der Adresse dieser Seite und die untenstehende Fehlermeldung an __emailLink__.",
             "heading_plural": "Ladefehler",
             "msg1_plural": "Fehler beim Laden des Formulars aufgetreten.",
@@ -131,6 +135,34 @@
             "heading": "Formel-Fehler",
             "msg": "Ein Formelauswertungsfehler ist aufgetreten. Bitte kontaktieren Sie __emailLink__ mit diesem Fehler:"
         }
+    },
+    "audioRecording": {
+        "error": {
+            "accessDenied": "",
+            "noMicrophone": "",
+            "notSupported": "",
+            "unknownError": "",
+            "recordingError": "",
+            "recordingInProgress": "",
+            "invalidAudioFile": {
+                "msg": "",
+                "heading": ""
+            }
+        },
+        "startRecording": "",
+        "uploadAudioFile": "",
+        "deleteWarning": "",
+        "backgroundDisclaimer": {
+            "heading": "",
+            "msg": [
+                "",
+                "",
+                "",
+                ""
+            ],
+            "buttonText": ""
+        },
+        "hasRecordedAudio": ""
     },
     "changelog": "Änderungshistorie",
     "confirm": {
@@ -225,11 +257,10 @@
         "instancenotfound": "Datensatz nicht vorhanden. Er ist wahrscheinlich abgelaufen.",
         "invalidediturl": "Keine gültige Bearbeitungs-URL",
         "loadfailed": "Fehler beim Laden von __resource__",
-        "notfoundinformlist": "Dieses Formular existiert nicht mehr oder Sie haben keiner Zugriff mehr darauf. Bitte überprüfen Sie die URL auf fehlende Zeichen.\n\nWenn das Formular bisher existierte, wurde es vielleicht archiviert, deaktiviert oder gelöscht. Falls dies unerwartet ist, kontaktieren Sie die Person, die Sie gebeten hat das Formular auszufüllen.\n\n(Versuchter Zugriff auf Formular mit ID: __formId__)",
-        "notfounddirectformurl": "Dieses Formular existiert nicht mehr oder Sie haben keiner Zugriff mehr darauf. Bitte überprüfen Sie die URL auf fehlende Zeichen.\n\nWenn das Formular bisher existierte, wurde es vielleicht archiviert, deaktiviert oder gelöscht. Falls dies unerwartet ist, kontaktieren Sie die Person, die Sie gebeten hat das Formular auszufüllen.\n\n(Versuchter Zugriff auf Formular mit ID: __notfounddirectformurl__)",
+        "notfoundinformlist": "",
         "pagenotfound": "Seite nicht gefunden",
         "surveyidnotactive": "Umfrage mit dieser ID ist nicht mehr aktiv",
-        "surveyidnotfound": "Umfrage mit dieser ID nicht gefunden",
+        "surveyidnotfound": "",
         "unknown": "Ein unbekannter Fehler ist aufgetreten"
     },
     "feedback": {
@@ -399,6 +430,10 @@
     },
     "themes": {
         "supported": "unterstützte Themes"
+    },
+    "update": {
+        "newversion": "",
+        "reload": ""
     },
     "version": "Version:",
     "widget": {

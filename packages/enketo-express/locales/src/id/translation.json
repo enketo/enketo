@@ -1,0 +1,444 @@
+{
+    "advanced": {
+        "flushdb": "Hapus Penyimpanan"
+    },
+    "alert": {
+        "addtohomescreen": {
+            "androidchrome": {
+                "msg": "Untuk menambahkan formulir ini ke layar utama Anda, klik ikon pengaturan browser __image1__ dan pilih: 'Tambahkan ke layar utama'."
+            },
+            "androidfirefox": {
+                "msg": "Untuk menambahkan formulir ini ke layar utama Anda, tekan lama bilah alamat dan pilih 'Tambahkan ke Layar Utama'."
+            },
+            "heading": "Tambahkan ke Layar Utama",
+            "iossafari": {
+                "msg": "Untuk menambahkan formulir ini ke layar Beranda Anda, klik ikon bagikan __image1__ di kanan atas browser Anda, dan pilih: '+ Tambahkan ke Layar Beranda'."
+            }
+        },
+        "appupdated": {
+            "heading": "Aplikasi Diperbarui!",
+            "msg": "Versi baru dari aplikasi ini telah diunduh. Buka ulang halaman ini untuk memuat versi terbaru."
+        },
+        "closing": {
+            "heading": "Menutup..."
+        },
+        "default": {
+            "button": "Tutup",
+            "heading": "Waspada"
+        },
+        "export": {
+            "error": {
+                "filecreatedmsg": "Meskipun begitu, konversi berkas yang tidak lengkap tetap dibuat.",
+                "heading": "Kesalahan Konversi",
+                "msg": "Terjadi kesalahan saat konversi berkas isian yang belum dikirim.  Kesalahan: __errors__"
+            },
+            "success": {
+                "heading": "Konversi Telah Dibuat",
+                "msg": "Ekspor berkas telah dibuat untuk semua isian yg belum terkirim dalam formulir ini"
+            }
+        },
+        "formupdated": {
+            "heading": "Formulir sudah diperbaharui!",
+            "later": "Nanti",
+            "msg": "Formulir terbaru sudah diunduh. Perbarui halaman ini untuk menggunakannya",
+            "refresh": "",
+            "refreshwithoutsaving": "",
+            "unsavedmsg": ""
+        },
+        "gotonotfound": {
+            "msg": "Gagal menemukan pertanyaan \"__path__\" dalam formulir. Apakah referensi untuk pertanyaan ini benar?"
+        },
+        "loaderror": {
+            "editadvice": "Kami tidak merekomendasikan untuk mengubah data ini sampai semuanya selesai.",
+            "entryadvice": "Kami tidak merekomendasikan Anda untuk menggunakan form ini untuk pengisian data sampai masalah terselesaikan.",
+            "heading": "Kesalahan Pengunduhan",
+            "msg1": "",
+            "msg2": "Silakan hubungi __emailLink__ dengan tautan ke halaman ini dan pesan kesalahan di bawah ini:",
+            "heading_plural": "Kesalahan Unduh",
+            "msg1_plural": "Kesalahan terjadi saat memuat formulir ini",
+            "msg2_plural": ""
+        },
+        "logout": {
+            "heading": "Telah Keluar",
+            "msg": "Anda telah keluar"
+        },
+        "offlinesupported": {
+            "heading": "Formulir bekerja offline!",
+            "msg": [
+                "Formulir ini sekarang dapat dimuat dan digunakan tanpa koneksi internet di perangkat ini. Tandai untuk akses secara offline.",
+                "Catatan disimpan secara otomatis dan diantrekan di browser Anda hingga koneksi Internet tersedia. Saat aplikasi online, catatan akan dikirimkan secara otomatis - satu per satu.",
+                ""
+            ]
+        },
+        "offlineunsupported": {
+            "heading": "Aplikasi tidak dapat dijalankan offline",
+            "msg": "Peluncuran aplikasi offline tidak didukung oleh browser Anda. Anda dapat menggunakan survei tanpa fitur ini atau melihat opsi untuk menyelesaikannya.",
+            "negButton": "Gunakan",
+            "posButton": "Tampilkan pilihan",
+            "refresh": ""
+        },
+        "queuesubmissionsuccess": {
+            "msg": "__recordNames__ telah berhasil dikirim",
+            "msg_plural": "__recordNames__ telah berhasil dikirim"
+        },
+        "recordloadsuccess": {
+            "msg": "__recordName__ telah diunduh"
+        },
+        "recordnotfound": {
+            "msg": ""
+        },
+        "recordsavesuccess": {
+            "draftmsg": "Isian disimpan sebagai draft",
+            "finalmsg": "Data dalam antrian untuk dikirim."
+        },
+        "savedraftinfo": {
+            "heading": "Selesaikan rekaman nanti",
+            "msg": [
+                "",
+                "",
+                ""
+            ]
+        },
+        "submission": {
+            "msg": "Mengirimkan...",
+            "redirectmsg": ""
+        },
+        "submissionerror": {
+            "authrequiredmsg": "",
+            "fnfmsg": [
+                "",
+                ""
+            ],
+            "heading": "Pengiriman gagal"
+        },
+        "submissionsuccess": {
+            "heading": "Pengiriman Berhasil",
+            "msg": "Data Anda telah terkirim!",
+            "redirectmsg": "Anda akan diarahkan"
+        },
+        "thanks": {
+            "heading": "Terima kasih atas partisipasi Anda!",
+            "msg": "Anda dapat menutup jendela ini sekarang",
+            "msgTaken": "Anda telah menyelesaikan survei ini."
+        },
+        "validationerror": {
+            "msg": "Formulir mengandung kesalahan. Silahkan lihat isian yang bertanda merah."
+        },
+        "validationsuccess": {
+            "heading": "OK",
+            "msg": "Form valid!"
+        },
+        "valuehasspaces": {
+            "multiple": ""
+        },
+        "xpatherror": {
+            "heading": "Kesalahan Formula",
+            "msg": "Terjadi kesalahan evaluasi formula. Silahkan menghubungi __emailLink__ dengan pesan kesalahan:"
+        }
+    },
+    "audioRecording": {
+        "error": {
+            "accessDenied": "",
+            "noMicrophone": "",
+            "notSupported": "",
+            "unknownError": "",
+            "recordingError": "",
+            "recordingInProgress": "",
+            "invalidAudioFile": {
+                "msg": "",
+                "heading": ""
+            }
+        },
+        "startRecording": "",
+        "uploadAudioFile": "",
+        "deleteWarning": "",
+        "backgroundDisclaimer": {
+            "heading": "",
+            "msg": [
+                "",
+                "",
+                "",
+                ""
+            ],
+            "buttonText": ""
+        },
+        "hasRecordedAudio": ""
+    },
+    "changelog": "Catatan perubahan",
+    "confirm": {
+        "autosaveload": {
+            "heading": "Rekaman yang tidak tersimpan ditemukan",
+            "msg": "Enketo telah menemukan catatan yang belum disimpan. Apakah Anda ingin memuat rekaman ini atau membuangnya?",
+            "negButton": "Membuang",
+            "posButton": "Unduh Isian"
+        },
+        "default": {
+            "heading": "Apakah Anda yakin?",
+            "msg": "Harap konfirmasi tindakan ini",
+            "negButton": "Batal",
+            "posButton": "Setuju"
+        },
+        "deleteall": {
+            "heading": "PANIK!",
+            "msg": [
+                "Ini akan menghapus semua data antrian Anda dan semua formulir Anda dari penyimpanan browser. Data akan hilang selamanya. Gunakan ini hanya sebagai upaya terakhir jika penyimpanan browser tampaknya rusak.",
+                "Tutup dulu semua layar Enketo yang lain.",
+                "Laman ini akan termuat ulang. Jika muncul eror, kamu dipersilahkan untuk mengulanginya lagi.",
+                "Anda yakin melakukan hal ini?"
+            ],
+            "posButton": "Hapus Semua"
+        },
+        "discardcurrent": {
+            "heading": "Penyuntingan belum disimpan",
+            "msg": "Ada perubahan yg belum disimpan pada formulir ini. Apakah Anda akan mengunggah isian tanpa menyimpannya pada formulir yg sedang Anda kerjakan?",
+            "posButton": "Jalankan tanpa disimpan"
+        },
+        "login": {
+            "heading": "Perlu Login",
+            "queuedMsg": [
+                "",
+                "Anda akan masuk sekarang atau nanti?"
+            ],
+            "msg": [
+                "Untuk mengirimkan data antrian Anda, Anda harus login. Jika Anda ingin melakukan ini sekarang, Anda akan dialihkan, dan akan kehilangan informasi yang belum disimpan.",
+                "Anda akan masuk sekarang atau nanti?"
+            ],
+            "negButton": "Nanti",
+            "posButton": "Masuk sekarang"
+        },
+        "print": {
+            "a4": "A4",
+            "heading": "Pilih Pengaturan Cetak",
+            "landscape": "Landscape",
+            "letter": "Letter",
+            "msg": "Untuk menyiapkan cetakan yang dioptimalkan, silakan pilih pengaturan cetak di bawah ini",
+            "orientation": "Orientasi Kertas",
+            "portrait": "Portrait",
+            "posButton": "Penyiapan",
+            "psize": "Ukuran Kertas",
+            "reminder": ""
+        },
+        "repeatremove": {
+            "heading": "Hapus kelompok jawaban ini?",
+            "msg": "Aksi ini tidak dapat dipulihkan. Anda yakin akan melakukannya?"
+        },
+        "save": {
+            "existingerror": "Nama atau ID rekaman ini sudah ada. Silakan ubah.",
+            "hint": "Nama ini memungkinkan Anda untuk dengan mudah menemukan catatan draf Anda untuk menyelesaikannya nanti.",
+            "msg": "Ada perubahan yang belum disimpan, apakah Anda ingin melanjutkan tanpa menyimpannya?",
+            "name": "Nama Isian",
+            "posButton": "Simpan & Tutup",
+            "renamemsg": "Anda yakin ingin merubah nama __currentName__ to __newName__?",
+            "unkownerror": ""
+        }
+    },
+    "constraint": {
+        "invalid": "Nilai tidak diizinkan",
+        "required": "Bagian ini diperlukan"
+    },
+    "contact": {
+        "admin": "Silahkan menghubungi administrator survei.",
+        "support": "Silahkan hubungi __supportEmail__ "
+    },
+    "drawwidget": {
+        "annotation": "berkas dan penarikan",
+        "drawing": "menggambar",
+        "signature": "tanda tangan"
+    },
+    "enketo": {
+        "power": "Disediakan oleh"
+    },
+    "error": {
+        "code": "Kode Kesalahan: __code__",
+        "dataloadfailed": "Gagal untuk memuat __filename__.",
+        "econnrefused": "Tidak dapat terhubung dengan Peladen Formulir",
+        "encryptionnotsupported": "Formulir ini memerlukan enkripsi catatan lokal. Sayangnya hal ini tidak didukung oleh browser Anda. Sebaiknya beralih ke browser yang lebih modern.",
+        "formloadfailed": "",
+        "instancenotfound": "Isian tidak ada. Mungkin sudah kadaluarsa",
+        "invalidediturl": "Penyuntingan URL tidak berlaku",
+        "loadfailed": "Gagal untuk mengunduh __resource__",
+        "notfoundinformlist": "",
+        "pagenotfound": "Halaman tidak Ditemukan",
+        "surveyidnotactive": "Survei dengan ID tersebut sudah tidak aktif",
+        "surveyidnotfound": "",
+        "unknown": ""
+    },
+    "feedback": {
+        "header": "Informasi"
+    },
+    "filepicker": {
+        "file": "berkas",
+        "notFound": "File __existing__ tidak dapat ditemukan (biarkan tidak berubah jika sudah dikirimkan dan Anda ingin menyimpannya).",
+        "placeholder": "Klik di sini untuk mengunggah file. (< __maxSize__)",
+        "resetWarning": "",
+        "toolargeerror": "Berkas terlalu besar (> __maxSize__)",
+        "waitingForPermissions": "Menunggu ijin pengguna"
+    },
+    "form": {
+        "chooseLanguage": "Pilih Bahasa",
+        "logout": "keluar",
+        "pages": {
+            "back": "Kembali",
+            "end": "Ke Bagian Akhir",
+            "next": "Berikutnya",
+            "return": "Kembali ke Awal"
+        },
+        "required": "wajib"
+    },
+    "formfooter": {
+        "complete": {
+            "btn": "Lengkap"
+        },
+        "savedraft": {
+            "btn": "Simpan Draft",
+            "label": "Simpan sebagai draf"
+        },
+        "submit": {
+            "btn": "Kirim"
+        },
+        "validate": {
+            "btn": "Validasi"
+        }
+    },
+    "geopicker": {
+        "accuracy": "akurasi (m)",
+        "altitude": "ketinggian (m)",
+        "closepolygon": "tutup poligon",
+        "kmlcoords": "Koordinat KML",
+        "kmlpaste": "salin koordinat KML disini",
+        "latitude": "lintang (x.y °)",
+        "longitude": "",
+        "points": "titik",
+        "removePoint": "",
+        "searchPlaceholder": "lacak tempat atau alamat",
+        "bordersintersectwarning": ""
+    },
+    "here": "di sini",
+    "hint": {
+        "guidance": {
+            "details": "Lebih detil"
+        }
+    },
+    "home": {
+        "msg": ""
+    },
+    "imagemap": {
+        "svgNotFound": "Gambar SVG tidak ditemukan"
+    },
+    "langs": {
+        "ar": "Arab",
+        "cs": "",
+        "de": "Jerman",
+        "el": "Yunani",
+        "en": "Inggris",
+        "es": "Spanyol",
+        "fa": "Persia",
+        "fi": "Finlandia",
+        "fr": "Prancis",
+        "he": "Ibrani",
+        "hi": "India",
+        "it": "Italia",
+        "ka": "Georgia",
+        "km": "Kamboja",
+        "lo": "Laos",
+        "nl": "Jerman",
+        "no": "Norwegia",
+        "pa": "Panjabi",
+        "pl": "Polandia",
+        "pt": "Portugis",
+        "ro": "Rumania",
+        "ru": "Rusia",
+        "sk": "Slovakia",
+        "sq": "Albanian",
+        "supported": "Bahasa yang didukung:",
+        "sv": "Swedia",
+        "sw": "Swahili",
+        "th": "Thailand",
+        "tr": "Turki",
+        "uk": "",
+        "vi": "Vietnam",
+        "zh": "Cina"
+    },
+    "literacywidget": {
+        "finish": "Selesai",
+        "start": "Mulai"
+    },
+    "page": {
+        "modernbrowsers": {
+            "heading": "Browser modern",
+            "ie": {
+                "heading": "",
+                "msg": ""
+            },
+            "msg1": "",
+            "msg2": ""
+        },
+        "offline": {
+            "heading": "Halaman yang diminta tidak dapat diakses",
+            "msg1": ""
+        }
+    },
+    "prompt": {
+        "default": {
+            "heading": "Masukan nilai"
+        },
+        "login": {
+            "heading": "",
+            "password": "Kata Sandi",
+            "remember": "Ingat di komputer ini",
+            "submit": "Kirim",
+            "username": "Username"
+        }
+    },
+    "rankwidget": {
+        "clickstart": "Klik untuk mulai",
+        "tapstart": "Tekan untuk mulai"
+    },
+    "record-list": {
+        "export": "Ekspor",
+        "msg1": "",
+        "msg2": "",
+        "msg2-nodraft": "",
+        "msg3": "",
+        "norecords": "tidak ada antrian record",
+        "title": "Antrian",
+        "upload": "Unggah"
+    },
+    "selectpicker": {
+        "noneselected": "tidak ada yang terpilih",
+        "numberselected": "__number__ terpilih"
+    },
+    "store": {
+        "error": {
+            "iosusesafari": "",
+            "notavailable": "",
+            "notsupported": "Browser Anda tidak dapat menjalankan form ini. Harap menggunakan browser terkini/modern browser."
+        }
+    },
+    "submission": {
+        "http0": "",
+        "http2xx": "Respon tidak terduga ketika mengirim data.",
+        "http400": "Server data tidak menerima data.",
+        "http401": "Terdapat masalah otentikasi dengan server data.",
+        "http403": "Tidak diperbolehkan untuk mengirim data ke server data ini.",
+        "http404": "Service pengiriman pada server data tidak ditemukan.",
+        "http408": "Server data time out.",
+        "http413": "Ukuran data terlalu besar.",
+        "http4xx": "Terdapat permasalahan pada server data.",
+        "http500": "Server data untuk form Anda atau server Enketo sedang bermasalah. Silahkan mencoba lagi beberapa waktu kemudian atau menghubungi __supportEmail__",
+        "http504": "Tidak dapat terkoneksi ke server data."
+    },
+    "themes": {
+        "supported": "Tema yang didukung"
+    },
+    "update": {
+        "newversion": "",
+        "reload": ""
+    },
+    "version": "versi:",
+    "widget": {
+        "comment": {
+            "update": "Perbaharui"
+        }
+    }
+}
