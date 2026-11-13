@@ -46,28 +46,32 @@ const GOOGLE_MAPS = {
 // The geopicker widget's address search
 const GEOCODER = { 'connect-src': ['https://maps.googleapis.com'] };
 
-const GOOGLE_LAYER = /^GOOGLE_/;
+// Same check as the geopicker widget uses to load the Google Maps API
+const GOOGLE_LAYER = /^GOOGLE_(SATELLITE|ROADMAP|HYBRID|TERRAIN)/;
 
 /**
  * Turns a tile URL template into a CSP source for its host, e.g.
  * `https://{s}.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png` becomes `https://*.tile.openstreetmap.fr`.
- * Placeholders in the host (Leaflet's `{s}` subdomains) become a wildcard.
+ * Placeholders in the host (Leaflet's `{s}` subdomains) become a wildcard. Protocol-relative
+ * URLs (`//tiles.example.com/...`) give a source without a scheme, which matches the page's own.
  *
  * @static
  * @param {string} url - Tile URL template
  * @return {string|undefined} CSP source, or undefined if the URL can't be used
  */
 function tileSource(url) {
-    const match = /^(https?):\/\/([^/?#]+)/i.exec(String(url).trim());
+    const match = /^(?:(https?):)?\/\/([^/?#]+)/i.exec(String(url).trim());
 
     if (!match) {
         return undefined;
     }
 
-    const [, protocol, host] = match;
+    const [, protocol, authority] = match;
+    // Leave out any credentials (user:password@), which aren't allowed in a CSP source
+    const host = authority.slice(authority.lastIndexOf('@') + 1);
     const labels = host.toLowerCase().split('.');
 
-    if (labels.slice(1).some((label) => label.includes('{'))) {
+    if (!host || labels.slice(1).some((label) => label.includes('{'))) {
         // Only a leading placeholder can be expressed as a CSP wildcard
         return undefined;
     }
@@ -76,7 +80,9 @@ function tileSource(url) {
         labels[0] = '*';
     }
 
-    return `${protocol.toLowerCase()}://${labels.join('.')}`;
+    const source = labels.join('.');
+
+    return protocol ? `${protocol.toLowerCase()}://${source}` : source;
 }
 
 /**
@@ -92,12 +98,25 @@ function tileUrls(map) {
 }
 
 /**
- * @param {string} [trackerUrl] - Piwik/Matomo tracker URL
- * @return {string|undefined} The tracker's origin
+ * @param {string} [trackerUrl] - Piwik/Matomo tracker URL, which may leave out the protocol
+ * @return {string|undefined} CSP source for the tracker's host
  */
-function originOf(trackerUrl) {
+function trackerSource(trackerUrl) {
+    if (typeof trackerUrl !== 'string') {
+        return undefined;
+    }
+
+    const value = trackerUrl.trim();
+    const protocolRelative = value.startsWith('//');
+
     try {
-        return new URL(trackerUrl).origin;
+        const url = new URL(protocolRelative ? `https:${value}` : value);
+
+        if (!/^https?:$/.test(url.protocol)) {
+            return undefined;
+        }
+
+        return protocolRelative ? url.host : url.origin;
     } catch (e) {
         return undefined;
     }
@@ -140,9 +159,20 @@ function buildDefaultCSP({ maps, analytics, google, piwik } = {}) {
             ? maps
             : [{ tiles: ['https://tile.openstreetmap.org/{z}/{x}/{y}.png'] }];
     const urls = layers.flatMap(tileUrls);
+    const googleLayers = urls.filter((url) => GOOGLE_LAYER.test(url));
     const tileSources = urls
         .filter((url) => !GOOGLE_LAYER.test(url))
-        .map(tileSource)
+        .map((url) => {
+            const source = tileSource(url);
+
+            if (!source) {
+                console.warn(
+                    `CSP: can't allow the map tiles at "${url}" in the default policy; set csp.value to allow them.`
+                );
+            }
+
+            return source;
+        })
         .filter(Boolean);
 
     // Tiles are images, but the offline service worker re-fetches them, which is checked against
@@ -150,7 +180,7 @@ function buildDefaultCSP({ maps, analytics, google, piwik } = {}) {
     add({ 'img-src': tileSources, 'connect-src': tileSources });
     add(GEOCODER);
 
-    if (urls.some((url) => GOOGLE_LAYER.test(url))) {
+    if (googleLayers.length > 0) {
         add(GOOGLE_MAPS);
     }
 
@@ -161,17 +191,25 @@ function buildDefaultCSP({ maps, analytics, google, piwik } = {}) {
         add(GOOGLE_ANALYTICS);
     }
 
-    const piwikOrigin = originOf(
+    const piwikSource = trackerSource(
         piwik && piwik.analytics && piwik.analytics['tracker url']
     );
 
-    if (analytics === 'piwik' && piwikOrigin) {
+    if (analytics === 'piwik' && piwikSource) {
         add({
-            'script-src': [piwikOrigin],
-            'img-src': [piwikOrigin],
-            'connect-src': [piwikOrigin],
+            'script-src': [piwikSource],
+            'img-src': [piwikSource],
+            'connect-src': [piwikSource],
         });
     }
+
+    // A directive that is left out falls back to default-src, so one that is added must keep
+    // those sources too, or same-origin fonts and frames would be blocked.
+    ['font-src', 'frame-src'].forEach((directive) => {
+        if (directives[directive].length > 0) {
+            directives[directive].unshift(...directives['default-src']);
+        }
+    });
 
     return Object.entries(directives)
         .filter(([, sources]) => sources.length > 0)
