@@ -43,6 +43,8 @@ i18next
         // debug: true, // DEBUG
         supportedLngs: app.get('languages supported'),
         fallbackLng: ['en'],
+        // Transifex sends untranslated strings as empty, fall back to English for them
+        returnEmptyString: false,
         joinArrays: '\n',
         backend: {
             loadPath: path.resolve(
