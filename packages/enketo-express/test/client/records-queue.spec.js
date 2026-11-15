@@ -439,17 +439,9 @@ describe('Records queue', () => {
             records.setAutoSavedDefaults(undefined);
         });
 
-        /**
-         * Auto-saved records are named after Date.now(), and names must be unique per form, so
-         * move the fake clock on as real autosaves in different sessions would.
-         *
-         * @param {EnketoRecord} record
-         */
-        const autoSave = (record) => {
-            timers.tick(1);
-
-            return records.updateAutoSavedRecord(record);
-        };
+        // Fake timers freeze Date.now(), so all autosaves in these tests are made in the same
+        // millisecond, as they can be in two tabs opened with different URL defaults.
+        const autoSave = (record) => records.updateAutoSavedRecord(record);
 
         it('keeps the key used before autosaves were bound to URL defaults when there are none', () => {
             [undefined, null, {}].forEach((defaults) => {
@@ -519,6 +511,29 @@ describe('Records queue', () => {
                     return autoSave({ ...recordB, xml: '<model>B</model>' });
                 })
                 .then(() => {
+                    records.setAutoSavedDefaults(alice);
+
+                    return records.getAutoSavedRecord();
+                })
+                .then((record) => {
+                    expect(record.xml).to.equal('<model>A</model>');
+                })
+                .then(done, done);
+        });
+
+        it('keeps the autosaves for different URL defaults made in the same millisecond', (done) => {
+            records.setAutoSavedDefaults(alice);
+
+            autoSave({ ...recordA, xml: '<model>A</model>' })
+                .then(() => {
+                    records.setAutoSavedDefaults(bob);
+
+                    return autoSave({ ...recordB, xml: '<model>B</model>' });
+                })
+                .then(() => records.getAutoSavedRecord())
+                .then((record) => {
+                    expect(record.xml).to.equal('<model>B</model>');
+
                     records.setAutoSavedDefaults(alice);
 
                     return records.getAutoSavedRecord();

@@ -217,8 +217,9 @@ function getAutoSavedRecord() {
 function updateAutoSavedRecord(record) {
     // prevent this record from accidentally being submitted
     record.draft = true;
-    // give an internal name
-    record.name = `__autoSave_${Date.now()}`;
+    // give an internal name, unique per set of URL defaults so that autosaves of different
+    // links made in the same millisecond don't clash in the unique [enketoId, name] index
+    record.name = `__autoSave_${Date.now()}${autoSavedDefaultsSuffix}`;
     // use the pre-defined key
     record.instanceId = getAutoSavedKey();
     // make the record valid
