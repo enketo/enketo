@@ -292,8 +292,9 @@ function Seed(instanceId, symmetricKey) {
 
     this.getIncrementedSeedByteString = () => {
         const index = ivCounter % ivSeedArray.length;
-        // Wrap at 256 like the Java byte overflow in ODK Collect, or the
-        // decryption tools cannot regenerate the IV
+        // Wrap at 256 to generate the IV the OpenRosa encryption
+        // specification expects; otherwise decryption tools cannot
+        // regenerate it
         ivSeedArray[index] = (ivSeedArray[index] + 1) % 256;
         ++ivCounter;
 
