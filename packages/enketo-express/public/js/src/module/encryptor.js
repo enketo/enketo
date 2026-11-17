@@ -293,8 +293,7 @@ function Seed(instanceId, symmetricKey) {
     this.getIncrementedSeedByteString = () => {
         const index = ivCounter % ivSeedArray.length;
         // Wrap at 256 to generate the IV the OpenRosa encryption
-        // specification expects; otherwise decryption tools cannot
-        // regenerate it
+        // specification expects
         ivSeedArray[index] = (ivSeedArray[index] + 1) % 256;
         ++ivCounter;
 
