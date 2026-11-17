@@ -291,7 +291,10 @@ function Seed(instanceId, symmetricKey) {
     let ivCounter = 0;
 
     this.getIncrementedSeedByteString = () => {
-        ++ivSeedArray[ivCounter % ivSeedArray.length];
+        const index = ivCounter % ivSeedArray.length;
+        // Wrap at 256 like the Java byte overflow in ODK Collect, or the
+        // decryption tools cannot regenerate the IV
+        ivSeedArray[index] = (ivSeedArray[index] + 1) % 256;
         ++ivCounter;
 
         return ivSeedArray.map((code) => String.fromCharCode(code)).join('');

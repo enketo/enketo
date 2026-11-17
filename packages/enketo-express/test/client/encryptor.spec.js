@@ -126,6 +126,41 @@ describe('Encryptor', () => {
             ];
             expect(first).to.deep.equal(firstExpected);
         });
+
+        it('wraps a seed byte that overflows 255 back to 0, like a Java byte', () => {
+            // md5 of these inputs is ffd7d27e37d965dfbf3b9849accd4c80, so
+            // the very first increment overflows
+            const seed = new encryptor.Seed(
+                'uuid:test-138',
+                '0123456789abcdefghijklmnopqrstuv'
+            );
+            const first = seed
+                .getIncrementedSeedByteString()
+                .split('')
+                .map((item) => item.charCodeAt(0));
+            expect(first).to.deep.equal([
+                0, 215, 210, 126, 55, 217, 101, 223, 191, 59, 152, 73, 172,
+                205, 76, 128,
+            ]);
+        });
+
+        it('wraps an overflowing seed byte at any position', () => {
+            // md5 of these inputs is 68ffd2ebc3a1e06bd61c38a0778dea42, so
+            // the second increment overflows
+            const seed = new encryptor.Seed(
+                'uuid:test-48',
+                '0123456789abcdefghijklmnopqrstuv'
+            );
+            seed.getIncrementedSeedByteString();
+            const second = seed
+                .getIncrementedSeedByteString()
+                .split('')
+                .map((item) => item.charCodeAt(0));
+            expect(second).to.deep.equal([
+                105, 0, 210, 235, 195, 161, 224, 107, 214, 28, 56, 160, 119,
+                141, 234, 66,
+            ]);
+        });
     });
 
     describe('submission encryption', () => {
