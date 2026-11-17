@@ -17,9 +17,15 @@ import utils from './utils';
 
 const SYMMETRIC_ALGORITHM = 'AES-CFB'; // JAVA: "AES/CFB/PKCS5Padding"
 const ASYMMETRIC_ALGORITHM = 'RSA-OAEP'; // JAVA: "RSA/NONE/OAEPWithSHA256AndMGF1Padding"
+// SHA-256 is used for both the OAEP digest and MGF1. This is what encrypted
+// submissions have always used (node-forge ignored the `mgf` option previously
+// passed here and fell back to the OAEP digest) and what ODK Briefcase decrypts.
+// Changing it would make new submissions impossible to decrypt.
 const ASYMMETRIC_OPTIONS = {
     md: forge.md.sha256.create(),
-    mgf: forge.mgf.mgf1.create(forge.md.sha1.create()),
+    mgf1: {
+        md: forge.md.sha256.create(),
+    },
 };
 
 /**
@@ -279,22 +285,32 @@ function _encryptContent(content, symmetricKey, seed) {
     return new Blob([array]);
 }
 
+/**
+ * Generates the IV for each encrypted file: the seed is the
+ * 16-byte MD5 hash of the instanceID and the symmetric key, and each file
+ * increments the next byte of it (cycling through all 16 bytes).
+ *
+ * The bytes are kept in a Uint8Array so they wrap from 0xff to 0x00, like
+ * Java's `byte`. A plain number array would hold 256 instead, which node-forge
+ * folds into the neighboring byte, producing an IV that ODK tools can't
+ * reproduce (so the file's first 16 bytes can't be decrypted).
+ *
+ * @param {string} instanceId - instanceID of the record
+ * @param {string} symmetricKey - symmetric encryption key (binary string)
+ */
 function Seed(instanceId, symmetricKey) {
-    // iv is the 16-byte md5 hash of the instanceID and the symmetric key
     const messageDigest = _md5Digest(
         forge.util.encodeUtf8(instanceId),
         symmetricKey
     ).getBytes();
-    const ivSeedArray = messageDigest
-        .split('')
-        .map((item) => item.charCodeAt(0));
+    const ivSeed = Uint8Array.from(messageDigest, (char) => char.charCodeAt(0));
     let ivCounter = 0;
 
     this.getIncrementedSeedByteString = () => {
-        ++ivSeedArray[ivCounter % ivSeedArray.length];
-        ++ivCounter;
+        ivSeed[ivCounter % ivSeed.length] += 1;
+        ivCounter += 1;
 
-        return ivSeedArray.map((code) => String.fromCharCode(code)).join('');
+        return forge.util.binary.raw.encode(ivSeed);
     };
 }
 
