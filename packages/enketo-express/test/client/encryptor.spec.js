@@ -127,7 +127,7 @@ describe('Encryptor', () => {
             expect(first).to.deep.equal(firstExpected);
         });
 
-        it('wraps a seed byte that overflows 255 back to 0, like a Java byte', () => {
+        it('wraps a seed byte that overflows 255 back to 0', () => {
             // md5 of these inputs is ffd7d27e37d965dfbf3b9849accd4c80, so
             // the very first increment overflows
             const seed = new encryptor.Seed(
