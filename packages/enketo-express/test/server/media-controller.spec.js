@@ -1,3 +1,4 @@
+const { expect } = require('chai');
 const request = require('supertest');
 const http = require('http');
 const nock = require('nock');
@@ -143,5 +144,72 @@ describe('Media controller', () => {
 
             await request(app).get(mediaURL).expect(200, { hostURL });
         }
+    });
+
+    describe('documents that can run scripts', () => {
+        const { origin, pathname } = new URL(testHTMLValidHTTPSURL);
+
+        /**
+         * @param {Record<string, string>} headers - upstream response headers
+         */
+        const getMedia = (headers) => {
+            // Replace the JSON reply set up for the other tests
+            nock.cleanAll();
+            nock(origin).get(pathname).reply(200, '<svg/>', headers);
+
+            return request(app).get(requestValidHTTPSURL).expect(200);
+        };
+
+        [
+            'image/svg+xml',
+            'image/svg+xml; charset=utf-8',
+            'IMAGE/SVG+XML',
+            'text/html',
+            'text/xml',
+            'application/xml',
+            'application/xhtml+xml',
+        ].forEach((contentType) => {
+            it(`are sandboxed when served as ${contentType}`, async () => {
+                const response = await getMedia({
+                    'Content-Type': contentType,
+                    'Content-Security-Policy': "script-src 'unsafe-inline'",
+                });
+
+                expect(response.headers['content-type']).to.equal(contentType);
+                expect(response.headers['content-security-policy']).to.match(
+                    /^sandbox; default-src 'none';/
+                );
+                expect(response.headers['x-content-type-options']).to.equal(
+                    'nosniff'
+                );
+            });
+        });
+
+        it('are sandboxed when served without a content type', async () => {
+            const response = await getMedia({});
+
+            expect(response.headers['content-security-policy']).to.match(
+                /^sandbox;/
+            );
+        });
+
+        ['image/jpeg', 'audio/mpeg', 'video/mp4', 'application/pdf'].forEach(
+            (contentType) => {
+                it(`leaves media served as ${contentType} as is, but not sniffed`, async () => {
+                    const response = await getMedia({
+                        'Content-Type': contentType,
+                    });
+
+                    expect(response.headers['content-type']).to.equal(
+                        contentType
+                    );
+                    expect(response.headers['content-security-policy']).to.be
+                        .undefined;
+                    expect(response.headers['x-content-type-options']).to.equal(
+                        'nosniff'
+                    );
+                });
+            }
+        );
     });
 });

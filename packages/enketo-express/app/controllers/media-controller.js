@@ -87,9 +87,41 @@ async function getMedia(req, res, next) {
     }
 }
 
+/**
+ * Content types a browser renders as a document that can run scripts when the media URL is
+ * opened directly (e.g. an SVG attachment opened from a download link in a new tab).
+ */
+const ACTIVE_CONTENT_TYPE =
+    /^\s*(text\/html|text\/xml|application\/xml|[^;\s]+\+xml)\s*(;|$)/i;
+
+/**
+ * Media is served from Enketo's origin, so a document like the above must not run scripts
+ * or load anything. Images, audio and video loaded by the form itself ignore this header.
+ */
+const ACTIVE_CONTENT_CSP =
+    "sandbox; default-src 'none'; style-src 'unsafe-inline'; img-src data:; font-src data:";
+
+/**
+ * Restricts what proxied media can do when opened as a document. Called before the
+ * upstream headers are copied to the response, so it changes those headers.
+ *
+ * @param {Record<string, string | string[] | undefined>} headers - upstream response headers (lowercase names)
+ */
+function _restrictActiveContent(headers) {
+    const contentType = headers['content-type'];
+
+    // Don't let the browser guess a scriptable type from the content
+    headers['x-content-type-options'] = 'nosniff';
+
+    if (!contentType || ACTIVE_CONTENT_TYPE.test(contentType)) {
+        headers['content-security-policy'] = ACTIVE_CONTENT_CSP;
+    }
+}
+
 function _pipeMedia(options, req, res, next) {
     request
         .get(options)
+        .on('response', (response) => _restrictActiveContent(response.headers))
         .on('error', (error) => _handleMediaRequestError(error, next))
         .pipe(res)
         .on('error', (error) => _handleMediaRequestError(error, next));
