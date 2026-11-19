@@ -65,6 +65,13 @@ self.addEventListener('fetch', (event) => {
         return;
     }
 
+    // Cross-origin requests (e.g. map tiles, analytics) are never cached either. Re-fetching them
+    // here would subject them to this worker's CSP connect-src instead of the page's own directives
+    // (e.g. img-src for map tiles), which blocks them.
+    if (new URL(event.request.url).origin !== self.location.origin) {
+        return;
+    }
+
     event.respondWith(
         caches.match(event.request).then((response) => {
             if (response) {
