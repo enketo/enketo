@@ -232,6 +232,14 @@ Set Content Security Policy (CSP) headers in express. Default is disabled. When 
 - `report only`: Default is `false`. Set to `true` to report, but not enforce, CSP.
 - `value`: Default is `null`. Set to a custom value to override default CSP value.
 
+The default policy only allows the Enketo domain, plus what the configured features need:
+
+- the tile servers of each item in [maps](#maps) (OpenStreetMap if `maps` is empty), and Google's hosts if a `GOOGLE_*` layer is used
+- `maps.googleapis.com` for the address search in map widgets
+- Google Analytics or Piwik hosts, when configured in [analytics](#analytics)
+
+When setting a custom `value`, make sure it allows the same sources, or these features will be blocked.
+
 ## csrf cookie name
 
 Default is "\_\_csrf". Set to override the cookie name used for a csrf token. This can be helpful to avoid conflicts with other cookies on a domain.
