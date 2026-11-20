@@ -347,6 +347,7 @@ module.exports = {
         validatePage: config['validate page'],
         swipePage: config['swipe page'],
         textMaxChars: config['text field character limit'],
+        filenameMaxChars: config['attachment file name character limit'],
         csrfCookieName: config['csrf cookie name'],
         excludeNonRelevant: config['exclude non-relevant'],
         experimentalOptimizations: config['experimental optimizations'],
