@@ -69,10 +69,19 @@ function init(formEl, data, loadErrors = []) {
 
     formData = data;
 
+    // Each set of URL defaults gets its own auto-saved record
+    records.setAutoSavedDefaults(data.validatedDefaults);
+
     return _initializeRecords()
         .then(_checkAutoSavedRecord)
         .then((record) => {
-            if (!data.instanceStr && record && record.xml) {
+            // The auto-saved record also replaces an instance built from URL defaults: it was
+            // made with the same defaults and already includes them.
+            if (
+                (!data.instanceStr || records.hasAutoSavedDefaults()) &&
+                record &&
+                record.xml
+            ) {
                 records.setActive(records.getAutoSavedKey());
                 data.instanceStr = record.xml;
             }
@@ -196,7 +205,17 @@ function _checkAutoSavedRecord() {
                 return rec;
             }
             if (rec) {
-                records.removeAutoSavedRecord();
+                // Wait for the removal, so it can't delete the first autosave of the new session,
+                // but don't let a failed removal stop the form from loading
+                return records
+                    .removeAutoSavedRecord()
+                    .catch((error) => {
+                        console.error(
+                            'Could not remove autosaved record',
+                            error
+                        );
+                    })
+                    .then(() => undefined);
             }
         });
 }

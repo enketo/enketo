@@ -134,10 +134,71 @@ function remove(instanceId) {
 }
 
 /**
- * Obtains auto-saved record key
+ * Suffix of the auto-saved record key for the URL defaults the form was opened with.
+ *
+ * @type { string }
+ */
+let autoSavedDefaultsSuffix = '';
+
+/**
+ * Turns URL default values into a suffix for the auto-saved record key.
+ *
+ * @param { Record<string, string> | null } [defaults] - validated `d[path]=value` URL defaults
+ * @return { string } suffix, the same for the same defaults in any order, or '' if there are none
+ */
+function getDefaultsSuffix(defaults) {
+    const paths = Object.keys(defaults || {}).sort();
+
+    if (paths.length === 0) {
+        return '';
+    }
+
+    // The key ends up in `[data-id="..."]` selectors, so encode the quotes, brackets and
+    // backslashes that the JSON and the URL values can contain.
+    return `_${encodeURIComponent(
+        JSON.stringify(paths.map((path) => [path, defaults[path]]))
+    )}`;
+}
+
+/**
+ * Binds the auto-saved record to the URL defaults the form was opened with, so that each
+ * set of defaults (e.g. each participant ID) has its own auto-saved record, and one is never
+ * restored, nor its files merged, into a form opened with other defaults.
+ *
+ * @param { Record<string, string> | null } [defaults] - validated `d[path]=value` URL defaults
+ */
+function setAutoSavedDefaults(defaults) {
+    autoSavedDefaultsSuffix = getDefaultsSuffix(defaults);
+}
+
+/**
+ * @return { boolean } Whether the auto-saved record is bound to URL defaults
+ */
+function hasAutoSavedDefaults() {
+    return autoSavedDefaultsSuffix !== '';
+}
+
+/**
+ * @return { string } Prefix shared by the keys of all auto-saved records of the current form
+ */
+function getAutoSavedKeyPrefix() {
+    return `__autoSave_${settings.enketoId}`;
+}
+
+/**
+ * @param { string } instanceId - instanceID of a record of the current form
+ * @return { boolean } Whether it is an auto-saved record, for any set of URL defaults
+ */
+function isAutoSavedKey(instanceId) {
+    return instanceId.startsWith(getAutoSavedKeyPrefix());
+}
+
+/**
+ * Obtains auto-saved record key. Without URL defaults it is the same key as before
+ * auto-saved records were bound to them.
  */
 function getAutoSavedKey() {
-    return `__autoSave_${settings.enketoId}`;
+    return `${getAutoSavedKeyPrefix()}${autoSavedDefaultsSuffix}`;
 }
 
 /**
@@ -156,8 +217,9 @@ function getAutoSavedRecord() {
 function updateAutoSavedRecord(record) {
     // prevent this record from accidentally being submitted
     record.draft = true;
-    // give an internal name
-    record.name = `__autoSave_${Date.now()}`;
+    // give an internal name, unique per set of URL defaults so that autosaves of different
+    // links made in the same millisecond don't clash in the unique [enketoId, name] index
+    record.name = `__autoSave_${Date.now()}${autoSavedDefaultsSuffix}`;
     // use the pre-defined key
     record.instanceId = getAutoSavedKey();
     // make the record valid
@@ -501,11 +563,11 @@ uploadProgress = {
  * @return { Promise<Record[]> } - records to be displayed in the UI
  */
 function getDisplayableRecordList(enketoId, { finalOnly = false } = {}) {
-    const autoSavedKey = getAutoSavedKey();
+    // Leave out the auto-saved records for every set of URL defaults, not just the current one
     const records = store.record
         .getAll(enketoId, finalOnly)
         .then((records) =>
-            records.filter((record) => record.instanceId !== autoSavedKey)
+            records.filter((record) => !isAutoSavedKey(record.instanceId))
         );
 
     return records;
@@ -595,6 +657,8 @@ export default {
     remove,
     getAutoSavedKey,
     getAutoSavedRecord,
+    setAutoSavedDefaults,
+    hasAutoSavedDefaults,
     getDisplayableRecordList,
     updateAutoSavedRecord,
     removeAutoSavedRecord,

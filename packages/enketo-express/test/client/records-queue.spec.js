@@ -431,6 +431,154 @@ describe('Records queue', () => {
         });
     });
 
+    describe('auto-saved records bound to URL defaults', () => {
+        const alice = { '/data/pid': 'A' };
+        const bob = { '/data/pid': 'B' };
+
+        afterEach(() => {
+            records.setAutoSavedDefaults(undefined);
+        });
+
+        // Fake timers freeze Date.now(), so all autosaves in these tests are made in the same
+        // millisecond, as they can be in two tabs opened with different URL defaults.
+        const autoSave = (record) => records.updateAutoSavedRecord(record);
+
+        it('keeps the key used before autosaves were bound to URL defaults when there are none', () => {
+            [undefined, null, {}].forEach((defaults) => {
+                records.setAutoSavedDefaults(defaults);
+
+                expect(records.getAutoSavedKey()).to.equal(
+                    `__autoSave_${enketoId}`
+                );
+            });
+        });
+
+        it('gives each set of URL defaults its own key, the same in any order', () => {
+            records.setAutoSavedDefaults(alice);
+            const aliceKey = records.getAutoSavedKey();
+
+            records.setAutoSavedDefaults(bob);
+            const bobKey = records.getAutoSavedKey();
+
+            records.setAutoSavedDefaults({ '/data/a': '1', '/data/b': '2' });
+            const abKey = records.getAutoSavedKey();
+
+            records.setAutoSavedDefaults({ '/data/b': '2', '/data/a': '1' });
+
+            expect(aliceKey).to.match(new RegExp(`^__autoSave_${enketoId}_`));
+            expect(aliceKey).not.to.equal(bobKey);
+            expect(records.getAutoSavedKey()).to.equal(abKey);
+        });
+
+        it('makes keys that can be used in data-id selectors whatever the URL values', () => {
+            const list = document.createElement('ul');
+
+            list.className = 'record-list__records';
+            document.body.append(list);
+
+            try {
+                [alice, { '/data/name': 'O"Brien \\ [x]' }].forEach(
+                    (defaults) => {
+                        records.setAutoSavedDefaults(defaults);
+
+                        const key = records.getAutoSavedKey();
+
+                        expect(records.hasAutoSavedDefaults()).to.equal(true);
+                        expect(() =>
+                            document.querySelector(`[data-id="${key}"]`)
+                        ).not.to.throw();
+                        expect(() => records.setActive(key)).not.to.throw();
+                    }
+                );
+            } finally {
+                list.remove();
+                records.setActive(null);
+            }
+        });
+
+        it('keeps a separate autosave for each set of URL defaults', (done) => {
+            records.setAutoSavedDefaults(alice);
+
+            autoSave({ ...recordA, xml: '<model>A</model>' })
+                .then(() => {
+                    records.setAutoSavedDefaults(bob);
+
+                    return records.getAutoSavedRecord();
+                })
+                .then((record) => {
+                    expect(record).to.equal(undefined);
+
+                    return autoSave({ ...recordB, xml: '<model>B</model>' });
+                })
+                .then(() => {
+                    records.setAutoSavedDefaults(alice);
+
+                    return records.getAutoSavedRecord();
+                })
+                .then((record) => {
+                    expect(record.xml).to.equal('<model>A</model>');
+                })
+                .then(done, done);
+        });
+
+        it('keeps the autosaves for different URL defaults made in the same millisecond', (done) => {
+            records.setAutoSavedDefaults(alice);
+
+            autoSave({ ...recordA, xml: '<model>A</model>' })
+                .then(() => {
+                    records.setAutoSavedDefaults(bob);
+
+                    return autoSave({ ...recordB, xml: '<model>B</model>' });
+                })
+                .then(() => records.getAutoSavedRecord())
+                .then((record) => {
+                    expect(record.xml).to.equal('<model>B</model>');
+
+                    records.setAutoSavedDefaults(alice);
+
+                    return records.getAutoSavedRecord();
+                })
+                .then((record) => {
+                    expect(record.xml).to.equal('<model>A</model>');
+                })
+                .then(done, done);
+        });
+
+        it('does not merge the files of the autosave for other URL defaults into a new record', (done) => {
+            records.setAutoSavedDefaults(alice);
+
+            autoSave({ ...recordA, files: files.slice() })
+                .then(() => {
+                    records.setAutoSavedDefaults(bob);
+
+                    return records.save('set', { ...recordB, files: [] });
+                })
+                .then(() => store.record.get(instanceIdB))
+                .then((record) => {
+                    expect(record.files).to.deep.equal([]);
+                })
+                .then(done, done);
+        });
+
+        it('leaves the autosaves for all URL defaults out of the record list', (done) => {
+            records.setAutoSavedDefaults(alice);
+
+            autoSave({ ...recordA })
+                .then(() => records.save('set', recordB))
+                .then(() => {
+                    records.setAutoSavedDefaults(bob);
+
+                    return records.getDisplayableRecordList(enketoId);
+                })
+                .then((list) => {
+                    expect(
+                        list.map((record) => record.instanceId)
+                    ).to.deep.equal([instanceIdB]);
+                })
+                .then(done, done);
+        });
+    });
+
     describe('Retrieving records', () => {
         it('gets the record list, excludes the auto-saved records', (done) => {
             const autoSavedKey = records.getAutoSavedKey();
