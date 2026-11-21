@@ -1,3 +1,4 @@
+import config from 'enketo/config';
 import * as utils from '../../src/js/utils';
 
 describe('Parsing expressions', () => {
@@ -90,6 +91,92 @@ describe('return postfixed filenames', () => {
 
             expect(utils.getFilename(file, postfix)).to.deep.equal(expected);
         });
+    });
+});
+
+describe('return filenames shortened to a maximum length', () => {
+    const postfix = '-12_34_56';
+    const longBase = 'a'.repeat(120);
+
+    [
+        [
+            'shortens the base name, keeping postfix and extension',
+            `${longBase}.jpg`,
+            20,
+            `${'a'.repeat(7)}${postfix}.jpg`,
+        ],
+        [
+            'shortens a name without an extension',
+            longBase,
+            20,
+            `${'a'.repeat(11)}${postfix}`,
+        ],
+        [
+            'drops the whole base when postfix and extension fill the limit',
+            'abc.jpg',
+            13,
+            `${postfix}.jpg`,
+        ],
+        [
+            'keeps only the extension when it fills the limit',
+            'abc.jpg',
+            4,
+            '.jpg',
+        ],
+        [
+            'cuts the full name when the extension alone exceeds the limit',
+            'abc.averyveryverylongextension',
+            10,
+            'abc-12_34_',
+        ],
+        [
+            'leaves a long name unchanged when the limit is negative',
+            `${longBase}.jpg`,
+            -1,
+            `${longBase}${postfix}.jpg`,
+        ],
+        [
+            'leaves a name that fits unchanged',
+            'short.jpg',
+            20,
+            `short${postfix}.jpg`,
+        ],
+    ].forEach(([description, name, maxLength, expected]) => {
+        it(description, () => {
+            expect(utils.getFilename({ name }, postfix, maxLength)).to.equal(
+                expected
+            );
+        });
+    });
+
+    it('shortens the postfix and keeps the extension when both exceed the limit', () => {
+        const result = utils.getFilename(
+            { name: 'recording.webm' },
+            '-20261120_120000',
+            20
+        );
+
+        expect(result).to.equal('-20261120_12000.webm');
+    });
+
+    it('does not split a character made of two UTF-16 code units', () => {
+        const result = utils.getFilename({ name: '😀😀😀😀.jpg' }, '-1', 9);
+
+        expect(result).to.equal('😀😀😀-1.jpg');
+        expect(Array.from(result).length).to.equal(9);
+    });
+
+    it('takes the maximum length from config.filenameMaxChars by default', () => {
+        const original = config.filenameMaxChars;
+        config.filenameMaxChars = 20;
+
+        try {
+            expect(
+                utils.getFilename({ name: `${longBase}.jpg` }, postfix)
+            ).to.equal(`${'a'.repeat(7)}${postfix}.jpg`);
+        } finally {
+            config.filenameMaxChars = original;
+        }
     });
 });
 

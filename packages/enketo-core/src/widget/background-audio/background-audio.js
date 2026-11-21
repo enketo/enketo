@@ -1,7 +1,7 @@
 import { t } from 'enketo/translator';
 import Widget from '../../js/widget';
 import AudioRecorder from '../../js/audio-recorder/audio-recorder';
-import { setCachedFile, getCachedFile } from '../../js/utils';
+import { setCachedFile, getCachedFile, getFilename } from '../../js/utils';
 import dialog from 'enketo/dialog';
 
 /**
@@ -287,7 +287,7 @@ class BackgroundAudioWidget extends Widget {
             .replace(/\D/g, '')
             .slice(0, 14);
         const postfix = `-${timestamp.slice(0, 8)}_${timestamp.slice(8)}`;
-        return `${baseFileName}${postfix}.webm`;
+        return getFilename({ name: `${baseFileName}.webm` }, postfix);
     }
 
     /**

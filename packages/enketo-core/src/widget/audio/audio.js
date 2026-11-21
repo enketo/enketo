@@ -4,7 +4,7 @@ import AudioRecorder from '../../js/audio-recorder/audio-recorder';
 import { formatTimeMMSS } from '../../js/format';
 import dialog from 'enketo/dialog';
 import fileManager from 'enketo/file-manager';
-import { setCachedFile, getCachedFile } from '../../js/utils';
+import { setCachedFile, getCachedFile, getFilename } from '../../js/utils';
 
 /**
  * AudioWidget that extends the Widget class to handle audio recording and playback.
@@ -558,22 +558,19 @@ class AudioWidget extends Widget {
      * and this ensures that each recording has a unique filename, for cases where the
      * user may upload the same file for multiple questions in the same form.
      *
+     * The name is shortened to `config.filenameMaxChars` if needed.
+     *
      * @param {string} filename - The original filename.
      * @returns {string} - The filename with a timestamp postfix.
      */
     postFixFilename(filename) {
-        // Breaks down the file name
-        const nameParts = filename.split('.');
-        const baseName = nameParts.slice(0, -1).join('.'); // Get the base name without extension
-        const extension = nameParts.slice(-1)[0]; // Get the file extension
-
         const timestamp = new Date()
             .toISOString()
             .replace(/\D/g, '')
             .slice(0, 14);
-        return `${baseName}-${timestamp.slice(0, 8)}_${timestamp.slice(
-            8
-        )}.${extension}`;
+        const postfix = `-${timestamp.slice(0, 8)}_${timestamp.slice(8)}`;
+
+        return getFilename({ name: filename }, postfix);
     }
 
     /**
