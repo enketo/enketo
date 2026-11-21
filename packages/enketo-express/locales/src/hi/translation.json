@@ -39,7 +39,11 @@
         },
         "formupdated": {
             "heading": " फॉर्म अपडेट हो गया!",
-            "msg": "इस फार्म का एक नया संस्करण डाउनलोड किया गया है। अद्यतन संस्करण लोड करने के लिए इस पेज को रिफ्रेश करें।"
+            "later": "बाद में",
+            "msg": "इस फार्म का एक नया संस्करण डाउनलोड किया गया है। अद्यतन संस्करण लोड करने के लिए इस पेज को रिफ्रेश करें।",
+            "refresh": "",
+            "refreshwithoutsaving": "",
+            "unsavedmsg": ""
         },
         "gotonotfound": {
             "msg": "सवाल \"__path__\" फ़ॉर्म में नहीं मिला। क्या इस सवाल का संदर्भ सही है?"
@@ -48,7 +52,7 @@
             "editadvice": "कृपया इस रिकॉर्ड को नहीं बदलें जब तक  इसका समाधान हो नहीं जाता है।",
             "entryadvice": "कृपया तब तक इस फॉर्म का उपयोग डाटा प्रविष्ट करने के लिए न करें जब तक इसका समाधान नहीं हो जाता।",
             "heading": "त्रुटि लोड हो रही है",
-            "msg1": "त्रुटि इस फार्म की लोडिंग के दौरान हुई।",
+            "msg1": "",
             "msg2": "इस पेज और नीचे त्रुटि संदेश के लिंक के साथ __emailLink__पर संपर्क करें:",
             "heading_plural": "त्रुटियाँ लोड हो रही हैं",
             "msg1_plural": " इस फार्म की लोडिंग के दौरान त्रुटियाँ हुई।",
@@ -71,7 +75,7 @@
             "msg": "ऑफलाइन एप्लीकेशन लांच आपके ब्राउज़र द्वारा समर्थित नहीं है। आप इस सुविधा के बिना सर्वेक्षण का उपयोग करें या इस को हल करने के लिए विकल्प देख सकते हैं।",
             "negButton": "इसका उपयोग करें",
             "posButton": "विकल्प दिखायें",
-            "refresh": "This form can no longer launch offline. Please refresh the page to try to fix this."
+            "refresh": ""
         },
         "queuesubmissionsuccess": {
             "msg": "__recordNames__ सफलतापूर्वक प्रस्तुत की गई थी",
@@ -88,11 +92,11 @@
             "finalmsg": "रिकार्ड जमा होने के लिए पंक्तिबद्ध।"
         },
         "savedraftinfo": {
-            "heading": "Finalize record later",
+            "heading": "",
             "msg": [
-                "The draft record is stored only within the current browser. You can close this browser without losing the stored record.",
-                "Draft records can be accessed by reopening this page and clicking the button on the left of the screen that looks like this: __icon__",
-                "Warning: If you clear your browser cache, all draft and unsubmitted final records will be permanently deleted."
+                "",
+                "",
+                ""
             ]
         },
         "submission": {
@@ -103,7 +107,7 @@
             "authrequiredmsg": "प्रमाणीकरण आवश्यक। एक अलग ब्राउज़र टैब में __here__ प्रमाणित करें और फिर कोशिश करें।",
             "fnfmsg": [
                 "निम्नलिखित मीडिया फ़ाइलों को प्राप्त नहीं किया जा सकता है: __failedFiles__।  इन फ़ाइलों के बिना फॉर्म सफलतापूर्वक जमा हो गया",
-                "Please contact __supportEmail__ to report a bug and if possible explain how the issue can be reproduced."
+                ""
             ],
             "heading": "जमा करने में असफल"
         },
@@ -131,6 +135,34 @@
             "heading": "फ़ॉर्मूले में त्रुटि",
             "msg": "एक फ़ॉर्मूला मूल्यांकन त्रुटि उत्पन्न हुई। इस त्रुटि के साथ __emailLink__  पर संपर्क करें:"
         }
+    },
+    "audioRecording": {
+        "error": {
+            "accessDenied": "",
+            "noMicrophone": "",
+            "notSupported": "",
+            "unknownError": "",
+            "recordingError": "",
+            "recordingInProgress": "",
+            "invalidAudioFile": {
+                "msg": "",
+                "heading": ""
+            }
+        },
+        "startRecording": "",
+        "uploadAudioFile": "",
+        "deleteWarning": "",
+        "backgroundDisclaimer": {
+            "heading": "",
+            "msg": [
+                "",
+                "",
+                "",
+                ""
+            ],
+            "buttonText": ""
+        },
+        "hasRecordedAudio": ""
     },
     "changelog": "बदलाव संग्रह",
     "confirm": {
@@ -163,6 +195,10 @@
         },
         "login": {
             "heading": "लॉगिन अनिवार्य ",
+            "queuedMsg": [
+                "",
+                "क्या आप लॉगिन अभी करना चाहेंगे या बाद में?"
+            ],
             "msg": [
                 "अपना कतारबद्ध डाटा जमा करने के लिए,आपको लॉग इन करना पड़ेगा । अगर आप अब ऐसा करना चाहेंगे, तो आपको पुनः निर्देशित किया जाएगा, और आप बिना सहेज़ी हुई जानकारी खो देंगे।",
                 "क्या आप लॉगिन अभी करना चाहेंगे या बाद में?"
@@ -187,7 +223,7 @@
             "msg": "यह क्रिया अपरिवर्तनीय है। क्या आप इसके साथ आगे बढ़ना चाहते हैं?"
         },
         "save": {
-            "existingerror": "यह रिकॉर्ड नाम या ID पहले से  मौजूद है।",
+            "existingerror": "यह रिकॉर्ड नाम या ID पहले से मौजूद है। कृपया इसे बदलें।",
             "hint": "।इस नाम से आप वह ड्राफ्ट रेकॉर्ड जिसे आप बाद में बाद में पूर्ण करना चाहते हों, सरलता से ढूंड  सकते हैं ",
             "msg": " परिवर्तन सहेजे  नही गये हैं क्या आप उन्हें बिना सहेजे आगे बढ़ना चाहते  हैं ?",
             "name": "रिकॉर्ड का नाम",
@@ -214,19 +250,17 @@
     },
     "error": {
         "code": "त्रुटि कोड: __code__",
-        "dataloadfailed": "__url__ से  डाटा लोड करने में असफल",
-        "econnrefused": "सर्वर से कनेक्ट नहीं हो पाया ",
-        "encryptionnotsupported": "This form requires local encryption of records. Unfortunately this is not supported by your browser. We recommend switching to a modern browser.",
+        "dataloadfailed": "__filename__ लोड करने में विफल।",
+        "econnrefused": "सर्वर से कनेक्ट नहीं हो पाया",
+        "encryptionnotsupported": "",
+        "formloadfailed": "",
         "instancenotfound": "रिकार्ड मौजूद नहीं है।हो सकता है कि उसकी अवधि समाप्त हो गयी हो।",
         "invalidediturl": "यह एक  मान्य संपादित यूआरएल नही है ",
         "loadfailed": "__resource__ लोड करने में असफल",
-        "notfoundinformlist": [
-            "Oops, this form doesn't exist (anymore). Most likely the owner of the form has deleted it, archived it, or disabled it. Please contact the form's owner to confirm.",
-            "आईडी __formId__ वाल फ़ॉर्म /formList में नहीं मिला।"
-        ],
+        "notfoundinformlist": "",
         "pagenotfound": "पृष्ठ नहीं मिला",
         "surveyidnotactive": "इस आईडी के साथ सर्वेक्षण अब सक्रिय नहीं है",
-        "surveyidnotfound": "इस आईडी के साथ सर्वेक्षण नहीं मिला",
+        "surveyidnotfound": "",
         "unknown": "एक अज्ञात त्रुटि हुई"
     },
     "feedback": {
@@ -234,7 +268,7 @@
     },
     "filepicker": {
         "file": "फ़ाइल",
-        "notFound": "File __existing__ could not be found (leave unchanged if already submitted and you want to preserve it).",
+        "notFound": "",
         "placeholder": "फ़ाइल अपलोड करने के लिए यहाँ दबाएँ। (<__maxSize__)",
         "resetWarning": "इस से __item__ को हटा दिया जाएगा। क्या आप यह करना चाहते हैं?",
         "toolargeerror": "फ़ाइल बहुत बड़ी है (>__maxSize__)",
@@ -270,13 +304,14 @@
         "accuracy": "सटीकता (एम)",
         "altitude": "ऊंचाई (मीटर)",
         "closepolygon": "बंद बहुभुज",
-        "kmlcoords": "KML coordinates",
-        "kmlpaste": "paste KML coordinates here",
+        "kmlcoords": "",
+        "kmlpaste": "",
         "latitude": "अक्षांश (XY °)",
         "longitude": "देशांतर (XY °)",
         "points": "बिंदूएँ",
-        "removePoint": "This will completely remove the current geopoint from the list of geopoints and cannot be undone. Are you sure you want to do this?",
-        "searchPlaceholder": "स्थान या पता खोजने हेतु"
+        "removePoint": "",
+        "searchPlaceholder": "स्थान या पता खोजने हेतु",
+        "bordersintersectwarning": ""
     },
     "here": "यहाँ",
     "hint": {
@@ -288,7 +323,7 @@
         "msg": "__appTitle__ चल रहा है! अपने __serverName__ स्थापना से Enketo फ़ॉर्मों का उपयोग करें।"
     },
     "imagemap": {
-        "svgNotFound": "SVG image could not be found"
+        "svgNotFound": ""
     },
     "langs": {
         "ar": "अरबी",
@@ -298,27 +333,29 @@
         "en": "अंग्रेज़ी",
         "es": "स्पेनिश",
         "fa": "फ़ारसी",
-        "fi": "Finnish",
+        "fi": "",
         "fr": "फ्रेंच",
         "he": "यहूदी",
         "hi": "हिंदी",
         "it": "इतालवी",
-        "ka": "Georgian",
+        "ka": "",
         "km": "खमेर",
-        "lo": "Lao",
+        "lo": "",
         "nl": "डच",
         "no": "नार्वेजियन",
-        "pa": "Panjabi",
-        "pl": "Polish",
+        "pa": "",
+        "pl": "",
         "pt": "पॉर्चुगीज़",
         "ro": "रोमानियाई",
         "ru": "रूसी",
         "sk": "स्लोवाक",
-        "sq": "Albanian",
+        "sq": "",
         "supported": "यह बोलियाँ समर्थित हैं :",
-        "sv": "Swedish",
+        "sv": "",
         "sw": "स्वाहिली",
         "th": "थाई",
+        "tr": "",
+        "uk": "",
         "vi": "वियतनामी",
         "zh": "चीनी"
     },
@@ -360,8 +397,8 @@
     "record-list": {
         "export": "निर्यात करें",
         "msg1": "रिकॉर्ड आपके ब्राउज़र में तब तक संग्रहित रहते हैं, जब तक वे अपलोड नहीं होते ( भले ही आप अपने कंप्यूटर को बंद कर दें या ऑफलाइन हो जाएँ)।",
-        "msg2": "Queued records, except those marked as draft __icon__, are uploaded automatically, in the background, every 5 minutes when the web page is open and an Internet connection is available.",
-        "msg2-nodraft": "Queued records are uploaded automatically, in the background, every 5 minutes when the web page is open and an Internet connection is available.",
+        "msg2": "",
+        "msg2-nodraft": "",
         "msg3": "स्वचालित प्रयास के दौरान बाध्यपुर्वक अपलोड हेतु, अपलोड पर क्लिक करें",
         "norecords": "कोई रिकॉर्ड पंक्तिबद्ध नहीं है",
         "title": "कतार",
@@ -379,7 +416,7 @@
         }
     },
     "submission": {
-        "http0": "विफल (ऑफलाइन?)।",
+        "http0": "सर्वर उपलब्ध नहीं है या हो सकता है कि आप इंटरनेट से कनेक्ट न हों।",
         "http2xx": "डेटा भेजने के दौरान अप्रत्याशित प्रतिक्रिया हुई।",
         "http400": "डाटा सर्वर  ने  स्वीकार डाटा नहीं किया।",
         "http401": " डेटा  सर्वर के साथ प्रमाणीकरण समस्या है।",
@@ -392,7 +429,11 @@
         "http504": "डाटा सर्वर से मेल नहीं हो पाया।"
     },
     "themes": {
-        "supported": "Themes supported"
+        "supported": ""
+    },
+    "update": {
+        "newversion": "",
+        "reload": ""
     },
     "version": "संस्करण:",
     "widget": {

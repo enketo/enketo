@@ -8,13 +8,7 @@
                 "msg": "Để thêm form này vào màn hình bắt đầu-Homescreen-của bạn, hãy kích vào trình duyệt biểu tượng thiết lập _image1_ và chọn: 'Thêm vào màn hình bắt đầu'."
             },
             "androidfirefox": {
-                "msg": [
-                    "Thêm form này vào màn hình bắt đầu-Homescreen-của bạn",
-                    "1. Thêm trang này vào bảng đánh dấu bookmark trong Firefox bằng cách bấm chuột vào biểu tượng thiết lập  __image1__  và vào biểu tượng ngôi sao  __image2__",
-                    "2. Mở bảng đánh dấu bookmark của bạn bằng cách mở một trang mới và kích vào tab Bookmarks",
-                    "3. Hãy kích và giữ nguyên trên form cho đến khi cửa sổ menu xuất hiện.",
-                    "4. Hãy chọn \"Màn hình bắt đầu\" Home screen."
-                ]
+                "msg": ""
             },
             "heading": "Thêm vào màn hình bắt đầu- Home Screen",
             "iossafari": {
@@ -25,32 +19,40 @@
             "heading": "Ứng dụng đã được cập nhật!",
             "msg": "Một phiên bản mới đã được tải xuống. Làm tươi trang này để có được phiên bản cập nhật"
         },
+        "closing": {
+            "heading": "Đang đóng"
+        },
         "default": {
             "button": "Đóng",
             "heading": "Khẩn"
         },
         "export": {
-            "alternativequestion": "tùy chọn tải xuống khác- trực tuyến",
             "error": {
                 "filecreatedmsg": "Thay vào đó, một tệp tin không đầy đủ đã được tạo.",
                 "heading": "Lỗi xuất dữ liệu",
-                "linknotcreated": "Lỗi khi tạo một liên kết xuất dữ liệu đối với các bản ghi chưa được gởi lên máy chủ. Bạn đang online?",
-                "msg": "Có lỗi khi tạo file dữ liệu xuất bản ghi. Các lỗi là __errors__"
+                "msg": "Có lỗi khi tạo file dữ liệu xuất bản ghi. Lỗi: __errors__"
             },
             "success": {
                 "heading": "Dữ liệu xuất đã được tạo",
-                "msg": "File xuất dữ liệu đã được tạo đối với các bản ghi chưa được gởi thuộc về form này."
+                "msg": "File xuất dữ liệu đã được tạo gồm các bản ghi chưa được gởi của biểu mẫu này."
             }
         },
         "formupdated": {
-            "heading": "Form đã được cập nhật",
-            "msg": "Một phiên bản mới của form này đã được tải xuống. Làm tươi lại trang này để tải phiên bản đã được thay đổi."
+            "heading": "Biểu mẫu đã được cập nhật",
+            "later": "Sau này",
+            "msg": "Một phiên bản mới của biểu mẫu này đã được tải xuống thiết bị của bạn. Làm tươi, \"refresh\", lại trang này để tải phiên bản đã được thay đổi.",
+            "refresh": "",
+            "refreshwithoutsaving": "",
+            "unsavedmsg": ""
+        },
+        "gotonotfound": {
+            "msg": "Không tìm thấy câu hỏi \"1__path__\" trong biểu mẫu. Xem lại tham chiếu đến câu hỏi này "
         },
         "loaderror": {
             "editadvice": "Không nên sửa bản ghi này cho đến khi vấn đề được giải quyết",
             "entryadvice": "Không nên dùng form này để nhập liệu cho đến khi vấn đề được giải quyết.",
             "heading": "Lỗi tải",
-            "msg1": "Có lỗi trong khi tải form này.",
+            "msg1": "",
             "msg2": "Xin liên hệ với __emailLink__ với liên kết đến trang này và thông báo lỗi như sau:",
             "heading_plural": "Các lỗi tải",
             "msg1_plural": "Có lỗi xảy ra khi tải form này.",
@@ -72,7 +74,8 @@
             "heading": "Ứng dụng không thể chạy offline.",
             "msg": "Việc sử dụng offline không được trình duyệt của bạn hỗ trợ. Bạn có thể thu thập dữ liệu mà không dùng tính năng này hoặc xem xét các tùy chọn để giải quyết vấn đề này.",
             "negButton": "Hãy dùng nó",
-            "posButton": "Hiển thị các tùy chọn"
+            "posButton": "Hiển thị các tùy chọn",
+            "refresh": ""
         },
         "queuesubmissionsuccess": {
             "msg": "_recordNames_ đã được gửi thành công",
@@ -87,6 +90,14 @@
         "recordsavesuccess": {
             "draftmsg": "Bản ghi được lưu lại như là bản nháp",
             "finalmsg": "Bản ghi được đưa vào hàng đợi để gởi đi"
+        },
+        "savedraftinfo": {
+            "heading": "",
+            "msg": [
+                "",
+                "",
+                ""
+            ]
         },
         "submission": {
             "msg": "Đang gởi đi...",
@@ -105,6 +116,11 @@
             "msg": "Dữ liệu của bạn đã được gửi đi!",
             "redirectmsg": "Bây giờ bạn sẽ đăng nhập lại."
         },
+        "thanks": {
+            "heading": "",
+            "msg": "",
+            "msgTaken": ""
+        },
         "validationerror": {
             "msg": "Form có chứa lỗi. Xin xem lại các trường có đánh dấu đỏ."
         },
@@ -112,11 +128,43 @@
             "heading": "OK",
             "msg": "Form hợp lệ!"
         },
+        "valuehasspaces": {
+            "multiple": ""
+        },
         "xpatherror": {
             "heading": "Lỗi công thức",
             "msg": "Một lỗi mô phỏng công thức đã xảy ra. Xin liên hệ _emailLink_ về lỗi này:"
         }
     },
+    "audioRecording": {
+        "error": {
+            "accessDenied": "",
+            "noMicrophone": "",
+            "notSupported": "",
+            "unknownError": "",
+            "recordingError": "",
+            "recordingInProgress": "",
+            "invalidAudioFile": {
+                "msg": "",
+                "heading": ""
+            }
+        },
+        "startRecording": "",
+        "uploadAudioFile": "",
+        "deleteWarning": "",
+        "backgroundDisclaimer": {
+            "heading": "",
+            "msg": [
+                "",
+                "",
+                "",
+                ""
+            ],
+            "buttonText": ""
+        },
+        "hasRecordedAudio": ""
+    },
+    "changelog": "",
     "confirm": {
         "autosaveload": {
             "heading": "Bảng ghi chưa lưu được tìm thấy",
@@ -126,7 +174,7 @@
         },
         "default": {
             "heading": "Bạn chắc chứ?",
-            "msg": "Xin xác nhận động tác này",
+            "msg": "Xin xác nhận thao tác này",
             "negButton": "Hủy",
             "posButton": "Xác nhận"
         },
@@ -142,11 +190,15 @@
         },
         "discardcurrent": {
             "heading": "Các sửa đổi chưa được lưu",
-            "msg": "Form hiện tại  có các thay đổi chưa được lưu. Bạn có muốn tải bản ghi mà không lưu thay đổi này?",
+            "msg": "Biểu mẫu hiện tại  có các thay đổi chưa được lưu. Bạn có muốn tải bản ghi mà không lưu thay đổi này?",
             "posButton": "Tiến hành mà không lưu."
         },
         "login": {
             "heading": "Cần phải đăng nhập",
+            "queuedMsg": [
+                "",
+                "Bạn muốn đăng nhập bây giờ hoặc để sau?"
+            ],
             "msg": [
                 "Để đưa dữ liệu đang chờ lên máy chủ bạn cần phải đăng nhập. Nếu bạn chấp nhận bạn sẽ được dẫn đến trang đăng nhập và sẽ bị mất thông tin chưa được lưu",
                 "Bạn muốn đăng nhập bây giờ hoặc để sau?"
@@ -166,8 +218,12 @@
             "psize": "Khổ giấy",
             "reminder": "Hãy nhớ thiết lập việc in ấn như nhau trong trình đơn in của trình duyệt sau này!"
         },
+        "repeatremove": {
+            "heading": "",
+            "msg": ""
+        },
         "save": {
-            "existingerror": "Tên hoặc ID của bản ghi này đã có.",
+            "existingerror": "Tên hoặc ID của bản ghi này đã tồn tại. Vui lòng thay đổi.",
             "hint": "Tên này cho phép bạn tìm kiếm dễ dàng hơn về sau để hoàn thành.",
             "msg": "Có vài thay đổi chưa được lưu, bạn có muốn tiếp tục mà không lưu chúng?",
             "name": "Tên bản ghi.",
@@ -184,25 +240,39 @@
         "admin": "Xin liên hệ với người quản lý cuộc khảo sát",
         "support": "Xin liên hệ với __supportEmail__"
     },
+    "drawwidget": {
+        "annotation": "",
+        "drawing": "bảng vẽ",
+        "signature": ""
+    },
     "enketo": {
         "power": "Được phát triển bởi"
     },
     "error": {
         "code": "Mã lỗi: __code__",
-        "dataloadfailed": "Lỗi tải dữ liệu từ địa chỉ __url__",
+        "dataloadfailed": "Không tải được __filename__.",
         "econnrefused": "Không thể kết nối với máy chủ",
-        "encryptionnotsupported": "Form này cần được mã hóa trên máy của bạn. Rất tiếc nó không được hỗ trợ. Chúng tôi khuyên bạn nên dùng ODK Collect để thu thập dữ liệu đối với form này.",
+        "encryptionnotsupported": "Biểu mẫu này yêu cầu mã hóa cục bộ các bản ghi. Rất tiếc, trình duyệt của bạn không hỗ trợ tính năng này. Chúng tôi khuyên bạn nên chuyển sang một trình duyệt hiện đại.",
+        "formloadfailed": "",
         "instancenotfound": "Bản ghi không tồn tại. Có thể đã quá hạn.",
         "invalidediturl": "URL không hợp lệ",
         "loadfailed": "Lỗi tải __resource__",
-        "notfoundinformlist": "Form với ID __formid__ không có trong /formList",
+        "notfoundinformlist": "",
         "pagenotfound": "Trang không tìm thấy",
         "surveyidnotactive": "Khảo sát với ID vừa được kích hoạt",
-        "surveyidnotfound": "Khảo sát với ID không được tìm thấy",
+        "surveyidnotfound": "",
         "unknown": "Một lỗi không xác định đã xảy ra"
     },
     "feedback": {
         "header": "Thông tin"
+    },
+    "filepicker": {
+        "file": "",
+        "notFound": "",
+        "placeholder": "",
+        "resetWarning": "",
+        "toolargeerror": "",
+        "waitingForPermissions": ""
     },
     "form": {
         "chooseLanguage": "Hãy chọn ngôn ngữ",
@@ -212,9 +282,13 @@
             "end": "Về cuối",
             "next": "Tiếp theo",
             "return": "Trở lại từ đầu"
-        }
+        },
+        "required": ""
     },
     "formfooter": {
+        "complete": {
+            "btn": ""
+        },
         "savedraft": {
             "btn": "Lưu nháp",
             "label": "Lưu như là bản nháp"
@@ -226,9 +300,30 @@
             "btn": "Kiểm tra tính hợp lệ"
         }
     },
+    "geopicker": {
+        "accuracy": "",
+        "altitude": "",
+        "closepolygon": "",
+        "kmlcoords": "",
+        "kmlpaste": "",
+        "latitude": "",
+        "longitude": "",
+        "points": "",
+        "removePoint": "",
+        "searchPlaceholder": "",
+        "bordersintersectwarning": ""
+    },
     "here": "tại đây",
+    "hint": {
+        "guidance": {
+            "details": ""
+        }
+    },
     "home": {
         "msg": "__appTitle__ đang chạy! Hãy truy xuất từ form Enketo máy chủ __serverName__"
+    },
+    "imagemap": {
+        "svgNotFound": ""
     },
     "langs": {
         "ar": "Ả rập",
@@ -238,20 +333,35 @@
         "en": "Anh",
         "es": "Tây Ban Nha",
         "fa": "Ba Tư",
+        "fi": "",
         "fr": "Pháp",
         "he": "Do Thái",
         "hi": "Hindi -Ấn Độ",
         "it": "Ý",
+        "ka": "",
         "km": "Khơ-me",
+        "lo": "",
         "nl": "Hà Lan",
         "no": "Na Uy",
+        "pa": "",
+        "pl": "",
+        "pt": "",
         "ro": "Rumani",
+        "ru": "",
         "sk": "Slovak",
+        "sq": "",
         "supported": "Ngôn ngữ được hỗ trợ:",
+        "sv": "",
         "sw": "Tiếng Bantu ở Đông Phi",
         "th": "Thái",
+        "tr": "",
+        "uk": "",
         "vi": "Việt Nam",
         "zh": "Trung Quốc"
+    },
+    "literacywidget": {
+        "finish": "",
+        "start": ""
     },
     "page": {
         "modernbrowsers": {
@@ -280,15 +390,23 @@
             "username": "Tên đăng nhập"
         }
     },
+    "rankwidget": {
+        "clickstart": "",
+        "tapstart": ""
+    },
     "record-list": {
         "export": "Xuất ra",
         "msg1": "Các bản ghi được lưu trữ bên trong trình duyệt của bạn cho đến khi chúng được tải lên (ngay cả khi bạn tắt máy hoặc offline).",
         "msg2": "Ngoại trừ các bản ghi được đánh dấu như bản nháp _icon_, các bản ghi trong hàng đợi được tải lên một cách tự động, cứ mỗi 5 phút một lần khi trang web được mở và kết nối Internet sẵn sàng.",
-        "msg2-nodraft": "Queued records are uploaded automatically, in the background, every 5 minutes when the web page is open and an Internet connection is available.",
+        "msg2-nodraft": "",
         "msg3": "Để thúc đẩy nhanh hơn việc tải lên, hãy kích Upload.",
         "norecords": "Không có bản ghi nào vào hàng đợi",
         "title": "Hàng đợi",
         "upload": "Tải lên"
+    },
+    "selectpicker": {
+        "noneselected": "",
+        "numberselected": ""
     },
     "store": {
         "error": {
@@ -298,15 +416,29 @@
         }
     },
     "submission": {
-        "http0": "Lỗi (offline?)",
+        "http0": "Máy chủ không khả dụng hoặc bạn có thể chưa kết nối Internet.",
         "http2xx": "Một phản hồi không mong đợi khi đang gửi dữ liệu.",
         "http400": "Máy chủ không chấp nhận dữ liệu này.",
         "http401": "Vấn đề về xác thực dữ liệu với máy chủ.",
         "http403": "Không được phép gửi dữ liệu đến máy chủ dữ liệu này.",
         "http404": "Dịch vụ gửi dữ liệu lên máy chủ không được tìm thấy.",
+        "http408": "",
         "http413": "Dữ liệu quá lớn.",
         "http4xx": "Không xác định được dữ liệu gửi lên máy chủ.",
-        "http500": "Dữ liệu gửi lên máy chủ trong form của bạn hoặc hiển thị Enketo đã bị ngừng. Hãy thử lại sau hoặc liên hệ _supportEmail_."
+        "http500": "Dữ liệu gửi lên máy chủ trong form của bạn hoặc hiển thị Enketo đã bị ngừng. Hãy thử lại sau hoặc liên hệ _supportEmail_.",
+        "http504": ""
     },
-    "version": "Phiên bản:"
+    "themes": {
+        "supported": ""
+    },
+    "update": {
+        "newversion": "",
+        "reload": ""
+    },
+    "version": "Phiên bản:",
+    "widget": {
+        "comment": {
+            "update": ""
+        }
+    }
 }

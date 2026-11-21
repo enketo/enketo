@@ -1,0 +1,444 @@
+{
+    "advanced": {
+        "flushdb": "স্টোরেজ মুছুন "
+    },
+    "alert": {
+        "addtohomescreen": {
+            "androidchrome": {
+                "msg": ""
+            },
+            "androidfirefox": {
+                "msg": ""
+            },
+            "heading": "",
+            "iossafari": {
+                "msg": ""
+            }
+        },
+        "appupdated": {
+            "heading": "এপ্লিকেশন আপডেটেড!",
+            "msg": "এই অ্যাপ্লিকেশনের নতুন ভার্সন ডাউনলোড হয়েছে। আপডেটেড ভার্সন লোড করতে পেইজটি রিফ্রেশ করুন।"
+        },
+        "closing": {
+            "heading": ""
+        },
+        "default": {
+            "button": "বন্ধ করুন",
+            "heading": "এলার্ট"
+        },
+        "export": {
+            "error": {
+                "filecreatedmsg": "আবারো একটি অসম্পূর্ণ এক্সপোর্ট ফাইল তৈরী হয়েছে।",
+                "heading": "এক্সপোর্টে সমস্যা হচ্ছে",
+                "msg": ""
+            },
+            "success": {
+                "heading": "এক্সপোর্ট তৈরি হয়েছে",
+                "msg": ""
+            }
+        },
+        "formupdated": {
+            "heading": "ফর্ম আপডেটেড!",
+            "later": "পরবর্তী",
+            "msg": "এই অ্যাপ্লিকেশনের নতুন ভার্সন ডাউনলোড হয়েছে। আপডেটেড ভার্সন লোড করতে পেইজটি রিফ্রেশ করুন।",
+            "refresh": "",
+            "refreshwithoutsaving": "",
+            "unsavedmsg": ""
+        },
+        "gotonotfound": {
+            "msg": ""
+        },
+        "loaderror": {
+            "editadvice": "",
+            "entryadvice": "",
+            "heading": "লোডিং সমস্যা",
+            "msg1": "",
+            "msg2": "",
+            "heading_plural": "লোডিং সমস্যা",
+            "msg1_plural": "ফর্মটি ডাউনলোড হতে সমস্যা হচ্ছে।",
+            "msg2_plural": ""
+        },
+        "logout": {
+            "heading": "লগড আউট",
+            "msg": "আপনি লগ আউট হয়েছেন"
+        },
+        "offlinesupported": {
+            "heading": "অফলাইনে ফর্ম কাজ করে!",
+            "msg": [
+                "",
+                "ইন্টারনেট সংযোগ পাওয়ার পূর্ব পর্যন্ত রেকর্ডগুলো ব্রাউজারে সয়ংক্রিয়ভাবে জমা থাকে এবং সাবমিট হওয়ার জন্য অপেক্ষমান থাকে। ইন্টারনেট সংযোগ পাওয়ার সাথে সাথে রেকর্ডগুলো একে একে সাবমিট হতে থাকবে।",
+                "রেকর্ড সফলভাবে সাবমিট হলে অপেক্ষমান তালিকা থেকে রেকর্ডটিকে সরিয়ে নেওয়া হবে। আরও অপেক্ষমান রেকর্ড থাকলেও ব্রাউজার বন্ধ করে দিতে পারেন। ফর্মটি আবার লোড করলেই রেকর্ডগুলো পেয়ে যাবেন। "
+            ]
+        },
+        "offlineunsupported": {
+            "heading": "অ্যাপ্লিকেশন অফলাইনে কাজ করে না",
+            "msg": "",
+            "negButton": "এটি ব্যবহার করুন",
+            "posButton": "অপশন দেখান",
+            "refresh": ""
+        },
+        "queuesubmissionsuccess": {
+            "msg": "__recordNames__সফলভাবে সাবমিট হয়েছে",
+            "msg_plural": "সফলভাবে সাবমিট হয়েছে"
+        },
+        "recordloadsuccess": {
+            "msg": "লোড হয়েছে__recordName__"
+        },
+        "recordnotfound": {
+            "msg": "তথ্য ফিরে পাওয়া যাবে না বা এখানে কোন তথ্য নেই"
+        },
+        "recordsavesuccess": {
+            "draftmsg": "তথ্য ড্রাফট আকারে জমা হয়েছে",
+            "finalmsg": "সাবমিশনের জন্য তথ্য অপেক্ষমান"
+        },
+        "savedraftinfo": {
+            "heading": "",
+            "msg": [
+                "",
+                "",
+                ""
+            ]
+        },
+        "submission": {
+            "msg": "সাবমিট হচ্ছে...",
+            "redirectmsg": "সাবমিট হওয়ার পর সয়ংক্রিয়ভাবে রিডিরেক্ট করা হবে।"
+        },
+        "submissionerror": {
+            "authrequiredmsg": "",
+            "fnfmsg": [
+                "",
+                ""
+            ],
+            "heading": "ডাটা সাবমিশন হয়নি"
+        },
+        "submissionsuccess": {
+            "heading": "সফলভাবে সাবমিট হয়েছে",
+            "msg": "আপনার ডেটা জমা দেওয়া হয়েছে!",
+            "redirectmsg": "আপনাকে রিডিরেক্ট করা হচ্ছে।"
+        },
+        "thanks": {
+            "heading": "",
+            "msg": "",
+            "msgTaken": ""
+        },
+        "validationerror": {
+            "msg": "ফর্ম পূরণে ভুল হয়েছে। দয়া করা লাল চিহ্নিত ঘরগুলো দেখুন।"
+        },
+        "validationsuccess": {
+            "heading": "সঠিক",
+            "msg": "ফর্মটি সঠিক"
+        },
+        "valuehasspaces": {
+            "multiple": ""
+        },
+        "xpatherror": {
+            "heading": "ভুল ফর্মুলা",
+            "msg": ""
+        }
+    },
+    "audioRecording": {
+        "error": {
+            "accessDenied": "",
+            "noMicrophone": "",
+            "notSupported": "",
+            "unknownError": "",
+            "recordingError": "",
+            "recordingInProgress": "",
+            "invalidAudioFile": {
+                "msg": "",
+                "heading": ""
+            }
+        },
+        "startRecording": "",
+        "uploadAudioFile": "",
+        "deleteWarning": "",
+        "backgroundDisclaimer": {
+            "heading": "",
+            "msg": [
+                "",
+                "",
+                "",
+                ""
+            ],
+            "buttonText": ""
+        },
+        "hasRecordedAudio": ""
+    },
+    "changelog": "",
+    "confirm": {
+        "autosaveload": {
+            "heading": "অসংরক্ষিত তথ্য পাওয়া গেছে",
+            "msg": "Enketo একটি অসংরক্ষিত রেকর্ড পেয়েছে। আপনি কি রেকর্ডটি লোড করতে চান বা বাতিল করতে চান?",
+            "negButton": "বাতিল",
+            "posButton": "লোড রেকর্ড"
+        },
+        "default": {
+            "heading": "আপনি কি নিশ্চিত ?",
+            "msg": "কাজটি সম্পন্ন করুন",
+            "negButton": "বাতিল করুন",
+            "posButton": "নিশ্চিত"
+        },
+        "deleteall": {
+            "heading": "",
+            "msg": [
+                "ব্রাউজার স্টোরেজ থেকে  সকল অপেক্ষমান ডাটা এবং ফর্ম মুছে দিবে । ডাটা চিরতরে মুছে যাবে। যদি ব্রাউজার স্টোরেজ নষ্ট হয়ে থাকে তবে শেষ অবলম্বন হিসেবে এটা করতে পারেন।",
+                "প্রথমে বাকি Enketo ব্রাউজার ট্যাবগুলো বন্ধ করুন।",
+                "পেইজটি রিলোড হবে। কোন সমস্যা দেখা দিলে পুনরায় চেষ্টা করুন।",
+                "আপনি কি সত্যি এটা করতে চান?"
+            ],
+            "posButton": "সব মুছে ফেলুন"
+        },
+        "discardcurrent": {
+            "heading": "",
+            "msg": "",
+            "posButton": "সেইভ না করে সামনে যান"
+        },
+        "login": {
+            "heading": "লগইন প্রযোজ্য",
+            "queuedMsg": [
+                "",
+                "আপনি কি এখন বা পরে লগ ইন করতে চান?"
+            ],
+            "msg": [
+                "অপেক্ষমান ডাটা সাবমিট করতে হলে আপনাকে লগইন করতে হবে। আপনি চাইলে আপনাকে লগ ইন পাতায় নেওয়া হবে তবে অসংরক্ষিত ডাটা হারিয়ে যাবে।",
+                "আপনি কি এখন বা পরে লগ ইন করতে চান?"
+            ],
+            "negButton": "পরবর্তী",
+            "posButton": "লগইন করুন"
+        },
+        "print": {
+            "a4": "এ4",
+            "heading": "সিলেক্ট প্রিন্ট সেটিংস",
+            "landscape": "ল্যান্ডস্কেপ",
+            "letter": "বর্ণ",
+            "msg": "আপনার পছন্দমত প্রিন্ট করতে চাইলে প্রিন্ট সেটিং এ ক্লিক করুন",
+            "orientation": "পেপার ওরিয়েন্টেশন",
+            "portrait": "",
+            "posButton": "",
+            "psize": "পেপার সাইজ",
+            "reminder": ""
+        },
+        "repeatremove": {
+            "heading": "",
+            "msg": ""
+        },
+        "save": {
+            "existingerror": "",
+            "hint": "",
+            "msg": "সেইভ হয়নি, আপনি কি সেইভ না করেই এগিয়ে যেতে চান? ",
+            "name": "রেকর্ডের নাম",
+            "posButton": "সেইভ এবং বন্ধ করুন",
+            "renamemsg": "",
+            "unkownerror": "ডাটা সেইভ করার সময় অজ্ঞাত ভুল হয়েছে"
+        }
+    },
+    "constraint": {
+        "invalid": "ভ্যালু গ্রহণযোগ্য নয়",
+        "required": "ঘরটি পুরণ করতে হবে"
+    },
+    "contact": {
+        "admin": "জরিপ এডমিনিস্ট্রেটরের সাথে যোগাযোগ করুন",
+        "support": "দয়া করে যোগাযোগ করুন__supportEmail__"
+    },
+    "drawwidget": {
+        "annotation": "",
+        "drawing": "",
+        "signature": ""
+    },
+    "enketo": {
+        "power": "Enketo দ্বারা পরিচালিত"
+    },
+    "error": {
+        "code": "ভুল কোডঃ",
+        "dataloadfailed": "",
+        "econnrefused": "",
+        "encryptionnotsupported": "",
+        "formloadfailed": "",
+        "instancenotfound": "তথ্য পাওয়া যাচ্ছে না। রেকর্ড হয়ত মুছে গেছে।",
+        "invalidediturl": "",
+        "loadfailed": "লোড হচ্ছে না__resource__",
+        "notfoundinformlist": "",
+        "pagenotfound": "পেইজটি খুঁজে পাওয়া যাচ্ছে না",
+        "surveyidnotactive": "এই আইডিতে জরিপপত্র সক্রিয় নয়",
+        "surveyidnotfound": "",
+        "unknown": "অজ্ঞাত ত্রুটি হয়েছে"
+    },
+    "feedback": {
+        "header": "তথ্য"
+    },
+    "filepicker": {
+        "file": "",
+        "notFound": "",
+        "placeholder": "",
+        "resetWarning": "",
+        "toolargeerror": "",
+        "waitingForPermissions": ""
+    },
+    "form": {
+        "chooseLanguage": "ভাষা বাছাই করুন",
+        "logout": "লগ আউট",
+        "pages": {
+            "back": "পিছনে",
+            "end": "শেষে যান",
+            "next": "পরবর্তী",
+            "return": "শুরুতে ফিরে যান"
+        },
+        "required": "প্রযোজ্য"
+    },
+    "formfooter": {
+        "complete": {
+            "btn": ""
+        },
+        "savedraft": {
+            "btn": "ড্রাফট আকারে সেইভ করুন",
+            "label": "ড্রাফট হিসেবে সেইভ করুন"
+        },
+        "submit": {
+            "btn": "জমা দিন"
+        },
+        "validate": {
+            "btn": "যাচাই করুন"
+        }
+    },
+    "geopicker": {
+        "accuracy": "একুরেসি (মিটার)",
+        "altitude": "উচ্চতা (মিটার)",
+        "closepolygon": "",
+        "kmlcoords": "",
+        "kmlpaste": "",
+        "latitude": "অক্ষাংশ ( x.y °)",
+        "longitude": "দ্রাঘিমাংশ ( x.y °)",
+        "points": "পয়েন্ট",
+        "removePoint": "",
+        "searchPlaceholder": "স্থান বা ঠিকানা অনুসন্ধান করুন",
+        "bordersintersectwarning": ""
+    },
+    "here": "এখানে",
+    "hint": {
+        "guidance": {
+            "details": ""
+        }
+    },
+    "home": {
+        "msg": ""
+    },
+    "imagemap": {
+        "svgNotFound": ""
+    },
+    "langs": {
+        "ar": "আরবি",
+        "cs": "চেক",
+        "de": "জার্মান",
+        "el": "গ্রিক",
+        "en": "ইংলিশ",
+        "es": "স্পেনীয়",
+        "fa": "ফার্সি",
+        "fi": "",
+        "fr": "ফরাসি",
+        "he": "হিব্রু",
+        "hi": "হিন্দি",
+        "it": "ইতালীয়",
+        "ka": "",
+        "km": "খ্‌মের",
+        "lo": "লাও",
+        "nl": "ডাচ",
+        "no": "নরওয়েজীয়",
+        "pa": "",
+        "pl": "",
+        "pt": "",
+        "ro": "রুমানীয়",
+        "ru": "",
+        "sk": "স্লোভাক",
+        "sq": "",
+        "supported": "যে সব ভাষা সাপোর্ট করেঃ",
+        "sv": "",
+        "sw": "সোয়াহিলি",
+        "th": "থাই",
+        "tr": "",
+        "uk": "",
+        "vi": "ভিয়েতনামী",
+        "zh": "চীনা"
+    },
+    "literacywidget": {
+        "finish": "",
+        "start": ""
+    },
+    "page": {
+        "modernbrowsers": {
+            "heading": "সমসাময়িক ব্রাউজার",
+            "ie": {
+                "heading": "",
+                "msg": ""
+            },
+            "msg1": "",
+            "msg2": ""
+        },
+        "offline": {
+            "heading": "পেইজটিতে এক্সেস করা যাচ্ছে না",
+            "msg1": ""
+        }
+    },
+    "prompt": {
+        "default": {
+            "heading": "ভ্যালু প্রবেশ করুন"
+        },
+        "login": {
+            "heading": "আপনার__server__ক্রেডেনশিয়াল প্রবেশ করুন ",
+            "password": "পাসওয়ার্ড",
+            "remember": "এই কম্পিউটারে সংরক্ষণ করুন",
+            "submit": "সাবমিট",
+            "username": "ব্যবহারকারির নাম "
+        }
+    },
+    "rankwidget": {
+        "clickstart": "",
+        "tapstart": ""
+    },
+    "record-list": {
+        "export": "এক্সপোর্ট",
+        "msg1": "রেকর্ড  আপলোড হওয়ার পূর্ব পর্যন্ত ব্রাউজারে থাকবে (এমনকি কম্পিউটার বন্ধ করা হলে বা অফলাইনে চলে গেলেও)",
+        "msg2": "",
+        "msg2-nodraft": "ওয়েব পেইজ খোলা থাকলে এবং ইন্টারনেট সংযোগ থাকলে, সাবমিট হওয়ার জন্য অপেক্ষমান ডাটা 5 মিনিট পর পর সয়ংক্রিয়ভাবে আপলোড হয়।",
+        "msg3": "",
+        "norecords": "অপেক্ষমান কোন তথ্য নেই",
+        "title": "অপেক্ষমান",
+        "upload": "আপলোড"
+    },
+    "selectpicker": {
+        "noneselected": "কোনটি সিলেক্ট করা হয়নি",
+        "numberselected": "__number__সিলেক্ট হয়েছে"
+    },
+    "store": {
+        "error": {
+            "iosusesafari": "আপনার iOS ব্রাউজার ফর্মটি চালাতে পারবে না। iOS এ চালাতে হলে Safari ব্রাউজার ব্যবহার করতে হবে।",
+            "notavailable": "প্রয়োজনীয় ব্রাউজার স্টোরেজ নেই বা ব্রাউজার স্টোরেজ নষ্ট বা রাইট করা যাচ্ছে না। প্রাইভেট ব্রাউজার সক্রিয় থাকলে রেগুলার ব্রাউজারে কাজ করুন অথবা অন্য ব্রাউজারে চেষ্টা করুন। (সমস্যার ধরণঃ__error__)",
+            "notsupported": "আপনার ব্রাউজার এই ফর্ম চালাতে সক্ষম নয়। সমসাময়িক ব্রাউজার ব্যবহার করুন।"
+        }
+    },
+    "submission": {
+        "http0": "",
+        "http2xx": "",
+        "http400": "ডাটা সার্ভার তথ্য গ্রহন করেনি",
+        "http401": "",
+        "http403": "এই ডাটা সার্ভারে ডাটা পোস্ট করার অনুমতি দেওয়া হয়নি।",
+        "http404": "এই ডাটা সার্ভারে ডাটা সাবমিট হয় না।",
+        "http408": "",
+        "http413": "ডাটা অনেক বড়।",
+        "http4xx": "ডাটা সার্ভারে ডাটা সাবমিটে অজ্ঞাত সমস্যা হচ্ছে। ",
+        "http500": "আপনার ডাটা সার্ভার বা Enketo সার্ভার ডাউন। দয়া করে পুনরায় চেষ্টা করুন অথবা যোগাযোগ করুন __supportEmail__",
+        "http504": ""
+    },
+    "themes": {
+        "supported": ""
+    },
+    "update": {
+        "newversion": "",
+        "reload": ""
+    },
+    "version": "ভার্সন",
+    "widget": {
+        "comment": {
+            "update": ""
+        }
+    }
+}

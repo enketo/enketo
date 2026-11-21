@@ -39,7 +39,11 @@
         },
         "formupdated": {
             "heading": "Enquete Bijgewerkt!",
-            "msg": "Een nieuwe versie van deze enquete is gedownload. Vernieuw deze pagina om de bijgewerkte versie te laden."
+            "later": "Later",
+            "msg": "Een nieuwe versie van deze enquete is gedownload. Vernieuw deze pagina om de bijgewerkte versie te laden.",
+            "refresh": "",
+            "refreshwithoutsaving": "",
+            "unsavedmsg": ""
         },
         "gotonotfound": {
             "msg": "Kon vraag \"__path__\" niet vinden. Is de referentie naar deze vraag juist?"
@@ -48,7 +52,7 @@
             "editadvice": "We raden u aan dit record niet te veranderen totdat dit is opgelost.",
             "entryadvice": "We raden u aan dit form niet te gebruiken voor gegevensinvoer totdat dit is opgelost.",
             "heading": "Laad Fout",
-            "msg1": "Er is een fout opgetreden tijdens het laden van deze enquete.",
+            "msg1": "",
             "msg2": "Contacteer __emailLink__ met de link naar dit form en de fout beschrijving hieronder:",
             "heading_plural": "Laad fouten",
             "msg1_plural": "Er zijn fouten opgetreden tijdens het laden van dit form.",
@@ -131,6 +135,34 @@
             "heading": "Formula fout",
             "msg": "Er is een formule evaluatie fout opgetreden. Contacteer __emailLink__ met deze fout beschrijving:"
         }
+    },
+    "audioRecording": {
+        "error": {
+            "accessDenied": "",
+            "noMicrophone": "",
+            "notSupported": "",
+            "unknownError": "",
+            "recordingError": "",
+            "recordingInProgress": "",
+            "invalidAudioFile": {
+                "msg": "",
+                "heading": ""
+            }
+        },
+        "startRecording": "",
+        "uploadAudioFile": "",
+        "deleteWarning": "",
+        "backgroundDisclaimer": {
+            "heading": "",
+            "msg": [
+                "",
+                "",
+                "",
+                ""
+            ],
+            "buttonText": ""
+        },
+        "hasRecordedAudio": ""
     },
     "changelog": "Wijzigingen logboek",
     "confirm": {
@@ -225,11 +257,10 @@
         "instancenotfound": "Record niet gevonden. Het kan verlopen zijn.",
         "invalidediturl": "Niet een geldig edit URL",
         "loadfailed": "Kon __resource__ niet laden",
-        "notfoundinformlist": "Dit formulier bestaat niet of u heeft er geen toegang meer toe. Controleer het web address op ontbrekende tekens. Als het formulier eerder bestond, is het mogelijk gearchiveerd, uitgeschakeld of verwijderd. Als dit onverwachts is, neem dan contact op met de persoon die u heeft gevraagd het formulier in te vullen. (Geprobeerd toegang te krijgen tot formulier met ID: __formId__)",
-        "notfounddirectformurl": "Dit formulier bestaat niet of u heeft er geen toegang meer toe. Controleer het web address op ontbrekende tekens. Als het formulier eerder bestond, is het mogelijk gearchiveerd, uitgeschakeld of verwijderd. Als dit onverwachts is, neem dan contact op met de persoon die u heeft gevraagd het formulier in te vullen. (Geprobeerd toegang te krijgen tot formulier: __notfounddirectformurl__)",
+        "notfoundinformlist": "",
         "pagenotfound": "Pagina niet gevonden",
         "surveyidnotactive": "Enquete met dit ID is niet langer aktief",
-        "surveyidnotfound": "Enquete met dit ID niet gevonden",
+        "surveyidnotfound": "",
         "unknown": "Een onbekende fout is opgetreden"
     },
     "feedback": {
@@ -399,6 +430,10 @@
     },
     "themes": {
         "supported": "Ondersteunde themes"
+    },
+    "update": {
+        "newversion": "",
+        "reload": ""
     },
     "version": "versie:",
     "widget": {
