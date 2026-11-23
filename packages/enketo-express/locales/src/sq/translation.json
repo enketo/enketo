@@ -39,7 +39,11 @@
         },
         "formupdated": {
             "heading": "Formulari është përditësuar!",
-            "msg": "Verzioni i ri i këtij formulari është shkarkuar. Freskoje këtë faqe për të ngarkuar verzionin e përditësuar."
+            "later": "Më vonë",
+            "msg": "Verzioni i ri i këtij formulari është shkarkuar. Freskoje këtë faqe për të ngarkuar verzionin e përditësuar.",
+            "refresh": "",
+            "refreshwithoutsaving": "",
+            "unsavedmsg": ""
         },
         "gotonotfound": {
             "msg": "Nuk e gjej pyetjen \"__path__\" në këtë formular. A është e saktë referenca për këtë pyetje?"
@@ -48,7 +52,7 @@
             "editadvice": "Rekomandohet të mos korrigjoni këtë dosje përderisa të zgjidhet",
             "entryadvice": "Rekomandohet që mos e përdorni këtë formular për futjen e të dhënave derisa të zgjidhet kjo.",
             "heading": "Gabim në Hapje",
-            "msg1": "Ka ndodhur gabim gjatë ngarkimit të këtij formulari.",
+            "msg1": "",
             "msg2": "Ju lutem kontaktoni __emailLink__ me vegzën e kësaj faqeje dhe porosinë e gabimit më poshtë:",
             "heading_plural": "Duke hapur Gabimet",
             "msg1_plural": "Kan ndodhur gabime gjatë ngarkimit të këtij formulari.",
@@ -70,7 +74,8 @@
             "heading": "Aplikacioni nuk mund të lansohet pa u lidhur",
             "msg": "Nisja e aplikacionit pa lidhje interneti nuk mbështetet nga shfletuesi juaj. Ju mund të përdorni sondazhin pa këtë veçori ose shihni opsionet për të zgjidhur këtë problem.",
             "negButton": "Shfrytëzo",
-            "posButton": "Shfaq opcionet"
+            "posButton": "Shfaq opcionet",
+            "refresh": ""
         },
         "queuesubmissionsuccess": {
             "msg": "__recordNames__ u dërguan me sukses",
@@ -85,6 +90,14 @@
         "recordsavesuccess": {
             "draftmsg": "Regjistri u ruajt si draft",
             "finalmsg": "Regjistri u rendit për dorëzim."
+        },
+        "savedraftinfo": {
+            "heading": "",
+            "msg": [
+                "",
+                "",
+                ""
+            ]
         },
         "submission": {
             "msg": "Duke dërguar...",
@@ -123,6 +136,35 @@
             "msg": "Gabim me vlerësimin e formulës. Ju lutem kontaktoni __emailLink__ me këtë gabim:"
         }
     },
+    "audioRecording": {
+        "error": {
+            "accessDenied": "",
+            "noMicrophone": "",
+            "notSupported": "",
+            "unknownError": "",
+            "recordingError": "",
+            "recordingInProgress": "",
+            "invalidAudioFile": {
+                "msg": "",
+                "heading": ""
+            }
+        },
+        "startRecording": "",
+        "uploadAudioFile": "",
+        "deleteWarning": "",
+        "backgroundDisclaimer": {
+            "heading": "",
+            "msg": [
+                "",
+                "",
+                "",
+                ""
+            ],
+            "buttonText": ""
+        },
+        "hasRecordedAudio": ""
+    },
+    "changelog": "",
     "confirm": {
         "autosaveload": {
             "heading": "Keni regjistër të paruajtur",
@@ -153,6 +195,10 @@
         },
         "login": {
             "heading": "Lidhja është a detyrueshme",
+            "queuedMsg": [
+                "",
+                "A doni të lidheni tani apo më vonë?"
+            ],
             "msg": [
                 "Për të dorëzuar shënimet e renditura, ju duhet të kyçni. Nëse dëshironi ta bëni këtë tani, ju do të ridrejtoheni dhe do të humbni informatat e paruajtura.",
                 "A doni të lidheni tani apo më vonë?"
@@ -177,7 +223,7 @@
             "msg": "Ky veprim është i parevokueshem. A jeni të sigurtë se dëshironi të vazhdoni?"
         },
         "save": {
-            "existingerror": "Regjistri me këtë emër ose ID tashmë ekziston.",
+            "existingerror": "Regjistri me këtë emër ose ID tashmë ekziston. Ju lutemi ndryshojeni.",
             "hint": "Ky emër ju mundëson të gjeni leht draftin e dosjes për ta përfunduar më vonë.",
             "msg": "Ka ndryshime të pa ruajtura, a dëshironit të vazhdoni pa i ruajtur ato?",
             "name": "Emri i Regjistrit",
@@ -204,19 +250,17 @@
     },
     "error": {
         "code": "Gabim me Kod: __code__",
-        "dataloadfailed": "Shënimet nuk mund të ngarkohen nga __url__",
+        "dataloadfailed": "__filename__ nuk mund të ngarkohej.",
         "econnrefused": "Nuk mund të lidhet me Server",
         "encryptionnotsupported": "Kjo formë kërkon kriptimin e regjistrave lokale. Fatkeqësisht, kjo nuk mbështetet nga shfletuesi juaj. Ju rekomandojmë të kaloni në një shfletues modern.",
+        "formloadfailed": "",
         "instancenotfound": "Regjistri nuk ekziston. Ndoshta ka skaduar.",
         "invalidediturl": "URL për redaktim e pavlefshme ",
         "loadfailed": "Nuk mund të ngarkoj __resource__",
-        "notfoundinformlist": [
-            "Ky formular (më) nuk ekziston. Ka gjasa që pronari i formularit e ka fshirë, arkivuar ose çaktivizuar atë. Ju lutemi kontaktoni pronarin e formularit për të konfirmuar.",
-            "Detalet e gabimit: Formulari me ID __formId__ nuk gjendet në /formList."
-        ],
+        "notfoundinformlist": "",
         "pagenotfound": "Faqja nuk gjet",
         "surveyidnotactive": "Sondazhi me këtë ID nuk është më aktiv",
-        "surveyidnotfound": "Sondazhi me këtë ID nuk u gjet",
+        "surveyidnotfound": "",
         "unknown": "Ka ndodhur gabim i panjohur"
     },
     "feedback": {
@@ -266,7 +310,8 @@
         "longitude": "gjërësi (x.y °)",
         "points": "pikat",
         "removePoint": "Ky veprim do ta largoj gjeopikën nga gjeopikat në mënyrë të parevokueshme. A jeni të sigurt që dëshironi ta bëni atë?",
-        "searchPlaceholder": "kërko për vend ose adresë"
+        "searchPlaceholder": "kërko për vend ose adresë",
+        "bordersintersectwarning": ""
     },
     "here": "këtu",
     "hint": {
@@ -293,19 +338,24 @@
         "he": "Hebraik",
         "hi": "Hindu",
         "it": "Italisht",
+        "ka": "",
         "km": "Kmere",
         "lo": "Lao",
         "nl": "Holandisht",
         "no": "Norvegjisht",
+        "pa": "",
         "pl": "Polonisht",
         "pt": "Portugeze",
         "ro": "Rumanisht",
         "ru": "Rusisht",
         "sk": "Sllovakisht",
+        "sq": "",
         "supported": "Gjuhët e përkrahura:",
         "sv": "Suedisht",
         "sw": "Suahili",
         "th": "Tai",
+        "tr": "",
+        "uk": "",
         "vi": "Vietnameze",
         "zh": "Kinezisht"
     },
@@ -366,7 +416,7 @@
         }
     },
     "submission": {
-        "http0": "Dështim (jashtë lidhjes?).",
+        "http0": "Serveri nuk është i disponueshëm ose mund të mos jeni të lidhur me internetin.",
         "http2xx": "Përgjigje e papritur gjat ngarkimit të shënimeve.",
         "http400": "Serveri i shënimeve nuk i pranoi shënimet.",
         "http401": "Problem me identifikim me serverin e shënimeve.",
@@ -377,6 +427,13 @@
         "http4xx": "Problem i panjohur ngarkimi me serverin e shënimeve.",
         "http500": "Serveri i shënimeve për Enketo formularin tënd nuk punon. Ju lutem provoni prap më vonë ose kontaktoni __supportEmail__.",
         "http504": "Nuk mund të vendoset lidhja me serverin e shënimeve."
+    },
+    "themes": {
+        "supported": ""
+    },
+    "update": {
+        "newversion": "",
+        "reload": ""
     },
     "version": "verzioni:",
     "widget": {

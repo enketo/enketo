@@ -5,52 +5,54 @@
     "alert": {
         "addtohomescreen": {
             "androidchrome": {
-                "msg": "To add this form to your Home screen, click the browser settings icon __image1__ and select: 'Add to Home screen'."
+                "msg": ""
             },
             "androidfirefox": {
-                "msg": [
-                    "To add this form to your Homescreen:",
-                    "1. Add this page to your Firefox bookmarks by clicking the settings icon __image1__ and then the star icon __image2__.",
-                    "2. Open your bookmarks by opening a new page and clicking the Bookmarks tab.",
-                    "3. Click-and-hold your form until a pop-up menu appears.",
-                    "4. Select 'Add to Home Screen'."
-                ]
+                "msg": ""
             },
-            "heading": "Add to Home Screen",
+            "heading": "",
             "iossafari": {
-                "msg": "To add this form to your Home screen, click the share icon __image1__ in the top right of your browser, and select: '+ Add to Home Screen'."
+                "msg": ""
             }
         },
         "appupdated": {
             "heading": "Programu imesahihishwa!",
             "msg": "Toleo jipya la hii programu limepakuliwa. Tafadhali onyesha upya ukurasa wa tovuti ili kutazama toleo hili."
         },
+        "closing": {
+            "heading": ""
+        },
         "default": {
             "button": "Funga",
             "heading": "Arifu"
         },
         "export": {
-            "alternativequestion": "alternative download - online",
             "error": {
-                "filecreatedmsg": "Nevertheless, an incomplete export file was still created.",
-                "heading": "Export Error",
-                "linknotcreated": "Failed to create an export link for unsubmitted records. Are you online?",
-                "msg": "Errors occurred during creating of the record export file for unsubmitted records. Errors: __errors__"
+                "filecreatedmsg": "",
+                "heading": "",
+                "msg": ""
             },
             "success": {
-                "heading": "Export Created",
-                "msg": "Export file created for all unsubmitted records belonging to this form."
+                "heading": "",
+                "msg": ""
             }
         },
         "formupdated": {
             "heading": "Fomu imesahihishwa!",
-            "msg": "Toleo jipya la fomu hii limepakuliwa. Onyesha upya ukurasa wa tovuti kutazama toleo hili."
+            "later": "Baadaye",
+            "msg": "Toleo jipya la fomu hii limepakuliwa. Onyesha upya ukurasa wa tovuti kutazama toleo hili.",
+            "refresh": "",
+            "refreshwithoutsaving": "",
+            "unsavedmsg": ""
+        },
+        "gotonotfound": {
+            "msg": ""
         },
         "loaderror": {
             "editadvice": "Unashauriwa kutohariri rekodi hii hadi jambo hili litatuliwe",
             "entryadvice": "Unashauriwa usitumie fomu hii kuingiza data mpaka jambo hili litatuliwe",
             "heading": "Onyesha kosa",
-            "msg1": "Kosa limetokea tukipakua fomu hii.",
+            "msg1": "",
             "msg2": "Tafadhali wasiliana nasi kupitia _anwani_ utupe kiungo cha ukurasa huu na ujumbe uliochapishwa hapa chini",
             "heading_plural": "Onyesha kosa",
             "msg1_plural": "Kosa limetokea tukipakia fomu hii.",
@@ -72,7 +74,8 @@
             "heading": "Programu haiwezi zinduliwa nje ya mtandao",
             "msg": "Kivinjari wavuti unachotumia hakikubalishi programu-tumizi kuzindua fomu nje ya mtandao. Unaweza tumia utafiti huu bila kipengele hiki au utumie machaguo uliyopewa hapa kurekebisha hili kosa.",
             "negButton": "Tumia",
-            "posButton": "Onyesha machaguo"
+            "posButton": "Onyesha machaguo",
+            "refresh": ""
         },
         "queuesubmissionsuccess": {
             "msg": "__recordNames__ imewasilishwa bila tatizo lolote",
@@ -87,6 +90,14 @@
         "recordsavesuccess": {
             "draftmsg": "Rekodi imehifadhiwa kama rasimu.",
             "finalmsg": "Rekodi iko kwenye foleni ya kuwasilishwa."
+        },
+        "savedraftinfo": {
+            "heading": "",
+            "msg": [
+                "",
+                "",
+                ""
+            ]
         },
         "submission": {
             "msg": "Ukiwasilisha...",
@@ -107,8 +118,8 @@
         },
         "thanks": {
             "heading": "Asante kwa kushiriki!",
-            "msg": "You can close this window now.",
-            "msgTaken": "You have already completed this survey."
+            "msg": "",
+            "msgTaken": ""
         },
         "validationerror": {
             "msg": "Fomu ziko na makosa. Tafadhali angalia uga zilizo na alama nyekundu."
@@ -117,11 +128,43 @@
             "heading": "Sawa",
             "msg": "Fomu imesajiliwa!"
         },
+        "valuehasspaces": {
+            "multiple": ""
+        },
         "xpatherror": {
             "heading": "Formula iko na kosa",
             "msg": "Kuna kosa kwenye fomula la uchambuzi. Tafadhali wasiliana nasi ututumie kosa hili kupitia __emailLink__ "
         }
     },
+    "audioRecording": {
+        "error": {
+            "accessDenied": "",
+            "noMicrophone": "",
+            "notSupported": "",
+            "unknownError": "",
+            "recordingError": "",
+            "recordingInProgress": "",
+            "invalidAudioFile": {
+                "msg": "",
+                "heading": ""
+            }
+        },
+        "startRecording": "",
+        "uploadAudioFile": "",
+        "deleteWarning": "",
+        "backgroundDisclaimer": {
+            "heading": "",
+            "msg": [
+                "",
+                "",
+                "",
+                ""
+            ],
+            "buttonText": ""
+        },
+        "hasRecordedAudio": ""
+    },
+    "changelog": "",
     "confirm": {
         "autosaveload": {
             "heading": "hariri ambayo haijahifadhiwa imepatikana",
@@ -152,6 +195,10 @@
         },
         "login": {
             "heading": "Uhalalishaji wa nywila unahitajika.",
+            "queuedMsg": [
+                "",
+                "Ungependa kuingia sahii ama baadaye?"
+            ],
             "msg": [
                 "Ili utume data iliyo kwenye foleni, lazima uingie kwenye programu. Ukiamua kutuma data sahii, utaelekezwa kwengine na utapoteza rekodi zote ambazo hazijahifadhiwa.",
                 "Ungependa kuingia sahii ama baadaye?"
@@ -171,8 +218,12 @@
             "psize": "Ukubwa wa karatasi",
             "reminder": "Tafadhali kumbuka kuweka mpangilio wa uchapishaji kwenye menyu la uchapisho la kivinjari wavuti lako baadaye!"
         },
+        "repeatremove": {
+            "heading": "",
+            "msg": ""
+        },
         "save": {
-            "existingerror": "Jina au kitambulisho la rekodi hii tayari liko.",
+            "existingerror": "Jina au kitambulisho cha rekodi hii tayari kipo. Tafadhali kibadilishe.",
             "hint": "Jina hili linakuwezesha kuipata rasimu yako kwa urahisi kwa minajili ya kuimalizia baadaye.",
             "msg": "Haujahifadhi mabadiliko uliyo fanya, je, unataka kuendelea bila kuhifadhi mabadiliko haya?",
             "name": "Jina la rekodi",
@@ -189,25 +240,39 @@
         "admin": "Tafadhali wasiliana na msimamizi wa utafiti huu. ",
         "support": "Tafadhali wasiliana na wasaidizi kupitia __auni__ ."
     },
+    "drawwidget": {
+        "annotation": "",
+        "drawing": "",
+        "signature": ""
+    },
     "enketo": {
         "power": "Imetengenezwa na"
     },
     "error": {
         "code": "Msimbo wa kosa:",
-        "dataloadfailed": "Failed to load data from __url__",
+        "dataloadfailed": "Imeshindwa kupakia __filename__.",
         "econnrefused": "Haikuweza kuwasiliana na kompyuta kuu",
-        "encryptionnotsupported": "Fomu hii inahitaji usimbaji fiche wa ndani kwenye rekodi zinazohifadhiwa. Kwa bahati mbaya, programu hili halina formula saidizi kufanya ufiche huu. Tunakushauri utumie programu iitwayo ODK collect kukusanya data kutumia fomu hii.",
+        "encryptionnotsupported": "Fomu hii inahitaji usimbaji fiche wa rekodi kwenye kifaa. Kwa bahati mbaya, kivinjari chako hakitumii kipengele hiki. Tunapendekeza utumie kivinjari cha kisasa.",
+        "formloadfailed": "",
         "instancenotfound": "Rekodi hii haipatikani. Inaweza kuwa imetolewa kwenye hifadhi kwa sababu imekaa hapo kwa muda mrefu.",
         "invalidediturl": "Anwani ya wavuti uliyopeana sio halali",
-        "loadfailed": "Failed to load __resource__",
-        "notfoundinformlist": "Fomu lenye kitambulisho nambari __formId__ halikupatikana kwenye /orodha la fomu zote",
+        "loadfailed": "",
+        "notfoundinformlist": "",
         "pagenotfound": "Ukurasa haukupatikana",
         "surveyidnotactive": "Tafiti lililoko na kitambulisho hiki haliko amilifu tena",
-        "surveyidnotfound": "Tafiti lililo na kitambulisho hiki halijapatikana",
+        "surveyidnotfound": "",
         "unknown": "Kosa tusilolifahamu limetendeka"
     },
     "feedback": {
         "header": "Habari"
+    },
+    "filepicker": {
+        "file": "",
+        "notFound": "",
+        "placeholder": "",
+        "resetWarning": "",
+        "toolargeerror": "",
+        "waitingForPermissions": ""
     },
     "form": {
         "chooseLanguage": "Chagua lugha",
@@ -218,11 +283,11 @@
             "next": "Ifuatayo",
             "return": "Rudi Mwanzo"
         },
-        "required": "required"
+        "required": ""
     },
     "formfooter": {
         "complete": {
-            "btn": "Complete"
+            "btn": ""
         },
         "savedraft": {
             "btn": "Hifadhi mswadajaribio",
@@ -236,44 +301,67 @@
         }
     },
     "geopicker": {
-        "accuracy": "accuracy (m)",
-        "altitude": "altitude (m)",
-        "closepolygon": "close polygon",
-        "kmlcoords": "KML coordinates",
-        "kmlpaste": "paste KML coordinates here",
-        "latitude": "latitude (x.y °)",
-        "longitude": "longitude (x.y °)",
-        "points": "points",
-        "searchPlaceholder": "search for place or address"
+        "accuracy": "",
+        "altitude": "",
+        "closepolygon": "",
+        "kmlcoords": "",
+        "kmlpaste": "",
+        "latitude": "",
+        "longitude": "",
+        "points": "",
+        "removePoint": "",
+        "searchPlaceholder": "",
+        "bordersintersectwarning": ""
     },
     "here": "hapa",
+    "hint": {
+        "guidance": {
+            "details": ""
+        }
+    },
     "home": {
         "msg": "__appTitle__ bado liko tendeshi. Tafadhali tumia Enketo fomu zako kupitia usakinishaji uitwao __serverName__."
     },
+    "imagemap": {
+        "svgNotFound": ""
+    },
     "langs": {
         "ar": "Kiarabu",
-        "cs": "Czech",
+        "cs": "",
         "de": "kijerumani",
         "el": "Greek",
         "en": "kiingereza",
         "es": "kihispania",
         "fa": "kiajemi",
-        "fi": "Finnish",
+        "fi": "",
         "fr": "kifaransa",
         "he": "Kiebrania",
         "hi": "Hindi",
         "it": "kiitaliano",
+        "ka": "",
         "km": "Khmer",
-        "lo": "Lao",
+        "lo": "",
         "nl": "Dutch",
         "no": "lugha ya Norway",
+        "pa": "",
+        "pl": "",
+        "pt": "",
         "ro": "Romanian",
+        "ru": "",
         "sk": "kislovakia",
+        "sq": "",
         "supported": "Lugha zinazokubaliwa:",
+        "sv": "",
         "sw": "Swahili",
         "th": "Thai",
+        "tr": "",
+        "uk": "",
         "vi": "Vietnamese",
         "zh": "kichina"
+    },
+    "literacywidget": {
+        "finish": "",
+        "start": ""
     },
     "page": {
         "modernbrowsers": {
@@ -302,19 +390,23 @@
             "username": "Jina la mtumiaji"
         }
     },
+    "rankwidget": {
+        "clickstart": "",
+        "tapstart": ""
+    },
     "record-list": {
         "export": "Hamisha",
         "msg1": "Rekodi zimehifadhiwa ndani ya kivinjari wavuti mpaka ziwasilishwe kwenye seva (hata ukizima tarakilishi yako au utoke kwenye mtandao).",
         "msg2": "Rekodi zote zilizo kwenye foleni isipokuwa rasimu __icon__,zitawasilishwa moja kwa moja, kila dakika 5 kivinjari wavuti ikifungiliwa na kukiwa na mtandao. ",
-        "msg2-nodraft": "Queued records are uploaded automatically, in the background, every 5 minutes when the web page is open and an Internet connection is available.",
+        "msg2-nodraft": "",
         "msg3": "Kulazimisha upakiaji kati ya majaribio moja kwa moja, bonyeza kitufe la kupakia.",
         "norecords": "Hakuna rekodi kwa foleni",
         "title": "Foleni",
         "upload": "Pakia"
     },
     "selectpicker": {
-        "noneselected": "none selected",
-        "numberselected": "__number__ selected"
+        "noneselected": "",
+        "numberselected": ""
     },
     "store": {
         "error": {
@@ -324,22 +416,29 @@
         }
     },
     "submission": {
-        "http0": "Kosekana (Je, uko nje ya mtandao?).",
+        "http0": "Seva haipatikani au huenda hujaunganishwa kwenye Intaneti.",
         "http2xx": "Jibu lisilotarajiwa wakati wa kuwasilisha data.",
         "http400": "Data seva haikukubali data.",
-        "http401": "Authentication problem with data server.",
+        "http401": "",
         "http403": "Hauruhusiwa kutuma data kwenye hii data seva.",
         "http404": "Huduma ya kuwasilisha data kwenye data seva haikupatikana.",
-        "http408": "Data server timed out.",
+        "http408": "",
         "http413": "Data ni kubwa mno.",
         "http4xx": "Data seva ina utata wakuwasilisha data tusioujua.",
         "http500": "Hatukuweza kuwasiliana na data seva iliyo na fomu yako au seva ya Enketo. Tafadhali jaribu tena baadaye au wasiliana nasi kupitia __supportEmail__.",
-        "http504": "Could not establish connection with data server."
+        "http504": ""
+    },
+    "themes": {
+        "supported": ""
+    },
+    "update": {
+        "newversion": "",
+        "reload": ""
     },
     "version": "toleo:",
     "widget": {
         "comment": {
-            "update": "Update"
+            "update": ""
         }
     }
 }

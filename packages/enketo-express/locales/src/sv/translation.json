@@ -39,7 +39,11 @@
         },
         "formupdated": {
             "heading": "Formuläret har uppdaterats!",
-            "msg": "En ny version av detta formulär har laddats ner. Uppdatera denna sida för att ladda in den uppdaterade versionen."
+            "later": "Senare",
+            "msg": "En ny version av detta formulär har laddats ner. Uppdatera denna sida för att ladda in den uppdaterade versionen.",
+            "refresh": "",
+            "refreshwithoutsaving": "",
+            "unsavedmsg": ""
         },
         "gotonotfound": {
             "msg": "Hittar inte fråga \"__path__\" i formuläret. Är referensen till denna fråga korrekt?"
@@ -48,7 +52,7 @@
             "editadvice": "Du rekommenderas att inte redigera detta formlär förrän detta har löst sig.",
             "entryadvice": "Det rekommenderas att inte använda detta formulär för inmatning av data förrän detta har lösts.",
             "heading": "Fel vid inläsning",
-            "msg1": "Ett fel uppstod vid inläsning av detta formulär.",
+            "msg1": "",
             "msg2": "Vänligen kontakta __emailLink__ med länken till denna sida och felmeddelandet nedan:",
             "heading_plural": "Fel vid inläsning",
             "msg1_plural": "Fel inträffade under inladdning av formuläret.",
@@ -131,6 +135,34 @@
             "heading": "Formulärfel",
             "msg": "Ett fel inträffade vid utvärdering av formel. Vänligen kontakta __emailLink__ med det här felet:"
         }
+    },
+    "audioRecording": {
+        "error": {
+            "accessDenied": "",
+            "noMicrophone": "",
+            "notSupported": "",
+            "unknownError": "",
+            "recordingError": "",
+            "recordingInProgress": "",
+            "invalidAudioFile": {
+                "msg": "",
+                "heading": ""
+            }
+        },
+        "startRecording": "",
+        "uploadAudioFile": "",
+        "deleteWarning": "",
+        "backgroundDisclaimer": {
+            "heading": "",
+            "msg": [
+                "",
+                "",
+                "",
+                ""
+            ],
+            "buttonText": ""
+        },
+        "hasRecordedAudio": ""
     },
     "changelog": "Ändringslogg",
     "confirm": {
@@ -225,11 +257,10 @@
         "instancenotfound": "Post finns inte. Den kan ha blivit ogiltig.",
         "invalidediturl": "Inte en giltig URL för redigering",
         "loadfailed": "Det gick inte att läsa in __resource__",
-        "notfoundinformlist": "Formuläret finns inte eller så har du inte behörighet till det. Kolla så URL är korrekt.\n\nFanns formuläret tidigare kan det ha blivit arkiverat eller raderat. Kontakta personen som bad dig fylla i formuläret.\n\n(Försök att använda formulär: __formId__)",
-        "notfounddirectformurl": "Formuläret finns inte eller så har du inte behörighet till det. Kolla så URL är korrekt.\n\nFanns formuläret tidigare kan det ha blivit arkiverat eller raderat. Kontakta personen som bad dig fylla i formuläret.\n\n(Försök att använda formulär: __notfounddirectformurl__)",
+        "notfoundinformlist": "",
         "pagenotfound": "Sidan hittades inte",
         "surveyidnotactive": "Undersökning med detta ID är inte längre aktiv",
-        "surveyidnotfound": "Undersökning med detta ID hittades inte",
+        "surveyidnotfound": "",
         "unknown": "Ett okänt fel inträffade"
     },
     "feedback": {
@@ -399,6 +430,10 @@
     },
     "themes": {
         "supported": "Teman stöds"
+    },
+    "update": {
+        "newversion": "",
+        "reload": ""
     },
     "version": "version:",
     "widget": {

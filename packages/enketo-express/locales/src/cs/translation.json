@@ -39,7 +39,11 @@
         },
         "formupdated": {
             "heading": "Formulář Aktualizovaný!",
-            "msg": "Nová verze tohoto formuláře byla stažena. Obnovte tuto stránku pro načtení aktualizované verze."
+            "later": "Později",
+            "msg": "Nová verze tohoto formuláře byla stažena. Obnovte tuto stránku pro načtení aktualizované verze.",
+            "refresh": "",
+            "refreshwithoutsaving": "",
+            "unsavedmsg": ""
         },
         "gotonotfound": {
             "msg": "Ve formuláři se nepodařilo najít otázku \"__path__\". Je odkaz na tuto otázku správný?"
@@ -48,7 +52,7 @@
             "editadvice": "Doporučuje se neupravovat tenhle záznam dokud to nebude vyřešeno.",
             "entryadvice": "Nedoporučuje se používat tento formulář pro vkládání dat dokud se to nevyřeší.",
             "heading": "Chyba při Načítání",
-            "msg1": "Při načítání tohoto formuláře došlo k chybě.",
+            "msg1": "",
             "msg2": "Prosím kontaktujte __emailLink__ s odkazem na tuto stránku a níže zobrazenou chybovou zprávou:",
             "heading_plural": "Chyby při Načítání",
             "msg1_plural": "Při načítání tohoto formuláře se vyskytly chyby.",
@@ -70,7 +74,8 @@
             "heading": "Aplikaci nelze spustit v režimu offline",
             "msg": "Váš prohlížeč nepodporuje spuštění této aplikace v offline režimu. Můžete pokračovat na průzkum bez využití této funkce, nebo se podívejte na možnosti pro řešení tohoto problému.",
             "negButton": "Použij",
-            "posButton": "Zobrazit možnosti"
+            "posButton": "Zobrazit možnosti",
+            "refresh": ""
         },
         "queuesubmissionsuccess": {
             "msg": "__recordNames__ byl úspěšně odeslán",
@@ -85,6 +90,14 @@
         "recordsavesuccess": {
             "draftmsg": "Záznam uložen jako koncept.",
             "finalmsg": "Záznam vložen do fronty k odeslání."
+        },
+        "savedraftinfo": {
+            "heading": "",
+            "msg": [
+                "",
+                "",
+                ""
+            ]
         },
         "submission": {
             "msg": "Odesílám...",
@@ -123,6 +136,34 @@
             "msg": "Došlo k chybě při vyhodnocování vzorce. Prosím kontaktujte __emailLink__ s touto chybou:"
         }
     },
+    "audioRecording": {
+        "error": {
+            "accessDenied": "",
+            "noMicrophone": "",
+            "notSupported": "",
+            "unknownError": "",
+            "recordingError": "",
+            "recordingInProgress": "",
+            "invalidAudioFile": {
+                "msg": "",
+                "heading": ""
+            }
+        },
+        "startRecording": "",
+        "uploadAudioFile": "",
+        "deleteWarning": "",
+        "backgroundDisclaimer": {
+            "heading": "",
+            "msg": [
+                "",
+                "",
+                "",
+                ""
+            ],
+            "buttonText": ""
+        },
+        "hasRecordedAudio": ""
+    },
     "changelog": "Deník změn",
     "confirm": {
         "autosaveload": {
@@ -154,6 +195,10 @@
         },
         "login": {
             "heading": "Nutné Přihlášení",
+            "queuedMsg": [
+                "",
+                "Chtěli byste se přihlásit nyní nebo později?"
+            ],
             "msg": [
                 "Pro odeslání dat čekajících na zpracování se musíte přihlásit. Pokud tak chcete učinit nyní, budete přesměrováni a ztratíte všechna neuložená data.",
                 "Chtěli byste se přihlásit nyní nebo později?"
@@ -178,7 +223,7 @@
             "msg": "Tato akce je nevratná. Jste si jisti, že chcete pokračovat?"
         },
         "save": {
-            "existingerror": "Záznam se stejným názvem nebo ID již existuje.",
+            "existingerror": "Záznam se stejným názvem nebo ID již existuje. Změňte jej prosím.",
             "hint": "Tento název vám umožní snadno najít váš koncept záznamu a dokončit jej později.",
             "msg": "Existují neuložené změny, chcete pokračovat bez jejich uložení?",
             "name": "Název Záznamu",
@@ -205,19 +250,17 @@
     },
     "error": {
         "code": "Chybový Kód: __code__",
-        "dataloadfailed": "Nepodařilo se načíst data z __url__",
+        "dataloadfailed": "Nepodařilo se načíst __filename__.",
         "econnrefused": "Nelze se připojit k Serveru",
         "encryptionnotsupported": "Tento formulář vyžaduje lokální šifrování záznamů. Váš prohlížeč to bohužel nepodporuje. Doporučujeme přechod na moderní prohlížeč.",
+        "formloadfailed": "",
         "instancenotfound": "Záznam není k dispozici. To může být způsobené tím, že vypršel.",
         "invalidediturl": "Neplatná URL pro úpravu",
         "loadfailed": "Nepodařilo se načíst __resource__",
-        "notfoundinformlist": [
-            "Oops, tento formulář již neexistuje. Vlastník formuláře jej pravděpodobně odstranil, archivoval nebo deaktivoval. Kontaktujte majitele ve formuláři pro potvrzení.",
-            "Detail chyby: Formulář s ID __formId__ nebyl nalezen v / formList"
-        ],
+        "notfoundinformlist": "",
         "pagenotfound": "Stránka nebyla Nenalezena",
         "surveyidnotactive": "Průzkum s tímto ID již není aktivní",
-        "surveyidnotfound": "Průzkum s tímto ID nebyl nalezen",
+        "surveyidnotfound": "",
         "unknown": "Nastala neznámá chyba"
     },
     "feedback": {
@@ -267,7 +310,8 @@
         "longitude": "zeměpisná délka (x.y °)",
         "points": "body",
         "removePoint": "Touto akcí zcela a nenávratně odstraníte současný geolokační bod z listu geolokačních bodů. Jste si jisti, že to chcete udělat?",
-        "searchPlaceholder": "hledání místa nebo adresy"
+        "searchPlaceholder": "hledání místa nebo adresy",
+        "bordersintersectwarning": ""
     },
     "here": "tady",
     "hint": {
@@ -294,10 +338,12 @@
         "he": "Hebrejština",
         "hi": "Hindština",
         "it": "Italština",
+        "ka": "Gruzínština",
         "km": "Khmerština",
         "lo": "Laoština",
         "nl": "Holandština",
         "no": "Norština",
+        "pa": "",
         "pl": "Polština",
         "pt": "Portugalština",
         "ro": "Rumunština",
@@ -308,6 +354,8 @@
         "sv": "Švédština",
         "sw": "Svahilština",
         "th": "Thajština",
+        "tr": "Turečtina",
+        "uk": "",
         "vi": "Vietnamština",
         "zh": "Čínština"
     },
@@ -368,7 +416,7 @@
         }
     },
     "submission": {
-        "http0": "Nepodařilo se (Offline?).",
+        "http0": "Server není dostupný nebo možná nejste připojeni k internetu.",
         "http2xx": "Neočekávaná odpověď při odesílání dat.",
         "http400": "Datový server neakceptoval data.",
         "http401": "Nastal problém při autentikaci s datovým serverem.",
@@ -377,11 +425,15 @@
         "http408": "Spojení s datovým serverem vypršelo.",
         "http413": "Data jsou příliš velké.",
         "http4xx": "Vyskytla neznáma chyba při odeslání na datovém serveru.",
-        "http500": "Datový server vašeho formuláře nebo Engeto server je nedostupný. Zkuste to prosím později nebo kontaktujte __supportEmail__.",
+        "http500": "Datový server vašeho formuláře nebo Enketo server je nedostupný. Zkuste to prosím později nebo kontaktujte __supportEmail__.",
         "http504": "Nepodařilo se navázat spojení s dátovým serverem."
     },
     "themes": {
         "supported": "Podporovaná témata"
+    },
+    "update": {
+        "newversion": "",
+        "reload": ""
     },
     "version": "verze:",
     "widget": {

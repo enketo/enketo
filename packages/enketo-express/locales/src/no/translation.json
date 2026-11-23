@@ -5,52 +5,54 @@
     "alert": {
         "addtohomescreen": {
             "androidchrome": {
-                "msg": "To add this form to your Home screen, click the browser settings icon __image1__ and select: 'Add to Home screen'."
+                "msg": ""
             },
             "androidfirefox": {
-                "msg": [
-                    "To add this form to your Homescreen:",
-                    "1. Add this page to your Firefox bookmarks by clicking the settings icon __image1__ and then the star icon __image2__.",
-                    "2. Open your bookmarks by opening a new page and clicking the Bookmarks tab.",
-                    "3. Click-and-hold your form until a pop-up menu appears.",
-                    "4. Select 'Add to Home Screen'."
-                ]
+                "msg": ""
             },
-            "heading": "Add to Home Screen",
+            "heading": "",
             "iossafari": {
-                "msg": "To add this form to your Home screen, click the share icon __image1__ in the top right of your browser, and select: '+ Add to Home Screen'."
+                "msg": ""
             }
         },
         "appupdated": {
             "heading": "App oppdatert!",
             "msg": "En ny versjon av denne applikasjonen har blitt lastet ned. Oppdater denne siden for å hente inn den nye versjonen."
         },
+        "closing": {
+            "heading": ""
+        },
         "default": {
             "button": "Lukk",
             "heading": "Advarsel"
         },
         "export": {
-            "alternativequestion": "alternative download - online",
             "error": {
-                "filecreatedmsg": "Nevertheless, an incomplete export file was still created.",
-                "heading": "Export Error",
-                "linknotcreated": "Failed to create an export link for unsubmitted records. Are you online?",
-                "msg": "Errors occurred during creating of the record export file for unsubmitted records. Errors: __errors__"
+                "filecreatedmsg": "",
+                "heading": "",
+                "msg": ""
             },
             "success": {
-                "heading": "Export Created",
-                "msg": "Export file created for all unsubmitted records belonging to this form."
+                "heading": "",
+                "msg": ""
             }
         },
         "formupdated": {
             "heading": "Skjema oppdatert!",
-            "msg": "En ny versjon av dette skjemaet har blitt lastet ned. Oppdater denne siden for å hente inn nyeste versjon."
+            "later": "Senere",
+            "msg": "En ny versjon av dette skjemaet har blitt lastet ned. Oppdater denne siden for å hente inn nyeste versjon.",
+            "refresh": "",
+            "refreshwithoutsaving": "",
+            "unsavedmsg": ""
+        },
+        "gotonotfound": {
+            "msg": ""
         },
         "loaderror": {
             "editadvice": "Det anbefales å ikke endre denne oppføringen før dette er løst.",
             "entryadvice": "Det anbefales å ikke bruke dette skjemaet for legge inn data før dette er løst.",
             "heading": "Innlastningsfeil",
-            "msg1": "En feil oppstod under innhentingen av skjemaet.",
+            "msg1": "",
             "msg2": "Vennligst kontakt __emailLink__ med en kobling til denne siden og feilmeldingen under:",
             "heading_plural": "Innlastingsfeil",
             "msg1_plural": "En feil oppstod under innhentingen av skjemaet.",
@@ -72,7 +74,8 @@
             "heading": "Applikasjonen kan ikke kjøres frakoblet",
             "msg": "Frakoblet start av applikasjonen er ikke støttet i din nettleser. Du kan bruke skjemaet uten denne funksjonen og se på muligheter for å løse dette.",
             "negButton": "Bruk",
-            "posButton": "Vis instillinger"
+            "posButton": "Vis instillinger",
+            "refresh": ""
         },
         "queuesubmissionsuccess": {
             "msg": "__recordNames__ har blitt sendt",
@@ -87,6 +90,14 @@
         "recordsavesuccess": {
             "draftmsg": "Oppføring lagret som utkast.",
             "finalmsg": "Oppføring lagt i kø for sending."
+        },
+        "savedraftinfo": {
+            "heading": "",
+            "msg": [
+                "",
+                "",
+                ""
+            ]
         },
         "submission": {
             "msg": "Sender...",
@@ -105,6 +116,11 @@
             "msg": "Dataen har blitt sendt!",
             "redirectmsg": "Du blir nå videresendt"
         },
+        "thanks": {
+            "heading": "",
+            "msg": "",
+            "msgTaken": ""
+        },
         "validationerror": {
             "msg": "Skjemaet inneholder feil. Vennligst se skjemaet markert i rødt."
         },
@@ -112,11 +128,43 @@
             "heading": "OK",
             "msg": "Skjemaet er ikke gyldig!"
         },
+        "valuehasspaces": {
+            "multiple": ""
+        },
         "xpatherror": {
             "heading": "Feil i Formel",
             "msg": "En feil ved formel-evaluering oppstod. Vennligst kontakt __emailLink__ med denne feilmeldingen:"
         }
     },
+    "audioRecording": {
+        "error": {
+            "accessDenied": "",
+            "noMicrophone": "",
+            "notSupported": "",
+            "unknownError": "",
+            "recordingError": "",
+            "recordingInProgress": "",
+            "invalidAudioFile": {
+                "msg": "",
+                "heading": ""
+            }
+        },
+        "startRecording": "",
+        "uploadAudioFile": "",
+        "deleteWarning": "",
+        "backgroundDisclaimer": {
+            "heading": "",
+            "msg": [
+                "",
+                "",
+                "",
+                ""
+            ],
+            "buttonText": ""
+        },
+        "hasRecordedAudio": ""
+    },
+    "changelog": "",
     "confirm": {
         "autosaveload": {
             "heading": "Ulagrede Oppføringer Funnet",
@@ -147,6 +195,10 @@
         },
         "login": {
             "heading": "Innlogging Påkrevet",
+            "queuedMsg": [
+                "",
+                "Vil du logge inn nå eller senere?"
+            ],
             "msg": [
                 "For å kunne sende data før køen må du logge inn. Hvis du vil gjøre det nå vil du bli videresendt til en ny side og miste informasjon som ikke er lagret.",
                 "Vil du logge inn nå eller senere?"
@@ -166,8 +218,12 @@
             "psize": "Papirstørrelse",
             "reminder": "Husk å velge de samme utskriftsinnstillingene i nettleserens utskriftsmeny etterpå!"
         },
+        "repeatremove": {
+            "heading": "",
+            "msg": ""
+        },
         "save": {
-            "existingerror": "Dette oppføringsnavnet eller ID eksistere allerede.",
+            "existingerror": "Dette oppføringsnavnet eller denne ID-en finnes allerede. Vennligst endre dette.",
             "hint": "Dette navner gjør det enklere for deg å finne dine utkast for å fullføre senere.",
             "msg": "Det er ulagrede endringer. Vil du fortsette uten å lagre disse?",
             "name": "Oppføringsnavn",
@@ -184,25 +240,39 @@
         "admin": "Vennligst kontakt administratoren for skjemaet",
         "support": "Vennligst kontakt __supportEmail__."
     },
+    "drawwidget": {
+        "annotation": "",
+        "drawing": "",
+        "signature": ""
+    },
     "enketo": {
         "power": "Drevet av"
     },
     "error": {
         "code": "Feilmeldingskode: __code__",
-        "dataloadfailed": "Klarte ikke å laste inn data fra __url__",
+        "dataloadfailed": "Klarte ikke å laste inn __filename__.",
         "econnrefused": "Kunne ikke koble til Server",
-        "encryptionnotsupported": "Dette skjemaet krever lokal kryptering av oppføringer. Uheldigvis er dette ikke støttet enda, men vi anbefaler at du bruker ODK Collect for datainnsamling med dette skjemaet.",
+        "encryptionnotsupported": "Dette skjemaet krever lokal kryptering av oppføringer. Dessverre støttes ikke dette av nettleseren din. Vi anbefaler å bytte til en moderne nettleser.",
+        "formloadfailed": "",
         "instancenotfound": "Oppføringen er ikke tilgjengelig. Den kan ha utløpt.",
         "invalidediturl": "Ikke en gyldig redigerings-adresse",
         "loadfailed": "Klarte ikke å laste inn __resource__",
-        "notfoundinformlist": "Skjemaet med ID __formId__ ble ikke funnet i /formList",
+        "notfoundinformlist": "",
         "pagenotfound": "Side ikke Funnet",
         "surveyidnotactive": "Skjemaet med denne IDen er ikke lengre aktivt",
-        "surveyidnotfound": "Skjema med denne IDen ble ikke funnet",
+        "surveyidnotfound": "",
         "unknown": "En ukjent feil har oppstått"
     },
     "feedback": {
         "header": "Informasjon"
+    },
+    "filepicker": {
+        "file": "",
+        "notFound": "",
+        "placeholder": "",
+        "resetWarning": "",
+        "toolargeerror": "",
+        "waitingForPermissions": ""
     },
     "form": {
         "chooseLanguage": "Velg språk",
@@ -212,9 +282,13 @@
             "end": "Gå til Slutt",
             "next": "Neste",
             "return": "Tilbake til Begynnelsen"
-        }
+        },
+        "required": ""
     },
     "formfooter": {
+        "complete": {
+            "btn": ""
+        },
         "savedraft": {
             "btn": "Lagre Utkast",
             "label": "Lagre som Utkast"
@@ -226,32 +300,68 @@
             "btn": "Valider"
         }
     },
+    "geopicker": {
+        "accuracy": "",
+        "altitude": "",
+        "closepolygon": "",
+        "kmlcoords": "",
+        "kmlpaste": "",
+        "latitude": "",
+        "longitude": "",
+        "points": "",
+        "removePoint": "",
+        "searchPlaceholder": "",
+        "bordersintersectwarning": ""
+    },
     "here": "her",
+    "hint": {
+        "guidance": {
+            "details": ""
+        }
+    },
     "home": {
         "msg": "__appTitle__ kjører! Vennligst åpne Enketo-skjemaer fra din __serverName__-installasjon."
     },
+    "imagemap": {
+        "svgNotFound": ""
+    },
     "langs": {
         "ar": "Arabisk",
-        "cs": "Czech",
+        "cs": "",
         "de": "Tysk",
         "el": "Gresk",
         "en": "Engelsk",
         "es": "Spansk",
-        "fa": "Persian",
-        "fr": "French",
+        "fa": "",
+        "fi": "",
+        "fr": "",
         "he": "Hebraisk",
         "hi": "Hindi",
-        "it": "Italian",
+        "it": "",
+        "ka": "",
         "km": "Khmer",
+        "lo": "",
         "nl": "Nederlansk",
         "no": "Norsk",
+        "pa": "",
+        "pl": "",
+        "pt": "",
         "ro": "Rumensk",
-        "sk": "Slovak",
+        "ru": "",
+        "sk": "",
+        "sq": "",
         "supported": "Støttede språk:",
+        "sv": "",
         "sw": "Swahili",
         "th": "Thai",
+        "tr": "",
+        "uk": "",
         "vi": "Vietnamesisk",
-        "zh": "Chinese"
+        "zh": ""
+    },
+    "literacywidget": {
+        "finish": "",
+        "start": ""
     },
     "page": {
         "modernbrowsers": {
@@ -280,6 +390,10 @@
             "username": "Brukernavn"
         }
     },
+    "rankwidget": {
+        "clickstart": "",
+        "tapstart": ""
+    },
     "record-list": {
         "export": "Eksporter",
         "msg1": "Oppføringer er lagret i nettleseren din frem til de er lastet opp (selv om du skrur av datamaskinen eller kobler fra internett).",
@@ -290,23 +404,41 @@
         "title": "Kø",
         "upload": "Last Opp"
     },
+    "selectpicker": {
+        "noneselected": "",
+        "numberselected": ""
+    },
     "store": {
         "error": {
-            "iosusesafari": "Your iOS browser is not able to run this form. On iOS, we recommend using Safari.",
+            "iosusesafari": "",
             "notavailable": "Nettleserlagring er behøves men er ikke tilgjengelig, er ødelagt eller ikke skrivbar. Hvis du er i modus for \"privat surfing,\" vennligst bytt til vanlig modus eller en annen nettleser. (error: __error__)",
-            "notsupported": "Your browser is not able to run this form. We recommend using a modern browser."
+            "notsupported": ""
         }
     },
     "submission": {
-        "http0": "Mislykket (Frakoblet?)",
+        "http0": "Serveren er ikke tilgjengelig, eller du er kanskje ikke koblet til Internett.",
         "http2xx": "Uforventet svar ved sending av data.",
         "http400": "Dataserveren tok ikke imot dataen.",
-        "http401": "Authentication problem with data server.",
+        "http401": "",
         "http403": "Ikke tillatt å sende data til denne dataserveren.",
         "http404": "Innsendingsservice på dataserveren ble ikke funnet.",
+        "http408": "",
         "http413": "Dataen er for stor.",
         "http4xx": "Ukjent problem ved sending til dataserver.",
-        "http500": "Dataserveren for ditt skjema eller Enketo-serveren er nede. Vennligst prøv igjen senere eller kontakt __supportEmail__."
+        "http500": "Dataserveren for ditt skjema eller Enketo-serveren er nede. Vennligst prøv igjen senere eller kontakt __supportEmail__.",
+        "http504": ""
     },
-    "version": "Versjon:"
+    "themes": {
+        "supported": ""
+    },
+    "update": {
+        "newversion": "",
+        "reload": ""
+    },
+    "version": "Versjon:",
+    "widget": {
+        "comment": {
+            "update": ""
+        }
+    }
 }
