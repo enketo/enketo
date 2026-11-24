@@ -256,7 +256,7 @@
         "formloadfailed": "",
         "instancenotfound": "Registro não presente. Talvez tenha expirado.",
         "invalidediturl": "URL de edição inválido",
-        "loadfailed": "Falha ao carregar __recurso__",
+        "loadfailed": "",
         "notfoundinformlist": "",
         "pagenotfound": "Página não encontrada",
         "surveyidnotactive": "A pesquisa com este ID não está mais ativa",

@@ -5,7 +5,7 @@
     "alert": {
         "addtohomescreen": {
             "androidchrome": {
-                "msg": "Để thêm form này vào màn hình bắt đầu-Homescreen-của bạn, hãy kích vào trình duyệt biểu tượng thiết lập _image1_ và chọn: 'Thêm vào màn hình bắt đầu'."
+                "msg": ""
             },
             "androidfirefox": {
                 "msg": ""
@@ -78,7 +78,7 @@
             "refresh": ""
         },
         "queuesubmissionsuccess": {
-            "msg": "_recordNames_ đã được gửi thành công",
+            "msg": "",
             "msg_plural": "__recordNames__ đã được gởi đi thành công."
         },
         "recordloadsuccess": {
@@ -104,11 +104,8 @@
             "redirectmsg": "Bạn sẽ được đăng nhập lại tự động sau khi hoàn tất việc gởi đi."
         },
         "submissionerror": {
-            "authrequiredmsg": "Yêu cầu xác thực. Xin xác nhận _here_ trong một cửa sổ trình duyệt khác và thử lại lần nữa.",
-            "fnfmsg": [
-                "Các tệp tin sau đây không thể lấy lại được:_failedFile_. Việc gởi thông tin đi trước đó đã thành công mà không có những tệp tin này.",
-                "Xin liên hệ _supportEmail_ để báo cáo lỗi và nếu có thể hãy giải thích làm thế nào vấn đề có thể cải thiện được. "
-            ],
+            "authrequiredmsg": "",
+            "fnfmsg": "",
             "heading": "Việc gửi đi bị lỗi"
         },
         "submissionsuccess": {
@@ -133,7 +130,7 @@
         },
         "xpatherror": {
             "heading": "Lỗi công thức",
-            "msg": "Một lỗi mô phỏng công thức đã xảy ra. Xin liên hệ _emailLink_ về lỗi này:"
+            "msg": ""
         }
     },
     "audioRecording": {
@@ -383,7 +380,7 @@
             "heading": "Hãy nhập các giá trị"
         },
         "login": {
-            "heading": "Nhập thông tin giới thiệu _server_ của bạn",
+            "heading": "",
             "password": "Mật khẩu",
             "remember": "Hãy nhớ trên máy tính này",
             "submit": "Gởi lên",
@@ -397,7 +394,7 @@
     "record-list": {
         "export": "Xuất ra",
         "msg1": "Các bản ghi được lưu trữ bên trong trình duyệt của bạn cho đến khi chúng được tải lên (ngay cả khi bạn tắt máy hoặc offline).",
-        "msg2": "Ngoại trừ các bản ghi được đánh dấu như bản nháp _icon_, các bản ghi trong hàng đợi được tải lên một cách tự động, cứ mỗi 5 phút một lần khi trang web được mở và kết nối Internet sẵn sàng.",
+        "msg2": "",
         "msg2-nodraft": "",
         "msg3": "Để thúc đẩy nhanh hơn việc tải lên, hãy kích Upload.",
         "norecords": "Không có bản ghi nào vào hàng đợi",
@@ -411,7 +408,7 @@
     "store": {
         "error": {
             "iosusesafari": "Trình duyệt iOS không thể chạy trong form này, Trên iOS, chúng tôi khuyến cáo sử dụng trình duyệt Safari.",
-            "notavailable": "Lưu trữ trình duyệt là cần thiết nhưng không có sẵn, có thể bị hỏng hoặc không cho phép ghi. Nếu bạn đang trong chế độ 'trình duyệt cá nhân' hãy chuyển đổi sang chế độ thông dụng, còn không thì chuyển sang trình duyệt khác. (lỗi: _error_)",
+            "notavailable": "",
             "notsupported": "Trình duyệt của bạn không thể chạy form này. Chúng tôi khuyên bạn sử dụng một trình duyệt mới hơn."
         }
     },
@@ -425,7 +422,7 @@
         "http408": "",
         "http413": "Dữ liệu quá lớn.",
         "http4xx": "Không xác định được dữ liệu gửi lên máy chủ.",
-        "http500": "Dữ liệu gửi lên máy chủ trong form của bạn hoặc hiển thị Enketo đã bị ngừng. Hãy thử lại sau hoặc liên hệ _supportEmail_.",
+        "http500": "",
         "http504": ""
     },
     "themes": {

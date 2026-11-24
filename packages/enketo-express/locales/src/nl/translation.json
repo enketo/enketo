@@ -129,7 +129,7 @@
             "msg": "The enquete is geldig!"
         },
         "valuehasspaces": {
-            "multiple": "Een \"select multiple\" question heeft een illegale waarde &#39;__waarde&#39; die een spatie bevat."
+            "multiple": ""
         },
         "xpatherror": {
             "heading": "Formula fout",

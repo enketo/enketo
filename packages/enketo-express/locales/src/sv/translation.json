@@ -250,7 +250,7 @@
     },
     "error": {
         "code": "Felkod: __code__",
-        "dataloadfailed": "Det gick inte att läsa in __resource__",
+        "dataloadfailed": "",
         "econnrefused": "Det gick inte att ansluta till formulärservern",
         "encryptionnotsupported": "Denna blankett kräver lokal kryptering av poster. Tyvärr stöds detta inte av din webbläsare. Vi rekommenderar att du byter till en modern webbläsare.",
         "formloadfailed": "Det gick inte att ladda formuläret.",

@@ -79,7 +79,7 @@
         },
         "queuesubmissionsuccess": {
             "msg": "__recordNames__সফলভাবে সাবমিট হয়েছে",
-            "msg_plural": "সফলভাবে সাবমিট হয়েছে"
+            "msg_plural": ""
         },
         "recordloadsuccess": {
             "msg": "লোড হয়েছে__recordName__"
@@ -249,7 +249,7 @@
         "power": "Enketo দ্বারা পরিচালিত"
     },
     "error": {
-        "code": "ভুল কোডঃ",
+        "code": "",
         "dataloadfailed": "",
         "econnrefused": "",
         "encryptionnotsupported": "",

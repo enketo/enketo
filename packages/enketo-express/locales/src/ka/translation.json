@@ -82,7 +82,7 @@
             "msg_plural": "__recordNames__წარმატებით გამოიგზავნა"
         },
         "recordloadsuccess": {
-            "msg": "__recordNames__ ჩაიტვირთა"
+            "msg": ""
         },
         "recordnotfound": {
             "msg": "ჩანაწერის პოვნა შეუძლებელია ან არ შეიცავს მონაცემებს."

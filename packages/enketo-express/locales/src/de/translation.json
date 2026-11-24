@@ -105,10 +105,7 @@
         },
         "submissionerror": {
             "authrequiredmsg": "Authentifizierung erforderlich. Bitte melden Sie sich __here__ in einem anderen Browser-Tab an, und versuchen Sie es erneut.",
-            "fnfmsg": [
-                "Die folgenden Mediendateien konnte nicht abgerufen werden: __failedFiles__. Die Speicherung wurde ohne diese Dateien durchgeführt.",
-                "Bitte kontaktieren Sie den Support per E-Mail, um einen Fehler zu melden und wenn möglich zu erklären, wie das Problem reproduziert werden kann."
-            ],
+            "fnfmsg": "",
             "heading": "Versand fehlgeschlagen"
         },
         "submissionsuccess": {
