@@ -8,13 +8,7 @@
                 "msg": "Lisätäksesi tämä lomake aloitusnäyttöön, muuta selaimen asetuksiksi kuvake __image1__ ja valitse: 'Lisää Koti-valikkoon'"
             },
             "androidfirefox": {
-                "msg": [
-                    "Lisätäksesi tämä lomake kotivalikkoon:",
-                    "Lisätäksesi tämä sivu Firefox-kirjanmerkkeihisi, napsauta asetuskuvaketta __image1__ ja sitten tähtikuvaketta __image2__.",
-                    "2. Avaa kirjanmerkkisi avaamalla uusi sivu ja napsauta kirjanmerkkikielekettä.",
-                    "3. Näpsäytä-ja-pidä lomakettasi kunnes ponnahdusikkunan lista ilmestyy.",
-                    "4. Valitse 'Lisää Koti-valikkoon'"
-                ]
+                "msg": ""
             },
             "heading": "Lisää Koti-valikkoon",
             "iossafari": {
@@ -25,16 +19,17 @@
             "heading": "Sovellus päivitetty!",
             "msg": "Uusi versio tästä sovelluksesta on ladattu. Lataa tämä sivu uudestaan ladataksesi päivitetty versio. "
         },
+        "closing": {
+            "heading": ""
+        },
         "default": {
             "button": "Sulje",
             "heading": "Hälyytys"
         },
         "export": {
-            "alternativequestion": "vaihtoehtoinen lataus - verkossa",
             "error": {
                 "filecreatedmsg": "Joka tapauksessa epätäydellinen vientitiedosto luotiin. ",
                 "heading": "Vientivirhe",
-                "linknotcreated": "Epäonnistuit luomaan vientilinkkiä tallentamattomille tiedostoille. Oletko verkossa?",
                 "msg": "Virheitä esiintyi luotaessa vientitiedostoa lähettämättömille tietueille. Virheet: __errors__"
             },
             "success": {
@@ -44,13 +39,20 @@
         },
         "formupdated": {
             "heading": "Lomake päivitetty!",
-            "msg": "Uusi versio tästä lomakkeesta on ladattu. Päivitä tämä sivu ladataksesi päivitetty versio. "
+            "later": "Myöhemmin",
+            "msg": "Uusi versio tästä lomakkeesta on ladattu. Päivitä tämä sivu ladataksesi päivitetty versio. ",
+            "refresh": "",
+            "refreshwithoutsaving": "",
+            "unsavedmsg": ""
+        },
+        "gotonotfound": {
+            "msg": ""
         },
         "loaderror": {
-            "editadvice": "Tämä tietuetta suositellaan olemaan päivittämättä kunnes tämä on selvitetty. ",
-            "entryadvice": "Suositellaan että tätä lomaketta ei käytetä tiedon tallentamiseen ennenkuin tämä on selvitetty. ",
+            "editadvice": "Tätä tietuetta ei suositella muokattavaksi ennen kuin asia on ratkaistu.",
+            "entryadvice": "Tätä lomaketta ei suositella käytettäväksi tietojen syöttämiseen ennen kuin asia on ratkaistu.",
             "heading": "Latausvirhe",
-            "msg1": "Virhe tätä lomaketta ladattaessa.",
+            "msg1": "",
             "msg2": "Ole yhteydessä __emailLink__ ja liitä mukaan tämän sivun osoite ja alla oleva virheilmoitus:",
             "heading_plural": "Latausvirheitä",
             "msg1_plural": "Virheitä esiintyi tätä lomaketta ladattaessa. ",
@@ -65,14 +67,15 @@
             "msg": [
                 "Tämä lomake voidaan nyt ladata ja käyttää ilman verkkoyhteyttä tällä laitteella. Merkitse se kirjanmerkkeihisin helpottaaksesi pääsyä ilman verkkoyhteyttä. ",
                 "Tietueet tallennetaan automaattisesti ja ne ovat jonossa selaimellasi kunnes verkkoyhteys on tarjolla. Kun sovellus on verkossa, tietueet lähetetään yksitellen automaattisesti. ",
-                "Tietueesi poistetaan jonosta vasta kun se on lähetetty. Voit turvallisesti sulkea selaimesi ja laitteesi vaikka jonossa on tietoja. Ne ovat siellä kun seuraavan kerran lataat lomakkeen. "
+                "Tietueesi poistetaan jonosta vasta kun se on lähetetty. Voit turvallisesti sulkea selaimesi ja laitteesi vaikka jonossa on tietoja. Ne ovat siellä kun seuraavan kerran lataat lomakkeen."
             ]
         },
         "offlineunsupported": {
             "heading": "Sovellusta ei voitu ladata verkon ulkopuolella. ",
             "msg": "Ilman verkkoa toimiva sovellus ei toimi selaimellasi. Voit käyttää tätä tutkimusta ilman tätä ominaisuutta tai tarkistaa vaihtoehdot tämän selvittämiseksi. ",
             "negButton": "Käytä sitä",
-            "posButton": "Näytä vaihtoehdot"
+            "posButton": "Näytä vaihtoehdot",
+            "refresh": ""
         },
         "queuesubmissionsuccess": {
             "msg": "__recordNames__ lähetettiin onnistuneesti",
@@ -87,6 +90,14 @@
         "recordsavesuccess": {
             "draftmsg": "Tietue tallennettu luonnokseksi.",
             "finalmsg": "Tietue tallennettu lähettämistä varten jonoon. "
+        },
+        "savedraftinfo": {
+            "heading": "",
+            "msg": [
+                "",
+                "",
+                ""
+            ]
         },
         "submission": {
             "msg": "Lähetetään...",
@@ -117,11 +128,43 @@
             "heading": "OK",
             "msg": "Lomake on virheetön!"
         },
+        "valuehasspaces": {
+            "multiple": ""
+        },
         "xpatherror": {
             "heading": "Matemaattinen virhe",
             "msg": "Muotoiluvirhe esiintyi. Ole hyvä ja ota yhteyttä __emailLink__ ja liitä mukaan tämä virheilmoitus:"
         }
     },
+    "audioRecording": {
+        "error": {
+            "accessDenied": "",
+            "noMicrophone": "",
+            "notSupported": "",
+            "unknownError": "",
+            "recordingError": "",
+            "recordingInProgress": "",
+            "invalidAudioFile": {
+                "msg": "",
+                "heading": ""
+            }
+        },
+        "startRecording": "",
+        "uploadAudioFile": "",
+        "deleteWarning": "",
+        "backgroundDisclaimer": {
+            "heading": "",
+            "msg": [
+                "",
+                "",
+                "",
+                ""
+            ],
+            "buttonText": ""
+        },
+        "hasRecordedAudio": ""
+    },
+    "changelog": "",
     "confirm": {
         "autosaveload": {
             "heading": "Tallentamaton tietue löytyi",
@@ -152,6 +195,10 @@
         },
         "login": {
             "heading": "Sisäänkirjaus vaaditaan",
+            "queuedMsg": [
+                "",
+                "Haluatko kirjautua sisään nyt vai myöhemmin?"
+            ],
             "msg": [
                 "Sinun täytyy kirjautua sisään lähettääksesi jonossa olevat tietosi. Jos haluat tehdä sen nyt, sinut ohjataan uudestaan ja menetät tallentamattomat tiedot. ",
                 "Haluatko kirjautua sisään nyt vai myöhemmin?"
@@ -171,8 +218,12 @@
             "psize": "Paperin koko",
             "reminder": "Muista asettaa nämä samat tulostusasetukset selaimen tulostusvalikosta jälkikäteen!"
         },
+        "repeatremove": {
+            "heading": "",
+            "msg": ""
+        },
         "save": {
-            "existingerror": "Tämä tiedoston nimi tai tunnus on jo olemassa. ",
+            "existingerror": "Tämän tietueen nimi tai tunnus on jo olemassa. Vaihda se.",
             "hint": "Tämä nimi mahdollistaa luonnoksesi helpon löytämisen myöhemmin viimeistelyä varten. ",
             "msg": "Tallentamattomia muutoksia, haluatko jatkaa tallentamatta niitä?",
             "name": "Tietueen nimi",
@@ -189,25 +240,39 @@
         "admin": "Ota yhteyttä tutkimuksen tekijään, ole hyvä. ",
         "support": "Ota yhteyttä __supportEmail__ ole hyvä."
     },
+    "drawwidget": {
+        "annotation": "",
+        "drawing": "",
+        "signature": ""
+    },
     "enketo": {
         "power": "Ylläpitäjä"
     },
     "error": {
         "code": "Virhekoodi: __code__",
-        "dataloadfailed": "Tiedon lataaminen epäonnistui __url__ sivustolta. ",
+        "dataloadfailed": "Tiedoston __filename__ lataaminen epäonnistui.",
         "econnrefused": "Yhteyden luominen palvelimeen ei onnistunut",
-        "encryptionnotsupported": "Tämä lomake vaatii paikallista tietueiden salaamista. Valitettavasti tätä toimintoa ei tueta vielä. Suosittelemme ODK Collectin käyttöä tiedon keräämistä varten tälle lomakkeelle. ",
+        "encryptionnotsupported": "Tämä lomake vaatii tietueiden paikallisen salauksen. Valitettavasti selaimesi ei tue tätä. Suosittelemme vaihtamaan nykyaikaiseen selaimeen.",
+        "formloadfailed": "",
         "instancenotfound": "Tietue ei ole saatavilla. Se on saattanut vanhentua. ",
         "invalidediturl": "Epäkelpo URL muoto",
         "loadfailed": "__resource__ lataus epäonnistui",
-        "notfoundinformlist": "Lomaketta numerolla __formId__ ei löytynyt /formList",
+        "notfoundinformlist": "",
         "pagenotfound": "Sivua ei löytynyt",
         "surveyidnotactive": "Tutkimusta tällä numerolla ei ole enää aktiivisena",
-        "surveyidnotfound": "Tutkimusta tällä numerolla ei löytynyt",
+        "surveyidnotfound": "",
         "unknown": "Tuntematon virhe esiintyi"
     },
     "feedback": {
         "header": "Tieto"
+    },
+    "filepicker": {
+        "file": "",
+        "notFound": "",
+        "placeholder": "",
+        "resetWarning": "",
+        "toolargeerror": "",
+        "waitingForPermissions": ""
     },
     "form": {
         "chooseLanguage": "Valitse kieli",
@@ -244,11 +309,21 @@
         "latitude": "leveys (x.y °)",
         "longitude": "pituus (x.y °)",
         "points": "pisteet",
-        "searchPlaceholder": "etsi paikkaa tai osoitetta"
+        "removePoint": "",
+        "searchPlaceholder": "etsi paikkaa tai osoitetta",
+        "bordersintersectwarning": ""
     },
     "here": "täällä",
+    "hint": {
+        "guidance": {
+            "details": ""
+        }
+    },
     "home": {
         "msg": "__appTitle__ on käynnissä! Ole hyvä ja kirjaudu Enketo lomakkeisiin __serverName__ asennuksesta."
+    },
+    "imagemap": {
+        "svgNotFound": ""
     },
     "langs": {
         "ar": "Arabia",
@@ -258,22 +333,35 @@
         "en": "Englanti",
         "es": "Espanja",
         "fa": "Persia",
-        "fi": "Finnish",
+        "fi": "",
         "fr": "Ranska",
         "he": "Heprea",
         "hi": "Hindi",
         "it": "Italia",
+        "ka": "",
         "km": "Khmer",
         "lo": "Lao",
         "nl": "Hollanti",
         "no": "Norja",
+        "pa": "",
+        "pl": "",
+        "pt": "",
         "ro": "Romania",
+        "ru": "",
         "sk": "Slovakia",
+        "sq": "",
         "supported": "Tuetut kielet:",
+        "sv": "",
         "sw": "Swahili",
         "th": "Thai",
+        "tr": "",
+        "uk": "",
         "vi": "Vietnami",
         "zh": "Kiina"
+    },
+    "literacywidget": {
+        "finish": "",
+        "start": ""
     },
     "page": {
         "modernbrowsers": {
@@ -302,6 +390,10 @@
             "username": "Käyttäjänimi"
         }
     },
+    "rankwidget": {
+        "clickstart": "",
+        "tapstart": ""
+    },
     "record-list": {
         "export": "Vie",
         "msg1": "Tietueet on tallennettu palvelimellesi kunnes ne ladataan uudestaan (vaikka sulkisit tietokoneesi tai poistuisit verkosta).",
@@ -324,7 +416,7 @@
         }
     },
     "submission": {
-        "http0": "Epäonnistui (pois verkosta?).",
+        "http0": "Palvelin ei ole käytettävissä tai et ehkä ole yhteydessä internetiin.",
         "http2xx": "Odottamaton vastaus tietoja lähetettäessä. ",
         "http400": "Tietopalvelin ei hyväksynyt tietoja. ",
         "http401": "Todentamisongelma tietopalvelimella. ",
@@ -335,6 +427,13 @@
         "http4xx": "Tuntematon lähetysongelma tietopalvelimella. ",
         "http500": "Tietopalvelin on Enketo-lomakkeellesi ei toimi. Yritä myöhemmin uudestaan tai ole yhteydessä __supportEmail__.",
         "http504": "Yhteyttä tietopalvelimeen ei saatu."
+    },
+    "themes": {
+        "supported": ""
+    },
+    "update": {
+        "newversion": "",
+        "reload": ""
     },
     "version": "versio:",
     "widget": {

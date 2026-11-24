@@ -39,7 +39,11 @@
         },
         "formupdated": {
             "heading": "Formulario actualizado!",
-            "msg": "Hemos descargado una nueva versión de este formulario. Actualice esta página para cargar la nueva versión."
+            "later": "Mas tarde",
+            "msg": "Hemos descargado una nueva versión de este formulario. Actualice esta página para cargar la nueva versión.",
+            "refresh": "",
+            "refreshwithoutsaving": "",
+            "unsavedmsg": ""
         },
         "gotonotfound": {
             "msg": "No se pudo encontrar la pregunta \"__path__\" en el formulario. ¿Es correcta la referencia a esta pregunta?"
@@ -48,7 +52,7 @@
             "editadvice": "Le recomendamos no editar este registro hasta que esté resuelto.",
             "entryadvice": "Le recomendamos no usar este formulario para introducir datos hasta que esto se resuelva.",
             "heading": "Error al cargar",
-            "msg1": "Se ha producido un error en la carga de este formulario.",
+            "msg1": "",
             "msg2": "Por favor contacte con  __emailLink__   indicando la dirección de esta página y el mensaje de error que aparece más abajo:",
             "heading_plural": "Errores en la carga",
             "msg1_plural": "Hubo errores durante la carga de este formulario",
@@ -137,16 +141,28 @@
             "accessDenied": "Acceso al micrófono denegado por el usuario.",
             "noMicrophone": "No se encontró ningún micrófono en este dispositivo.",
             "notSupported": "La grabación de audio no es compatible con este navegador.",
-            "unknownError": "Error al acceder al micrófono: __errorMessage__",
+            "unknownError": "No se pudo acceder al micrófono. Revise la configuración y los permisos de su navegador.",
             "recordingError": "Ocurrió un error al intentar grabar audio.",
+            "recordingInProgress": "",
             "invalidAudioFile": {
                 "msg": "El archivo seleccionado no es un archivo de audio válido y no se puede reproducir.",
                 "heading": "Archivo de audio no válido"
             }
         },
         "startRecording": "Iniciar grabación",
-        "uploadAudioFile": "Subir archivo",
-        "deleteWarning": "El audio será excluido. ¿Está seguro de que desea hacer esto?"
+        "uploadAudioFile": "Subir archivo de audio",
+        "deleteWarning": "El audio será eliminado. ¿Está seguro de que desea hacer esto?",
+        "backgroundDisclaimer": {
+            "heading": "",
+            "msg": [
+                "",
+                "",
+                "",
+                ""
+            ],
+            "buttonText": ""
+        },
+        "hasRecordedAudio": ""
     },
     "changelog": "Registro de Cambios",
     "confirm": {
@@ -180,7 +196,7 @@
         "login": {
             "heading": "Inicio de sesión requerido",
             "queuedMsg": [
-                "Record queued for submission. In order to submit your queued data, you need to login.",
+                "",
                 "¿Le gustaría iniciar sesión ahora o más tarde?"
             ],
             "msg": [
@@ -241,11 +257,10 @@
         "instancenotfound": "Registro no hallado. Puede haber expirado.",
         "invalidediturl": "Esta URL no es válida",
         "loadfailed": "Error al cargar __resource__",
-        "notfoundinformlist": "This form does not exist or you no longer have access to it. Please check the URL for any missing characters.\n\nIf the form existed previously, it may have been archived, disabled or deleted. If this is unexpected, please contact the person who asked you to fill the form.\n\n(Attempted to access form with ID: __formId__)",
-        "notfounddirectformurl": "This form does not exist or you no longer have access to it. Please check the URL for any missing characters.\n\nIf the form existed previously, it may have been archived, disabled or deleted. If this is unexpected, please contact the person who asked you to fill the form.\n\n(Attempted to access form: __notfounddirectformurl__)",
+        "notfoundinformlist": "",
         "pagenotfound": "No hemos encontrado la página",
         "surveyidnotactive": "No hay activa ninguna encuesta con este ID",
-        "surveyidnotfound": "No hemos encontrado ninguna encuesta con este ID",
+        "surveyidnotfound": "",
         "unknown": "Se ha producido un error desconocido"
     },
     "feedback": {
@@ -340,7 +355,7 @@
         "sw": "Swahili",
         "th": "Tailandés",
         "tr": "Turco",
-        "uk": "Ukrainian",
+        "uk": "",
         "vi": "Vietnamita",
         "zh": "Chino"
     },
@@ -415,6 +430,10 @@
     },
     "themes": {
         "supported": "Temas disponibles"
+    },
+    "update": {
+        "newversion": "",
+        "reload": ""
     },
     "version": "versión:",
     "widget": {
