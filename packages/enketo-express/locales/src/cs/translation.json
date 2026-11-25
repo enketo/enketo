@@ -30,7 +30,7 @@
             "error": {
                 "filecreatedmsg": "Nicméně, neúplný export byl přesto vytvořen.",
                 "heading": "Chyba při exportu",
-                "msg": ""
+                "msg": "Nastaly chyby při tvorbě exportu pro neodeslané záznamy. Chyby: __error__"
             },
             "success": {
                 "heading": "Export Vytvořen",

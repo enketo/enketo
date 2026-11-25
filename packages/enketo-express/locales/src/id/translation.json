@@ -397,7 +397,7 @@
     "record-list": {
         "export": "Ekspor",
         "msg1": "Data isian disimpan di dalam browser Anda hingga berhasil diunggah (meskipun Anda mematikan komputer atau sedang offline).",
-        "msg2": "",
+        "msg2": "Data isian dalam antrean, kecuali yang ditandai sebagai draf, akan diunggah secara otomatis di latar belakang setiap 5 menit saat halaman web terbuka dan koneksi internet tersedia.",
         "msg2-nodraft": "Data isian dalam antrean akan diunggah secara otomatis di latar belakang setiap 5 menit saat halaman web terbuka dan koneksi internet tersedia.",
         "msg3": "Untuk memaksa pengunggahan, klik Unggah.",
         "norecords": "tidak ada antrian record",

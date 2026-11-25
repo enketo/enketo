@@ -53,10 +53,10 @@
             "entryadvice": "Unashauriwa usitumie fomu hii kuingiza data mpaka jambo hili litatuliwe",
             "heading": "Onyesha kosa",
             "msg1": "",
-            "msg2": "",
+            "msg2": "Tafadhali wasiliana nasi kupitia _anwani_ utupe kiungo cha ukurasa huu na ujumbe uliochapishwa hapa chini",
             "heading_plural": "Onyesha kosa",
             "msg1_plural": "Kosa limetokea tukipakia fomu hii.",
-            "msg2_plural": ""
+            "msg2_plural": "Tafadhali wasiliana nasi kupitia _emailLink_ utupe kiungo la jedwali hili na ujumbe uliochapishwa kwenye kosa lililo hapo chini"
         },
         "logout": {
             "heading": "Aga kamili",
@@ -82,7 +82,7 @@
             "msg_plural": "__recordNames__ imewasilishwa kwenye seva bila tatizo lolote"
         },
         "recordloadsuccess": {
-            "msg": ""
+            "msg": "__recordNames__ imepakiwa kwenye kivanjiri wavuti"
         },
         "recordnotfound": {
             "msg": "Rekodi hili halikupatikana ama halina data yoyote."
@@ -228,7 +228,7 @@
             "msg": "Haujahifadhi mabadiliko uliyo fanya, je, unataka kuendelea bila kuhifadhi mabadiliko haya?",
             "name": "Jina la rekodi",
             "posButton": "Hifadhi na Ufunge",
-            "renamemsg": "",
+            "renamemsg": "Unauhakika unataka kubadilisha jina hili kutoka __currentName liwe __newName__?",
             "unkownerror": "Kosa tusilolijua limetendeka tulipokuwa tukijaribu kuhifadhi data."
         }
     },
@@ -238,7 +238,7 @@
     },
     "contact": {
         "admin": "Tafadhali wasiliana na msimamizi wa utafiti huu. ",
-        "support": ""
+        "support": "Tafadhali wasiliana na wasaidizi kupitia __auni__ ."
     },
     "drawwidget": {
         "annotation": "",
@@ -249,7 +249,7 @@
         "power": "Imetengenezwa na"
     },
     "error": {
-        "code": "",
+        "code": "Msimbo wa kosa:",
         "dataloadfailed": "Imeshindwa kupakia __filename__.",
         "econnrefused": "Haikuweza kuwasiliana na kompyuta kuu",
         "encryptionnotsupported": "Fomu hii inahitaji usimbaji fiche wa rekodi kwenye kifaa. Kwa bahati mbaya, kivinjari chako hakitumii kipengele hiki. Tunapendekeza utumie kivinjari cha kisasa.",

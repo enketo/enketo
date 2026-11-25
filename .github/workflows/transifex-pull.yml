@@ -35,14 +35,19 @@ jobs:
             # Uses the Node version pinned in package.json
             - uses: 'volta-cli/action@v5'
 
-            # Unreviewed translations can break placeholders (`__name__`). Blank those
-            # strings so they fall back to English, and list them in the PR body.
+            # Unreviewed translations can break placeholders (`__name__`). List those strings
+            # in the PR body, with how to fix them and send the fixes back to Transifex.
             - name: Check translation placeholders
               run: |
                   echo 'Automated update of translated strings pulled from Transifex.' > "$RUNNER_TEMP/pr-body.md"
                   echo >> "$RUNNER_TEMP/pr-body.md"
                   node packages/enketo-express/tools/check-translation-placeholders.js --report "$RUNNER_TEMP/placeholders.md"
-                  cat "$RUNNER_TEMP/placeholders.md" >> "$RUNNER_TEMP/pr-body.md"
+
+                  if [ -s "$RUNNER_TEMP/placeholders.md" ]; then
+                      cat "$RUNNER_TEMP/placeholders.md" >> "$RUNNER_TEMP/pr-body.md"
+                  else
+                      echo '✅ All translation placeholders match the English text.' >> "$RUNNER_TEMP/pr-body.md"
+                  fi
 
             - name: Open pull request
               id: cpr

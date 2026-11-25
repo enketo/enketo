@@ -5,18 +5,16 @@
 
 /**
  * Checks that every translation uses the same i18next placeholders (`__name__`)
- * as the English source.
+ * as the English source, and reports the ones that don't.
  *
- * Translations pulled from Transifex sometimes drop a placeholder, translate its
- * name (`__recurso__`) or break its delimiters (`_emailLink_`). i18next then shows
- * an empty value or the literal text. This tool blanks those strings so they fall
- * back to English (`returnEmptyString: false`), and lists them so they can be fixed
- * in Transifex.
+ * Translations pulled from Transifex sometimes break a placeholder's delimiters
+ * (`_emailLink_`), translate its name (`__recurso__`) or leave it out. i18next then
+ * shows the literal text, an empty value or no value. The report explains how to fix
+ * them and send the fixes back to Transifex.
  *
  * Usage: node tools/check-translation-placeholders.js [--report <markdown file>]
  *
- * It rewrites the affected `locales/src/<lang>/translation.json` files in place and
- * always exits with 0: a mismatch is reported, not treated as a failure.
+ * It doesn't change any file, and placeholder problems don't make it fail.
  */
 const fs = require('fs');
 const path = require('path');
@@ -29,6 +27,7 @@ const PLACEHOLDER = /__(.+?)__/g;
 const BROKEN_PLACEHOLDER = /(?<![_\w])_[^_\s]+_(?![_\w])|__/;
 // Keeps the report well under GitHub's 65536 character limit for PR bodies
 const MAX_REPORT_ROWS = 150;
+const MAX_REPORT_LENGTH = 55000;
 const MAX_CELL_LENGTH = 100;
 
 // Report sections, from the most to the least visible problem
@@ -36,17 +35,17 @@ const PROBLEMS = {
     broken: {
         title: 'Broken placeholders',
         description:
-            'A placeholder is written with single underscores (e.g. `_emailLink_`) or is never closed, so users would see it as literal text.',
+            'a placeholder is written with single underscores (e.g. `_emailLink_`) or is never closed, so users see it as literal text',
     },
     wrong: {
         title: 'Wrong placeholders',
         description:
-            "The translation uses a placeholder the English text doesn't have, usually a translated name (e.g. `__recurso__` for `__resource__`), so users would see an empty value.",
+            "the translation uses a placeholder the English text doesn't have, usually a translated name (e.g. `__recurso__` for `__resource__`), so users see an empty value",
     },
     missing: {
         title: 'Missing placeholders',
         description:
-            "The translation leaves a placeholder out, so users wouldn't see that value (e.g. the support email or the error code).",
+            "the translation leaves a placeholder out, so users don't see that value (e.g. the support email or the error code)",
     },
 };
 
@@ -78,16 +77,16 @@ function isEmpty(value) {
  * @typedef {object} Mismatch
  * @property {string} key - the dotted translation key
  * @property {string|string[]} source - the English text
- * @property {string|string[]} translation - the rejected translation
+ * @property {string|string[]} translation - the translation
  * @property {string[]} missing - placeholders the translation leaves out
  * @property {string[]} unexpected - placeholders that aren't in the English text
  * @property {'broken'|'wrong'|'missing'} problem - the report section it goes in
  */
 
 /**
- * @param {string|string[]} value - the rejected translation
+ * @param {string|string[]} value - the translation
  * @param {string[]} unexpected - placeholders that aren't in the English text
- * @return {'broken'|'wrong'|'missing'} what users would see wrong
+ * @return {'broken'|'wrong'|'missing'} what users see wrong
  */
 function getProblem(value, unexpected) {
     const text = Array.isArray(value) ? value.join('\n') : String(value);
@@ -100,14 +99,14 @@ function getProblem(value, unexpected) {
 }
 
 /**
- * Blanks the translations whose placeholders differ from the source.
+ * Finds the translations whose placeholders differ from the source.
  *
  * @param {object} source - the English translation object
- * @param {object} translation - a translation object, modified in place
+ * @param {object} translation - a translation object
  * @param {string} [prefix] - the dotted key of the objects
- * @return {Mismatch[]} the blanked translations
+ * @return {Mismatch[]} the mismatched translations
  */
-function blankMismatchedTranslations(source, translation, prefix = '') {
+function findMismatches(source, translation, prefix = '') {
     const mismatches = [];
 
     Object.entries(translation).forEach(([name, value]) => {
@@ -118,14 +117,12 @@ function blankMismatchedTranslations(source, translation, prefix = '') {
                 : undefined;
 
         if (value && typeof value === 'object' && !Array.isArray(value)) {
-            mismatches.push(
-                ...blankMismatchedTranslations(sourceValue, value, key)
-            );
+            mismatches.push(...findMismatches(sourceValue, value, key));
 
             return;
         }
 
-        // Keys that aren't in the source aren't used, so there is nothing to compare
+        // Keys that aren't in the source aren't used, and empty ones fall back to English
         if (
             sourceValue == null ||
             (typeof sourceValue === 'object' && !Array.isArray(sourceValue)) ||
@@ -148,7 +145,6 @@ function blankMismatchedTranslations(source, translation, prefix = '') {
                 unexpected,
                 problem: getProblem(value, unexpected),
             });
-            translation[name] = '';
         }
     });
 
@@ -175,67 +171,100 @@ function toCell(value) {
 
 /**
  * @param {Object<string, Mismatch[]>} mismatchesByLanguage - mismatches per language
- * @return {string} a markdown report, empty when there are no mismatches
+ * @param {Object<string, string>} [unreadable] - the error per language whose file
+ * couldn't be read
+ * @return {string} a markdown report, empty when there is nothing to report
  */
-function formatReport(mismatchesByLanguage) {
-    const languages = Object.keys(mismatchesByLanguage).filter(
-        (language) => mismatchesByLanguage[language].length
+function formatReport(mismatchesByLanguage, unreadable = {}) {
+    const mismatches = Object.entries(mismatchesByLanguage).flatMap(
+        ([language, items]) => items.map((item) => ({ language, ...item }))
     );
+    const lines = Object.entries(unreadable).length
+        ? [
+              '### ⚠️ Some translation files could not be read',
+              '',
+              ...Object.entries(unreadable).map(
+                  ([language, error]) => `- **${language}**: ${toCell(error)}`
+              ),
+              '',
+          ]
+        : [];
 
-    if (!languages.length) {
-        return '';
+    if (!mismatches.length) {
+        return lines.join('\n');
     }
 
-    const mismatches = languages.flatMap((language) =>
-        mismatchesByLanguage[language].map((mismatch) => ({
-            language,
-            ...mismatch,
-        }))
-    );
+    const count = (problem) =>
+        mismatches.filter((item) => item.problem === problem).length;
     const placeholders = (names) =>
-        names.map((name) => toCell(`__${name}__`)).join(', ');
-    const lines = [
-        `### Translations left out (${mismatches.length})`,
+        names.map((name) => toCell(`__${name}__`)).join(', ') || '-';
+
+    lines.push(
+        `### ⚠️ ${mismatches.length} translations have placeholder problems`,
         '',
-        "These translations don't use the same placeholders as the English text, so they were blanked and English is shown instead. Please fix them in Transifex, or they'll be left out again on the next pull.",
+        "They don't use the same placeholders (`__name__`) as the English text:",
         '',
-    ];
-    let rowsLeft = MAX_REPORT_ROWS;
+        ...Object.entries(PROBLEMS)
+            .filter(([problem]) => count(problem))
+            .map(
+                ([problem, { description }]) =>
+                    `- **${count(problem)} ${problem}**: ${description}.`
+            ),
+        '',
+        '**To fix them:**',
+        '',
+        '1. In this PR, edit `packages/enketo-express/locales/src/<language>/translation.json` and give each string below the placeholders in the "Expected" column.',
+        '2. Merge this PR before the next weekly pull, which rebuilds this branch and drops the fixes.',
+        '3. Run the "Transifex - push ALL translations" workflow, so Transifex gets the fixes and the next pull doesn\'t bring the broken strings back.',
+        ''
+    );
 
-    Object.entries(PROBLEMS).forEach(([problem, { title, description }]) => {
-        const rows = mismatches.filter((item) => item.problem === problem);
+    let shown = 0;
+    let reportLength = lines.join('\n').length;
 
-        if (!rows.length) {
-            return;
-        }
-
-        lines.push(
+    Object.entries(PROBLEMS).forEach(([problem, { title }]) => {
+        const rows = mismatches
+            .filter((item) => item.problem === problem)
+            .map(
+                (item) =>
+                    `| ${item.language} | \`${item.key}\` | ${placeholders(
+                        getPlaceholders(item.source)
+                    )} | ${placeholders(
+                        getPlaceholders(item.translation)
+                    )} | ${toCell(item.source)} | ${toCell(item.translation)} |`
+            );
+        const section = [
             `#### ${title} (${rows.length})`,
             '',
-            description,
-            '',
             '| Language | Key | Expected | Found | English | Translation |',
-            '| --- | --- | --- | --- | --- | --- |'
-        );
-        rows.slice(0, Math.max(rowsLeft, 0)).forEach((item) => {
-            const expected = getPlaceholders(item.source);
-            const found = getPlaceholders(item.translation);
+            '| --- | --- | --- | --- | --- | --- |',
+        ];
 
-            lines.push(
-                `| ${item.language} | \`${item.key}\` | ${
-                    placeholders(expected) || '-'
-                } | ${placeholders(found) || '-'} | ${toCell(
-                    item.source
-                )} | ${toCell(item.translation)} |`
-            );
+        rows.forEach((row) => {
+            if (
+                shown < MAX_REPORT_ROWS &&
+                reportLength + row.length + 1 < MAX_REPORT_LENGTH
+            ) {
+                // The section's heading, counted with its first row
+                if (section.length === 4) {
+                    reportLength += section.join('\n').length + 1;
+                }
+                section.push(row);
+                shown += 1;
+                reportLength += row.length + 1;
+            }
         });
-        rowsLeft -= rows.length;
-        lines.push('');
+
+        if (section.length > 4) {
+            lines.push(...section, '');
+        }
     });
 
-    if (rowsLeft < 0) {
+    if (shown < mismatches.length) {
         lines.push(
-            `${-rowsLeft} more are listed in the log of the workflow run.`,
+            `${
+                mismatches.length - shown
+            } more are listed in the log of the workflow run.`,
             ''
         );
     }
@@ -244,44 +273,53 @@ function formatReport(mismatchesByLanguage) {
 }
 
 /**
- * Checks and fixes every translation file in a locales directory.
+ * Checks every translation file in a locales directory.
  *
  * @param {string} localesDir - the directory with one folder per language
- * @return {Object<string, Mismatch[]>} the blanked translations per language
+ * @return {{mismatchesByLanguage: Object<string, Mismatch[]>, unreadable: Object<string, string>}}
+ * the mismatched translations per language, and the error per file that couldn't be read
  */
 function checkLocales(localesDir) {
-    const localePath = (language) =>
-        path.join(localesDir, language, 'translation.json');
-    const source = JSON.parse(
-        fs.readFileSync(localePath(SOURCE_LANGUAGE), 'utf8')
-    );
+    const readLocale = (language) =>
+        JSON.parse(
+            fs.readFileSync(
+                path.join(localesDir, language, 'translation.json'),
+                'utf8'
+            )
+        );
+    const source = readLocale(SOURCE_LANGUAGE);
     const mismatchesByLanguage = {};
+    const unreadable = {};
 
     fs.readdirSync(localesDir)
         .filter(
             (language) =>
                 language !== SOURCE_LANGUAGE &&
-                fs.existsSync(localePath(language))
+                fs.existsSync(
+                    path.join(localesDir, language, 'translation.json')
+                )
         )
         .sort()
         .forEach((language) => {
-            const text = fs.readFileSync(localePath(language), 'utf8');
-            const translation = JSON.parse(text);
-            const mismatches = blankMismatchedTranslations(source, translation);
+            let translation;
+
+            // A malformed file shouldn't stop the pull PR from being opened
+            try {
+                translation = readLocale(language);
+            } catch (error) {
+                unreadable[language] = error.message;
+
+                return;
+            }
+
+            const mismatches = findMismatches(source, translation);
 
             if (mismatches.length) {
-                // Keep Transifex's formatting so the diff only shows the blanked strings
-                const newline = text.endsWith('\n') ? '\n' : '';
-
-                fs.writeFileSync(
-                    localePath(language),
-                    `${JSON.stringify(translation, null, 4)}${newline}`
-                );
                 mismatchesByLanguage[language] = mismatches;
             }
         });
 
-    return mismatchesByLanguage;
+    return { mismatchesByLanguage, unreadable };
 }
 
 if (require.main === module) {
@@ -289,7 +327,6 @@ if (require.main === module) {
     const reportFile =
         reportIndex === -1 ? null : process.argv[reportIndex + 1];
 
-    // Fail before touching the locales, rather than after
     if (reportIndex !== -1 && !reportFile) {
         console.error(
             'Usage: check-translation-placeholders.js [--report <file>]'
@@ -297,10 +334,14 @@ if (require.main === module) {
         process.exit(1);
     }
 
-    const mismatchesByLanguage = checkLocales(
+    const { mismatchesByLanguage, unreadable } = checkLocales(
         path.resolve(__dirname, '../locales/src')
     );
-    const report = formatReport(mismatchesByLanguage);
+    const report = formatReport(mismatchesByLanguage, unreadable);
+
+    Object.entries(unreadable).forEach(([language, error]) =>
+        console.error(`Could not read ${language}: ${error}`)
+    );
 
     if (reportFile) {
         fs.writeFileSync(reportFile, report);
@@ -322,7 +363,9 @@ if (require.main === module) {
 
 module.exports = {
     getPlaceholders,
-    blankMismatchedTranslations,
+    isEmpty,
+    toCell,
+    findMismatches,
     formatReport,
     checkLocales,
 };

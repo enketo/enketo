@@ -105,7 +105,10 @@
         },
         "submissionerror": {
             "authrequiredmsg": "Identifikimi është i detyrueshëm. Ju lutem identifikohuni __here__ në një faqe tjetër të shfletuesit dhe provoni përsëri.",
-            "fnfmsg": "",
+            "fnfmsg": [
+                "Dosja mediale nuk mund te mirret: __failedFiles__. Dorëzimi vazhdoi pa këto dosje me sukses.",
+                "Ju lutem kontaktoni _supportEmail__ të raportoni problemet, dhe nëse mundeni, spjegoni se si të riprodhohet problemi."
+            ],
             "heading": "Dorëzimi Dështoi"
         },
         "submissionsuccess": {
@@ -380,7 +383,7 @@
             "heading": "Fut vlerat"
         },
         "login": {
-            "heading": "",
+            "heading": "Vendosni kredencialet për serverin tuaj",
             "password": "Fjalëkalimi",
             "remember": "Memorizoje ne këtë kompjutër",
             "submit": "Dërgo",
