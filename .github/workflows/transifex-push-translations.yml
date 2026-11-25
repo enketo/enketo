@@ -1,0 +1,63 @@
+name: Transifex - push ALL translations
+
+# Manually pushes the translation files of every language from main to Transifex, e.g. after
+# fixing broken placeholders in the repo. Transifex skips a language that changed there after
+# its file was last committed. The run form and the run summary explain what it does.
+
+on:
+    workflow_dispatch:
+        inputs:
+            confirm:
+                description: 'I know what I am doing: this pushes the translations of ALL languages in main to Transifex, replacing the ones there (empty strings included).'
+                required: true
+                type: boolean
+                default: false
+
+jobs:
+    push-translations:
+        if: github.ref == 'refs/heads/main' && inputs.confirm
+        runs-on: ubuntu-latest
+        steps:
+            - name: Checkout
+              uses: actions/checkout@v7
+              with:
+                  # the full history, for the time each file was last committed
+                  fetch-depth: 0
+
+            # Transifex compares the file time with the last change there. Set it to the last
+            # commit, in case the CLI can't read the git history itself.
+            - name: Set the translation files to their last commit time
+              run: |
+                  for file in packages/enketo-express/locales/src/*/translation.json; do
+                      touch -d "$(git log -1 --format=%cI -- "$file")" "$file"
+                  done
+
+            - name: Push translations
+              uses: transifex/cli-action@v2
+              with:
+                  token: ${{ secrets.TRANSIFEX_TOKEN }}
+                  # No --force: languages that changed in Transifex since their last commit are skipped
+                  args: 'push --translation --use-git-timestamps'
+
+            - name: Summary
+              if: always()
+              run: |
+                  cat >> "$GITHUB_STEP_SUMMARY" <<'EOF'
+                  ### Transifex - push ALL translations
+
+                  Pushes the translations of every language in `main` to Transifex, e.g. after fixing broken placeholders in the repo, so the next pull doesn't bring the broken strings back.
+
+                  - Every language file in `main` replaces the one in Transifex, empty strings included.
+                  - Transifex **skips a language that changed there after its file was last committed**, so newer work isn't overwritten. Check the "Push translations" log for skipped languages. To push one anyway, merge the latest Transifex pull PR, redo the fix and run this again.
+                  - Check the pushed strings in Transifex.
+                  EOF
+
+    notify-failure:
+        needs: push-translations
+        if: failure()
+        uses: ./.github/workflows/zulip.yml
+        secrets: inherit
+        with:
+            topic: 'Transifex automation'
+            stream: 'Enketo'
+            content: ':warning: [Transifex push ALL translations run #${{ github.run_number }}](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}) failed'
