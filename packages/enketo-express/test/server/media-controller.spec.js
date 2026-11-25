@@ -259,6 +259,12 @@ describe('Media controller', () => {
                     ETag: '"page"',
                 });
                 res.write('<script>alert(1)</script>');
+            } else if (req.url.startsWith('/typed?')) {
+                // Serves the content type given in the query
+                res.writeHead(200, {
+                    'Content-Type': decodeURIComponent(req.url.split('?')[1]),
+                });
+                res.write('typed');
             } else if (
                 req.url === '/auth-with-location.csv' &&
                 !req.headers.authorization
@@ -463,8 +469,26 @@ describe('Media controller', () => {
             );
         });
 
-        it('sandboxes documents that can run scripts', async () => {
-            const response = await getMedia(`${remoteOrigin}/page.html`).expect(
+        [
+            'text/html',
+            'text/csv',
+            'image/svg+xml',
+            'text/plain, text/html',
+            'application/pdf, text/html',
+        ].forEach((contentType) => {
+            it(`sandboxes media served as ${contentType}`, async () => {
+                const response = await getMedia(
+                    `${remoteOrigin}/typed?${encodeURIComponent(contentType)}`
+                ).expect(200);
+
+                expect(response.headers['content-security-policy']).to.match(
+                    /^sandbox; default-src 'none'/
+                );
+            });
+        });
+
+        it('sandboxes media without a content type', async () => {
+            const response = await getMedia(`${remoteOrigin}/typed?`).expect(
                 200
             );
 
@@ -473,19 +497,21 @@ describe('Media controller', () => {
             );
         });
 
-        it('does not sandbox other media', async () => {
-            const response = await getMedia(`${remoteOrigin}/file.csv`).expect(
-                200,
-                `${remoteOrigin} csv`
-            );
+        ['application/pdf', 'application/pdf; charset=binary'].forEach(
+            (contentType) => {
+                it(`does not sandbox a PDF served as ${contentType}`, async () => {
+                    const response = await getMedia(
+                        `${remoteOrigin}/typed?${encodeURIComponent(contentType)}`
+                    ).expect(200);
 
-            expect(response.headers['content-type']).to.equal('text/csv');
-            expect(response.headers['x-content-type-options']).to.equal(
-                'nosniff'
-            );
-            expect(
-                response.headers['content-security-policy'] ?? ''
-            ).to.not.match(/sandbox/);
-        });
+                    expect(response.headers['x-content-type-options']).to.equal(
+                        'nosniff'
+                    );
+                    expect(
+                        response.headers['content-security-policy'] ?? ''
+                    ).to.not.match(/sandbox/);
+                });
+            }
+        );
     });
 });

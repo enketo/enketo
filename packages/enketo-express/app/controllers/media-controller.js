@@ -20,15 +20,17 @@ const MEDIA_HEADERS = [
     'content-encoding',
     'content-length',
     'content-range',
+    'content-language',
     'content-type',
     'etag',
+    'expires',
     'last-modified',
+    'vary',
 ];
-// Documents that can run scripts when opened (HTML, XML, SVG, or no type)
-const ACTIVE_CONTENT_TYPE =
-    /^\s*(text\/html|text\/xml|application\/xml|[^;\s]+\+xml)\s*(;|$)/i;
-// Not for every type: a sandbox breaks Chrome's PDF viewer
-const ACTIVE_CONTENT_CSP =
+// Every media document is sandboxed but PDFs, as a sandbox breaks Chrome's PDF viewer. Only an
+// exact type counts: browsers read e.g. `text/plain, text/html` as HTML.
+const UNSANDBOXED_CONTENT_TYPE = /^\s*application\/pdf\s*(;[^,]*)?$/i;
+const MEDIA_CSP =
     "sandbox; default-src 'none'; style-src 'unsafe-inline'; img-src data:; font-src data:";
 
 module.exports = (app) => {
@@ -218,8 +220,8 @@ function _pipeMedia(options, req, res, next) {
 
 /**
  * Keeps only the headers the browser needs for the media, so the server hosting it can't set
- * cookies, a security policy or a login prompt on Enketo's domain, and sandboxes documents
- * that can run scripts. The client copies these headers to the response when piping.
+ * cookies, a security policy or a login prompt on Enketo's domain, and sandboxes the media
+ * when it's opened as a document. The client copies these headers to the response when piping.
  *
  * @param {import('http').IncomingHttpHeaders} headers - the media response's headers
  */
@@ -232,11 +234,8 @@ function _restrictMediaHeaders(headers) {
 
     headers['x-content-type-options'] = 'nosniff';
 
-    if (
-        !headers['content-type'] ||
-        ACTIVE_CONTENT_TYPE.test(headers['content-type'])
-    ) {
-        headers['content-security-policy'] = ACTIVE_CONTENT_CSP;
+    if (!UNSANDBOXED_CONTENT_TYPE.test(headers['content-type'] ?? '')) {
+        headers['content-security-policy'] = MEDIA_CSP;
     }
 }
 
