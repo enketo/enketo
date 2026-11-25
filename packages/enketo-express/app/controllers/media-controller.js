@@ -62,11 +62,9 @@ async function getMedia(req, res, next) {
         // due to a bug in request/request using options.method with Digest Auth we won't pass method as an option
         delete options.method;
 
-        // Media files hosted elsewhere are redirected to, often from http (internal OpenRosa URL) to https.
-        // Without this, the client reuses the agent of the first protocol and the request fails.
+        // Lets redirects switch protocol (e.g. internal http URL to remote https media)
         options.allowInsecureRedirect = true;
         options.followRedirect = _followMediaRedirect;
-        // The previous URL can be an internal one, which other hosts don't need to know
         options.removeRefererHeader = true;
 
         if (_isPrintView(req)) {
@@ -97,18 +95,14 @@ async function getMedia(req, res, next) {
 }
 
 /**
- * Decides whether a media request follows a redirect. It's called with the request as `this`.
- *
- * The user's cookies and credentials are only meant for the OpenRosa server, so they aren't
- * sent to another host: the cookie header is removed and authentication is turned off, so a
- * 401 from that host can't get the credentials either. Redirects from https to http, and to
- * invalid URLs, are refused.
+ * Called (with the request as `this`) before following a redirect. Refuses https to http and
+ * invalid URLs, and keeps the user's cookies and credentials from reaching other hosts.
  *
  * @param {import('http').IncomingMessage} response - the redirect response
  * @return {boolean} whether to follow the redirect
  */
 function _followMediaRedirect(response) {
-    // Authentication retries the same URL after a 401, whatever its location says
+    // Authentication retry of the same URL
     if (response.statusCode === 401) {
         return true;
     }
@@ -118,7 +112,6 @@ function _followMediaRedirect(response) {
 
     try {
         from = new URL(this.uri.href);
-        // Resolved like the client does, so the checks apply to the URL it requests
         to = new URL(url.resolve(from.href, response.headers.location));
     } catch {
         return false;
@@ -143,10 +136,6 @@ function _followMediaRedirect(response) {
     return true;
 }
 
-/**
- * @param {import('http').IncomingMessage} response - a media response
- * @return {boolean} whether it's a redirect that wasn't followed
- */
 function _isRedirect(response) {
     return (
         response.statusCode >= 300 &&
@@ -161,8 +150,8 @@ function _getRefusedRedirectError() {
 
 function _pipeMedia(options, req, res, next) {
     const mediaRequest = request.get(options);
+    // The client can emit both an error and a response (e.g. too many redirects)
     let failed = false;
-    // The client can emit both an error and a response, e.g. after too many redirects
     const fail = (error) => {
         if (!failed) {
             failed = true;
@@ -177,7 +166,7 @@ function _pipeMedia(options, req, res, next) {
             return;
         }
 
-        // Passing it on would make the browser follow it instead
+        // A redirect that wasn't followed, which the browser shouldn't follow either
         if (_isRedirect(response)) {
             mediaRequest.abort();
             fail(_getRefusedRedirectError());
