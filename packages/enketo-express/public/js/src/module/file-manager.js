@@ -305,9 +305,12 @@ function _getUnchangedFile(filename) {
 /**
  * Obtain files currently stored in file input elements of open record
  *
+ * @param {{irrelevant?: boolean}} [include] - the same options the record's
+ *     XML is obtained with (see `getDataStr` in enketo-core), so that the files
+ *     match the answers the record keeps
  * @return { Promise } A promise that resolves with an array of files
  */
-function getCurrentFiles() {
+function getCurrentFiles(include = {}) {
     const fileInputs = [
         ...document.querySelectorAll(
             'form.or input[type="file"], form.or input[type="text"][data-drawing="true"], input[data-audio="true"], input[data-background-audio="true"]'
@@ -381,15 +384,18 @@ function getCurrentFiles() {
             // get any file names of files that were loaded as DataURI and have remained unchanged (i.e. loaded from Storage)
             fileInputs
                 // a question that has become non-relevant keeps its
-                // data-loaded-file-name, but the record no longer refers to
-                // the file, so it must not be submitted or signed. Ask the
-                // branch rather than the control: a readonly control is
-                // disabled too, and its file is still part of the record.
+                // data-loaded-file-name. Where the record leaves out the
+                // answers of such questions it no longer refers to the file,
+                // so it must not be submitted or signed; where it keeps them
+                // (e.g. a draft) the file must be kept too. Ask the branch
+                // rather than the control: a readonly control is disabled
+                // too, and its file is still part of the record.
                 .filter(
                     (input) =>
                         !replacedInputs.has(input) &&
                         input.matches('[data-loaded-file-name]') &&
-                        !input.closest('.or-branch.disabled')
+                        (include.irrelevant !== false ||
+                            !input.closest('.or-branch.disabled'))
                 )
                 .forEach((input) => {
                     files.push(

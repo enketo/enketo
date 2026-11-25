@@ -587,7 +587,9 @@ describe('File manager', () => {
             formEl.appendChild(question);
             question.appendChild(addFileInput('photo.jpg'));
 
-            const files = await fileManager.getCurrentFiles();
+            const files = await fileManager.getCurrentFiles({
+                irrelevant: false,
+            });
 
             expect(files).to.deep.equal([]);
         });
@@ -610,9 +612,32 @@ describe('File manager', () => {
             group.appendChild(question);
             question.appendChild(addFileInput('photo.jpg'));
 
-            const files = await fileManager.getCurrentFiles();
+            const files = await fileManager.getCurrentFiles({
+                irrelevant: false,
+            });
 
             expect(files).to.deep.equal([]);
+        });
+
+        // e.g. a draft, whose record keeps the answers of non-relevant
+        // questions so they are still there once the question is shown again
+        it('returns the attachment of a non-relevant question when non-relevant answers are kept', async () => {
+            fileManager.setInstanceAttachments({
+                'photo.jpg': dataURL('a photo'),
+            });
+
+            await fileManager.prefetchInstanceAttachments();
+
+            const question = document.createElement('label');
+
+            question.className = 'question or-branch disabled';
+            formEl.appendChild(question);
+            question.appendChild(addFileInput('photo.jpg'));
+
+            const [file] = await fileManager.getCurrentFiles();
+
+            expect(file).to.be.an.instanceof(Blob);
+            expect(file.name).to.equal('photo.jpg');
         });
 
         // the filepicker disables the control of a readonly question for the
