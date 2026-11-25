@@ -1,8 +1,8 @@
 const request = require('supertest');
-const fs = require('fs');
+const crypto = require('crypto');
 const http = require('http');
 const https = require('https');
-const path = require('path');
+const forge = require('node-forge');
 const nock = require('nock');
 const { expect } = require('chai');
 const sinon = require('sinon');
@@ -10,7 +10,41 @@ const communicator = require('../../app/lib/communicator');
 const mediaLib = require('../../app/lib/media');
 const app = require('../../config/express');
 
-const tlsFixtures = path.join(__dirname, '../fixtures/tls');
+/**
+ * @return {{key: string, cert: string}} a self-signed certificate for localhost, valid for a day
+ */
+const createLocalhostCertificate = () => {
+    const { privateKey, publicKey } = crypto.generateKeyPairSync('rsa', {
+        modulusLength: 2048,
+        publicKeyEncoding: { type: 'spki', format: 'pem' },
+        privateKeyEncoding: { type: 'pkcs1', format: 'pem' },
+    });
+    const certificate = forge.pki.createCertificate();
+    const subject = [{ name: 'commonName', value: 'localhost' }];
+
+    certificate.publicKey = forge.pki.publicKeyFromPem(publicKey);
+    certificate.serialNumber = '01';
+    certificate.validity.notBefore = new Date(Date.now() - 60 * 1000);
+    certificate.validity.notAfter = new Date(Date.now() + 24 * 60 * 60 * 1000);
+    certificate.setSubject(subject);
+    certificate.setIssuer(subject);
+    certificate.setExtensions([
+        {
+            name: 'subjectAltName',
+            altNames: [
+                { type: 2, value: 'localhost' },
+                { type: 7, ip: '127.0.0.1' },
+            ],
+        },
+    ]);
+    certificate.sign(
+        forge.pki.privateKeyFromPem(privateKey),
+        forge.md.sha256.create()
+    );
+
+    return { key: privateKey, cert: forge.pki.certificateToPem(certificate) };
+};
+
 const testHTMLBody = 'im in.';
 const portHTML = 1234;
 const testHTMLURL = `http://localhost:${portHTML}/`;
@@ -153,7 +187,9 @@ describe('Media controller', () => {
     describe('redirects to media hosted elsewhere', () => {
         const cookie = 'kobonaut=secret';
         const credentials = { user: 'user', pass: 'secret' };
-        const ca = fs.readFileSync(path.join(tlsFixtures, 'localhost.crt'));
+
+        /** @type {{key: string, cert: string}} */
+        let tls;
 
         /** @type {http.Server} */
         let openRosaServer;
@@ -227,6 +263,10 @@ describe('Media controller', () => {
             res.end();
         };
 
+        before(() => {
+            tls = createLocalhostCertificate();
+        });
+
         beforeEach(async () => {
             receivedHeaders = {};
 
@@ -251,19 +291,11 @@ describe('Media controller', () => {
                 .stub(communicator, 'getUpdatedRequestOptions')
                 .callsFake((options) => ({
                     ...getUpdatedRequestOptions(options),
-                    ca,
+                    ca: tls.cert,
                 }));
 
             openRosaServer = http.createServer(handler('http:'));
-            remoteServer = https.createServer(
-                {
-                    key: fs.readFileSync(
-                        path.join(tlsFixtures, 'localhost.key')
-                    ),
-                    cert: ca,
-                },
-                handler('https:')
-            );
+            remoteServer = https.createServer(tls, handler('https:'));
 
             const [openRosaPort, remotePort] = await Promise.all([
                 listen(openRosaServer),
