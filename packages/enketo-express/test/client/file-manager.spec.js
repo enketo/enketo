@@ -529,6 +529,42 @@ describe('File manager', () => {
             );
         });
 
+        it('downloads an attachment again once an earlier download failed', async () => {
+            const fetchStub = sandbox.stub(window, 'fetch');
+
+            fetchStub
+                .withArgs('https://example.com/photo.jpg')
+                .onFirstCall()
+                .rejects(new TypeError('Failed to fetch'))
+                .onSecondCall()
+                .resolves(new Response('a photo'));
+            fetchStub
+                .withArgs('https://example.com/other.jpg')
+                .resolves(new Response('another photo'));
+
+            fileManager.setInstanceAttachments({
+                'photo.jpg': 'https://example.com/photo.jpg',
+                'other.jpg': 'https://example.com/other.jpg',
+            });
+
+            await fileManager.prefetchInstanceAttachments();
+
+            addFileInput('photo.jpg');
+            addFileInput('other.jpg');
+
+            const files = await fileManager.getCurrentFiles();
+
+            expect(files.map((file) => file.name)).to.deep.equal([
+                'photo.jpg',
+                'other.jpg',
+            ]);
+            expect(await files[0].text()).to.equal('a photo');
+            // only the failed download is repeated
+            expect(
+                fetchStub.withArgs('https://example.com/other.jpg').callCount
+            ).to.equal(1);
+        });
+
         it('fails with the name of an attachment that is too large', async () => {
             fileManager.setInstanceAttachments({
                 'photo.jpg': dataURL('a photo'),

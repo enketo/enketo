@@ -146,6 +146,44 @@ function _getInstanceAttachmentUrl(filename) {
 }
 
 /**
+ * Downloads attachments of the record being edited and caches the Blobs. A
+ * download that fails is logged and left out of the cache.
+ *
+ * @param {Record<string, string>} attachments - the attachments map they are
+ *     part of, so that downloads for a record that has since been replaced are
+ *     discarded
+ * @param {Array<[string, string]>} entries - keys and URLs to download
+ * @return {Promise<void>}
+ */
+function _downloadAttachments(attachments, entries) {
+    return Promise.all(
+        entries.map(([filename, url]) =>
+            fetch(url, { credentials: 'include' })
+                .then((response) => {
+                    if (!response.ok) {
+                        throw new Error(
+                            `Request failed with status ${response.status}`
+                        );
+                    }
+
+                    return response.blob();
+                })
+                .then((blob) => {
+                    if (instanceAttachments === attachments) {
+                        prefetchedBlobCache.set(filename, blob);
+                    }
+                })
+                .catch((error) => {
+                    console.error(
+                        `Failed to download attachment "${filename}":`,
+                        error
+                    );
+                })
+        )
+    ).then(() => undefined);
+}
+
+/**
  * Downloads the attachments already on the record being edited and caches the
  * Blobs.
  *
@@ -157,30 +195,37 @@ function _getInstanceAttachmentUrl(filename) {
  */
 function prefetchInstanceAttachments() {
     if (prefetchPromise == null) {
-        prefetchPromise = Promise.all(
-            Object.entries(instanceAttachments ?? {}).map(([filename, url]) =>
-                fetch(url, { credentials: 'include' })
-                    .then((response) => {
-                        if (!response.ok) {
-                            throw new Error(
-                                `Request failed with status ${response.status}`
-                            );
-                        }
-
-                        return response.blob();
-                    })
-                    .then((blob) => {
-                        prefetchedBlobCache.set(filename, blob);
-                    })
-                    .catch((error) => {
-                        console.error(
-                            `Failed to download attachment "${filename}":`,
-                            error
-                        );
-                    })
-            )
-        ).then(() => undefined);
+        prefetchPromise = _downloadAttachments(
+            instanceAttachments,
+            Object.entries(instanceAttachments ?? {})
+        );
     }
+
+    return prefetchPromise;
+}
+
+/**
+ * Waits for the attachments of the record being edited to be downloaded, and
+ * downloads again any that failed, e.g. because the connection dropped while
+ * the record was opened. Does nothing when no download was requested.
+ *
+ * @return {Promise<void>}
+ */
+function _awaitInstanceAttachments() {
+    if (prefetchPromise == null) {
+        return Promise.resolve();
+    }
+
+    const attachments = instanceAttachments;
+
+    prefetchPromise = prefetchPromise.then(() =>
+        _downloadAttachments(
+            attachments,
+            Object.entries(attachments ?? {}).filter(
+                ([filename]) => !prefetchedBlobCache.has(filename)
+            )
+        )
+    );
 
     return prefetchPromise;
 }
@@ -380,7 +425,7 @@ function getCurrentFiles(include = {}) {
     });
 
     return Promise.all(fileTasks).then((files) =>
-        Promise.resolve(prefetchPromise).then(() => {
+        _awaitInstanceAttachments().then(() => {
             // get any file names of files that were loaded as DataURI and have remained unchanged (i.e. loaded from Storage)
             fileInputs
                 // a question that has become non-relevant keeps its
