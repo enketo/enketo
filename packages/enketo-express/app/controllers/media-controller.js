@@ -87,7 +87,7 @@ async function getMedia(req, res, next) {
         options.removeRefererHeader = true;
 
         if (_isPrintView(req)) {
-            request.head(options, (error, response) => {
+            const headRequest = request.head(options, (error, response) => {
                 if (error) {
                     next(error);
                 } else if (_isRedirect(response)) {
@@ -105,6 +105,8 @@ async function getMedia(req, res, next) {
                     }
                 }
             });
+
+            _keepCredentialsOnOpenRosaServer(headRequest);
         } else {
             _pipeMedia(options, req, res, next);
         }
@@ -115,7 +117,8 @@ async function getMedia(req, res, next) {
 
 /**
  * Called (with the request as `this`) before following a redirect. Refuses https to http and
- * invalid URLs, and keeps the user's cookies and credentials from reaching other hosts.
+ * URLs without a host. The location is resolved and parsed like the client does
+ * (`lib/redirect.js`), so the check applies to the URL it would request.
  *
  * @param {import('http').IncomingMessage} response - the redirect response
  * @return {boolean} whether to follow the redirect
@@ -126,33 +129,48 @@ function _followMediaRedirect(response) {
         return true;
     }
 
-    let from;
+    const { location } = response.headers;
     let to;
 
     try {
-        from = new URL(this.uri.href);
-        to = new URL(url.resolve(from.href, response.headers.location));
+        to = url.parse(
+            /^https?:/.test(location)
+                ? location
+                : url.resolve(this.uri.href, location)
+        );
     } catch {
         return false;
     }
 
-    if (
-        !['http:', 'https:'].includes(to.protocol) ||
-        (from.protocol === 'https:' && to.protocol !== 'https:')
-    ) {
-        return false;
-    }
+    return (
+        Boolean(to.host) &&
+        ['http:', 'https:'].includes(to.protocol) &&
+        !(this.uri.protocol === 'https:' && to.protocol !== 'https:')
+    );
+}
 
-    if (to.host !== from.host) {
-        this.removeHeader('cookie');
-        this.removeHeader('authorization');
+/**
+ * Keeps the user's cookies and credentials from reaching other hosts than the OpenRosa
+ * server. The client emits `redirect` once it has parsed the URL it will request next, so
+ * this compares the host it will actually connect to.
+ *
+ * @param {import('@cypress/request').Request} mediaRequest - a media request
+ * @return {import('@cypress/request').Request} the same request
+ */
+function _keepCredentialsOnOpenRosaServer(mediaRequest) {
+    const openRosaHost = mediaRequest.uri.host;
 
-        if (this._auth) {
-            this._auth.hasAuth = false;
+    return mediaRequest.on('redirect', () => {
+        if (mediaRequest.uri.host !== openRosaHost) {
+            mediaRequest.removeHeader('cookie');
+            mediaRequest.removeHeader('authorization');
+
+            // Or a 401 from that host would get the credentials
+            if (mediaRequest._auth) {
+                mediaRequest._auth.hasAuth = false;
+            }
         }
-    }
-
-    return true;
+    });
 }
 
 function _isRedirect(response) {
@@ -168,7 +186,7 @@ function _getRefusedRedirectError() {
 }
 
 function _pipeMedia(options, req, res, next) {
-    const mediaRequest = request.get(options);
+    const mediaRequest = _keepCredentialsOnOpenRosaServer(request.get(options));
     // The client can emit both an error and a response (e.g. too many redirects)
     let failed = false;
     const fail = (error) => {

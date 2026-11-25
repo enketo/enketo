@@ -241,6 +241,8 @@ describe('Media controller', () => {
                 '/remote': `${remoteOrigin}/file.csv`,
                 '/insecure': `${openRosaOrigin}/file.csv`,
                 '/invalid': 'http://[invalid',
+                // No host for the client, which only adds the slashes to relative locations
+                '/no-slashes': otherHostOrigin.replace('//', ''),
                 '/loop': '/loop',
             };
 
@@ -395,6 +397,10 @@ describe('Media controller', () => {
 
         it('does not follow a redirect to an invalid URL', async () => {
             await getMedia(`${openRosaOrigin}/invalid`).expect(502);
+        });
+
+        it('does not follow a redirect to a URL the client finds no host in', async () => {
+            await getMedia(`${openRosaOrigin}/no-slashes`).expect(502);
         });
 
         it('answers once when there are too many redirects', async () => {
