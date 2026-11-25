@@ -1,10 +1,49 @@
 const request = require('supertest');
+const crypto = require('crypto');
 const http = require('http');
+const https = require('https');
+const forge = require('node-forge');
 const nock = require('nock');
+const { expect } = require('chai');
 const sinon = require('sinon');
 const communicator = require('../../app/lib/communicator');
 const mediaLib = require('../../app/lib/media');
 const app = require('../../config/express');
+
+/**
+ * @return {{key: string, cert: string}} a self-signed certificate for localhost, valid for a day
+ */
+const createLocalhostCertificate = () => {
+    const { privateKey, publicKey } = crypto.generateKeyPairSync('rsa', {
+        modulusLength: 2048,
+        publicKeyEncoding: { type: 'spki', format: 'pem' },
+        privateKeyEncoding: { type: 'pkcs1', format: 'pem' },
+    });
+    const certificate = forge.pki.createCertificate();
+    const subject = [{ name: 'commonName', value: 'localhost' }];
+
+    certificate.publicKey = forge.pki.publicKeyFromPem(publicKey);
+    certificate.serialNumber = '01';
+    certificate.validity.notBefore = new Date(Date.now() - 60 * 1000);
+    certificate.validity.notAfter = new Date(Date.now() + 24 * 60 * 60 * 1000);
+    certificate.setSubject(subject);
+    certificate.setIssuer(subject);
+    certificate.setExtensions([
+        {
+            name: 'subjectAltName',
+            altNames: [
+                { type: 2, value: 'localhost' },
+                { type: 7, ip: '127.0.0.1' },
+            ],
+        },
+    ]);
+    certificate.sign(
+        forge.pki.privateKeyFromPem(privateKey),
+        forge.md.sha256.create()
+    );
+
+    return { key: privateKey, cert: forge.pki.certificateToPem(certificate) };
+};
 
 const testHTMLBody = 'im in.';
 const portHTML = 1234;
@@ -143,5 +182,336 @@ describe('Media controller', () => {
 
             await request(app).get(mediaURL).expect(200, { hostURL });
         }
+    });
+
+    describe('redirects to media hosted elsewhere', () => {
+        const cookie = 'kobonaut=secret';
+        const credentials = { user: 'user', pass: 'secret' };
+
+        /** @type {{key: string, cert: string}} */
+        let tls;
+
+        /** @type {http.Server} */
+        let openRosaServer;
+
+        /** @type {https.Server} */
+        let remoteServer;
+
+        // Like the internal OpenRosa URL: http, redirecting to where a file is hosted
+        /** @type {string} */
+        let openRosaOrigin;
+
+        // The same server under another host name
+        /** @type {string} */
+        let otherHostOrigin;
+
+        // Another host, over https
+        /** @type {string} */
+        let remoteOrigin;
+
+        /** @type {Record<string, http.IncomingHttpHeaders>} */
+        let receivedHeaders;
+
+        /**
+         * @param {http.Server} target - the server to start on a free port
+         * @return {Promise<number>} the port
+         */
+        const listen = (target) =>
+            new Promise((resolve, reject) => {
+                target.once('error', reject);
+                target.listen(0, '127.0.0.1', () => {
+                    resolve(target.address().port);
+                });
+            });
+
+        /**
+         * @param {string} protocol - the server's protocol
+         * @return {http.RequestListener} a handler that records the headers per URL
+         * and redirects or serves a file
+         */
+        const handler = (protocol) => (req, res) => {
+            const origin = `${protocol}//${req.headers.host}`;
+
+            receivedHeaders[`${origin}${req.url}`] = req.headers;
+
+            const redirects = {
+                '/same-host': '/file.csv',
+                '/other-host': `${otherHostOrigin}/file.csv`,
+                '/other-host-auth': `${otherHostOrigin}/auth.csv`,
+                '/remote': `${remoteOrigin}/file.csv`,
+                '/insecure': `${openRosaOrigin}/file.csv`,
+                '/invalid': 'http://[invalid',
+                // No host for the client, which only adds the slashes to relative locations
+                '/no-slashes': otherHostOrigin.replace('//', ''),
+                '/loop': '/loop',
+            };
+
+            if (redirects[req.url]) {
+                res.writeHead(302, { location: redirects[req.url] });
+            } else if (req.url === '/auth.csv' && !req.headers.authorization) {
+                res.writeHead(401, { 'WWW-Authenticate': 'Basic realm="x"' });
+            } else if (req.url === '/page.html') {
+                res.writeHead(200, {
+                    'Content-Type': 'text/html',
+                    'Content-Security-Policy': 'script-src *',
+                    'Set-Cookie': 'kobonaut=other; Path=/',
+                    'WWW-Authenticate': 'Basic realm="x"',
+                    ETag: '"page"',
+                });
+                res.write('<script>alert(1)</script>');
+            } else if (req.url.startsWith('/typed?')) {
+                // Serves the content type given in the query
+                res.writeHead(200, {
+                    'Content-Type': decodeURIComponent(req.url.split('?')[1]),
+                });
+                res.write('typed');
+            } else if (
+                req.url === '/auth-with-location.csv' &&
+                !req.headers.authorization
+            ) {
+                res.writeHead(401, {
+                    'WWW-Authenticate': 'Basic realm="x"',
+                    location: `${otherHostOrigin}/file.csv`,
+                });
+            } else {
+                res.writeHead(200, { 'Content-Type': 'text/csv' });
+                res.write(`${origin} csv`);
+            }
+            res.end();
+        };
+
+        before(() => {
+            tls = createLocalhostCertificate();
+        });
+
+        beforeEach(async () => {
+            receivedHeaders = {};
+
+            // Following a redirect clears the client's timeout, which a real clearTimeout
+            // can't do for a fake setTimeout: the timeout would then fire in afterEach
+            timers.restore();
+            timers = sinon.useFakeTimers({
+                toFake: ['setTimeout', 'clearTimeout'],
+            });
+
+            mediaLib.getHostURLOptions.callsFake((req) => ({
+                auth: { ...credentials },
+                basePath: app.get('base path'),
+                cookie,
+                requestPath: req.url,
+            }));
+
+            // Trusts the test server's self-signed certificate
+            const { getUpdatedRequestOptions } = communicator;
+
+            sandbox
+                .stub(communicator, 'getUpdatedRequestOptions')
+                .callsFake((options) => ({
+                    ...getUpdatedRequestOptions(options),
+                    ca: tls.cert,
+                }));
+
+            openRosaServer = http.createServer(handler('http:'));
+            remoteServer = https.createServer(tls, handler('https:'));
+
+            const [openRosaPort, remotePort] = await Promise.all([
+                listen(openRosaServer),
+                listen(remoteServer),
+            ]);
+
+            openRosaOrigin = `http://localhost:${openRosaPort}`;
+            otherHostOrigin = `http://127.0.0.1:${openRosaPort}`;
+            remoteOrigin = `https://localhost:${remotePort}`;
+        });
+
+        afterEach(async () => {
+            await Promise.all(
+                [openRosaServer, remoteServer].map(
+                    (target) =>
+                        new Promise((resolve) => {
+                            target.close(resolve);
+                        })
+                )
+            );
+        });
+
+        const getMedia = (hostURL) => {
+            sandbox.stub(mediaLib, 'getHostURL').resolves(hostURL);
+
+            return request(app).get(requestURL);
+        };
+
+        it('follows a redirect from http to https', async () => {
+            await getMedia(`${openRosaOrigin}/remote`).expect(
+                200,
+                `${remoteOrigin} csv`
+            );
+        });
+
+        it('sends the cookies to the OpenRosa server, but not to another host', async () => {
+            await getMedia(`${openRosaOrigin}/other-host`).expect(
+                200,
+                `${otherHostOrigin} csv`
+            );
+
+            expect(
+                receivedHeaders[`${openRosaOrigin}/other-host`].cookie
+            ).to.equal(cookie);
+            expect(
+                receivedHeaders[`${otherHostOrigin}/file.csv`]
+            ).to.not.have.property('cookie');
+        });
+
+        it('does not send the credentials to another host that asks for them', async () => {
+            await getMedia(`${openRosaOrigin}/other-host-auth`).expect(401);
+
+            expect(
+                receivedHeaders[`${otherHostOrigin}/auth.csv`]
+            ).to.not.have.property('authorization');
+        });
+
+        it('does not tell another host which URL it was redirected from', async () => {
+            await getMedia(`${openRosaOrigin}/remote`).expect(200);
+
+            expect(
+                receivedHeaders[`${remoteOrigin}/file.csv`]
+            ).to.not.have.property('referer');
+        });
+
+        it('keeps the cookies on a redirect to the same host', async () => {
+            await getMedia(`${openRosaOrigin}/same-host`).expect(
+                200,
+                `${openRosaOrigin} csv`
+            );
+
+            expect(
+                receivedHeaders[`${openRosaOrigin}/file.csv`].cookie
+            ).to.equal(cookie);
+        });
+
+        it('does not follow a redirect from https to http', async () => {
+            await getMedia(`${remoteOrigin}/insecure`)
+                .expect(502)
+                .expect((response) => {
+                    expect(response.headers).to.not.have.property('location');
+                });
+
+            expect(receivedHeaders).to.not.have.property(
+                `${openRosaOrigin}/file.csv`
+            );
+        });
+
+        it('does not follow a redirect to an invalid URL', async () => {
+            await getMedia(`${openRosaOrigin}/invalid`).expect(502);
+        });
+
+        it('does not follow a redirect to a URL the client finds no host in', async () => {
+            await getMedia(`${openRosaOrigin}/no-slashes`).expect(502);
+        });
+
+        it('answers once when there are too many redirects', async () => {
+            // Only the error handler sets a status for this request
+            const setStatus = sandbox.spy(app.response, 'status');
+
+            await getMedia(`${openRosaOrigin}/loop`).expect(500);
+
+            expect(setStatus.args).to.deep.equal([[500]]);
+        });
+
+        it('authenticates to the OpenRosa server even if its 401 has a location', async () => {
+            await getMedia(`${openRosaOrigin}/auth-with-location.csv`).expect(
+                200,
+                `${openRosaOrigin} csv`
+            );
+
+            expect(
+                receivedHeaders[`${openRosaOrigin}/auth-with-location.csv`]
+                    .authorization
+            ).to.equal(
+                `Basic ${Buffer.from('user:secret').toString('base64')}`
+            );
+            expect(receivedHeaders).to.not.have.property(
+                `${otherHostOrigin}/file.csv`
+            );
+        });
+
+        it('handles redirects in the print view too', async () => {
+            sandbox
+                .stub(mediaLib, 'getHostURL')
+                .callsFake(async (options) =>
+                    options.requestPath.endsWith('insecure')
+                        ? `${remoteOrigin}/insecure`
+                        : `${openRosaOrigin}/remote`
+                );
+            const printReferer = 'https://enketo.example.org/x/abc?print=true';
+
+            await request(app)
+                .get(requestURL)
+                .set('referer', printReferer)
+                .expect(200, `${remoteOrigin} csv`);
+            await request(app)
+                .get(`${requestURL}?insecure`)
+                .set('referer', printReferer)
+                .expect(502);
+        });
+
+        it("passes on only the media's own headers", async () => {
+            const response = await getMedia(`${remoteOrigin}/page.html`).expect(
+                200
+            );
+
+            expect(response.headers['content-type']).to.equal('text/html');
+            expect(response.headers.etag).to.equal('"page"');
+            expect(response.headers).to.not.have.property('set-cookie');
+            expect(response.headers).to.not.have.property('www-authenticate');
+            expect(response.headers['x-content-type-options']).to.equal(
+                'nosniff'
+            );
+        });
+
+        [
+            'text/html',
+            'text/csv',
+            'image/svg+xml',
+            'text/plain, text/html',
+            'application/pdf, text/html',
+        ].forEach((contentType) => {
+            it(`sandboxes media served as ${contentType}`, async () => {
+                const response = await getMedia(
+                    `${remoteOrigin}/typed?${encodeURIComponent(contentType)}`
+                ).expect(200);
+
+                expect(response.headers['content-security-policy']).to.match(
+                    /^sandbox; default-src 'none'/
+                );
+            });
+        });
+
+        it('sandboxes media without a content type', async () => {
+            const response = await getMedia(`${remoteOrigin}/typed?`).expect(
+                200
+            );
+
+            expect(response.headers['content-security-policy']).to.match(
+                /^sandbox; default-src 'none'/
+            );
+        });
+
+        ['application/pdf', 'application/pdf; charset=binary'].forEach(
+            (contentType) => {
+                it(`does not sandbox a PDF served as ${contentType}`, async () => {
+                    const response = await getMedia(
+                        `${remoteOrigin}/typed?${encodeURIComponent(contentType)}`
+                    ).expect(200);
+
+                    expect(response.headers['x-content-type-options']).to.equal(
+                        'nosniff'
+                    );
+                    expect(
+                        response.headers['content-security-policy'] ?? ''
+                    ).to.not.match(/sandbox/);
+                });
+            }
+        );
     });
 });
