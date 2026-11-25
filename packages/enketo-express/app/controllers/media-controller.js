@@ -12,6 +12,25 @@ const debug = require('debug')('enketo:media-controller');
 const { ResponseError } = require('../lib/custom-error');
 const mediaLib = require('../lib/media');
 
+// The only headers of a media response passed on to the browser
+const MEDIA_HEADERS = [
+    'accept-ranges',
+    'cache-control',
+    'content-disposition',
+    'content-encoding',
+    'content-length',
+    'content-range',
+    'content-type',
+    'etag',
+    'last-modified',
+];
+// Documents that can run scripts when opened (HTML, XML, SVG, or no type)
+const ACTIVE_CONTENT_TYPE =
+    /^\s*(text\/html|text\/xml|application\/xml|[^;\s]+\+xml)\s*(;|$)/i;
+// Not for every type: a sandbox breaks Chrome's PDF viewer
+const ACTIVE_CONTENT_CSP =
+    "sandbox; default-src 'none'; style-src 'unsafe-inline'; img-src data:; font-src data:";
+
 module.exports = (app) => {
     app.use(`${app.get('base path')}/media`, router);
 };
@@ -174,8 +193,33 @@ function _pipeMedia(options, req, res, next) {
             return;
         }
 
+        _restrictMediaHeaders(response.headers);
         mediaRequest.pipe(res).on('error', fail);
     });
+}
+
+/**
+ * Keeps only the headers the browser needs for the media, so the server hosting it can't set
+ * cookies, a security policy or a login prompt on Enketo's domain, and sandboxes documents
+ * that can run scripts. The client copies these headers to the response when piping.
+ *
+ * @param {import('http').IncomingHttpHeaders} headers - the media response's headers
+ */
+function _restrictMediaHeaders(headers) {
+    Object.keys(headers).forEach((name) => {
+        if (!MEDIA_HEADERS.includes(name)) {
+            delete headers[name];
+        }
+    });
+
+    headers['x-content-type-options'] = 'nosniff';
+
+    if (
+        !headers['content-type'] ||
+        ACTIVE_CONTENT_TYPE.test(headers['content-type'])
+    ) {
+        headers['content-security-policy'] = ACTIVE_CONTENT_CSP;
+    }
 }
 
 function _handleMediaRequestError(error, next) {

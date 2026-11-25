@@ -248,6 +248,15 @@ describe('Media controller', () => {
                 res.writeHead(302, { location: redirects[req.url] });
             } else if (req.url === '/auth.csv' && !req.headers.authorization) {
                 res.writeHead(401, { 'WWW-Authenticate': 'Basic realm="x"' });
+            } else if (req.url === '/page.html') {
+                res.writeHead(200, {
+                    'Content-Type': 'text/html',
+                    'Content-Security-Policy': 'script-src *',
+                    'Set-Cookie': 'kobonaut=other; Path=/',
+                    'WWW-Authenticate': 'Basic realm="x"',
+                    ETag: '"page"',
+                });
+                res.write('<script>alert(1)</script>');
             } else if (
                 req.url === '/auth-with-location.csv' &&
                 !req.headers.authorization
@@ -432,6 +441,45 @@ describe('Media controller', () => {
                 .get(`${requestURL}?insecure`)
                 .set('referer', printReferer)
                 .expect(502);
+        });
+
+        it("passes on only the media's own headers", async () => {
+            const response = await getMedia(`${remoteOrigin}/page.html`).expect(
+                200
+            );
+
+            expect(response.headers['content-type']).to.equal('text/html');
+            expect(response.headers.etag).to.equal('"page"');
+            expect(response.headers).to.not.have.property('set-cookie');
+            expect(response.headers).to.not.have.property('www-authenticate');
+            expect(response.headers['x-content-type-options']).to.equal(
+                'nosniff'
+            );
+        });
+
+        it('sandboxes documents that can run scripts', async () => {
+            const response = await getMedia(`${remoteOrigin}/page.html`).expect(
+                200
+            );
+
+            expect(response.headers['content-security-policy']).to.match(
+                /^sandbox; default-src 'none'/
+            );
+        });
+
+        it('does not sandbox other media', async () => {
+            const response = await getMedia(`${remoteOrigin}/file.csv`).expect(
+                200,
+                `${remoteOrigin} csv`
+            );
+
+            expect(response.headers['content-type']).to.equal('text/csv');
+            expect(response.headers['x-content-type-options']).to.equal(
+                'nosniff'
+            );
+            expect(
+                response.headers['content-security-policy'] ?? ''
+            ).to.not.match(/sandbox/);
         });
     });
 });
