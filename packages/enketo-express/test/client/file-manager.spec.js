@@ -559,7 +559,7 @@ describe('File manager', () => {
                 'other.jpg',
             ]);
             expect(await files[0].text()).to.equal('a photo');
-            // only the failed download is repeated
+            // getCurrentFiles repeats only the failed download
             expect(
                 fetchStub.withArgs('https://example.com/other.jpg').callCount
             ).to.equal(1);
@@ -655,8 +655,8 @@ describe('File manager', () => {
             expect(files).to.deep.equal([]);
         });
 
-        // e.g. a draft, whose record keeps the answers of non-relevant
-        // questions so they are still there once the question is shown again
+        // such as a draft, which keeps the answers of non-relevant questions
+        // so they come back when the question becomes relevant again
         it('returns the attachment of a non-relevant question when non-relevant answers are kept', async () => {
             fileManager.setInstanceAttachments({
                 'photo.jpg': dataURL('a photo'),

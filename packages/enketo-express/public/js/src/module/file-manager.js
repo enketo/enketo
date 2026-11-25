@@ -146,12 +146,12 @@ function _getInstanceAttachmentUrl(filename) {
 }
 
 /**
- * Downloads attachments of the record being edited and caches the Blobs. A
- * download that fails is logged and left out of the cache.
+ * Downloads attachments of the record being edited and caches the Blobs. It
+ * logs a failed download and leaves it out of the cache.
  *
- * @param {Record<string, string>} attachments - the attachments map they are
- *     part of, so that downloads for a record that has since been replaced are
- *     discarded
+ * @param {Record<string, string>} attachments - the attachments map the
+ *     entries come from. If another record replaces it before a download
+ *     finishes, the cache does not keep that download.
  * @param {Array<[string, string]>} entries - keys and URLs to download
  * @return {Promise<void>}
  */
@@ -205,9 +205,10 @@ function prefetchInstanceAttachments() {
 }
 
 /**
- * Waits for the attachments of the record being edited to be downloaded, and
- * downloads again any that failed, e.g. because the connection dropped while
- * the record was opened. Does nothing when no download was requested.
+ * Waits for the attachments of the record being edited to download, then
+ * downloads again any that failed, such as when the connection dropped while
+ * the record opened. Does nothing if nothing called
+ * prefetchInstanceAttachments.
  *
  * @return {Promise<void>}
  */
@@ -350,9 +351,9 @@ function _getUnchangedFile(filename) {
 /**
  * Obtain files currently stored in file input elements of open record
  *
- * @param {{irrelevant?: boolean}} [include] - the same options the record's
- *     XML is obtained with (see `getDataStr` in enketo-core), so that the files
- *     match the answers the record keeps
+ * @param {{irrelevant?: boolean}} [include] - the options the record's XML
+ *     comes from (see `getDataStr` in enketo-core). Passing the same options
+ *     makes the files match the answers the record keeps.
  * @return { Promise } A promise that resolves with an array of files
  */
 function getCurrentFiles(include = {}) {
@@ -429,12 +430,13 @@ function getCurrentFiles(include = {}) {
             // get any file names of files that were loaded as DataURI and have remained unchanged (i.e. loaded from Storage)
             fileInputs
                 // a question that has become non-relevant keeps its
-                // data-loaded-file-name. Where the record leaves out the
-                // answers of such questions it no longer refers to the file,
-                // so it must not be submitted or signed; where it keeps them
-                // (e.g. a draft) the file must be kept too. Ask the branch
-                // rather than the control: a readonly control is disabled
-                // too, and its file is still part of the record.
+                // data-loaded-file-name. When the record leaves out the
+                // answers of non-relevant questions, it no longer refers to
+                // the file, so the file stays out of the submission and its
+                // signature. When the record keeps those answers, such as in
+                // a draft, it keeps the file too. A readonly control is
+                // disabled as well and its file is still part of the record,
+                // so check the branch rather than the control.
                 .filter(
                     (input) =>
                         !replacedInputs.has(input) &&
