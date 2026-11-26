@@ -35,4 +35,8 @@ export default /** @type {const} */ ({
     validatePage: true,
     swipePage: true,
     textMaxChars: 2000,
+    /**
+     * Maximum attachment file name length, in code points. 0 means no limit.
+     */
+    filenameMaxChars: 0,
 });

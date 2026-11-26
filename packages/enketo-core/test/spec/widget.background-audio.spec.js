@@ -2,6 +2,7 @@ import BackgroundAudioWidget from '../../src/widget/background-audio/background-
 import AudioRecorder from '../../src/js/audio-recorder/audio-recorder';
 import dialog from '../../src/js/fake-dialog';
 import fileManager from '../../src/js/file-manager';
+import config from 'enketo/config';
 import { waitFor } from '../helpers/wait-for';
 
 const FORM = `<form class="or">
@@ -141,5 +142,22 @@ describe('BackgroundAudioWidget', () => {
 
         expect(AudioRecorder.prototype.startRecording.called).to.equal(false);
         expect(widget.audioContext).to.equal(undefined);
+    });
+});
+
+describe('BackgroundAudioWidget getFileName()', () => {
+    it('shortens names from long field names to config.filenameMaxChars', () => {
+        const original = config.filenameMaxChars;
+        config.filenameMaxChars = 30;
+
+        try {
+            const name = BackgroundAudioWidget.prototype.getFileName.call({
+                element: { name: `/data/${'b'.repeat(120)}` },
+            });
+
+            expect(name).to.match(/^b{9}-\d{8}_\d{6}\.webm$/);
+        } finally {
+            config.filenameMaxChars = original;
+        }
     });
 });

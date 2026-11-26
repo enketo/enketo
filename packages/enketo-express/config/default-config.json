@@ -108,6 +108,7 @@
     "validate page": true,
     "payload limit": "100kb",
     "text field character limit": 2000,
+    "attachment file name character limit": 0,
     "csrf cookie name": "__csrf",
     "frameguard deny": false,
     "no sniff": false,
