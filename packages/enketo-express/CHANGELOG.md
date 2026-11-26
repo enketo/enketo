@@ -3,6 +3,23 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## 7.6.6 - 2026-11-26
+
+### Changed
+
+- Translations updated (#1618, #1620)
+
+### Security
+
+- Hardened the handling of form media served through Enketo (#1640)
+
+### Fixed
+
+- Forms not loading when a media file is hosted on another server and the server redirects to it over https (#1640)
+- Map tiles not loading in offline-capable forms when a Content Security Policy is enabled (#1631)
+- Encrypted submissions with attachments sometimes not being fully decryptable (#1629)
+- Untranslated strings showing as empty instead of falling back to English (#1620)
+
 ## 7.6.5 - 2026-11-08
 
 ### Added
