@@ -1,0 +1,108 @@
+name: Transifex - push ALL translations
+
+# Manually sends the translations in main to Transifex, e.g. after fixing the broken
+# placeholders listed in a Transifex pull PR. It compares main with the current translations
+# in Transifex and lists every string that differs. With the box checked, it also pushes them.
+
+on:
+    workflow_dispatch:
+        inputs:
+            confirm:
+                description: 'Push the changes to Transifex. Leave unchecked to only list them. Strings changed in Transifex after the last pull are replaced too, so check the list first.'
+                required: true
+                type: boolean
+                default: false
+
+jobs:
+    push-translations:
+        runs-on: ubuntu-latest
+        steps:
+            - name: Check the branch
+              run: |
+                  if [ "$GITHUB_REF" != refs/heads/main ]; then
+                      echo "::error::Run this from main"
+                      exit 1
+                  fi
+
+            - name: Checkout
+              uses: actions/checkout@v7
+
+            # Uses the Node version pinned in package.json
+            - uses: 'volta-cli/action@v5'
+
+            - name: Keep the translations of main
+              run: cp -r packages/enketo-express/locales/src "$RUNNER_TEMP/main-locales"
+
+            - name: Pull the translations from Transifex
+              uses: transifex/cli-action@v2
+              with:
+                  token: ${{ secrets.TRANSIFEX_TOKEN }}
+                  # Every language, even below the minimum_perc of .tx/config, so none is compared with itself
+                  args: 'pull --translations --mode onlytranslated --minimum-perc 0 --force'
+
+            - name: Compare main with Transifex
+              id: compare
+              run: |
+                  # The Transifex action runs in a container, which can leave the files owned by root
+                  sudo chown -R "$(id -u):$(id -g)" packages/enketo-express/locales/src
+
+                  node packages/enketo-express/tools/compare-translations.js \
+                      "$RUNNER_TEMP/main-locales" packages/enketo-express/locales/src \
+                      --report "$RUNNER_TEMP/changes.md" --languages "$RUNNER_TEMP/languages.txt"
+
+                  echo "languages=$(cat "$RUNNER_TEMP/languages.txt")" >> "$GITHUB_OUTPUT"
+
+            - name: Put back the translations of main
+              if: inputs.confirm && steps.compare.outputs.languages != ''
+              env:
+                  LANGUAGES: ${{ steps.compare.outputs.languages }}
+              run: |
+                  for language in ${LANGUAGES//,/ }; do
+                      cp "$RUNNER_TEMP/main-locales/$language/translation.json" \
+                          "packages/enketo-express/locales/src/$language/translation.json"
+                  done
+
+            - name: Push translations
+              id: push
+              if: inputs.confirm && steps.compare.outputs.languages != ''
+              uses: transifex/cli-action@v2
+              with:
+                  token: ${{ secrets.TRANSIFEX_TOKEN }}
+                  # --force: the files were compared with Transifex just before
+                  args: 'push --translation --languages ${{ steps.compare.outputs.languages }} --force'
+
+            - name: Summary
+              if: always()
+              env:
+                  CONFIRMED: ${{ inputs.confirm }}
+                  PUSH: ${{ steps.push.outcome }}
+              run: |
+                  {
+                      echo '### Transifex - push ALL translations'
+                      echo
+
+                      if [ "$PUSH" = success ]; then
+                          echo '**Pushed** the strings below to Transifex. Check them there.'
+                      elif [ "$PUSH" = failure ]; then
+                          echo '**The push failed**, see the "Push translations" log. Some of the strings below may have been pushed.'
+                      elif [ "$CONFIRMED" = true ]; then
+                          echo '**Nothing was pushed**: there was nothing to push, or an earlier step failed.'
+                      else
+                          echo '**Preview only**, nothing was pushed. To push these strings, run this again with the box checked.'
+                      fi
+
+                      echo
+                      echo 'Empty strings in `main` are left out, as Transifex ignores them. A string changed in Transifex after the last pull shows up here too, and pushing replaces it.'
+                      echo
+                      cat "$RUNNER_TEMP/changes.md" 2>/dev/null || echo 'The comparison did not run, see the log.'
+                  } >> "$GITHUB_STEP_SUMMARY"
+
+    notify-failure:
+        needs: push-translations
+        if: failure()
+        uses: ./.github/workflows/zulip.yml
+        secrets: inherit
+        with:
+            topic: 'Transifex automation'
+            stream: 'Enketo'
+            content: ':warning: [Transifex push ALL translations run #${{ github.run_number }}](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}) failed'
