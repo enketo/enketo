@@ -12,8 +12,35 @@ import { t } from './translator';
 
 const URL_RE = /[a-zA-Z0-9+-.]+?:\/\//;
 
+const MARKUP_ENTITIES = {
+    '&': '&amp;',
+    '<': '&lt;',
+    '>': '&gt;',
+    '"': '&quot;',
+};
+
+/** Stand-in host used to escape a file name as a URL path, as the server does. */
+const ESCAPE_URL_HOST = 'http://example.com';
+
 /** @type {Record<string, string>} */
 let instanceAttachments;
+
+/**
+ * Blobs of the attachments loaded with the record, keyed exactly as the
+ * attachments map keys them (i.e. escaped by the server).
+ *
+ * @type {Map<string, Blob>}
+ */
+const prefetchedBlobCache = new Map();
+
+/**
+ * Resolves once every attachment has either been downloaded or failed. Remains
+ * null when no prefetch was requested, which is how the file names of unchanged
+ * attachments are known to be good enough as-is.
+ *
+ * @type {?Promise<void>}
+ */
+let prefetchPromise = null;
 
 /**
  * Initialize the file manager .
@@ -41,7 +68,169 @@ function isWaitingForPermissions() {
  */
 function setInstanceAttachments(attachments) {
     instanceAttachments = attachments;
+    prefetchedBlobCache.clear();
+    prefetchPromise = null;
 }
+
+/**
+ * Applies the escaping the server applies to the keys of the instance
+ * attachments map (see `escapeFileName` in /app/lib/media.js), so that an
+ * attachment can be looked up by the file name as it appears in the record.
+ *
+ * That escaping cannot be undone: a file name may itself contain a literal `%`
+ * or something that merely looks percent-encoded, and both survive it
+ * unchanged. It is therefore applied in the same direction here rather than
+ * reversed.
+ *
+ * @param {string} filename - file name as it appears in the record
+ * @return {string} file name as used in the attachments map
+ */
+function _escapeFilename(filename) {
+    const [scheme] = filename.match(/^[a-z]+:/) ?? [];
+    let escaped;
+
+    try {
+        if (scheme == null) {
+            const { pathname, search } = new URL(
+                `${ESCAPE_URL_HOST}/${filename.replace(/^\//, '')}`
+            );
+
+            escaped = filename.startsWith('/')
+                ? `${pathname}${search}`
+                : `${pathname.replace(/^\//, '')}${search}`;
+        } else {
+            // a name that opens with something the URL parser reads as a
+            // scheme is escaped as a URL in its own right
+            escaped = new URL(
+                filename.replace(/^jr:\/*/, 'http://')
+            ).href.replace('http:', scheme);
+        }
+    } catch {
+        // not parseable as a URL, so the server could not have filed it either
+        return filename;
+    }
+
+    return escaped
+        .replace(/[\\/]/g, (character) => encodeURIComponent(character))
+        .replace(/[&<>"]/g, (character) => MARKUP_ENTITIES[character]);
+}
+
+/**
+ * The keys an attachment may be filed under. The escaping the server applies
+ * comes first; a plain `encodeURIComponent` and the bare name follow, for maps
+ * that predate the server escaping these keys.
+ *
+ * @param {string} filename - file name as it appears in the record
+ * @return {string[]} candidate keys, most likely first
+ */
+function _attachmentKeys(filename) {
+    return [_escapeFilename(filename), encodeURIComponent(filename), filename];
+}
+
+/**
+ * Obtains the URL of an attachment already on the record being edited.
+ *
+ * @param {string} filename - file name as it appears in the record
+ * @return {?string} the URL, or null when the record has no such attachment
+ */
+function _getInstanceAttachmentUrl(filename) {
+    if (!instanceAttachments) {
+        return null;
+    }
+
+    const key = _attachmentKeys(filename).find((candidate) =>
+        Object.prototype.hasOwnProperty.call(instanceAttachments, candidate)
+    );
+
+    return key == null ? null : instanceAttachments[key];
+}
+
+/**
+ * Downloads attachments of the record being edited and caches the Blobs. It
+ * logs a failed download and leaves it out of the cache.
+ *
+ * @param {Record<string, string>} attachments - the attachments map the
+ *     entries come from. If another record replaces it before a download
+ *     finishes, the cache does not keep that download.
+ * @param {Array<[string, string]>} entries - keys and URLs to download
+ * @return {Promise<void>}
+ */
+function _downloadAttachments(attachments, entries) {
+    return Promise.all(
+        entries.map(([filename, url]) =>
+            fetch(url, { credentials: 'include' })
+                .then((response) => {
+                    if (!response.ok) {
+                        throw new Error(
+                            `Request failed with status ${response.status}`
+                        );
+                    }
+
+                    return response.blob();
+                })
+                .then((blob) => {
+                    if (instanceAttachments === attachments) {
+                        prefetchedBlobCache.set(filename, blob);
+                    }
+                })
+                .catch((error) => {
+                    console.error(
+                        `Failed to download attachment "${filename}":`,
+                        error
+                    );
+                })
+        )
+    ).then(() => undefined);
+}
+
+/**
+ * Downloads the attachments already on the record being edited and caches the
+ * Blobs.
+ *
+ * Those attachments arrive as file names only, and encrypting the submission
+ * needs their bytes. Repeat calls return the same promise, until another
+ * record is loaded.
+ *
+ * @return {Promise<void>}
+ */
+function prefetchInstanceAttachments() {
+    if (prefetchPromise == null) {
+        prefetchPromise = _downloadAttachments(
+            instanceAttachments,
+            Object.entries(instanceAttachments ?? {})
+        );
+    }
+
+    return prefetchPromise;
+}
+
+/**
+ * Waits for the attachments of the record being edited to download, then
+ * downloads again any that failed, such as when the connection dropped while
+ * the record opened. Does nothing if nothing called
+ * prefetchInstanceAttachments.
+ *
+ * @return {Promise<void>}
+ */
+function _awaitInstanceAttachments() {
+    if (prefetchPromise == null) {
+        return Promise.resolve();
+    }
+
+    const attachments = instanceAttachments;
+
+    prefetchPromise = prefetchPromise.then(() =>
+        _downloadAttachments(
+            attachments,
+            Object.entries(attachments ?? {}).filter(
+                ([filename]) => !prefetchedBlobCache.has(filename)
+            )
+        )
+    );
+
+    return prefetchPromise;
+}
+
 /**
  * Obtains a url that can be used to show a preview of the file when used
  * as a src attribute.
@@ -54,26 +243,12 @@ function getFileUrl(subject) {
         if (!subject) {
             resolve(null);
         } else if (typeof subject === 'string') {
-            const escapedSubject = encodeURIComponent(subject);
+            const attachmentUrl = _getInstanceAttachmentUrl(subject);
 
             if (subject.startsWith('/') || subject.startsWith('data:')) {
                 resolve(subject);
-            } else if (
-                instanceAttachments &&
-                Object.prototype.hasOwnProperty.call(
-                    instanceAttachments,
-                    escapedSubject
-                )
-            ) {
-                resolve(instanceAttachments[escapedSubject]);
-            } else if (
-                instanceAttachments &&
-                Object.prototype.hasOwnProperty.call(
-                    instanceAttachments,
-                    subject
-                )
-            ) {
-                resolve(instanceAttachments[subject]);
+            } else if (attachmentUrl != null) {
+                resolve(attachmentUrl);
             } else if (!settings.offline || !store.available) {
                 // e.g. in an online-only edit view
                 reject(new Error('store not available'));
@@ -141,17 +316,60 @@ function getObjectUrl(subject) {
 }
 
 /**
+ * Obtains the file of an attachment that was already on the record being
+ * edited and was left unchanged. Encrypting the submission needs its bytes, so
+ * where the attachments were downloaded the Blob is returned rather than the
+ * file name.
+ *
+ * @param {string} filename - file name as it appears in the record
+ * @return {Blob|string} the downloaded Blob, or the file name
+ */
+function _getUnchangedFile(filename) {
+    if (prefetchPromise == null) {
+        return filename;
+    }
+
+    const blob = _attachmentKeys(filename)
+        .map((candidate) => prefetchedBlobCache.get(candidate))
+        .find((candidate) => candidate != null);
+
+    if (!blob) {
+        throw new Error(t('error.dataloadfailed', { filename }));
+    }
+
+    if (isTooLarge(blob)) {
+        throw new Error(`${filename}: ${_getMaxSizeError().message}`);
+    }
+
+    // the record, not the attachments map, is the authority on the name the
+    // submission XML refers to this file by
+    blob.name = filename;
+
+    return blob;
+}
+
+/**
  * Obtain files currently stored in file input elements of open record
  *
+ * @param {{irrelevant?: boolean}} [include] - the options the record's XML
+ *     comes from (see `getDataStr` in enketo-core). Passing the same options
+ *     makes the files match the answers the record keeps.
  * @return { Promise } A promise that resolves with an array of files
  */
-function getCurrentFiles() {
+function getCurrentFiles(include = {}) {
     const fileInputs = [
         ...document.querySelectorAll(
             'form.or input[type="file"], form.or input[type="text"][data-drawing="true"], input[data-audio="true"], input[data-background-audio="true"]'
         ),
     ];
     const fileTasks = [];
+    /**
+     * Inputs that already contributed the file they hold. A
+     * data-loaded-file-name left on one of these refers to the file that was
+     * replaced: the filepicker removes it only once the new file has been
+     * processed, and the drawing and audio widgets never remove it at all.
+     */
+    const replacedInputs = new Set();
 
     const _processNameAndSize = function (input, file) {
         if (file && file.name) {
@@ -180,6 +398,7 @@ function getCurrentFiles() {
         if (input.type === 'file') {
             // first get any files inside file input elements
             if (input.files[0]) {
+                replacedInputs.add(input);
                 fileTasks.push(
                     Promise.resolve(_processNameAndSize(input, input.files[0]))
                 );
@@ -195,6 +414,7 @@ function getCurrentFiles() {
                 blob = utils.dataUriToBlobSync(input.dataset.cache);
             }
             if (blob) {
+                replacedInputs.add(input);
                 blob.name = input.value;
                 fileTasks.push(
                     new Promise((resolve) =>
@@ -205,16 +425,36 @@ function getCurrentFiles() {
         }
     });
 
-    return Promise.all(fileTasks).then((files) => {
-        // get any file names of files that were loaded as DataURI and have remained unchanged (i.e. loaded from Storage)
-        fileInputs
-            .filter((input) => input.matches('[data-loaded-file-name]'))
-            .forEach((input) =>
-                files.push(input.getAttribute('data-loaded-file-name'))
-            );
+    return Promise.all(fileTasks).then((files) =>
+        _awaitInstanceAttachments().then(() => {
+            // get any file names of files that were loaded as DataURI and have remained unchanged (i.e. loaded from Storage)
+            fileInputs
+                // a question that has become non-relevant keeps its
+                // data-loaded-file-name. When the record leaves out the
+                // answers of non-relevant questions, it no longer refers to
+                // the file, so the file stays out of the submission and its
+                // signature. When the record keeps those answers, such as in
+                // a draft, it keeps the file too. A readonly control is
+                // disabled as well and its file is still part of the record,
+                // so check the branch rather than the control.
+                .filter(
+                    (input) =>
+                        !replacedInputs.has(input) &&
+                        input.matches('[data-loaded-file-name]') &&
+                        (include.irrelevant !== false ||
+                            !input.closest('.or-branch.disabled'))
+                )
+                .forEach((input) => {
+                    files.push(
+                        _getUnchangedFile(
+                            input.getAttribute('data-loaded-file-name')
+                        )
+                    );
+                });
 
-        return files;
-    });
+            return files;
+        })
+    );
 }
 
 /**
@@ -274,6 +514,7 @@ export default {
     isWaitingForPermissions,
     init,
     setInstanceAttachments,
+    prefetchInstanceAttachments,
     getFileUrl,
     getObjectUrl,
     getCurrentFiles,
