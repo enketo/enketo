@@ -11,6 +11,7 @@ const I18nextBackend = require('i18next-fs-backend');
 const i18nextMiddleware = require('i18next-http-middleware');
 const compression = require('compression');
 const errorHandler = require('../app/controllers/error-handler');
+const { buildDefaultCSP } = require('../app/lib/csp');
 
 const controllersPath = path.join(__dirname, '../app/controllers');
 const app = express();
@@ -156,14 +157,19 @@ if (hsts && hsts.seconds !== 0) {
     }
     securityHeaders['Strict-Transport-Security'] = hstsDirectives.join('; ');
 }
-const defaultCSP =
-    "default-src 'self' blob:; script-src 'self' 'unsafe-inline' data:; style-src 'self' 'unsafe-inline' data:; img-src 'self' data: blob:";
 const csp = app.get('csp');
 if (csp && csp.enabled) {
     const cspHeader = csp['report only']
         ? 'Content-Security-Policy-Report-Only'
         : 'Content-Security-Policy';
-    securityHeaders[cspHeader] = csp.value || defaultCSP;
+    securityHeaders[cspHeader] =
+        csp.value ||
+        buildDefaultCSP({
+            maps: app.get('maps'),
+            analytics: app.get('analytics'),
+            google: app.get('google'),
+            piwik: app.get('piwik'),
+        });
 }
 // If any security headers are set, apply middleware
 if (Object.keys(securityHeaders).length > 0) {
