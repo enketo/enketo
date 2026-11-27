@@ -1,3 +1,4 @@
+import events from '../../src/js/event';
 import { initTimeLocalization } from '../../src/js/format';
 import Datetimepicker from '../../src/widget/datetime/datetimepicker-extended';
 import { runAllCommonWidgetTests } from '../helpers/test-widget';
@@ -28,9 +29,9 @@ describe('datetimepicker widget', () => {
         teardownTimeLocalization();
     });
 
-    function initForm(form) {
-        const fragment = document.createRange().createContextualFragment(form);
-        const control = fragment.querySelector('input');
+    function initForm(form, parent = document.createDocumentFragment()) {
+        parent.append(document.createRange().createContextualFragment(form));
+        const control = parent.querySelector('input');
         return new Datetimepicker(control);
     }
 
@@ -62,6 +63,45 @@ describe('datetimepicker widget', () => {
 
             expect(input.value).to.equal('');
             expect(input.onchange.callCount).to.equal(2);
+        });
+    });
+
+    describe('applyfocus event', () => {
+        /** @type {HTMLElement} */
+        let container;
+
+        beforeEach(() => {
+            container = document.createElement('div');
+            document.body.append(container);
+        });
+
+        afterEach(() => {
+            container.remove();
+            document
+                .querySelectorAll('body > .datepicker')
+                .forEach((el) => el.remove());
+        });
+
+        it('does not open the datepicker while the form is hidden', () => {
+            // Like on initial load, when the loader hides the form.
+            container.style.display = 'none';
+            const datetimepicker = initForm(FORM, container);
+
+            datetimepicker.element.dispatchEvent(events.ApplyFocus());
+
+            // The picker is only added to <body> when it opens.
+            expect(document.querySelector('body > .datepicker')).to.equal(null);
+        });
+
+        it('focuses the fake date input when the form is visible', () => {
+            const datetimepicker = initForm(FORM, container);
+            const fakeDateInput = datetimepicker.question.querySelector(
+                '.widget .date input'
+            );
+
+            datetimepicker.element.dispatchEvent(events.ApplyFocus());
+
+            expect(document.activeElement).to.equal(fakeDateInput);
         });
     });
 });

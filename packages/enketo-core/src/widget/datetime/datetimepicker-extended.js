@@ -126,7 +126,9 @@ class DatetimepickerExtended extends Widget {
     _setFocusHandler($els) {
         // Handle focus on original input (goTo functionality)
         this.element.addEventListener(events.ApplyFocus().type, () => {
-            $els.eq(0).focus();
+            // Native focus on purpose. On a hidden form (initial load) jQuery's
+            // `.focus()` still opens the datepicker, in the top-left corner.
+            $els[0].focus();
         });
     }
 
