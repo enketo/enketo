@@ -129,6 +129,14 @@ class ImageMap extends Widget {
             // Resize, using original unscaled SVG dimensions
             // Note that width and height will be zero if the SVG is currently not visible
             const bbox = svg.getBBox();
+            if (!bbox.width || !bbox.height) {
+                // The question is hidden, e.g. because it is not relevant yet.
+                // A zero-sized viewBox would keep the image invisible after it is
+                // revealed, so measure again in enable().
+                this.viewBoxPending = true;
+
+                return;
+            }
             viewBox = `${bbox.x} ${bbox.y} ${bbox.width} ${bbox.height}`;
         } catch (e) {
             // svg.getBBox() only works after SVG has been added to DOM.
@@ -143,6 +151,7 @@ class ImageMap extends Widget {
                 viewBox = `0 0 ${parseInt(width, 10)} ${parseInt(height, 10)}`;
             }
         }
+        this.viewBoxPending = false;
         svg.setAttribute('viewBox', viewBox);
     }
 
@@ -297,6 +306,9 @@ class ImageMap extends Widget {
      */
     enable() {
         this.svg.removeAttribute('or-readonly');
+        if (this.viewBoxPending) {
+            this._setViewBox(this.svg);
+        }
     }
 
     /**

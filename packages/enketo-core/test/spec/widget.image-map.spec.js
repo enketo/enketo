@@ -207,3 +207,63 @@ describe('SVG XSS sanitization via image-map widget', () => {
         });
     });
 });
+
+describe('image-map widget in a question that is hidden when the form loads', () => {
+    // No viewBox, so the widget has to measure the image itself.
+    const SVG_WITHOUT_VIEWBOX =
+        '<svg xmlns="http://www.w3.org/2000/svg" width="200" height="100"><path id="north" d="M0 0H200V50H0Z"/><path id="south" d="M0 50H200V100H0Z"/></svg>';
+    let container;
+
+    beforeEach(() => {
+        container = document.createElement('div');
+        document.body.appendChild(container);
+        sinon
+            .stub(window, 'fetch')
+            .callsFake(() =>
+                Promise.resolve(new Response(SVG_WITHOUT_VIEWBOX))
+            );
+    });
+
+    afterEach(() => {
+        sinon.restore();
+        container.remove();
+    });
+
+    it('sets the viewBox once the question is revealed', () => {
+        container.innerHTML = `<form class="or">
+            <fieldset class="question simple-select or-appearance-image-map" style="display: none;">
+                <fieldset>
+                    <legend>
+                        <span lang="default" class="question-label active">Select a region</span>
+                        <img lang="default" class="active" src="jr://images/regions.svg" alt="image">
+                    </legend>
+                    <div class="option-wrapper">
+                        <label>
+                            <input type="radio" name="/data/region" value="north" data-type-xml="select1">
+                            <span lang="" class="option-label active">North</span>
+                        </label>
+                        <label>
+                            <input type="radio" name="/data/region" value="south" data-type-xml="select1">
+                            <span lang="" class="option-label active">South</span>
+                        </label>
+                    </div>
+                </fieldset>
+            </fieldset>
+        </form>`;
+
+        const question = container.querySelector('.question');
+        const control = container.querySelector(ImageMapWidget.selector);
+
+        return new ImageMapWidget(control, {}).then((widget) => {
+            const svg = question.querySelector('svg');
+
+            expect(svg.getAttribute('viewBox')).not.to.equal('0 0 0 0');
+
+            // This is what the relevance logic does when the question becomes relevant.
+            question.style.display = '';
+            widget.enable();
+
+            expect(svg.getAttribute('viewBox')).to.equal('0 0 200 100');
+        });
+    });
+});
